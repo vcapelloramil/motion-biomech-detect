@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import heroPose from "@/assets/hero-pose.jpg";
-import kineticChain from "@/assets/kinetic-chain.jpg";
+import heroPose from "@/assets/player-hero.jpg";
+import kineticChain from "@/assets/clinic-session.jpg";
 import { Activity, Brain, HeartPulse, Target, Upload, Video, Zap, ScanLine, ArrowRight, Stethoscope, BarChart3 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
