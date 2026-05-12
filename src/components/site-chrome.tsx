@@ -1,13 +1,15 @@
 import { Link } from "@tanstack/react-router";
 import { Activity } from "lucide-react";
+import avatar from "@/assets/profile-avatar.jpg";
 
 export function Header() {
   const links = [
     { to: "/", label: "Inicio" },
+    { to: "/upload", label: "Subir" },
+    { to: "/videos", label: "Videos" },
     { to: "/performance", label: "Performance" },
-    { to: "/clinica", label: "Análisis Clínico" },
+    { to: "/clinica", label: "Clínico" },
     { to: "/tecnologia", label: "Tecnología" },
-    { to: "/precios", label: "Precios" },
   ] as const;
 
   return (
@@ -22,7 +24,7 @@ export function Header() {
             <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">tennis · vision · ai</div>
           </div>
         </Link>
-        <nav className="hidden items-center gap-1 md:flex">
+        <nav className="hidden items-center gap-1 lg:flex">
           {links.map((l) => (
             <Link
               key={l.to}
@@ -35,11 +37,14 @@ export function Header() {
             </Link>
           ))}
         </nav>
-        <div className="flex items-center gap-2">
-          <button className="hidden rounded-md px-4 py-2 text-sm text-muted-foreground hover:text-foreground md:block">Iniciar sesión</button>
-          <button className="rounded-md bg-gradient-neon px-4 py-2 text-sm font-semibold text-neon-foreground shadow-neon transition-transform hover:scale-105">
+        <div className="flex items-center gap-3">
+          <Link to="/upload" className="hidden rounded-md bg-gradient-neon px-4 py-2 text-sm font-semibold text-neon-foreground shadow-neon transition-transform hover:scale-105 md:block">
             Subir video
-          </button>
+          </Link>
+          <Link to="/profile" className="flex items-center gap-2 rounded-full border border-border p-1 pr-3 transition-colors hover:border-neon/50">
+            <img src={avatar} alt="Perfil" className="h-7 w-7 rounded-full object-cover" />
+            <span className="hidden font-mono text-xs text-muted-foreground sm:inline">Marco R.</span>
+          </Link>
         </div>
       </div>
     </header>
