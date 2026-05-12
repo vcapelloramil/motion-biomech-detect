@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Activity, TrendingUp, Target, Zap, MapPin } from "lucide-react";
+import { Activity, TrendingUp, Target, Zap, Timer } from "lucide-react";
 
 export const Route = createFileRoute("/performance")({
   head: () => ({
@@ -67,20 +67,34 @@ function PerformancePage() {
           </div>
         </div>
 
-        {/* HEATMAP */}
+        {/* CONSISTENCY OVER TIME */}
         <div className="rounded-2xl border border-border bg-card p-6">
-          <h3 className="font-display text-xl font-semibold">Cobertura de cancha</h3>
-          <div className="mt-4 aspect-[3/4] w-full rounded-xl border border-border bg-court/40 p-3">
-            <div className="relative grid h-full w-full grid-cols-6 grid-rows-8 gap-px overflow-hidden rounded-lg bg-foreground/5">
-              {Array.from({ length: 48 }).map((_, i) => {
-                const heat = Math.random();
-                return <div key={i} style={{ backgroundColor: `oklch(0.84 0.22 145 / ${heat * 0.7})` }} />;
-              })}
-              <div className="pointer-events-none absolute inset-x-0 top-1/2 h-px bg-foreground/40" />
-            </div>
+          <div className="flex items-center gap-2">
+            <Timer className="h-4 w-4 text-neon" />
+            <h3 className="font-display text-xl font-semibold">Consistencia por set</h3>
+          </div>
+          <p className="mt-1 text-xs text-muted-foreground">Precisión de golpe a lo largo de la sesión.</p>
+          <div className="mt-5 flex h-44 items-end gap-2">
+            {[78, 82, 76, 84, 71, 88, 79, 73, 81, 69, 77, 74].map((v, i) => (
+              <div key={i} className="group relative flex-1">
+                <div
+                  className="w-full rounded-t-sm bg-gradient-neon transition-opacity hover:opacity-80"
+                  style={{ height: `${v}%` }}
+                />
+                <div className="absolute -top-6 left-1/2 hidden -translate-x-1/2 rounded bg-background px-1.5 py-0.5 font-mono text-[10px] text-neon group-hover:block">
+                  {v}%
+                </div>
+              </div>
+            ))}
           </div>
           <div className="mt-3 flex items-center justify-between font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-            <span>Bajo</span><MapPin className="h-3 w-3" /><span>Alto</span>
+            <span>Set 1</span>
+            <span className="text-destructive">↓ Fatiga set 4</span>
+            <span>Set 4</span>
+          </div>
+          <div className="mt-4 rounded-lg border border-border bg-background p-3">
+            <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">Tiempo medio entre golpes</div>
+            <div className="mt-1 font-display text-2xl font-bold">1.42<span className="text-sm text-muted-foreground">s</span></div>
           </div>
         </div>
       </div>
