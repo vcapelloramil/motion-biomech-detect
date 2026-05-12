@@ -9,14 +9,32 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VideosRouteImport } from './routes/videos'
+import { Route as UploadRouteImport } from './routes/upload'
 import { Route as TecnologiaRouteImport } from './routes/tecnologia'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PerformanceRouteImport } from './routes/performance'
 import { Route as ClinicaRouteImport } from './routes/clinica'
 import { Route as IndexRouteImport } from './routes/index'
 
+const VideosRoute = VideosRouteImport.update({
+  id: '/videos',
+  path: '/videos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UploadRoute = UploadRouteImport.update({
+  id: '/upload',
+  path: '/upload',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TecnologiaRoute = TecnologiaRouteImport.update({
   id: '/tecnologia',
   path: '/tecnologia',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PerformanceRoute = PerformanceRouteImport.update({
@@ -39,43 +57,98 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/clinica': typeof ClinicaRoute
   '/performance': typeof PerformanceRoute
+  '/profile': typeof ProfileRoute
   '/tecnologia': typeof TecnologiaRoute
+  '/upload': typeof UploadRoute
+  '/videos': typeof VideosRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/clinica': typeof ClinicaRoute
   '/performance': typeof PerformanceRoute
+  '/profile': typeof ProfileRoute
   '/tecnologia': typeof TecnologiaRoute
+  '/upload': typeof UploadRoute
+  '/videos': typeof VideosRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/clinica': typeof ClinicaRoute
   '/performance': typeof PerformanceRoute
+  '/profile': typeof ProfileRoute
   '/tecnologia': typeof TecnologiaRoute
+  '/upload': typeof UploadRoute
+  '/videos': typeof VideosRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/clinica' | '/performance' | '/tecnologia'
+  fullPaths:
+    | '/'
+    | '/clinica'
+    | '/performance'
+    | '/profile'
+    | '/tecnologia'
+    | '/upload'
+    | '/videos'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/clinica' | '/performance' | '/tecnologia'
-  id: '__root__' | '/' | '/clinica' | '/performance' | '/tecnologia'
+  to:
+    | '/'
+    | '/clinica'
+    | '/performance'
+    | '/profile'
+    | '/tecnologia'
+    | '/upload'
+    | '/videos'
+  id:
+    | '__root__'
+    | '/'
+    | '/clinica'
+    | '/performance'
+    | '/profile'
+    | '/tecnologia'
+    | '/upload'
+    | '/videos'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ClinicaRoute: typeof ClinicaRoute
   PerformanceRoute: typeof PerformanceRoute
+  ProfileRoute: typeof ProfileRoute
   TecnologiaRoute: typeof TecnologiaRoute
+  UploadRoute: typeof UploadRoute
+  VideosRoute: typeof VideosRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/videos': {
+      id: '/videos'
+      path: '/videos'
+      fullPath: '/videos'
+      preLoaderRoute: typeof VideosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/upload': {
+      id: '/upload'
+      path: '/upload'
+      fullPath: '/upload'
+      preLoaderRoute: typeof UploadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tecnologia': {
       id: '/tecnologia'
       path: '/tecnologia'
       fullPath: '/tecnologia'
       preLoaderRoute: typeof TecnologiaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/performance': {
@@ -106,18 +179,11 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ClinicaRoute: ClinicaRoute,
   PerformanceRoute: PerformanceRoute,
+  ProfileRoute: ProfileRoute,
   TecnologiaRoute: TecnologiaRoute,
+  UploadRoute: UploadRoute,
+  VideosRoute: VideosRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

@@ -79,9 +79,9 @@ function UploadPage() {
               <div className="mt-6 grid gap-2 font-mono text-xs">
                 {[
                   { l: "Lectura de metadatos (FPS, resolución)", done: progress > 30 },
-                  { l: "Detección de keypoints (17 joints)", done: stage === "processing" || stage === "done" },
-                  { l: "Filtro Kalman + suavizado", done: stage === "done" },
-                  { l: "Cálculo cinemático y reporte clínico", done: stage === "done" },
+                  { l: "Detección de keypoints (17 joints)", done: stage === "processing" },
+                  { l: "Filtro Kalman + suavizado", done: false },
+                  { l: "Cálculo cinemático y reporte clínico", done: false },
                 ].map((s) => (
                   <div key={s.l} className="flex items-center gap-2">
                     {s.done ? <Check className="h-3 w-3 text-neon" /> : <span className="h-3 w-3 rounded-full border border-border" />}
