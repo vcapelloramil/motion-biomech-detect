@@ -5,7 +5,7 @@ vecinos. Así que **antes** de filtrar hay que sacar los datos no confiables:
 
 - fotogramas sin detección,
 - puntos por debajo del umbral de confianza (de ``engine.validation``),
-- puntos marcados como salto imposible (de ``engine.validation``).
+- puntos marcados como salto imposible o inversión de profundidad (``engine.validation``).
 
 Los huecos cortos (hasta ``GAP_MAX_INTERPOLABLE`` fotogramas) se interpolan
 linealmente. Los más largos se dejan como ``NaN`` y se registran como tramos
@@ -97,6 +97,11 @@ def preparar_series(
 
     bajos = set(validacion.puntos_baja_confianza)  # (indice_frame, art)
     saltos = {(s.frame_hasta, s.articulacion) for s in validacion.saltos_imposibles}
+    # Cada inversión de z ensucia toda su franja [frame_desde, frame_hasta].
+    inversiones: set[tuple[int, ArticulacionCanonica]] = set()
+    for inv in validacion.inversiones_z:
+        for fr in range(inv.frame_desde, inv.frame_hasta + 1):
+            inversiones.add((fr, inv.articulacion))
 
     def _pts(frame):
         return frame.puntos if espacio == "imagen" else frame.puntos_mundo
@@ -120,7 +125,8 @@ def preparar_series(
             coord_tuvo_dato["x"] = coord_tuvo_dato["y"] = True
             if p.z is not None:
                 coord_tuvo_dato["z"] = True
-            if (frame.indice, art) in bajos or (frame.indice, art) in saltos:
+            clave = (frame.indice, art)
+            if clave in bajos or clave in saltos or clave in inversiones:
                 continue  # el punto existe pero no es confiable
             crudas["x"][i] = p.x
             crudas["y"][i] = p.y

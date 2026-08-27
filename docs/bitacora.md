@@ -6,6 +6,43 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-08-27 (fix) — Detector de inversión de profundidad (z)
+
+**Rama:** `fix/inversion-z` (desde `main`). Fix a E2/E3 ya mergeadas, con su propia
+etiqueta `v0.3.1`, antes de seguir con la Etapa 4.
+
+Surgió de la validación cualitativa de la Etapa 4: el saque `zverev_saque_lateral_02`
+daba un pico de brazo de 24 932 °/s. Investigado (decisión 009): `CODO_DER` **invierte
+el signo de `z`** en el frame 566 (+0,098 → −0,050 m) y queda invertida hasta ~573.
+Confianza 0,65 (pasa el umbral de 0,5) y desplazamiento 3D 0,31 torsos (< 0,5): **ni la
+baja confianza ni el salto imposible lo marcaban.**
+
+### Qué se hizo
+
+- `engine/validation.py`: `detectar_inversiones_z` — cambio de signo de `z` + `|Δz| /
+  torso > 0,18` + dominado por `z` (`|Δz| > 1,8·|Δxy|`). Detectada la entrada, extiende
+  la franja mientras `z` mantiene el signo invertido (tope 25 fotogramas).
+  `ResultadoValidacion.inversiones_z`.
+- `engine/preparacion.py`: excluye toda la franja `[frame_desde, frame_hasta]` antes de
+  filtrar (junto con baja confianza y saltos).
+- Calibrado con el único caso real (`zverev_02` frame 566); deja pasar los dos falsos
+  candidatos del mismo clip (dithering de z cerca del plano). Umbrales a revisar con la
+  Fase B.
+- Versión del motor → `0.3.1`. Decisión 009.
+
+### Pruebas
+
+`pytest -m "not slow"` → **121 en verde** (6 nuevas de inversión de z). `-m slow` → 14,
+incluida `test_inversion_z_corpus.py` (el detector atrapa el frame 566 real y la franja
+566–573 queda como `TramoExcluido` en E3).
+
+### Siguiente paso concreto
+
+Merge `fix/inversion-z` → `main` con `v0.3.1`, traer `etapa/4-cinematica` sobre esa base,
+y seguir esperando la Fase B para 4.7/4.8 y el punto de decisión.
+
+---
+
 ## 2026-08-27 (sesión 2) — Etapa 3: Procesamiento de señales
 
 **Rama:** `etapa/3-senales` (desde `main`, con Etapas 0–2 mergeadas y pusheadas).

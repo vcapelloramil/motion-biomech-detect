@@ -6,6 +6,7 @@ from app.engine.pose.articulaciones import ArticulacionCanonica as A
 from app.engine.pose.base import PoseFrame, Punto, SecuenciaPose
 from app.engine.pose.fake_backend import FakeBackend
 from app.engine.validation import (
+    detectar_inversiones_z,
     detectar_saltos_imposibles,
     largo_torso,
     marcar_baja_confianza,
@@ -44,6 +45,55 @@ def test_validar_rechaza_espacio_desconocido():
     seq = FakeBackend(dims=3).procesar(range(10), **_KW)
     with pytest.raises(ValueError):
         validar(seq, espacio="otro")
+
+
+# --- inversión de profundidad (decisión 009) -------------------------------
+
+_TORSO = {
+    A.HOMBRO_IZQ: Punto(-0.18, -0.30, 0.0, 0.9),
+    A.HOMBRO_DER: Punto(0.18, -0.30, 0.0, 0.9),
+    A.CADERA_IZQ: Punto(-0.15, 0.18, 0.0, 0.9),
+    A.CADERA_DER: Punto(0.15, 0.18, 0.0, 0.9),
+}  # largo de torso ≈ 0.5
+
+
+def _par(z0, z1, dxy=0.01):
+    """Dos frames con CODO_DER cambiando de z0 a z1 (y un torso estable)."""
+    f0 = PoseFrame(0, True, puntos_mundo={**_TORSO, A.CODO_DER: Punto(0.30, -0.10, z0, 0.9)})
+    f1 = PoseFrame(1, True, puntos_mundo={**_TORSO, A.CODO_DER: Punto(0.30 + dxy, -0.10, z1, 0.9)})
+    return _seq([f0, f1], [*_TORSO, A.CODO_DER])
+
+
+def test_inversion_de_profundidad_se_detecta():
+    invs = detectar_inversiones_z(_par(0.10, -0.09), espacio="mundo")
+    assert len(invs) == 1
+    assert invs[0].articulacion is A.CODO_DER
+    assert invs[0].z_antes > 0 > invs[0].z_despues
+
+
+def test_dithering_de_z_cerca_de_cero_no_se_marca():
+    # cambia de signo pero es minúsculo (ruido cerca del plano del cuerpo)
+    assert detectar_inversiones_z(_par(0.01, -0.008), espacio="mundo") == []
+
+
+def test_movimiento_3d_genuino_no_se_marca_como_inversion():
+    # cambia de signo y es grande, pero x,y se mueven tanto como z -> no dominado por z
+    assert detectar_inversiones_z(_par(0.10, -0.09, dxy=0.20), espacio="mundo") == []
+
+
+def test_cambio_grande_de_z_sin_cambio_de_signo_no_es_inversion():
+    # eso lo tiene que atrapar el detector de saltos, no este
+    assert detectar_inversiones_z(_par(0.05, 0.35), espacio="mundo") == []
+
+
+def test_backend_2d_no_dispara_inversiones():
+    seq = FakeBackend(dims=2).procesar(range(20), **_KW)
+    assert detectar_inversiones_z(seq, espacio="imagen") == []
+
+
+def test_validar_incluye_inversiones_z():
+    r = validar(_par(0.10, -0.09), espacio="mundo")
+    assert r.n_inversiones_z == 1
 
 
 def test_oclusion_marca_baja_confianza_y_baja_la_cobertura():

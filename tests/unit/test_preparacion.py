@@ -1,11 +1,12 @@
 """Preparación de series antes de filtrar: excluir no confiables, interpolar huecos."""
 
 import numpy as np
+import pytest
 
 from app.engine.pose.articulaciones import ArticulacionCanonica as A
 from app.engine.pose.base import PoseFrame, Punto, SecuenciaPose
 from app.engine.preparacion import TramoExcluido, _interpolar_huecos_cortos, preparar_series
-from app.engine.validation import ResultadoValidacion, validar
+from app.engine.validation import InversionZ, ResultadoValidacion, validar
 from app.engine.pose.fake_backend import FakeBackend
 
 _KW = dict(ancho=1920, alto=1080, fps_efectivos=240.0)
@@ -41,6 +42,23 @@ def test_frames_sin_deteccion_cortos_se_interpolan():
     serie = series[(A.HOMBRO_DER, "x")]
     assert not np.isnan(serie).any()  # hueco de 3 interpolado
     assert not any(t.articulacion is A.HOMBRO_DER for t in tramos)
+
+
+def test_inversion_z_excluye_los_dos_frames_del_par():
+    seq = FakeBackend(dims=3).procesar(range(60), **_KW)
+    val = validar(seq, espacio="mundo")  # secuencia sana -> sin inversiones reales
+    val.inversiones_z = [InversionZ(A.CODO_DER, 20, 21, 0.4, 0.1, -0.1)]
+
+    crudo_20 = seq.frames[20].get_mundo(A.CODO_DER).x
+    series, _ = preparar_series(seq, val, espacio="mundo")
+    s = series[(A.CODO_DER, "x")]
+
+    # hueco corto de 2 -> se interpola; el valor en 20 ya no es el crudo, es el de
+    # la recta entre 19 y 22.
+    assert not np.isnan(s).any()
+    esperado = np.interp(20, [19, 22], [s[19], s[22]])
+    assert s[20] == pytest.approx(esperado)
+    assert abs(s[20] - crudo_20) > 0  # se usó la interpolación, no el dato crudo
 
 
 def test_frames_sin_deteccion_largos_quedan_como_tramo():

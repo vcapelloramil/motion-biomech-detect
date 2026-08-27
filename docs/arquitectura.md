@@ -24,7 +24,7 @@ todo lo demás:
 | --- | --- | --- | --- |
 | E1 · Ingesta | `engine/ingest.py`, `engine/framehash.py`, `app/catalogador.py` | Lee FPS reales, resuelve el caso de cámara lenta, clasifica por frecuencia efectiva, verifica unicidad de fotogramas | **construido** |
 | E2 · Pose | `engine/pose/` (`base`, `articulaciones`, `mediapipe_backend`, `fake_backend`, `cache`), `app/extraer_pose.py`, `app/bench_pose.py` | Estimación de pose (MediaPipe por defecto) detrás de una interfaz común; caché de coordenadas; medición de velocidad de inferencia | **construido** |
-| E2b · Validación | `engine/validation.py` | Marcado de puntos por confianza y saltos imposibles | **construido** |
+| E2b · Validación | `engine/validation.py` | Marcado de puntos por confianza, saltos imposibles e inversiones de profundidad (z) | **construido** |
 | E3 · Elevación | — | No aplica: MediaPipe entrega 3D directo; no hay modelo de elevación | descartado |
 | E3 · Filtrado | `engine/dsp.py`, `engine/preparacion.py`, `engine/winter.py`, `engine/pipeline.py` | Remoción de atípicos, corte objetivo (Winter), Butterworth de fase cero sobre coordenadas métricas | **construido** |
 | E4 | `engine/kinematics.py`, `engine/sequencing.py` | Ángulos, velocidades, orden de picos | pendiente |
@@ -74,8 +74,8 @@ backend se usó.
   de repliegue de E4.
 - **Coordenadas**: imagen normalizada `[0,1]` + `z` relativo (o `None`) + `confianza [0,1]`.
 - **`engine/validation.py`**: puntos de baja confianza + saltos imposibles (umbral en
-  fracciones de la longitud del torso, sin escala métrica) + cobertura auditable por
-  articulación.
+  fracciones de la longitud del torso) + **inversiones de profundidad** (cambio de signo
+  de `z` dominado por `z`, decisión 009) + cobertura auditable por articulación.
 - **Caché** (`engine/pose/cache.py`, `KINETIQ_CACHE_DIR` / `backend/.cache/`): `.pose.npz`
   + `.pose.json`. `python -m app.extraer_pose` la puebla; `python -m app.bench_pose` mide
   la velocidad de inferencia y la registra en `docs/resultados/`.
