@@ -42,3 +42,4 @@ Qué habilita, qué cierra, qué hay que recordar más adelante.
 | [002](002-config-ruta-corpus.md) | La ubicación del corpus se recibe por configuración | vigente |
 | [003](003-estructura-monorepo.md) | Estructura del monorepo (apartado 4.3.5 de la tesis) | vigente |
 | [004](004-ingesta-fps-y-verificacion.md) | Ingesta: dos verificaciones, factor externo y frecuencia efectiva | vigente |
+| [005](005-percepcion-pose.md) | Percepción de pose: contrato intercambiable, MediaPipe por defecto | vigente |

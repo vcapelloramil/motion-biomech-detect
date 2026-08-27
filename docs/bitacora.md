@@ -6,6 +6,94 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-08-27 — Etapa 2: Estimación de pose
+
+**Rama:** `etapa/2-pose` (desde `main`, con Etapas 0 y 1 ya mergeadas y pusheadas).
+**Modelo:** Sonnet 5 Medio.
+
+Lecturas previas (convención): `capitulo-3` §3.3.2.3–3.3.2.9 y `capitulo-4` §4.4.3.
+Cuatro puntos de diseño confirmados por Valentín: A `static_image_mode=True`; B
+interfaz + mapa canónico + MediaPipeBackend + FakeBackend (que **también** simula el
+caso 2D-solo con `z=None`), sin Vía A real todavía; C `docs/resultados/` arranca en E2;
+D distancia cadera-hombro como referencia interna para el umbral de salto imposible.
+
+### Qué se hizo
+
+- **2.1 · Contrato `PoseBackend`** (`engine/pose/base.py`). ABC: cada backend implementa
+  `estimar_frame(frame_bgr, indice) -> PoseFrame`; la base arma la `SecuenciaPose`
+  (`procesar`). `Punto` (x,y normalizados, z relativo o None, confianza), `PoseFrame`,
+  `SecuenciaPose` (con `dims` 2/3, `cobertura`, `cobertura_articulacion`, `config_hash`).
+  Context manager para liberar recursos.
+- **2.3 · Mapa articular canónico** (`engine/pose/articulaciones.py`). 19
+  `ArticulacionCanonica`; `MEDIAPIPE_A_CANONICO` (33→canónico) y `COCO_A_CANONICO`
+  (17→canónico); `ARTICULACIONES_CORE` (13, lo que ambos entregan). Puntos de mano/pie
+  solo MediaPipe (habilitan el indicador indirecto de rotación de hombro, §3.3.3.4).
+- **2.2 · `MediaPipeBackend`** (`engine/pose/mediapipe_backend.py`). `static_image_mode=True`,
+  `model_complexity=2`. `visibility` → confianza. `version` = `"mediapipe-0.10.18"`
+  (va a `trazabilidad.backend_pose`).
+- **`FakeBackend`** (`engine/pose/fake_backend.py`). Esqueleto plausible (posiciones
+  nominales + balanceo + oscilación por articulación), `dims=2|3`, simula oclusión
+  (confianza baja por articulación) y fotogramas sin detección. Es el segundo backend
+  contra el que se prueba que la interfaz aguanta el caso 2D-solo.
+- **2.4 · `engine/validation.py`**. `marcar_baja_confianza` (umbral 0.5),
+  `detectar_saltos_imposibles` (umbral 0.5 longitudes de torso; sin torso no se juzga),
+  `validar()` → `ResultadoValidacion` con cobertura auditable **por articulación**
+  (§3.3.2.8).
+- **2.5 · Caché** (`engine/pose/cache.py` + `config.get_cache_dir()`). `.pose.npz` +
+  `.pose.json`. Clave = stem + backend id + hash de config. `cargar_si_vigente` compara
+  una firma rápida del video y descarta la caché si el archivo cambió.
+  `KINETIQ_CACHE_DIR` (default `backend/.cache/`, ignorado).
+- **`app/extraer_pose.py`**. CLI: recorre el corpus, corre el backend, cachea. Si ya
+  está y el video no cambió, no re-infiere. Probado con `--backend fake` sobre los 12
+  clips.
+- **2.6 · `app/bench_pose.py` + `docs/resultados/`**. Mide fps de inferencia y agrega la
+  corrida a `docs/resultados/e2-velocidad-inferencia.json`.
+
+### Criterio de aceptación de la Etapa 2
+
+| Punto | Estado |
+| --- | --- |
+| Un video de la Etapa 0 produce un archivo de coordenadas completo con confianzas | ✅ `extraer_pose` → `.pose.npz`/`.pose.json` |
+| Video con jugador visible: cobertura > 95 % | ✅ `test_mediapipe_backend.py` sobre `zverev_saque_lateral_01` (cobertura > 0.95) |
+| Video con oclusión: puntos ocluidos marcados de baja confianza | ✅ `test_mediapipe_backend.py` sobre `control_oclusion_02` |
+| El cambio de backend no altera la estructura de la salida | ✅ FakeBackend (2D y 3D) y MediaPipe producen la misma `SecuenciaPose` |
+| Velocidad de inferencia medida y registrada | ✅ `docs/resultados/e2-velocidad-inferencia.json` |
+
+### Dato duro (tarea 2.6, primer punto del indicador §2.4)
+
+`static_image_mode=True` + `model_complexity=2`, 1080p, **CPU** (MediaPipe-Python no usa
+la GTX 1050ti): **~3,6 fotogramas/segundo** (~280 ms/frame, p95 ~322 ms). Un clip de
+~750 fotogramas ≈ 3–4 min; el corpus entero ≈ 40 min, **una sola vez** (después la
+caché). Si en E4 el tiempo molesta: `model_complexity=1`, `static_image_mode=False`
+(tracking), o bajar resolución antes de inferir. No se toca ahora ("no optimizar antes
+de medir").
+
+### Pruebas
+
+`pytest -m "not slow"` → **96 en verde** (unit de pose: articulaciones, base/FakeBackend,
+validación, caché; integración con clips sintéticos). `-m slow` → MediaPipe sobre video
+real (4) + corpus Fase A de la Etapa 1 (5).
+
+### Pendiente
+
+- **Vía A (YOLOv8-Pose 2D + elevación)**: no implementada. Se hace si el punto de
+  decisión de E4 lo pide (plan de repliegue). La interfaz ya está lista para un backend
+  de 17 puntos.
+- `pose_world_landmarks` métricos de MediaPipe: disponibles pero no se guardan todavía;
+  se decide en E4 si los ángulos 3D los necesitan.
+- Reevaluar la config de MediaPipe (complexity / tracking) si la velocidad molesta en E4.
+- `.gitattributes` con `eol=lf` (arrastre de la Etapa 0).
+
+### Siguiente paso concreto
+
+Cerrar la Etapa 2 (correr `extraer_pose` real sobre el corpus para dejar la caché lista,
+mergear `etapa/2-pose` a `main`, etiqueta `v0.3.0-etapa2`) y abrir la **Etapa 3 —
+Procesamiento de señales**. Lecturas de la convención para E3: `capitulo-3` §3.4.2.1–3.4.2.6
+(Butterworth de fase cero, `filtfilt` vs `lfilter`, análisis residual de Winter, orden
+del pipeline).
+
+---
+
 ## 2026-08-26 (sesión 2) — Etapa 1: Ingesta y validación de FPS
 
 **Rama:** `etapa/1-ingesta` (desde `etapa/0-fundaciones`, todavía sin merge a `main`).

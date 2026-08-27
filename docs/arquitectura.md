@@ -23,8 +23,8 @@ todo lo demás:
 | Etapa | Módulo | Qué hace | Estado |
 | --- | --- | --- | --- |
 | E1 · Ingesta | `engine/ingest.py`, `engine/framehash.py`, `app/catalogador.py` | Lee FPS reales, resuelve el caso de cámara lenta, clasifica por frecuencia efectiva, verifica unicidad de fotogramas | **construido** |
-| E2 · Pose | `engine/pose/` | Estimación de pose (MediaPipe por defecto) detrás de una interfaz común | pendiente |
-| E2b · Validación | `engine/validation.py` | Marcado de puntos por confianza y saltos imposibles | pendiente |
+| E2 · Pose | `engine/pose/` (`base`, `articulaciones`, `mediapipe_backend`, `fake_backend`, `cache`), `app/extraer_pose.py`, `app/bench_pose.py` | Estimación de pose (MediaPipe por defecto) detrás de una interfaz común; caché de coordenadas; medición de velocidad de inferencia | **construido** |
+| E2b · Validación | `engine/validation.py` | Marcado de puntos por confianza y saltos imposibles | **construido** |
 | E3 · Elevación | `engine/lifting.py` | Elevación 2D→3D (opcional) | pendiente |
 | E3 · Filtrado | `engine/dsp.py` | Filtrado Butterworth de fase cero (bidireccional) | pendiente |
 | E4 | `engine/kinematics.py`, `engine/sequencing.py` | Ángulos, velocidades, orden de picos | pendiente |
@@ -56,6 +56,30 @@ frecuencia de captura efectiva) de la entrada/salida (`probe()`, `iterar_fotogra
   `catalogo-verificado.csv`. No toca `catalogo.csv`.
 
 Ver `docs/decisiones/004-ingesta-fps-y-verificacion.md`.
+
+### E2 — Estimación de pose
+
+Contrato intercambiable: `engine/pose/base.PoseBackend` (ABC). Cada backend solo
+implementa `estimar_frame`; la clase base arma la `SecuenciaPose`. E3/E4 no saben qué
+backend se usó.
+
+- **`MediaPipeBackend`** por defecto (§4.4.3): 33 puntos, 3D directo. `static_image_mode=True`
+  (señal cruda; el suavizado lo hace E3), `model_complexity=2`.
+- **Mapa articular canónico** (`engine/pose/articulaciones.py`): 19 `ArticulacionCanonica`;
+  MediaPipe (33) y COCO-17 se traducen al mismo vocabulario. `SecuenciaPose.dims` (2/3)
+  indica si `z` está poblado.
+- **`FakeBackend`**: backend sintético (sin modelo) para pruebas; simula también el caso
+  2D-solo (`dims=2`, `z=None`). La Vía A real (YOLOv8-Pose + elevación) se difiere al plan
+  de repliegue de E4.
+- **Coordenadas**: imagen normalizada `[0,1]` + `z` relativo (o `None`) + `confianza [0,1]`.
+- **`engine/validation.py`**: puntos de baja confianza + saltos imposibles (umbral en
+  fracciones de la longitud del torso, sin escala métrica) + cobertura auditable por
+  articulación.
+- **Caché** (`engine/pose/cache.py`, `KINETIQ_CACHE_DIR` / `backend/.cache/`): `.pose.npz`
+  + `.pose.json`. `python -m app.extraer_pose` la puebla; `python -m app.bench_pose` mide
+  la velocidad de inferencia y la registra en `docs/resultados/`.
+
+Ver `docs/decisiones/005-percepcion-pose.md`.
 
 ## Contrato del reporte
 

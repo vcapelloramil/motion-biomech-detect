@@ -53,6 +53,9 @@ variable `KINETIQ_DATA_DIR` o del archivo `backend/.env` (ver
 cp backend/.env.example backend/.env   # y editar el valor
 ```
 
+Opcional: `KINETIQ_CACHE_DIR` para los resultados intermedios del motor (coordenadas de
+pose extraídas). Si no se define, se usa `backend/.cache/` (ignorada por git).
+
 ## Pruebas
 
 ```bash
@@ -64,15 +67,25 @@ pytest -m "not slow"   # omite las que decodifican video real (corpus Fase A)
 Las pruebas de integración se saltan solas si no hay `ffmpeg`. La prueba de aceptación
 del corpus se salta si no hay `KINETIQ_DATA_DIR`.
 
-## Catalogador del corpus
+## Herramientas de línea de comandos
+
+Todas se corren desde `backend/` (para que `app` esté en el path).
 
 ```bash
-cd backend
-python -m app.catalogador              # usa KINETIQ_DATA_DIR, con verificación de huella
-python -m app.catalogador --sin-hash   # primera pasada rápida, sin verificación de huella
-```
+# Catalogar y verificar el corpus (Etapa 1). Escribe catalogo-verificado.csv
+# junto al corpus; NO modifica catalogo.csv.
+python -m app.catalogador
+python -m app.catalogador --sin-hash          # sin verificación de huella (rápido)
 
-Escribe `catalogo-verificado.csv` junto al corpus. No modifica `catalogo.csv`.
+# Extraer y cachear las coordenadas de pose de los clips (Etapa 2).
+python -m app.extraer_pose                     # todos los clips, MediaPipe
+python -m app.extraer_pose --clip zverev_saque_lateral_01.mp4
+python -m app.extraer_pose --backend fake --max-frames 30
+
+# Medir la velocidad de inferencia de un backend (Etapa 2, tarea 2.6).
+# Agrega la corrida a docs/resultados/e2-velocidad-inferencia.json
+python -m app.bench_pose --clip zverev_saque_lateral_01.mp4 --frames 120
+```
 
 ## Estructura
 
@@ -82,14 +95,22 @@ backend/
   requirements-dev.txt     + pytest
   .env.example             plantilla de configuración local
   app/
-    config.py              resolución de KINETIQ_DATA_DIR
-    catalogador.py          CLI: cataloga y verifica el corpus (Etapa 1, tarea 1.5)
+    config.py              resolución de KINETIQ_DATA_DIR / KINETIQ_CACHE_DIR
+    catalogador.py          CLI: cataloga y verifica el corpus (E1, tarea 1.5)
+    extraer_pose.py         CLI: extrae y cachea coordenadas de pose (E2)
+    bench_pose.py           CLI: mide la velocidad de inferencia (E2, tarea 2.6)
     schemas/
       reporte.py           contrato del reporte (Anexo A del plan)
     engine/                núcleo biomecánico, sin dependencias web
       version.py           versión del motor, se sella en cada reporte
       ingest.py             E1: FPS reales, cámara lenta, aptitud, iterador de fotogramas
       framehash.py          E1: unicidad de fotogramas por huella (decisión 001)
-      pose/                backends de estimación de pose (Etapa 2)
+      validation.py         E2b: baja confianza + saltos imposibles
+      pose/
+        base.py             contrato PoseBackend + SecuenciaPose
+        articulaciones.py   mapa articular canónico (MediaPipe 33 / COCO 17)
+        mediapipe_backend.py  backend por defecto
+        fake_backend.py     backend sintético para pruebas (incluye caso 2D-solo)
+        cache.py            persistencia de coordenadas (.pose.npz + .pose.json)
     routers/  workers/     API (Etapa 6)
 ```
