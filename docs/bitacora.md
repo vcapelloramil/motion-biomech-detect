@@ -6,40 +6,43 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
-## 2026-08-27 (fix) — Detector de inversión de profundidad (z)
+## 2026-08-27 (fix) — Detector de inversión de profundidad (z), `v0.3.1` + `v0.3.2`
 
-**Rama:** `fix/inversion-z` (desde `main`). Fix a E2/E3 ya mergeadas, con su propia
-etiqueta `v0.3.1`, antes de seguir con la Etapa 4.
+**Ramas:** `fix/inversion-z` (`v0.3.1`) y `fix/inversion-z-calibracion` (`v0.3.2`),
+ambas mergeadas a `main`. Fix a E2/E3, antes de seguir con la Etapa 4.
 
-Surgió de la validación cualitativa de la Etapa 4: el saque `zverev_saque_lateral_02`
-daba un pico de brazo de 24 932 °/s. Investigado (decisión 009): `CODO_DER` **invierte
-el signo de `z`** en el frame 566 (+0,098 → −0,050 m) y queda invertida hasta ~573.
-Confianza 0,65 (pasa el umbral de 0,5) y desplazamiento 3D 0,31 torsos (< 0,5): **ni la
-baja confianza ni el salto imposible lo marcaban.**
+Surgió de la validación cualitativa de la Etapa 4: `zverev_saque_lateral_02` daba un
+pico de brazo de 24 932 °/s. Investigado (decisión 009): `CODO_DER` **invierte el signo
+de `z`** en el frame 566 (+0,098 → −0,050 m). Confianza 0,65 (pasa el umbral de 0,5) y
+desplazamiento 3D 0,31 torsos (< 0,5): **ni la baja confianza ni el salto imposible lo
+marcaban.**
 
 ### Qué se hizo
 
-- `engine/validation.py`: `detectar_inversiones_z` — cambio de signo de `z` + `|Δz| /
-  torso > 0,18` + dominado por `z` (`|Δz| > 1,8·|Δxy|`). Detectada la entrada, extiende
-  la franja mientras `z` mantiene el signo invertido (tope 25 fotogramas).
-  `ResultadoValidacion.inversiones_z`.
-- `engine/preparacion.py`: excluye toda la franja `[frame_desde, frame_hasta]` antes de
-  filtrar (junto con baja confianza y saltos).
-- Calibrado con el único caso real (`zverev_02` frame 566); deja pasar los dos falsos
-  candidatos del mismo clip (dithering de z cerca del plano). Umbrales a revisar con la
-  Fase B.
-- Versión del motor → `0.3.1`. Decisión 009.
+- `engine/validation.py`: `detectar_inversiones_z`. Firma de un glitch puntual real —
+  **cinco condiciones**: confianza previa ≥ 0,80, cambio de signo de `z`,
+  `|Δz|/torso > 0,20`, dominado por `z` (`|Δz| > 1,8·|Δxy|`), y **`z` vuelve** al signo
+  original en ≤ 15 fotogramas. `ResultadoValidacion.inversiones_z`.
+- `engine/preparacion.py`: excluye la franja `[frame_desde, frame_hasta]` antes de filtrar.
+- `v0.3.1` era más laxa (sin confianza previa ni retorno) y disparaba 35–95 veces por
+  clip, removiendo picos plausibles del brazo y exponiendo peores. `v0.3.2` la acota a
+  3–45/clip sin perder el caso real.
+
+### Hallazgo (para el Capítulo 6/7)
+
+Aun con las cinco condiciones, sobre el corpus público el detector **dispara 16–45 veces
+por saque** de Zverev (solo 3 en el drive). No son falsos positivos: en **toma lateral**
+la `z` de las articulaciones rápidas del brazo/mano que da MediaPipe es poco más que
+ruido que cruza el cero. Consecuencia: al excluir esas franjas, **las repeticiones de
+saque del corpus público quedan "no auditables"** en vez de reportar un orden con un
+número plausible por casualidad — correcto por R3, y la misma conclusión de la decisión
+008: la toma lateral no sirve para el brazo rápido; **Fase B con tres cuartos**. El
+`drive` (brazo más en el plano) sigue recuperando `pelvis → torso → brazo`.
 
 ### Pruebas
 
-`pytest -m "not slow"` → **121 en verde** (6 nuevas de inversión de z). `-m slow` → 14,
-incluida `test_inversion_z_corpus.py` (el detector atrapa el frame 566 real y la franja
-566–573 queda como `TramoExcluido` en E3).
-
-### Siguiente paso concreto
-
-Merge `fix/inversion-z` → `main` con `v0.3.1`, traer `etapa/4-cinematica` sobre esa base,
-y seguir esperando la Fase B para 4.7/4.8 y el punto de decisión.
+`pytest -m "not slow"` → **123 en verde**. `-m slow` → `test_inversion_z_corpus.py`
+atrapa el frame 566 real y la franja queda como `TramoExcluido` en E3.
 
 ---
 
