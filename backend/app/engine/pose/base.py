@@ -30,9 +30,11 @@ from app.engine.pose.articulaciones import ArticulacionCanonica
 class Punto:
     """Un punto articular en un fotograma.
 
-    x, y: coordenadas en la imagen, normalizadas a [0, 1] (0,0 = esquina superior
-    izquierda). z: profundidad relativa estimada (MediaPipe) o None si el backend
-    es bidimensional. confianza: [0, 1] (para MediaPipe, la 'visibility').
+    En ``PoseFrame.puntos`` (espacio de imagen): x, y normalizados a [0, 1]
+    (0,0 = esquina superior izquierda), z = profundidad relativa (o None en 2D).
+    En ``PoseFrame.puntos_mundo`` (espacio métrico de MediaPipe): x, y, z en
+    **metros**, origen en el punto medio de las caderas. confianza: [0, 1]
+    (para MediaPipe, la 'visibility'; es la misma en imagen y en mundo).
     """
 
     x: float
@@ -45,10 +47,17 @@ class Punto:
 class PoseFrame:
     indice: int
     detectado: bool
+    # Espacio de imagen normalizado. Se usa para el overlay del esqueleto (E5).
     puntos: dict[ArticulacionCanonica, Punto] = field(default_factory=dict)
+    # Espacio métrico (metros, centrado en las caderas). Es lo que filtra E3 y lo
+    # que consume la cinemática de E4. Vacío si el backend es 2D puro.
+    puntos_mundo: dict[ArticulacionCanonica, Punto] = field(default_factory=dict)
 
     def get(self, art: ArticulacionCanonica) -> Punto | None:
         return self.puntos.get(art)
+
+    def get_mundo(self, art: ArticulacionCanonica) -> Punto | None:
+        return self.puntos_mundo.get(art)
 
 
 @dataclass(frozen=True)
@@ -66,6 +75,11 @@ class SecuenciaPose:
     @property
     def n_frames(self) -> int:
         return len(self.frames)
+
+    @property
+    def tiene_mundo(self) -> bool:
+        """True si hay coordenadas métricas (MediaPipe); False en backends 2D puros."""
+        return any(f.puntos_mundo for f in self.frames)
 
     @property
     def cobertura(self) -> float:

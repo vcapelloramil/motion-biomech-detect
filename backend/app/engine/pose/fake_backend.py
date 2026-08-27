@@ -96,6 +96,7 @@ class FakeBackend(PoseBackend):
         t = indice / 30.0  # "segundos" arbitrarios para la sinusoide
         vaiven = 0.03 * math.sin(2.0 * math.pi * 0.15 * t)  # balanceo global del cuerpo
         puntos: dict[ArticulacionCanonica, Punto] = {}
+        puntos_mundo: dict[ArticulacionCanonica, Punto] = {}
         for art in self._articulaciones:
             bx, by, bz = _NOMINAL[art]
             ph = _fase(art)
@@ -104,4 +105,11 @@ class FakeBackend(PoseBackend):
             z = None if self.dims == 2 else bz + 0.03 * math.sin(2.0 * math.pi * 0.35 * t + ph)
             conf = self._ocluidas.get(art, self._conf_base)
             puntos[art] = Punto(x=x, y=y, z=z, confianza=conf)
-        return PoseFrame(indice=indice, detectado=True, puntos=puntos)
+            if self.dims == 3:
+                # Pseudo-metros: normalizado centrado en 0.5, escala ~1.8 m de alto.
+                puntos_mundo[art] = Punto(
+                    x=(x - 0.5) * 1.8, y=(y - 0.5) * 1.8, z=z * 1.8, confianza=conf
+                )
+        return PoseFrame(
+            indice=indice, detectado=True, puntos=puntos, puntos_mundo=puntos_mundo
+        )

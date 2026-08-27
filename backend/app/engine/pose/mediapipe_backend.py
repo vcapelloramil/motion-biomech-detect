@@ -75,18 +75,26 @@ class MediaPipeBackend(PoseBackend):
 
         landmarks = getattr(resultado, "pose_landmarks", None)
         if landmarks is None:
-            return PoseFrame(indice=indice, detectado=False, puntos={})
+            return PoseFrame(indice=indice, detectado=False, puntos={}, puntos_mundo={})
 
+        mundo = getattr(resultado, "pose_world_landmarks", None)
         puntos: dict[ArticulacionCanonica, Punto] = {}
+        puntos_mundo: dict[ArticulacionCanonica, Punto] = {}
         for idx, art in MEDIAPIPE_A_CANONICO.items():
             lm = landmarks.landmark[idx]
             puntos[art] = Punto(
-                x=float(lm.x),
-                y=float(lm.y),
-                z=float(lm.z),
+                x=float(lm.x), y=float(lm.y), z=float(lm.z),
                 confianza=float(lm.visibility),
             )
-        return PoseFrame(indice=indice, detectado=True, puntos=puntos)
+            if mundo is not None:
+                wm = mundo.landmark[idx]
+                puntos_mundo[art] = Punto(
+                    x=float(wm.x), y=float(wm.y), z=float(wm.z),
+                    confianza=float(wm.visibility),
+                )
+        return PoseFrame(
+            indice=indice, detectado=True, puntos=puntos, puntos_mundo=puntos_mundo
+        )
 
     def cerrar(self) -> None:
         if self._pose is not None:

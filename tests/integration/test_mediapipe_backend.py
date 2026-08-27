@@ -67,6 +67,17 @@ def test_entrega_puntos_3d_del_vocabulario_canonico(seq_zverev):
     assert 0.0 <= p.confianza <= 1.0
 
 
+def test_entrega_coordenadas_metricas_de_mundo(seq_zverev):
+    from app.engine.pose.articulaciones import ArticulacionCanonica
+
+    assert seq_zverev.tiene_mundo is True
+    frame = next(f for f in seq_zverev.frames if f.detectado)
+    pm = frame.get_mundo(ArticulacionCanonica.HOMBRO_DER)
+    assert pm is not None and pm.z is not None
+    # world landmarks en metros, centrados en las caderas: un hombro cae a < ~1 m.
+    assert abs(pm.x) < 1.5 and abs(pm.y) < 1.5 and abs(pm.z) < 1.5
+
+
 def test_backend_version_va_al_reporte(seq_zverev):
     assert seq_zverev.backend_id == "mediapipe"
     assert seq_zverev.backend_version.startswith("mediapipe-")

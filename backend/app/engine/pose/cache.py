@@ -20,6 +20,12 @@ import numpy as np
 from app.engine.pose.articulaciones import ArticulacionCanonica
 from app.engine.pose.base import PoseFrame, Punto, SecuenciaPose
 
+# Versión del formato en disco. Se sube cuando cambia la estructura guardada, para
+# invalidar cachés viejas aunque la config del backend no haya cambiado.
+#   1 — solo puntos de imagen (Etapa 2)
+#   2 — + puntos_mundo métricos (Etapa 3)
+_ESQUEMA = 2
+
 
 def firma_video(ruta: Path) -> str:
     """Identidad rápida del archivo: tamaño + mtime + sha1 de los primeros 64 KB."""
@@ -56,22 +62,26 @@ def guardar(seq: SecuenciaPose, base: Path, *, video: Path | None = None) -> tup
 
     detectado = np.zeros(n, dtype=bool)
     indices = np.zeros(n, dtype=np.int64)
-    columnas = {a.value: np.full((n, 4), np.nan, dtype=np.float64) for a in arts}
+    img = {a.value: np.full((n, 4), np.nan, dtype=np.float64) for a in arts}
+    mundo = {a.value: np.full((n, 4), np.nan, dtype=np.float64) for a in arts}
 
     for i, frame in enumerate(seq.frames):
         indices[i] = frame.indice
         detectado[i] = frame.detectado
         for art, p in frame.puntos.items():
-            z = np.nan if p.z is None else p.z
-            columnas[art.value][i] = (p.x, p.y, z, p.confianza)
+            img[art.value][i] = (p.x, p.y, np.nan if p.z is None else p.z, p.confianza)
+        for art, p in frame.puntos_mundo.items():
+            mundo[art.value][i] = (p.x, p.y, np.nan if p.z is None else p.z, p.confianza)
 
     np.savez_compressed(
         str(base) + ".pose",
         detectado=detectado,
         indices=indices,
-        **{f"kp__{k}": v for k, v in columnas.items()},
+        **{f"kp__{k}": v for k, v in img.items()},
+        **{f"kpw__{k}": v for k, v in mundo.items()},
     )
     meta = {
+        "esquema": _ESQUEMA,
         "backend_id": seq.backend_id,
         "backend_version": seq.backend_version,
         "articulaciones": [a.value for a in arts],
@@ -96,21 +106,30 @@ def cargar(base: Path) -> SecuenciaPose:
     detectado = datos["detectado"]
     indices = datos["indices"]
 
-    frames: list[PoseFrame] = []
-    for i in range(meta["n_frames"]):
-        puntos: dict[ArticulacionCanonica, Punto] = {}
+    def _leer(prefijo: str, i: int) -> dict[ArticulacionCanonica, Punto]:
+        salida: dict[ArticulacionCanonica, Punto] = {}
         for art in arts:
-            x, y, z, conf = datos[f"kp__{art.value}"][i]
+            clave = f"{prefijo}{art.value}"
+            if clave not in datos:
+                continue
+            x, y, z, conf = datos[clave][i]
             if np.isnan(x):
                 continue
-            puntos[art] = Punto(
-                x=float(x),
-                y=float(y),
-                z=None if np.isnan(z) else float(z),
-                confianza=float(conf),
+            salida[art] = Punto(
+                x=float(x), y=float(y),
+                z=None if np.isnan(z) else float(z), confianza=float(conf),
             )
+        return salida
+
+    frames: list[PoseFrame] = []
+    for i in range(meta["n_frames"]):
         frames.append(
-            PoseFrame(indice=int(indices[i]), detectado=bool(detectado[i]), puntos=puntos)
+            PoseFrame(
+                indice=int(indices[i]),
+                detectado=bool(detectado[i]),
+                puntos=_leer("kp__", i),
+                puntos_mundo=_leer("kpw__", i),
+            )
         )
 
     return SecuenciaPose(
@@ -134,6 +153,8 @@ def cargar_si_vigente(
     if not (_p_npz(base).is_file() and _p_json(base).is_file()):
         return None
     meta = json.loads(_p_json(base).read_text(encoding="utf-8"))
+    if meta.get("esquema") != _ESQUEMA:
+        return None  # formato viejo: re-extraer
     if meta.get("firma_video") and meta["firma_video"] != firma_video(Path(video)):
         return None
     return cargar(base)

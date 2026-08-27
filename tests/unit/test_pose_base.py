@@ -17,11 +17,22 @@ def test_fake_3d_produce_secuencia_completa():
     assert p is not None and p.z is not None
 
 
-def test_fake_2d_no_tiene_z_y_usa_solo_el_core():
+def test_fake_3d_tiene_coordenadas_metricas():
+    seq = FakeBackend(dims=3).procesar(range(20), **_KW)
+    assert seq.tiene_mundo is True
+    pm = seq.frames[5].get_mundo(ArticulacionCanonica.CADERA_IZQ)
+    assert pm is not None and pm.z is not None
+    # pseudo-metros: magnitud plausible para un cuerpo
+    assert abs(pm.x) < 2.0 and abs(pm.y) < 2.0
+
+
+def test_fake_2d_no_tiene_z_ni_mundo_y_usa_solo_el_core():
     seq = FakeBackend(dims=2).procesar(range(20), **_KW)
     assert seq.dims == 2
+    assert seq.tiene_mundo is False
     assert set(seq.articulaciones) == ARTICULACIONES_CORE
     for frame in seq.frames:
+        assert frame.puntos_mundo == {}
         for punto in frame.puntos.values():
             assert punto.z is None
 
