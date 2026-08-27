@@ -61,13 +61,21 @@ def test_el_filtro_reduce_la_energia_de_alta_frecuencia():
 
     res = procesar_e3(_SEQ)
 
-    def _serie(seq, art):
-        return np.array(
-            [f.get_mundo(art).x for f in seq.frames if f.get_mundo(art) is not None]
-        )
+    # CADERA_IZQ: cobertura completa y sin saltos -> comparación alineada por índice.
+    art = A.CADERA_IZQ
+    por_indice_cruda = {
+        f.indice: f.get_mundo(art).x for f in _SEQ.frames if f.get_mundo(art) is not None
+    }
+    comunes = [
+        f.indice
+        for f in res.secuencia.frames
+        if f.get_mundo(art) is not None and f.indice in por_indice_cruda
+    ]
+    assert len(comunes) > 0.9 * _SEQ.n_frames  # casi todos los fotogramas
 
-    cruda = _serie(_SEQ, A.MUNECA_DER)
-    filtrada = _serie(res.secuencia, A.MUNECA_DER)
-    n = min(len(cruda), len(filtrada))
+    cruda = np.array([por_indice_cruda[i] for i in comunes])
+    filtrada = np.array(
+        [f.get_mundo(art).x for f in res.secuencia.frames if f.indice in set(comunes)]
+    )
     # varianza de la diferencia de primer orden (proxy de alta frecuencia): baja
-    assert np.var(np.diff(filtrada[:n])) < np.var(np.diff(cruda[:n]))
+    assert np.var(np.diff(filtrada)) < np.var(np.diff(cruda))
