@@ -1,5 +1,7 @@
 """Validación de pose: confianza baja, saltos imposibles, cobertura por articulación."""
 
+import pytest
+
 from app.engine.pose.articulaciones import ArticulacionCanonica as A
 from app.engine.pose.base import PoseFrame, Punto, SecuenciaPose
 from app.engine.pose.fake_backend import FakeBackend
@@ -26,6 +28,22 @@ def test_secuencia_sana_no_dispara_nada():
     assert r.puntos_baja_confianza == []
     assert r.saltos_imposibles == []
     assert all(v == 1.0 for v in r.cobertura_auditable.values())
+
+
+def test_validar_en_espacio_mundo():
+    seq = FakeBackend(dims=3, articulaciones_ocluidas={A.MUNECA_DER: 0.2}).procesar(
+        range(30), **_KW
+    )
+    r = validar(seq, espacio="mundo")
+    assert {art for _, art in r.puntos_baja_confianza} == {A.MUNECA_DER}
+    assert r.saltos_imposibles == []
+    assert r.cobertura_auditable[A.MUNECA_DER] == 0.0
+
+
+def test_validar_rechaza_espacio_desconocido():
+    seq = FakeBackend(dims=3).procesar(range(10), **_KW)
+    with pytest.raises(ValueError):
+        validar(seq, espacio="otro")
 
 
 def test_oclusion_marca_baja_confianza_y_baja_la_cobertura():

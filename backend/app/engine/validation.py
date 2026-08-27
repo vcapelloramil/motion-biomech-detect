@@ -55,53 +55,64 @@ class ResultadoValidacion:
         return len(self.saltos_imposibles)
 
 
+# Espacio de coordenadas sobre el que trabaja la validación. E3 usa "mundo"
+# (métrico, centrado en caderas): quita la traslación por paneo de cámara, así un
+# salto real se distingue mejor. Los backends 2D puros solo tienen "imagen".
+_ESPACIOS = ("imagen", "mundo")
+
+
+def _puntos(frame: PoseFrame, espacio: str) -> dict[ArticulacionCanonica, Punto]:
+    return frame.puntos if espacio == "imagen" else frame.puntos_mundo
+
+
 def _dist(a: Punto, b: Punto) -> float:
-    return math.hypot(a.x - b.x, a.y - b.y)
+    dz = 0.0 if (a.z is None or b.z is None) else (a.z - b.z)
+    return math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2 + dz**2)
 
 
-def largo_torso(frame: PoseFrame) -> float | None:
-    """Distancia media hombro-cadera (mismo lado) en coordenadas normalizadas.
-
-    None si no hay al menos un lado con hombro y cadera presentes.
-    """
+def largo_torso(frame: PoseFrame, *, espacio: str = "imagen") -> float | None:
+    """Distancia media hombro-cadera (mismo lado). None si falta un lado completo."""
+    puntos = _puntos(frame, espacio)
     lados = (
         (ArticulacionCanonica.HOMBRO_IZQ, ArticulacionCanonica.CADERA_IZQ),
         (ArticulacionCanonica.HOMBRO_DER, ArticulacionCanonica.CADERA_DER),
     )
-    largos = []
-    for hombro, cadera in lados:
-        h, c = frame.get(hombro), frame.get(cadera)
-        if h is not None and c is not None:
-            largos.append(_dist(h, c))
+    largos = [
+        _dist(puntos[h], puntos[c])
+        for h, c in lados
+        if h in puntos and c in puntos
+    ]
     return sum(largos) / len(largos) if largos else None
 
 
 def marcar_baja_confianza(
-    seq: SecuenciaPose, *, umbral: float = UMBRAL_CONFIANZA
+    seq: SecuenciaPose, *, umbral: float = UMBRAL_CONFIANZA, espacio: str = "imagen"
 ) -> list[tuple[int, ArticulacionCanonica]]:
     marcados: list[tuple[int, ArticulacionCanonica]] = []
     for frame in seq.frames:
-        for art, punto in frame.puntos.items():
+        for art, punto in _puntos(frame, espacio).items():
             if punto.confianza < umbral:
                 marcados.append((frame.indice, art))
     return marcados
 
 
 def detectar_saltos_imposibles(
-    seq: SecuenciaPose, *, max_torsos: float = MAX_SALTO_TORSOS
+    seq: SecuenciaPose, *, max_torsos: float = MAX_SALTO_TORSOS, espacio: str = "imagen"
 ) -> list[SaltoImposible]:
     saltos: list[SaltoImposible] = []
     for anterior, actual in zip(seq.frames, seq.frames[1:]):
         if not (anterior.detectado and actual.detectado):
             continue
-        escala = largo_torso(actual) or largo_torso(anterior)
+        escala = largo_torso(actual, espacio=espacio) or largo_torso(
+            anterior, espacio=espacio
+        )
         if not escala or escala <= 0:
             continue  # sin escala interna no se puede juzgar
-        for art, p_actual in actual.puntos.items():
-            p_anterior = anterior.puntos.get(art)
-            if p_anterior is None:
+        p_ant = _puntos(anterior, espacio)
+        for art, p_actual in _puntos(actual, espacio).items():
+            if art not in p_ant:
                 continue
-            desplazamiento = _dist(p_anterior, p_actual) / escala
+            desplazamiento = _dist(p_ant[art], p_actual) / escala
             if desplazamiento > max_torsos:
                 saltos.append(
                     SaltoImposible(
@@ -115,7 +126,7 @@ def detectar_saltos_imposibles(
 
 
 def _cobertura_auditable(
-    seq: SecuenciaPose, umbral: float
+    seq: SecuenciaPose, umbral: float, espacio: str
 ) -> dict[ArticulacionCanonica, float]:
     if not seq.frames:
         return {}
@@ -125,7 +136,7 @@ def _cobertura_auditable(
         ok = sum(
             1
             for f in seq.frames
-            if (p := f.puntos.get(art)) is not None and p.confianza >= umbral
+            if (p := _puntos(f, espacio).get(art)) is not None and p.confianza >= umbral
         )
         cobertura[art] = ok / n
     return cobertura
@@ -136,11 +147,18 @@ def validar(
     *,
     umbral_confianza: float = UMBRAL_CONFIANZA,
     max_salto_torsos: float = MAX_SALTO_TORSOS,
+    espacio: str = "imagen",
 ) -> ResultadoValidacion:
+    if espacio not in _ESPACIOS:
+        raise ValueError(f"espacio debe ser uno de {_ESPACIOS}")
     return ResultadoValidacion(
         umbral_confianza=umbral_confianza,
         max_salto_torsos=max_salto_torsos,
-        puntos_baja_confianza=marcar_baja_confianza(seq, umbral=umbral_confianza),
-        saltos_imposibles=detectar_saltos_imposibles(seq, max_torsos=max_salto_torsos),
-        cobertura_auditable=_cobertura_auditable(seq, umbral_confianza),
+        puntos_baja_confianza=marcar_baja_confianza(
+            seq, umbral=umbral_confianza, espacio=espacio
+        ),
+        saltos_imposibles=detectar_saltos_imposibles(
+            seq, max_torsos=max_salto_torsos, espacio=espacio
+        ),
+        cobertura_auditable=_cobertura_auditable(seq, umbral_confianza, espacio),
     )
