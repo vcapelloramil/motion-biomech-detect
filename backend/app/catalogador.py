@@ -31,12 +31,17 @@ from app.engine.ingest import AptitudFaseRapida, IngestaError, evaluar, probe
 
 EXTENSIONES_VIDEO = {".mp4", ".mov", ".avi", ".mkv", ".m4v"}
 
+# Subcarpetas que se saltan por defecto: contienen material de origen (videos
+# largos de los que se recortan los segmentos), no unidades de análisis.
+CARPETAS_EXCLUIDAS = {"compilaciones"}
+
 
 @dataclass
 class FilaCatalogo:
     archivo: str
     ruta_relativa: str
-    fps_declarados: float = 0.0
+    fps_declarados: float = 0.0          # normalizado (59.94 -> 60)
+    fps_declarados_crudo: float = 0.0    # lo que devolvió el archivo, sin normalizar
     factor: float = 1.0
     origen_factor: str = "declarado"
     fps_efectivos: float = 0.0
@@ -64,8 +69,8 @@ def _combinar_uso(
 
     if aptitud in (AptitudFaseRapida.COMPLETO, AptitudFaseRapida.REDUCIDO):
         base = "E1-E4"
-    else:  # SOLO_PREPARACION
-        base = "E1-E4 (solo preparación)"
+    else:  # SOLO_PREPARACION: la fase rápida no es auditable, solo la preparación
+        base = "E1-E2 (solo preparación)"
 
     if categoria_unicidad == "duplicacion_sistematica":
         # Fotogramas duplicados: no sirve para velocidades ni orden de picos.
@@ -119,10 +124,12 @@ def catalogar_directorio(
     catalogo: Path | None = None,
     con_hash: bool = True,
     ventana: tuple[float, float] | None = None,
+    incluir_todo: bool = False,
 ) -> tuple[list[FilaCatalogo], list[str]]:
-    """Cataloga todos los videos bajo ``directorio``. No escribe nada.
+    """Cataloga los videos bajo ``directorio``. No escribe nada.
 
-    Devuelve (filas, avisos_globales).
+    Salta las subcarpetas de ``CARPETAS_EXCLUIDAS`` (material de origen) salvo que
+    ``incluir_todo`` sea True. Devuelve (filas, avisos_globales).
     """
     directorio = Path(directorio)
     if catalogo:
@@ -131,7 +138,9 @@ def catalogar_directorio(
         manual, mal_formados, avisos = {}, set(), []
 
     videos = sorted(
-        p for p in directorio.rglob("*") if p.suffix.lower() in EXTENSIONES_VIDEO
+        p for p in directorio.rglob("*")
+        if p.suffix.lower() in EXTENSIONES_VIDEO
+        and (incluir_todo or not (CARPETAS_EXCLUIDAS & set(p.relative_to(directorio).parts)))
     )
     if not videos:
         avisos.append(f"No se encontraron videos bajo {directorio}.")
@@ -170,7 +179,13 @@ def catalogar_directorio(
             md, factor=factor, escala_conocida=escala_conocida, origen_factor=origen
         )
 
-        fila.fps_declarados = round(md.fps_declarados, 3)
+        fila.fps_declarados = round(res.fps_declarados_normalizado, 3)
+        fila.fps_declarados_crudo = round(md.fps_declarados, 3)
+        if abs(res.fps_declarados_normalizado - md.fps_declarados) > 0.01:
+            avisos_fila.append(
+                f"tasa NTSC {md.fps_declarados:.3f} normalizada a "
+                f"{res.fps_declarados_normalizado:.0f}"
+            )
         fila.factor = factor
         fila.origen_factor = res.origen_factor
         fila.fps_efectivos = round(res.fps_efectivos, 2)
@@ -211,6 +226,15 @@ def catalogar_directorio(
         if avisos_fila:
             fila.avisos = " | ".join(avisos_fila)
         filas.append(fila)
+
+    # Filas del catálogo manual que no tienen un archivo correspondiente.
+    escaneados = {f.archivo for f in filas}
+    huerfanas = sorted(set(manual) - escaneados)
+    for nombre in huerfanas:
+        avisos.append(
+            f"catalogo.csv tiene una fila para '{nombre}' pero no se encontró ese "
+            f"archivo bajo {directorio}."
+        )
 
     return filas, avisos
 
@@ -260,6 +284,8 @@ def main(argv: list[str] | None = None) -> int:
                         help="Ventana para el hash, en segundos 'desde:hasta'.")
     parser.add_argument("--sin-hash", action="store_true",
                         help="Omite la verificación de unicidad de fotogramas (más rápido).")
+    parser.add_argument("--incluir-todo", action="store_true",
+                        help=f"No saltear las subcarpetas de origen ({', '.join(sorted(CARPETAS_EXCLUIDAS))}).")
     args = parser.parse_args(argv)
 
     if args.dir is None or args.catalogo is None or args.salida is None:
@@ -276,7 +302,8 @@ def main(argv: list[str] | None = None) -> int:
         ventana = (float(desde), float(hasta))
 
     filas, avisos = catalogar_directorio(
-        args.dir, catalogo=args.catalogo, con_hash=not args.sin_hash, ventana=ventana
+        args.dir, catalogo=args.catalogo, con_hash=not args.sin_hash,
+        ventana=ventana, incluir_todo=args.incluir_todo,
     )
 
     _imprimir_tabla(filas)
@@ -288,9 +315,13 @@ def main(argv: list[str] | None = None) -> int:
 
     errores = [f for f in filas if f.aptitud_fps == "ERROR"]
     rechazados = [f for f in filas if f.uso_final == "rechazado"]
+    con_avisos = [f for f in filas if f.avisos or f.inconsistencias]
     print(f"Aptos fase rápida: {sum(1 for f in filas if f.uso_final.startswith('E1-E4'))}  "
+          f"| solo preparación: {sum(1 for f in filas if 'preparación' in f.uso_final)}  "
           f"| solo E1-E2: {sum(1 for f in filas if f.uso_final == 'E1-E2')}  "
           f"| rechazados: {len(rechazados)}  | con error: {len(errores)}")
+    if con_avisos or avisos:
+        print(f"Con avisos: {len(con_avisos)} clip(s) + {len(avisos)} aviso(s) global(es).")
     return 1 if errores else 0
 
 

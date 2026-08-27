@@ -51,6 +51,26 @@ _UMBRAL_COMPLETO = 240.0
 _UMBRAL_REDUCIDO = 120.0
 _UMBRAL_PREPARACION = 60.0
 
+# Tasas de captura estándar. Las tasas NTSC (24000/1001 = 23.976, 30000/1001 =
+# 29.97, 60000/1001 = 59.94, ...) son artefactos de la aritmética de video, no
+# decisiones: un archivo a 59.94 fps es material "60p".
+_FPS_ESTANDAR = (24.0, 25.0, 30.0, 48.0, 50.0, 60.0, 96.0, 100.0, 120.0, 240.0)
+_TOL_NORMALIZACION = 0.005  # 0.5%
+
+
+def normalizar_fps(fps: float) -> float:
+    """Ajusta una tasa NTSC a su valor nominal si cae a menos de 0.5% de él.
+
+    Sin esto, un clip a 59.94 fps quedaría por debajo del umbral de 60 y se
+    rechazaría por un redondeo, no por una limitación real de muestreo.
+    """
+    if fps <= 0:
+        return fps
+    for estandar in _FPS_ESTANDAR:
+        if abs(fps - estandar) / estandar <= _TOL_NORMALIZACION:
+            return estandar
+    return fps
+
 
 def clasificar_fps(fps_efectivos: float) -> AptitudFaseRapida:
     """Aplica la tabla de aptitud del plan (tarea 1.3) a una frecuencia efectiva."""
@@ -101,6 +121,7 @@ class ResultadoIngesta:
     metadatos: MetadatosVideo
     factor: float
     origen_factor: str  # "declarado" | "manual" | "catalogo"
+    fps_declarados_normalizado: float
     fps_efectivos: float
     escala_temporal_conocida: bool
     aptitud: AptitudFaseRapida
@@ -194,7 +215,8 @@ def evaluar(
     if factor <= 0:
         raise ValueError(f"El factor de ralentización debe ser > 0 (se recibió {factor}).")
 
-    fps_efectivos = md.fps_declarados * factor
+    fps_base = normalizar_fps(md.fps_declarados)
+    fps_efectivos = fps_base * factor
     aptitud = clasificar_fps(fps_efectivos)
     inconsistencias = detectar_inconsistencias(md)
 
@@ -210,6 +232,7 @@ def evaluar(
         metadatos=md,
         factor=factor,
         origen_factor=origen_factor,
+        fps_declarados_normalizado=fps_base,
         fps_efectivos=fps_efectivos,
         escala_temporal_conocida=escala_conocida,
         aptitud=aptitud,
