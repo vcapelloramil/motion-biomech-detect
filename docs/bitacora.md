@@ -90,8 +90,12 @@ el catalogador sobre el corpus nuevo aparecieron dos bugs propios, ya arreglados
 - **Material de origen.** El catalogador escaneaba `fase-a/compilaciones/` (videos largos
   de los que se recortan los segmentos). Ahora salta `compilaciones/` por defecto
   (`--incluir-todo` para no saltearla).
-- Alineado el vocabulario: `SOLO_PREPARACION` → `uso = "E1-E2 (solo preparación)"` (antes
-  decía `E1-E4 (...)`, que no casaba con la convención del `catalogo.csv`).
+- Alineado el vocabulario: `SOLO_PREPARACION` → `uso = "E1-E2 (solo preparacion)"`
+  (**sin tilde**, por pedido de Valentín: es un token que viaja al CSV y se compara
+  contra `catalogo.csv`; se mantiene ASCII para no depender de la codificación de la
+  consola en Windows/Git Bash). Barrido del resto del código: los otros usos de la
+  palabra con tilde son comentarios y prosa de docs (se dejan con ortografía correcta);
+  la única otra cadena *generada* era `motivo_rechazo` en `ingest.py`, ya pasada a ASCII.
 - El catalogador ahora reporta filas del `catalogo.csv` que no tienen archivo.
 
 **Pruebas sintéticas retiradas** (había material real equivalente): parámetros 30/60 fps
@@ -103,33 +107,36 @@ temporal 240 vs ralentizado (depende de la Fase B, plazo 22/9).
 (`escala_temporal_conocida = False`, sin duplicación), controles de 30 fps → rechazado,
 de 60 fps → solo preparación.
 
-### Bloqueante para cerrar la Etapa 1: arreglar `catalogo.csv`
+### Cierre del `catalogo.csv` y merge
 
-El catalogador lee los 12 clips pero **marca inconsistencias** (bar de Valentín: "no
-marca inconsistencias"). Todas son del `catalogo.csv`, no del código:
+Valentín arregló el `catalogo.csv`: renombró la fila fantasma a
+`control_reves_30fps_01.mp4`, quitó la fila de `zverev_saque_sideview.mp4` (compilación),
+y puso `uso = rechazado` en los 4 controles a 30 fps. Quedan **12 filas parejas**.
 
-1. Fila `control_saque_30fps_01.mp4` — no existe ese archivo (el archivo real es
-   `control_reves_30fps_01.mp4`, que a su vez no tiene fila).
-2. Fila `zverev_saque_sideview.mp4` — es un video de origen en `compilaciones/`, no una
-   unidad de análisis. Quitar la fila (sus 3 segmentos ya están catalogados).
-3. Cuatro controles a 30 fps con `uso = E1-E2`; deberían decir `rechazado` (coincide con
-   la descripción de Valentín: "25/30 fps → rechazo por fps insuficiente").
+`python -m app.catalogador` sobre el corpus final: **sin avisos globales, sin
+inconsistencias**. Los únicos avisos por clip son las notas informativas de
+normalización NTSC (`29.97 → 30`, `59.94 → 60`). Resultado:
 
-`test_corpus_fase_a.py::test_el_catalogo_no_tiene_inconsistencias` está como
-`xfail(strict=True)`: cuando el catálogo se arregle, pasa y hay que quitarle el xfail.
+| grupo | clips | uso |
+| --- | --- | --- |
+| gestos en cámara lenta | zverev ×3 (500 fps ef.), drive_lateral_01 (480), reves_lateral_01 (300) | `E1-E4`, `escala_temporal_conocida=False`, `captura_real` |
+| control 60 fps | control_rally_60fps_01/02, control_oclusion_03 | `E1-E2 (solo preparacion)` |
+| control 30 fps | control_drive_30fps_01, control_reves_30fps_01/02, control_oclusion_02 | `rechazado` |
 
-**El merge a `main` y las etiquetas `v0.1.0-etapa0` / `v0.2.0-etapa1` quedan en espera
-hasta que el `catalogo.csv` esté limpio.**
+Se quitó el `xfail` de `test_el_catalogo_no_tiene_inconsistencias` (ahora pasa como
+prueba real). `pytest -m "not slow"` → 64 en verde; `-m slow` → 5 en verde.
+
+**Merge hecho:** `etapa/0-fundaciones` → `main`, etiqueta `v0.1.0-etapa0`;
+`etapa/1-ingesta` → `main`, etiqueta `v0.2.0-etapa1`. `main` funcional. Sin `push`
+(local). **Etapa 1 cerrada.**
 
 ### Siguiente paso concreto
 
-1. Valentín arregla los 3 puntos del `catalogo.csv`.
-2. Se vuelve a correr `python -m app.catalogador` — debe salir sin avisos (salvo la nota
-   informativa de normalización NTSC).
-3. Se quita el `xfail`, se mergean `etapa/0-fundaciones` y `etapa/1-ingesta` a `main` con
-   las etiquetas, y ahí sí Etapa 1 queda cerrada.
-4. En paralelo ya se puede planificar la **Etapa 2 — Estimación de pose** (lecturas:
-   `capitulo-3` 3.3.2.3–3.3.2.9, `capitulo-4` 4.4.3).
+**Etapa 2 — Estimación de pose**, rama `etapa/2-pose` desde `main`. Plan ya propuesto y
+aprobado en su forma general (lecturas hechas: `capitulo-3` 3.3.2.3–3.3.2.9, `capitulo-4`
+4.4.3). Pendiente de confirmar 4 puntos de diseño antes de escribir código:
+`static_image_mode`, alcance de la Vía A (YOLOv8-Pose), `docs/resultados/` desde E2, y el
+umbral de "salto imposible" sin escala métrica.
 
 ---
 

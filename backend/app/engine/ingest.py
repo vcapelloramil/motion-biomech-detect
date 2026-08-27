@@ -222,10 +222,12 @@ def evaluar(
 
     motivo = None
     if aptitud is AptitudFaseRapida.RECHAZADO:
+        # Texto sin tildes: es una cadena generada que puede terminar en un CSV
+        # o en el reporte; se mantiene ASCII.
         motivo = (
             f"Frecuencia de captura efectiva {fps_efectivos:.1f} fps < "
             f"{_UMBRAL_PREPARACION:.0f} fps: insuficiente incluso para la fase de "
-            f"preparación."
+            f"preparacion."
         )
 
     return ResultadoIngesta(

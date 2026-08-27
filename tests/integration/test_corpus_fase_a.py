@@ -83,16 +83,9 @@ def test_los_controles_de_fps_bajo_se_clasifican_bien(catalogo_fase_a):
         assert f.uso_final == "rechazado", f.archivo
     for f in de_60:
         assert f.aptitud_fps == "solo_preparacion", f.archivo
-        assert "preparación" in f.uso_final, f.archivo
+        assert "preparacion" in f.uso_final, f.archivo
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="catalogo.csv: 2 filas sin archivo (control_saque_30fps_01, "
-    "zverev_saque_sideview), 1 archivo sin fila (control_reves_30fps_01) y 4 "
-    "controles con uso=E1-E2 que deberían decir 'rechazado'. Pendiente de arreglo "
-    "por Valentín; al arreglarse, este test pasa y se le quita el xfail.",
-)
 def test_el_catalogo_no_tiene_inconsistencias(catalogo_fase_a):
     filas, avisos, _ = catalogo_fase_a
     # La nota de normalización NTSC (59.94 -> 60) es informativa, no una inconsistencia.

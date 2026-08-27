@@ -69,8 +69,10 @@ def _combinar_uso(
 
     if aptitud in (AptitudFaseRapida.COMPLETO, AptitudFaseRapida.REDUCIDO):
         base = "E1-E4"
-    else:  # SOLO_PREPARACION: la fase rápida no es auditable, solo la preparación
-        base = "E1-E2 (solo preparación)"
+    else:  # SOLO_PREPARACION: la fase rapida no es auditable, solo la preparacion.
+        # Etiqueta sin tilde a proposito: es un token que viaja al CSV y se compara
+        # contra catalogo.csv; se mantiene ASCII para evitar lios de codificacion.
+        base = "E1-E2 (solo preparacion)"
 
     if categoria_unicidad == "duplicacion_sistematica":
         # Fotogramas duplicados: no sirve para velocidades ni orden de picos.
@@ -316,8 +318,8 @@ def main(argv: list[str] | None = None) -> int:
     errores = [f for f in filas if f.aptitud_fps == "ERROR"]
     rechazados = [f for f in filas if f.uso_final == "rechazado"]
     con_avisos = [f for f in filas if f.avisos or f.inconsistencias]
-    print(f"Aptos fase rápida: {sum(1 for f in filas if f.uso_final.startswith('E1-E4'))}  "
-          f"| solo preparación: {sum(1 for f in filas if 'preparación' in f.uso_final)}  "
+    print(f"Aptos fase rapida: {sum(1 for f in filas if f.uso_final.startswith('E1-E4'))}  "
+          f"| solo preparacion: {sum(1 for f in filas if 'preparacion' in f.uso_final)}  "
           f"| solo E1-E2: {sum(1 for f in filas if f.uso_final == 'E1-E2')}  "
           f"| rechazados: {len(rechazados)}  | con error: {len(errores)}")
     if con_avisos or avisos:

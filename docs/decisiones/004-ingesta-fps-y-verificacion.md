@@ -85,7 +85,7 @@ unicidad:
 - `RECHAZADO` (fps) → `rechazado`, sin importar la unicidad.
 - `duplicacion_sistematica` (unicidad) → **cae a `E1-E2`**, sin importar los fps.
 - `repeticion_aislada` → se agrega " (con reservas)".
-- resto → `E1-E4` o `E1-E4 (solo preparación)` según la aptitud.
+- resto → `E1-E4` o `E1-E2 (solo preparacion)` según la aptitud.
 
 ### 6. El catalogador no toca `catalogo.csv`
 
@@ -104,8 +104,10 @@ Se corre desde `backend/`: `python -m app.catalogador` (usa `KINETIQ_DATA_DIR`).
 `fase-a/compilaciones/` contiene los videos largos de origen de los que se recortan los
 segmentos. No son unidades de análisis: el catalogador salta cualquier subcarpeta
 llamada `compilaciones` por defecto (`--incluir-todo` para no saltearla). El "uso" para
-`SOLO_PREPARACION` se etiqueta `"E1-E2 (solo preparación)"`, alineado con el vocabulario
-del `catalogo.csv` (`E1-E4` = completo, `E1-E2` = uso limitado).
+`SOLO_PREPARACION` se etiqueta `"E1-E2 (solo preparacion)"` —**sin tilde a propósito**:
+es un token que viaja al CSV y se compara contra `catalogo.csv`, se mantiene ASCII para
+no depender de la codificación de la consola en Windows/Git Bash. Alineado con el
+vocabulario del `catalogo.csv` (`E1-E4` = completo, `E1-E2` = uso limitado).
 
 ---
 

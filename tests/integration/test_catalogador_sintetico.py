@@ -42,7 +42,7 @@ def corpus(tmp_path):
         "sano_240.mp4,240,conocida,1,240,E1-E4\n"
         "lento_30.mp4,30,desconocida,8,240,E1-E4\n"
         "malo_30.mp4,30,conocida,1,30,rechazado\n"
-        "parcial_60.mp4,60,conocida,1,60,E1-E2 (solo preparación)\n"
+        "parcial_60.mp4,60,conocida,1,60,E1-E2 (solo preparacion)\n"
         # triplicado_720.mp4 a propósito NO está en el catálogo
         , encoding="utf-8",
     )
@@ -71,7 +71,7 @@ def test_clasifica_cada_caso(corpus):
 
     parcial = por_nombre["parcial_60.mp4"]
     assert parcial.aptitud_fps == "solo_preparacion"
-    assert parcial.uso_final == "E1-E2 (solo preparación)"
+    assert parcial.uso_final == "E1-E2 (solo preparacion)"
 
     trip = por_nombre["triplicado_720.mp4"]
     assert trip.categoria_unicidad == "duplicacion_sistematica"
