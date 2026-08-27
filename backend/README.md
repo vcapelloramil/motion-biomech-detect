@@ -32,6 +32,17 @@ Instalar dependencias:
 pip install -r backend/requirements.txt -r backend/requirements-dev.txt
 ```
 
+### Dependencia externa: ffmpeg / ffprobe
+
+El **catalogador** (`app/catalogador.py`) y las pruebas de integración usan `ffprobe`
+para leer metadatos del contenedor y `ffmpeg` para generar clips de prueba. Tienen que
+estar en el `PATH`. El núcleo del motor (`engine/`) funciona sin ellos, con menos poder
+de contraste de metadatos. Ver `docs/decisiones/004-ingesta-fps-y-verificacion.md`.
+
+```bash
+ffprobe -version   # para confirmar que está disponible
+```
+
 ## Configuración
 
 El motor no tiene rutas de video hardcodeadas. La ubicación del corpus se toma de la
@@ -46,8 +57,22 @@ cp backend/.env.example backend/.env   # y editar el valor
 
 ```bash
 # desde la raíz del repositorio, con el venv activado
-pytest
+pytest                 # todo
+pytest -m "not slow"   # omite las que decodifican video real (corpus Fase A)
 ```
+
+Las pruebas de integración se saltan solas si no hay `ffmpeg`. La prueba de aceptación
+del corpus se salta si no hay `KINETIQ_DATA_DIR`.
+
+## Catalogador del corpus
+
+```bash
+cd backend
+python -m app.catalogador              # usa KINETIQ_DATA_DIR, con verificación de huella
+python -m app.catalogador --sin-hash   # primera pasada rápida, sin verificación de huella
+```
+
+Escribe `catalogo-verificado.csv` junto al corpus. No modifica `catalogo.csv`.
 
 ## Estructura
 
@@ -58,10 +83,13 @@ backend/
   .env.example             plantilla de configuración local
   app/
     config.py              resolución de KINETIQ_DATA_DIR
+    catalogador.py          CLI: cataloga y verifica el corpus (Etapa 1, tarea 1.5)
     schemas/
-      reporte.py           contrato del reporte (Anexo A del plan) — CONGELADO
+      reporte.py           contrato del reporte (Anexo A del plan)
     engine/                núcleo biomecánico, sin dependencias web
       version.py           versión del motor, se sella en cada reporte
+      ingest.py             E1: FPS reales, cámara lenta, aptitud, iterador de fotogramas
+      framehash.py          E1: unicidad de fotogramas por huella (decisión 001)
       pose/                backends de estimación de pose (Etapa 2)
     routers/  workers/     API (Etapa 6)
 ```

@@ -41,3 +41,4 @@ Qué habilita, qué cierra, qué hay que recordar más adelante.
 | [001](001-admision-corpus.md) | Cómo se verifica un video antes de entrar al corpus | vigente |
 | [002](002-config-ruta-corpus.md) | La ubicación del corpus se recibe por configuración | vigente |
 | [003](003-estructura-monorepo.md) | Estructura del monorepo (apartado 4.3.5 de la tesis) | vigente |
+| [004](004-ingesta-fps-y-verificacion.md) | Ingesta: dos verificaciones, factor externo y frecuencia efectiva | vigente |
