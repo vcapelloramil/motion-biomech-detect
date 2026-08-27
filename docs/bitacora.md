@@ -68,6 +68,11 @@ caché). Si en E4 el tiempo molesta: `model_complexity=1`, `static_image_mode=Fa
 (tracking), o bajar resolución antes de inferir. No se toca ahora ("no optimizar antes
 de medir").
 
+**Choca con la tesis:** el apartado 4.2.3 usó ~25 fps para justificar el procesamiento
+asincrónico y estimar tiempos; 4.5.4 apoyó los costos en ese número. Casi 7× de
+diferencia. Es un pendiente de **redacción** (no de código): reescribir 4.2.3 y 4.5.4
+con el número medido antes de la entrega. Registrado en `docs/decisiones/006`.
+
 ### Pruebas
 
 `pytest -m "not slow"` → **96 en verde** (unit de pose: articulaciones, base/FakeBackend,
@@ -79,18 +84,20 @@ real (4) + corpus Fase A de la Etapa 1 (5).
 - **Vía A (YOLOv8-Pose 2D + elevación)**: no implementada. Se hace si el punto de
   decisión de E4 lo pide (plan de repliegue). La interfaz ya está lista para un backend
   de 17 puntos.
-- `pose_world_landmarks` métricos de MediaPipe: disponibles pero no se guardan todavía;
-  se decide en E4 si los ángulos 3D los necesitan.
+- `pose_world_landmarks` métricos de MediaPipe: no se guardan aún. **La Etapa 3 los va a
+  necesitar**: el filtro va a operar sobre coordenadas métricas (ver plan de E3), así
+  que E3 empieza extendiendo la captura de pose y re-extrayendo el corpus.
 - Reevaluar la config de MediaPipe (complexity / tracking) si la velocidad molesta en E4.
-- `.gitattributes` con `eol=lf` (arrastre de la Etapa 0).
+- `.gitattributes` con `eol=lf`: **resuelto** (commit `4fbce0e`). `renormalize` no tocó
+  ningún archivo; los blobs ya estaban en LF.
+- **Calendario:** Valentín adelanta la Fase B (grabación propia, hito C1) a esta semana
+  en vez del 22/9. No cambia nada del desarrollo en curso.
 
 ### Siguiente paso concreto
 
-Cerrar la Etapa 2 (correr `extraer_pose` real sobre el corpus para dejar la caché lista,
-mergear `etapa/2-pose` a `main`, etiqueta `v0.3.0-etapa2`) y abrir la **Etapa 3 —
-Procesamiento de señales**. Lecturas de la convención para E3: `capitulo-3` §3.4.2.1–3.4.2.6
-(Butterworth de fase cero, `filtfilt` vs `lfilter`, análisis residual de Winter, orden
-del pipeline).
+Abrir la **Etapa 3 — Procesamiento de señales**. Lecturas de la convención (hechas):
+`capitulo-3` §3.4.2.1–3.4.2.6. Plan propuesto; pendiente de aprobación antes de escribir
+código.
 
 ---
 

@@ -43,3 +43,4 @@ Qué habilita, qué cierra, qué hay que recordar más adelante.
 | [003](003-estructura-monorepo.md) | Estructura del monorepo (apartado 4.3.5 de la tesis) | vigente |
 | [004](004-ingesta-fps-y-verificacion.md) | Ingesta: dos verificaciones, factor externo y frecuencia efectiva | vigente |
 | [005](005-percepcion-pose.md) | Percepción de pose: contrato intercambiable, MediaPipe por defecto | vigente |
+| [006](006-velocidad-inferencia-vs-tesis.md) | La velocidad de inferencia real obliga a revisar 4.2.3 y 4.5.4 | vigente (pendiente de redacción) |
