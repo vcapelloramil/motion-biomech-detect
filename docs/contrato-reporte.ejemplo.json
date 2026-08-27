@@ -1,0 +1,89 @@
+{
+  "reporte_id": "f2b9c1e0-1111-4a2b-8c3d-000000000001",
+  "video_id": "f2b9c1e0-2222-4a2b-8c3d-000000000002",
+  "gesto": "saque",
+  "creado_en": "2026-10-15T14:32:00Z",
+
+  "trazabilidad": {
+    "version_motor": "0.5.0",
+    "backend_pose": "mediapipe-0.10.14",
+    "filtro": { "tipo": "butterworth", "orden": 4, "corte_hz": 8.0, "fase_cero": true },
+    "fps_real": 240.0,
+    "apto_fase_rapida": true
+  },
+
+  "cobertura": {
+    "auditable_pct": 87.5,
+    "tramos_no_auditables": [
+      { "desde_s": 0.55, "hasta_s": 0.61, "motivo": "confianza_insuficiente" }
+    ]
+  },
+
+  "segmentacion": {
+    "metodo": "manual_asistido",
+    "repeticiones_marcadas": 6,
+    "repeticiones_auditables": 5
+  },
+
+  "secuenciacion": {
+    "orden_esperado": ["pelvis", "torso", "brazo"],
+
+    "repeticiones": [
+      {
+        "indice": 1,
+        "desde_s": 2.10,
+        "hasta_s": 3.05,
+        "auditable": true,
+        "orden_observado": ["pelvis", "torso", "brazo"],
+        "correcto": true,
+        "picos": [
+          { "segmento": "pelvis", "instante_s": 0.42, "velocidad": 440.0, "unidad": "grados/s", "confianza": 0.94 },
+          { "segmento": "torso",  "instante_s": 0.51, "velocidad": 870.0, "unidad": "grados/s", "confianza": 0.91 },
+          { "segmento": "brazo",  "instante_s": 0.58, "velocidad": 1510.0, "unidad": "grados/s", "confianza": 0.72 }
+        ]
+      },
+      {
+        "indice": 2,
+        "desde_s": 6.40,
+        "hasta_s": 7.38,
+        "auditable": false,
+        "orden_observado": null,
+        "correcto": null,
+        "motivo_no_auditable": "confianza_insuficiente_en_muneca",
+        "picos": []
+      }
+    ],
+
+    "resumen": {
+      "repeticiones_correctas": 5,
+      "repeticiones_evaluadas": 6,
+      "orden_predominante": ["pelvis", "torso", "brazo"],
+      "dispersion_instante_pico_torso_ms": 18.4
+    }
+  },
+
+  "metricas": [
+    { "nombre": "separacion_cadera_hombro_max", "valor": 42.0, "unidad": "grados", "confianza": 0.93, "auditable": true },
+    { "nombre": "flexion_rodilla_carga", "valor": 118.0, "unidad": "grados", "confianza": 0.90, "auditable": true },
+    { "nombre": "extension_codo_impacto", "valor": null, "unidad": "grados", "confianza": 0.41, "auditable": false }
+  ],
+
+  "comparacion_propia": {
+    "sesion_anterior_id": "f2b9c1e0-3333-4a2b-8c3d-000000000003",
+    "desfase_torso_ms": 30,
+    "direccion": "mas_tarde"
+  },
+
+  "observaciones": [
+    { "severidad": "correcto", "texto": "La secuencia se ordenó correctamente en 5 de 6 repeticiones." },
+    { "severidad": "atencion", "texto": "El torso alcanzó su pico 30 ms más tarde que en la sesión anterior.",
+      "fundamento": "desfase_torso_ms=30", "referencia": "Martin et al. (2014)" },
+    { "severidad": "no_auditable", "texto": "No se pudo medir el instante de impacto en 2 de 6 repeticiones.",
+      "fundamento": "confianza < 0.5 en muñeca durante el impacto" }
+  ],
+
+  "artefactos": {
+    "overlay_url": "https://ejemplo.invalido/overlay/f2b9c1e0.mp4",
+    "pdf_url": "https://ejemplo.invalido/pdf/f2b9c1e0.pdf"
+  }
+}
