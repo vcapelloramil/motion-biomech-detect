@@ -1,0 +1,14 @@
+# Normalización de fin de línea. El repo guarda LF; git convierte al checkout
+# según cada plataforma. Evita el ruido de "LF will be replaced by CRLF" en cada
+# commit desde Windows y mantiene diffs limpios entre colaboradores.
+* text=auto eol=lf
+
+# Binarios: nunca tocar.
+*.jpg  binary
+*.jpeg binary
+*.png  binary
+*.gif  binary
+*.mp4  binary
+*.mov  binary
+*.pdf  binary
+*.npz  binary
