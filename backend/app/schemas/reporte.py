@@ -54,6 +54,10 @@ class Trazabilidad(_Base):
     filtro: Filtro
     fps_real: float = Field(gt=0.0)
     apto_fase_rapida: bool
+    # False cuando fps_real es una estimación (material descargado, cámara lenta con
+    # factor cronometrado a ojo): sirve para el ORDEN de los picos, no para
+    # velocidades absolutas. Ver docs/decisiones/001 y 004. Regla R3 aplicada al dato.
+    escala_temporal_conocida: bool
 
 
 # --- Cobertura auditable -------------------------------------------------------

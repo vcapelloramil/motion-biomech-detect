@@ -9,7 +9,8 @@
     "backend_pose": "mediapipe-0.10.14",
     "filtro": { "tipo": "butterworth", "orden": 4, "corte_hz": 8.0, "fase_cero": true },
     "fps_real": 240.0,
-    "apto_fase_rapida": true
+    "apto_fase_rapida": true,
+    "escala_temporal_conocida": true
   },
 
   "cobertura": {

@@ -59,3 +59,12 @@ def test_rechaza_gesto_fuera_del_alcance():
     datos["gesto"] = "volea"  # fuera del alcance declarado (R5)
     with pytest.raises(ValidationError):
         Reporte.model_validate(datos)
+
+
+def test_trazabilidad_exige_escala_temporal_conocida():
+    # Agregado en la Etapa 1 (ver docs/decisiones/004): distingue una frecuencia
+    # medida de una estimada. Es obligatorio, no tiene default.
+    datos = _ejemplo_dict()
+    del datos["trazabilidad"]["escala_temporal_conocida"]
+    with pytest.raises(ValidationError):
+        Reporte.model_validate(datos)
