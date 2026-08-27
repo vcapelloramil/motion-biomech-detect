@@ -1,11 +1,12 @@
 """Generación de clips de video sintéticos para las pruebas de integración.
 
-Todavía no hay material de control propio (30/60 fps, oclusión), así que se generan
-clips con ffmpeg en el directorio temporal de pytest —nunca entran al repo—.
-
-PENDIENTE DE REEMPLAZO OBLIGATORIO: cuando se suba el material del bloque de control
-del protocolo de grabación, las pruebas que hoy usan clips sintéticos pasan a usar
-ese material real. No conviven las dos versiones.
+El corpus real de la Fase A ya cubre 30/60 fps y oclusión (ver
+tests/integration/test_corpus_fase_a.py). Estos helpers quedan para los dos casos
+que el corpus real NO tiene:
+  - duplicación sistemática de fotogramas (test_framehash_video, test_catalogador_sintetico)
+  - par 240 fps vs su ralentizado del mismo gesto (test_slowmo_coherencia) — pendiente
+    de la Fase B (plazo 22/9), ahí se reemplaza por un par real.
+Los clips se generan con ffmpeg en el tmp_path de pytest; nunca entran al repo.
 """
 
 from __future__ import annotations

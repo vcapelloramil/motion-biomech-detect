@@ -1,6 +1,7 @@
-"""Unicidad de fotogramas sobre video real (decisión 001, verificación 2).
+"""Unicidad de fotogramas (decisión 001, verificación 2).
 
-PENDIENTE DE REEMPLAZO OBLIGATORIO por material real cuando exista.
+La captura sana se cubre también con el corpus real (test_corpus_fase_a.py). El caso
+de duplicación sistemática se genera con ffmpeg: ningún clip del corpus lo tiene.
 """
 
 from __future__ import annotations

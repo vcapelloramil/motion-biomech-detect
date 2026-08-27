@@ -1,6 +1,8 @@
-"""Catalogador sobre un directorio sintético con casos conocidos.
+"""Catalogador sobre un directorio sintético con casos controlados.
 
-PENDIENTE DE REEMPLAZO OBLIGATORIO por el material del bloque de control cuando exista.
+Complementa test_corpus_fase_a.py (corpus real): acá se arman casos que el corpus no
+tiene —duplicación sistemática de fotogramas, subcarpeta de origen a saltear— y se
+verifica la escritura del CSV y el modo --sin-hash sin depender del material real.
 """
 
 from __future__ import annotations
@@ -27,8 +29,12 @@ def corpus(tmp_path):
     nativo = generar_clip(d / "sano_240.mp4", fps=240, segundos=1.0)
     ralentizar(nativo, d / "lento_30.mp4", factor=8, fps_salida=30)
     generar_clip(d / "malo_30.mp4", fps=30, segundos=1.0)
-    base = generar_clip(tmp_path / "base30.mp4", fps=30, segundos=2.0)
-    duplicar_fotogramas(base, d / "triplicado_90.mp4", fps_destino=90)
+    generar_clip(d / "parcial_60.mp4", fps=60, segundos=1.0)
+    # tripla los fotogramas partiendo de 240 fps -> 720 fps declarados (rápido por
+    # tasa) pero con 2/3 de fotogramas duplicados: solo el hash puede detectarlo.
+    duplicar_fotogramas(nativo, d / "triplicado_720.mp4", fps_destino=720)
+    # material de origen: debe saltarse por defecto
+    generar_clip(d / "compilaciones" / "fuente_larga.mp4", fps=240, segundos=1.0)
 
     catalogo = tmp_path / "catalogo.csv"
     catalogo.write_text(
@@ -36,7 +42,8 @@ def corpus(tmp_path):
         "sano_240.mp4,240,conocida,1,240,E1-E4\n"
         "lento_30.mp4,30,desconocida,8,240,E1-E4\n"
         "malo_30.mp4,30,conocida,1,30,rechazado\n"
-        # triplicado_90.mp4 a propósito NO está en el catálogo
+        "parcial_60.mp4,60,conocida,1,60,E1-E2 (solo preparación)\n"
+        # triplicado_720.mp4 a propósito NO está en el catálogo
         , encoding="utf-8",
     )
     return d, catalogo
@@ -62,10 +69,23 @@ def test_clasifica_cada_caso(corpus):
     assert malo.aptitud_fps == "rechazado"
     assert malo.uso_final == "rechazado"
 
-    trip = por_nombre["triplicado_90.mp4"]
+    parcial = por_nombre["parcial_60.mp4"]
+    assert parcial.aptitud_fps == "solo_preparacion"
+    assert parcial.uso_final == "E1-E2 (solo preparación)"
+
+    trip = por_nombre["triplicado_720.mp4"]
     assert trip.categoria_unicidad == "duplicacion_sistematica"
     assert trip.uso_final == "E1-E2"
     assert "sin fila en catalogo.csv" in trip.avisos
+
+
+def test_salta_la_carpeta_de_compilaciones(corpus):
+    directorio, catalogo = corpus
+    filas, _ = catalogar_directorio(directorio, catalogo=catalogo)
+    assert "fuente_larga.mp4" not in {f.archivo for f in filas}
+
+    filas_todo, _ = catalogar_directorio(directorio, catalogo=catalogo, incluir_todo=True)
+    assert "fuente_larga.mp4" in {f.archivo for f in filas_todo}
 
 
 def test_no_toca_el_catalogo_manual(corpus):
@@ -93,5 +113,5 @@ def test_sin_hash_no_calcula_unicidad(corpus):
     filas, _ = catalogar_directorio(directorio, catalogo=catalogo, con_hash=False)
     assert all(f.ratio_unicidad is None for f in filas)
     # sin el dato de unicidad, el uso no puede degradar a E1-E2
-    trip = next(f for f in filas if f.archivo == "triplicado_90.mp4")
+    trip = next(f for f in filas if f.archivo == "triplicado_720.mp4")
     assert trip.uso_final.startswith("E1-E4")

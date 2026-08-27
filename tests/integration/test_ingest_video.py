@@ -1,6 +1,7 @@
-"""Ingesta sobre archivos de video reales (generados con ffmpeg).
+"""Ingesta sobre archivos de video (generados con ffmpeg).
 
-PENDIENTE DE REEMPLAZO OBLIGATORIO por material del bloque de control cuando exista.
+Los casos 30/60 fps se verifican contra el corpus real en test_corpus_fase_a.py.
+Acá quedan 120/240 fps (sin equivalente nativo en el corpus) y los casos de error.
 """
 
 from __future__ import annotations
@@ -16,7 +17,9 @@ from video_fixtures import generar_clip, requiere_ffmpeg
 pytestmark = requiere_ffmpeg
 
 
-@pytest.mark.parametrize("fps", [30, 60, 120, 240])
+# 30 y 60 fps se verifican contra material real en tests/integration/test_corpus_fase_a.py
+# (bloque de control). Acá quedan 120 y 240, que no tienen equivalente nativo en el corpus.
+@pytest.mark.parametrize("fps", [120, 240])
 def test_probe_lee_la_tasa_declarada_de_cada_clip(tmp_path, fps):
     clip = generar_clip(tmp_path / f"c{fps}.mp4", fps=fps, segundos=1.0)
     md = probe(clip)
