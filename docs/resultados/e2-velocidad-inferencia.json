@@ -1,0 +1,28 @@
+[
+  {
+    "fecha": "2026-08-27T06:01:38+00:00",
+    "version_motor": "0.2.0",
+    "maquina": {
+      "sistema": "Windows",
+      "release": "10",
+      "procesador": "Intel64 Family 6 Model 158 Stepping 10, GenuineIntel",
+      "python": "3.11.8"
+    },
+    "backend": "mediapipe-0.10.18",
+    "config": {
+      "static_image_mode": true,
+      "model_complexity": 2,
+      "min_detection_confidence": 0.5,
+      "min_tracking_confidence": 0.5
+    },
+    "clip": "zverev_saque_lateral_01.mp4",
+    "resolucion": "1920x1080",
+    "n_frames": 80,
+    "fps_inferencia_media": 3.57,
+    "ms_por_frame": {
+      "media": 280.0,
+      "p50": 236.5,
+      "p95": 321.8
+    }
+  }
+]
