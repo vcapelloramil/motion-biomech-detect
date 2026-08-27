@@ -57,15 +57,27 @@ _TORSO = {
 }  # largo de torso ≈ 0.5
 
 
-def _par(z0, z1, dxy=0.01):
-    """Dos frames con CODO_DER cambiando de z0 a z1 (y un torso estable)."""
-    f0 = PoseFrame(0, True, puntos_mundo={**_TORSO, A.CODO_DER: Punto(0.30, -0.10, z0, 0.9)})
-    f1 = PoseFrame(1, True, puntos_mundo={**_TORSO, A.CODO_DER: Punto(0.30 + dxy, -0.10, z1, 0.9)})
-    return _seq([f0, f1], [*_TORSO, A.CODO_DER])
+def _serie_z(zs, *, dxy=0.005, conf_pre=0.95, conf_flip=0.7):
+    """Frames con CODO_DER recorriendo la lista `zs` (y un torso estable).
+
+    El fotograma previo al primer cambio de signo lleva confianza alta (venía bien
+    seguido); a partir de ahí, más baja.
+    """
+    frames = []
+    x = 0.30
+    signo0 = 1.0 if zs[0] >= 0 else -1.0
+    for k, z in enumerate(zs):
+        conf = conf_pre if (z * signo0 >= 0) else conf_flip
+        frames.append(
+            PoseFrame(k, True, puntos_mundo={**_TORSO, A.CODO_DER: Punto(x, -0.10, z, conf)})
+        )
+        x += dxy
+    return _seq(frames, [*_TORSO, A.CODO_DER])
 
 
 def test_inversion_de_profundidad_se_detecta():
-    invs = detectar_inversiones_z(_par(0.10, -0.09), espacio="mundo")
+    # z venía positiva, se da vuelta y vuelve
+    invs = detectar_inversiones_z(_serie_z([0.12, 0.11, -0.09, -0.08, 0.10, 0.11]), espacio="mundo")
     assert len(invs) == 1
     assert invs[0].articulacion is A.CODO_DER
     assert invs[0].z_antes > 0 > invs[0].z_despues
@@ -73,17 +85,33 @@ def test_inversion_de_profundidad_se_detecta():
 
 def test_dithering_de_z_cerca_de_cero_no_se_marca():
     # cambia de signo pero es minúsculo (ruido cerca del plano del cuerpo)
-    assert detectar_inversiones_z(_par(0.01, -0.008), espacio="mundo") == []
+    assert detectar_inversiones_z(_serie_z([0.01, 0.008, -0.008, 0.009, 0.01]), espacio="mundo") == []
 
 
 def test_movimiento_3d_genuino_no_se_marca_como_inversion():
-    # cambia de signo y es grande, pero x,y se mueven tanto como z -> no dominado por z
-    assert detectar_inversiones_z(_par(0.10, -0.09, dxy=0.20), espacio="mundo") == []
+    # cambia de signo, grande, y vuelve, pero x,y se mueven tanto como z
+    assert detectar_inversiones_z(
+        _serie_z([0.12, 0.11, -0.09, -0.08, 0.10], dxy=0.20), espacio="mundo"
+    ) == []
+
+
+def test_z_que_no_vuelve_no_es_inversion():
+    # se dio vuelta y se quedó del otro lado -> cambio de posición, no glitch
+    assert detectar_inversiones_z(
+        _serie_z([0.12, 0.11, -0.09, -0.10, -0.11, -0.12, -0.13]), espacio="mundo"
+    ) == []
+
+
+def test_articulacion_mal_seguida_antes_del_flip_no_dispara():
+    # confianza baja en el fotograma previo -> z ruidosa crónica, no inversión puntual
+    assert detectar_inversiones_z(
+        _serie_z([0.12, 0.11, -0.09, -0.08, 0.10], conf_pre=0.4), espacio="mundo"
+    ) == []
 
 
 def test_cambio_grande_de_z_sin_cambio_de_signo_no_es_inversion():
     # eso lo tiene que atrapar el detector de saltos, no este
-    assert detectar_inversiones_z(_par(0.05, 0.35), espacio="mundo") == []
+    assert detectar_inversiones_z(_serie_z([0.05, 0.10, 0.35, 0.4]), espacio="mundo") == []
 
 
 def test_backend_2d_no_dispara_inversiones():
@@ -92,7 +120,7 @@ def test_backend_2d_no_dispara_inversiones():
 
 
 def test_validar_incluye_inversiones_z():
-    r = validar(_par(0.10, -0.09), espacio="mundo")
+    r = validar(_serie_z([0.12, 0.11, -0.09, -0.08, 0.10, 0.11]), espacio="mundo")
     assert r.n_inversiones_z == 1
 
 

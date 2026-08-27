@@ -46,30 +46,50 @@ profundidad → ω se dispara.
 Se agrega un **tercer control** a `engine/validation.py`:
 `detectar_inversiones_z(seq, *, espacio)`.
 
-Marca una franja como inversión de profundidad cuando el fotograma de **entrada**
-cumple las tres condiciones a la vez:
+Firma de una inversión de profundidad — MediaPipe venía siguiendo bien una
+articulación, de golpe elige el lado equivocado del plano del cuerpo, y corrige.
+Las **cinco** condiciones a la vez:
 
-1. **Cambio de signo de `z`** entre fotogramas consecutivos (`z0 · z1 < 0`).
-2. **Magnitud apreciable:** `|Δz| / longitud_de_torso > 0,18`
+1. **Confianza alta antes** del cambio: `confianza(frame previo) ≥ 0,80`
+   (`CONF_MIN_PRE_INVERSION`). Si la articulación ya venía mal seguida, su `z` es
+   ruido crónico —lo maneja el marcado por baja confianza—, no una inversión.
+2. **Cambio de signo de `z`** entre fotogramas consecutivos (`z0 · z1 < 0`).
+3. **Magnitud apreciable:** `|Δz| / longitud_de_torso > 0,20`
    (`UMBRAL_INVERSION_Z_TORSOS`). El frame 566 da 0,29.
-3. **Dominado por `z`:** `|Δz| > 1,8 · |Δ(x, y)|` (`FACTOR_DOMINANCIA_Z`). El frame
+4. **Dominado por `z`:** `|Δz| > 1,8 · |Δ(x, y)|` (`FACTOR_DOMINANCIA_Z`). El frame
    566 da 2,9. Descarta el movimiento 3D genuino, donde `x`, `y` también se mueven.
+5. **`z` vuelve** al signo original dentro de `MAX_SPAN_INVERSION_Z = 15`
+   fotogramas. Si no vuelve, es un cambio de posición real, no un glitch.
 
-Detectada la entrada, la franja se extiende hacia adelante mientras `z` mantenga el
-signo invertido, hasta `MAX_SPAN_INVERSION_Z = 25` fotogramas. `frame_hasta` es el
-último fotograma invertido (el retorno, o el tope).
+`frame_hasta` es el último fotograma con el signo invertido; `preparar_series`
+excluye `[frame_desde, frame_hasta]`.
 
-### Calibración
+### Calibración y qué se observó en el corpus público
 
-Anclada en `zverev_saque_lateral_02` frame 566 (único caso real disponible). Los
-umbrales dejan pasar dos falsos candidatos del mismo clip:
+Anclada en `zverev_saque_lateral_02` frame 566 (único caso real disponible), donde
+`CODO_DER` y `HOMBRO_DER` cumplen las cinco condiciones. Descarta el dithering de
+`z` cerca del plano (frames 574–575 del mismo clip).
 
-- frame 573→574: `|Δz|/torso = 0,13` (< 0,18) → no se marca.
-- frame 574→575: `|Δz|/torso = 0,04` (dithering de `z` cerca del plano) → no se
-  marca.
+**Hallazgo importante, para el Capítulo 6/7:** sobre el corpus público, con las
+cinco condiciones, el detector **igual dispara 16–45 veces por clip de saque** de
+Zverev (y solo 3 en el drive). No son falsos positivos del detector: en toma
+lateral, la coordenada `z` de las articulaciones rápidas del brazo y de la mano
+(muñeca, dedos) que devuelve MediaPipe **es poco más que ruido que cruza el cero
+todo el tiempo**. El detector está identificando correctamente que ese canal no es
+confiable.
 
-Sin material propio hay un solo ejemplo; los umbrales se revisan cuando llegue la
-Fase B (mismo pendiente que el margen del techo, decisión 008).
+Consecuencia: al excluir todas esas franjas, la velocidad angular del segmento
+`brazo` de los saques de Zverev queda no auditable → **las repeticiones de saque
+del corpus público pasan a "no auditable"** en vez de reportar un orden con un
+número de velocidad plausible por casualidad. Es el comportamiento correcto por la
+regla R3 ("un dato faltante es mejor que un dato equivocado"), y es la misma
+conclusión de la decisión 008: **la toma lateral no sirve para el brazo rápido; la
+Fase B tiene que ir con encuadre de tres cuartos.** El `drive` (movimiento del
+brazo más en el plano de la imagen) sigue recuperando `pelvis → torso → brazo`.
+
+**La validación real del detector es la Fase B**, con `z` métrica de verdad (240
+fps, luz controlada), donde una inversión genuina será rara y el detector la
+marcará limpio. Los cinco umbrales se revisan ahí.
 
 ### Propagación a E3 y E4
 

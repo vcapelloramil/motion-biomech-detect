@@ -17,11 +17,12 @@ Dos controles independientes sobre una ``SecuenciaPose``:
 3. **Inversiones de profundidad.** Sub-caso del anterior que el umbral de saltos no
    atrapa: MediaPipe no siempre distingue si una articulación está delante o detrás
    del plano del cuerpo, y en el instante rápido puede "dar vuelta" la coordenada
-   ``z`` de golpe (§3.3.2.1). Es una inversión de signo de ``z``, dominada por ``z``
-   (``x``,``y`` casi no se mueven), de magnitud apreciable. Calibrado con
-   ``zverev_saque_lateral_02`` frame 566 (``CODO_DER`` pasa de z=+0,098 a z=−0,050 m,
-   ~0,29 torsos, con confianza 0,65 y desplazamiento 3D 0,31 torsos: ni el umbral de
-   confianza ni el de saltos lo marcan). Ver decisión 009.
+   ``z`` de golpe (§3.3.2.1). Firma: la articulación venía con confianza alta, ``z``
+   cambia de signo con ``|Δz|`` grande y dominado por ``z`` (``x``,``y`` casi no se
+   mueven), y ``z`` **vuelve** al signo original en pocos fotogramas. Calibrado con
+   ``zverev_saque_lateral_02`` frame 566, que ni el umbral de confianza (0,65 > 0,5)
+   ni el de saltos (0,31 < 0,5 torsos) marcan. **En toma lateral la ``z`` del brazo
+   rápido es poco fiable y esto dispara seguido**: ver decisión 009 (§ hallazgo).
 """
 
 from __future__ import annotations
@@ -34,12 +35,18 @@ from app.engine.pose.base import PoseFrame, Punto, SecuenciaPose
 
 UMBRAL_CONFIANZA = 0.5
 MAX_SALTO_TORSOS = 0.5
-# El fotograma de entrada a una inversión: |Δz| supera esta fracción del torso, con
-# cambio de signo y dominado por z. Una vez detectada la entrada, se excluye la
-# franja completa hasta que z recupera el signo (o hasta MAX_SPAN, por las dudas).
-UMBRAL_INVERSION_Z_TORSOS = 0.18
+# Inversión de profundidad = MediaPipe venía siguiendo bien una articulación y de
+# golpe elige el lado equivocado del plano del cuerpo, y después corrige. Firma:
+#   (1) el fotograma anterior tiene confianza alta (venía bien seguida);
+#   (2) el fotograma de entrada cambia el signo de z, con |Δz| grande y dominado por z;
+#   (3) z **vuelve** al signo original dentro de unos pocos fotogramas.
+# Si la articulación ya venía con confianza baja, su z es ruido crónico, no una
+# inversión puntual (lo maneja el marcado por baja confianza). Si z no vuelve, es un
+# cambio de posición genuino.
+CONF_MIN_PRE_INVERSION = 0.80
+UMBRAL_INVERSION_Z_TORSOS = 0.20
 FACTOR_DOMINANCIA_Z = 1.8
-MAX_SPAN_INVERSION_Z = 25  # fotogramas
+MAX_SPAN_INVERSION_Z = 15  # fotogramas: si z no vuelve en esta ventana, no es glitch
 
 
 @dataclass(frozen=True)
@@ -173,6 +180,7 @@ def detectar_inversiones_z(
     umbral_torsos: float = UMBRAL_INVERSION_Z_TORSOS,
     factor_dominancia_z: float = FACTOR_DOMINANCIA_Z,
     max_span: int = MAX_SPAN_INVERSION_Z,
+    conf_min_pre: float = CONF_MIN_PRE_INVERSION,
 ) -> list[InversionZ]:
     """Franjas donde ``z`` se dio vuelta de golpe (cambio de signo dominado por z).
 
@@ -201,18 +209,30 @@ def detectar_inversiones_z(
             dz = abs(z1 - z0)
             p0, p1 = _puntos(seq.frames[i], espacio)[art], _puntos(seq.frames[i + 1], espacio)[art]
             dxy = math.hypot(p1.x - p0.x, p1.y - p0.y)
-            if dz / escala <= umbral_torsos or dz <= factor_dominancia_z * dxy:
+            if (
+                p0.confianza < conf_min_pre  # la articulación no venía bien seguida
+                or dz / escala <= umbral_torsos
+                or dz <= factor_dominancia_z * dxy
+            ):
                 i += 1
                 continue
-            # entrada a la inversión en i -> i+1. Avanzar mientras z mantenga el
-            # signo invertido (el de z1), hasta max_span.
-            signo = 1.0 if z1 > 0 else -1.0
+            # entrada a la inversión en i -> i+1 (signo de z1). Buscar el retorno al
+            # signo original (el de z0) dentro de max_span.
+            signo_invertido = 1.0 if z1 > 0 else -1.0
             fin = i + 1
+            retorno = None
             for j in range(i + 2, min(n, i + 1 + max_span)):
-                if j in zpos and zpos[j] * signo > 0:
-                    fin = j
-                else:
+                if j not in zpos:
                     break
+                if zpos[j] * signo_invertido > 0:  # sigue invertido
+                    fin = j
+                else:  # volvió al signo original
+                    retorno = j
+                    break
+            if retorno is None:
+                # no volvió: cambio de posición genuino o tracking malo sostenido
+                i += 1
+                continue
             inversiones.append(
                 InversionZ(
                     articulacion=art,
@@ -223,7 +243,7 @@ def detectar_inversiones_z(
                     z_despues=z1,
                 )
             )
-            i = fin + 1
+            i = retorno
     return inversiones
 
 
