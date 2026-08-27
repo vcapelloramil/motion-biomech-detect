@@ -1,0 +1,26 @@
+# Dependencias de ejecución del backend. Versiones FIJADAS (plan, tarea 0.2).
+#
+# El entorno se crea SIEMPRE con Python 3.11 (el `python` del sistema es 3.14 y
+# mediapipe no lo soporta):
+#   py -3.11 -m venv backend/.venv
+#   backend/.venv/Scripts/activate                 (Windows PowerShell/CMD)
+#   pip install -r backend/requirements.txt -r backend/requirements-dev.txt
+#
+# En la Etapa 0 solo se usan pydantic y python-dotenv. El resto se instaló ahora
+# a propósito para verificar HOY que mediapipe corre en esta máquina (corre, por
+# CPU/XNNPACK; la GTX 1050ti no la usa la API de Python de mediapipe).
+
+# mediapipe 0.10.x exige numpy<2 -> numpy queda en la serie 1.26.
+numpy==1.26.4
+scipy==1.14.1
+
+# mediapipe depende de opencv-contrib-python (no de opencv-python). contrib es
+# superset de opencv-python, así que se usa ese y no los dos a la vez: tener
+# ambos instalados pisa los archivos de cv2 y deja el import roto.
+opencv-contrib-python==4.11.0.86
+mediapipe==0.10.18
+
+fastapi==0.115.5
+uvicorn==0.32.1
+pydantic==2.10.3
+python-dotenv==1.0.1

@@ -1,0 +1,4 @@
+# Dependencias solo de desarrollo/pruebas. No se instalan en producción.
+-r requirements.txt
+
+pytest==8.3.4
