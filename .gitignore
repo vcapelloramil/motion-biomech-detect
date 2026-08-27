@@ -46,6 +46,8 @@ __pycache__/
 # Empaquetado
 *.egg-info/
 build/
+# Caché del motor (coordenadas de pose extraídas; se re-genera). Ver KINETIQ_CACHE_DIR.
+.cache/
 
 # --- Configuración local / secretos ---
 # .env real: nunca va a git. El versionado es backend/.env.example

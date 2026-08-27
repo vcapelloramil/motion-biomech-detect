@@ -9,6 +9,7 @@ línea con las etiquetas de git del plan de desarrollo (v0.2.0-etapa1,
 v0.3.0-etapa2, ...). Empezó en "0.0.0" (Etapa 0, sin cálculo).
 
 - 0.1.0 — Etapa 1: ingesta y validación de FPS.
+- 0.2.0 — Etapa 2: estimación de pose (interfaz intercambiable + MediaPipe).
 """
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"

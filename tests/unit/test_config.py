@@ -7,15 +7,17 @@ apunta a carpetas temporales.
 import pytest
 
 from app import config
-from app.config import ConfigError, get_data_dir
+from app.config import ConfigError, get_cache_dir, get_data_dir
 
 
 @pytest.fixture(autouse=True)
 def _aislar_entorno(monkeypatch, tmp_path):
-    # Quita la variable real y desactiva la lectura de backend/.env,
+    # Quita las variables reales y desactiva la lectura de backend/.env,
     # para que cada test parta de cero.
     monkeypatch.delenv("KINETIQ_DATA_DIR", raising=False)
+    monkeypatch.delenv("KINETIQ_CACHE_DIR", raising=False)
     monkeypatch.setattr(config, "_DOTENV_PATH", tmp_path / "no-existe.env")
+    monkeypatch.setattr(config, "_CACHE_DIR_POR_DEFECTO", tmp_path / "cache-default")
 
 
 def test_devuelve_la_ruta_cuando_la_variable_esta(monkeypatch, tmp_path):
@@ -41,3 +43,18 @@ def test_no_hay_ruta_por_defecto_hardcodeada(monkeypatch):
     # Si alguien mete un fallback a una ruta fija, este test lo detecta.
     with pytest.raises(ConfigError):
         get_data_dir()
+
+
+def test_cache_dir_usa_el_default_y_lo_crea(tmp_path):
+    # Sin variable: usa backend/.cache (aquí redirigido por la fixture) y lo crea.
+    destino = get_cache_dir()
+    assert destino == (tmp_path / "cache-default").resolve()
+    assert destino.is_dir()
+
+
+def test_cache_dir_respeta_la_variable(monkeypatch, tmp_path):
+    elegida = tmp_path / "otra-cache"
+    monkeypatch.setenv("KINETIQ_CACHE_DIR", str(elegida))
+    destino = get_cache_dir()
+    assert destino == elegida.resolve()
+    assert destino.is_dir()  # se crea aunque no exista de antemano
