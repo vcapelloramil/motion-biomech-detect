@@ -105,12 +105,13 @@ def velocidad_angular_segmento(
     lado_dominante: str,
     *,
     espacio: str = "mundo",
+    brazo_via: str = "codo",
 ) -> np.ndarray:
     """Velocidad angular del segmento en °/s, alineada a los fotogramas de `seq`.
 
     ω[i] = ∠(u[i-1], u[i]) · fps ; ω[0] se copia de ω[1]. NaN donde falte un extremo.
     """
-    origen_art, extremo_art = vector_segmento(seg, lado_dominante)
+    origen_art, extremo_art = vector_segmento(seg, lado_dominante, brazo_via=brazo_via)
     fps = seq.fps_efectivos
     n = seq.n_frames
     u = np.full((n, 3), np.nan)

@@ -7,7 +7,14 @@ from app.engine.preparacion import TramoExcluido
 from app.engine.pose.articulaciones import ArticulacionCanonica as A
 from app.engine.pose.base import PoseFrame, Punto, SecuenciaPose
 from app.engine.segmentos_corporales import SegmentoCadena as S
-from app.engine.sequencing import evaluar_repeticion, secuenciar, segmentar
+from app.engine.sequencing import (
+    MARGEN_PLAUSIBILIDAD,
+    _FLEISIG_MAX,
+    evaluar_repeticion,
+    secuenciar,
+    segmentar,
+    techo_velocidad,
+)
 
 FPS = 240.0
 CENTRO = np.array([0.0, 0.0, 0.0])
@@ -40,15 +47,16 @@ def _seq_con_picos(t_pelvis, t_torso, t_brazo, *, n=180, offset=(0.05, 0.03, -0.
 
         ci, cd = eje(np.array([0, 0.5, 0]), ph_p)
         hi, hd = eje(np.array([0, 0.2, 0]), ph_t, r=0.16)
-        # brazo: la muñeca derecha barre un arco desde el hombro derecho
+        # brazo: codo y muñeca derechos barren un arco desde el hombro derecho
         hombro_d = hd
+        codo_d = hombro_d + np.array([0.01, -0.22 * np.cos(ph_b), -0.22 * np.sin(ph_b)])
         muneca_d = hombro_d + np.array([0.02, -0.45 * np.cos(ph_b), -0.45 * np.sin(ph_b)])
 
         pts = {}
         for art, xyz in [
             (A.CADERA_IZQ, ci), (A.CADERA_DER, cd),
             (A.HOMBRO_IZQ, hi), (A.HOMBRO_DER, hd),
-            (A.MUNECA_DER, muneca_d),
+            (A.CODO_DER, codo_d), (A.MUNECA_DER, muneca_d),
         ]:
             p = xyz + off + rng.normal(0, ruido, 3)
             pts[art] = Punto(float(p[0]), float(p[1]), float(p[2]), 0.9)
@@ -83,12 +91,42 @@ def test_pico_en_tramo_no_auditable_no_se_reporta():
         TramoExcluido(A.HOMBRO_DER, "x", 90, 115),
     ]
     r = evaluar_repeticion(
-        seq, segmentar(seq, "der")[0], 1, lado_dominante="der", tramos_excluidos=tramos
+        seq, segmentar(seq, "der")[0], 1, lado_dominante="der",
+        tramos_excluidos=tramos,
     )
     assert r.picos[S.TORSO].auditable is False
     assert "no auditable" in r.picos[S.TORSO].motivo
     assert r.auditable is False  # falta el torso -> la repetición no es auditable
     assert r.orden_observado is None
+
+
+def test_techo_por_segmento_deriva_de_fleisig():
+    # ordenados como en §3.4.2.2: pelvis < torso < brazo
+    assert _FLEISIG_MAX[S.PELVIS] < _FLEISIG_MAX[S.TORSO] < _FLEISIG_MAX[S.BRAZO]
+    assert techo_velocidad(S.PELVIS) == pytest.approx(440.0 * MARGEN_PLAUSIBILIDAD)
+    assert techo_velocidad(S.BRAZO) == pytest.approx(2368.0 * MARGEN_PLAUSIBILIDAD)
+    # un pico plausible de brazo (~2000 °/s) queda por debajo del techo; uno de
+    # 25000 °/s (glitch de profundidad) queda muy por encima
+    assert 2000.0 < techo_velocidad(S.BRAZO) < 25000.0
+
+
+def test_pico_implausible_por_segmento_no_se_reporta():
+    seq = _seq_con_picos(0.25, 0.42, 0.60, semilla=7)
+    # inflar artificialmente la muñeca/codo derechos en un frame -> ω enorme
+    frames = list(seq.frames)
+    i = 90
+    p = frames[i].puntos_mundo
+    from dataclasses import replace
+    from app.engine.pose.base import Punto
+    p2 = dict(p)
+    p2[A.CODO_DER] = Punto(p[A.CODO_DER].x + 3.0, p[A.CODO_DER].y, p[A.CODO_DER].z, 0.9)
+    frames[i] = replace(frames[i], puntos_mundo=p2)
+    seq2 = replace(seq, frames=frames)
+    r = evaluar_repeticion(
+        seq2, segmentar(seq2, "der")[0], 1, lado_dominante="der", tramos_excluidos=[]
+    )
+    assert r.picos[S.BRAZO].auditable is False
+    assert "implausible" in r.picos[S.BRAZO].motivo
 
 
 def test_segmentacion_manual_respeta_las_ventanas():

@@ -46,9 +46,26 @@ mínima; el pico dominante es el más alto. Un pico se marca **no auditable** (n
 reporta ni se estima — R3) si:
 
 - cae dentro de un `TramoExcluido` de E3 de alguna articulación del segmento, o
-- supera `VELOCIDAD_ANGULAR_MAX_PLAUSIBLE = 8000 °/s`. Esto **no es un parámetro de
-  ajuste**: el hombro pico ~2368 °/s (Fleisig et al., §3.4.2.2); ~3× de margen. Por
-  encima es un error de detección, no un movimiento.
+- supera el **techo de plausibilidad física del segmento**.
+
+**Techo por segmento, anclado a la literatura** (no un número a ojo). Velocidades
+angulares máximas de Fleisig et al. (2003) en tenistas de nivel mundial
+(§3.4.2.2): pelvis 440 °/s, torso 870, hombro ≈2368 (`brazo`). El techo es
+`Fleisig × MARGEN_PLAUSIBILIDAD`, con **`MARGEN_PLAUSIBILIDAD = 3`**.
+
+Criterio del margen: (a) el factor de ralentización de los clips descargados es
+una estimación (`escala_temporal_conocida = False`), así que el fps efectivo —y
+con él ω— tiene incertidumbre de un factor cercano a 2; (b) el ruido de MediaPipe
+(146 mm de error 3D, §3.3.2.5) infla las tasas instantáneas. Los valores de
+Fleisig ya son el máximo de la élite mundial: un amateur no debería acercarse, así
+que ×3 deja margen amplio para señal legítima y sigue siendo un orden de magnitud
+por debajo de los *glitches* observados (15 000–42 000 °/s).
+
+| segmento | Fleisig (°/s) | techo (×3, °/s) |
+| --- | --- | --- |
+| pelvis | 440 | 1 320 |
+| torso | 870 | 2 610 |
+| brazo | 2 368 | 7 104 |
 
 Si a una repetición le falta el pico auditable de algún segmento → `auditable =
 False`, sin orden observado.
@@ -74,11 +91,12 @@ solo en el código.
 
 ## 2. Validación cualitativa sobre el corpus público — resultados
 
-Corrida de `python -m app.analizar` sobre los 4 clips públicos con lado dominante
-confirmado (3 saques de Zverev + 1 drive de Sinner; el revés de Federer quedó
-pendiente, ver §3). Se registran **tal cual salieron**, sin ajustar nada.
+Corrida de `python -m app.analizar` sobre los 5 clips públicos aptos. Se registran
+**tal cual salieron**, sin ajustar nada. La tabla es la primera pasada (ventana =
+todo el clip) para comparar los dos `brazo_via`; la segmentación automática cambió
+después al pasar `brazo` a codo (ver punto 2).
 
-### Instantes de pico (segundos dentro de la ventana)
+### Instantes de pico de la primera pasada (segundos dentro de la ventana)
 
 | clip | pelvis | torso | brazo (`HOMBRO→MUNECA`) | brazo (`HOMBRO→CODO`) |
 | --- | --- | --- | --- | --- |
@@ -86,23 +104,51 @@ pendiente, ver §3). Se registran **tal cual salieron**, sin ajustar nada.
 | zverev_saque_lateral_02 | 1.154 (637) | 1.154 (846) | 1.044 — **41 866 °/s** | 1.132 — **24 932 °/s** |
 | zverev_saque_lateral_03 | 0.830 (550) | 0.812 (885) | 0.868 — 1 799 °/s | 0.862 — 1 883 °/s |
 | drive_lateral_01 | 0.827 (827) | 0.833 (1666) | 0.952 — **26 624 °/s** | 0.956 — 1 744 °/s |
+| reves_lateral_01 (Federer, `der`) | 0.290 (522) | 0.447 (385) | 1.000 — **6 448 °/s** | 1.000 — **10 208 °/s** |
 
 ### Qué se observa
 
 1. **El pipeline corre de punta a punta sobre material profesional real sin
-   romperse.** El manejo de no auditables funciona: con `brazo = HOMBRO→MUNECA`, la
-   velocidad implausible de la muñeca cerca del impacto (desenfoque de movimiento)
-   se detecta y la repetición queda no auditable, en vez de reportar un orden
-   basado en un número basura.
+   romperse.** El manejo de no auditables funciona.
 
 2. **La muñeca de la raqueta no es auditable en el saque/drive del corpus público.**
    `HOMBRO→MUNECA` da 15 000–42 000 °/s en 3 de 4 clips: MediaPipe pierde el punto
    de la mano en el fotograma más rápido. `HOMBRO→CODO` (brazo superior, el segmento
    anatómicamente correcto de la "cadena": el antebrazo y la mano son eslabones
-   posteriores) da valores plausibles (1 700–2 300 °/s) en 3 de 4, y en el drive el
-   orden sale **`pelvis → torso → brazo` completo y con velocidades plausibles**.
-   `zverev_02` tiene un tramo de *tracking* malo cerca del impacto que ni el codo
-   salva (correctamente no auditable).
+   posteriores) da valores plausibles (1 700–2 300 °/s) en 3 de 4. **Decidido:
+   `brazo = HOMBRO→CODO` por defecto, configurable (`brazo_via`)** — para
+   re-testear con `muneca` bajo el encuadre de tres cuartos en la Fase B.
+   Efecto lateral: con la muñeca, sus *glitches* de 40 000 °/s inundaban la
+   "velocidad total" y rompían la segmentación automática; con el codo la
+   segmentación por valles de quietud empieza a funcionar (el drive se parte en
+   ventanas y una repetición sale `pelvis → torso → brazo` **correcta** con
+   velocidades plausibles 827 / 1 666 / 1 744 °/s).
+
+3. **`zverev_saque_lateral_02` — investigación del pico implausible de 24 932 °/s
+   (con codo).** No es un techo mal calibrado: es un **error de detección puntual de
+   ese clip que ni E2 ni E3 marcaron**.
+   - En el fotograma 566, la coordenada `z` de `CODO_DER` **cambia de signo**
+     (+0,095 → −0,050 m, ~14 cm) mientras `x`, `y` siguen suaves: una **inversión
+     de profundidad** de MediaPipe (no distingue si el codo está delante o detrás
+     del plano del cuerpo; §3.3.2.1).
+   - La confianza en ese fotograma es **0,65**, por encima del umbral de 0,5 → el
+     marcado por baja confianza **no lo atrapa**.
+   - El desplazamiento 3D es ~0,15 m ≈ **0,33 longitudes de torso**, por debajo del
+     umbral `MAX_SALTO_TORSOS = 0,5` → el detector de saltos imposibles **tampoco lo
+     atrapa**.
+   - La serie de `z` con la inversión llega a E4; la dirección del vector
+     `HOMBRO→CODO` gira de golpe → ω salta a 24 932 °/s → lo corta el techo de
+     plausibilidad → la repetición queda correctamente **no auditable**.
+   - **El techo hizo su trabajo.** No se perdió un saque bueno por un techo malo:
+     se marcó un saque donde la estimación de profundidad del codo se invierte.
+   - **Gap detectado en los umbrales de E2/E3** (propuesta, no aplicada — toca
+     etapas ya mergeadas): una inversión de signo de `z` de ~1/3 de torso pasa por
+     debajo de los dos filtros. Opciones: (a) agregar a `engine/validation.py` un
+     detector de **inversión de signo en `z`** (|Δz| por encima de un umbral con
+     `x`,`y` estables) — apunta al modo de falla exacto, bajo riesgo de falsos
+     positivos; (b) endurecer `MAX_SALTO_TORSOS` (~0,3) y/o hacerlo consciente de la
+     velocidad implícita. Recomendación: (a). Pendiente de decidir si se hace ahora
+     o junto con la continuación de la Etapa 4 tras la Fase B.
 
 3. **Vista lateral: pelvis y torso quedan a ~12–18  ms.** En los saques de Zverev el
    pico de pelvis y el de torso caen casi juntos (12 ms en el 01, 18 ms en el 03),
@@ -129,22 +175,33 @@ del protocolo— pone la rotación transversal más en el plano de la imagen).
 
 ---
 
-## 3. Pendientes (no se tocan hasta la Fase B / el punto de decisión)
+## 3. Resuelto en esta sesión y pendientes
 
-- **Revisar `brazo = HOMBRO→MUNECA` → `HOMBRO→CODO`.** La evidencia de arriba lo
-  recomienda, pero el cambio queda para que Valentín lo apruebe (el vector se
-  aprobó como `HOMBRO→MUNECA` en el plan). Alternativa: hacerlo configurable.
-- **`reves_lateral_01` (Federer):** el catálogo lo marca zurdo, pero Roger Federer
-  juega **de derecha** (revés a una mano con la derecha). La columna `lado_dominante`
-  quedó vacía para ese clip a la espera de confirmación. Es justo el caso que la
-  columna busca evitar: sin ella, el default habría medido el brazo equivocado en
-  silencio.
-- **Medición formal de Criterio 1 (4.7) y Criterio 2 (4.8)** y el **punto de
-  decisión de repliegue**: requieren repeticiones controladas del mismo jugador
-  (Fase B).
-- Calibrar prominencia / separación de `find_peaks` con más material.
-- Elegir "pico dominante plausible" en vez de descartar toda la serie si el pico
-  más alto es implausible (posible refinamiento con datos de Fase B).
+**Resuelto:**
+
+- **`brazo = HOMBRO→CODO` por defecto, configurable** (`brazo_via`) — decidido con
+  Valentín; la evidencia y el argumento anatómico coinciden.
+- **`reves_lateral_01`:** `lado_dominante = der`. Roger Federer juega **de derecha**;
+  el dato "zurdo" del catálogo era un error, ya corregido.
+- **Techo de plausibilidad por segmento, anclado a Fleisig** (§ "Detección de picos").
+- **`zverev_saque_lateral_02`:** investigado; es un error de detección puntual
+  (inversión de `z` del codo) que el techo marca correctamente como no auditable.
+
+**Pendiente (no se toca hasta la Fase B / el punto de decisión):**
+
+- **Detector de inversión de signo en `z`** en `engine/validation.py` (gap de umbrales
+  de E2/E3, ver punto 3 de §2). Decidir si se hace ahora o con la continuación de E4.
+- **Medición formal de Criterio 1 (4.7) y Criterio 2 (4.8)** y el **punto de decisión
+  de repliegue**: requieren repeticiones controladas del mismo jugador (Fase B).
+- Confirmar / descartar la casi-simultaneidad pelvis-torso (~12–18 ms) con encuadre de
+  tres cuartos.
+- Calibrar prominencia / separación de `find_peaks` y los parámetros de segmentación
+  automática (`QUIETUD_REL`, `DUR_MIN_REPETICION_S`) con más material — baja prioridad:
+  los clips de la Fase B traen pausas explícitas en posición neutra (protocolo §5).
+- Elegir "pico dominante plausible" en vez de descartar toda la serie si el pico más
+  alto es implausible.
+- Conseguir 1–2 clips públicos con **encuadre de tres cuartos** para adelantar la
+  comparación pelvis-vs-torso antes de gastar la sesión de grabación propia.
 
 ---
 

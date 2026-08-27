@@ -55,6 +55,8 @@ def main(argv: list[str] | None = None) -> int:
                         help="Lado dominante; si se omite, se lee de catalogo.csv.")
     parser.add_argument("--manual", default=None,
                         help="Ventanas de repetición 'desde:hasta' en segundos, separadas por coma.")
+    parser.add_argument("--brazo-via", default="codo", choices=["codo", "muneca"],
+                        help="Articulación distal del segmento 'brazo' (default: codo).")
     parser.add_argument("--backend", default="mediapipe", choices=["mediapipe"])
     args = parser.parse_args(argv)
 
@@ -89,11 +91,12 @@ def main(argv: list[str] | None = None) -> int:
         filt.secuencia,
         lado_dominante=lado,
         tramos_excluidos=filt.tramos_excluidos,
+        brazo_via=args.brazo_via,
         manual=_parse_manual(args.manual),
         corpus_publico=True,
     )
 
-    print(f"clip: {args.clip}   lado dominante: {lado}")
+    print(f"clip: {args.clip}   lado dominante: {lado}   brazo vía: {args.brazo_via}")
     print(f"fps efectivos: {seq.fps_efectivos:.1f}   corte del filtro: {filt.corte_hz:.1f} Hz "
           f"({filt.metodo_corte})   orden esperado: {_fmt_orden(ORDEN_ESPERADO)}")
     print("-" * 78)

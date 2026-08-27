@@ -40,6 +40,9 @@ incluida `test_inversion_z_corpus.py` (el detector atrapa el frame 566 real y la
 
 Merge `fix/inversion-z` → `main` con `v0.3.1`, traer `etapa/4-cinematica` sobre esa base,
 y seguir esperando la Fase B para 4.7/4.8 y el punto de decisión.
+
+---
+
 ## 2026-08-27 (sesión 3) — Etapa 4: Cinemática y secuenciación (arranque, 4.1–4.6)
 
 **Rama:** `etapa/4-cinematica` (desde `main`). **La Etapa 4 NO se cierra en esta sesión.**
@@ -92,24 +95,45 @@ sesgo** (3 series sintéticas con offset constante + ruido → recupera pelvis�
 ángulos de geometría conocida, pico en tramo no auditable → no se reporta. `-m slow`:
 `test_analizar_e4.py` (estructura coherente sobre pose real, sin aseverar correctitud).
 
+### Ajustes tras la revisión de Valentín (misma sesión)
+
+- **`brazo = HOMBRO→CODO` por defecto, configurable** (`brazo_via`).
+- **`catalogo.csv`:** `reves_lateral_01` → `lado_dominante = der` (Federer juega de
+  derecha; el "zurdo" era un dato equivocado).
+- **Techo de plausibilidad POR SEGMENTO, anclado a Fleisig et al. (2003)** (§3.4.2.2):
+  pelvis 440, torso 870, brazo 2368 °/s × `MARGEN_PLAUSIBILIDAD = 3` → 1320 / 2610 /
+  7104 °/s. Criterio del margen en decisión 008 (incertidumbre del factor de
+  ralentización estimado + ruido de MediaPipe).
+- **`zverev_saque_lateral_02` investigado:** el pico de 24 932 °/s (codo) es un error
+  de detección puntual, no un techo mal calibrado. Frame 566: la `z` de `CODO_DER`
+  **cambia de signo** (~14 cm) con `x`,`y` suaves (inversión de profundidad de
+  MediaPipe). Confianza 0,65 (pasa el umbral de 0,5) y desplazamiento 0,33 torsos
+  (< `MAX_SALTO_TORSOS = 0,5`): **ni E2 ni E3 lo marcaron**. El techo lo corta →
+  repetición no auditable (correcto). Propuesta (no aplicada): detector de inversión
+  de signo en `z` en `engine/validation.py`.
+- Efecto lateral del codo: la segmentación automática, antes inundada por los
+  *glitches* de 40 000 °/s de la muñeca, empieza a funcionar (el drive se parte y una
+  repetición sale `pelvis → torso → brazo` **correcta**, 827/1666/1744 °/s).
+
+`pytest -m "not slow"` → **130 en verde**.
+
 ### Pendiente
 
-- **Revisar `brazo = HOMBRO→MUNECA` → `HOMBRO→CODO`** (la evidencia lo recomienda; el
-  vector se aprobó como muñeca — decisión de Valentín, o hacerlo configurable).
-- **`reves_lateral_01`:** el catálogo dice Federer zurdo, pero **Roger Federer juega de
-  derecha**. `lado_dominante` quedó vacío a la espera de confirmación. Es exactamente el
-  caso que la columna sin-default busca evitar.
 - 4.7 / 4.8 / punto de decisión: Fase B.
-- Calibrar `find_peaks` con más material; elegir "pico dominante plausible" en vez de
-  descartar la serie si el más alto es implausible.
+- Detector de inversión de signo en `z` (gap de umbrales E2/E3): ¿ahora o con la
+  continuación de E4?
+- Confirmar/descartar pelvis-torso ~12–18 ms con encuadre de tres cuartos.
+- Calibrar `find_peaks` / parámetros de segmentación — baja prioridad (Fase B trae
+  pausas en posición neutra).
+- Conseguir 1–2 clips públicos de tres cuartos para adelantar la comparación
+  pelvis-vs-torso.
 - La rama `etapa/4-cinematica` **queda abierta**, sin merge ni tag, hasta cerrar la etapa.
 
 ### Siguiente paso concreto
 
-Definir con Valentín: (a) `brazo` codo vs muñeca vs configurable; (b) handedness de
-`reves_lateral_01`. Después, esperar la Fase B para 4.7/4.8 y el punto de decisión.
-Mientras tanto, la Etapa 4 no avanza más (no tiene sentido pulir un detector cuyos
-criterios de éxito todavía no se pueden medir — precondición del plan).
+Esperar la Fase B para 4.7/4.8 y el punto de decisión. Opcional mientras tanto: el
+detector de inversión de `z`, y/o clips públicos de tres cuartos. La Etapa 4 no avanza
+más sin material para medir sus criterios (precondición del plan).
 
 ---
 

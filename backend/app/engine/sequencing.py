@@ -12,7 +12,7 @@ segmento **no se reporta ni se estima** (regla R3); la repetición queda `audita
 from __future__ import annotations
 
 from collections import Counter
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 import numpy as np
 from scipy.signal import find_peaks
@@ -30,21 +30,37 @@ from app.engine.segmentos_corporales import (
 PROMINENCIA_MIN_ABS = 40.0          # °/s
 PROMINENCIA_MIN_REL = 0.15          # fracción del pico máximo de la ventana
 SEPARACION_MIN_S = 0.05            # s entre picos
-# Techo de plausibilidad física, NO un parámetro de ajuste. El hombro pico ~2368 °/s
-# (Fleisig et al., §3.4.2.2); ~3x de margen. Un "pico" por encima es un error de
-# detección (la muñeca de la raqueta se pierde por desenfoque cerca del impacto), y
-# se marca como no auditable en vez de reportarse (regla R3).
-VELOCIDAD_ANGULAR_MAX_PLAUSIBLE = 8000.0  # °/s
 # Segmentación automática: "quietud" = velocidad total por debajo de esta fracción
 # del máximo del clip, sostenida.
 QUIETUD_REL = 0.10
 DUR_MIN_REPETICION_S = 0.20
+
+# --- Techo de plausibilidad física, POR SEGMENTO, anclado a la literatura --------
+# Velocidades angulares máximas medidas por Fleisig et al. (2003) en tenistas de
+# nivel mundial (tesis §3.4.2.2). Son un tope: un jugador amateur no debería
+# acercarse.
+_FLEISIG_MAX = {
+    SegmentoCadena.PELVIS: 440.0,
+    SegmentoCadena.TORSO: 870.0,
+    SegmentoCadena.BRAZO: 2368.0,   # rotación interna del hombro, el pico más rápido
+}
+# Margen sobre el valor de Fleisig. Criterio: cubre (1) que el factor de
+# ralentización de los clips descargados es una estimación
+# (`escala_temporal_conocida = False`), así que el fps efectivo —y por lo tanto ω—
+# tiene incertidumbre de un factor cercano a 2; y (2) el ruido de MediaPipe (146 mm
+# de error 3D, §3.3.2.5), que infla las tasas instantáneas. Un pico por encima de
+# Fleisig × este margen es un error de detección, no un movimiento (regla R3).
+MARGEN_PLAUSIBILIDAD = 3.0
 
 _CAVEAT_PUBLICO = (
     "Corpus público (sin repeticiones controladas del mismo jugador): estos "
     "agregados son una validación cualitativa temprana, NO la medición del "
     "Criterio 1 ni del Criterio 3, que requieren el conjunto propio de la Fase B."
 )
+
+
+def techo_velocidad(seg: SegmentoCadena) -> float:
+    return _FLEISIG_MAX[seg] * MARGEN_PLAUSIBILIDAD
 
 
 @dataclass(frozen=True)
@@ -96,9 +112,9 @@ class ResumenSecuenciacion:
 # --- frames no auditables por segmento --------------------------------------
 
 def _frames_excluidos_por_segmento(
-    tramos: list[TramoExcluido], seg: SegmentoCadena, lado_dominante: str
+    tramos: list[TramoExcluido], seg: SegmentoCadena, lado_dominante: str, brazo_via: str
 ) -> set[int]:
-    arts = set(articulaciones_de_segmento(seg, lado_dominante))
+    arts = set(articulaciones_de_segmento(seg, lado_dominante, brazo_via=brazo_via))
     fuera: set[int] = set()
     for t in tramos:
         if t.articulacion in arts:
@@ -114,6 +130,7 @@ def detectar_pico(
     fps: float,
     offset_frame: int,
     frames_excluidos: set[int],
+    techo: float,
 ) -> tuple[int, float] | tuple[None, str]:
     """Devuelve (frame_absoluto, velocidad) del pico dominante, o (None, motivo)."""
     valido = omega[~np.isnan(omega)]
@@ -123,19 +140,18 @@ def detectar_pico(
     prominencia = max(PROMINENCIA_MIN_ABS, PROMINENCIA_MIN_REL * tope)
     distancia = max(1, int(SEPARACION_MIN_S * fps))
     omega_sin_nan = np.nan_to_num(omega, nan=-np.inf)
-    idxs, props = find_peaks(omega_sin_nan, prominence=prominencia, distance=distancia)
+    idxs, _ = find_peaks(omega_sin_nan, prominence=prominencia, distance=distancia)
     if len(idxs) == 0:
         return None, "sin picos marcados por encima de la prominencia mínima"
-    # pico dominante = el más alto
-    k = int(idxs[np.argmax(omega_sin_nan[idxs])])
+    k = int(idxs[np.argmax(omega_sin_nan[idxs])])  # pico dominante = el más alto
     frame_abs = offset_frame + k
     if frame_abs in frames_excluidos:
         return None, "el pico cae en un tramo no auditable"
     velocidad = float(omega[k])
-    if velocidad > VELOCIDAD_ANGULAR_MAX_PLAUSIBLE:
+    if velocidad > techo:
         return None, (
-            f"velocidad implausible ({velocidad:.0f} °/s > "
-            f"{VELOCIDAD_ANGULAR_MAX_PLAUSIBLE:.0f}): probable error de detección"
+            f"velocidad implausible ({velocidad:.0f} °/s > techo {techo:.0f}): "
+            f"probable error de detección"
         )
     return frame_abs, velocidad
 
@@ -148,26 +164,25 @@ def orden_observado(
     faltan = [s.value for s, p in picos.items() if p is None]
     if faltan:
         return None, None, f"sin pico auditable para: {', '.join(faltan)}"
-    orden = tuple(
-        s for s, _ in sorted(picos.items(), key=lambda kv: kv[1].instante_s)
-    )
+    orden = tuple(s for s, _ in sorted(picos.items(), key=lambda kv: kv[1].instante_s))
     return orden, (orden == ORDEN_ESPERADO), None
 
 
 # --- segmentación ------------------------------------------------------
 
-def _velocidad_total(seq: SecuenciaPose, lado_dominante: str) -> np.ndarray:
+def _velocidad_total(seq: SecuenciaPose, lado_dominante: str, brazo_via: str) -> np.ndarray:
     partes = [
-        velocidad_angular_segmento(seq, s, lado_dominante) for s in ORDEN_ESPERADO
+        velocidad_angular_segmento(seq, s, lado_dominante, brazo_via=brazo_via)
+        for s in ORDEN_ESPERADO
     ]
     return np.nansum(np.vstack(partes), axis=0)
 
 
 def sugerir_repeticiones(
-    seq: SecuenciaPose, lado_dominante: str
+    seq: SecuenciaPose, lado_dominante: str, brazo_via: str = "codo"
 ) -> list[tuple[int, int]]:
     """Ventanas activas entre pausas de quietud. Fallback: todo el clip."""
-    total = _velocidad_total(seq, lado_dominante)
+    total = _velocidad_total(seq, lado_dominante, brazo_via)
     n = seq.n_frames
     if n < 10 or np.all(np.isnan(total)):
         return [(0, n - 1)]
@@ -192,6 +207,7 @@ def segmentar(
     seq: SecuenciaPose,
     lado_dominante: str,
     *,
+    brazo_via: str = "codo",
     manual: list[tuple[float, float]] | None = None,
 ) -> list[Ventana]:
     fps = seq.fps_efectivos
@@ -199,7 +215,10 @@ def segmentar(
         return [
             Ventana(int(round(d * fps)), int(round(h * fps)), fps) for d, h in manual
         ]
-    return [Ventana(d, h, fps) for d, h in sugerir_repeticiones(seq, lado_dominante)]
+    return [
+        Ventana(d, h, fps)
+        for d, h in sugerir_repeticiones(seq, lado_dominante, brazo_via)
+    ]
 
 
 # --- evaluación por repetición y agregación --------------------------------
@@ -211,24 +230,29 @@ def evaluar_repeticion(
     *,
     lado_dominante: str,
     tramos_excluidos: list[TramoExcluido],
+    brazo_via: str = "codo",
 ) -> ResultadoRepeticion:
     fps = seq.fps_efectivos
     d, h = ventana.desde_frame, ventana.hasta_frame
     picos: dict[SegmentoCadena, PicoSegmento | None] = {}
     for seg in ORDEN_ESPERADO:
-        omega = velocidad_angular_segmento(seq, seg, lado_dominante)[d : h + 1]
-        excluidos = _frames_excluidos_por_segmento(tramos_excluidos, seg, lado_dominante)
+        omega = velocidad_angular_segmento(
+            seq, seg, lado_dominante, brazo_via=brazo_via
+        )[d : h + 1]
+        excluidos = _frames_excluidos_por_segmento(
+            tramos_excluidos, seg, lado_dominante, brazo_via
+        )
         resultado = detectar_pico(
-            omega, fps=fps, offset_frame=d, frames_excluidos=excluidos
+            omega, fps=fps, offset_frame=d, frames_excluidos=excluidos,
+            techo=techo_velocidad(seg),
         )
         if resultado[0] is None:
-            picos[seg] = PicoSegmento(seg, -1, float("nan"), float("nan"),
-                                      auditable=False, motivo=resultado[1])
+            picos[seg] = PicoSegmento(
+                seg, -1, float("nan"), float("nan"), auditable=False, motivo=resultado[1]
+            )
         else:
             frame_abs, vel = resultado
-            picos[seg] = PicoSegmento(
-                seg, frame_abs, (frame_abs - d) / fps, vel
-            )
+            picos[seg] = PicoSegmento(seg, frame_abs, (frame_abs - d) / fps, vel)
 
     orden, correcto, motivo = orden_observado(
         {s: (p if p and p.auditable else None) for s, p in picos.items()}
@@ -252,8 +276,7 @@ def agregar(
 
     predominante = None
     if auditables:
-        conteo = Counter(r.orden_observado for r in auditables)
-        predominante = conteo.most_common(1)[0][0]
+        predominante = Counter(r.orden_observado for r in auditables).most_common(1)[0][0]
 
     dispersion = None
     instantes_torso = [
@@ -279,14 +302,16 @@ def secuenciar(
     *,
     lado_dominante: str,
     tramos_excluidos: list[TramoExcluido] | None = None,
+    brazo_via: str = "codo",
     manual: list[tuple[float, float]] | None = None,
     corpus_publico: bool = False,
 ) -> tuple[list[ResultadoRepeticion], ResumenSecuenciacion]:
     tramos_excluidos = tramos_excluidos or []
-    ventanas = segmentar(seq, lado_dominante, manual=manual)
+    ventanas = segmentar(seq, lado_dominante, brazo_via=brazo_via, manual=manual)
     resultados = [
         evaluar_repeticion(
-            seq, v, i + 1, lado_dominante=lado_dominante, tramos_excluidos=tramos_excluidos
+            seq, v, i + 1, lado_dominante=lado_dominante,
+            tramos_excluidos=tramos_excluidos, brazo_via=brazo_via,
         )
         for i, v in enumerate(ventanas)
     ]
