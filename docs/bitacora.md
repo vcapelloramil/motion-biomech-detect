@@ -40,6 +40,76 @@ incluida `test_inversion_z_corpus.py` (el detector atrapa el frame 566 real y la
 
 Merge `fix/inversion-z` → `main` con `v0.3.1`, traer `etapa/4-cinematica` sobre esa base,
 y seguir esperando la Fase B para 4.7/4.8 y el punto de decisión.
+## 2026-08-27 (sesión 3) — Etapa 4: Cinemática y secuenciación (arranque, 4.1–4.6)
+
+**Rama:** `etapa/4-cinematica` (desde `main`). **La Etapa 4 NO se cierra en esta sesión.**
+**Modelo:** Sonnet 5 Medio.
+
+Lecturas previas (convención): `capitulo-3` §3.3.3 y §3.3.4.1–§3.3.4.5. Confirmado con
+Valentín: se construyen 4.1–4.6 (+ 4.6b con caveat en el reporte) usando el corpus
+público; se difieren 4.7 (Criterio 1), 4.8 (Criterio 2) y el punto de decisión hasta
+tener la Fase B. Lado dominante: columna nueva en `catalogo.csv`, sin default.
+
+### Qué se hizo
+
+- **`engine/segmentos_corporales.py`** — cadena `pelvis → torso → brazo` como vectores
+  directores. `brazo = HOMBRO_{dom} → MUNECA_{dom}`; `{dom}` de la columna
+  `lado_dominante` del `catalogo.csv` (agregada esta sesión), sin valor por defecto.
+- **`engine/kinematics.py`** (4.1–4.3) — `angulo_tres_puntos`, `serie_angulo_articular`,
+  `serie_separacion_cadera_hombro`, `velocidad_angular_segmento` (°/s, escalar).
+- **`engine/sequencing.py`** (4.4–4.6b) — `detectar_pico` (`find_peaks`; no auditable si
+  cae en `TramoExcluido` o supera 8000 °/s = techo de plausibilidad física, no un
+  ajuste), `orden_observado`, `segmentar` (auto/manual/fallback), `evaluar_repeticion`,
+  `agregar` (con `nota` de caveat de corpus público en la estructura).
+- **`app/analizar.py`** — CLI `python -m app.analizar --clip X` (pose caché → E3 → E4).
+- **`catalogo.csv`** — columna `lado_dominante` (zverev/sinner = `der`; `reves_lateral_01`
+  de Federer y los dos `desconocido` quedaron vacíos — ver pendientes).
+- Versión del motor → `0.4.0`. Decisión 008 (incluye los hallazgos de la validación).
+
+### Validación cualitativa sobre el corpus público (registrada tal cual salió)
+
+Corrida de `analizar` sobre 3 saques de Zverev + drive de Sinner:
+
+- **El pipeline corre de punta a punta sobre material profesional sin romperse.** El
+  manejo de no auditables funciona.
+- **La muñeca de la raqueta no es auditable en gestos rápidos:** `HOMBRO→MUNECA` da
+  15 000–42 000 °/s en 3 de 4 clips (MediaPipe pierde la mano por desenfoque). Con
+  `HOMBRO→CODO` (brazo superior) los valores son plausibles (1 700–2 300 °/s) en 3 de 4
+  y en el **drive el orden sale `pelvis → torso → brazo` completo y plausible**.
+- **Vista lateral:** en los saques, pelvis y torso pican a ~12–18 ms — al borde de lo
+  resoluble; el orden entre ambos se invierte según el clip. Es el riesgo anticipado:
+  rotación transversal sobre el eje de profundidad (§3.3.2.8). El brazo, cuando es
+  auditable, queda claramente último.
+- **Lectura para la tesis:** evidencia positiva (el drive recupera la cadena pese al
+  sesgo y a la vista lateral; la prueba sintética de ordenamiento con sesgo lo confirma)
+  y de límite (pelvis-vs-torso lateral ≈ 15 ms; muñeca no auditable). Ambas útiles;
+  guían el encuadre de la Fase B (tres cuartos pone la rotación en el plano de imagen).
+
+### Pruebas
+
+`pytest -m "not slow"` → **128 en verde**. Incluye la **prueba de ordenamiento con
+sesgo** (3 series sintéticas con offset constante + ruido → recupera pelvis→torso→brazo),
+ángulos de geometría conocida, pico en tramo no auditable → no se reporta. `-m slow`:
+`test_analizar_e4.py` (estructura coherente sobre pose real, sin aseverar correctitud).
+
+### Pendiente
+
+- **Revisar `brazo = HOMBRO→MUNECA` → `HOMBRO→CODO`** (la evidencia lo recomienda; el
+  vector se aprobó como muñeca — decisión de Valentín, o hacerlo configurable).
+- **`reves_lateral_01`:** el catálogo dice Federer zurdo, pero **Roger Federer juega de
+  derecha**. `lado_dominante` quedó vacío a la espera de confirmación. Es exactamente el
+  caso que la columna sin-default busca evitar.
+- 4.7 / 4.8 / punto de decisión: Fase B.
+- Calibrar `find_peaks` con más material; elegir "pico dominante plausible" en vez de
+  descartar la serie si el más alto es implausible.
+- La rama `etapa/4-cinematica` **queda abierta**, sin merge ni tag, hasta cerrar la etapa.
+
+### Siguiente paso concreto
+
+Definir con Valentín: (a) `brazo` codo vs muñeca vs configurable; (b) handedness de
+`reves_lateral_01`. Después, esperar la Fase B para 4.7/4.8 y el punto de decisión.
+Mientras tanto, la Etapa 4 no avanza más (no tiene sentido pulir un detector cuyos
+criterios de éxito todavía no se pueden medir — precondición del plan).
 
 ---
 

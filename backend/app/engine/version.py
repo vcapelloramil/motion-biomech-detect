@@ -13,6 +13,7 @@ v0.3.0-etapa2, ...). Empezó en "0.0.0" (Etapa 0, sin cálculo).
 - 0.3.0 — Etapa 3: filtrado de fase cero (Butterworth + Winter).
 - 0.3.1 — Fix: detector de inversión de profundidad (z) en la validación (decisión 009).
 - 0.3.2 — Calibración del detector de inversión de z (confianza previa + retorno).
+- 0.4.0 — Etapa 4 (en curso): cinemática y secuenciación, pasos 4.1–4.6.
 """
 
-__version__ = "0.3.2"
+__version__ = "0.4.0"
