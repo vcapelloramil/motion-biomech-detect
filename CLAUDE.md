@@ -1,0 +1,148 @@
+# CLAUDE.md — Proyecto KinetiQ
+
+Contexto permanente del proyecto. Leer antes de proponer o hacer cualquier cambio.
+
+---
+
+## 1. Qué es este proyecto
+
+Sistema de análisis biomecánico preventivo para tenis mediante visión artificial y análisis
+de la cadena cinética. Proyecto Final de Ingeniería en Informática, Universidad del Salvador.
+Autor: Valentín Capello Ramil. Nombre de producto: **KinetiQ**.
+
+El sistema procesa de forma asincrónica videos pregrabados (mp4/mov) de jugadores de tenis,
+extrae puntos articulares con estimación de pose, y **documenta** el orden temporal en que
+cada segmento del cuerpo alcanza su velocidad máxima durante saque, drive y revés.
+
+**Qué mide realmente el sistema:** el ORDEN de los picos de velocidad (pelvis → torso → brazo),
+más ángulos articulares y separación cadera-hombro.
+
+**Qué NO mide:** velocidad de la pelota, precisión de tiro, ubicación en cancha, porcentaje de
+transferencia de energía, ni nada que requiera rastrear la pelota o la cancha.
+
+---
+
+## 2. Reglas duras — NO NEGOCIABLES
+
+Estas cinco reglas derivan de los capítulos ya entregados de la tesis. Violarlas invalida
+el trabajo académico, no solo el código.
+
+### R1 — Mínimo 120 fps
+El teorema de Nyquist-Shannon impone que, para medir el gesto rápido, el video debe estar
+grabado a **120 fps como mínimo** (240 recomendado). A 30 fps el hombro rota casi 80° entre
+fotogramas: la información no está "borrosa", está perdida y ningún filtro la recupera.
+
+- Nunca escribir "30 fps recomendado" ni similar en ninguna pantalla.
+- La pantalla de carga debe validar los FPS reales del archivo y advertir de forma visible.
+- Videos por debajo de 120 fps solo habilitan el análisis de la fase de preparación.
+
+### R2 — El sistema documenta, no predice ni diagnostica
+No existe evidencia que permita predecir lesiones a partir del movimiento (Bahr, 2016).
+
+**Verbos prohibidos en toda la interfaz, textos y reportes:** predecir, diagnosticar, prevenir.
+**Términos prohibidos:** nombres de patologías ("epicondilitis", "tendinitis"), "riesgo de
+lesión", "bandera roja" como etiqueta visible.
+**Verbos correctos:** se observa, se documenta, se midió, no se pudo medir.
+**Etiqueta correcta para una alerta:** "alerta de carga".
+
+Tampoco se prescribe tratamiento. Nunca escribir cosas como "reducí la intensidad X días"
+o "consultá por tal lesión". El sistema muestra el dato; la conclusión es del profesional.
+Razón legal: si el software dirige la atención médica sube de Clase I a Clase II ante ANMAT.
+
+### R3 — Cuatro estados, no tres
+El semáforo tiene cuatro estados y el cuarto es el más importante:
+
+| Estado | Color | Significado |
+|---|---|---|
+| Correcto | verde | Dentro del rango de referencia |
+| Desvío leve | ámbar | Se aparta, sin alcanzar criterio de alerta |
+| Alerta de carga | rojo | Patrón asociado en la literatura con mayor carga articular |
+| **No auditable** | **gris** | **El sistema no pudo medir con confianza suficiente** |
+
+Un dato equivocado presentado como bueno es peor que un dato faltante. Nunca rellenar huecos
+con estimaciones silenciosas. Ningún estado se comunica solo por color: siempre ícono + texto.
+
+### R4 — Trazabilidad
+Toda alerta debe poder responder dos preguntas: qué magnitud concreta la disparó y qué fuente
+la respalda. Todo reporte lleva sello de versión del motor, backend de pose y parámetros de
+filtrado. Nunca inventar números sin unidad, sin confianza y sin origen.
+
+### R5 — Alcance declarado
+**Dentro:** saque, drive, revés. Un jugador por video. Videos de entrenamiento.
+**Fuera:** voleas, dejadas, aproximación; partidos completos; múltiples jugadores; análisis en
+tiempo real; rastreo de pelota o cancha; comparativas con jugadores ATP/WTA; exportación a
+formatos médicos (DICOM/HL7).
+
+---
+
+## 3. Jerarquía de la interfaz
+
+Tres niveles con revelación progresiva. Cada nivel es completo en sí mismo.
+
+1. **Veredicto** — máximo TRES observaciones accionables, lenguaje llano, sin jerga, visible
+   sin desplazamiento. Es lo que pidió el 60% de los encuestados.
+2. **Evidencia** — video con esqueleto superpuesto sincronizado, gráfico de secuenciación,
+   curvas por segmento. Cada observación del nivel 1 enlaza al instante exacto del video.
+3. **Dato y fundamento** — valores numéricos, confianza, parámetros de filtrado, versión del
+   motor, referencia bibliográfica de cada umbral.
+
+**El gráfico de secuenciación es el elemento central del producto:** un eje temporal único con
+los instantes en que pelvis, torso y brazo alcanzan su velocidad máxima. Correcto = escalera
+ordenada de izquierda a derecha. Incorrecto = cruce.
+
+**Comparar al jugador consigo mismo** es la base del reporte clínico, no compararlo contra un
+promedio poblacional ni contra un "modelo ideal".
+
+---
+
+## 4. Arquitectura
+
+```
+Usuario → Frontend (React/TanStack) → API (FastAPI) → Motor Python → Supabase
+```
+
+Pipeline del motor:
+```
+E0 Ingesta (OpenCV, FPS reales)
+E1 Pose (MediaPipe por defecto / YOLOv8-Pose+ONNX alternativo)
+E1b Validación por confianza
+E2 Elevación 2D→3D (opcional)
+E3 Filtrado Butterworth de FASE CERO (bidireccional, nunca unidireccional)
+E4 Ángulos, velocidades, orden de picos
+E5 Auditoría y alertas
+```
+
+**Reglas de arquitectura:**
+- El frontend NO calcula nada biomecánico. Solo representa datos ya evaluados por el motor.
+- El motor no importa bibliotecas web. Recibe rutas de archivo, devuelve estructuras de datos.
+- El filtrado va DESPUÉS de la elevación 3D y ANTES de calcular velocidades.
+- El filtro debe ser de fase cero (aplicación hacia adelante y hacia atrás). Un filtro
+  unidireccional corre los picos en el tiempo y destruye justamente lo que medimos.
+- La etapa de pose es intercambiable detrás de una interfaz común (plan de repliegue).
+
+---
+
+## 5. Estado actual
+
+- Capítulos 1, 2 y 3 de la tesis entregados. Capítulo 4 en redacción, entrega 25/8/2026.
+- Frontend: prototipo navegable generado con Lovable (TanStack Start, React 19, Tailwind 4,
+  shadcn/ui, configurado para Cloudflare Workers). Diseño visual bueno; contenido y semántica
+  requieren corrección según las reglas de la sección 2.
+- Motor: pruebas exploratorias con YOLO sobre video. Sin pipeline integrado.
+- Sin Supabase conectado todavía.
+
+**Prioridad inmediata:** dejar el prototipo coherente con la tesis para poder capturar pantallas.
+No se requiere despliegue público: alcanza con el servidor de desarrollo local.
+
+---
+
+## 6. Criterios de trabajo
+
+- **MVP primero.** Ante dos soluciones, elegir la más simple que valide la hipótesis. No
+  introducir infraestructura que el volumen actual no justifica (colas persistentes,
+  observabilidad avanzada, microservicios).
+- **Explicar el código.** El autor tiene experiencia limitada en Python y frameworks web:
+  al proponer cambios, explicar qué hace cada parte y por qué.
+- **Cambios acotados.** Preferir ediciones puntuales sobre regeneraciones amplias.
+- **Ante la duda sobre alcance o vocabulario, preguntar.** Un texto que suena bien pero
+  contradice la sección 2 cuesta más de lo que ahorra.

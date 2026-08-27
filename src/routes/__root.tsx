@@ -38,7 +38,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "KinetiQ — Análisis biomecánico de tenis con visión artificial" },
-      { name: "description", content: "Subí un video de tu juego y recibí análisis de performance y evaluación clínica de la cadena cinética con modelos YOLO." },
+      { name: "description", content: "Cargá un video de entrenamiento y obtené el orden en que pelvis, torso y brazo alcanzan su velocidad máxima, con su nivel de confianza." },
     ],
     links: [{ rel: "stylesheet", href: appCss }],
   }),

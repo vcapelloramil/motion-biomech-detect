@@ -37,6 +37,11 @@
   --color-neon-foreground: var(--neon-foreground);
   --color-clinic: var(--clinic);
   --color-court: var(--court);
+  --color-state-ok: var(--state-ok);
+  --color-state-warn: var(--state-warn);
+  --color-state-alert: var(--state-alert);
+  --color-state-none: var(--state-none);
+  --color-state-none-foreground: var(--state-none-foreground);
 }
 
 :root {
@@ -64,6 +69,13 @@
   --neon-foreground: oklch(0.16 0.02 230);
   --clinic: oklch(0.72 0.16 195);
   --court: oklch(0.6 0.18 145);
+
+  /* Semaforo de auditoria — R3: cuatro estados, nunca solo color (siempre icono + texto) */
+  --state-ok: oklch(0.78 0.18 145);        /* Correcto */
+  --state-warn: oklch(0.8 0.15 80);        /* Desvio leve */
+  --state-alert: oklch(0.65 0.24 25);      /* Alerta de carga */
+  --state-none: oklch(0.65 0.012 235);     /* No auditable — gris neutro, ~6.5:1 sobre --card */
+  --state-none-foreground: oklch(0.16 0.02 230);
 
   --gradient-hero: radial-gradient(ellipse at top right, oklch(0.84 0.22 145 / 0.15), transparent 60%),
                    radial-gradient(ellipse at bottom left, oklch(0.7 0.18 200 / 0.12), transparent 55%);

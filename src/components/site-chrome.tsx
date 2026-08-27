@@ -5,10 +5,9 @@ import avatar from "@/assets/profile-avatar.jpg";
 export function Header() {
   const links = [
     { to: "/", label: "Inicio" },
-    { to: "/upload", label: "Subir" },
-    { to: "/videos", label: "Videos" },
-    { to: "/performance", label: "Performance" },
-    { to: "/clinica", label: "Clínico" },
+    { to: "/upload", label: "Cargar" },
+    { to: "/reporte", label: "Reporte" },
+    { to: "/videos", label: "Sesiones" },
     { to: "/tecnologia", label: "Tecnología" },
   ] as const;
 
@@ -62,12 +61,12 @@ export function Footer() {
             </div>
             <span className="font-display text-lg font-bold">KinetiQ</span>
           </div>
-          <p className="mt-3 text-sm text-muted-foreground">Visión artificial al servicio del tenis y la salud del jugador.</p>
+          <p className="mt-3 text-sm text-muted-foreground">Visión artificial aplicada a la secuenciación de la cadena cinética en tenis.</p>
         </div>
         <div>
           <div className="font-display text-sm font-semibold">Producto</div>
           <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-            <li>Performance</li><li>Análisis clínico</li><li>API YOLO</li>
+            <li>Carga y verificación</li><li>Reporte</li><li>Evolución del atleta</li>
           </ul>
         </div>
         <div>
@@ -79,7 +78,7 @@ export function Footer() {
         <div>
           <div className="font-display text-sm font-semibold">Legal</div>
           <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-            <li>Privacidad</li><li>Términos</li><li>Datos médicos</li>
+            <li>Privacidad</li><li>Términos</li><li>Alcance del sistema</li>
           </ul>
         </div>
       </div>

@@ -1,0 +1,799 @@
+# Plan de Desarrollo por Etapas — KinetiQ
+
+**Sistema de análisis biomecánico preventivo para tenis mediante visión artificial**
+Proyecto Final de Ingeniería en Informática · Universidad del Salvador
+Ventana de desarrollo: 26 de agosto — 17 de noviembre de 2026 (12 semanas)
+
+---
+
+## Cómo usar este documento
+
+Este archivo va en `docs/plan-desarrollo.md` dentro del repositorio, junto al `CLAUDE.md`.
+
+**Regla de trabajo con Claude Code: una etapa por sesión.** Al iniciar cada sesión, indicar
+qué etapa se va a abordar y pedir primero un plan de implementación antes de escribir código.
+Revisar ese plan, aprobarlo y recién entonces avanzar. Ninguna etapa comienza si la anterior
+no cumplió su criterio de aceptación.
+
+Cada etapa define: qué se construye, por qué en ese orden, qué se entrega, cómo se sabe que
+está terminada, y qué hacer si falla.
+
+---
+
+## Principios rectores
+
+**1. El riesgo primero.** El motor biomecánico se construye antes que la interfaz. La hipótesis
+de la tesis puede refutarse; la interfaz no. Construir primero lo que puede fallar deja tiempo
+para reaccionar. Este es el principio que gobierna el orden de todas las etapas.
+
+**2. El contrato antes que las partes.** En la Etapa 0 se congela la estructura JSON del reporte.
+A partir de ahí, motor e interfaz pueden avanzar en paralelo sin bloquearse: la interfaz trabaja
+contra datos de ejemplo que cumplen el contrato, el motor produce datos que lo cumplen.
+
+**3. Cuaderno primero, módulo después.** Cada etapa del pipeline se explora en un cuaderno de
+trabajo hasta entender el comportamiento sobre datos reales, y recién entonces se refactoriza a
+módulo con pruebas. Escribir el módulo antes de entender el problema produce abstracciones
+equivocadas.
+
+**4. Prueba sintética antes que video real.** Toda función del motor se valida primero contra
+una señal generada matemáticamente, cuyo resultado correcto se conoce de antemano. Un video real
+no permite saber si el resultado es correcto: esa es justamente la incertidumbre que la tesis
+investiga.
+
+**5. Nada se mide sin poder reproducirse.** Cada medición que vaya al Capítulo 7 debe salir de un
+script versionado que pueda volver a ejecutarse y dar el mismo número.
+
+---
+
+## Mapa de etapas
+
+```mermaid
+gantt
+    dateFormat YYYY-MM-DD
+    axisFormat %d/%m
+    title Desarrollo del MVP · agosto a noviembre 2026
+
+    section Fundaciones
+    E0 · Monorepo, contrato y corpus web :e0, 2026-08-26, 7d
+    C1 · Grabacion propia (limite)      :milestone, c1, 2026-09-22, 0d
+    section Motor biomecánico
+    E1 · Ingesta y validación de FPS    :e1, after e0, 7d
+    E2 · Estimación de pose             :e2, after e1, 7d
+    E3 · Procesamiento de señales       :e3, after e2, 7d
+    E4 · Cinemática y secuenciación     :crit, e4, after e3, 14d
+    E5 · Auditoría y reporte            :e5, after e4, 7d
+    section Plataforma
+    E6 · API y procesamiento asincrónico :e6, after e5, 7d
+    E7 · Persistencia e identidad       :e7, after e6, 7d
+    E8 · Integración de la interfaz     :e8, after e7, 7d
+    section Cierre
+    E9 · Validación y medición          :e9, after e8, 7d
+    E10 · Congelamiento y entrega       :e10, after e9, 7d
+```
+
+| Etapa | Semana | Fechas | Entregable central | Hito de tesis |
+| --- | --- | --- | --- | --- |
+| E0 | 1 | 26/8 – 1/9 | Monorepo, contrato de datos, corpus público (Fase A) | Hito 5 (1/9) |
+| E1 | 2 | 2/9 – 8/9 | Ingesta con validación de FPS | |
+| E2 | 3 | 9/9 – 15/9 | Extracción de pose con confianza | |
+| E3 | 4 | 16/9 – 22/9 | Filtrado de fase cero | |
+| **C1** | — | **límite 22/9** | **Conjunto propio grabado (Fase B)** | *bloquea E4* |
+| **E4** | **5–6** | **23/9 – 6/10** | **Secuenciación · punto de decisión** | Hito 6 (29/9), Hito 7 (6/10) |
+| E5 | 7 | 7/10 – 13/10 | Reporte JSON completo | |
+| E6 | 8 | 14/10 – 20/10 | API asincrónica | |
+| E7 | 9 | 21/10 – 27/10 | Supabase integrado | |
+| E8 | 10 | 28/10 – 3/11 | Interfaz conectada al motor | |
+| E9 | 11 | 4/11 – 10/11 | Indicadores medidos | Hito 8 |
+| E10 | 12 | 11/11 – 17/11 | Sistema congelado y documentado | Hito 8 |
+
+---
+
+# ETAPA 0 — Fundaciones
+
+**Semana 1 · 26/8 – 1/9**
+
+## Objetivo
+
+Dejar el repositorio, el contrato de datos y el material de video listos para que las nueve
+etapas siguientes no se bloqueen por infraestructura ni por falta de insumos.
+
+## Por qué ahora
+
+La grabación de videos es la única tarea que depende de terceros —una cancha, un jugador, luz
+adecuada— y por lo tanto la única que no se puede comprimir si se retrasa. Tiene que empezar
+en la primera semana. El contrato de datos, por su parte, es lo que habilita el trabajo en
+paralelo del resto del proyecto.
+
+## Tareas
+
+**0.1 — Reestructurar a monorepo.** Mover el proyecto actual de Lovable a `frontend/` y crear
+`backend/`, `tests/` y `docs/` según la estructura declarada en el apartado 4.3.5 de la tesis.
+Advertencia: esto rompe la sincronización con Lovable, lo cual es aceptable porque el desarrollo
+continúa en Claude Code.
+
+**0.2 — Entorno Python.** Python 3.11, entorno virtual, `requirements.txt` con versiones fijadas:
+opencv-python, mediapipe, numpy, scipy, fastapi, uvicorn, pydantic, pytest. Verificar que
+mediapipe instala y ejecuta sobre el hardware disponible: si falla, se detecta ahora y no en la
+Etapa 2.
+
+**0.3 — Congelar el contrato del reporte.** Definir con Pydantic la estructura JSON de salida
+(ver Anexo A). Es la decisión más importante de esta etapa: todo lo demás se construye contra
+este contrato.
+
+**0.4 — Higiene del repositorio.** `.gitignore` que excluya `node_modules`, entornos virtuales,
+`__pycache__`, `.env` y **los archivos de video**. Los videos no van a git: se guardan fuera del
+repositorio y se referencian por ruta. Un repositorio con videos de 300 MB se vuelve inmanejable.
+
+**0.5 — Recolección de material en dos tiempos.**
+
+La recolección se divide en dos fases con propósitos distintos, en línea con las técnicas
+declaradas en el apartado 2.5 de la tesis. La Fase A desbloquea el desarrollo de inmediato; la
+Fase B aporta la validación ecológica, que es la contribución metodológica diferencial del
+trabajo frente al 76 % de la literatura (Brecha 4).
+
+**Fase A — Corpus de desarrollo desde fuentes públicas (esta semana).**
+
+Objetivo: tener material suficiente para construir y depurar las Etapas 1 a 3 sin esperar a la
+grabación propia. Se busca **variedad**, no calidad uniforme.
+
+Composición mínima:
+
+| Tipo de clip | Cantidad | Para qué sirve |
+| --- | --- | --- |
+| Cámara lenta de saque, drive o revés (240 fps capturados) | 8–12 | Desarrollo de las Etapas 2 a 4 con muestreo suficiente |
+| Video convencional a 25–30 fps | 5 | Casos negativos: el sistema debe rechazarlos para la fase rápida |
+| Video a 50–60 fps | 5 | Zona intermedia: análisis parcial |
+| Clips con oclusión, encuadre deficiente o jugador parcialmente fuera de cuadro | 4 | Validar el manejo de datos no auditables |
+
+Antes de incorporar cualquier clip, verificar su frecuencia real y no confiar en la descripción:
+
+```bash
+ffprobe -v error -select_streams v:0 \
+  -show_entries stream=r_frame_rate,avg_frame_rate,nb_frames,duration \
+  -of default=noprint_wrappers=1 archivo.mp4
+```
+
+Un clip de cámara lenta conserva la información temporal aunque se reproduzca a 30 fps: los
+fotogramas capturados a alta frecuencia están todos presentes, estirados en el tiempo. Registrar
+para cada clip la frecuencia de captura estimada y el factor de ralentización.
+
+Restricciones: el material de transmisión y de terceros tiene derechos, de modo que se usa
+únicamente para desarrollo, **no se redistribuye y no se sube al repositorio**. Se guarda fuera
+del repositorio y se referencia por ruta.
+
+**Fase B — Conjunto propio controlado (antes del 23 de septiembre).**
+
+Objetivo: obtener material con condiciones registradas, repeticiones del mismo gesto y el mismo
+jugador en distintas sesiones. Es imprescindible para medir el Criterio 1 (repetibilidad del
+orden) y el Criterio 3 (comparación del jugador consigo mismo), que no pueden obtenerse de
+material ajeno.
+
+El alcance es deliberadamente modesto y **no requiere cancha, rival ni pelotas**: el sistema mide
+el movimiento del cuerpo, no la trayectoria de la pelota. Alcanza con un espacio con lugar para
+extender el brazo, un celular en modo 240 fps apoyado en un punto fijo, y aproximadamente treinta
+minutos de trabajo.
+
+- 1 jugador como mínimo, 2 si se consigue.
+- 3 gestos: saque, drive y revés.
+- 6 repeticiones de cada gesto, sin pelota, ejecutando el movimiento completo.
+- 2 encuadres: perfil y tres cuartos.
+- 2 sesiones separadas por al menos una semana, con el mismo encuadre, para habilitar el
+  Criterio 3.
+- Algunas repeticiones grabadas deliberadamente a 30 y 60 fps, para las pruebas de la Etapa 1.
+
+Registrar en una planilla las condiciones de cada toma: fecha, jugador, gesto, ángulo, distancia
+aproximada, altura de la cámara, iluminación y frecuencia de grabación. Esa planilla es la ficha
+de observación que el apartado 2.6 declara como instrumento de recolección.
+
+**0.6 — Registro de decisiones.** Crear `docs/decisiones/` y documentar allí cada decisión de
+arquitectura relevante con su fecha, alternativas consideradas y motivo. Alimenta directamente
+la redacción de los capítulos siguientes.
+
+## Criterio de aceptación
+
+- `pytest` corre sin errores sobre una prueba trivial.
+- El contrato del reporte valida un ejemplo de datos ficticios sin errores.
+- El corpus de la Fase A está completo, con la frecuencia real de cada clip verificada y
+  registrada.
+- La Fase B tiene fecha agendada y el equipo de captura probado: grabar un clip de prueba a
+  240 fps y confirmar que el archivo resultante efectivamente contiene esa frecuencia.
+- El proyecto frontend levanta desde su nueva ubicación.
+
+## Riesgo
+
+Que la Fase B se postergue indefinidamente amparándose en que la Fase A "ya alcanza". Es el
+riesgo más subestimado del proyecto: el material público desbloquea el desarrollo pero **no puede
+sustituir** la validación ecológica ni la comparación del jugador consigo mismo. Si el 23 de
+septiembre llega sin conjunto propio, la Etapa 4 no puede medir sus criterios y el punto de
+decisión pierde sentido.
+
+Mitigación: tratar la Fase B como un hito con fecha propia (C1) y no como una tarea dentro de
+una etapa.
+
+---
+
+# ETAPA 1 — Ingesta y validación de FPS
+
+**Semana 2 · 2/9 – 8/9**
+
+## Objetivo
+
+Convertir un archivo de video en una secuencia de fotogramas con metadatos temporales confiables,
+y rechazar de forma explícita el material que no cumple el requisito de muestreo.
+
+## Por qué ahora
+
+Es la base de toda medición temporal posterior. Un error de FPS no produce ruido: produce un
+reporte internamente coherente y completamente falso. Todo lo que se construya encima de una
+ingesta defectuosa es inválido, aunque parezca correcto.
+
+## Tareas
+
+**1.1** Módulo `engine/ingest.py`: apertura del archivo, lectura de FPS reales, cantidad de
+fotogramas, resolución y duración.
+
+**1.2 — Detección y resolución del caso de cámara lenta.** Es la tarea más delicada de esta etapa
+y adquiere importancia adicional porque buena parte del corpus de la Fase A son clips
+ralentizados. El problema: un archivo puede declarar una tasa de reproducción distinta de la tasa
+a la que fue capturado. Un saque grabado a 240 fps y exportado para reproducirse a 30 fps se ve
+ocho veces más lento; los fotogramas están todos, pero el eje temporal está estirado.
+
+Si el sistema toma la tasa declarada como si fuera la de captura, todas las velocidades salen
+divididas por ocho y el reporte queda internamente coherente y completamente falso.
+
+Lógica a implementar:
+
+- Leer la tasa declarada, la cantidad total de fotogramas y la duración del contenedor.
+- Contrastar los tres valores entre sí para detectar inconsistencias.
+- Cuando se detecte ralentización, requerir o estimar el **factor de ralentización** y calcular
+  la frecuencia de captura efectiva: `fps_captura = fps_declarados × factor`.
+- Permitir declarar el factor de forma manual por clip, ya que en material descargado no siempre
+  puede inferirse automáticamente. Registrarlo en la planilla del corpus.
+- Propagar al resto del pipeline la **frecuencia de captura**, nunca la de reproducción.
+
+**1.3** Regla de aptitud sobre la frecuencia de captura efectiva:
+
+| Frecuencia efectiva | Decisión |
+| --- | --- |
+| ≥ 240 fps | Apto para análisis completo, incluido el impacto |
+| 120 – 239 fps | Apto; el impacto se marca como de confianza reducida |
+| 60 – 119 fps | Solo fase de preparación; fase rápida marcada como no auditable |
+| < 60 fps | Rechazado |
+
+**1.4** Iterador de fotogramas eficiente en memoria, que no cargue el video completo.
+
+**1.5** Utilidad de línea de comandos para catalogar un directorio de clips: recorre los archivos,
+informa frecuencia declarada, frecuencia efectiva, duración y aptitud, y genera la planilla del
+corpus. Sirve tanto para el material de la Fase A como para el propio de la Fase B.
+
+## Pruebas
+
+- Archivos de 30, 60, 120 y 240 fps: cada uno devuelve su tasa real.
+- **Clip ralentizado:** un video capturado a 240 fps y exportado a 30 fps con factor 8 debe
+  resolverse a una frecuencia efectiva de 240, no de 30.
+- **Prueba de coherencia temporal:** un mismo gesto grabado a 240 fps y su versión ralentizada
+  deben producir la misma duración real del movimiento y los mismos instantes de referencia.
+  Es la verificación definitiva de que el manejo de cámara lenta es correcto.
+- Archivo con metadatos inconsistentes entre duración, cantidad de fotogramas y tasa declarada:
+  se detecta y se advierte en lugar de asumir.
+- Archivo corrupto o formato no soportado: error claro, sin caída del proceso.
+- Video de 240 fps y 30 segundos: la iteración no supera un consumo de memoria razonable.
+
+## Criterio de aceptación
+
+El catalogador procesa el corpus completo de la Fase A sin errores, clasifica cada clip según la
+tabla de aptitud, y la prueba de coherencia temporal pasa. Toda la lógica se apoya en la
+frecuencia de captura efectiva y no en la declarada.
+
+---
+
+# ETAPA 2 — Estimación de pose
+
+**Semana 3 · 9/9 – 15/9**
+
+## Objetivo
+
+Obtener, para cada fotograma, las coordenadas de los puntos articulares con su puntaje de
+confianza, detrás de una interfaz que permita cambiar de modelo sin tocar el resto del sistema.
+
+## Tareas
+
+**2.1** Definir la interfaz `PoseBackend` en `engine/pose/base.py`: contrato que declara qué
+debe entregar cualquier estimador —puntos por fotograma, confianzas y correspondencia con un
+mapa articular canónico.
+
+**2.2** Implementar `MediaPipeBackend`. Es el backend por defecto según la decisión del apartado
+4.4.3.
+
+**2.3** Definir el mapa articular canónico interno. Es lo que permite que MediaPipe (33 puntos) y
+YOLOv8-Pose (17 puntos) alimenten el mismo motor: ambos se traducen a un vocabulario común.
+
+**2.4** Módulo `engine/validation.py`: marcado de puntos por debajo del umbral de confianza y
+detección de saltos imposibles entre fotogramas consecutivos —un punto que se desplaza 40 cm en
+un fotograma no es movimiento, es un error de detección.
+
+**2.5** Persistir las coordenadas extraídas en disco, para no re-inferir en cada iteración de las
+etapas siguientes. La inferencia es la operación más lenta del pipeline: cachearla acelera todo
+el desarrollo posterior.
+
+**2.6** Medir e informar la velocidad de inferencia en fotogramas por segundo sobre el hardware
+disponible. Es el primer dato duro del indicador de rendimiento del apartado 2.4.
+
+## Pruebas
+
+- Video con el jugador siempre visible: cobertura de detección superior al 95 %.
+- Video con oclusión deliberada: los puntos ocluidos quedan marcados como de baja confianza.
+- El cambio de backend no altera la estructura de la salida.
+
+## Criterio de aceptación
+
+Un video de la Etapa 0 produce un archivo de coordenadas completo, con confianzas, y la velocidad
+de inferencia está medida y registrada.
+
+---
+
+# ETAPA 3 — Procesamiento de señales
+
+**Semana 4 · 16/9 – 22/9**
+
+## Objetivo
+
+Eliminar el temblor de la estimación sin desplazar los picos en el tiempo.
+
+## Por qué ahora
+
+Sin filtrado, el cálculo de velocidades amplifica el ruido y genera picos falsos. Con filtrado
+mal aplicado —en un solo sentido— los picos se desplazan de forma distinta según el segmento, y
+el orden observado deja de ser el orden real. Esta etapa condiciona directamente la validez de
+la Etapa 4.
+
+## Tareas
+
+**3.1** Módulo `engine/dsp.py` con filtro Butterworth de cuarto orden aplicado de forma
+bidireccional. Verificar explícitamente que la frecuencia de corte sea menor que la mitad de la
+frecuencia de muestreo.
+
+**3.2** Implementar el análisis residual de Winter para elegir el punto de corte de forma objetiva
+en lugar de arbitraria, y persistir el valor elegido como parte del reporte.
+
+**3.3** Tratamiento de valores atípicos **antes** del filtrado. El filtro no elimina un dato
+disparatado: lo desparrama sobre los fotogramas vecinos. Los puntos marcados como no confiables
+en la Etapa 2 se interpolan o se excluyen antes de filtrar, nunca después.
+
+**3.4** Definir el orden del pipeline y documentarlo: detección → remoción de atípicos →
+(elevación 3D) → filtrado → cálculo de velocidades.
+
+## Pruebas
+
+- **Prueba de fase cero:** señal sintética con un máximo en un instante conocido; tras filtrar, el
+  máximo permanece en el mismo instante. La misma prueba con filtrado unidireccional debe fallar.
+  Esta prueba es la garantía automatizada de la validez del análisis temporal.
+- Señal con ruido conocido: el filtro reduce la amplitud del ruido sin alterar la componente lenta.
+- Frecuencia de corte por encima de Nyquist: el sistema rechaza el parámetro.
+
+## Criterio de aceptación
+
+La prueba de fase cero pasa y su versión unidireccional falla, demostrando que la prueba
+efectivamente detecta el problema que dice detectar.
+
+---
+
+# ETAPA 4 — Cinemática y secuenciación · PUNTO DE DECISIÓN
+
+**Semanas 5–6 · 23/9 – 6/10**
+
+## Objetivo
+
+Calcular ángulos y velocidades articulares, detectar los picos de velocidad por segmento, y
+determinar el orden temporal de la cadena cinética.
+
+## Por qué esta etapa es distinta
+
+**Es la tesis.** Todas las etapas anteriores existen para hacer posible esta, y todas las
+posteriores existen para presentarla. Al terminar esta etapa se sabe si la hipótesis del apartado
+1.4 se sostiene o si hay que activar el plan de repliegue. Por eso ocupa dos semanas y por eso
+tiene un punto de decisión formal al final.
+
+## Tareas
+
+**4.1** Módulo `engine/kinematics.py`: ángulo entre tres puntos mediante producto escalar, para
+rodilla, codo y cadera.
+
+**4.2** Separación cadera-hombro: desfase angular entre el eje de la pelvis y el eje de los
+hombros. Es una de las magnitudes más confiables del sistema porque involucra solo articulaciones
+proximales.
+
+**4.3** Velocidades angulares por segmento a partir de las series filtradas.
+
+**4.4** Módulo `engine/sequencing.py`: detección de máximos locales por segmento e identificación
+del instante de cada pico. Manejar los casos difíciles: picos múltiples, picos poco marcados,
+tramos no auditables dentro de la ventana.
+
+**4.5** Determinación del orden observado y comparación contra el orden esperado
+(pelvis → torso → brazo).
+
+**4.6** Segmentación del clip en repeticiones, con marcado manual asistido, según el alcance
+acotado declarado en el apartado 4.3.3. Un clip contiene varias repeticiones del mismo gesto y
+cada una se evalúa por separado. La detección automática se apoya en las pausas en posición neutra
+del protocolo de grabación —tramos donde la velocidad de todos los segmentos cae cerca de cero— y
+se ofrece como sugerencia revisable, nunca como marcado definitivo.
+
+**4.6b** Agregación de las repeticiones: orden predominante, proporción de repeticiones correctas
+y dispersión de los instantes de pico entre repeticiones. Esta última magnitud es la variabilidad
+intra-sesión del jugador y sirve de referencia para interpretar el Criterio 3.
+
+**4.7** **Medición del Criterio 1:** sobre las repeticiones grabadas en la Etapa 0, calcular en qué
+proporción de casos el orden se determina de forma repetible. Meta: 8 de cada 10.
+
+**4.8** **Medición del Criterio 2:** comparar los ángulos calculados contra medición manual sobre
+los mismos fotogramas. Meta: error inferior a 20,6°.
+
+## Pruebas
+
+- **Prueba de ordenamiento con sesgo:** tres series sintéticas con picos en orden conocido, a las
+  que se suma ruido y un desplazamiento constante que simula el sesgo sistemático de los centros
+  articulares. El detector debe recuperar el orden correcto. Esta prueba valida experimentalmente
+  el argumento central del apartado 3.3.4.2.
+- Ángulos de geometrías de valor conocido: triángulo rectángulo, segmentos colineales.
+- Serie con un tramo no auditable: el pico no se reporta, no se estima.
+
+## Precondición
+
+Esta etapa **no puede comenzar sin el conjunto propio de la Fase B (hito C1)**. Las mediciones de
+los Criterios 1 y 2 requieren repeticiones controladas del mismo gesto, con encuadre y condiciones
+registradas, algo que el corpus público no provee. Si al 22 de septiembre C1 no está cumplido, la
+prioridad de la semana pasa a ser la grabación y el desarrollo del motor se detiene: no tiene
+sentido perfeccionar un detector cuyos criterios de éxito no se pueden medir.
+
+## Punto de decisión
+
+| Resultado | Acción |
+| --- | --- |
+| Criterios 1 y 2 se cumplen | Continuar con la Etapa 5 según lo previsto |
+| Criterio 1 falla | **Activar repliegue:** limitar el alcance a la fase de preparación, donde las velocidades son menores y el muestreo alcanza |
+| Criterio 2 falla | **Activar repliegue:** análisis 2D con encuadre controlado |
+| Ambos fallan | Reformular el alcance del MVP y documentarlo como resultado negativo, que sigue siendo un aporte válido |
+
+Cualquiera sea el resultado, documentarlo en `docs/decisiones/`: alimenta el Capítulo 6 de análisis
+de riesgos y el Capítulo 7 de resultados.
+
+---
+
+# ETAPA 5 — Auditoría y reporte
+
+**Semana 7 · 7/10 – 13/10**
+
+## Objetivo
+
+Convertir las magnitudes calculadas en un reporte estructurado, trazable y con alertas fundadas.
+
+## Tareas
+
+**5.1** Módulo `engine/audit.py`: comparación contra umbrales y generación de alertas. Cada alerta
+lleva su código, su severidad, el valor que la disparó y la referencia bibliográfica que la
+respalda. Ninguna alerta sin fundamento registrado.
+
+**5.2** Comparación del jugador contra sí mismo: variación respecto de la sesión anterior. Es la
+base del reporte clínico según el apartado 3.3.4.5, porque el error constante de la cámara se
+cancela al comparar mediciones del mismo jugador con el mismo encuadre.
+
+**5.3** Cálculo de la cobertura auditable: qué porcentaje del gesto pudo medirse con confianza.
+
+**5.4** Ensamblado del reporte JSON completo según el contrato de la Etapa 0, con sello de versión
+del motor, backend de pose y parámetros de filtrado.
+
+**5.5** Módulo `engine/render.py`: video con esqueleto superpuesto.
+
+**5.6** Generación del PDF exportable.
+
+**5.7** Revisión de vocabulario: verificar que ningún texto generado por el motor contenga los
+términos prohibidos de la regla R2 del `CLAUDE.md`. Automatizarlo como prueba.
+
+## Criterio de aceptación
+
+Un video de entrada produce un reporte JSON válido, un video con esqueleto y un PDF, todos
+consistentes entre sí y con sello de versión.
+
+---
+
+# ETAPA 6 — API y procesamiento asincrónico
+
+**Semana 8 · 14/10 – 20/10**
+
+## Objetivo
+
+Exponer el motor como servicio, con procesamiento en segundo plano y estados consultables.
+
+## Tareas
+
+**6.1** Aplicación FastAPI con las siete operaciones del apartado 4.2.5.
+
+**6.2** Esquemas Pydantic de entrada y salida; la salida reutiliza el contrato de la Etapa 0.
+
+**6.3** Ejecución en segundo plano con estado persistido, según la decisión de MVP del apartado
+4.4.2: sin cola externa.
+
+**6.4** Máquina de estados completa, incluido el estado **parcial** para análisis con tramos no
+auditables.
+
+**6.5** Recuperación al arranque: los análisis que quedaron en estado *procesando* se vuelven a
+encolar.
+
+**6.6** Manejo de errores que distinga fallas del usuario (video inválido) de fallas del sistema.
+
+## Pruebas
+
+- Ciclo completo: alta, confirmación, consulta de estado hasta completado, obtención del reporte.
+- Solicitud sin token: rechazada.
+- Respuesta que no cumple el esquema: detectada en el servidor.
+
+---
+
+# ETAPA 7 — Persistencia e identidad
+
+**Semana 9 · 21/10 – 27/10**
+
+## Objetivo
+
+Conectar Supabase: base de datos, autenticación y almacenamiento.
+
+## Tareas
+
+**7.1** Migraciones SQL con el esquema del apartado 4.4.6: usuarios, atletas, videos, reportes,
+métricas, alertas y versiones del motor. Archivos numerados, nunca editados retroactivamente.
+
+**7.2** Restricciones de integridad: claves foráneas, unicidad, verificación sobre campos de
+dominio acotado, campos obligatorios.
+
+**7.3** Políticas de seguridad a nivel de fila sobre todas las tablas con datos de usuario.
+
+**7.4** Autenticación con verificación de token en la API. La identidad se extrae del token,
+nunca se acepta como parámetro del cliente.
+
+**7.5** Almacenamiento privado con URL firmadas de vida corta para carga y lectura.
+
+**7.6** Política de retención: eliminación del video original a los siete días, conservando la
+telemetría.
+
+**7.7** Probar el procedimiento de restauración de un respaldo. Un respaldo nunca restaurado no
+es una garantía.
+
+## Pruebas
+
+- **Prueba de aislamiento:** un usuario intenta leer datos de otro y la base los excluye, aunque
+  la consulta esté mal escrita.
+- Carga y descarga mediante URL firmada; verificar que el enlace vence.
+
+---
+
+# ETAPA 8 — Integración de la interfaz
+
+**Semana 10 · 28/10 – 3/11**
+
+## Objetivo
+
+Conectar la interfaz corregida a la API real, reemplazando los datos de ejemplo.
+
+## Por qué recién ahora
+
+Porque desde la Etapa 0 la interfaz trabajó contra el contrato congelado. Si el contrato se
+respetó, esta etapa consiste en cambiar el origen de los datos, no en rehacer pantallas.
+
+## Tareas
+
+**8.1** Cliente tipado de la API en el frontend.
+**8.2** Sesión y rutas protegidas.
+**8.3** Carga directa al almacenamiento con URL firmada, sin pasar por la API.
+**8.4** Consulta de estado y actualización de la pantalla de procesamiento.
+**8.5** Reporte real: los tres niveles poblados con datos del motor.
+**8.6** Gráfico de secuenciación con datos reales.
+**8.7** Reproductor sincronizado con el video con esqueleto generado por el motor.
+**8.8** Historial de evolución del atleta.
+**8.9** Manejo de estados de error y del estado parcial.
+
+## Criterio de aceptación
+
+Un usuario carga un video desde el navegador y obtiene su reporte sin intervención manual.
+
+---
+
+# ETAPA 9 — Validación y medición
+
+**Semana 11 · 4/11 – 10/11**
+
+## Objetivo
+
+Producir los números que van al Capítulo 7 y validar el diseño con usuarios reales.
+
+## Tareas
+
+**9.1** Ejecutar el conjunto completo de videos y medir los cinco criterios del apartado 4.3.4.
+
+**9.2** Medir los tres indicadores del apartado 2.4: fotogramas por segundo procesados, tasa de
+falsos positivos en alertas, y precisión angular contra medición manual. Reportar la precisión
+**por articulación**, no como número único, según lo argumentado en el apartado 3.3.2.8.
+
+**9.3** Pruebas de usabilidad con los tres perfiles, según el protocolo del apartado 4.6.6.
+
+**9.4** Pruebas de extremo a extremo automatizadas del flujo completo.
+
+**9.5** Pruebas de regresión: verificar que el motor sigue dando los mismos resultados sobre los
+videos de referencia.
+
+**9.6** Volcar todos los resultados en `docs/resultados/` en formato reproducible.
+
+## Criterio de aceptación
+
+Cada indicador tiene un número, un método y un script que lo reproduce.
+
+---
+
+# ETAPA 10 — Congelamiento y entrega
+
+**Semana 12 · 11/11 – 17/11**
+
+## Objetivo
+
+Dejar el sistema estable, documentado y presentable.
+
+## Tareas
+
+**10.1** Congelamiento de funcionalidad: a partir de esta semana solo se corrigen errores. No se
+agrega nada nuevo, por atractivo que parezca.
+**10.2** Corrección de los errores detectados en la Etapa 9, priorizados por impacto.
+**10.3** README completo: propósito, instalación, ejecución y limitaciones declaradas.
+**10.4** Documentación de arquitectura actualizada contra lo efectivamente construido.
+**10.5** Etiqueta de versión `v1.0.0-mvp` y despliegue de la instancia demostrativa.
+**10.6** Preparación de la demostración: guion, video de respaldo por si falla la conexión, y
+respuestas preparadas sobre las limitaciones conocidas.
+**10.7** Verificación final de vocabulario en toda la interfaz y en todos los reportes.
+
+---
+
+# Convenciones de trabajo
+
+## Ramas y commits
+
+Una rama por etapa: `etapa/0-fundaciones`, `etapa/1-ingesta`, y así sucesivamente. Se integra a
+`main` únicamente cuando la etapa cumple su criterio de aceptación. `main` siempre debe estar en
+estado funcional.
+
+Commits con prefijo convencional: `feat:`, `fix:`, `test:`, `docs:`, `refactor:`, `chore:`.
+Commits pequeños y frecuentes; un commit que toca veinte archivos es imposible de revisar y de
+revertir.
+
+Etiqueta al cerrar cada etapa: `v0.1.0-etapa1`, `v0.2.0-etapa2`. Permite volver a cualquier punto
+estable y documenta el avance para la tesis.
+
+## Definición de terminado
+
+Una etapa está terminada cuando, y solo cuando:
+
+1. Sus pruebas automatizadas pasan.
+2. Se ejecutó sobre video real, no solo sintético (a partir de la Etapa 1).
+3. Está integrada a `main` y etiquetada.
+4. Sus decisiones relevantes están en `docs/decisiones/`.
+5. Los números que produce, si los produce, están registrados de forma reproducible.
+
+## Qué no hacer
+
+- No agregar infraestructura que el volumen no justifique: nada de colas persistentes,
+  observabilidad distribuida ni microservicios.
+- No optimizar antes de medir. Si una etapa es lenta, medir primero dónde.
+- No saltear el punto de decisión de la Etapa 4 por optimismo.
+- No commitear videos, credenciales ni archivos `.env`.
+- No agregar funcionalidad después de la Etapa 10.
+
+---
+
+# Anexo A — Contrato del reporte
+
+Estructura a congelar en la Etapa 0. Sirve como referencia para el motor, para la API y para la
+interfaz.
+
+```json
+{
+  "reporte_id": "uuid",
+  "video_id": "uuid",
+  "gesto": "saque",
+  "creado_en": "2026-10-15T14:32:00Z",
+
+  "trazabilidad": {
+    "version_motor": "0.5.0",
+    "backend_pose": "mediapipe-0.10.14",
+    "filtro": { "tipo": "butterworth", "orden": 4, "corte_hz": 8.0, "fase_cero": true },
+    "fps_real": 240.0,
+    "apto_fase_rapida": true
+  },
+
+  "cobertura": {
+    "auditable_pct": 87.5,
+    "tramos_no_auditables": [
+      { "desde_s": 0.55, "hasta_s": 0.61, "motivo": "confianza_insuficiente" }
+    ]
+  },
+
+  "segmentacion": {
+    "metodo": "manual_asistido",
+    "repeticiones_marcadas": 6,
+    "repeticiones_auditables": 5
+  },
+
+  "secuenciacion": {
+    "orden_esperado": ["pelvis", "torso", "brazo"],
+
+    "repeticiones": [
+      {
+        "indice": 1,
+        "desde_s": 2.10,
+        "hasta_s": 3.05,
+        "auditable": true,
+        "orden_observado": ["pelvis", "torso", "brazo"],
+        "correcto": true,
+        "picos": [
+          { "segmento": "pelvis", "instante_s": 0.42, "velocidad": 440.0, "unidad": "grados/s", "confianza": 0.94 },
+          { "segmento": "torso",  "instante_s": 0.51, "velocidad": 870.0, "unidad": "grados/s", "confianza": 0.91 },
+          { "segmento": "brazo",  "instante_s": 0.58, "velocidad": 1510.0, "unidad": "grados/s", "confianza": 0.72 }
+        ]
+      },
+      {
+        "indice": 2,
+        "desde_s": 6.40,
+        "hasta_s": 7.38,
+        "auditable": false,
+        "orden_observado": null,
+        "correcto": null,
+        "motivo_no_auditable": "confianza_insuficiente_en_muneca",
+        "picos": []
+      }
+    ],
+
+    "resumen": {
+      "repeticiones_correctas": 5,
+      "repeticiones_evaluadas": 6,
+      "orden_predominante": ["pelvis", "torso", "brazo"],
+      "dispersion_instante_pico_torso_ms": 18.4
+    }
+  },
+
+  "metricas": [
+    { "nombre": "separacion_cadera_hombro_max", "valor": 42.0, "unidad": "grados", "confianza": 0.93, "auditable": true },
+    { "nombre": "flexion_rodilla_carga", "valor": 118.0, "unidad": "grados", "confianza": 0.90, "auditable": true },
+    { "nombre": "extension_codo_impacto", "valor": null, "unidad": "grados", "confianza": 0.41, "auditable": false }
+  ],
+
+  "comparacion_propia": {
+    "sesion_anterior_id": "uuid",
+    "desfase_torso_ms": 30,
+    "direccion": "mas_tarde"
+  },
+
+  "observaciones": [
+    { "severidad": "correcto", "texto": "La secuencia se ordenó correctamente en 5 de 6 repeticiones." },
+    { "severidad": "atencion", "texto": "El torso alcanzó su pico 30 ms más tarde que en la sesión anterior.",
+      "fundamento": "desfase_torso_ms=30", "referencia": "Martin et al. (2014)" },
+    { "severidad": "no_auditable", "texto": "No se pudo medir el instante de impacto en 2 de 6 repeticiones.",
+      "fundamento": "confianza < 0.5 en muñeca durante el impacto" }
+  ],
+
+  "artefactos": {
+    "overlay_url": "https://...",
+    "pdf_url": "https://..."
+  }
+}
+```
+
+**Nota sobre `auditable: false`:** cuando una métrica no es auditable, su valor es `null`. Nunca
+se estima ni se rellena. Es la regla R3 del `CLAUDE.md` aplicada al nivel del dato.
+
+**Nota sobre la unidad de análisis.** Un video puede contener varias repeticiones del mismo gesto.
+La unidad de medición es la **repetición**, no el archivo: el motor segmenta el clip, evalúa cada
+repetición de forma independiente y agrega los resultados. El campo `resumen` es lo que alimenta
+las observaciones del nivel 1 del reporte ("la secuencia se ordenó correctamente en 5 de 6
+repeticiones") y lo que permite medir el Criterio 1 del plan, que es una propiedad del conjunto de
+repeticiones y no de una medición aislada.
+
+El campo `dispersion_instante_pico_torso_ms` cumple una función específica: cuantifica cuánto varía
+el propio jugador entre repeticiones de la misma sesión. Es la referencia contra la cual se
+interpreta la variación entre sesiones del Criterio 3, porque una diferencia entre sesiones solo
+es significativa si supera la variabilidad natural del jugador dentro de una misma sesión.

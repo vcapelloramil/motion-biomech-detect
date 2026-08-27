@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as VideosRouteImport } from './routes/videos'
 import { Route as UploadRouteImport } from './routes/upload'
 import { Route as TecnologiaRouteImport } from './routes/tecnologia'
+import { Route as ReporteRouteImport } from './routes/reporte'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PerformanceRouteImport } from './routes/performance'
 import { Route as ClinicaRouteImport } from './routes/clinica'
@@ -30,6 +31,11 @@ const UploadRoute = UploadRouteImport.update({
 const TecnologiaRoute = TecnologiaRouteImport.update({
   id: '/tecnologia',
   path: '/tecnologia',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReporteRoute = ReporteRouteImport.update({
+  id: '/reporte',
+  path: '/reporte',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfileRoute = ProfileRouteImport.update({
@@ -58,6 +64,7 @@ export interface FileRoutesByFullPath {
   '/clinica': typeof ClinicaRoute
   '/performance': typeof PerformanceRoute
   '/profile': typeof ProfileRoute
+  '/reporte': typeof ReporteRoute
   '/tecnologia': typeof TecnologiaRoute
   '/upload': typeof UploadRoute
   '/videos': typeof VideosRoute
@@ -67,6 +74,7 @@ export interface FileRoutesByTo {
   '/clinica': typeof ClinicaRoute
   '/performance': typeof PerformanceRoute
   '/profile': typeof ProfileRoute
+  '/reporte': typeof ReporteRoute
   '/tecnologia': typeof TecnologiaRoute
   '/upload': typeof UploadRoute
   '/videos': typeof VideosRoute
@@ -77,6 +85,7 @@ export interface FileRoutesById {
   '/clinica': typeof ClinicaRoute
   '/performance': typeof PerformanceRoute
   '/profile': typeof ProfileRoute
+  '/reporte': typeof ReporteRoute
   '/tecnologia': typeof TecnologiaRoute
   '/upload': typeof UploadRoute
   '/videos': typeof VideosRoute
@@ -88,6 +97,7 @@ export interface FileRouteTypes {
     | '/clinica'
     | '/performance'
     | '/profile'
+    | '/reporte'
     | '/tecnologia'
     | '/upload'
     | '/videos'
@@ -97,6 +107,7 @@ export interface FileRouteTypes {
     | '/clinica'
     | '/performance'
     | '/profile'
+    | '/reporte'
     | '/tecnologia'
     | '/upload'
     | '/videos'
@@ -106,6 +117,7 @@ export interface FileRouteTypes {
     | '/clinica'
     | '/performance'
     | '/profile'
+    | '/reporte'
     | '/tecnologia'
     | '/upload'
     | '/videos'
@@ -116,6 +128,7 @@ export interface RootRouteChildren {
   ClinicaRoute: typeof ClinicaRoute
   PerformanceRoute: typeof PerformanceRoute
   ProfileRoute: typeof ProfileRoute
+  ReporteRoute: typeof ReporteRoute
   TecnologiaRoute: typeof TecnologiaRoute
   UploadRoute: typeof UploadRoute
   VideosRoute: typeof VideosRoute
@@ -142,6 +155,13 @@ declare module '@tanstack/react-router' {
       path: '/tecnologia'
       fullPath: '/tecnologia'
       preLoaderRoute: typeof TecnologiaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reporte': {
+      id: '/reporte'
+      path: '/reporte'
+      fullPath: '/reporte'
+      preLoaderRoute: typeof ReporteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/profile': {
@@ -180,6 +200,7 @@ const rootRouteChildren: RootRouteChildren = {
   ClinicaRoute: ClinicaRoute,
   PerformanceRoute: PerformanceRoute,
   ProfileRoute: ProfileRoute,
+  ReporteRoute: ReporteRoute,
   TecnologiaRoute: TecnologiaRoute,
   UploadRoute: UploadRoute,
   VideosRoute: VideosRoute,
@@ -187,3 +208,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
