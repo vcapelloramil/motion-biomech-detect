@@ -10,6 +10,7 @@ v0.3.0-etapa2, ...). Empezó en "0.0.0" (Etapa 0, sin cálculo).
 
 - 0.1.0 — Etapa 1: ingesta y validación de FPS.
 - 0.2.0 — Etapa 2: estimación de pose (interfaz intercambiable + MediaPipe).
+- 0.3.0 — Etapa 3: filtrado de fase cero (Butterworth + Winter).
 """
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"

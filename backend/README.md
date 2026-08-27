@@ -105,7 +105,11 @@ backend/
       version.py           versión del motor, se sella en cada reporte
       ingest.py             E1: FPS reales, cámara lenta, aptitud, iterador de fotogramas
       framehash.py          E1: unicidad de fotogramas por huella (decisión 001)
-      validation.py         E2b: baja confianza + saltos imposibles
+      validation.py         E2b: baja confianza + saltos imposibles (espacio imagen/mundo)
+      dsp.py                E3: Butterworth de fase cero (filtfilt)
+      preparacion.py        E3: exclusión de atípicos + interpolación de huecos cortos
+      winter.py             E3: análisis residual -> corte objetivo
+      pipeline.py           E3: orden validar -> preparar -> Winter -> filtrar
       pose/
         base.py             contrato PoseBackend + SecuenciaPose
         articulaciones.py   mapa articular canónico (MediaPipe 33 / COCO 17)

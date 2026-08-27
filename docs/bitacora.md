@@ -6,6 +6,76 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-08-27 (sesión 2) — Etapa 3: Procesamiento de señales
+
+**Rama:** `etapa/3-senales` (desde `main`, con Etapas 0–2 mergeadas y pusheadas).
+**Modelo:** Sonnet 5 Medio.
+
+Lecturas previas (convención): `capitulo-3` §3.4.2.1–§3.4.2.6. Puntos A/B/C confirmados
+por Valentín: re-extracción simple del corpus; un corte de Winter por clip (como
+simplificación deliberada por el contrato congelado); interpolar huecos de hasta 5
+fotogramas.
+
+### Qué se hizo
+
+- **Paso 0 — Coordenadas métricas.** `PoseFrame.puntos_mundo` (metros, centrado en
+  caderas), `PoseFrame.get_mundo()`, `SecuenciaPose.tiene_mundo`. `MediaPipeBackend`
+  lee `pose_world_landmarks`; `FakeBackend` emite `puntos_mundo` sintéticos (dims=3).
+  Caché: arrays `kpw__*`, **esquema v2** — `cargar_si_vigente` descarta las cachés v1,
+  así el corpus se **re-extrae solo**. `puntos` (imagen) queda para el overlay de E5.
+- **`engine/dsp.py`** (3.1): `butterworth_fase_cero` con `filtfilt` (nunca `lfilter`).
+  Guarda de Nyquist explícita (`corte_hz >= fps/2` → error). Rechaza NaN y series
+  cortas.
+- **`engine/preparacion.py`** (3.3): `preparar_series` excluye fotogramas sin
+  detección, puntos de baja confianza y saltos imposibles (de `validation` de E2);
+  interpola huecos ≤ 5 fotogramas; los largos → `TramoExcluido`. Una articulación
+  totalmente excluida → tramo que abarca todo el clip.
+- **`engine/winter.py`** (3.2): `analizar_serie` (residuo RMS vs corte) y `elegir_corte`
+  (un corte por clip = el máximo de los cortes de las articulaciones rápidas).
+- **`engine/pipeline.py`** (3.4): `procesar_e3` encadena validar → preparar → Winter →
+  filtrar sobre la secuencia completa. `SecuenciaFiltrada.trazabilidad_filtro()` arma
+  el bloque `trazabilidad.filtro` del contrato — **sin cambio de contrato** (el campo
+  `corte_hz` ya existía; E3 lo llena).
+- **`validation.py`**: parámetro `espacio` (`"imagen"` | `"mundo"`); `_dist` 3D. E3
+  valida en `"mundo"`.
+- Versión del motor → `0.3.0`. Decisión 007.
+
+### Criterio de aceptación de la Etapa 3
+
+| Punto | Estado |
+| --- | --- |
+| Prueba de fase cero pasa y su versión unidireccional falla | ✅ `test_dsp.py::test_fase_cero_conserva_el_instante_del_pico_y_la_unidireccional_no` |
+| Señal con ruido conocido: reduce el ruido sin tocar la componente lenta | ✅ |
+| Corte por encima de Nyquist: rechazado | ✅ |
+| Winter elige un corte entre señal y ruido | ✅ |
+| Pipeline completo sobre pose real → secuencia filtrada coherente | ✅ `test_pipeline_e3.py` (`slow`) *(pendiente de la re-extracción; ver abajo)* |
+
+### Pruebas
+
+`pytest -m "not slow"` → **114 en verde** (nuevas: `test_dsp`, `test_winter`,
+`test_preparacion`, `test_validation` ampliado, `test_pose_base`/`test_pose_cache`
+ampliados para `puntos_mundo`).
+
+### Pendiente
+
+- **Re-extracción del corpus con esquema v2** en curso al momento de escribir esto
+  (background). El `test_pipeline_e3.py` (`slow`) se corre en cuanto termine.
+- El filtro sobre clips con `escala_temporal_conocida = False` usa un `fps_efectivos`
+  estimado → corte en Hz y velocidades absolutas aproximados; el **orden** de picos es
+  inmune (§3.3.4.2). Sin acción, coherente con lo que ya marca E1.
+- Si E4 muestra que un corte único por clip distorsiona alguna articulación → pasar a
+  corte por articulación (ampliaría el contrato).
+
+### Siguiente paso concreto
+
+Cerrar la Etapa 3 (correr `test_pipeline_e3` sobre la caché re-extraída, merge
+`etapa/3-senales` → `main`, tag `v0.4.0-etapa3`) y abrir la **Etapa 4 — Cinemática y
+secuenciación** (el punto de decisión; dos semanas en el plan). Precondición del plan:
+la Fase B (grabación propia) — Valentín la adelantó a esta semana. Lecturas de la
+convención para E4: `capitulo-3` §3.3.3 y §3.3.4.1–§3.3.4.5.
+
+---
+
 ## 2026-08-27 — Etapa 2: Estimación de pose
 
 **Rama:** `etapa/2-pose` (desde `main`, con Etapas 0 y 1 ya mergeadas y pusheadas).

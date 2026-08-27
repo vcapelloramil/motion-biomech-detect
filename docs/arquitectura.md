@@ -25,15 +25,16 @@ todo lo demás:
 | E1 · Ingesta | `engine/ingest.py`, `engine/framehash.py`, `app/catalogador.py` | Lee FPS reales, resuelve el caso de cámara lenta, clasifica por frecuencia efectiva, verifica unicidad de fotogramas | **construido** |
 | E2 · Pose | `engine/pose/` (`base`, `articulaciones`, `mediapipe_backend`, `fake_backend`, `cache`), `app/extraer_pose.py`, `app/bench_pose.py` | Estimación de pose (MediaPipe por defecto) detrás de una interfaz común; caché de coordenadas; medición de velocidad de inferencia | **construido** |
 | E2b · Validación | `engine/validation.py` | Marcado de puntos por confianza y saltos imposibles | **construido** |
-| E3 · Elevación | `engine/lifting.py` | Elevación 2D→3D (opcional) | pendiente |
-| E3 · Filtrado | `engine/dsp.py` | Filtrado Butterworth de fase cero (bidireccional) | pendiente |
+| E3 · Elevación | — | No aplica: MediaPipe entrega 3D directo; no hay modelo de elevación | descartado |
+| E3 · Filtrado | `engine/dsp.py`, `engine/preparacion.py`, `engine/winter.py`, `engine/pipeline.py` | Remoción de atípicos, corte objetivo (Winter), Butterworth de fase cero sobre coordenadas métricas | **construido** |
 | E4 | `engine/kinematics.py`, `engine/sequencing.py` | Ángulos, velocidades, orden de picos | pendiente |
 | E5 | `engine/audit.py`, `engine/render.py` | Auditoría, alertas, reporte, overlay | pendiente |
 
-Orden del procesamiento: detección → remoción de atípicos → (elevación 3D) → filtrado →
-cálculo de velocidades. El filtrado va **después** de la elevación y **antes** de las
-velocidades, y es de fase cero (adelante y atrás); un filtro unidireccional corre los picos
-en el tiempo y destruye justamente lo que se mide.
+Orden del procesamiento: detección → remoción de atípicos → filtrado → cálculo de
+velocidades. (El paso "elevación 3D" del orden canónico de la tesis no existe acá: MediaPipe
+da 3D directo.) El filtrado va **antes** de las velocidades y es de fase cero (adelante y
+atrás); un filtro unidireccional corre los picos en el tiempo y destruye justamente lo que
+se mide.
 
 ### E1 — Ingesta y validación de FPS
 
@@ -80,6 +81,25 @@ backend se usó.
   la velocidad de inferencia y la registra en `docs/resultados/`.
 
 Ver `docs/decisiones/005-percepcion-pose.md`.
+
+### E3 — Procesamiento de señales
+
+`engine/pipeline.procesar_e3(seq) -> SecuenciaFiltrada` encadena, en orden fijo:
+
+1. **`validation.validar(seq, espacio="mundo")`** — baja confianza + saltos imposibles.
+2. **`preparacion.preparar_series`** — excluye lo no confiable; interpola huecos ≤ 5
+   fotogramas; los más largos quedan como `TramoExcluido` (no se estiman).
+3. **`winter.elegir_corte`** — análisis residual → un `corte_hz` para todo el clip
+   (simplificación deliberada por el contrato congelado).
+4. **`dsp.butterworth_fase_cero`** — Butterworth de 4º orden con `filtfilt` (nunca
+   `lfilter`), sobre la **secuencia completa** (E4 recorta las repeticiones después).
+
+Se filtra el espacio **métrico** (`puntos_mundo`, metros) cuando existe; los backends
+2D puros caen a `puntos` (imagen). El overlay de E5 usa `puntos` **sin filtrar**.
+`SecuenciaFiltrada.trazabilidad_filtro()` produce el bloque `trazabilidad.filtro` del
+reporte; los `TramoExcluido` alimentan `cobertura.tramos_no_auditables`.
+
+Ver `docs/decisiones/007-filtrado-de-senales.md`.
 
 ## Contrato del reporte
 
