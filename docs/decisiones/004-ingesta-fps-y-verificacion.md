@@ -65,6 +65,13 @@ antes de integrar nada a `main`.
 | 60–119 | `SOLO_PREPARACION` | solo fase de preparación |
 | < 60 | `RECHAZADO` | no se analiza |
 
+**Normalización de tasas NTSC.** Antes de clasificar, `evaluar()` ajusta la tasa
+declarada a su valor nominal si cae a menos de 0.5% de una tasa estándar (24, 25, 30,
+48, 50, 60, 96, 100, 120, 240). Un archivo a 59.94 fps (60000/1001) es material "60p":
+tratarlo como `< 60` y rechazarlo sería un artefacto de la aritmética de video, no una
+decisión. `fps_declarados_normalizado` viaja en el `ResultadoIngesta` y el catalogador
+lo reporta como nota informativa cuando difiere del crudo.
+
 **`< 60` es un resultado, no una excepción.** `evaluar()` devuelve un
 `ResultadoIngesta` con `aptitud == RECHAZADO` y `motivo_rechazo`, para que el rechazo
 quede registrado y sea trazable (R4). La excepción (`IngestaError`) se reserva para
@@ -86,33 +93,41 @@ unicidad:
 verificación). El catalogador **lee** de ahí lo que no puede inferir y **escribe
 aparte** `catalogo-verificado.csv` con lo computado. Avisa de discrepancias (uso o
 `fps_efectivos` que no coinciden, inconsistencias de metadatos, filas con cantidad de
-columnas incorrecta). Sobre una fila mal formada usa lo que puede leer pero no hace
-cruces semánticos contra ella.
+columnas incorrecta, y **filas del catálogo sin archivo correspondiente**). Sobre una
+fila mal formada usa lo que puede leer pero no hace cruces semánticos contra ella.
 
 Se corre desde `backend/`: `python -m app.catalogador` (usa `KINETIQ_DATA_DIR`).
 `--sin-hash` omite la verificación de unicidad para una primera pasada rápida.
+
+### 7. Se cataloga `segmentos/` y `control/`, no `compilaciones/`
+
+`fase-a/compilaciones/` contiene los videos largos de origen de los que se recortan los
+segmentos. No son unidades de análisis: el catalogador salta cualquier subcarpeta
+llamada `compilaciones` por defecto (`--incluir-todo` para no saltearla). El "uso" para
+`SOLO_PREPARACION` se etiqueta `"E1-E2 (solo preparación)"`, alineado con el vocabulario
+del `catalogo.csv` (`E1-E4` = completo, `E1-E2` = uso limitado).
 
 ---
 
 ## Consecuencias
 
-- El material de Zverev (25 fps declarados × factor 20 = 500 fps efectivos, escala
-  desconocida, 750/750 fotogramas únicos) se cataloga como **apto para fase rápida
-  (`E1-E4`) con `escala_temporal_conocida = False`**.
+- El material de gestos en cámara lenta (Zverev 25×20=500, drive 60×8=480, revés
+  25×12=300 fps efectivos; escala desconocida; sin fotogramas duplicados) se cataloga
+  como **apto para fase rápida (`E1-E4`) con `escala_temporal_conocida = False`**. Los
+  controles a 30 fps → `rechazado`; a 60 fps → `solo preparación`.
 - La huella md5 por fotograma sobre la ventana central de un clip de ~30 s a 1080p
-  tarda segundos; catalogar los 4 clips actuales de la Fase A con hash completo tarda
-  unos 3–4 minutos. Es una herramienta offline de admisión; si el corpus crece mucho,
-  la mitigación es submuestrear la ventana o hashear una versión reducida (no se hace
-  ahora: "no optimizar antes de medir").
+  tarda ~1 min; catalogar la Fase A actual (12 clips, los rechazados no se hashean) con
+  hash completo tarda ~2 minutos. Es una herramienta offline de admisión; si el corpus
+  crece mucho, la mitigación es submuestrear la ventana o hashear una versión reducida
+  (no se hace ahora: "no optimizar antes de medir").
 - **Para el Capítulo 6:** que la frecuencia declarada de un archivo no refleje la de
   captura es un modo de falla que la literatura de pose en deporte no discute (decisión
   001). Queda documentado como riesgo del sistema y limitación del material público.
 
 ## Pendiente
 
-- Las pruebas de integración usan clips sintéticos generados con ffmpeg porque todavía
-  no hay material de control propio (30/60 fps, oclusión). **Reemplazo obligatorio** por
-  el material real del bloque de control del protocolo de grabación cuando se suba: no
-  conviven las dos versiones.
-- La "prueba de coherencia temporal" (240 fps vs su ralentizado del mismo gesto) hoy es
-  sintética; se reemplaza por un par real de la Fase B.
+- Con el corpus real ampliado a 12 clips se retiraron las pruebas sintéticas de 30/60
+  fps y de oclusión. Quedan dos sintéticas sin equivalente real: la de **duplicación
+  sistemática de fotogramas** (ningún clip del corpus la tiene) y la de **coherencia
+  temporal** (240 fps vs su ralentizado del mismo gesto), que depende de la Fase B
+  (plazo 22/9). Marcadas en el código.

@@ -55,43 +55,81 @@ convención fijada.
 | Metadatos inconsistentes se detectan y advierten | ✅ |
 | Archivo corrupto / formato no soportado: error claro sin caída | ✅ |
 | Video 240 fps / 20 s: la iteración no acumula memoria | ✅ (`tracemalloc`, pico <100 MB) |
-| El catalogador procesa la Fase A completa sin errores y clasifica cada clip | ✅ (`test_corpus_fase_a.py`, marcado `slow`, ~3–4 min) |
+| El catalogador procesa la Fase A completa sin errores y clasifica cada clip | ✅ lee y clasifica los 12; marca las inconsistencias del `catalogo.csv` (ver abajo) |
 | Toda la lógica sobre la frecuencia efectiva, no la declarada | ✅ |
 
-Corrida real del catalogador sobre `kinetiq-data/fase-a/`: los 3 segmentos de Zverev
-(+ la compilación `sideview`) → `fps_efectivos 500`, `escala_temporal_conocida = False`,
-`ratio_unicidad ≈ 1.0` (`captura_real`), `uso = E1-E4`.
+Corrida real del catalogador sobre `kinetiq-data/fase-a/` (12 clips, `compilaciones/`
+excluida): 5 gestos en cámara lenta → `fps_efectivos` 500/480/300,
+`escala_temporal_conocida = False`, `ratio_unicidad ≈ 1.0` (`captura_real`), `uso = E1-E4`;
+4 controles a 30 fps → `rechazado`; 3 a 60 fps → `solo preparación`.
 
 ### Pruebas
 
-`pytest -m "not slow"` → **54 en verde** (incluye las 12 de la Etapa 0). Las 3 de
-`test_corpus_fase_a.py` (`slow`) pasan sobre el material real (~3,7 min).
+`pytest -m "not slow"` → **64 en verde** (incluye las 12 de la Etapa 0). `-m slow` →
+4 pasan sobre el material real + 1 `xfail` (catálogo con inconsistencias, ver abajo).
+~2 min.
 
 ### Pendiente
 
-- **PENDIENTE DE REEMPLAZO OBLIGATORIO:** todas las pruebas de integración de esta etapa
-  usan clips sintéticos generados con ffmpeg (`tests/video_fixtures.py`) porque no hay
-  material de control propio todavía. Cuando se suba el bloque de control del protocolo
-  (30/60 fps, oclusión, cuerpo fuera de cuadro), esas pruebas pasan a usar el material
-  real y las sintéticas se retiran — no conviven.
-- La prueba de coherencia temporal necesita además un par real 240 fps + su ralentizado
-  del mismo gesto (Fase B).
-- `catalogo.csv` tiene las 4 filas con una columna de menos. No se toca desde acá (es de
-  Valentín); el catalogador ya lo reporta en cada corrida.
+- Sigue con la única prueba sintética sin equivalente real: duplicación sistemática de
+  fotogramas (ningún clip real la tiene) y el par de coherencia temporal 240 vs
+  ralentizado (depende de la Fase B, plazo 22/9). Marcadas en el código.
 - Hash md5 por fotograma sobre 1080p: ~1 min por clip de 30 s. Aceptable como
   herramienta offline; si el corpus crece, submuestrear la ventana.
-- Integrar `etapa/1-ingesta` a `main` y etiquetar `v0.2.0-etapa1` — **pendiente del OK
-  de Valentín** (la definición de terminado del plan pide integración + etiqueta).
-- Sigue pendiente de la Etapa 0: decidir si `ajuste-tesis` se integra a `main`;
-  `.gitattributes` con `eol=lf`.
+- `.gitattributes` con `eol=lf` (arrastre de la Etapa 0).
+
+### Correcciones tras la revisión (misma sesión)
+
+El corpus de la Fase A se amplió a **12 clips reales** (3 saques + 1 drive + 1 revés en
+cámara lenta; 7 de control: 4 a 30 fps, 3 a 60 fps, con oclusión en varios). Al correr
+el catalogador sobre el corpus nuevo aparecieron dos bugs propios, ya arreglados:
+
+- **Tasas NTSC.** `59.94` fps (= 60000/1001) quedaba por debajo del umbral de 60 y se
+  rechazaba por redondeo. Se agregó `normalizar_fps()`: ajusta a la tasa nominal si cae
+  a <0.5%. Ahora `59.94 → 60 → solo preparación`, `29.97 → 30 → rechazado`.
+- **Material de origen.** El catalogador escaneaba `fase-a/compilaciones/` (videos largos
+  de los que se recortan los segmentos). Ahora salta `compilaciones/` por defecto
+  (`--incluir-todo` para no saltearla).
+- Alineado el vocabulario: `SOLO_PREPARACION` → `uso = "E1-E2 (solo preparación)"` (antes
+  decía `E1-E4 (...)`, que no casaba con la convención del `catalogo.csv`).
+- El catalogador ahora reporta filas del `catalogo.csv` que no tienen archivo.
+
+**Pruebas sintéticas retiradas** (había material real equivalente): parámetros 30/60 fps
+de `test_ingest_video.py`. Se mantienen las sintéticas que no tienen equivalente real:
+duplicación sistemática de fotogramas (ningún clip real la tiene) y el par de coherencia
+temporal 240 vs ralentizado (depende de la Fase B, plazo 22/9).
+
+`test_corpus_fase_a.py` reescrita contra los 12 clips reales: 5 gestos aptos E1-E4
+(`escala_temporal_conocida = False`, sin duplicación), controles de 30 fps → rechazado,
+de 60 fps → solo preparación.
+
+### Bloqueante para cerrar la Etapa 1: arreglar `catalogo.csv`
+
+El catalogador lee los 12 clips pero **marca inconsistencias** (bar de Valentín: "no
+marca inconsistencias"). Todas son del `catalogo.csv`, no del código:
+
+1. Fila `control_saque_30fps_01.mp4` — no existe ese archivo (el archivo real es
+   `control_reves_30fps_01.mp4`, que a su vez no tiene fila).
+2. Fila `zverev_saque_sideview.mp4` — es un video de origen en `compilaciones/`, no una
+   unidad de análisis. Quitar la fila (sus 3 segmentos ya están catalogados).
+3. Cuatro controles a 30 fps con `uso = E1-E2`; deberían decir `rechazado` (coincide con
+   la descripción de Valentín: "25/30 fps → rechazo por fps insuficiente").
+
+`test_corpus_fase_a.py::test_el_catalogo_no_tiene_inconsistencias` está como
+`xfail(strict=True)`: cuando el catálogo se arregle, pasa y hay que quitarle el xfail.
+
+**El merge a `main` y las etiquetas `v0.1.0-etapa0` / `v0.2.0-etapa1` quedan en espera
+hasta que el `catalogo.csv` esté limpio.**
 
 ### Siguiente paso concreto
 
-Abrir la **Etapa 2 — Estimación de pose** (`docs/plan-desarrollo.md`). Por la
-convención: antes de pedir el plan, leer `capitulo-3` apartados 3.3.2.3 a 3.3.2.9 (por
-qué YOLOv8-Pose es 2D, MediaPipe como backend por defecto, tabla de error por
-articulación) y el apartado 4.4.3 del `capitulo-4`. La Etapa 2 consume la salida de la
-ingesta sobre los segmentos de Zverev.
+1. Valentín arregla los 3 puntos del `catalogo.csv`.
+2. Se vuelve a correr `python -m app.catalogador` — debe salir sin avisos (salvo la nota
+   informativa de normalización NTSC).
+3. Se quita el `xfail`, se mergean `etapa/0-fundaciones` y `etapa/1-ingesta` a `main` con
+   las etiquetas, y ahí sí Etapa 1 queda cerrada.
+4. En paralelo ya se puede planificar la **Etapa 2 — Estimación de pose** (lecturas:
+   `capitulo-3` 3.3.2.3–3.3.2.9, `capitulo-4` 4.4.3).
 
 ---
 
