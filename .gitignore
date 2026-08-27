@@ -30,3 +30,39 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# --- Backend Python ---
+# Entornos virtuales (se recrean con: py -3.11 -m venv backend/.venv)
+.venv/
+venv/
+env/
+# Caché de intérprete y de herramientas
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+# Empaquetado
+*.egg-info/
+build/
+
+# --- Configuración local / secretos ---
+# .env real: nunca va a git. El versionado es backend/.env.example
+.env
+.env.*
+!.env.example
+
+# --- Datos de video ---
+# Los videos viven fuera del repo (~/kinetiq-data). Nunca se commitean.
+# Ver docs/decisiones/002-config-ruta-corpus.md
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.m4v
+kinetiq-data/
+
+# --- Gestor de paquetes del frontend ---
+# El proyecto usa bun (bun.lock). No mantener un segundo lockfile de npm.
+package-lock.json
