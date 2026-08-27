@@ -22,12 +22,17 @@ esos apartados quedan desactualizados.
 
 ## Qué se hace
 
-- **Ahora:** nada en el código. Se coincide en no optimizar hasta que el punto de
-  decisión de la Etapa 4 diga si la velocidad es un problema real para el alcance
-  del MVP.
-- **Antes de la entrega final:** reescribir 4.2.3 y 4.5.4 con el número medido
-  (o con el que resulte tras las palancas de la decisión 005: `model_complexity=1`,
-  `static_image_mode=False`, o menor resolución). El dato reproducible ya está
+- **Ahora:** nada en el código. Se coincide en no optimizar hasta **después** del
+  punto de decisión de la Etapa 4, no antes.
+- **Si en algún momento hace falta optimizar, el orden de palancas a evaluar es:**
+  1. `model_complexity` más bajo (2 → 1) — cambio de una línea, sin migración.
+  2. Si no alcanza, migrar a la **Vía A sobre ONNX Runtime** (ya prevista en el
+     Capítulo 4): ahí sí hay soporte real de GPU en Windows, mientras que la API de
+     Python de MediaPipe corre solo por CPU.
+  3. Menor resolución antes de inferir y/o `static_image_mode=False` (tracking)
+     quedan como palancas secundarias.
+- **Antes de la entrega final:** reescribir 4.2.3 y 4.5.4 con el número medido (o
+  con el que resulte tras aplicar las palancas). El dato reproducible ya está
   versionado en `docs/resultados/`.
 
 ## Por qué queda registrado acá
