@@ -120,23 +120,44 @@ sesgo** (3 series sintéticas con offset constante + ruido → recupera pelvis�
 
 `pytest -m "not slow"` → **130 en verde**.
 
+### Detector de inversión de z (aplicado, `v0.3.1`/`v0.3.2`) — ver la entrada "(fix)"
+
+### Comparación con dos clips públicos de tres cuartos (Valentín los consiguió)
+
+`drive_trescuartos_01`, `saque_trescuartos_01` (240 fps efectivos, factor 8).
+`catalogo.csv` actualizado a 14 clips (`test_corpus_fase_a.py` a 14, corre limpio).
+También: `control_oclusion_02` jugador → alcaraz; `fps_efectivos` de los tres cuartos
+corregido a 240 (el catalogador detectó la discrepancia 480 arrastrada).
+
+**El tres cuartos, sobre estos dos clips no controlados, NO mejoró ninguna métrica:**
+
+| | lateral | tres cuartos |
+| --- | --- | --- |
+| separación pelvis–torso | ~2–18 ms, orden que se invierte | 271 / 317 ms **pero torso antes que pelvis**, sin pico claro de pelvis |
+| brazo auditable | drive sí (1744 °/s), saques no | drive al borde (6399 °/s), saque no (23365) |
+| inversiones de z | 16–45 saques / 3 drive | 40 saque / 14 drive |
+| tramos excluidos E3 | decenas | 75 (drive) / 150 (saque) — ~40 % del clip |
+
+Los dos clips son de baja tasa de bits y origen desconocido: no descarta el tres
+cuartos para la Fase B (240 fps reales, luz, encuadre fijo, pausas, repeticiones),
+pero **sí descarta contar con el ángulo de cámara como solución por sí solo**. La
+única evidencia positiva limpia sigue siendo `drive_lateral_01` en toma lateral.
+Detalle en decisión 008 §2.
+
 ### Pendiente
 
 - 4.7 / 4.8 / punto de decisión: Fase B.
-- Detector de inversión de signo en `z` (gap de umbrales E2/E3): ¿ahora o con la
-  continuación de E4?
-- Confirmar/descartar pelvis-torso ~12–18 ms con encuadre de tres cuartos.
 - Calibrar `find_peaks` / parámetros de segmentación — baja prioridad (Fase B trae
-  pausas en posición neutra).
-- Conseguir 1–2 clips públicos de tres cuartos para adelantar la comparación
-  pelvis-vs-torso.
+  pausas en posición neutra). La segmentación automática recorta mal los clips de
+  tres cuartos (picos en el borde de la ventana).
+- Revisar los umbrales del techo (×3) y del detector de inversión de z con material
+  de Fase B (`escala_temporal_conocida = True`, 240 fps reales).
 - La rama `etapa/4-cinematica` **queda abierta**, sin merge ni tag, hasta cerrar la etapa.
 
 ### Siguiente paso concreto
 
-Esperar la Fase B para 4.7/4.8 y el punto de decisión. Opcional mientras tanto: el
-detector de inversión de `z`, y/o clips públicos de tres cuartos. La Etapa 4 no avanza
-más sin material para medir sus criterios (precondición del plan).
+Esperar la Fase B para 4.7/4.8 y el punto de decisión. La Etapa 4 no avanza más sin
+material para medir sus criterios (precondición del plan).
 
 ---
 

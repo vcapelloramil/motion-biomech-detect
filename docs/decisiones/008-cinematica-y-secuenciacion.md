@@ -173,6 +173,31 @@ resultados son insumos válidos: acotan qué puede y qué no puede afirmar el MV
 guían el encuadre y el diseño de la Fase B (una toma de **tres cuartos** —Ángulo B
 del protocolo— pone la rotación transversal más en el plano de la imagen).
 
+### Comparación con dos clips públicos de tres cuartos
+
+Se catalogaron dos clips de tres cuartos (`drive_trescuartos_01`,
+`saque_trescuartos_01`, ~30 fps declarados × factor 8 = 240 efectivos) para
+adelantar la comparación antes de grabar. **Resultado: el encuadre de tres
+cuartos, sobre estos dos clips no controlados, NO mejoró ninguna de las tres
+métricas.**
+
+| métrica | toma lateral (zverev / drive) | tres cuartos (drive / saque) |
+| --- | --- | --- |
+| separación pelvis–torso | ~2–18 ms, orden que se invierte | 271 / 317 ms, pero **torso antes que pelvis** (invertido) y sin pico claro de pelvis: varios picos de magnitud parecida repartidos por el clip |
+| brazo auditable | drive lateral: sí (1 744 °/s); saques: no | drive: al borde (6 399 °/s, ~2,7× Fleisig); saque: **no** (23 365 °/s) |
+| inversiones de z (total / de brazo) | 16–45 / 1–3 (saques); 3 / 0 (drive) | 40 / 1 (saque); 14 / 0 (drive) |
+| tramos excluidos por E3 | decenas | **75 (drive) / 150 (saque)** — ~40 % del clip |
+
+Lectura: (1) la ambigüedad pelvis-torso **no** se resuelve sola cambiando el
+ángulo con material de esta calidad; (2) el brazo del **saque** rápido sigue no
+auditable en tres cuartos (el desenfoque en el impacto es un límite del apartado
+1, no del encuadre); (3) la `z` no se estabiliza. Los dos clips son de baja
+tasa de bits y origen desconocido, así que esto **no descarta** el tres cuartos
+para la Fase B —donde habrá 240 fps reales, luz controlada, encuadre fijo,
+pausas en posición neutra y repeticiones—, pero **sí descarta contar con el
+ángulo de cámara como solución por sí solo**. La única evidencia positiva limpia
+sigue siendo `drive_lateral_01` en toma lateral.
+
 ---
 
 ## 3. Resuelto en esta sesión y pendientes
