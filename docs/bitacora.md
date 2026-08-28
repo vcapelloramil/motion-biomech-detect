@@ -58,6 +58,10 @@ tener la Fase B. Lado dominante: columna nueva en `catalogo.csv`, sin default.
 
 ### Qué se hizo
 
+- **Housekeeping (al abrir la sesión):** `.gitattributes` con `eol=lf` (commit
+  `4fbce0e`; `renormalize` no tocó nada, los blobs ya estaban en LF). ADR 006 ampliado
+  con el orden de palancas de optimización de inferencia (`model_complexity` más bajo →
+  Vía A sobre ONNX). Ambos ya en `main`.
 - **`engine/segmentos_corporales.py`** — cadena `pelvis → torso → brazo` como vectores
   directores. `brazo = HOMBRO_{dom} → MUNECA_{dom}`; `{dom}` de la columna
   `lado_dominante` del `catalogo.csv` (agregada esta sesión), sin valor por defecto.
@@ -120,7 +124,12 @@ sesgo** (3 series sintéticas con offset constante + ruido → recupera pelvis�
 
 `pytest -m "not slow"` → **130 en verde**.
 
-### Detector de inversión de z (aplicado, `v0.3.1`/`v0.3.2`) — ver la entrada "(fix)"
+### Detector de inversión de z (aplicado, `v0.3.1` → `v0.3.2`)
+
+Salió de investigar el pico de 24 932 °/s del punto anterior. Se hizo en ramas
+propias (`fix/inversion-z`, `fix/inversion-z-calibracion`) y se mergeó a `main`
+antes de rebasar `etapa/4-cinematica`. Detalle completo en la entrada **"(fix)"** de
+más arriba y en la decisión 009.
 
 ### Comparación con dos clips públicos de tres cuartos (Valentín los consiguió)
 
@@ -138,26 +147,99 @@ corregido a 240 (el catalogador detectó la discrepancia 480 arrastrada).
 | inversiones de z | 16–45 saques / 3 drive | 40 saque / 14 drive |
 | tramos excluidos E3 | decenas | 75 (drive) / 150 (saque) — ~40 % del clip |
 
-Los dos clips son de baja tasa de bits y origen desconocido: no descarta el tres
-cuartos para la Fase B (240 fps reales, luz, encuadre fijo, pausas, repeticiones),
-pero **sí descarta contar con el ángulo de cámara como solución por sí solo**. La
-única evidencia positiva limpia sigue siendo `drive_lateral_01` en toma lateral.
-Detalle en decisión 008 §2.
+**Dos lecturas distintas, no confundirlas:**
 
-### Pendiente
+1. **"El ángulo no lo resolvió":** con estos dos clips, cambiar a tres cuartos **no**
+   convirtió la ambigüedad pelvis-torso (~15 ms) en una secuencia limpia, **no**
+   volvió auditable el brazo del saque, y **no** bajó las inversiones de z. Si el
+   único cambio fuera el ángulo, no alcanzaría.
+2. **"No fue una prueba justa del ángulo":** estos dos clips son públicos, de baja
+   tasa de bits (3–4 MB para 13–16 s), origen desconocido, sin segmentar (la
+   ventana automática los recorta mal), `escala_temporal_conocida = False` y factor
+   estimado a ojo. La Fase B es otra cosa: 240 fps **reales**, luz controlada,
+   encuadre fijo medido, pausas en posición neutra que hacen la segmentación
+   trivial, y repeticiones del mismo gesto. La comparación honesta pelvis-torso
+   lateral vs tres cuartos **todavía no se hizo**; esto solo descartó el atajo.
 
-- 4.7 / 4.8 / punto de decisión: Fase B.
-- Calibrar `find_peaks` / parámetros de segmentación — baja prioridad (Fase B trae
-  pausas en posición neutra). La segmentación automática recorta mal los clips de
-  tres cuartos (picos en el borde de la ventana).
-- Revisar los umbrales del techo (×3) y del detector de inversión de z con material
-  de Fase B (`escala_temporal_conocida = True`, 240 fps reales).
-- La rama `etapa/4-cinematica` **queda abierta**, sin merge ni tag, hasta cerrar la etapa.
+La única evidencia positiva limpia sigue siendo `drive_lateral_01` (toma lateral):
+`pelvis → torso → brazo` correcto, velocidades plausibles. Que el drive recupere la
+cadena y el saque no, mismo encuadre y mismo pipeline, apunta a que el cuello de
+botella es el gesto (velocidad de la mano en el impacto — límite del apartado 1),
+no el pipeline.
 
-### Siguiente paso concreto
+---
 
-Esperar la Fase B para 4.7/4.8 y el punto de decisión. La Etapa 4 no avanza más sin
-material para medir sus criterios (precondición del plan).
+## Estado al cerrar la sesión (2026-08-27)
+
+**En `main` (pusheado):** Etapas 0–3 (`v0.1.0-etapa0` … `v0.4.0-etapa3`) + fixes
+`v0.3.1` y `v0.3.2` (detector de inversión de z). El motor en `main` está en
+`0.3.2`.
+
+**En `etapa/4-cinematica` (rama abierta, sin merge, sin tag):** pasos 4.1–4.6 de la
+Etapa 4 sobre esa base. Motor `0.4.0`. `pytest -m "not slow"` → **139 en verde**;
+`-m slow` → 15 (incluye `test_corpus_fase_a.py` con 14 clips, `test_analizar_e4.py`,
+`test_inversion_z_corpus.py`). Nada pendiente de commitear.
+
+**Corpus (`kinetiq-data/`):** 14 clips catalogados y verificados, catalogador limpio
+(solo avisos informativos de normalización NTSC). 12 laterales + 2 de tres cuartos.
+Caché de pose (`backend/.cache/`) poblada para los 14.
+
+**Lo que NO se hizo, a propósito** (precondición del plan — no tiene sentido pulir un
+detector cuyos criterios de éxito todavía no se pueden medir): tareas 4.7 (Criterio 1),
+4.8 (Criterio 2), 4.6b como medición formal, y el **punto de decisión de repliegue**.
+La Etapa 4 no se cierra hasta tener el material propio.
+
+## Cuando llegue el material de la Fase B — checklist
+
+Precondición: el conjunto propio grabado y verificado (protocolo de grabación,
+hito C1). Trabajar en `etapa/4-cinematica`.
+
+1. **Ingesta y catálogo.** Copiar los clips a `kinetiq-data/fase-b/`. Agregar una
+   fila por clip a `catalogo.csv` con **`escala_temporal = conocida`**, `factor_estimado = 1`,
+   `fps_efectivos` reales (240), `lado_dominante` del jugador. Correr, desde `backend/`:
+   `python -m app.catalogador` — debe salir sin avisos (ni siquiera de NTSC si se grabó
+   a 240 exactos).
+2. **Pose.** `python -m app.extraer_pose` (procesa lo nuevo, ~3–4 min por clip). Deja
+   la caché lista.
+3. **Análisis por clip.** `python -m app.analizar --clip <archivo> [--manual d1:h1,d2:h2]`.
+   Para clips con 6 repeticiones y pausas del protocolo, la segmentación automática
+   debería andar; si no, marcar las ventanas con `--manual`.
+4. **Qué comparar (las tres preguntas que quedaron abiertas):**
+   - **Pelvis-torso:** ¿la separación es estable y en el orden esperado
+     (pelvis→torso) entre repeticiones del mismo saque? ¿El encuadre de tres cuartos
+     da una separación más limpia que el de perfil? Comparar contra los ~2–18 ms
+     invertidos de la toma lateral (decisión 008 §2).
+   - **Brazo:** ¿el pico del segmento `brazo` (con `--brazo-via codo`) cae por debajo
+     del techo de plausibilidad, o el desenfoque en el impacto lo mantiene no
+     auditable también a 240 fps reales? Probar además `--brazo-via muneca`.
+   - **Inversiones de z:** ¿cuántas veces dispara `detectar_inversiones_z` con `z`
+     métrica real? Debería ser mucho menos que las 16–45/clip del corpus público.
+5. **Recalibrar con datos reales** (todo con `escala_temporal_conocida = True`):
+   - `MARGEN_PLAUSIBILIDAD` del techo (hoy ×3; sin la incertidumbre del factor
+     estimado, probablemente conviene bajarlo). `_FLEISIG_MAX` / `techo_velocidad` en
+     `engine/sequencing.py`.
+   - Los cinco umbrales de `detectar_inversiones_z` en `engine/validation.py`.
+   - `find_peaks` (`PROMINENCIA_*`, `SEPARACION_MIN_S`) y la segmentación
+     (`QUIETUD_REL`, `DUR_MIN_REPETICION_S`) en `engine/sequencing.py`.
+6. **Medición formal (4.7 / 4.8).** Implementar `4.7` (Criterio 1: proporción de
+   repeticiones con orden repetible; meta 8/10) y `4.8` (Criterio 2: error angular vs
+   medición manual sobre los mismos fotogramas; meta < 20,6°). Volcar los números a
+   `docs/resultados/` con un script versionado (principio 5 del plan).
+7. **Pruebas a activar / agregar:**
+   - En `tests/integration/test_analizar_e4.py`: pasar de "estructura coherente" a
+     aserciones reales sobre las repeticiones de la Fase B (orden, auditabilidad).
+   - Nueva prueba de **repetibilidad del orden** entre las 6 repeticiones de un clip
+     (base del Criterio 1).
+   - Nueva prueba de **coherencia temporal** con el par real 240 fps / ralentizado
+     del mismo gesto (pendiente desde la Etapa 1: hoy es sintética en
+     `test_slowmo_coherencia.py`).
+   - Reemplazar las pruebas de integración que hoy usan clips sintéticos de control
+     por el material real equivalente de la Fase B, si lo hay.
+8. **Punto de decisión.** Con los Criterios 1 y 2 medidos, aplicar la tabla del plan
+   (continuar a E5 / repliegue a fase de preparación / repliegue a 2D / reformular
+   alcance) y **documentar el resultado en `docs/decisiones/`** cualquiera sea —
+   alimenta los Capítulos 6 y 7. Recién ahí: merge `etapa/4-cinematica` → `main`,
+   tag `v0.5.0-etapa4`.
 
 ---
 
