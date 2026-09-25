@@ -22,7 +22,7 @@ from dataclasses import dataclass, field
 
 import numpy as np
 
-from app.engine.dsp import ORDEN_POR_DEFECTO, butterworth_fase_cero
+from app.engine.dsp import ORDEN_POR_DEFECTO, butterworth_fase_cero_por_segmentos
 from app.engine.pose.base import PoseFrame, Punto, SecuenciaPose
 from app.engine.preparacion import (
     GAP_MAX_INTERPOLABLE,
@@ -132,20 +132,18 @@ def procesar_e3(
     else:
         metodo = "manual"
 
+    # Cada serie se filtra POR SEGMENTOS continuos (v0.4.1): los huecos largos siguen en
+    # NaN y no se rellenan; un segmento demasiado corto para filtfilt pasa a NaN y se
+    # registra como tramo excluido, nunca se deja crudo (regla R3). Antes de 0.4.1 toda
+    # serie con algún NaN se dejaba ENTERA sin filtrar (ver decisión 010).
+    indices = [f.indice for f in seq.frames]
     filtradas: dict = {}
-    for clave, serie in series.items():
-        if np.isnan(serie).any():
-            # tramo largo excluido: se filtra solo el segmento continuo más largo
-            # y el resto queda como NaN (no auditable). Simplificación: si hay
-            # huecos largos, esa serie no se filtra (E4 la tratará como parcial).
-            filtradas[clave] = serie
-            continue
-        try:
-            filtradas[clave] = butterworth_fase_cero(
-                serie, fps=fps, corte_hz=corte_hz, orden=orden
-            )
-        except Exception:
-            filtradas[clave] = serie  # serie demasiado corta: se deja cruda
+    for (art, coord), serie in series.items():
+        filtradas[(art, coord)], cortos = butterworth_fase_cero_por_segmentos(
+            serie, fps=fps, corte_hz=corte_hz, orden=orden
+        )
+        for desde, hasta in cortos:
+            tramos.append(TramoExcluido(art, coord, indices[desde], indices[hasta]))
 
     seq_filtrada = _reconstruir_secuencia(seq, filtradas, espacio=espacio)
     return SecuenciaFiltrada(

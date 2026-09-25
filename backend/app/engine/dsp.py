@@ -69,6 +69,69 @@ def butterworth_fase_cero(
     return filtfilt(b, a, serie)
 
 
+def largo_minimo_segmento(*, fps: float, corte_hz: float, orden: int = ORDEN_POR_DEFECTO) -> int:
+    """Muestras mínimas de un segmento continuo para poder filtrarlo con ``filtfilt``."""
+    b, a = _coeficientes(fps, corte_hz, orden)
+    return _largo_minimo(b, a)
+
+
+def segmentos_continuos(serie: np.ndarray) -> list[tuple[int, int]]:
+    """Rangos [desde, hasta] (posiciones, inclusive) de valores no-NaN consecutivos."""
+    valido = ~np.isnan(np.asarray(serie, dtype=float))
+    if not valido.any():
+        return []
+    bordes = np.flatnonzero(np.diff(valido.astype(np.int8)))
+    inicios = [0] if valido[0] else []
+    fines: list[int] = []
+    for k in bordes:
+        if valido[k + 1]:
+            inicios.append(int(k + 1))
+        else:
+            fines.append(int(k))
+    if valido[-1]:
+        fines.append(len(valido) - 1)
+    return list(zip(inicios, fines))
+
+
+def butterworth_fase_cero_por_segmentos(
+    serie: np.ndarray,
+    *,
+    fps: float,
+    corte_hz: float,
+    orden: int = ORDEN_POR_DEFECTO,
+) -> tuple[np.ndarray, list[tuple[int, int]]]:
+    """Filtra de fase cero cada segmento continuo de una serie que tiene huecos (NaN).
+
+    Devuelve ``(filtrada, no_filtrables)``:
+
+    - los NaN se conservan exactamente donde estaban (no se interpola ni se rellena a
+      través de un hueco: rellenar con ceros o con una recta inventaría movimiento y
+      el filtro lo desparramaría hacia los datos buenos);
+    - cada segmento con al menos ``largo_minimo_segmento`` muestras se filtra por
+      separado con ``butterworth_fase_cero``;
+    - un segmento MÁS CORTO no se puede filtrar y **no se deja crudo**: pasa a NaN
+      (no auditable) y se devuelve en ``no_filtrables`` como rango [desde, hasta] de
+      posiciones. Dejarlo crudo mezclaría datos ruidosos con datos filtrados sin
+      avisar (regla R3).
+
+    Antes de esta función, toda serie con algún NaN se dejaba entera sin filtrar.
+    """
+    serie = np.asarray(serie, dtype=float)
+    if serie.ndim != 1:
+        raise ParametroDSPInvalido("la serie debe ser 1D.")
+    minimo = largo_minimo_segmento(fps=fps, corte_hz=corte_hz, orden=orden)
+    salida = np.full_like(serie, np.nan)
+    no_filtrables: list[tuple[int, int]] = []
+    for desde, hasta in segmentos_continuos(serie):
+        if hasta - desde + 1 >= minimo:
+            salida[desde : hasta + 1] = butterworth_fase_cero(
+                serie[desde : hasta + 1], fps=fps, corte_hz=corte_hz, orden=orden
+            )
+        else:
+            no_filtrables.append((desde, hasta))
+    return salida, no_filtrables
+
+
 def _filtro_unidireccional(
     serie: np.ndarray,
     *,

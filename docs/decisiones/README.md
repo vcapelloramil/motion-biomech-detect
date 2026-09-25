@@ -47,3 +47,4 @@ Qué habilita, qué cierra, qué hay que recordar más adelante.
 | [007](007-filtrado-de-senales.md) | Qué filtra el filtro (world landmarks) y el orden del pipeline | vigente |
 | [008](008-cinematica-y-secuenciacion.md) | Cinemática y secuenciación (4.1–4.6) + hallazgos sobre corpus público | vigente (Etapa 4 abierta) |
 | [009](009-inversion-de-profundidad.md) | Detector de inversión de profundidad (z) en la validación | vigente |
+| [010](010-filtrado-por-segmentos.md) | E3 filtra por segmentos continuos (antes dejaba crudas las series con huecos) | vigente (motor 0.4.1) |
