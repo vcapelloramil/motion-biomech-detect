@@ -33,15 +33,33 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
   (fotogramas de drive rep03/rep04). La ventana acotada del brazo **no se implementó**: Valentín
   quiere ver primero que el patrón por encuadre se sostenga con las magnitudes ya corregidas
   (ver arriba) antes de acotar algo que pueda enmascararlo.
-- Referencia de Fleisig para el brazo (≈ 2368 °/s): en la tesis la tabla la etiqueta "Hombro"; un
-  vector hombro→codo no ve la rotación axial del húmero, así que **podría no ser una referencia
-  comparable** (y entonces "0,55× Fleisig" no significa nada). Por verificar contra el artículo.
+- **Referencia de Fleisig para el brazo: ERROR CONCEPTUAL confirmado** (Valentín, con dos fuentes;
+  decisión 011). Los 2368 °/s ("Hombro") son la rotación interna, un giro axial del húmero; ω del
+  vector hombro→codo (orientación del brazo en el espacio) es incapaz de medirla, y tampoco mide la
+  extensión de codo (1510 °/s), que es un ángulo relativo. **Ningún valor de la tabla equivale a lo
+  que mide el motor para el brazo.** Todo "× Fleisig" del brazo queda sin valor. Pendiente de
+  redacción: aclaración en la tabla del apartado 3.3.2.8 del Capítulo 3.
 - Umbral de salto imposible (0,5 torsos ≈ 62 m/s): sigue sin recalibrarse. Punto 2 pendiente.
 - Decisión codo vs muñeca: NO se reabre en código; la justificación empírica de la decisión 008
   quedó invalidada y está registrada como **pendiente de redacción del Capítulo 4** en la
   decisión 010 (y con una nota de aviso en la 008).
 - Sin merge/tag de la Etapa 4; 4.7 y 4.8 y el punto de decisión siguen pendientes (los umbrales
   aún no están congelados: no calibrar y medir sobre las mismas repeticiones).
+
+### Referencia de Fleisig del brazo (2026-09-25, decisión 011)
+
+- Prueba `test_omega_vector_vs_angulo.py` (geometrías de resultado conocido): el vector hombro→codo
+  mide el balanceo del brazo (ω real), da **0** ante extensión de codo y **0** ante rotación axial;
+  el ángulo de tres puntos ve la extensión y también da 0 ante rotación axial.
+- Comparación equivalente (`diagnosticos_e3 fleisig-brazo`, saque, E3 0.4.1): ángulo del codo vs
+  1510 °/s = **0,88×** en perfil y **0,50×** en tres cuartos, con baja cobertura (25–57 % de
+  fotogramas con los tres puntos). ω del vector = 1315/1379 °/s: 0,56–0,58× de 2368 (referencia
+  equivocada) y 0,87–0,91× de 1510 (coincidencia numérica, no comparación equivalente).
+- La "subestimación" que veníamos arrastrando desaparece **como argumento** (no había comparación
+  válida), y NO se reemplaza por "medido correctamente": no hay referencia equivalente.
+- **Techo del brazo:** sin cambios numéricos (7104 °/s), ahora rotulado como cota provisional sin
+  respaldo en la literatura. Reanclarlo a 1510 (×3 = 4530) da el mismo resultado práctico en la
+  Fase B pero repetiría el error con otro valor; **pendiente de decisión de Valentín**.
 
 ### Corte de Winter para el brazo (2026-09-25)
 

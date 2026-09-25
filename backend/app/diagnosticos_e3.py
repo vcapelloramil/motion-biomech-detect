@@ -14,6 +14,11 @@ Subcomandos (desde backend/):
                       (método actual: valores válidos concatenados vs tramo continuo más
                       largo) y barrido del corte SOLO del codo (6–20 Hz; el resto en el corte
                       del clip) sobre velocidad, orden y adelanto del brazo (ancla de torso).
+  fleisig-brazo       Compara, en el saque, dos magnitudes DISTINTAS del brazo contra los valores de
+                      Fleisig (2003): ω del vector hombro→codo (orientación del brazo en el
+                      espacio; lo que mide el motor) y ω del ÁNGULO del codo (tres puntos:
+                      extensión de codo, comparable con los 1510 °/s). Ninguna mide la rotación
+                      interna del hombro (2368 °/s), que es axial.
   serie-articulacion  Serie fotograma a fotograma de una articulación (crudo vs filtrado,
                       confianza, ω del segmento, marcas de validación).
   salto-articulacion  Desplazamiento por fotograma de una articulación, en cm y en torsos.
@@ -48,7 +53,8 @@ from app.engine.segmentos_corporales import SegmentoCadena as S, vector_segmento
 from app.engine.validation import largo_torso, validar
 from app.engine.version import __version__ as version_motor
 from app.engine.dsp import segmentos_continuos
-from app.engine.sequencing import secuenciar
+from app.engine.kinematics import serie_angulo_articular, velocidad_angular_segmento
+from app.engine.sequencing import secuenciar, ventana_anclada
 from app.engine.winter import (
     ARTICULACIONES_RAPIDAS,
     FACTOR_NIVEL_RUIDO,
@@ -414,6 +420,85 @@ def cmd_corte_brazo(args) -> int:
     return 0
 
 
+# --- fleisig-brazo --------------------------------------------------------------------
+
+# Fleisig et al. (2003), tabla del apartado 3.3.2.8 de la tesis, en °/s.
+FLEISIG = {"codo (extension)": 1510.0, "muneca (flexion)": 1950.0, "hombro (rotacion interna)": 2368.0}
+
+
+def omega_angulo(theta: np.ndarray, fps: float, k: int = 1) -> np.ndarray:
+    """|Δθ| · fps / k (°/s) de una serie de ángulos (grados), alineada a i+k."""
+    w = np.full(len(theta), np.nan)
+    w[k:] = np.abs(theta[k:] - theta[:-k]) * fps / k
+    return w
+
+
+def maximo_en(w: np.ndarray, desde: int, hasta: int) -> float | None:
+    v = w[desde:hasta + 1]
+    v = v[np.isfinite(v)]
+    return float(v.max()) if v.size else None
+
+
+def cmd_fleisig_brazo(args) -> int:
+    from app.config import get_data_dir
+
+    cat = _catalogo(get_data_dir())
+    grupos = args.grupo or ["saque_perfil", "saque_trescuartos"]
+    filas = {}
+    for nombre, r in cat.items():
+        g = f"{r.get('gesto')}_{r.get('angulo')}"
+        if r.get("fuente") != "propio" or "_rep" not in nombre or g not in grupos:
+            continue
+        seq, _ = cargar(nombre)
+        lado = r["lado_dominante"]
+        try:
+            filt = procesar_e3(seq)
+        except ValueError:
+            continue
+        sf, fps = filt.secuencia, seq.fps_efectivos
+        w_vec = velocidad_angular_segmento(sf, S.BRAZO, lado, brazo_via="codo")
+        th = serie_angulo_articular(sf, "codo", lado)
+        w_ang, w_ang4 = omega_angulo(th, fps, 1), omega_angulo(th, fps, 4)
+        u = vector_unitario(  # ω del vector a k=4, para ver si el pico es ruido
+            {(a_, c): np.array([getattr(f.puntos_mundo[a_], c) if a_ in f.puntos_mundo else np.nan
+                                for f in sf.frames]) for a_ in articulaciones_brazo(lado, "codo") for c in "xyz"},
+            *articulaciones_brazo(lado, "codo"))
+        w_vec4 = omega_k(u, fps, 4)
+        v, motivo = ventana_anclada(sf, lado, "torso", tramos_excluidos=filt.tramos_excluidos)
+        d, h = (v.desde_frame, v.hasta_frame) if v is not None else (0, len(w_vec) - 1)
+        filas[nombre] = {
+            "grupo": g, "ventana_anclada": v is not None,
+            "vector_hombro_codo": {"pico_ventana_k1": maximo_en(w_vec, d, h), "pico_ventana_k4": maximo_en(w_vec4, d, h),
+                                   "p99_clip": p99(w_vec)},
+            "angulo_codo": {"pico_ventana_k1": maximo_en(w_ang, d, h), "pico_ventana_k4": maximo_en(w_ang4, d, h),
+                            "p99_clip": p99(w_ang),
+                            "cobertura": round(float(np.isfinite(th).mean()), 3)},
+        }
+        f_ = filas[nombre]
+        print(f"{nombre[-22:]:22} {g:18} vector: pico {f_['vector_hombro_codo']['pico_ventana_k1']} (k4 {f_['vector_hombro_codo']['pico_ventana_k4']}) | "
+              f"ángulo codo: pico {f_['angulo_codo']['pico_ventana_k1']} (k4 {f_['angulo_codo']['pico_ventana_k4']}) cob {f_['angulo_codo']['cobertura']}")
+    print("\nMedianas por grupo (pico en la ventana anclada al torso, °/s) y cociente contra cada valor de Fleisig")
+    por = defaultdict(list)
+    for f in filas.values():
+        por[f["grupo"]].append(f)
+    resumen = {}
+    for g, L in por.items():
+        med = lambda tipo, k: np.median([f[tipo][k] for f in L if f[tipo][k] is not None])
+        v1, v4 = med("vector_hombro_codo", "pico_ventana_k1"), med("vector_hombro_codo", "pico_ventana_k4")
+        a1, a4 = med("angulo_codo", "pico_ventana_k1"), med("angulo_codo", "pico_ventana_k4")
+        resumen[g] = {"vector_k1": v1, "vector_k4": v4, "angulo_codo_k1": a1, "angulo_codo_k4": a4}
+        print(f"\n{g} ({len(L)} clips)")
+        print(f"  ω del VECTOR hombro→codo:  k1 {v1:6.0f}  k4 {v4:6.0f}   = {v1 / FLEISIG['hombro (rotacion interna)']:.2f}× (2368 hombro)  "
+              f"{v1 / FLEISIG['codo (extension)']:.2f}× (1510 codo)")
+        print(f"  ω del ÁNGULO del codo:     k1 {a1:6.0f}  k4 {a4:6.0f}   = {a1 / FLEISIG['codo (extension)']:.2f}× (1510 codo, comparable)")
+    if args.salida:
+        Path(args.salida).write_text(json.dumps({"version_motor": version_motor, "fleisig": FLEISIG,
+                                                 "resumen": resumen, "clips": filas},
+                                                ensure_ascii=False, indent=1), encoding="utf-8")
+        print(f"\nEscrito: {args.salida}")
+    return 0
+
+
 # --- serie-articulacion / salto-articulacion --------------------------------------------
 
 def _art(nombre: str):
@@ -562,6 +647,11 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--grupo", action="append", default=None)
     p.add_argument("--salida", default=None)
     p.set_defaults(fn=cmd_corte_brazo)
+
+    p = sub.add_parser("fleisig-brazo", help="ω del vector vs ω del ángulo del codo, contra Fleisig")
+    p.add_argument("--grupo", action="append", default=None)
+    p.add_argument("--salida", default=None)
+    p.set_defaults(fn=cmd_fleisig_brazo)
 
     p = sub.add_parser("serie-articulacion", help="serie fotograma a fotograma")
     p.add_argument("clip"); p.add_argument("articulacion"); p.add_argument("desde", type=int); p.add_argument("hasta", type=int)

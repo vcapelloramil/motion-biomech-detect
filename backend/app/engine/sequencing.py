@@ -42,7 +42,11 @@ DUR_MIN_REPETICION_S = 0.20
 _FLEISIG_MAX = {
     SegmentoCadena.PELVIS: 440.0,
     SegmentoCadena.TORSO: 870.0,
-    SegmentoCadena.BRAZO: 2368.0,   # rotación interna del hombro, el pico más rápido
+    # OJO (decisión 011): 2368 °/s es la ROTACIÓN INTERNA del hombro (giro axial del húmero) y
+    # ω del vector hombro→codo (orientación del brazo en el espacio) es incapaz de medirla, así
+    # que NO es una referencia comparable. Se conserva solo como cota PROVISIONAL para rechazar
+    # errores de detección, sin respaldo en la literatura. Pendiente de decisión.
+    SegmentoCadena.BRAZO: 2368.0,
 }
 # Margen sobre el valor de Fleisig. Criterio: cubre (1) que el factor de
 # ralentización de los clips descargados es una estimación

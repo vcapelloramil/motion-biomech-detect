@@ -66,7 +66,9 @@ por debajo de los *glitches* observados (15 000–42 000 °/s).
 > 0,40–0,94× Fleisig, así que el argumento del "ruido de MediaPipe" para el ×3 ya no aplica.
 > El techo no se recalibró todavía. Además, el valor de Fleisig para el brazo (≈2368 °/s) es,
 > según los datos de la tesis, el del **hombro**, y un vector hombro→codo no puede ver la
-> rotación axial del húmero: **por verificar contra el artículo si es la referencia adecuada.**
+> rotación axial del húmero: **verificado por Valentín: NO es una referencia comparable**; ver
+> decisión 011 (corrección de un error conceptual de referencia). Toda comparación "× Fleisig" del
+> brazo queda sin valor.
 
 | segmento | Fleisig (°/s) | techo (×3, °/s) |
 | --- | --- | --- |
