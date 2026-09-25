@@ -65,6 +65,27 @@ Medianas por grupo (pico p99 de ω sobre el clip completo, `puntos_mundo` filtra
 - Límites: n = 6 por grupo, un jugador, una sesión; detector de vuelo aproximado (tobillos
   en imagen); p99 sobre el clip completo, no sobre la ventana del gesto.
 
+### Segmentación: `clip completo` vs `auto` (2026-09-25, mismo día)
+
+Hipótesis de Valentín: la segmentación automática elegía ventanas parciales y era la causa
+común del drive invertido y del brazo anómalo del revés de tres cuartos. Se agregó el modo
+explícito **`clip_completo`** (`segmentar`/`secuenciar`, `analizar --clip-completo`; excluyente
+con `manual`) y se comparó con el automático (`docs/resultados/e4-fase-b-exploratorio-*.json`).
+
+- **No era la causa.** Drive perfil: el pico del brazo cae 200–500 ms **antes** que los de
+  torso y pelvis en las 4 repeticiones auditables, con ventana automática y con clip completo.
+  Revés tres cuartos, brazo: los picos son los mismos valores (1001,7 / 917,6 / 855,0 /
+  803,7 °/s) en ambos modos; solo cambia el instante (relativo a la ventana).
+- **El clip completo tampoco es neutro:** el pico de cada segmento es el máximo global del
+  clip y puede ser otro evento. Saque de perfil: brazo primero en 2 de 3 auditables (0 con
+  auto); saque tres cuartos: pelvis→torso→brazo correcto 5 → 4 de 6; drive perfil 1 → 0; en el
+  revés aparecen desfases pelvis→torso de −842, −142 y +208 ms (picos de eventos distintos).
+- **Sí resuelve** el sobre-particionado (7, 7, 8 y 12 ventanas → 6 por grupo): para el
+  Criterio 1 la unidad es el clip.
+- Conclusión: las dos anomalías siguen abiertas y no son de ventana. La medición del orden
+  es sensible a la ventana en ambos sentidos; falta una ventana anclada al gesto (p. ej.
+  alrededor del pico de pelvis/torso, o marcas manuales).
+
 ### Hipótesis a contrastar (Valentín, 2026-09-25)
 
 El saque tiene fase aérea y drive/revés no. **Si la pelvis de drive y revés se acerca más a
