@@ -36,6 +36,7 @@ Uso (desde backend/):
     python -m app.explorar_fase_b                                # modo clip
     python -m app.explorar_fase_b -s clip -s auto -s ancla-torso -s ancla-pelvis
     python -m app.explorar_fase_b -s ancla-torso --grupo drive_perfil
+    python -m app.explorar_fase_b -s clip -s ancla-torso --etiqueta e3-0.4.1   # no pisa corridas previas
 """
 
 from __future__ import annotations
@@ -297,6 +298,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--brazo-via", choices=["codo", "muneca"], default="codo")
     parser.add_argument("--grupo", action="append", default=None,
                         help="gesto_encuadre (repetible), p. ej. drive_perfil. Default: los seis grupos base.")
+    parser.add_argument("--etiqueta", default="",
+                        help="Sufijo del nombre de los JSON (p. ej. e3-0.4.1) para no pisar corridas previas.")
     parser.add_argument("--salida-dir", type=Path, default=_RESULTADOS,
                         help="Carpeta de los JSON (default: docs/resultados/).")
     args = parser.parse_args(argv)
@@ -339,7 +342,8 @@ def main(argv: list[str] | None = None) -> int:
             datos["resumen"] = resumir_grupo(datos["clips"])
             datos["ordenes"] = resumir_ordenes(datos["clips"])
         _imprimir(m, grupos[m], con_p99=(i == 0))
-        salida = args.salida_dir / f"e4-fase-b-exploratorio-{m}.json"
+        sufijo = f"-{args.etiqueta}" if args.etiqueta else ""
+        salida = args.salida_dir / f"e4-fase-b-exploratorio-{m}{sufijo}.json"
         salida.write_text(json.dumps({
             "generado_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
             "version_motor": version_motor,

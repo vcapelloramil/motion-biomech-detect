@@ -1,0 +1,5585 @@
+{
+ "version_motor": "0.4.1",
+ "filas": [
+  {
+   "clip": "zverev_saque_lateral_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "zverev_saque_lateral_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "zverev_saque_lateral_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "zverev_saque_lateral_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "zverev_saque_lateral_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.023
+  },
+  {
+   "clip": "zverev_saque_lateral_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "zverev_saque_lateral_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "zverev_saque_lateral_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "zverev_saque_lateral_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.008
+  },
+  {
+   "clip": "zverev_saque_lateral_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.032
+  },
+  {
+   "clip": "zverev_saque_lateral_02.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "zverev_saque_lateral_02.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "zverev_saque_lateral_02.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "zverev_saque_lateral_02.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.556
+  },
+  {
+   "clip": "zverev_saque_lateral_02.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.448
+  },
+  {
+   "clip": "zverev_saque_lateral_02.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "zverev_saque_lateral_02.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "zverev_saque_lateral_02.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "zverev_saque_lateral_02.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.568
+  },
+  {
+   "clip": "zverev_saque_lateral_02.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.457
+  },
+  {
+   "clip": "zverev_saque_lateral_03.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "zverev_saque_lateral_03.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "zverev_saque_lateral_03.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "zverev_saque_lateral_03.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "zverev_saque_lateral_03.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "zverev_saque_lateral_03.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "zverev_saque_lateral_03.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "zverev_saque_lateral_03.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "zverev_saque_lateral_03.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.043
+  },
+  {
+   "clip": "zverev_saque_lateral_03.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.024
+  },
+  {
+   "clip": "control_reves_30fps_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "control_reves_30fps_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "control_reves_30fps_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "control_reves_30fps_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.692
+  },
+  {
+   "clip": "control_reves_30fps_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.6
+  },
+  {
+   "clip": "control_reves_30fps_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "control_reves_30fps_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "control_reves_30fps_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "control_reves_30fps_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.692
+  },
+  {
+   "clip": "control_reves_30fps_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.6
+  },
+  {
+   "clip": "control_drive_30fps_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "control_drive_30fps_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "control_drive_30fps_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "control_drive_30fps_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.725
+  },
+  {
+   "clip": "control_drive_30fps_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.433
+  },
+  {
+   "clip": "control_drive_30fps_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "control_drive_30fps_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "control_drive_30fps_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "control_drive_30fps_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.725
+  },
+  {
+   "clip": "control_drive_30fps_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.433
+  },
+  {
+   "clip": "control_reves_30fps_02.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "control_reves_30fps_02.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "control_reves_30fps_02.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "control_reves_30fps_02.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.772
+  },
+  {
+   "clip": "control_reves_30fps_02.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.522
+  },
+  {
+   "clip": "control_reves_30fps_02.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "control_reves_30fps_02.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "control_reves_30fps_02.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "control_reves_30fps_02.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.778
+  },
+  {
+   "clip": "control_reves_30fps_02.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.556
+  },
+  {
+   "clip": "control_rally_60fps_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "control_rally_60fps_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "control_rally_60fps_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "control_rally_60fps_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.022
+  },
+  {
+   "clip": "control_rally_60fps_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.192
+  },
+  {
+   "clip": "control_rally_60fps_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "control_rally_60fps_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 6,
+   "series": 6,
+   "fraccion_nan_media": 0.014
+  },
+  {
+   "clip": "control_rally_60fps_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.011
+  },
+  {
+   "clip": "control_rally_60fps_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.037
+  },
+  {
+   "clip": "control_rally_60fps_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.213
+  },
+  {
+   "clip": "control_rally_60fps_02.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 6,
+   "series": 6,
+   "fraccion_nan_media": 0.004
+  },
+  {
+   "clip": "control_rally_60fps_02.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 6,
+   "series": 6,
+   "fraccion_nan_media": 0.011
+  },
+  {
+   "clip": "control_rally_60fps_02.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.013
+  },
+  {
+   "clip": "control_rally_60fps_02.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.042
+  },
+  {
+   "clip": "control_rally_60fps_02.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.103
+  },
+  {
+   "clip": "control_rally_60fps_02.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 6,
+   "series": 6,
+   "fraccion_nan_media": 0.004
+  },
+  {
+   "clip": "control_rally_60fps_02.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 6,
+   "series": 6,
+   "fraccion_nan_media": 0.018
+  },
+  {
+   "clip": "control_rally_60fps_02.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.013
+  },
+  {
+   "clip": "control_rally_60fps_02.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.05
+  },
+  {
+   "clip": "control_rally_60fps_02.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.128
+  },
+  {
+   "clip": "control_oclusion_02.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "control_oclusion_02.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "control_oclusion_02.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "control_oclusion_02.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.065
+  },
+  {
+   "clip": "control_oclusion_02.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.092
+  },
+  {
+   "clip": "control_oclusion_02.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "control_oclusion_02.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 3,
+   "series": 6,
+   "fraccion_nan_media": 0.009
+  },
+  {
+   "clip": "control_oclusion_02.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "control_oclusion_02.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.065
+  },
+  {
+   "clip": "control_oclusion_02.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.092
+  },
+  {
+   "clip": "control_oclusion_03.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 6,
+   "series": 6,
+   "fraccion_nan_media": 0.3
+  },
+  {
+   "clip": "control_oclusion_03.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 6,
+   "series": 6,
+   "fraccion_nan_media": 0.292
+  },
+  {
+   "clip": "control_oclusion_03.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.294
+  },
+  {
+   "clip": "control_oclusion_03.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.421
+  },
+  {
+   "clip": "control_oclusion_03.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.542
+  },
+  {
+   "clip": "control_oclusion_03.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 6,
+   "series": 6,
+   "fraccion_nan_media": 0.3
+  },
+  {
+   "clip": "control_oclusion_03.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 6,
+   "series": 6,
+   "fraccion_nan_media": 0.321
+  },
+  {
+   "clip": "control_oclusion_03.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.312
+  },
+  {
+   "clip": "control_oclusion_03.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.421
+  },
+  {
+   "clip": "control_oclusion_03.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.542
+  },
+  {
+   "clip": "drive_lateral_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "drive_lateral_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "drive_lateral_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "drive_lateral_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "drive_lateral_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.096
+  },
+  {
+   "clip": "drive_lateral_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "drive_lateral_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "drive_lateral_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "drive_lateral_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "drive_lateral_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.096
+  },
+  {
+   "clip": "reves_lateral_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "reves_lateral_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "reves_lateral_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "reves_lateral_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.412
+  },
+  {
+   "clip": "reves_lateral_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.117
+  },
+  {
+   "clip": "reves_lateral_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "reves_lateral_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "reves_lateral_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "reves_lateral_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.412
+  },
+  {
+   "clip": "reves_lateral_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.117
+  },
+  {
+   "clip": "drive_trescuartos_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "drive_trescuartos_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "drive_trescuartos_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "drive_trescuartos_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.23
+  },
+  {
+   "clip": "drive_trescuartos_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.118
+  },
+  {
+   "clip": "drive_trescuartos_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "drive_trescuartos_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "drive_trescuartos_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "drive_trescuartos_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.23
+  },
+  {
+   "clip": "drive_trescuartos_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.118
+  },
+  {
+   "clip": "saque_trescuartos_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "saque_trescuartos_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "saque_trescuartos_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "saque_trescuartos_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.097
+  },
+  {
+   "clip": "saque_trescuartos_01.mp4",
+   "corpus": "publico",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.136
+  },
+  {
+   "clip": "saque_trescuartos_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "saque_trescuartos_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "saque_trescuartos_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "saque_trescuartos_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.097
+  },
+  {
+   "clip": "saque_trescuartos_01.mp4",
+   "corpus": "publico",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.136
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.624
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.509
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.624
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.509
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.697
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.645
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.697
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.645
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.453
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.37
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.483
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.37
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.389
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.283
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.389
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.283
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.55
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.416
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.55
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.416
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.406
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.393
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.406
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.393
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 6,
+   "series": 6,
+   "fraccion_nan_media": 0.984
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 6,
+   "series": 6,
+   "fraccion_nan_media": 0.986
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.986
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 0,
+   "series": 0,
+   "fraccion_nan_media": null
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 0,
+   "series": 0,
+   "fraccion_nan_media": null
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 6,
+   "series": 6,
+   "fraccion_nan_media": 0.984
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 6,
+   "series": 6,
+   "fraccion_nan_media": 0.986
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.986
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 0,
+   "series": 0,
+   "fraccion_nan_media": null
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 0,
+   "series": 0,
+   "fraccion_nan_media": null
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 6,
+   "series": 6,
+   "fraccion_nan_media": 0.988
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 6,
+   "series": 6,
+   "fraccion_nan_media": 0.988
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.988
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 0,
+   "series": 0,
+   "fraccion_nan_media": null
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 0,
+   "series": 0,
+   "fraccion_nan_media": null
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 6,
+   "series": 6,
+   "fraccion_nan_media": 0.988
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 6,
+   "series": 6,
+   "fraccion_nan_media": 0.988
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.988
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 0,
+   "series": 0,
+   "fraccion_nan_media": null
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 0,
+   "series": 0,
+   "fraccion_nan_media": null
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 6,
+   "series": 6,
+   "fraccion_nan_media": 0.294
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 6,
+   "series": 6,
+   "fraccion_nan_media": 0.294
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.294
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.826
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.787
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 6,
+   "series": 6,
+   "fraccion_nan_media": 0.294
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 6,
+   "series": 6,
+   "fraccion_nan_media": 0.294
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.294
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.851
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.787
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 6,
+   "series": 6,
+   "fraccion_nan_media": 0.793
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 6,
+   "series": 6,
+   "fraccion_nan_media": 0.79
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.79
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.962
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.96
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 6,
+   "series": 6,
+   "fraccion_nan_media": 0.793
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 6,
+   "series": 6,
+   "fraccion_nan_media": 0.79
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.79
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.962
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.96
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 6,
+   "series": 6,
+   "fraccion_nan_media": 0.406
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 6,
+   "series": 6,
+   "fraccion_nan_media": 0.406
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.406
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.869
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.846
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 6,
+   "series": 6,
+   "fraccion_nan_media": 0.406
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 6,
+   "series": 6,
+   "fraccion_nan_media": 0.406
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.406
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.869
+  },
+  {
+   "clip": "20260924_VCR_saque_fueracuadro_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.846
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.631
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.344
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.631
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.344
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.715
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.412
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.715
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.412
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.653
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.387
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.653
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.387
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.664
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.418
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.664
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.418
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.728
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.518
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.728
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.518
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.695
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.457
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.695
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.457
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.229
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.663
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.229
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.663
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.44
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.553
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.44
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.587
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.3
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.431
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.36
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.438
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.409
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.556
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.409
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.58
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.379
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.621
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.379
+  },
+  {
+   "clip": "20260924_VCR_saque_espaldas_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.621
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.792
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.706
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.792
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.708
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.677
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.333
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.677
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.383
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.75
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.467
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.75
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.467
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.743
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.58
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.743
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.58
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.827
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.624
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.827
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.624
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.827
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.6
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.827
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.6
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.487
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.19
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.487
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.19
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.647
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.307
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.647
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.307
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.653
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.272
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.653
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.272
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.757
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.363
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.757
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.363
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.667
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.264
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.667
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.264
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.707
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.364
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.707
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.364
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.226
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.226
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.375
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.178
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.375
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.178
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.33
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.153
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.33
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.153
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.323
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.097
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.323
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.123
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.256
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.039
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.256
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.039
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.478
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.097
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.478
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.117
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep02.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep03.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.144
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.138
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.144
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep04.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.138
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep05.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.067
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 0,
+   "series": 6,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.067
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep06.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 0,
+   "series": 3,
+   "fraccion_nan_media": 0.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_030_01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 6,
+   "series": 6,
+   "fraccion_nan_media": 0.207
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_030_01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 6,
+   "series": 6,
+   "fraccion_nan_media": 0.203
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_030_01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.204
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_030_01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.69
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_030_01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.586
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_030_01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 6,
+   "series": 6,
+   "fraccion_nan_media": 0.207
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_030_01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 6,
+   "series": 6,
+   "fraccion_nan_media": 0.203
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_030_01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.204
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_030_01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.69
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_030_01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.601
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_060_01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 6,
+   "series": 6,
+   "fraccion_nan_media": 0.161
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_060_01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "torso",
+   "series_sin_filtrar": 6,
+   "series": 6,
+   "fraccion_nan_media": 0.156
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_060_01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "hombro",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.156
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_060_01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.715
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_060_01.mov",
+   "corpus": "propio",
+   "validacion": "sin_z",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.542
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_060_01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "pelvis",
+   "series_sin_filtrar": 6,
+   "series": 6,
+   "fraccion_nan_media": 0.161
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_060_01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "torso",
+   "series_sin_filtrar": 6,
+   "series": 6,
+   "fraccion_nan_media": 0.157
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_060_01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "hombro",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.156
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_060_01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "codo",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.715
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_060_01.mov",
+   "corpus": "propio",
+   "validacion": "actual",
+   "grupo": "muneca",
+   "series_sin_filtrar": 3,
+   "series": 3,
+   "fraccion_nan_media": 0.548
+  }
+ ]
+}
