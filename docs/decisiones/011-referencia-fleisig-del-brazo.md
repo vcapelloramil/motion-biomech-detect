@@ -83,9 +83,69 @@ Pico mediano en la ventana (°/s):
    error conceptual con otro valor (el vector tampoco mide extensión de codo): solo sería
    aceptable rotulado como cota de orden de magnitud, no como comparación equivalente. **Pendiente de
    decisión de Valentín.**
-3. **Alcance:** el "brazo" de la cadena `pelvis → torso → brazo` es un proxy —la orientación del
-   brazo—, no la rotación interna del hombro. Con este vector no se puede contrastar el momento del
-   pico de rotación interna que describe la literatura.
+3. **Alcance de la afirmación (ver la sección siguiente):** el "brazo" de la cadena
+   `pelvis → torso → brazo` es un proxy de la **orientación espacial del segmento superior**
+   (el balanceo del brazo), no la rotación interna del hombro. Vale para todo el sistema, no solo
+   para el techo.
+
+## Alcance: "orden del balanceo del brazo" no es "orden del pico de rotación interna"
+
+**Qué mide el sistema.** El orden temporal de tres picos de velocidad angular de *orientación de
+un eje*: (1) el eje de las caderas (giro de la pelvis en el plano transversal), (2) el eje de los
+hombros (giro del torso superior) y (3) el eje hombro→codo, es decir el **balanceo del brazo**
+(cómo cambia la dirección del brazo en el espacio: flexión, abducción, aducción horizontal).
+
+**Qué describe la literatura (Fleisig et al., 2003, y la cadena cinética del saque).** Una secuencia
+proximal→distal de picos de velocidad angular de la pelvis, del torso superior y, en el brazo, de
+la extensión de codo, la **rotación interna del hombro** y la flexión de muñeca. El evento del
+"brazo" en esa literatura es un giro **axial** del húmero.
+
+**Son dos eventos distintos del gesto.** El balanceo del brazo (cambio de dirección del eje) y la
+rotación interna (giro sobre el propio eje) son movimientos diferentes, pueden alcanzar su
+velocidad máxima en instantes distintos y **no hay dato de referencia que los relacione**. En el
+drive y el revés, además, el balanceo tiene picos en la preparación (caída de la raqueta) que no
+corresponden al golpe. Con nuestros datos solo puede decirse, por ejemplo, que en el saque de tres
+cuartos el pico del balanceo llega después del pico del torso en 6 de 6 repeticiones (mediana
+~110 ms con el codo filtrado a 8 Hz; `docs/resultados/e3-corte-brazo-fase-b.json`); eso **no** dice
+dónde cae respecto del pico de rotación interna.
+
+| Afirmación | ¿Se sostiene? |
+| --- | --- |
+| "El sistema documenta el orden temporal de los picos de velocidad de pelvis, torso y **balanceo del brazo**" | **Sí**: es exactamente lo que mide. |
+| "El sistema documenta el orden pelvis → torso → brazo **descripto en la literatura**" | **No, tal cual.** Pelvis y torso miden un giro axial del tronco, comparable en lo esencial con la literatura *(a verificar contra el artículo)*; el tercer eslabón mide otro evento. |
+| Etiquetar el orden como "correcto" (escalera) o "incorrecto" (cruce) cuando interviene el brazo | **Sin fundamento bibliográfico** para el eslabón del brazo. El orden pelvis vs torso sí puede fundarse; torso vs balanceo del brazo, no. |
+| Criterio 1: el orden observado es **repetible** (meta 8 de cada 10) | **Se mantiene** como propiedad de la medición (repetibilidad de lo observado), con el enunciado corregido a "pelvis, torso y balanceo del brazo". |
+| Criterio 3: comparar al jugador **consigo mismo** entre sesiones | **Se mantiene**: no necesita referencia externa, y el error constante del proxy se cancela al comparar con el mismo encuadre. |
+
+**Consecuencia para las reglas del proyecto.** R4 exige que toda alerta cite una fuente. Ninguna
+etiqueta de "orden incorrecto" que dependa del brazo puede citar a Fleisig. Hasta que se decida
+otra cosa, el orden que incluye al brazo debería documentarse como "orden observado del balanceo
+del brazo", sin juicio de correcto/incorrecto *(propuesta; pendiente de decisión de Valentín)*.
+
+**Terminología propuesta.** "Balanceo del brazo" (u "orientación del brazo") para lo que mide el
+sistema; reservar "rotación interna" para lo que describe la literatura. El campo
+`segmento: "brazo"` del contrato congelado puede mantenerse siempre que su definición quede
+documentada.
+
+**Qué haría falta para comparar con la literatura** (fuera del alcance del MVP): capturar rotación
+axial —goniometría 3D, sensores inerciales, o puntos de mano y antebrazo lo bastante fiables para
+inferir la orientación del antebrazo—. Puede declararse como limitación en los Capítulos 6 y 7.
+
+**Lugares donde aparece la afirmación y hay que revisar la redacción** (no se editó ninguno en esta
+sesión, salvo el comentario de `_FLEISIG_MAX`):
+
+- `CLAUDE.md`: §1 ("el ORDEN de los picos (pelvis → torso → brazo)") y §3 ("Correcto = escalera
+  ordenada… Incorrecto = cruce").
+- `docs/tesis/capitulo-4-marco-tecnologico.md`: hipótesis I1 (~línea 263), Criterio 1 (~324) y la
+  descripción del gráfico de secuenciación (~776).
+- `docs/tesis/capitulo-3-marco-teorico.md`: tabla del apartado 3.3.2.8 y el tratamiento de la
+  cadena cinética.
+- `docs/arquitectura.md`, `docs/plan-desarrollo.md` (tareas 4.4–4.5, Anexo A: `orden_esperado`),
+  `docs/contrato-reporte.ejemplo.json`.
+- Interfaz: `frontend/src/routes/index.tsx`, `routes/reporte.tsx`,
+  `components/reporte/grafico-secuenciacion.tsx`, `lib/reporte-mock.ts` (sujetos a las reglas R2 y R3).
+- Código: docstring de `engine/segmentos_corporales.py`, `app/analizar.py`, `app/explorar_fase_b.py`,
+  `backend/README.md`.
 
 ## PENDIENTE DE REDACCIÓN — Capítulo 3, apartado 3.3.2.8
 

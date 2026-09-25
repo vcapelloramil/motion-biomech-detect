@@ -61,6 +61,15 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
   respaldo en la literatura. Reanclarlo a 1510 (×3 = 4530) da el mismo resultado práctico en la
   Fase B pero repetiría el error con otro valor; **pendiente de decisión de Valentín**.
 
+**Alcance ampliado (decisión 011):** el "brazo" de `pelvis → torso → brazo` es un proxy de la
+**orientación espacial del segmento superior** (balanceo del brazo), no de la rotación interna del
+hombro que describe la literatura. Son dos eventos distintos que pueden no coincidir en el tiempo.
+Se sostiene "el sistema documenta el orden de los picos de pelvis, torso y balanceo del brazo" y el
+Criterio 1 (repetibilidad); NO se sostiene "el orden descripto en la literatura" ni etiquetar
+correcto/incorrecto cuando interviene el brazo (R4: sin fuente). Pendiente de decisión y de
+redacción: CLAUDE.md §1 y §3, Cap. 3 (3.3.2.8 y cadena cinética), Cap. 4 (I1, Criterio 1, gráfico de
+secuenciación), arquitectura, plan (Anexo A), interfaz. Lista completa en la decisión 011.
+
 ### Corte de Winter para el brazo (2026-09-25)
 
 Pregunta de Valentín: ¿un solo corte por clip sigue siendo válido para el brazo? **No se tocó
