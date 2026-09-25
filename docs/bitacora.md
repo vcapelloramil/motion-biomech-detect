@@ -70,6 +70,34 @@ correcto/incorrecto cuando interviene el brazo (R4: sin fuente). Pendiente de de
 redacción: CLAUDE.md §1 y §3, Cap. 3 (3.3.2.8 y cadena cinética), Cap. 4 (I1, Criterio 1, gráfico de
 secuenciación), arquitectura, plan (Anexo A), interfaz. Lista completa en la decisión 011.
 
+### Ventana del brazo: barrido del adelanto (2026-09-25) — NO se implementó en el motor
+
+`python -m app.diagnosticos_e3 ventana-brazo` (`docs/resultados/e3-ventana-brazo-fase-b.json`).
+Se permite buscar el pico del brazo desde `torso − adelanto` hasta `torso + 300 ms` (adelanto 300,
+200, 150, 100, 50, 0 ms) y se mide cuántos picos CAMBIAN respecto de la ventana de ±300 (lo que la
+acotación enmascara). Con adelanto 0, "brazo antes que torso" es imposible por construcción.
+
+- **Tres cuartos (saque, drive y revés): la ventana es irrelevante.** El pico del brazo no cambia
+  al acotar (0 desplazados de 6 en casi todos los adelantos), y llega después del torso: +110 ms
+  (saque), +115–121 (drive), +79 (revés) de mediana.
+- **Drive de perfil:** brazo antes del torso en 4/5 con adelanto ≥ 150 ms (mediana −50 ms) y 3/4 a
+  100 ms; con adelanto ≤ 50 ms el brazo queda **no auditable** en 5 de 6 (1/6 auditable): no hay un
+  pico posterior identificable. Es decir, acotar no "arregla" el drive, lo vuelve no medible. Los
+  picos se ubican 50–100 ms antes del torso.
+- **Revés de perfil:** con ±300 el brazo va primero en 5/6 (mediana −19 ms), pero 2 de esos picos
+  están 200–300 ms antes del torso; con adelanto ≤ 200 la mediana pasa a 0 ms (3/6 antes, los tres con
+  −12 a −21 ms, prácticamente simultáneos) y con adelanto 0 los 4 auditables pasan a +165 ms
+  (4/4 desplazados). Coherente con que esos 2 picos tempranos sean la preparación.
+- **Saque de perfil:** 2/5 con el brazo antes (≥ 100 ms antes); con adelanto ≤ 50 esos 2 se
+  desplazan a picos posteriores (dt +67). Confirma la fragilidad de ese grupo (n = 3–5).
+
+**Lectura:** el patrón "brazo antes en perfil, después en tres cuartos" se sostiene con claridad
+solo en el **drive de perfil** (y en los tres grupos de tres cuartos como "después"); en el revés
+de perfil el brazo es casi simultáneo con el torso salvo dos picos de preparación; el saque de
+perfil depende de la ventana. **Ninguna ventana por sí sola discrimina golpe de preparación:**
+haría falta un marcador de fase independiente (p. ej. el punto más bajo de la muñeca como inicio del
+golpe hacia adelante), validado con fotogramas. Pendiente de decisión de Valentín.
+
 ### Corte de Winter para el brazo (2026-09-25)
 
 Pregunta de Valentín: ¿un solo corte por clip sigue siendo válido para el brazo? **No se tocó

@@ -19,6 +19,10 @@ Subcomandos (desde backend/):
                       espacio; lo que mide el motor) y ω del ÁNGULO del codo (tres puntos:
                       extensión de codo, comparable con los 1510 °/s). Ninguna mide la rotación
                       interna del hombro (2368 °/s), que es axial.
+  ventana-brazo       Barrido de cuánto se permite buscar el pico del BRAZO ANTES del pico del
+                      torso (adelanto 300…0 ms; después siempre +300 ms). Mide cuántos picos se
+                      desplazan al acotar (lo que la ventana enmascara). Con adelanto 0 "brazo
+                      antes que torso" es imposible por construcción: no usarlo para refutar.
   serie-articulacion  Serie fotograma a fotograma de una articulación (crudo vs filtrado,
                       confianza, ω del segmento, marcas de validación).
   salto-articulacion  Desplazamiento por fotograma de una articulación, en cm y en torsos.
@@ -54,7 +58,14 @@ from app.engine.validation import largo_torso, validar
 from app.engine.version import __version__ as version_motor
 from app.engine.dsp import segmentos_continuos
 from app.engine.kinematics import serie_angulo_articular, velocidad_angular_segmento
-from app.engine.sequencing import secuenciar, ventana_anclada
+from app.engine.sequencing import (
+    _frames_excluidos_por_segmento,
+    detectar_pico,
+    instante_ancla,
+    secuenciar,
+    techo_velocidad,
+    ventana_anclada,
+)
 from app.engine.winter import (
     ARTICULACIONES_RAPIDAS,
     FACTOR_NIVEL_RUIDO,
@@ -499,6 +510,80 @@ def cmd_fleisig_brazo(args) -> int:
     return 0
 
 
+# --- ventana-brazo --------------------------------------------------------------------
+
+ADELANTOS_MS = (300, 200, 150, 100, 50, 0)
+POST_MS = 300
+
+
+def pico_brazo_en_ventana(omega: np.ndarray, frame_torso: int, *, adelanto_ms: float, post_ms: float,
+                          fps: float, excluidos: set, techo: float):
+    """Pico del brazo dentro de [torso − adelanto, torso + post]; (frame, °/s) o (None, motivo)."""
+    d = max(0, frame_torso - int(round(adelanto_ms * fps / 1000)))
+    h = min(len(omega) - 1, frame_torso + int(round(post_ms * fps / 1000)))
+    return detectar_pico(omega[d:h + 1], fps=fps, offset_frame=d, frames_excluidos=excluidos, techo=techo)
+
+
+def cmd_ventana_brazo(args) -> int:
+    from app.config import get_data_dir
+
+    cat = _catalogo(get_data_dir())
+    grupos = args.grupo or [f"{g}_{e}" for g in ("saque", "drive", "reves") for e in ("perfil", "trescuartos")]
+    filas = {}
+    for nombre, r in cat.items():
+        g = f"{r.get('gesto')}_{r.get('angulo')}"
+        if r.get("fuente") != "propio" or "_rep" not in nombre or g not in grupos:
+            continue
+        seq, _ = cargar(nombre)
+        lado = r["lado_dominante"]
+        try:
+            filt = procesar_e3(seq)
+        except ValueError:
+            continue
+        sf, fps = filt.secuencia, seq.fps_efectivos
+        ft, _ = instante_ancla(sf, lado, "torso", tramos_excluidos=filt.tramos_excluidos)
+        if ft is None:
+            filas[nombre] = {"grupo": g, "sin_ancla": True}
+            continue
+        omega = velocidad_angular_segmento(sf, S.BRAZO, lado, brazo_via="codo")
+        excl = _frames_excluidos_por_segmento(filt.tramos_excluidos, S.BRAZO, lado, "codo")
+        techo = techo_velocidad(S.BRAZO)
+        base = None
+        por_adelanto = {}
+        for a in ADELANTOS_MS:
+            fr, info = pico_brazo_en_ventana(omega, ft, adelanto_ms=a, post_ms=POST_MS, fps=fps,
+                                             excluidos=excl, techo=techo)
+            if a == ADELANTOS_MS[0]:
+                base = fr
+            por_adelanto[str(a)] = {
+                "dt_torso_a_brazo_ms": None if fr is None else round((fr - ft) / fps * 1000, 1),
+                "vel": None if fr is None else round(float(info), 1),
+                "desplazado_vs_300": None if (fr is None or base is None) else bool(fr != base),
+            }
+        filas[nombre] = {"grupo": g, "frame_torso": int(ft), "por_adelanto": por_adelanto}
+    por_grupo = defaultdict(list)
+    for f in filas.values():
+        if "sin_ancla" not in f:
+            por_grupo[f["grupo"]].append(f)
+    print("Barrido del adelanto de la ventana del brazo (post = +300 ms). Por grupo y adelanto:")
+    print("  aud = brazo auditable | antes = pico del brazo ANTES que el del torso | desplaz. = el pico cambia respecto de ±300 | dt = mediana (ms, − = antes)")
+    for g, L in por_grupo.items():
+        print(f"\n{g} ({len(L)} clips)")
+        for a in ADELANTOS_MS:
+            k = str(a)
+            d = [f["por_adelanto"][k] for f in L]
+            aud = [x for x in d if x["dt_torso_a_brazo_ms"] is not None]
+            dts = [x["dt_torso_a_brazo_ms"] for x in aud]
+            print(f"  adelanto {a:3d} ms: aud {len(aud)}/{len(L)} | antes {sum(t < 0 for t in dts)}/{len(aud)} | "
+                  f"desplaz. {sum(bool(x['desplazado_vs_300']) for x in aud)}/{len(aud)} | "
+                  f"dt {np.median(dts) if dts else float('nan'):6.0f}")
+    if args.salida:
+        Path(args.salida).write_text(json.dumps({"version_motor": version_motor, "post_ms": POST_MS,
+                                                 "clips": filas}, ensure_ascii=False, indent=1), encoding="utf-8")
+        print(f"\nEscrito: {args.salida}")
+    return 0
+
+
 # --- serie-articulacion / salto-articulacion --------------------------------------------
 
 def _art(nombre: str):
@@ -652,6 +737,11 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--grupo", action="append", default=None)
     p.add_argument("--salida", default=None)
     p.set_defaults(fn=cmd_fleisig_brazo)
+
+    p = sub.add_parser("ventana-brazo", help="barrido del adelanto de la ventana del brazo")
+    p.add_argument("--grupo", action="append", default=None)
+    p.add_argument("--salida", default=None)
+    p.set_defaults(fn=cmd_ventana_brazo)
 
     p = sub.add_parser("serie-articulacion", help="serie fotograma a fotograma")
     p.add_argument("clip"); p.add_argument("articulacion"); p.add_argument("desde", type=int); p.add_argument("hasta", type=int)
