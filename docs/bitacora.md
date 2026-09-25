@@ -6,6 +6,89 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-09-25 — Fase B: extracción de pose y primera lectura (saque de perfil)
+
+**Rama:** `etapa/4-cinematica`.
+
+### Qué se hizo
+
+- `extraer_pose` y `analizar` recorren `fase-a/` y `fase-b/` (mismas `CARPETAS_EXCLUIDAS` y
+  `FASES_POR_DEFECTO` que el catalogador) y saltean `originales/`.
+- `analizar` deducía `corpus_publico=True` siempre; ahora sale de la columna `fuente` del
+  catálogo (`propio` → sin caveat; sin dato → caveat, el error seguro).
+- Extracción de pose de fase-b (~2 min por clip, CPU).
+
+### Primera lectura: saque de perfil (6 repeticiones, 240 fps reales)
+
+Cualitativa, sin umbrales tocados. Ver la tabla completa en la conversación de la sesión.
+
+- **Pelvis-torso:** las 3 repeticiones auditables dan `torso → pelvis` (4, 12 y 13 ms):
+  mismo rango invertido que el corpus público. No se estabilizó con condiciones controladas.
+- **Brazo (codo):** 4 de 6 bajo el techo (4000–6100 °/s, 1,7–2,6× Fleisig); una en 37 124.
+- **Inversiones de z:** 8–28 por clip (público: 16–45 / 3): **no bajaron** con `z` métrica.
+- **Pelvis 1000–1400 °/s (2,3–3,2× Fleisig 440)** y ~1,4× más rápida que el torso
+  (Fleisig: al revés). Revisado el cálculo: **no hay error** (fórmula y `fps_efectivos`
+  correctos; el pico casi no cambia con el paso k=1,2,4,8; ~todo en el plano x–z; curva de
+  ángulo suave; caderas bien ubicadas en los fotogramas). No se puede distinguir "gira así"
+  de "cadera lejana mal estimada por la oclusión del perfil" sin una medición independiente.
+
+### Comparación entre gestos y encuadres (36 repeticiones, 1 jugador, 1 sesión)
+
+Medianas por grupo (pico p99 de ω sobre el clip completo, `puntos_mundo` filtrados, °/s;
+6 clips por grupo; **exploratorio**, umbrales sin tocar). Referencia de Fleisig: **solo saque**.
+
+| grupo | pelvis | torso | pelvis/torso | caída pelvis k=1→8 | inv. z por clip (mediana) | orden pelvis-torso |
+| --- | --- | --- | --- | --- | --- | --- |
+| saque perfil | 1174 | 791 | 1,46 | 4 % | 14,5 | 3 auditables: 3 invertidas (−4/−12/−13 ms) |
+| saque tres cuartos | 975 | 837 | 1,15 | 4 % | 5 | 6 auditables: 4 pelvis primero (0–13 ms), 1 empate 0 ms, 1 invertida (−13 ms) |
+| drive perfil | 702 | 628 | 1,12 | 3 % | 9,5 | — |
+| drive tres cuartos | 814 | 680 | 1,19 | 3 % | 7,5 | — |
+| revés perfil | 324 | 435 | 0,72 | 3 % | 5,5 | — |
+| revés tres cuartos | 257 | 507 | 0,46 | 3 % | 5 | — |
+
+- **Sensibilidad al paso (pregunta 3):** la pelvis cae 3–4 % entre k=1 y k=8 en los seis
+  grupos: no es un artefacto del saque; es una señal suave en todos los gestos.
+- **Hipótesis del salto: resultado mixto, no confirmada.** El revés (sin vuelo) no muestra
+  exceso (pelvis 257–324 °/s, pelvis/torso < 1, como en Fleisig). El drive (sin vuelo)
+  mantiene pelvis ≥ torso y 700–800 °/s. El orden de gestos saque > drive > revés se repite
+  en ambos encuadres; el encuadre mueve la magnitud (±20 %) sin cambiar ese orden.
+- **Tres cuartos vs perfil (saque):** mejora el orden auditable (6/6 vs 3/6) y baja las
+  inversiones de z (5 vs 14,5). Pero de los 5 "pelvis primero/empate", 3 quedan a ≤ 1
+  fotograma (4,17 ms): en el límite de resolución.
+- **Segmentación automática:** parte en 2–3 ventanas clips que contienen 1 repetición
+  (revés perfil rep02, revés tres cuartos rep04/rep05, etc.). Para el Criterio 1 la unidad
+  debe ser el clip (1 repetición), no las ventanas.
+- **Drive:** varios clips dan el orden `brazo > torso > pelvis` (invertido); no reproduce la
+  cadena que sí dio `drive_lateral_01` del corpus público. Sin analizar aún.
+- **Revés tres cuartos, brazo:** ω ~850–980 °/s y casi constante con k (2 % de caída), muy
+  distinto del resto (2000–5000 °/s, ~65–80 % de caída). Sospechoso; sin analizar aún.
+- Límites: n = 6 por grupo, un jugador, una sesión; detector de vuelo aproximado (tobillos
+  en imagen); p99 sobre el clip completo, no sobre la ventana del gesto.
+
+### Hipótesis a contrastar (Valentín, 2026-09-25)
+
+El saque tiene fase aérea y drive/revés no. **Si la pelvis de drive y revés se acerca más a
+la referencia de Fleisig que la del saque, el salto explica el exceso** y no el ángulo de
+cámara. Si mantiene el mismo exceso, apunta a la estimación de la cadera en perfil. Se
+contrasta con el mismo análisis de sensibilidad al paso (k=1,2,4,8) aplicado a drive/revés.
+
+### Candidato de recalibración (NO aplicado)
+
+El techo de plausibilidad por segmento (Fleisig × `MARGEN_PLAUSIBILIDAD`) descartó picos de
+pelvis de 1325 y 1386 °/s (techo 1320) que se comportan como movimiento continuo. Un error
+de detección real es un salto puntual: **no sobrevive al cambio de paso de muestreo**.
+Criterio candidato, "pico sostenido": comparar el pico a k=1 contra k=4 (o k=8); si se
+mantiene (p. ej. cae menos de ~10 %), es movimiento; si colapsa, es glitch. Reemplazaría o
+complementaría el techo fijo. **Límite conocido:** un pico real pero breve (el brazo en el
+impacto dura <30 ms) también cae al promediar más fotogramas (saque de perfil: el brazo cae
+~70 % entre k=1 y k=8, la pelvis solo ~4 %). El criterio discrimina bien en segmentos lentos
+(pelvis, torso) y **no** debe aplicarse tal cual al brazo; para el brazo hay que buscar otra
+firma (p. ej. duración del pico a mitad de altura). **No se toca ahora**: recalibrar sobre estas mismas
+repeticiones contaminaría la medición del Criterio 1 (hace falta separar datos de ajuste y
+de medición: p. ej. ajustar con perfil, medir con la sesión 2).
+
+---
+
 ## 2026-09-24 — Catalogador: soporte de `fase-b/`
 
 **Rama:** `etapa/4-cinematica`. Primera sesión de Fase B: 6 repeticiones del saque de perfil
@@ -246,6 +329,8 @@ hito C1). Trabajar en `etapa/4-cinematica`.
    - **Inversiones de z:** ¿cuántas veces dispara `detectar_inversiones_z` con `z`
      métrica real? Debería ser mucho menos que las 16–45/clip del corpus público.
 5. **Recalibrar con datos reales** (todo con `escala_temporal_conocida = True`):
+   - **Criterio de "pico sostenido vs. paso de muestreo"** como alternativa al techo fijo
+     (ver entrada 2026-09-25); no calibrar y medir sobre las mismas repeticiones.
    - `MARGEN_PLAUSIBILIDAD` del techo (hoy ×3; sin la incertidumbre del factor
      estimado, probablemente conviene bajarlo). `_FLEISIG_MAX` / `techo_velocidad` en
      `engine/sequencing.py`.

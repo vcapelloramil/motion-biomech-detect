@@ -22,7 +22,8 @@ from app.engine.pose import cache as pose_cache
 from app.engine.pose.base import PoseBackend, SecuenciaPose
 
 EXTENSIONES_VIDEO = {".mp4", ".mov", ".avi", ".mkv", ".m4v"}
-CARPETAS_EXCLUIDAS = {"compilaciones"}
+# Mismas carpetas de origen y mismas fases que el catalogador (una sola fuente de verdad).
+from app.catalogador import CARPETAS_EXCLUIDAS, FASES_POR_DEFECTO  # noqa: E402
 
 
 def crear_backend(nombre: str) -> PoseBackend:
@@ -81,9 +82,10 @@ def extraer(
     return seq, False
 
 
-def _listar_clips(directorio: Path, nombres: list[str] | None) -> list[Path]:
+def _listar_clips(directorios: list[Path], nombres: list[str] | None) -> list[Path]:
     todos = sorted(
         p
+        for directorio in directorios if directorio.is_dir()
         for p in directorio.rglob("*")
         if p.suffix.lower() in EXTENSIONES_VIDEO
         and not (CARPETAS_EXCLUIDAS & set(p.relative_to(directorio).parts))
@@ -103,7 +105,7 @@ def main(argv: list[str] | None = None) -> int:
 
     parser = argparse.ArgumentParser(description="Extrae coordenadas de pose del corpus.")
     parser.add_argument("--dir", type=Path, default=None,
-                        help="Directorio de clips (default: KINETIQ_DATA_DIR/fase-a).")
+                        help="Directorio de clips (default: fase-a/ y fase-b/ de KINETIQ_DATA_DIR).")
     parser.add_argument("--clip", action="append", default=None,
                         help="Nombre de archivo a procesar (repetible). Default: todos.")
     parser.add_argument("--backend", default="mediapipe", choices=["mediapipe", "fake"])
@@ -114,13 +116,13 @@ def main(argv: list[str] | None = None) -> int:
     from app.config import get_cache_dir, get_data_dir
 
     base_datos = get_data_dir()
-    directorio = args.dir or base_datos / "fase-a"
+    directorios = [args.dir] if args.dir else [base_datos / f for f in FASES_POR_DEFECTO]
     verificado = base_datos / "catalogo-verificado.csv"
     cache_dir = get_cache_dir()
 
-    clips = _listar_clips(directorio, args.clip)
+    clips = _listar_clips(directorios, args.clip)
     if not clips:
-        print(f"No hay clips bajo {directorio}.")
+        print("No hay clips bajo " + ", ".join(map(str, directorios)) + ".")
         return 1
 
     print(f"Backend: {args.backend}  | caché: {cache_dir}")

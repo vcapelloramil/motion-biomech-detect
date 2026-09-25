@@ -13,6 +13,7 @@ import csv
 import sys
 from pathlib import Path
 
+from app.catalogador import CARPETAS_EXCLUIDAS, FASES_POR_DEFECTO
 from app.engine.pipeline import procesar_e3
 from app.engine.pose import cache as pose_cache
 from app.engine.pose.mediapipe_backend import MediaPipeBackend
@@ -20,15 +21,27 @@ from app.engine.sequencing import secuenciar
 from app.engine.segmentos_corporales import ORDEN_ESPERADO, validar_lado
 
 
-def lado_dominante_de(catalogo: Path, nombre: str) -> str | None:
+def _campo_de(catalogo: Path, nombre: str, campo: str) -> str | None:
     if not catalogo.is_file():
         return None
     with catalogo.open(encoding="utf-8", newline="") as f:
         for fila in csv.DictReader(f):
             if fila.get("archivo") == nombre:
-                v = (fila.get("lado_dominante") or "").strip().lower()
+                v = (fila.get(campo) or "").strip().lower()
                 return v or None
     return None
+
+
+def lado_dominante_de(catalogo: Path, nombre: str) -> str | None:
+    return _campo_de(catalogo, nombre, "lado_dominante")
+
+
+def es_corpus_publico(catalogo: Path, nombre: str) -> bool:
+    """True salvo que el catálogo marque el clip como material propio.
+
+    Si no se sabe la fuente se asume público: el caveat de más es el error seguro.
+    """
+    return _campo_de(catalogo, nombre, "fuente") != "propio"
 
 
 def _parse_manual(txt: str | None) -> list[tuple[float, float]] | None:
@@ -64,9 +77,13 @@ def main(argv: list[str] | None = None) -> int:
 
     base = get_data_dir()
     catalogo = base / "catalogo.csv"
-    video = next((p for p in (base / "fase-a").rglob(args.clip) if p.is_file()), None)
+    video = next(
+        (p for fase in FASES_POR_DEFECTO for p in (base / fase).rglob(args.clip)
+         if p.is_file() and not (CARPETAS_EXCLUIDAS & set(p.relative_to(base / fase).parts))),
+        None,
+    )
     if video is None:
-        print(f"No se encontró {args.clip} bajo {base / 'fase-a'}.")
+        print(f"No se encontró {args.clip} bajo {', '.join(FASES_POR_DEFECTO)} de {base}.")
         return 1
 
     lado = args.lado or lado_dominante_de(catalogo, args.clip)
@@ -93,7 +110,7 @@ def main(argv: list[str] | None = None) -> int:
         tramos_excluidos=filt.tramos_excluidos,
         brazo_via=args.brazo_via,
         manual=_parse_manual(args.manual),
-        corpus_publico=True,
+        corpus_publico=es_corpus_publico(catalogo, args.clip),
     )
 
     print(f"clip: {args.clip}   lado dominante: {lado}   brazo vía: {args.brazo_via}")

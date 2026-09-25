@@ -81,6 +81,7 @@ python -m app.catalogador --sin-hash          # sin verificación de huella (rá
 python -m app.catalogador --dir RUTA          # una sola carpeta
 
 # Extraer y cachear las coordenadas de pose de los clips (Etapa 2).
+# Recorre fase-a/ y fase-b/ (sin originales/ ni compilaciones/).
 python -m app.extraer_pose                     # todos los clips, MediaPipe
 python -m app.extraer_pose --clip zverev_saque_lateral_01.mp4
 python -m app.extraer_pose --backend fake --max-frames 30
