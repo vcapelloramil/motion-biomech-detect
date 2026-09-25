@@ -58,12 +58,27 @@ sube el motor a `0.4.1`.
 - **Todo lo medido del brazo antes de 0.4.1 queda invalidado** (magnitudes y órdenes). Los JSON
   de `docs/resultados/e4-fase-b-exploratorio-*.json` sin sufijo son de 0.4.0; los de 0.4.1 llevan
   el sufijo `-e3-0.4.1`.
-- **Decisión 008 (brazo = hombro→codo, techo ×3):** se apoyaba en una comparación contaminada. En
-  la comparación de la decisión, el codo "plausible" era justo el que se había filtrado y la
-  muñeca "implausible" la que quedaba cruda. Con las dos filtradas, la muñeca da entre 0,95 y 2,0
-  veces el codo (mediana 1,39), no 10–40 veces, y la cobertura es la misma (0,83 vs 0,84). La
-  elección del codo no se revoca aquí, pero su justificación cambia: ver el informe en la
-  bitácora. El techo ×3 (7104 °/s) queda a 3–10 veces del brazo filtrado típico; su justificación
-  de "ruido de MediaPipe" ya no aplica. **No se recalibra todavía.**
+- **Decisión 008 (techo ×3):** el techo ×3 (7104 °/s) queda a 3–10 veces del brazo filtrado
+  típico; su justificación de "ruido de MediaPipe" ya no aplica. **No se recalibra todavía.**
+- **PENDIENTE DE REDACCIÓN — Capítulo 4: la justificación empírica de `brazo = hombro→codo`
+  (decisión 008, punto 2) ya no se sostiene con las series filtradas correctamente.**
+  - *Lo que se afirmó:* "la muñeca da 15 000–42 000 °/s en 3 de 4 clips; con el codo los valores son
+    plausibles (1 700–2 300 °/s)".
+  - *Por qué no vale:* en esa comparación la serie del codo estaba **filtrada** y la de la muñeca
+    **cruda** en dos de los cuatro clips (`zverev_saque_lateral_01`: 2126 vs 10 076 °/s;
+    `drive_lateral_01`: 1567 vs 10 322); en `zverev_saque_lateral_02` ambas crudas (16 283 vs
+    26 063); y en `zverev_saque_lateral_03` ambas filtradas daban lo mismo (1821 vs 1756). La
+    diferencia entre codo y muñeca estaba confundida con qué serie se filtró.
+  - *Con E3 0.4.1* (ambas filtradas, n = 13 clips): muñeca/codo = 0,95–2,0 (mediana 1,39), no
+    10–40; valores de la muñeca plausibles (1500–3100 °/s en el corpus público); cobertura de
+    datos válidos equivalente (codo 0,83, muñeca 0,84). Fuente:
+    `docs/resultados/e3-retro-comparar-brazo-corpus-publico.json`.
+  - *Lo que se mantiene:* la decisión de usar el codo **por el argumento anatómico** (el codo es
+    el eslabón del segmento "brazo" de la cadena; antebrazo y mano son eslabones posteriores). No
+    se reabre en código. Cambia solo la justificación.
+  - *Qué hacer al redactar:* no escribir que la muñeca se descartó por valores disparatados.
+    Decir que se eligió el codo por criterio anatómico y que la comparación empírica inicial
+    estaba contaminada por un defecto de filtrado, corregido en 0.4.1. Es un ajuste de
+    redacción pendiente, como el de la velocidad de inferencia (decisión 006).
 - **Pendientes (no aplicados):** umbral de salto imposible en unidades físicas; corte de Winter
   por clip (8–9 Hz) para el brazo; ambas cosas se calibran separando datos de ajuste y de medición.

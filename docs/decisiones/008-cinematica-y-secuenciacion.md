@@ -61,6 +61,13 @@ Fleisig ya son el máximo de la élite mundial: un amateur no debería acercarse
 que ×3 deja margen amplio para señal legítima y sigue siendo un orden de magnitud
 por debajo de los *glitches* observados (15 000–42 000 °/s).
 
+> **Nota (25/9/2026):** esos *glitches* de 15 000–42 000 °/s eran, en buena parte, series
+> sin filtrar (decisión 010). Con E3 0.4.1 el codo filtrado del corpus público queda en
+> 0,40–0,94× Fleisig, así que el argumento del "ruido de MediaPipe" para el ×3 ya no aplica.
+> El techo no se recalibró todavía. Además, el valor de Fleisig para el brazo (≈2368 °/s) es,
+> según los datos de la tesis, el del **hombro**, y un vector hombro→codo no puede ver la
+> rotación axial del húmero: **por verificar contra el artículo si es la referencia adecuada.**
+
 | segmento | Fleisig (°/s) | techo (×3, °/s) |
 | --- | --- | --- |
 | pelvis | 440 | 1 320 |
@@ -112,6 +119,12 @@ después al pasar `brazo` a codo (ver punto 2).
    romperse.** El manejo de no auditables funciona.
 
 2. **La muñeca de la raqueta no es auditable en el saque/drive del corpus público.**
+   > **Nota (25/9/2026) — la justificación empírica de este punto NO se sostiene.** La
+   > comparación estaba confundida por un defecto de filtrado de E3 (el codo se había
+   > filtrado y la muñeca no). Con las series filtradas correctamente la muñeca da 0,95–2,0
+   > veces el codo, no 10–40. La decisión de usar el codo se mantiene por el criterio
+   > **anatómico**, no por este dato. **No citar este párrafo en la tesis.** Ver decisión 010.
+   >
    `HOMBRO→MUNECA` da 15 000–42 000 °/s en 3 de 4 clips: MediaPipe pierde el punto
    de la mano en el fotograma más rápido. `HOMBRO→CODO` (brazo superior, el segmento
    anatómicamente correcto de la "cadena": el antebrazo y la mano son eslabones

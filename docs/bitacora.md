@@ -6,9 +6,66 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
-## 2026-09-25 — Fase B: extracción de pose y primera lectura (saque de perfil)
+## 2026-09-25 — Fase B: extracción de pose, ventana anclada y corrección de E3 (motor 0.4.1)
 
-**Rama:** `etapa/4-cinematica`.
+**Rama:** `etapa/4-cinematica` (sin merge, sin tag). Motor `0.4.1`. `pytest -m "not slow"` →
+**189 en verde**; los tests lentos que usan E3 sobre pose real (5) también pasan.
+
+### Estado al cierre de la sesión
+
+**Lo que se sostiene (medido con E3 0.4.1, 36 repeticiones propias, 1 jugador, 1 sesión):**
+- Pelvis y torso NO se vieron afectados por el defecto de E3 (diferencia 0,0000 °/s entre 0.4.0 y
+  0.4.1). Sus conclusiones se mantienen: orden pelvis→torso en el límite de resolución (desfases
+  de ±4–13 ms; 1 fotograma = 4,17 ms), pelvis más rápida que el torso en el saque (1,15–1,46×),
+  gradiente de gestos saque > drive > revés en ambos encuadres.
+- El brazo, con la serie bien filtrada: p99 de ω a k=1 de 790–2165 °/s (mediana por grupo),
+  caída k1→k8 de 1–10 %. La "anomalía del revés de tres cuartos" era el único grupo bien filtrado.
+- **Patrón por encuadre (ancla de torso): brazo DESPUÉS del torso en saque de tres cuartos, drive
+  de tres cuartos y revés de tres cuartos; brazo ANTES en drive de perfil (4/5) y revés de perfil
+  (5/6).** Robusto al corte del codo entre 8 y 15 Hz en esos cinco grupos (en revés de perfil,
+  a 6 Hz baja a 3/6); magnitud del adelanto
+  dependiente del corte (drive perfil: −179 ms a 6 Hz, −33 ms a 15 Hz; revés perfil: −10 a −19 ms,
+  casi simultáneo). **El saque de perfil NO es robusto:** con el codo a ≤ 8 Hz el brazo llega
+  después (+62 a +67 ms, 0/3 con brazo primero); a ≥ 10 Hz llega antes (−58 a −67 ms, 2/3). n = 3.
+
+**Lo que NO está resuelto / en revisión:**
+- El pico global del brazo puede capturar la caída de la raqueta (preparación) y no el golpe
+  (fotogramas de drive rep03/rep04). La ventana acotada del brazo **no se implementó**: Valentín
+  quiere ver primero que el patrón por encuadre se sostenga con las magnitudes ya corregidas
+  (ver arriba) antes de acotar algo que pueda enmascararlo.
+- Referencia de Fleisig para el brazo (≈ 2368 °/s): en la tesis la tabla la etiqueta "Hombro"; un
+  vector hombro→codo no ve la rotación axial del húmero, así que **podría no ser una referencia
+  comparable** (y entonces "0,55× Fleisig" no significa nada). Por verificar contra el artículo.
+- Umbral de salto imposible (0,5 torsos ≈ 62 m/s): sigue sin recalibrarse. Punto 2 pendiente.
+- Decisión codo vs muñeca: NO se reabre en código; la justificación empírica de la decisión 008
+  quedó invalidada y está registrada como **pendiente de redacción del Capítulo 4** en la
+  decisión 010 (y con una nota de aviso en la 008).
+- Sin merge/tag de la Etapa 4; 4.7 y 4.8 y el punto de decisión siguen pendientes (los umbrales
+  aún no están congelados: no calibrar y medir sobre las mismas repeticiones).
+
+### Corte de Winter para el brazo (2026-09-25)
+
+Pregunta de Valentín: ¿un solo corte por clip sigue siendo válido para el brazo? **No se tocó
+código ni contrato** (`trazabilidad.filtro.corte_hz`). Datos: `docs/resultados/e3-corte-brazo-fase-b.json`,
+`python -m app.diagnosticos_e3 corte-brazo`.
+
+- **El corte del clip ya lo fija el brazo:** `elegir_corte` toma el MÁXIMO entre los cortes de las
+  series de codo y muñeca (ambos lados). No sale de pelvis/torso.
+- **Los cortes por articulación son parecidos:** codo 4–11 Hz (casi todos 7–9), muñeca 7–9,
+  pelvis 5–9, torso 6–9; el corte del clip es 8–11 (mayoría 8–9). Diferencia por articulación
+  ≲ 2 Hz: **no hay evidencia de que el brazo necesite un corte propio.**
+- **No es el corte lo que hace ver "bajo" al brazo:** barriendo solo el corte del codo, el p99
+  varía entre −2 % y +28 % entre 6 y 10 Hz (más al ir a 20 Hz), y a la vez la caída k1→k8 crece (p. ej. drive
+  tres cuartos 10 % → 28 %, revés perfil 4 % → 25 %): más corte mete ruido, no revela movimiento.
+- **Debilidades reales de la implementación (no del criterio "un corte por clip"):**
+  (a) Winter concatena los valores válidos saltando los huecos: las uniones son discontinuidades;
+  usando el tramo continuo más largo el corte del clip cambia en 19 de 36 clips (de −1 a +3 Hz,
+  mediana 0, media +0,4);
+  (b) el corte de una serie individual es inestable (codo 4 Hz en un clip); el máximo entre ~12
+  series lo vuelve conservador; (c) el corte tiene efecto sobre el orden del saque de perfil
+  (arriba): conviene registrar la sensibilidad en la trazabilidad.
+- Recomendación: **mantener un corte por clip y el contrato**; si se quiere tocar algo, arreglar
+  (a) sin cambiar el contrato. No hecho: espera la decisión de Valentín.
 
 ### Qué se hizo
 
@@ -113,6 +170,98 @@ pelvis→torso solo si se compara contra el otro segmento (el ancla queda en el 
   2590–2830. El brazo queda último en 5/6: lo anómalo es la magnitud, no el orden.
 - Criterio de Valentín cumplido: ambas anomalías persisten con la ventana bien anclada, así
   que se tratan como hallazgos a investigar, no como artefactos de ventana.
+
+### CORRECCIÓN (2026-09-25, misma sesión): las "anomalías del brazo" vienen de E3 y de la validación
+
+La serie fotograma a fotograma del codo (drive perfil rep04) y una revisión de `procesar_e3`
+**invalidan la lectura anterior** ("ambas anomalías persisten → hallazgos"). Lo que se vio:
+
+- **No es un salto de un fotograma.** Entre 0,196 y 0,242 s (fotogramas 47–58) el codo derecho
+  se mueve 5,0 cm/fotograma (mediana; máx. 11,9 cm = 28 m/s), con confianza 0,65–0,98 y `z`
+  alternando (0,168 → 0,225 → 0,172). Es una ráfaga de jitter, no un salto ni una inversión.
+- **Por qué la validación no lo atrapó:** (1) la confianza está por encima de 0,5; (2) el
+  umbral de salto imposible es 0,5 torsos = 25,7 cm/fotograma = **62 m/s** (torso 0,514 m): el
+  máximo de todo el clip es 24,4 cm (0,47 torsos) y el de la ráfaga 11,9 cm (0,23); un codo
+  real no supera ~10 m/s (≈ 4 cm/fotograma) y 79 de 299 fotogramas válidos lo superan;
+  (3) no hay cambio de signo de `z`. El umbral detecta teletransportes, no jitter.
+- **Hueco en E3 (`pipeline.py`, "Simplificación"):** toda serie con algún NaN (tramo largo
+  excluido, > 5 fotogramas) **se deja SIN filtrar completa**. En rep04 el codo tiene 223 de 368
+  fotogramas en NaN (60 %). Resultado: el codo crudo (ruidoso) entra a E4 contra un hombro ya
+  filtrado. Sobre las 36 repeticiones: **pelvis 0 % y torso 0 % sin filtrar; hombro/codo
+  derecho sin filtrar en 6/6 clips de cinco grupos** y en 2/6 del revés de tres cuartos.
+- **Lo que explica todo:** en el revés de tres cuartos, los 4 clips donde el brazo SÍ se filtra
+  dan 800–1000 °/s, planos con k (2 % de caída); los 2 sin filtrar dan 2590–2830 °/s y caen
+  ~58 %, igual que el resto de los grupos (58–81 %). La "anomalía" era el único grupo bien
+  filtrado; lo anómalo son los demás.
+- Diagnóstico (interpolando y filtrando el codo a 8 Hz, solo para mirar): en los fotogramas
+  47–58 la ω pasa de 4790 a 386 °/s. La cifra de todo el clip de ese diagnóstico NO es válida
+  (interpolé 223 fotogramas de hueco) y 8 Hz podría ser bajo para el brazo.
+
+**Consecuencias:**
+- Todas las velocidades del **brazo** reportadas hasta acá (incl. "1,7–2,6× Fleisig", los picos
+  de 4000–6100 °/s, el orden `brazo > torso > pelvis` del drive) están contaminadas por codo
+  sin filtrar: **no son evidencia**. (Ver la re-medición de abajo: las MAGNITUDES eran ruido;
+  el ORDEN del drive de perfil persiste aunque con un adelanto mucho menor. Esta frase decía
+  antes "el drive invertido NO es un hallazgo fisiológico": era demasiado fuerte.)
+- Pelvis y torso NO están afectados por este hueco: las conclusiones sobre ellos se mantienen.
+- La ventana acotada del brazo sigue siendo razonable, pero es secundaria: primero E3 y el
+  umbral de salto.
+
+**Candidatos (NO aplicados; tocan E3 y validación, y cambian todo lo medido del brazo):**
+1. E3: filtrar los segmentos continuos válidos de una serie con NaN en vez de dejarla cruda.
+2. Umbral de salto imposible en unidades físicas (cm/fotograma o m/s) y calibrado, no 0,5
+   torsos; evaluarlo separando datos de ajuste y de medición.
+3. Chequeo de consistencia entre pasos k (ver "pico sostenido"), con su límite para el brazo.
+4. Revisar el corte de Winter único por clip (8–9 Hz) para el brazo.
+
+Los diagnósticos que se hicieron primero en un scratchpad (serie del codo, conteo de series sin
+filtrar, comparación por grupo, salto por fotograma, montaje de fotogramas, ángulo en el plano)
+quedaron **versionados** en `backend/app/diagnosticos_e3.py` (principio 5).
+
+### Re-medición con E3 corregido (motor 0.4.1) sobre los 36 clips — validada por Valentín (25/9)
+
+**Estado:** Valentín validó esta re-medición el 25/9 (la conclusión previa sobre el drive y el
+revés de tres cuartos quedó reemplazada por ésta). Punto 1 de E3 hecho (decisión 010, `dsp.py`,
+`pipeline.py`, pruebas `test_dsp_segmentos.py` y `test_pipeline_e3_huecos.py`, que fallan con el
+E3 anterior). Los puntos 2 (umbral de salto) y 3 (corte de Winter) NO se tocaron.
+Datos: `docs/resultados/e4-fase-b-exploratorio-<modo>-e3-0.4.1.json` (0.4.0: sin sufijo).
+
+- **Regresión:** pelvis y torso idénticos entre 0.4.0 y 0.4.1 (diferencia máxima 0,0000 °/s).
+- **Brazo, p99 de ω a k=1 (mediana por grupo, viejo → nuevo, °/s):** saque perfil 4847 → 1300;
+  saque tres cuartos 3771 → 1371; drive perfil 3857 → 790; drive tres cuartos 6600 → 2165; revés
+  perfil 5226 → 953; revés tres cuartos 940 → 908 (ya estaba filtrado). Caída k=1→8: 63–81 % →
+  1–10 %. **La "anomalía" del revés de tres cuartos desaparece**: era el único grupo bien filtrado.
+- **Drive de perfil: la inversión persiste, más chica.** Brazo antes del torso en 4 de 5
+  repeticiones con ancla de torso, pero con un adelanto de 38–92 ms (antes 133–288 ms) y
+  velocidades de 380–676 °/s (antes 2594–4546). Con el fotograma: el pico cae en la caída de la
+  raqueta, justo antes del golpe hacia adelante. Drive tres cuartos: brazo después del torso en
+  5 de 6 (96–146 ms).
+- **Revés de perfil: aparece brazo primero en 5 de 6** (−12 a −233 ms; antes 0, porque casi
+  no era auditable). Saque perfil: brazo después del torso en 3/3 auditables (+62 a +79 ms) con
+  1072–1356 °/s. Saque tres cuartos: pelvis>torso>brazo en 5/6, sin cambios.
+- Patrón: con el brazo bien filtrado, **en perfil el pico del brazo (hombro→codo) tiende a llegar
+  ANTES que el del torso en drive y revés; en tres cuartos y en el saque, después.** Candidata
+  a explicación (no probada): el pico global del brazo captura la caída de la raqueta y no el
+  golpe (ventana de búsqueda del brazo); alternativa: el ángulo de perfil.
+- **Cuidado con las magnitudes:** con el corte de Winter por clip de 8–9 Hz el brazo probablemente
+  está subestimado (el saque queda en ~0,55× Fleisig). Es el punto 3.
+
+**Revisión retroactiva del corpus público** (`diagnosticos_e3 comparar-brazo`; A = E3 viejo sin
+detector de z = estado de la decisión 008):
+- En A, el codo "plausible" era el que SÍ se había filtrado y la muñeca "implausible" la que
+  quedaba cruda: `zverev_saque_lateral_01` (codo filtrado 2126 vs muñeca cruda 10 076),
+  `drive_lateral_01` (1567 vs 10 322). En `zverev_saque_lateral_03` ambas estaban filtradas y daban
+  lo mismo (1821 vs 1756). En `_02` ambas crudas (16 283 vs 26 063). La preferencia por el codo
+  estaba **confundida con qué serie se filtraba**.
+- Con E3 nuevo (C): muñeca/codo = 0,95–2,0 (mediana 1,39, n = 13), no 10–40; cobertura igual
+  (codo 0,83, muñeca 0,84). La decisión codo-vs-muñeca **no se revoca aquí**, pero su
+  justificación original ("la muñeca da 15 000–42 000 °/s") no se sostiene: hay que decidirla de
+  nuevo con datos limpios (anatomía: el codo es el eslabón del "brazo" de la cadena; desenfoque de
+  la muñeca en el impacto sigue siendo un argumento).
+- **Techo ×3 (Fleisig × 3 = 7104 °/s):** el codo filtrado del corpus público está en 0,40–0,94×
+  Fleisig (946–2234 °/s). Su justificación de "ruido de MediaPipe" ya no aplica (el ruido era el
+  hueco). Ojo: en el corpus público la escala temporal es estimada, así que estos múltiplos son
+  aproximados. No se recalibra todavía.
 
 ### Hipótesis a contrastar (Valentín, 2026-09-25)
 

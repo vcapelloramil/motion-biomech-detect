@@ -10,6 +10,10 @@ Subcomandos (desde backend/):
                       de inversión de z (v0.3.0); B) E3 viejo con detector (0.4.0);
                       C) E3 nuevo con detector (0.4.1). Sirve para revisar de forma
                       retroactiva la elección del codo y el techo de plausibilidad ×3.
+  corte-brazo         ¿Un solo corte de Winter por clip sirve para el brazo? Corte por serie
+                      (método actual: valores válidos concatenados vs tramo continuo más
+                      largo) y barrido del corte SOLO del codo (6–20 Hz; el resto en el corte
+                      del clip) sobre velocidad, orden y adelanto del brazo (ancla de torso).
   serie-articulacion  Serie fotograma a fotograma de una articulación (crudo vs filtrado,
                       confianza, ω del segmento, marcas de validación).
   salto-articulacion  Desplazamiento por fotograma de una articulación, en cm y en torsos.
@@ -35,7 +39,7 @@ from pathlib import Path
 import numpy as np
 
 from app.engine.dsp import butterworth_fase_cero, butterworth_fase_cero_por_segmentos
-from app.engine.pipeline import GAP_MAX_INTERPOLABLE, procesar_e3
+from app.engine.pipeline import GAP_MAX_INTERPOLABLE, _reconstruir_secuencia, procesar_e3
 from app.engine.pose import cache as pose_cache
 from app.engine.pose.articulaciones import ArticulacionCanonica as A
 from app.engine.pose.mediapipe_backend import MediaPipeBackend
@@ -43,7 +47,14 @@ from app.engine.preparacion import preparar_series
 from app.engine.segmentos_corporales import SegmentoCadena as S, vector_segmento
 from app.engine.validation import largo_torso, validar
 from app.engine.version import __version__ as version_motor
-from app.engine.winter import elegir_corte
+from app.engine.dsp import segmentos_continuos
+from app.engine.sequencing import secuenciar
+from app.engine.winter import (
+    ARTICULACIONES_RAPIDAS,
+    FACTOR_NIVEL_RUIDO,
+    analizar_serie,
+    elegir_corte,
+)
 
 _RESULTADOS = Path(__file__).resolve().parents[2] / "docs" / "resultados"
 ESTADOS = {
@@ -263,6 +274,146 @@ def cmd_comparar_brazo(args) -> int:
     return 0
 
 
+# --- corte-brazo ----------------------------------------------------------------------
+
+CORTES_BARRIDO = (6.0, 8.0, 10.0, 12.0, 15.0, 20.0)
+MIN_MUESTRAS_WINTER = 30          # el mismo mínimo que engine.winter.elegir_corte
+
+
+def corte_de_serie(serie: np.ndarray, *, fps: float, orden: int = 4) -> float | None:
+    """Corte de Winter de UNA serie (mismo criterio que ``elegir_corte``), o None si es corta."""
+    v = serie[~np.isnan(serie)]
+    if v.size <= MIN_MUESTRAS_WINTER:
+        return None
+    cortes, residuos, nivel = analizar_serie(v, fps=fps, orden=orden)
+    bajo = np.where(residuos <= nivel * FACTOR_NIVEL_RUIDO)[0]
+    return float(cortes[bajo[0]] if len(bajo) else cortes[-1])
+
+
+def tramo_mas_largo(serie: np.ndarray) -> np.ndarray:
+    """Tramo continuo (sin NaN) más largo; array vacío si no hay ninguno."""
+    tramos = segmentos_continuos(serie)
+    if not tramos:
+        return np.array([])
+    d, h = max(tramos, key=lambda t: t[1] - t[0])
+    return serie[d:h + 1]
+
+
+def cortes_por_articulacion(series: dict, *, fps: float, metodo: str) -> dict:
+    """{articulacion: [corte por coordenada]}; metodo: 'concatenado' (el del pipeline) o 'tramo'."""
+    salida: dict = defaultdict(list)
+    for (art, _c), s_ in sorted(series.items(), key=lambda kv: (kv[0][0].value, kv[0][1])):
+        base = s_ if metodo == "concatenado" else tramo_mas_largo(s_)
+        c = corte_de_serie(base, fps=fps)
+        if c is not None:
+            salida[art].append(c)
+    return dict(salida)
+
+
+def filtrar_con_cortes(series: dict, *, fps: float, corte_base: float, especiales: dict) -> dict:
+    """Filtra por segmentos con ``corte_base`` salvo las articulaciones de ``especiales``."""
+    return {
+        (art, c): butterworth_fase_cero_por_segmentos(
+            s_, fps=fps, corte_hz=especiales.get(art, corte_base), orden=4)[0]
+        for (art, c), s_ in series.items()
+    }
+
+
+def barrer_corte_codo(seq, filt, series, lado: str) -> dict:
+    """Barre el corte del codo dominante; devuelve {corte: métricas del brazo}."""
+    fps = seq.fps_efectivos
+    codo = A[f"CODO_{'DER' if lado == 'der' else 'IZQ'}"]
+    a, b = articulaciones_brazo(lado, "codo")
+    salida = {}
+    for x in CORTES_BARRIDO:
+        f = filtrar_con_cortes(series, fps=fps, corte_base=filt.corte_hz, especiales={codo: x})
+        u = vector_unitario(f, a, b)
+        w1, w8 = omega_k(u, fps, 1), omega_k(u, fps, 8)
+        sec = _reconstruir_secuencia(seq, f, espacio="mundo")
+        r, _ = secuenciar(sec, lado_dominante=lado, tramos_excluidos=filt.tramos_excluidos,
+                          brazo_via="codo", ancla="torso")
+        rep_ = r[0]
+        pb, pt = rep_.picos.get(S.BRAZO), rep_.picos.get(S.TORSO)
+        dt = None
+        if pb and pt and pb.auditable and pt.auditable:
+            dt = round((pb.instante_s - pt.instante_s) * 1000, 1)     # + => el brazo llega después
+        salida[str(x)] = {
+            "p99_k1": p99(w1), "p99_k8": p99(w8),
+            "orden": "".join(o.value[0] for o in rep_.orden_observado) if rep_.orden_observado else None,
+            "dt_torso_a_brazo_ms": dt,
+            "pico_brazo": round(pb.velocidad, 1) if pb and pb.auditable else None,
+        }
+    return salida
+
+
+def cmd_corte_brazo(args) -> int:
+    from app.config import get_data_dir
+
+    cat = _catalogo(get_data_dir())
+    grupos = args.grupo or [f"{g}_{e}" for g in ("saque", "drive", "reves") for e in ("perfil", "trescuartos")]
+    filas = {}
+    for nombre, r in cat.items():
+        g = f"{r.get('gesto')}_{r.get('angulo')}"
+        if r.get("fuente") != "propio" or "_rep" not in nombre or g not in grupos:
+            continue
+        seq, _ = cargar(nombre)
+        lado = r["lado_dominante"]
+        fps = seq.fps_efectivos
+        try:
+            filt = procesar_e3(seq)
+        except ValueError:
+            continue
+        series, _ = preparar_series(seq, filt.validacion, espacio="mundo", gap_max=GAP_MAX_INTERPOLABLE)
+        dom = "DER" if lado == "der" else "IZQ"
+        conc = cortes_por_articulacion(series, fps=fps, metodo="concatenado")
+        tram = cortes_por_articulacion(series, fps=fps, metodo="tramo")
+        rapidas = [c for a_, cs in conc.items() if a_ in ARTICULACIONES_RAPIDAS for c in cs]
+        rapidas_t = [c for a_, cs in tram.items() if a_ in ARTICULACIONES_RAPIDAS for c in cs]
+
+        def mx(d, *arts):
+            v = [max(d[a_]) for a_ in arts if a_ in d]
+            return max(v) if v else None
+
+        por_art = {
+            "pelvis": mx(conc, A.CADERA_IZQ, A.CADERA_DER),
+            "torso": mx(conc, A.HOMBRO_IZQ, A.HOMBRO_DER),
+            "hombro_dom": mx(conc, A[f"HOMBRO_{dom}"]),
+            "codo_dom": mx(conc, A[f"CODO_{dom}"]),
+            "muneca_dom": mx(conc, A[f"MUNECA_{dom}"]),
+        }
+        filas[nombre] = {
+            "grupo": g, "corte_clip_hz": filt.corte_hz,
+            "corte_rapidas_concatenado": max(rapidas) if rapidas else None,
+            "corte_rapidas_tramo_largo": max(rapidas_t) if rapidas_t else None,
+            "por_articulacion_concatenado": por_art,
+            "barrido_codo": barrer_corte_codo(seq, filt, series, lado),
+        }
+        print(f"{nombre[-22:]:22} corte clip {filt.corte_hz:4.1f} | tramo largo {filas[nombre]['corte_rapidas_tramo_largo']} | "
+              f"codo {por_art['codo_dom']} muñeca {por_art['muneca_dom']} pelvis {por_art['pelvis']} torso {por_art['torso']}")
+    por_grupo = defaultdict(list)
+    for f in filas.values():
+        por_grupo[f["grupo"]].append(f)
+    print("\nBarrido del corte del codo (mediana por grupo): p99 ω k=1 | caída k1→k8 | brazo primero | p>t>b | adelanto (ms, + = brazo después)")
+    for g, L in por_grupo.items():
+        print(f"\n{g} (corte clip mediano {np.median([f['corte_clip_hz'] for f in L]):.0f} Hz)")
+        for x in CORTES_BARRIDO:
+            k = str(x)
+            v1 = [f["barrido_codo"][k]["p99_k1"] for f in L if f["barrido_codo"][k]["p99_k1"]]
+            cai = [100 * (1 - f["barrido_codo"][k]["p99_k8"] / f["barrido_codo"][k]["p99_k1"])
+                   for f in L if f["barrido_codo"][k]["p99_k1"]]
+            ords = [f["barrido_codo"][k]["orden"] for f in L if f["barrido_codo"][k]["orden"]]
+            dts = [f["barrido_codo"][k]["dt_torso_a_brazo_ms"] for f in L
+                   if f["barrido_codo"][k]["dt_torso_a_brazo_ms"] is not None]
+            print(f"  codo a {x:4.0f} Hz: p99 {np.median(v1):6.0f} | caída {np.median(cai):3.0f}% | "
+                  f"brazo primero {sum(o[0] == 'b' for o in ords)}/{len(ords)} | p>t>b {sum(o == 'ptb' for o in ords)} | "
+                  f"adelanto {np.median(dts) if dts else float('nan'):5.0f}")
+    if args.salida:
+        Path(args.salida).write_text(json.dumps({"version_motor": version_motor, "clips": filas},
+                                                ensure_ascii=False, indent=1), encoding="utf-8")
+        print(f"\nEscrito: {args.salida}")
+    return 0
+
+
 # --- serie-articulacion / salto-articulacion --------------------------------------------
 
 def _art(nombre: str):
@@ -406,6 +557,11 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--clip", action="append", default=None, help="default: todo el corpus público con lado dominante")
     p.add_argument("--salida", default=None)
     p.set_defaults(fn=cmd_comparar_brazo)
+
+    p = sub.add_parser("corte-brazo", help="¿un corte por clip sirve para el brazo?")
+    p.add_argument("--grupo", action="append", default=None)
+    p.add_argument("--salida", default=None)
+    p.set_defaults(fn=cmd_corte_brazo)
 
     p = sub.add_parser("serie-articulacion", help="serie fotograma a fotograma")
     p.add_argument("clip"); p.add_argument("articulacion"); p.add_argument("desde", type=int); p.add_argument("hasta", type=int)
