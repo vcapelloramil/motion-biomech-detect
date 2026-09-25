@@ -209,8 +209,23 @@ def segmentar(
     *,
     brazo_via: str = "codo",
     manual: list[tuple[float, float]] | None = None,
+    clip_completo: bool = False,
 ) -> list[Ventana]:
+    """Ventanas de repetición. Cuatro caminos:
+
+    - ``manual``: las que se pasan (marcado del autor);
+    - ``clip_completo``: todo el clip es UNA repetición (material ya pre-cortado, como
+      la Fase B: no se intenta partirlo);
+    - automático: valles de quietud (sugerencia revisable);
+    - fallback del automático: todo el clip si no encuentra ninguna ventana.
+
+    ``manual`` y ``clip_completo`` a la vez es ambiguo y se rechaza.
+    """
     fps = seq.fps_efectivos
+    if manual and clip_completo:
+        raise ValueError("manual y clip_completo son excluyentes.")
+    if clip_completo:
+        return [Ventana(0, seq.n_frames - 1, fps)]
     if manual:
         return [
             Ventana(int(round(d * fps)), int(round(h * fps)), fps) for d, h in manual
@@ -304,10 +319,14 @@ def secuenciar(
     tramos_excluidos: list[TramoExcluido] | None = None,
     brazo_via: str = "codo",
     manual: list[tuple[float, float]] | None = None,
+    clip_completo: bool = False,
     corpus_publico: bool = False,
 ) -> tuple[list[ResultadoRepeticion], ResumenSecuenciacion]:
     tramos_excluidos = tramos_excluidos or []
-    ventanas = segmentar(seq, lado_dominante, brazo_via=brazo_via, manual=manual)
+    ventanas = segmentar(
+        seq, lado_dominante, brazo_via=brazo_via, manual=manual,
+        clip_completo=clip_completo,
+    )
     resultados = [
         evaluar_repeticion(
             seq, v, i + 1, lado_dominante=lado_dominante,

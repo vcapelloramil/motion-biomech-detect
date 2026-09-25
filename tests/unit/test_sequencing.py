@@ -135,3 +135,23 @@ def test_segmentacion_manual_respeta_las_ventanas():
     assert len(ventanas) == 2
     assert ventanas[0].desde_frame == 0
     assert ventanas[1].hasta_frame == int(round(0.75 * FPS))
+
+
+def test_clip_completo_es_una_sola_ventana_sobre_todo_el_clip():
+    seq = _seq_con_picos(0.25, 0.42, 0.60)
+    ventanas = segmentar(seq, "der", clip_completo=True)
+    assert len(ventanas) == 1
+    assert (ventanas[0].desde_frame, ventanas[0].hasta_frame) == (0, seq.n_frames - 1)
+
+
+def test_clip_completo_y_manual_son_excluyentes():
+    seq = _seq_con_picos(0.25, 0.42, 0.60)
+    with pytest.raises(ValueError, match="excluyentes"):
+        segmentar(seq, "der", manual=[(0.0, 0.3)], clip_completo=True)
+
+
+def test_secuenciar_con_clip_completo_evalua_una_repeticion():
+    seq = _seq_con_picos(0.25, 0.42, 0.60)
+    resultados, resumen = secuenciar(seq, lado_dominante="der", clip_completo=True)
+    assert len(resultados) == 1
+    assert resumen.repeticiones_evaluadas == 1

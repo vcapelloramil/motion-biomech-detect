@@ -4,6 +4,7 @@ Validación cualitativa temprana sobre el corpus público. Uso (desde backend/):
     python -m app.analizar --clip zverev_saque_lateral_01.mp4
     python -m app.analizar --clip reves_lateral_01.mp4 --lado izq
     python -m app.analizar --clip X --manual 0.0:1.2,1.5:2.8
+    python -m app.analizar --clip X_rep01.mov --clip-completo   # clip pre-cortado = 1 repetición
 """
 
 from __future__ import annotations
@@ -68,6 +69,9 @@ def main(argv: list[str] | None = None) -> int:
                         help="Lado dominante; si se omite, se lee de catalogo.csv.")
     parser.add_argument("--manual", default=None,
                         help="Ventanas de repetición 'desde:hasta' en segundos, separadas por coma.")
+    parser.add_argument("--clip-completo", action="store_true",
+                        help="Todo el clip es UNA repetición (material pre-cortado, p. ej. Fase B); "
+                             "no se intenta segmentar. Excluye --manual.")
     parser.add_argument("--brazo-via", default="codo", choices=["codo", "muneca"],
                         help="Articulación distal del segmento 'brazo' (default: codo).")
     parser.add_argument("--backend", default="mediapipe", choices=["mediapipe"])
@@ -110,6 +114,7 @@ def main(argv: list[str] | None = None) -> int:
         tramos_excluidos=filt.tramos_excluidos,
         brazo_via=args.brazo_via,
         manual=_parse_manual(args.manual),
+        clip_completo=args.clip_completo,
         corpus_publico=es_corpus_publico(catalogo, args.clip),
     )
 
