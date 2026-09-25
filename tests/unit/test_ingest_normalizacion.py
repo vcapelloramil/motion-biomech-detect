@@ -51,3 +51,35 @@ def test_2997_fps_sigue_rechazado():
     r = evaluar(_md(29.97), factor=1.0, escala_conocida=True)
     assert r.fps_declarados_normalizado == 30.0
     assert r.aptitud is AptitudFaseRapida.RECHAZADO
+
+
+# --- Material propio de iPhone: 30 declarado + escala conocida + factor fijo 8 -------
+# Es un caso distinto del corpus público (factor estimado, escala desconocida). La
+# normalización NTSC solo toca la tasa declarada; el factor y la escala son
+# independientes y vienen del catálogo.
+
+def _md(fps_declarados: float) -> MetadatosVideo:
+    return MetadatosVideo(
+        ruta=None, fps_declarados=fps_declarados, nb_frames=439,
+        duracion_s=439 / fps_declarados, ancho=1920, alto=1080,
+    )
+
+
+def test_iphone_30_declarado_con_factor_fijo_8_da_240_efectivos():
+    r = evaluar(_md(30.0), factor=8, escala_conocida=True, origen_factor="catalogo")
+    assert r.fps_declarados_normalizado == 30.0
+    assert r.fps_efectivos == 240.0
+    assert r.escala_temporal_conocida is True
+    assert r.aptitud is AptitudFaseRapida.COMPLETO
+
+
+def test_iphone_29_97_normaliza_a_30_y_da_240_efectivos():
+    r = evaluar(_md(29.97), factor=8, escala_conocida=True, origen_factor="catalogo")
+    assert r.fps_declarados_normalizado == 30.0
+    assert r.fps_efectivos == 240.0
+
+
+def test_caso_publico_no_cambia_25_desconocida_factor_20():
+    r = evaluar(_md(25.0), factor=20, escala_conocida=False, origen_factor="catalogo")
+    assert r.fps_efectivos == 500.0
+    assert r.escala_temporal_conocida is False

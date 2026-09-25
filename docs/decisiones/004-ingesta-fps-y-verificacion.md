@@ -109,6 +109,25 @@ es un token que viaja al CSV y se compara contra `catalogo.csv`, se mantiene ASC
 no depender de la codificación de la consola en Windows/Git Bash. Alineado con el
 vocabulario del `catalogo.csv` (`E1-E4` = completo, `E1-E2` = uso limitado).
 
+### 8. Fase B: dos carpetas, `originales/` fuera, y el caso "formato Apple, factor fijo 8"
+
+Sin `--dir`, el catalogador recorre `fase-a/` y `fase-b/`. En fase-b la estructura es
+`fase-b/<sesion>/<gesto>/{originales,recortes}/`: **`recortes/` es la única carpeta de
+unidades de análisis** (incluye los clips que no llevan corte —controles a 30/60 fps y
+casos deficientes— copiados tal cual, sin recodificar). `originales/` queda solo para las
+fuentes que tienen recortes hermanos y se saltea igual que `compilaciones/`.
+
+Los `.mov` de cámara lenta de iPhone declaran `r_frame_rate=30/1` pero contienen captura
+real a 240 fps (factor 8, fijo por diseño del formato; protocolo, sección 7). No es la
+ambigüedad del corpus público: se registran con `escala_temporal = conocida`,
+`factor_estimado = 8`, `fps_efectivos = 240`. `normalizar_fps` solo ajusta la tasa
+*declarada* (29,97 → 30) y es independiente del factor y de la escala; cubierto por
+`test_ingest_normalizacion.py`. La huella (verificación 2) se sigue calculando sobre cada
+recorte.
+
+Chequeo cruzado nuevo: el catalogador avisa si `fps_declarados` del catálogo difiere (>1 %)
+del valor normalizado del archivo.
+
 ---
 
 ## Consecuencias

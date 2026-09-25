@@ -6,6 +6,37 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-09-24 — Catalogador: soporte de `fase-b/`
+
+**Rama:** `etapa/4-cinematica`. Primera sesión de Fase B: 6 repeticiones del saque de perfil
+(iPhone, 240 fps, `r_frame_rate=30/1`, factor 8, `escala_temporal = conocida`) catalogadas
+a mano en `catalogo.csv`.
+
+### Qué se hizo
+
+- `app/catalogador.py`: sin `--dir` recorre `fase-a/` y `fase-b/` (rutas relativas a
+  `KINETIQ_DATA_DIR`); `originales/` se saltea junto a `compilaciones/`; subcarpeta
+  inexistente → aviso; chequeo cruzado `fps_declarados` catálogo vs archivo.
+- Verificado que la normalización NTSC no confunde el caso Apple (30 + conocida + factor 8
+  → 240 efectivos) con el caso público (factor estimado, escala desconocida): son
+  mecanismos independientes. Pruebas en `test_ingest_normalizacion.py`.
+- `test_corpus_fase_a.py` ajustado (escanea ambas fases, evalúa solo fase-a).
+- Docs: decisión 004 §8, `backend/README.md`.
+- Corrida real: 20 clips, 6 filas de fase-b OK (240 ef., unicidad 1.0), 0 avisos globales.
+- `pytest -m "not slow"` → 146 en verde.
+
+### Convención de carpetas (Fase B)
+
+`fase-b/<sesion>/<gesto>/recortes/` = unidades de análisis (también los clips sin corte,
+copiados tal cual); `originales/` = solo fuentes con recortes hermanos.
+
+### Pendiente
+
+Sumar al catálogo el resto de los cortes y los controles/deficientes; correr
+`python -m app.catalogador` y luego `extraer_pose` (checklist de Fase B, arriba).
+
+---
+
 ## 2026-08-27 (fix) — Detector de inversión de profundidad (z), `v0.3.1` + `v0.3.2`
 
 **Ramas:** `fix/inversion-z` (`v0.3.1`) y `fix/inversion-z-calibracion` (`v0.3.2`),

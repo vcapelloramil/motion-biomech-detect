@@ -45,9 +45,13 @@ _FPS_EFECTIVOS_GESTOS = {
 def catalogo_fase_a():
     from app.catalogador import catalogar_directorio
 
+    # catalogo.csv tiene también las filas de fase-b: se escanean ambas fases para que
+    # no figuren como huérfanas, y acá solo se evalúan las de fase-a.
     filas, avisos = catalogar_directorio(
-        _DATA_DIR / "fase-a", catalogo=_DATA_DIR / "catalogo.csv"
+        _DATA_DIR, catalogo=_DATA_DIR / "catalogo.csv",
+        subcarpetas=("fase-a", "fase-b"),
     )
+    filas = [f for f in filas if f.ruta_relativa.startswith("fase-a/")]
     return filas, avisos, {f.archivo: f for f in filas}
 
 

@@ -74,8 +74,11 @@ Todas se corren desde `backend/` (para que `app` esté en el path).
 ```bash
 # Catalogar y verificar el corpus (Etapa 1). Escribe catalogo-verificado.csv
 # junto al corpus; NO modifica catalogo.csv.
+# Sin --dir recorre fase-a/ y fase-b/ de KINETIQ_DATA_DIR; saltea compilaciones/ y
+# originales/ (las unidades de análisis de fase-b van en <sesion>/<gesto>/recortes/).
 python -m app.catalogador
 python -m app.catalogador --sin-hash          # sin verificación de huella (rápido)
+python -m app.catalogador --dir RUTA          # una sola carpeta
 
 # Extraer y cachear las coordenadas de pose de los clips (Etapa 2).
 python -m app.extraer_pose                     # todos los clips, MediaPipe
