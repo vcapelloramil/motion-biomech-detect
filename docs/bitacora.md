@@ -6,6 +6,59 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-09-25 — Diagnóstico de oclusión del lado dominante (sesiones 1 y 2 de la Fase B)
+
+**Rama:** `etapa/4-cinematica`. Sin cambios en el motor. Pedido de Valentín: en ambas sesiones la cámara
+quedó del mismo lado y es diestro; ¿oclusión sistemática del brazo dominante? Decidir si hace falta una
+tercera sesión con la cámara del otro lado **antes** de extraer pose del resto y medir formalmente.
+
+**Herramienta:** `python -m app.diagnosticos_e3 oclusion-lado` (`docs/resultados/pose-oclusion-lado-dominante.json`;
+7 pruebas en `tests/unit/test_oclusion_lado.py`). Solo lee la caché de pose.
+**Muestra:** sesión 1 completa (36 clips de perfil y tres cuartos a 240 fps) y de la sesión 2 **solo 13 de 48**
+(2 por grupo y 1 por cada toma `02`/`02b`/`02c` del saque de tres cuartos); las otras 35 no tienen pose
+(no se extrajeron a propósito). n de la sesión 2 = 6 (perfil) y 7 (tres cuartos).
+**Método:** por clip y pareado, confianza media (`visibility`) y cobertura (fracción de fotogramas con
+confianza ≥ 0,5, la definición del motor) de hombro, codo, muñeca y cadera del lado dominante (der) contra
+el no dominante (izq), en tres tramos: **reposo** (a más de 0,6 s del pico crudo del torso: sin desenfoque
+posible), **ventana del gesto** (± 0,3 s) y clip completo. Criterio declarado antes de mirar (juicio de
+Claude, ajustable): mediana de Δcobertura ≤ −0,10, Δ < 0 en ≥ 75 % de los clips y p del signo < 0,05.
+
+**Resultados:**
+- **La cámara ve el lado izquierdo (no dominante):** es el más cercano en 43 de 49 clips; los 6 restantes son
+  todos revés (1 de perfil, 5 de tres cuartos), o sea que ese "lado cercano" está **confundido con el gesto**
+  (en el revés el giro del cuerpo expone el brazo derecho).
+- **Hombro y cadera: 1,00 en ambos lados en todos los grupos y sesiones.** Ojo: `visibility` satura en 1,0
+  para estos puntos; no prueba que estén bien ubicados (no descarta un error de profundidad de la cadera o
+  el hombro lejanos en perfil).
+- **Codo y muñeca dominantes en reposo (sin desenfoque):** perfil, codo 0,10 (s1) y 0,14 (s2) contra 0,99 del
+  izquierdo, cobertura 0,02 y 0,05; muñeca 0,29 y 0,37 contra 0,97–0,98; Δ < 0 en el 100 % de los clips
+  → **oclusión geométrica confirmada en perfil, en ambas sesiones** (p = 0,031 con n = 6, el mínimo posible).
+  Tres cuartos sesión 1: codo 0,21 (cobertura 0,16), muñeca 0,61 → marcado. Tres cuartos sesión 2 (n = 7):
+  codo 0,82, muñeca 0,95 → **no** marcado.
+- **En la ventana del gesto** el codo dominante ronda 0,45–0,53 de confianza y 0,46–0,54 de cobertura en todos
+  los grupos (no dominante 0,94–0,96 y 1,00); muñeca 0,71–0,81. Con mi criterio no se marca (Δ < 0 en 67–83 %
+  de los clips, p 0,02–0,45, porque los revés dejan ver el brazo y diluyen el signo), pero el efecto es grande
+  (Δ mediana de cobertura del codo −0,47 a −0,54).
+- **Revés de tres cuartos:** brazo dominante bien visible (confianza 0,84–0,89, cobertura 0,97–1,00 en la
+  ventana). Explica por qué fue el único grupo con la serie del brazo completa (y por eso ya estaba filtrado
+  antes del arreglo de E3, decisión 010).
+- **Sesión 2, saque y drive de tres cuartos:** en reposo se ve mucho mejor que en la sesión 1 (0,59–0,92 contra
+  0,03–0,27), pero **la ventana del gesto no mejora** (0,27–0,58). Es decir: aun con el brazo visible en reposo,
+  durante el golpe el codo se pierde (desenfoque o autooclusión), no solo por la posición de la cámara.
+
+**Lectura (para decidir; no se decidió):** la oclusión geométrica del brazo dominante está confirmada en perfil
+y en el saque/drive de tres cuartos de la sesión 1. Pero mover la cámara al lado dominante no garantiza
+resolver la cobertura durante el golpe: la mejora de reposo de la sesión 2 no se trasladó a la ventana. El
+único caso "brazo que golpea de cara a la cámara" es el revés de tres cuartos (cobertura ~1,0), que es un gesto
+más lento que el saque. Recomendación de Claude: **piloto corto** (p. ej. 6 saques y 6 drives de tres cuartos con
+la cámara del lado dominante) antes de una tercera sesión completa, comparando la cobertura en la ventana.
+**No se extrajeron las otras 35 poses de la sesión 2** a la espera de esa decisión.
+
+**A tener presente:** las dos sesiones son de fechas consecutivas (24 y 25/9), y el plan pide al menos una
+semana entre sesiones para el Criterio 3.
+
+---
+
 ## 2026-09-25 — Fase B: extracción de pose, ventana anclada y corrección de E3 (motor 0.4.1)
 
 Sesión larga: primera pasada de la Fase B, corrección de E3, y tres correcciones de rumbo de lo

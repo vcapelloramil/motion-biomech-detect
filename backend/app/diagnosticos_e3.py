@@ -23,6 +23,11 @@ Subcomandos (desde backend/):
                       torso (adelanto 300…0 ms; después siempre +300 ms). Mide cuántos picos se
                       desplazan al acotar (lo que la ventana enmascara). Con adelanto 0 "brazo
                       antes que torso" es imposible por construcción: no usarlo para refutar.
+  oclusion-lado       Confianza y cobertura de hombro/codo/muñeca del lado DOMINANTE contra el no
+                      dominante, por encuadre y por sesión, en tres tramos (clip completo, ventana
+                      del gesto y reposo). Si el dominante es peor también en REPOSO, apunta a
+                      oclusión por la posición de la cámara; si solo lo es durante el gesto,
+                      apunta a desenfoque por velocidad. Solo lee la caché de pose.
   serie-articulacion  Serie fotograma a fotograma de una articulación (crudo vs filtrado,
                       confianza, ω del segmento, marcas de validación).
   salto-articulacion  Desplazamiento por fotograma de una articulación, en cm y en torsos.
@@ -57,7 +62,7 @@ from app.engine.segmentos_corporales import SegmentoCadena as S, vector_segmento
 from app.engine.validation import largo_torso, validar
 from app.engine.version import __version__ as version_motor
 from app.engine.dsp import segmentos_continuos
-from app.engine.kinematics import serie_angulo_articular, velocidad_angular_segmento
+from app.engine.kinematics import _xyz, serie_angulo_articular, velocidad_angular_segmento
 from app.engine.sequencing import (
     _frames_excluidos_por_segmento,
     detectar_pico,
@@ -66,6 +71,8 @@ from app.engine.sequencing import (
     techo_velocidad,
     ventana_anclada,
 )
+from scipy.stats import binomtest
+
 from app.engine.winter import (
     ARTICULACIONES_RAPIDAS,
     FACTOR_NIVEL_RUIDO,
@@ -584,6 +591,162 @@ def cmd_ventana_brazo(args) -> int:
     return 0
 
 
+# --- oclusion-lado ---------------------------------------------------------------------
+
+UMBRAL_CONF = 0.5                 # el mismo de engine.validation.UMBRAL_CONFIANZA
+JUEGO_ART = ("HOMBRO", "CODO", "MUNECA", "CADERA")   # la cadera: la otra articulación que la cámara podría tapar
+VENTANA_GESTO_S = 0.3             # ± alrededor del pico crudo del torso
+REPOSO_DESDE_S = 0.6              # reposo = a más de esto del pico
+# Criterio de trabajo declarado ANTES de mirar los datos (juicio de Claude; ajustable):
+# "posible oclusión sistemática del dominante" si, en un grupo, la cobertura del dominante es menor
+# que la del no dominante por >= DELTA_COB en la mediana, en >= FRAC_NEG de los clips, con p < ALFA.
+DELTA_COB, FRAC_NEG, ALFA = -0.10, 0.75, 0.05
+
+
+def confianza_por_frame(seq, art) -> np.ndarray:
+    """Confianza (visibility) de ``art`` por fotograma; NaN si el punto no está."""
+    return np.array([f.puntos[art].confianza if art in f.puntos else np.nan for f in seq.frames])
+
+
+def ancla_cruda(seq) -> int | None:
+    """Fotograma del pico de ω del eje de hombros, SIN E3 (suavizado a 9 fotogramas)."""
+    n = seq.n_frames
+    u = np.full((n, 3), np.nan)
+    for i, f in enumerate(seq.frames):
+        p = f.puntos_mundo
+        if A.HOMBRO_IZQ in p and A.HOMBRO_DER in p and p[A.HOMBRO_IZQ].z is not None and p[A.HOMBRO_DER].z is not None:
+            d = _xyz(p[A.HOMBRO_DER]) - _xyz(p[A.HOMBRO_IZQ])
+            nd = np.linalg.norm(d)
+            if nd > 0:
+                u[i] = d / nd
+    w = np.nan_to_num(omega_k(u, seq.fps_efectivos, 1), nan=0.0)
+    if not np.any(w > 0):
+        return None
+    return int(np.argmax(np.convolve(w, np.ones(9) / 9, mode="same")))
+
+
+def mascaras_tramos(n: int, ancla: int | None, fps: float) -> dict:
+    idx = np.arange(n)
+    salida = {"clip": np.ones(n, dtype=bool)}
+    if ancla is not None:
+        salida["ventana"] = np.abs(idx - ancla) <= VENTANA_GESTO_S * fps
+        salida["reposo"] = np.abs(idx - ancla) > REPOSO_DESDE_S * fps
+    return salida
+
+
+def metricas_mascara(conf: np.ndarray, mascara: np.ndarray) -> tuple[float | None, float | None]:
+    """(confianza media entre los fotogramas donde el punto está, cobertura ≥ umbral sobre TODOS)."""
+    c = conf[mascara]
+    if c.size == 0:
+        return None, None
+    presentes = c[np.isfinite(c)]
+    media = float(presentes.mean()) if presentes.size else None
+    cobertura = float(np.mean(np.nan_to_num(c, nan=0.0) >= UMBRAL_CONF))
+    return media, cobertura
+
+
+def resumen_pareado(deltas: list[float]) -> dict:
+    """Resumen de diferencias dominante − no dominante por clip: mediana, fracción negativa, signo."""
+    d = np.array([x for x in deltas if x is not None and np.isfinite(x)])
+    if d.size == 0:
+        return {"n": 0}
+    neg, pos = int((d < 0).sum()), int((d > 0).sum())
+    p = float(binomtest(neg, neg + pos, 0.5).pvalue) if neg + pos > 0 else 1.0
+    return {"n": int(d.size), "mediana": float(np.median(d)), "frac_neg": neg / d.size,
+            "p_signo": p}
+
+
+def sesion_de(nombre: str, fechas: list[str]) -> int:
+    return fechas.index(nombre[:8]) + 1
+
+
+def lado_cercano(seq, mascara: np.ndarray) -> str | None:
+    """Lado del cuerpo más cercano a la cámara según la z relativa de los hombros (menor = más cerca)."""
+    dz = []
+    for i in np.flatnonzero(mascara):
+        p = seq.frames[i].puntos
+        if A.HOMBRO_DER in p and A.HOMBRO_IZQ in p and p[A.HOMBRO_DER].z is not None and p[A.HOMBRO_IZQ].z is not None:
+            dz.append(p[A.HOMBRO_DER].z - p[A.HOMBRO_IZQ].z)
+    if not dz:
+        return None
+    return "der" if np.median(dz) < 0 else "izq"
+
+
+def cmd_oclusion_lado(args) -> int:
+    from app.config import get_cache_dir, get_data_dir
+
+    base = get_data_dir()
+    cat = _catalogo(base)
+    b = MediaPipeBackend()
+    clips = [(n, r) for n, r in cat.items()
+             if r.get("fuente") == "propio" and "_rep" in n and r.get("angulo") in ("perfil", "trescuartos")
+             and str(r.get("fps_efectivos")).strip() in ("240", "240.0")]
+    fechas = sorted({n[:8] for n, _ in clips})
+    filas, sin_pose = [], defaultdict(int)
+    for n, r in clips:
+        video = _buscar_video(base, n)
+        seq = pose_cache.cargar_si_vigente(get_cache_dir(), video, b.id, b.config_hash)
+        ses = sesion_de(n, fechas)
+        if seq is None:
+            sin_pose[(ses, r["angulo"])] += 1
+            continue
+        lado_dom = r["lado_dominante"]
+        no_dom = "izq" if lado_dom == "der" else "der"
+        m = mascaras_tramos(seq.n_frames, ancla_cruda(seq), seq.fps_efectivos)
+        fila = {"clip": n, "sesion": ses, "angulo": r["angulo"], "gesto": r["gesto"],
+                "lado_cercano": lado_cercano(seq, m.get("ventana", m["clip"])), "tramos": {}}
+        for tramo, mask in m.items():
+            fila["tramos"][tramo] = {}
+            for j in JUEGO_ART:
+                d = metricas_mascara(confianza_por_frame(seq, A[f"{j}_{'DER' if lado_dom == 'der' else 'IZQ'}"]), mask)
+                nd = metricas_mascara(confianza_por_frame(seq, A[f"{j}_{'DER' if no_dom == 'der' else 'IZQ'}"]), mask)
+                fila["tramos"][tramo][j] = {"dom": d, "nodom": nd}
+        filas.append(fila)
+
+    grupos = defaultdict(list)
+    for f in filas:
+        grupos[(f["sesion"], f["angulo"])].append(f)
+    salida = {}
+    print(f"Criterio de trabajo (declarado antes de mirar): posible oclusión del dominante si, para una articulación,\n"
+          f"  mediana de Δcobertura (dom − no dom) <= {DELTA_COB}, Δ<0 en >= {int(FRAC_NEG * 100)} % de los clips y p_signo < {ALFA}.\n")
+    for tramo in ("reposo", "ventana", "clip"):
+        print(f"=== tramo: {tramo} (Δ = dominante − no dominante; conf = confianza media, cob = fracción de fotogramas con conf ≥ {UMBRAL_CONF}) ===")
+        print(f"{'ses':>3} {'encuadre':12} {'art':7} {'n':>3} | conf dom  no dom  Δ     | cob dom  no dom  Δmed    Δ<0   p     | flag")
+        for (ses, ang), L in sorted(grupos.items()):
+            for j in JUEGO_ART:
+                pares = [f["tramos"][tramo][j] for f in L if tramo in f["tramos"]]
+                cdom = [x["dom"][0] for x in pares if x["dom"][0] is not None and x["nodom"][0] is not None]
+                cno = [x["nodom"][0] for x in pares if x["dom"][0] is not None and x["nodom"][0] is not None]
+                kdom = [x["dom"][1] for x in pares if x["dom"][1] is not None]
+                kno = [x["nodom"][1] for x in pares if x["nodom"][1] is not None]
+                res = resumen_pareado([a_ - b_ for a_, b_ in zip(kdom, kno)])
+                if not res["n"]:
+                    continue
+                flag = (res["mediana"] <= DELTA_COB and res["frac_neg"] >= FRAC_NEG and res["p_signo"] < ALFA)
+                salida[f"{tramo}|s{ses}|{ang}|{j}"] = {
+                    "n": res["n"], "conf_dom": float(np.median(cdom)), "conf_nodom": float(np.median(cno)),
+                    "cob_dom": float(np.median(kdom)), "cob_nodom": float(np.median(kno)),
+                    "delta_cob_mediana": res["mediana"], "frac_delta_neg": res["frac_neg"], "p_signo": res["p_signo"],
+                    "posible_oclusion": bool(flag)}
+                print(f"{ses:>3} {ang:12} {j.lower():7} {res['n']:3d} | {np.median(cdom):6.2f} {np.median(cno):7.2f} {np.median(cdom) - np.median(cno):+5.2f} | "
+                      f"{np.median(kdom):6.2f} {np.median(kno):7.2f} {res['mediana']:+6.2f} {res['frac_neg']:5.0%} {res['p_signo']:6.3f} | {'POSIBLE OCLUSIÓN' if flag else '-'}")
+        print()
+    print("Lado del cuerpo más cercano a la cámara (z relativa de hombros, en la ventana), clips por (sesión, encuadre):")
+    for (ses, ang), L in sorted(grupos.items()):
+        c = defaultdict(int)
+        for f in L:
+            c[f["lado_cercano"]] += 1
+        print(f"  sesión {ses} {ang:12}: {dict(c)}   (lado dominante = der)")
+    if sin_pose:
+        print("\nClips SIN pose cacheada (no incluidos):", dict(sin_pose))
+    if args.salida:
+        Path(args.salida).write_text(json.dumps({"version_motor": version_motor, "criterio": {
+            "delta_cob": DELTA_COB, "frac_neg": FRAC_NEG, "alfa": ALFA}, "resumen": salida, "clips": filas},
+            ensure_ascii=False, indent=1), encoding="utf-8")
+        print(f"\nEscrito: {args.salida}")
+    return 0
+
+
 # --- serie-articulacion / salto-articulacion --------------------------------------------
 
 def _art(nombre: str):
@@ -742,6 +905,10 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--grupo", action="append", default=None)
     p.add_argument("--salida", default=None)
     p.set_defaults(fn=cmd_ventana_brazo)
+
+    p = sub.add_parser("oclusion-lado", help="confianza/cobertura del lado dominante vs no dominante")
+    p.add_argument("--salida", default=None)
+    p.set_defaults(fn=cmd_oclusion_lado)
 
     p = sub.add_parser("serie-articulacion", help="serie fotograma a fotograma")
     p.add_argument("clip"); p.add_argument("articulacion"); p.add_argument("desde", type=int); p.add_argument("hasta", type=int)
