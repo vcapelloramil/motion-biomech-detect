@@ -147,6 +147,71 @@ sesión, salvo el comentario de `_FLEISIG_MAX`):
 - Código: docstring de `engine/segmentos_corporales.py`, `app/analizar.py`, `app/explorar_fase_b.py`,
   `backend/README.md`.
 
+## Decisión de alcance: el orden del brazo en perfil es NO CONCLUYENTE (25/9/2026)
+
+Decisión de Valentín, apoyada en `docs/resultados/e3-corte-brazo-fase-b.json` y
+`e3-ventana-brazo-fase-b.json` (motor 0.4.1, 36 repeticiones):
+
+- **Drive de perfil:** el pico del brazo llega 50–100 ms antes que el del torso, y acotar la
+  ventana del brazo lo deja no auditable (1/6): no hay un pico posterior identificable.
+- **Revés de perfil:** casi simultáneo con el torso (−12 a −21 ms) salvo dos picos 200–300 ms antes
+  (probablemente preparación); con adelanto 0 los cuatro auditables pasan a +165 ms.
+- **Saque de perfil:** depende del corte del codo (≤ 8 Hz el brazo llega después; ≥ 10 Hz, antes
+  en 2 de 3) y de la ventana.
+
+En perfil el orden torso/brazo se declara **no concluyente**. En el vocabulario de la regla R3
+corresponde al estado **"no auditable"** (gris): el sistema no pudo medir con confianza suficiente
+*(propuesta de mapeo; no implementada)*. Las afirmaciones que dependen del brazo se apoyan en el
+encuadre de **tres cuartos**.
+
+## Lectura metodológica: qué sostiene cada encuadre (citable en el Capítulo 6 y en las conclusiones)
+
+Ancla de torso, E3 0.4.1, 36 repeticiones (6 por gesto y encuadre), un jugador, una sesión.
+1 fotograma = 4,17 ms.
+
+| Vínculo | Perfil | Tres cuartos |
+| --- | --- | --- |
+| **torso → balanceo del brazo** | brazo después del torso en **5 de 16**; drive antes (4/5), revés ~simultáneo, saque depende del corte y la ventana → **no concluyente** | brazo después del torso en **17 de 18**; estable con el corte del codo entre 6 y 15 Hz (a 20 Hz un caso de revés cambia: 16 de 18) y con la ventana → **robusto** |
+| **pelvis vs torso** | pelvis primero en 3 de 15, **torso primero en 11 de 15** (saque 3/3 y drive 6/6, medianas −12 y −17 ms) → sesgo sistemático **opuesto al orden esperado**; no concluyente | pelvis primero en 9 de 18, torso primero en 7 de 18; mediana ±4 ms; |Δ| ≤ 3 fotogramas en 16 de 18 → **simultáneo dentro de la resolución**; no concluyente |
+
+**Lectura.** En este conjunto, el encuadre de tres cuartos es el que permite establecer de forma
+robusta el vínculo **torso → balanceo del brazo**, y el de perfil no. **Ningún encuadre resuelve el
+orden entre pelvis y torso**: perfil da un sesgo sistemático con el torso primero y tres cuartos,
+simultaneidad dentro de 1–3 fotogramas. **La cadena completa `pelvis → torso → brazo` no queda
+establecida por ninguno de los dos; lo que tres cuartos sostiene es su segunda mitad.**
+
+> **Corrección de la formulación inicial.** Se propuso citar que "perfil solo sostiene
+> pelvis→torso". Los datos no lo respaldan: en perfil el orden pelvis→torso sale invertido de forma
+> sistemática (saque y drive, 9 de 9) y en tres cuartos queda en empate técnico. Lo que perfil sí
+> aporta es la **magnitud** de pelvis y torso (sin diferencia entre 0.4.0 y 0.4.1) y su cercanía
+> temporal.
+
+*Hipótesis, no probada aquí:* en perfil los ejes de caderas y hombros apuntan hacia la cámara y la
+rotación ocurre en profundidad (`z`, la coordenada más ruidosa de MediaPipe); tres cuartos pone parte
+de la rotación en el plano de la imagen (ya anticipado en la decisión 008, sección "guían el encuadre
+de la Fase B").
+
+*Propuesta de redacción para la tesis:* "En este conjunto de 36 repeticiones de un jugador, el
+encuadre de tres cuartos permitió establecer de forma robusta que el pico del balanceo del brazo
+sigue al del torso (17 de 18 repeticiones), y el de perfil no (5 de 16). Ninguno de los dos encuadres
+resolvió el orden entre pelvis y torso: el de perfil mostró un sesgo sistemático con el torso primero
+(11 de 15) y el de tres cuartos, simultaneidad dentro de 1–3 fotogramas (16 de 18 repeticiones)."
+Debe acompañarse de las limitaciones: un jugador, una sesión, seis repeticiones por grupo, y que el
+"brazo" es un proxy de orientación (sección anterior).
+
+**Consecuencias.** (1) Recomendar tres cuartos en el protocolo para todo análisis que involucre al
+brazo; perfil sirve para las magnitudes de pelvis y torso. (2) El Criterio 1 (repetibilidad del orden)
+no se midió formalmente; la lectura exploratoria muestra que solo el saque de tres cuartos repite un
+mismo orden completo en 5 de 6. (3) Vale para este jugador y esta sesión: la segunda sesión (Criterio 3)
+puede confirmarlo o no.
+
+## Trabajo futuro (NO implementado)
+
+**Marcador de fase independiente** para separar el golpe de la preparación, por ejemplo el punto más
+bajo de la muñeca como inicio del golpe hacia adelante, validado con fotogramas. Depende de la
+cobertura de la muñeca (25–57 % de los fotogramas con los tres puntos en el saque), que es baja justo
+en el impacto. Alternativa para el evento de rotación interna: goniometría 3D o sensores inerciales.
+
 ## PENDIENTE DE REDACCIÓN — Capítulo 3, apartado 3.3.2.8
 
 Antes de la entrega hay que agregar una aclaración a la tabla de velocidades de Fleisig: el valor

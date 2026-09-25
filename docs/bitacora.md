@@ -8,43 +8,58 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ## 2026-09-25 — Fase B: extracción de pose, ventana anclada y corrección de E3 (motor 0.4.1)
 
-**Rama:** `etapa/4-cinematica` (sin merge, sin tag). Motor `0.4.1`. `pytest -m "not slow"` →
-**189 en verde**; los tests lentos que usan E3 sobre pose real (5) también pasan.
+Sesión larga: primera pasada de la Fase B, corrección de E3, y tres correcciones de rumbo de lo
+que se había concluido (ver "CORRECCIÓN" y las decisiones 010 y 011).
 
 ### Estado al cierre de la sesión
 
-**Lo que se sostiene (medido con E3 0.4.1, 36 repeticiones propias, 1 jugador, 1 sesión):**
-- Pelvis y torso NO se vieron afectados por el defecto de E3 (diferencia 0,0000 °/s entre 0.4.0 y
-  0.4.1). Sus conclusiones se mantienen: orden pelvis→torso en el límite de resolución (desfases
-  de ±4–13 ms; 1 fotograma = 4,17 ms), pelvis más rápida que el torso en el saque (1,15–1,46×),
-  gradiente de gestos saque > drive > revés en ambos encuadres.
-- El brazo, con la serie bien filtrada: p99 de ω a k=1 de 790–2165 °/s (mediana por grupo),
-  caída k1→k8 de 1–10 %. La "anomalía del revés de tres cuartos" era el único grupo bien filtrado.
-- **Patrón por encuadre (ancla de torso): brazo DESPUÉS del torso en saque de tres cuartos, drive
-  de tres cuartos y revés de tres cuartos; brazo ANTES en drive de perfil (4/5) y revés de perfil
-  (5/6).** Robusto al corte del codo entre 8 y 15 Hz en esos cinco grupos (en revés de perfil,
-  a 6 Hz baja a 3/6); magnitud del adelanto
-  dependiente del corte (drive perfil: −179 ms a 6 Hz, −33 ms a 15 Hz; revés perfil: −10 a −19 ms,
-  casi simultáneo). **El saque de perfil NO es robusto:** con el codo a ≤ 8 Hz el brazo llega
-  después (+62 a +67 ms, 0/3 con brazo primero); a ≥ 10 Hz llega antes (−58 a −67 ms, 2/3). n = 3.
+**Rama/motor/tests:** `etapa/4-cinematica`, motor `0.4.1`, `pytest -m "not slow"` → **194 en verde**
+(los 5 tests lentos que usan E3 sobre pose real también pasan). Sin merge ni tag de la Etapa 4.
 
-**Lo que NO está resuelto / en revisión:**
-- El pico global del brazo puede capturar la caída de la raqueta (preparación) y no el golpe
-  (fotogramas de drive rep03/rep04). La ventana acotada del brazo **no se implementó**: Valentín
-  quiere ver primero que el patrón por encuadre se sostenga con las magnitudes ya corregidas
-  (ver arriba) antes de acotar algo que pueda enmascararlo.
-- **Referencia de Fleisig para el brazo: ERROR CONCEPTUAL confirmado** (Valentín, con dos fuentes;
-  decisión 011). Los 2368 °/s ("Hombro") son la rotación interna, un giro axial del húmero; ω del
-  vector hombro→codo (orientación del brazo en el espacio) es incapaz de medirla, y tampoco mide la
-  extensión de codo (1510 °/s), que es un ángulo relativo. **Ningún valor de la tabla equivale a lo
-  que mide el motor para el brazo.** Todo "× Fleisig" del brazo queda sin valor. Pendiente de
-  redacción: aclaración en la tabla del apartado 3.3.2.8 del Capítulo 3.
-- Umbral de salto imposible (0,5 torsos ≈ 62 m/s): sigue sin recalibrarse. Punto 2 pendiente.
-- Decisión codo vs muñeca: NO se reabre en código; la justificación empírica de la decisión 008
-  quedó invalidada y está registrada como **pendiente de redacción del Capítulo 4** en la
-  decisión 010 (y con una nota de aviso en la 008).
-- Sin merge/tag de la Etapa 4; 4.7 y 4.8 y el punto de decisión siguen pendientes (los umbrales
-  aún no están congelados: no calibrar y medir sobre las mismas repeticiones).
+**Decisiones de Valentín en esta sesión:**
+1. `recortes/` es la única carpeta de unidades de análisis de la Fase B; el catalogador,
+   `extraer_pose` y `analizar` recorren `fase-a/` y `fase-b/` y saltean `originales/`.
+2. Arreglo de E3 (series con huecos, decisión 010, motor 0.4.1); se mantiene **un corte de Winter
+   por clip** (sin cambio de contrato).
+3. Codo vs muñeca: la decisión anatómica se mantiene; la justificación empírica de la 008 queda
+   invalidada y es **pendiente de redacción del Capítulo 4**.
+4. Referencia de Fleisig del brazo: error conceptual (decisión 011). El techo del brazo no se
+   reancló a 1510 °/s; queda 7104 °/s como cota provisional sin respaldo en la literatura.
+5. **El orden del brazo en perfil se declara NO CONCLUYENTE; las afirmaciones que dependen del
+   brazo se apoyan en tres cuartos.** No se implementó ventana acotada del brazo.
+6. El marcador de fase independiente queda como **trabajo futuro** (no implementar ahora).
+
+**Lo medido (E3 0.4.1; 36 repeticiones propias, un jugador, una sesión):**
+- Pelvis y torso no se vieron afectados por el defecto de E3 (diferencia 0,0000 °/s); pelvis más
+  rápida que el torso en el saque (1,15–1,46×); gradiente saque > drive > revés en ambos encuadres.
+- Brazo (orientación del segmento, p99 de ω a k=1): 790–2165 °/s por grupo, caída k1→k8 de 1–10 %.
+  No hay referencia de Fleisig equivalente (decisión 011).
+- **Por encuadre** (ancla de torso): **torso → balanceo del brazo** con el brazo después en **17 de 18**
+  en tres cuartos (estable con el corte entre 6 y 15 Hz —a 20 Hz, 16 de 18— y con la ventana) y en **5 de 16** en perfil (no
+  concluyente). **Pelvis vs torso:** perfil con el torso primero en 11 de 15 (saque 3/3, drive 6/6);
+  tres cuartos 9 pelvis primero / 7 torso primero, |Δ| ≤ 3 fotogramas en 16 de 18.
+
+**Lo que NO queda establecido:**
+- **La cadena completa `pelvis → torso → brazo` no queda establecida en ningún encuadre**; tres
+  cuartos sostiene su segunda mitad (torso→brazo). Perfil no sostiene pelvis→torso (lo invierte
+  sistemáticamente), contra la formulación inicial; corregido en la decisión 011.
+- Etiquetar "correcto/incorrecto" cuando interviene el brazo no tiene fuente (R4).
+- Criterio 1 no medido formalmente; exploratoriamente, solo el saque de tres cuartos repite un mismo
+  orden completo en 5 de 6.
+
+**Pendientes (todos requieren decisión de Valentín salvo indicación):**
+- Redacción: Cap. 3 (tabla 3.3.2.8 y cadena cinética), Cap. 4 (hipótesis I1, Criterio 1, gráfico de
+  secuenciación; justificación de hombro→codo), CLAUDE.md §1 y §3, interfaz (R2/R3), y la
+  terminología "balanceo del brazo" vs "rotación interna" (lista completa en la decisión 011).
+- Propuesta: mapear el orden del brazo en perfil al estado gris "no auditable" (R3), y el orden que
+  incluye al brazo como "orden observado" sin juicio de correcto/incorrecto. No implementado.
+- Protocolo: recomendar tres cuartos para todo lo que involucre al brazo.
+- Umbral de salto imposible en unidades físicas (punto 2); opcional: Winter sobre el tramo continuo
+  más largo. Ambos con datos de ajuste y de medición separados.
+- 4.7 / 4.8 y el punto de decisión de la Etapa 4; segunda sesión de la Fase B (Criterio 3).
+- **Trabajo futuro (NO implementar ahora):** marcador de fase independiente (p. ej. punto más bajo
+  de la muñeca como inicio del golpe hacia adelante), validado con fotogramas; depende de la
+  cobertura de la muñeca (25–57 % en el saque; baja justo en el impacto).
 
 ### Referencia de Fleisig del brazo (2026-09-25, decisión 011)
 
