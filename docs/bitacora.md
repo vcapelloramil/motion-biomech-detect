@@ -61,6 +61,15 @@ que se había concluido (ver "CORRECCIÓN" y las decisiones 010 y 011).
   de la muñeca como inicio del golpe hacia adelante), validado con fotogramas; depende de la
   cobertura de la muñeca (25–57 % en el saque; baja justo en el impacto).
 
+**Siguiente paso concreto — ETAPA 4 EN PAUSA (indicación de Valentín, 25/9):** no se toca más código
+de la Etapa 4 ni se decide nada sobre el **Criterio 1** ni el **punto de decisión** hasta que Valentín
+vuelva con material nuevo: la **segunda sesión de la Fase B** (necesaria para el Criterio 3) y más
+repeticiones de **tres cuartos**, el encuadre con la señal más clara. Al volver: catalogar
+(`python -m app.catalogador`), extraer pose, correr `python -m app.explorar_fase_b` y
+`python -m app.diagnosticos_e3` sobre lo nuevo, y recién entonces la medición formal (4.7 / 4.8) con
+umbrales congelados y datos de ajuste separados de los de medición. La decisión 011 se deja como está.
+Hallazgo a retomar: la inversión sistemática pelvis/torso en perfil (torso primero en 11 de 15).
+
 ### Referencia de Fleisig del brazo (2026-09-25, decisión 011)
 
 - Prueba `test_omega_vector_vs_angulo.py` (geometrías de resultado conocido): el vector hombro→codo
