@@ -203,6 +203,62 @@ def sugerir_repeticiones(
     return ventanas or [(0, n - 1)]
 
 
+# --- ventana anclada al gesto ------------------------------------------------
+
+ANCLAS_VALIDAS = ("torso", "pelvis")
+MARGEN_ANCLA_S = 0.3   # ± alrededor del instante ancla (decisión de Valentín, 2026-09-25)
+
+
+def instante_ancla(
+    seq: SecuenciaPose,
+    lado_dominante: str,
+    ancla: str,
+    *,
+    tramos_excluidos: list[TramoExcluido] | None = None,
+    brazo_via: str = "codo",
+) -> tuple[int, float] | tuple[None, str]:
+    """(frame, velocidad) del pico global del segmento ancla, o (None, motivo).
+
+    Usa el mismo detector y las mismas reglas de auditabilidad que cualquier pico
+    (tramos excluidos, techo de plausibilidad): un ancla implausible no se estima.
+    """
+    if ancla not in ANCLAS_VALIDAS:
+        raise ValueError(f"ancla debe ser una de {ANCLAS_VALIDAS} (se recibió {ancla!r}).")
+    seg = SegmentoCadena(ancla)
+    omega = velocidad_angular_segmento(seq, seg, lado_dominante, brazo_via=brazo_via)
+    excluidos = _frames_excluidos_por_segmento(
+        tramos_excluidos or [], seg, lado_dominante, brazo_via
+    )
+    return detectar_pico(
+        omega, fps=seq.fps_efectivos, offset_frame=0, frames_excluidos=excluidos,
+        techo=techo_velocidad(seg),
+    )
+
+
+def ventana_anclada(
+    seq: SecuenciaPose,
+    lado_dominante: str,
+    ancla: str,
+    *,
+    margen_s: float = MARGEN_ANCLA_S,
+    tramos_excluidos: list[TramoExcluido] | None = None,
+    brazo_via: str = "codo",
+) -> tuple[Ventana | None, str | None]:
+    """Ventana [t_ancla − margen, t_ancla + margen] recortada al clip.
+
+    Devuelve (ventana, None) o (None, motivo) si el ancla no es auditable: en ese caso
+    no se adivina una ventana (regla R3).
+    """
+    frame, info = instante_ancla(
+        seq, lado_dominante, ancla, tramos_excluidos=tramos_excluidos, brazo_via=brazo_via
+    )
+    if frame is None:
+        return None, f"sin ancla: pico de {ancla} no auditable ({info})"
+    fps = seq.fps_efectivos
+    m = int(round(margen_s * fps))
+    return Ventana(max(0, frame - m), min(seq.n_frames - 1, frame + m), fps), None
+
+
 def segmentar(
     seq: SecuenciaPose,
     lado_dominante: str,
@@ -320,13 +376,34 @@ def secuenciar(
     brazo_via: str = "codo",
     manual: list[tuple[float, float]] | None = None,
     clip_completo: bool = False,
+    ancla: str | None = None,
+    margen_ancla_s: float = MARGEN_ANCLA_S,
     corpus_publico: bool = False,
 ) -> tuple[list[ResultadoRepeticion], ResumenSecuenciacion]:
+    """``ancla`` ("torso" | "pelvis"): UNA repetición por clip, con la ventana centrada en
+    el pico global de ese segmento (± ``margen_ancla_s``). Excluyente con ``manual`` y
+    ``clip_completo``. Si el ancla no es auditable la repetición queda no auditable.
+    """
     tramos_excluidos = tramos_excluidos or []
-    ventanas = segmentar(
-        seq, lado_dominante, brazo_via=brazo_via, manual=manual,
-        clip_completo=clip_completo,
-    )
+    if ancla is not None:
+        if manual or clip_completo:
+            raise ValueError("ancla es excluyente con manual y clip_completo.")
+        ventana, motivo = ventana_anclada(
+            seq, lado_dominante, ancla, margen_s=margen_ancla_s,
+            tramos_excluidos=tramos_excluidos, brazo_via=brazo_via,
+        )
+        if ventana is None:
+            r = ResultadoRepeticion(
+                indice=1, ventana=Ventana(0, seq.n_frames - 1, seq.fps_efectivos), picos={},
+                orden_observado=None, correcto=None, auditable=False, motivo_no_auditable=motivo,
+            )
+            return [r], agregar([r], corpus_publico=corpus_publico)
+        ventanas = [ventana]
+    else:
+        ventanas = segmentar(
+            seq, lado_dominante, brazo_via=brazo_via, manual=manual,
+            clip_completo=clip_completo,
+        )
     resultados = [
         evaluar_repeticion(
             seq, v, i + 1, lado_dominante=lado_dominante,

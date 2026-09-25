@@ -1,9 +1,10 @@
 {
- "generado_utc": "2026-09-25T05:26:47+00:00",
+ "generado_utc": "2026-09-25T05:48:32+00:00",
  "version_motor": "0.4.0",
  "backend_pose": "mediapipe-0.10.18",
  "maquina": "Windows-10-10.0.26200-SP0",
  "segmentacion": "auto",
+ "margen_ancla_ms": null,
  "brazo_via": "codo",
  "pasos_k": [
   1,
@@ -11,7 +12,7 @@
   4,
   8
  ],
- "nota": "Exploratorio (E4): no calibra ni mide criterios. Un pico real breve (brazo) tambien cae con k; no leerlo como ruido.",
+ "nota": "Exploratorio (E4): no calibra ni mide criterios. Un pico real breve (brazo) tambien cae con k; no leerlo como ruido. En modos ancla la ventana excluye por construccion los picos tempranos del brazo: ver brazo_global_fuera_de_ventana.",
  "grupos": {
   "saque_perfil": {
    "clips": [
@@ -40,6 +41,11 @@
      },
      "inversiones_z": 15,
      "frames_con_tramo_excluido_pct": 66.5,
+     "ancla_torso_s": 1.2333,
+     "ancla_pelvis_s": 1.2375,
+     "ancla_torso_vs_pelvis_ms": 4.2,
+     "brazo_pico_global_s": 0.9417,
+     "archivo": "20260924_VCR_saque_perfil_240_01_rep01.mov",
      "repeticiones": [
       {
        "indice": 1,
@@ -52,25 +58,27 @@
         "pelvis",
         "brazo"
        ],
+       "motivo_no_auditable": null,
        "dt_pelvis_a_torso_ms": -4.2,
+       "dt_torso_a_brazo_ms": 75.0,
        "pico_pelvis_en_vuelo": true,
+       "brazo_global_fuera_de_ventana": true,
        "picos": {
         "pelvis": {
-         "instante_s": 0.2208,
+         "instante_abs_s": 1.2375,
          "velocidad": 1303.4
         },
         "torso": {
-         "instante_s": 0.2167,
+         "instante_abs_s": 1.2333,
          "velocidad": 865.9
         },
         "brazo": {
-         "instante_s": 0.2917,
+         "instante_abs_s": 1.3083,
          "velocidad": 3987.5
         }
        }
       }
-     ],
-     "archivo": "20260924_VCR_saque_perfil_240_01_rep01.mov"
+     ]
     },
     {
      "n_frames": 656,
@@ -97,6 +105,11 @@
      },
      "inversiones_z": 14,
      "frames_con_tramo_excluido_pct": 71.0,
+     "ancla_torso_s": 2.1667,
+     "ancla_pelvis_s": null,
+     "ancla_torso_vs_pelvis_ms": null,
+     "brazo_pico_global_s": 1.8625,
+     "archivo": "20260924_VCR_saque_perfil_240_01_rep02.mov",
      "repeticiones": [
       {
        "indice": 1,
@@ -105,24 +118,26 @@
         2.325
        ],
        "orden": null,
+       "motivo_no_auditable": "sin pico auditable para: pelvis",
        "dt_pelvis_a_torso_ms": null,
+       "dt_torso_a_brazo_ms": 91.6,
        "pico_pelvis_en_vuelo": null,
+       "brazo_global_fuera_de_ventana": true,
        "picos": {
         "pelvis": {
          "no_auditable": "velocidad implausible (1325 °/s > techo 1320): probable error de detección"
         },
         "torso": {
-         "instante_s": 0.0458,
+         "instante_abs_s": 2.1667,
          "velocidad": 803.6
         },
         "brazo": {
-         "instante_s": 0.1375,
+         "instante_abs_s": 2.2583,
          "velocidad": 5241.8
         }
        }
       }
-     ],
-     "archivo": "20260924_VCR_saque_perfil_240_01_rep02.mov"
+     ]
     },
     {
      "n_frames": 424,
@@ -149,6 +164,11 @@
      },
      "inversiones_z": 28,
      "frames_con_tramo_excluido_pct": 55.9,
+     "ancla_torso_s": 0.7042,
+     "ancla_pelvis_s": null,
+     "ancla_torso_vs_pelvis_ms": null,
+     "brazo_pico_global_s": null,
+     "archivo": "20260924_VCR_saque_perfil_240_01_rep03.mov",
      "repeticiones": [
       {
        "indice": 1,
@@ -157,14 +177,17 @@
         1.762
        ],
        "orden": null,
+       "motivo_no_auditable": "sin pico auditable para: pelvis, brazo",
        "dt_pelvis_a_torso_ms": null,
+       "dt_torso_a_brazo_ms": null,
        "pico_pelvis_en_vuelo": null,
+       "brazo_global_fuera_de_ventana": null,
        "picos": {
         "pelvis": {
          "no_auditable": "velocidad implausible (2525 °/s > techo 1320): probable error de detección"
         },
         "torso": {
-         "instante_s": 0.7042,
+         "instante_abs_s": 0.7042,
          "velocidad": 1503.9
         },
         "brazo": {
@@ -172,8 +195,7 @@
         }
        }
       }
-     ],
-     "archivo": "20260924_VCR_saque_perfil_240_01_rep03.mov"
+     ]
     },
     {
      "n_frames": 368,
@@ -200,6 +222,11 @@
      },
      "inversiones_z": 8,
      "frames_con_tramo_excluido_pct": 42.9,
+     "ancla_torso_s": 0.8833,
+     "ancla_pelvis_s": 0.8958,
+     "ancla_torso_vs_pelvis_ms": 12.5,
+     "brazo_pico_global_s": 0.4375,
+     "archivo": "20260924_VCR_saque_perfil_240_01_rep04.mov",
      "repeticiones": [
       {
        "indice": 1,
@@ -212,25 +239,27 @@
         "pelvis",
         "brazo"
        ],
+       "motivo_no_auditable": null,
        "dt_pelvis_a_torso_ms": -12.5,
+       "dt_torso_a_brazo_ms": 112.5,
        "pico_pelvis_en_vuelo": true,
+       "brazo_global_fuera_de_ventana": true,
        "picos": {
         "pelvis": {
-         "instante_s": 0.1083,
+         "instante_abs_s": 0.8958,
          "velocidad": 1046.7
         },
         "torso": {
-         "instante_s": 0.0958,
+         "instante_abs_s": 0.8833,
          "velocidad": 751.7
         },
         "brazo": {
-         "instante_s": 0.2083,
+         "instante_abs_s": 0.9958,
          "velocidad": 5120.1
         }
        }
       }
-     ],
-     "archivo": "20260924_VCR_saque_perfil_240_01_rep04.mov"
+     ]
     },
     {
      "n_frames": 442,
@@ -257,6 +286,11 @@
      },
      "inversiones_z": 16,
      "frames_con_tramo_excluido_pct": 62.0,
+     "ancla_torso_s": 1.0875,
+     "ancla_pelvis_s": 1.1,
+     "ancla_torso_vs_pelvis_ms": 12.5,
+     "brazo_pico_global_s": 1.1708,
+     "archivo": "20260924_VCR_saque_perfil_240_01_rep05.mov",
      "repeticiones": [
       {
        "indice": 1,
@@ -269,25 +303,27 @@
         "pelvis",
         "brazo"
        ],
+       "motivo_no_auditable": null,
        "dt_pelvis_a_torso_ms": -12.5,
+       "dt_torso_a_brazo_ms": 83.3,
        "pico_pelvis_en_vuelo": true,
+       "brazo_global_fuera_de_ventana": false,
        "picos": {
         "pelvis": {
-         "instante_s": 1.1,
+         "instante_abs_s": 1.1,
          "velocidad": 1058.0
         },
         "torso": {
-         "instante_s": 1.0875,
+         "instante_abs_s": 1.0875,
          "velocidad": 801.8
         },
         "brazo": {
-         "instante_s": 1.1708,
+         "instante_abs_s": 1.1708,
          "velocidad": 6119.0
         }
        }
       }
-     ],
-     "archivo": "20260924_VCR_saque_perfil_240_01_rep05.mov"
+     ]
     },
     {
      "n_frames": 461,
@@ -314,6 +350,11 @@
      },
      "inversiones_z": 9,
      "frames_con_tramo_excluido_pct": 46.9,
+     "ancla_torso_s": 1.2542,
+     "ancla_pelvis_s": null,
+     "ancla_torso_vs_pelvis_ms": null,
+     "brazo_pico_global_s": 0.65,
+     "archivo": "20260924_VCR_saque_perfil_240_01_rep06.mov",
      "repeticiones": [
       {
        "indice": 1,
@@ -322,24 +363,26 @@
         1.483
        ],
        "orden": null,
+       "motivo_no_auditable": "sin pico auditable para: pelvis",
        "dt_pelvis_a_torso_ms": null,
+       "dt_torso_a_brazo_ms": -75.0,
        "pico_pelvis_en_vuelo": null,
+       "brazo_global_fuera_de_ventana": true,
        "picos": {
         "pelvis": {
          "no_auditable": "velocidad implausible (1386 °/s > techo 1320): probable error de detección"
         },
         "torso": {
-         "instante_s": 0.15,
+         "instante_abs_s": 1.2542,
          "velocidad": 901.2
         },
         "brazo": {
-         "instante_s": 0.075,
+         "instante_abs_s": 1.1792,
          "velocidad": 4186.1
         }
        }
       }
-     ],
-     "archivo": "20260924_VCR_saque_perfil_240_01_rep06.mov"
+     ]
     }
    ],
    "resumen": {
@@ -351,6 +394,14 @@
     "caida_pelvis_k1_a_k8_pct": 3.7601923450225785,
     "caida_brazo_k1_a_k8_pct": 70.61651473182869,
     "inversiones_z_mediana": 14.5
+   },
+   "ordenes": {
+    "repeticiones": 6,
+    "auditables": 3,
+    "pelvis_torso_brazo": 0,
+    "brazo_primero": 0,
+    "brazo_global_fuera_de_ventana": 4,
+    "anclas_torso_vs_pelvis_dif_mediana_ms": 12.5
    }
   },
   "saque_trescuartos": {
@@ -380,6 +431,11 @@
      },
      "inversiones_z": 5,
      "frames_con_tramo_excluido_pct": 69.6,
+     "ancla_torso_s": 1.2708,
+     "ancla_pelvis_s": 1.2625,
+     "ancla_torso_vs_pelvis_ms": 8.3,
+     "brazo_pico_global_s": 1.35,
+     "archivo": "20260924_VCR_saque_trescuartos_240_01_rep01.mov",
      "repeticiones": [
       {
        "indice": 1,
@@ -392,25 +448,27 @@
         "torso",
         "brazo"
        ],
+       "motivo_no_auditable": null,
        "dt_pelvis_a_torso_ms": 8.3,
+       "dt_torso_a_brazo_ms": 79.2,
        "pico_pelvis_en_vuelo": true,
+       "brazo_global_fuera_de_ventana": false,
        "picos": {
         "pelvis": {
-         "instante_s": 0.0458,
+         "instante_abs_s": 1.2625,
          "velocidad": 1114.5
         },
         "torso": {
-         "instante_s": 0.0542,
+         "instante_abs_s": 1.2708,
          "velocidad": 879.3
         },
         "brazo": {
-         "instante_s": 0.1333,
+         "instante_abs_s": 1.35,
          "velocidad": 5159.3
         }
        }
       }
-     ],
-     "archivo": "20260924_VCR_saque_trescuartos_240_01_rep01.mov"
+     ]
     },
     {
      "n_frames": 480,
@@ -437,6 +495,11 @@
      },
      "inversiones_z": 3,
      "frames_con_tramo_excluido_pct": 81.2,
+     "ancla_torso_s": 1.4792,
+     "ancla_pelvis_s": 1.4667,
+     "ancla_torso_vs_pelvis_ms": 12.5,
+     "brazo_pico_global_s": 1.6167,
+     "archivo": "20260924_VCR_saque_trescuartos_240_01_rep02.mov",
      "repeticiones": [
       {
        "indice": 1,
@@ -449,25 +512,27 @@
         "torso",
         "brazo"
        ],
+       "motivo_no_auditable": null,
        "dt_pelvis_a_torso_ms": 12.5,
+       "dt_torso_a_brazo_ms": 137.5,
        "pico_pelvis_en_vuelo": false,
+       "brazo_global_fuera_de_ventana": false,
        "picos": {
         "pelvis": {
-         "instante_s": 1.4667,
+         "instante_abs_s": 1.4667,
          "velocidad": 873.1
         },
         "torso": {
-         "instante_s": 1.4792,
+         "instante_abs_s": 1.4792,
          "velocidad": 891.7
         },
         "brazo": {
-         "instante_s": 1.6167,
+         "instante_abs_s": 1.6167,
          "velocidad": 4389.8
         }
        }
       }
-     ],
-     "archivo": "20260924_VCR_saque_trescuartos_240_01_rep02.mov"
+     ]
     },
     {
      "n_frames": 450,
@@ -494,6 +559,11 @@
      },
      "inversiones_z": 14,
      "frames_con_tramo_excluido_pct": 74.0,
+     "ancla_torso_s": 1.2625,
+     "ancla_pelvis_s": 1.2583,
+     "ancla_torso_vs_pelvis_ms": 4.2,
+     "brazo_pico_global_s": 1.3583,
+     "archivo": "20260924_VCR_saque_trescuartos_240_01_rep03.mov",
      "repeticiones": [
       {
        "indice": 1,
@@ -506,25 +576,27 @@
         "torso",
         "brazo"
        ],
+       "motivo_no_auditable": null,
        "dt_pelvis_a_torso_ms": 4.2,
+       "dt_torso_a_brazo_ms": 95.8,
        "pico_pelvis_en_vuelo": true,
+       "brazo_global_fuera_de_ventana": false,
        "picos": {
         "pelvis": {
-         "instante_s": 0.05,
+         "instante_abs_s": 1.2583,
          "velocidad": 1224.4
         },
         "torso": {
-         "instante_s": 0.0542,
+         "instante_abs_s": 1.2625,
          "velocidad": 960.3
         },
         "brazo": {
-         "instante_s": 0.15,
+         "instante_abs_s": 1.3583,
          "velocidad": 4666.5
         }
        }
       }
-     ],
-     "archivo": "20260924_VCR_saque_trescuartos_240_01_rep03.mov"
+     ]
     },
     {
      "n_frames": 450,
@@ -551,6 +623,11 @@
      },
      "inversiones_z": 4,
      "frames_con_tramo_excluido_pct": 68.4,
+     "ancla_torso_s": 1.2583,
+     "ancla_pelvis_s": 1.2542,
+     "ancla_torso_vs_pelvis_ms": 4.1,
+     "brazo_pico_global_s": 0.7458,
+     "archivo": "20260924_VCR_saque_trescuartos_240_01_rep04.mov",
      "repeticiones": [
       {
        "indice": 1,
@@ -563,25 +640,27 @@
         "torso",
         "brazo"
        ],
-       "dt_pelvis_a_torso_ms": 4.2,
+       "motivo_no_auditable": null,
+       "dt_pelvis_a_torso_ms": 4.1,
+       "dt_torso_a_brazo_ms": 16.7,
        "pico_pelvis_en_vuelo": true,
+       "brazo_global_fuera_de_ventana": true,
        "picos": {
         "pelvis": {
-         "instante_s": 0.0583,
+         "instante_abs_s": 1.2542,
          "velocidad": 749.8
         },
         "torso": {
-         "instante_s": 0.0625,
+         "instante_abs_s": 1.2583,
          "velocidad": 674.8
         },
         "brazo": {
-         "instante_s": 0.0792,
+         "instante_abs_s": 1.275,
          "velocidad": 4373.9
         }
        }
       }
-     ],
-     "archivo": "20260924_VCR_saque_trescuartos_240_01_rep04.mov"
+     ]
     },
     {
      "n_frames": 600,
@@ -608,6 +687,11 @@
      },
      "inversiones_z": 5,
      "frames_con_tramo_excluido_pct": 75.7,
+     "ancla_torso_s": 1.8792,
+     "ancla_pelvis_s": 1.8917,
+     "ancla_torso_vs_pelvis_ms": 12.5,
+     "brazo_pico_global_s": 1.8917,
+     "archivo": "20260924_VCR_saque_trescuartos_240_01_rep05.mov",
      "repeticiones": [
       {
        "indice": 1,
@@ -620,25 +704,27 @@
         "pelvis",
         "brazo"
        ],
+       "motivo_no_auditable": null,
        "dt_pelvis_a_torso_ms": -12.5,
+       "dt_torso_a_brazo_ms": 12.5,
        "pico_pelvis_en_vuelo": true,
+       "brazo_global_fuera_de_ventana": false,
        "picos": {
         "pelvis": {
-         "instante_s": 0.05,
+         "instante_abs_s": 1.8917,
          "velocidad": 1015.7
         },
         "torso": {
-         "instante_s": 0.0375,
+         "instante_abs_s": 1.8792,
          "velocidad": 981.6
         },
         "brazo": {
-         "instante_s": 0.05,
+         "instante_abs_s": 1.8917,
          "velocidad": 6969.8
         }
        }
       }
-     ],
-     "archivo": "20260924_VCR_saque_trescuartos_240_01_rep05.mov"
+     ]
     },
     {
      "n_frames": 420,
@@ -665,6 +751,11 @@
      },
      "inversiones_z": 15,
      "frames_con_tramo_excluido_pct": 78.1,
+     "ancla_torso_s": 1.2542,
+     "ancla_pelvis_s": 1.2542,
+     "ancla_torso_vs_pelvis_ms": 0.0,
+     "brazo_pico_global_s": 1.2708,
+     "archivo": "20260924_VCR_saque_trescuartos_240_01_rep06.mov",
      "repeticiones": [
       {
        "indice": 1,
@@ -677,25 +768,27 @@
         "torso",
         "brazo"
        ],
+       "motivo_no_auditable": null,
        "dt_pelvis_a_torso_ms": 0.0,
+       "dt_torso_a_brazo_ms": 16.6,
        "pico_pelvis_en_vuelo": true,
+       "brazo_global_fuera_de_ventana": false,
        "picos": {
         "pelvis": {
-         "instante_s": 0.05,
+         "instante_abs_s": 1.2542,
          "velocidad": 1021.8
         },
         "torso": {
-         "instante_s": 0.05,
+         "instante_abs_s": 1.2542,
          "velocidad": 860.9
         },
         "brazo": {
-         "instante_s": 0.0667,
+         "instante_abs_s": 1.2708,
          "velocidad": 5318.1
         }
        }
       }
-     ],
-     "archivo": "20260924_VCR_saque_trescuartos_240_01_rep06.mov"
+     ]
     }
    ],
    "resumen": {
@@ -707,6 +800,14 @@
     "caida_pelvis_k1_a_k8_pct": 3.664903762567989,
     "caida_brazo_k1_a_k8_pct": 63.301868974934116,
     "inversiones_z_mediana": 5.0
+   },
+   "ordenes": {
+    "repeticiones": 6,
+    "auditables": 6,
+    "pelvis_torso_brazo": 5,
+    "brazo_primero": 0,
+    "brazo_global_fuera_de_ventana": 1,
+    "anclas_torso_vs_pelvis_dif_mediana_ms": 6.25
    }
   },
   "drive_perfil": {
@@ -736,6 +837,11 @@
      },
      "inversiones_z": 9,
      "frames_con_tramo_excluido_pct": 83.1,
+     "ancla_torso_s": 1.125,
+     "ancla_pelvis_s": 1.1667,
+     "ancla_torso_vs_pelvis_ms": 41.7,
+     "brazo_pico_global_s": null,
+     "archivo": "20260924_VCR_drive_perfil_240_01_rep01.mov",
      "repeticiones": [
       {
        "indice": 1,
@@ -744,15 +850,18 @@
         1.496
        ],
        "orden": null,
+       "motivo_no_auditable": "sin pico auditable para: brazo",
        "dt_pelvis_a_torso_ms": -41.7,
+       "dt_torso_a_brazo_ms": null,
        "pico_pelvis_en_vuelo": false,
+       "brazo_global_fuera_de_ventana": null,
        "picos": {
         "pelvis": {
-         "instante_s": 1.1667,
+         "instante_abs_s": 1.1667,
          "velocidad": 748.2
         },
         "torso": {
-         "instante_s": 1.125,
+         "instante_abs_s": 1.125,
          "velocidad": 722.8
         },
         "brazo": {
@@ -760,8 +869,7 @@
         }
        }
       }
-     ],
-     "archivo": "20260924_VCR_drive_perfil_240_01_rep01.mov"
+     ]
     },
     {
      "n_frames": 300,
@@ -788,6 +896,11 @@
      },
      "inversiones_z": 15,
      "frames_con_tramo_excluido_pct": 81.7,
+     "ancla_torso_s": 0.8208,
+     "ancla_pelvis_s": 0.8417,
+     "ancla_torso_vs_pelvis_ms": 20.9,
+     "brazo_pico_global_s": null,
+     "archivo": "20260924_VCR_drive_perfil_240_01_rep02.mov",
      "repeticiones": [
       {
        "indice": 1,
@@ -796,15 +909,18 @@
         1.246
        ],
        "orden": null,
-       "dt_pelvis_a_torso_ms": -20.8,
+       "motivo_no_auditable": "sin pico auditable para: brazo",
+       "dt_pelvis_a_torso_ms": -20.9,
+       "dt_torso_a_brazo_ms": null,
        "pico_pelvis_en_vuelo": false,
+       "brazo_global_fuera_de_ventana": null,
        "picos": {
         "pelvis": {
-         "instante_s": 0.8417,
+         "instante_abs_s": 0.8417,
          "velocidad": 563.4
         },
         "torso": {
-         "instante_s": 0.8208,
+         "instante_abs_s": 0.8208,
          "velocidad": 573.1
         },
         "brazo": {
@@ -812,8 +928,7 @@
         }
        }
       }
-     ],
-     "archivo": "20260924_VCR_drive_perfil_240_01_rep02.mov"
+     ]
     },
     {
      "n_frames": 300,
@@ -840,6 +955,11 @@
      },
      "inversiones_z": 10,
      "frames_con_tramo_excluido_pct": 77.7,
+     "ancla_torso_s": 0.55,
+     "ancla_pelvis_s": 0.5542,
+     "ancla_torso_vs_pelvis_ms": 4.2,
+     "brazo_pico_global_s": 0.2625,
+     "archivo": "20260924_VCR_drive_perfil_240_01_rep03.mov",
      "repeticiones": [
       {
        "indice": 1,
@@ -852,25 +972,27 @@
         "torso",
         "pelvis"
        ],
+       "motivo_no_auditable": null,
        "dt_pelvis_a_torso_ms": -4.2,
+       "dt_torso_a_brazo_ms": -287.5,
        "pico_pelvis_en_vuelo": false,
+       "brazo_global_fuera_de_ventana": false,
        "picos": {
         "pelvis": {
-         "instante_s": 0.5542,
+         "instante_abs_s": 0.5542,
          "velocidad": 795.8
         },
         "torso": {
-         "instante_s": 0.55,
+         "instante_abs_s": 0.55,
          "velocidad": 695.8
         },
         "brazo": {
-         "instante_s": 0.2625,
+         "instante_abs_s": 0.2625,
          "velocidad": 3966.3
         }
        }
       }
-     ],
-     "archivo": "20260924_VCR_drive_perfil_240_01_rep03.mov"
+     ]
     },
     {
      "n_frames": 300,
@@ -897,6 +1019,11 @@
      },
      "inversiones_z": 19,
      "frames_con_tramo_excluido_pct": 76.7,
+     "ancla_torso_s": 0.3917,
+     "ancla_pelvis_s": 0.4042,
+     "ancla_torso_vs_pelvis_ms": 12.5,
+     "brazo_pico_global_s": 0.2,
+     "archivo": "20260924_VCR_drive_perfil_240_01_rep04.mov",
      "repeticiones": [
       {
        "indice": 1,
@@ -909,25 +1036,27 @@
         "torso",
         "pelvis"
        ],
+       "motivo_no_auditable": null,
        "dt_pelvis_a_torso_ms": -12.5,
+       "dt_torso_a_brazo_ms": -191.7,
        "pico_pelvis_en_vuelo": false,
+       "brazo_global_fuera_de_ventana": false,
        "picos": {
         "pelvis": {
-         "instante_s": 0.4042,
+         "instante_abs_s": 0.4042,
          "velocidad": 615.2
         },
         "torso": {
-         "instante_s": 0.3917,
+         "instante_abs_s": 0.3917,
          "velocidad": 567.9
         },
         "brazo": {
-         "instante_s": 0.2,
+         "instante_abs_s": 0.2,
          "velocidad": 4546.5
         }
        }
       }
-     ],
-     "archivo": "20260924_VCR_drive_perfil_240_01_rep04.mov"
+     ]
     },
     {
      "n_frames": 450,
@@ -954,6 +1083,11 @@
      },
      "inversiones_z": 9,
      "frames_con_tramo_excluido_pct": 85.1,
+     "ancla_torso_s": 0.9208,
+     "ancla_pelvis_s": 0.925,
+     "ancla_torso_vs_pelvis_ms": 4.2,
+     "brazo_pico_global_s": 0.575,
+     "archivo": "20260924_VCR_drive_perfil_240_01_rep05.mov",
      "repeticiones": [
       {
        "indice": 1,
@@ -966,25 +1100,27 @@
         "torso",
         "pelvis"
        ],
+       "motivo_no_auditable": null,
        "dt_pelvis_a_torso_ms": -4.2,
+       "dt_torso_a_brazo_ms": -133.3,
        "pico_pelvis_en_vuelo": false,
+       "brazo_global_fuera_de_ventana": true,
        "picos": {
         "pelvis": {
-         "instante_s": 0.2417,
+         "instante_abs_s": 0.925,
          "velocidad": 652.5
         },
         "torso": {
-         "instante_s": 0.2375,
+         "instante_abs_s": 0.9208,
          "velocidad": 585.6
         },
         "brazo": {
-         "instante_s": 0.1042,
+         "instante_abs_s": 0.7875,
          "velocidad": 3000.0
         }
        }
       }
-     ],
-     "archivo": "20260924_VCR_drive_perfil_240_01_rep05.mov"
+     ]
     },
     {
      "n_frames": 480,
@@ -1011,6 +1147,11 @@
      },
      "inversiones_z": 6,
      "frames_con_tramo_excluido_pct": 85.4,
+     "ancla_torso_s": 0.8542,
+     "ancla_pelvis_s": 0.9292,
+     "ancla_torso_vs_pelvis_ms": 75.0,
+     "brazo_pico_global_s": 0.4125,
+     "archivo": "20260924_VCR_drive_perfil_240_01_rep06.mov",
      "repeticiones": [
       {
        "indice": 1,
@@ -1023,19 +1164,22 @@
         "torso",
         "brazo"
        ],
+       "motivo_no_auditable": null,
        "dt_pelvis_a_torso_ms": 20.8,
+       "dt_torso_a_brazo_ms": 150.0,
        "pico_pelvis_en_vuelo": false,
+       "brazo_global_fuera_de_ventana": false,
        "picos": {
         "pelvis": {
-         "instante_s": 0.0292,
+         "instante_abs_s": 0.2417,
          "velocidad": 251.5
         },
         "torso": {
-         "instante_s": 0.05,
+         "instante_abs_s": 0.2625,
          "velocidad": 287.7
         },
         "brazo": {
-         "instante_s": 0.2,
+         "instante_abs_s": 0.4125,
          "velocidad": 3547.4
         }
        }
@@ -1051,25 +1195,27 @@
         "torso",
         "pelvis"
        ],
+       "motivo_no_auditable": null,
        "dt_pelvis_a_torso_ms": -4.2,
+       "dt_torso_a_brazo_ms": -62.5,
        "pico_pelvis_en_vuelo": false,
+       "brazo_global_fuera_de_ventana": true,
        "picos": {
         "pelvis": {
-         "instante_s": 0.1292,
+         "instante_abs_s": 0.6417,
          "velocidad": 733.9
         },
         "torso": {
-         "instante_s": 0.125,
+         "instante_abs_s": 0.6375,
          "velocidad": 678.5
         },
         "brazo": {
-         "instante_s": 0.0625,
+         "instante_abs_s": 0.575,
          "velocidad": 2594.5
         }
        }
       }
-     ],
-     "archivo": "20260924_VCR_drive_perfil_240_01_rep06.mov"
+     ]
     }
    ],
    "resumen": {
@@ -1081,6 +1227,14 @@
     "caida_pelvis_k1_a_k8_pct": 2.96385600477731,
     "caida_brazo_k1_a_k8_pct": 81.33914379495775,
     "inversiones_z_mediana": 9.5
+   },
+   "ordenes": {
+    "repeticiones": 7,
+    "auditables": 5,
+    "pelvis_torso_brazo": 1,
+    "brazo_primero": 4,
+    "brazo_global_fuera_de_ventana": 2,
+    "anclas_torso_vs_pelvis_dif_mediana_ms": 16.7
    }
   },
   "drive_trescuartos": {
@@ -1110,6 +1264,11 @@
      },
      "inversiones_z": 3,
      "frames_con_tramo_excluido_pct": 64.2,
+     "ancla_torso_s": 1.3208,
+     "ancla_pelvis_s": 1.325,
+     "ancla_torso_vs_pelvis_ms": 4.2,
+     "brazo_pico_global_s": null,
+     "archivo": "20260924_VCR_drive_trescuartos_240_01_rep01.mov",
      "repeticiones": [
       {
        "indice": 1,
@@ -1118,15 +1277,18 @@
         1.996
        ],
        "orden": null,
+       "motivo_no_auditable": "sin pico auditable para: brazo",
        "dt_pelvis_a_torso_ms": -4.2,
+       "dt_torso_a_brazo_ms": null,
        "pico_pelvis_en_vuelo": false,
+       "brazo_global_fuera_de_ventana": null,
        "picos": {
         "pelvis": {
-         "instante_s": 1.325,
+         "instante_abs_s": 1.325,
          "velocidad": 856.8
         },
         "torso": {
-         "instante_s": 1.3208,
+         "instante_abs_s": 1.3208,
          "velocidad": 712.7
         },
         "brazo": {
@@ -1134,8 +1296,7 @@
         }
        }
       }
-     ],
-     "archivo": "20260924_VCR_drive_trescuartos_240_01_rep01.mov"
+     ]
     },
     {
      "n_frames": 300,
@@ -1162,6 +1323,11 @@
      },
      "inversiones_z": 7,
      "frames_con_tramo_excluido_pct": 86.3,
+     "ancla_torso_s": 0.5667,
+     "ancla_pelvis_s": 0.5542,
+     "ancla_torso_vs_pelvis_ms": 12.5,
+     "brazo_pico_global_s": null,
+     "archivo": "20260924_VCR_drive_trescuartos_240_01_rep02.mov",
      "repeticiones": [
       {
        "indice": 1,
@@ -1170,15 +1336,18 @@
         1.246
        ],
        "orden": null,
+       "motivo_no_auditable": "sin pico auditable para: brazo",
        "dt_pelvis_a_torso_ms": 12.5,
+       "dt_torso_a_brazo_ms": null,
        "pico_pelvis_en_vuelo": false,
+       "brazo_global_fuera_de_ventana": null,
        "picos": {
         "pelvis": {
-         "instante_s": 0.5542,
+         "instante_abs_s": 0.5542,
          "velocidad": 750.3
         },
         "torso": {
-         "instante_s": 0.5667,
+         "instante_abs_s": 0.5667,
          "velocidad": 662.9
         },
         "brazo": {
@@ -1186,8 +1355,7 @@
         }
        }
       }
-     ],
-     "archivo": "20260924_VCR_drive_trescuartos_240_01_rep02.mov"
+     ]
     },
     {
      "n_frames": 360,
@@ -1214,6 +1382,11 @@
      },
      "inversiones_z": 13,
      "frames_con_tramo_excluido_pct": 83.3,
+     "ancla_torso_s": 0.75,
+     "ancla_pelvis_s": 0.7417,
+     "ancla_torso_vs_pelvis_ms": 8.3,
+     "brazo_pico_global_s": null,
+     "archivo": "20260924_VCR_drive_trescuartos_240_01_rep03.mov",
      "repeticiones": [
       {
        "indice": 1,
@@ -1222,15 +1395,18 @@
         1.496
        ],
        "orden": null,
+       "motivo_no_auditable": "sin pico auditable para: brazo",
        "dt_pelvis_a_torso_ms": 8.3,
+       "dt_torso_a_brazo_ms": null,
        "pico_pelvis_en_vuelo": false,
+       "brazo_global_fuera_de_ventana": null,
        "picos": {
         "pelvis": {
-         "instante_s": 0.7417,
+         "instante_abs_s": 0.7417,
          "velocidad": 816.7
         },
         "torso": {
-         "instante_s": 0.75,
+         "instante_abs_s": 0.75,
          "velocidad": 695.5
         },
         "brazo": {
@@ -1238,8 +1414,7 @@
         }
        }
       }
-     ],
-     "archivo": "20260924_VCR_drive_trescuartos_240_01_rep03.mov"
+     ]
     },
     {
      "n_frames": 300,
@@ -1266,6 +1441,11 @@
      },
      "inversiones_z": 8,
      "frames_con_tramo_excluido_pct": 78.7,
+     "ancla_torso_s": 0.5875,
+     "ancla_pelvis_s": 0.5917,
+     "ancla_torso_vs_pelvis_ms": 4.2,
+     "brazo_pico_global_s": 0.25,
+     "archivo": "20260924_VCR_drive_trescuartos_240_01_rep04.mov",
      "repeticiones": [
       {
        "indice": 1,
@@ -1278,25 +1458,27 @@
         "torso",
         "pelvis"
        ],
+       "motivo_no_auditable": null,
        "dt_pelvis_a_torso_ms": -4.2,
+       "dt_torso_a_brazo_ms": -120.8,
        "pico_pelvis_en_vuelo": false,
+       "brazo_global_fuera_de_ventana": true,
        "picos": {
         "pelvis": {
-         "instante_s": 0.1458,
+         "instante_abs_s": 0.5917,
          "velocidad": 866.5
         },
         "torso": {
-         "instante_s": 0.1417,
+         "instante_abs_s": 0.5875,
          "velocidad": 694.0
         },
         "brazo": {
-         "instante_s": 0.0208,
+         "instante_abs_s": 0.4667,
          "velocidad": 2345.2
         }
        }
       }
-     ],
-     "archivo": "20260924_VCR_drive_trescuartos_240_01_rep04.mov"
+     ]
     },
     {
      "n_frames": 420,
@@ -1323,6 +1505,11 @@
      },
      "inversiones_z": 1,
      "frames_con_tramo_excluido_pct": 76.0,
+     "ancla_torso_s": 0.7167,
+     "ancla_pelvis_s": 0.7208,
+     "ancla_torso_vs_pelvis_ms": 4.1,
+     "brazo_pico_global_s": 0.9667,
+     "archivo": "20260924_VCR_drive_trescuartos_240_01_rep05.mov",
      "repeticiones": [
       {
        "indice": 1,
@@ -1335,19 +1522,22 @@
         "pelvis",
         "brazo"
        ],
-       "dt_pelvis_a_torso_ms": -4.2,
+       "motivo_no_auditable": null,
+       "dt_pelvis_a_torso_ms": -4.1,
+       "dt_torso_a_brazo_ms": 200.0,
        "pico_pelvis_en_vuelo": false,
+       "brazo_global_fuera_de_ventana": true,
        "picos": {
         "pelvis": {
-         "instante_s": 0.0667,
+         "instante_abs_s": 0.2458,
          "velocidad": 697.7
         },
         "torso": {
-         "instante_s": 0.0625,
+         "instante_abs_s": 0.2417,
          "velocidad": 493.4
         },
         "brazo": {
-         "instante_s": 0.2625,
+         "instante_abs_s": 0.4417,
          "velocidad": 2853.7
         }
        }
@@ -1363,25 +1553,27 @@
         "torso",
         "pelvis"
        ],
-       "dt_pelvis_a_torso_ms": -4.2,
+       "motivo_no_auditable": null,
+       "dt_pelvis_a_torso_ms": -4.1,
+       "dt_torso_a_brazo_ms": -45.9,
        "pico_pelvis_en_vuelo": false,
+       "brazo_global_fuera_de_ventana": true,
        "picos": {
         "pelvis": {
-         "instante_s": 0.1792,
+         "instante_abs_s": 0.7208,
          "velocidad": 944.0
         },
         "torso": {
-         "instante_s": 0.175,
+         "instante_abs_s": 0.7167,
          "velocidad": 831.1
         },
         "brazo": {
-         "instante_s": 0.1292,
+         "instante_abs_s": 0.6708,
          "velocidad": 2696.6
         }
        }
       }
-     ],
-     "archivo": "20260924_VCR_drive_trescuartos_240_01_rep05.mov"
+     ]
     },
     {
      "n_frames": 420,
@@ -1408,6 +1600,11 @@
      },
      "inversiones_z": 16,
      "frames_con_tramo_excluido_pct": 80.2,
+     "ancla_torso_s": 0.7042,
+     "ancla_pelvis_s": 0.6833,
+     "ancla_torso_vs_pelvis_ms": 20.9,
+     "brazo_pico_global_s": null,
+     "archivo": "20260924_VCR_drive_trescuartos_240_01_rep06.mov",
      "repeticiones": [
       {
        "indice": 1,
@@ -1416,15 +1613,18 @@
         1.746
        ],
        "orden": null,
-       "dt_pelvis_a_torso_ms": 20.8,
+       "motivo_no_auditable": "sin pico auditable para: brazo",
+       "dt_pelvis_a_torso_ms": 20.9,
+       "dt_torso_a_brazo_ms": null,
        "pico_pelvis_en_vuelo": false,
+       "brazo_global_fuera_de_ventana": null,
        "picos": {
         "pelvis": {
-         "instante_s": 0.6833,
+         "instante_abs_s": 0.6833,
          "velocidad": 663.6
         },
         "torso": {
-         "instante_s": 0.7042,
+         "instante_abs_s": 0.7042,
          "velocidad": 550.1
         },
         "brazo": {
@@ -1432,8 +1632,7 @@
         }
        }
       }
-     ],
-     "archivo": "20260924_VCR_drive_trescuartos_240_01_rep06.mov"
+     ]
     }
    ],
    "resumen": {
@@ -1445,6 +1644,14 @@
     "caida_pelvis_k1_a_k8_pct": 2.66644952094523,
     "caida_brazo_k1_a_k8_pct": 64.34724515947593,
     "inversiones_z_mediana": 7.5
+   },
+   "ordenes": {
+    "repeticiones": 7,
+    "auditables": 3,
+    "pelvis_torso_brazo": 0,
+    "brazo_primero": 2,
+    "brazo_global_fuera_de_ventana": 3,
+    "anclas_torso_vs_pelvis_dif_mediana_ms": 6.25
    }
   },
   "reves_perfil": {
@@ -1474,6 +1681,11 @@
      },
      "inversiones_z": 15,
      "frames_con_tramo_excluido_pct": 28.5,
+     "ancla_torso_s": 0.6708,
+     "ancla_pelvis_s": 0.6625,
+     "ancla_torso_vs_pelvis_ms": 8.3,
+     "brazo_pico_global_s": null,
+     "archivo": "20260924_VCR_reves_perfil_240_01_rep01.mov",
      "repeticiones": [
       {
        "indice": 1,
@@ -1482,15 +1694,18 @@
         1.621
        ],
        "orden": null,
+       "motivo_no_auditable": "sin pico auditable para: brazo",
        "dt_pelvis_a_torso_ms": 8.3,
+       "dt_torso_a_brazo_ms": null,
        "pico_pelvis_en_vuelo": false,
+       "brazo_global_fuera_de_ventana": null,
        "picos": {
         "pelvis": {
-         "instante_s": 0.6625,
+         "instante_abs_s": 0.6625,
          "velocidad": 518.2
         },
         "torso": {
-         "instante_s": 0.6708,
+         "instante_abs_s": 0.6708,
          "velocidad": 495.9
         },
         "brazo": {
@@ -1498,8 +1713,7 @@
         }
        }
       }
-     ],
-     "archivo": "20260924_VCR_reves_perfil_240_01_rep01.mov"
+     ]
     },
     {
      "n_frames": 360,
@@ -1526,6 +1740,11 @@
      },
      "inversiones_z": 1,
      "frames_con_tramo_excluido_pct": 40.0,
+     "ancla_torso_s": 0.5042,
+     "ancla_pelvis_s": 0.5,
+     "ancla_torso_vs_pelvis_ms": 4.2,
+     "brazo_pico_global_s": 0.8083,
+     "archivo": "20260924_VCR_reves_perfil_240_01_rep02.mov",
      "repeticiones": [
       {
        "indice": 1,
@@ -1538,19 +1757,22 @@
         "pelvis",
         "brazo"
        ],
+       "motivo_no_auditable": null,
        "dt_pelvis_a_torso_ms": -4.2,
+       "dt_torso_a_brazo_ms": 158.4,
        "pico_pelvis_en_vuelo": false,
+       "brazo_global_fuera_de_ventana": true,
        "picos": {
         "pelvis": {
-         "instante_s": 0.0292,
+         "instante_abs_s": 0.15,
          "velocidad": 214.6
         },
         "torso": {
-         "instante_s": 0.025,
+         "instante_abs_s": 0.1458,
          "velocidad": 225.7
         },
         "brazo": {
-         "instante_s": 0.1833,
+         "instante_abs_s": 0.3042,
          "velocidad": 2499.8
         }
        }
@@ -1566,19 +1788,22 @@
         "torso",
         "brazo"
        ],
+       "motivo_no_auditable": null,
        "dt_pelvis_a_torso_ms": 4.2,
+       "dt_torso_a_brazo_ms": 41.6,
        "pico_pelvis_en_vuelo": false,
+       "brazo_global_fuera_de_ventana": true,
        "picos": {
         "pelvis": {
-         "instante_s": 0.0542,
+         "instante_abs_s": 0.5,
          "velocidad": 290.3
         },
         "torso": {
-         "instante_s": 0.0583,
+         "instante_abs_s": 0.5042,
          "velocidad": 407.8
         },
         "brazo": {
-         "instante_s": 0.1,
+         "instante_abs_s": 0.5458,
          "velocidad": 2787.6
         }
        }
@@ -1594,25 +1819,27 @@
         "pelvis",
         "brazo"
        ],
+       "motivo_no_auditable": null,
        "dt_pelvis_a_torso_ms": -8.3,
+       "dt_torso_a_brazo_ms": 79.1,
        "pico_pelvis_en_vuelo": false,
+       "brazo_global_fuera_de_ventana": false,
        "picos": {
         "pelvis": {
-         "instante_s": 0.0667,
+         "instante_abs_s": 0.7375,
          "velocidad": 242.7
         },
         "torso": {
-         "instante_s": 0.0583,
+         "instante_abs_s": 0.7292,
          "velocidad": 378.1
         },
         "brazo": {
-         "instante_s": 0.1375,
+         "instante_abs_s": 0.8083,
          "velocidad": 2842.4
         }
        }
       }
-     ],
-     "archivo": "20260924_VCR_reves_perfil_240_01_rep02.mov"
+     ]
     },
     {
      "n_frames": 300,
@@ -1639,6 +1866,11 @@
      },
      "inversiones_z": 3,
      "frames_con_tramo_excluido_pct": 33.0,
+     "ancla_torso_s": 0.2583,
+     "ancla_pelvis_s": 0.2625,
+     "ancla_torso_vs_pelvis_ms": 4.2,
+     "brazo_pico_global_s": null,
+     "archivo": "20260924_VCR_reves_perfil_240_01_rep03.mov",
      "repeticiones": [
       {
        "indice": 1,
@@ -1647,15 +1879,18 @@
         1.246
        ],
        "orden": null,
+       "motivo_no_auditable": "sin pico auditable para: brazo",
        "dt_pelvis_a_torso_ms": -4.2,
+       "dt_torso_a_brazo_ms": null,
        "pico_pelvis_en_vuelo": false,
+       "brazo_global_fuera_de_ventana": null,
        "picos": {
         "pelvis": {
-         "instante_s": 0.2625,
+         "instante_abs_s": 0.2625,
          "velocidad": 279.2
         },
         "torso": {
-         "instante_s": 0.2583,
+         "instante_abs_s": 0.2583,
          "velocidad": 393.4
         },
         "brazo": {
@@ -1663,8 +1898,7 @@
         }
        }
       }
-     ],
-     "archivo": "20260924_VCR_reves_perfil_240_01_rep03.mov"
+     ]
     },
     {
      "n_frames": 300,
@@ -1691,6 +1925,11 @@
      },
      "inversiones_z": 6,
      "frames_con_tramo_excluido_pct": 35.0,
+     "ancla_torso_s": 0.5417,
+     "ancla_pelvis_s": 0.3333,
+     "ancla_torso_vs_pelvis_ms": 208.4,
+     "brazo_pico_global_s": null,
+     "archivo": "20260924_VCR_reves_perfil_240_01_rep04.mov",
      "repeticiones": [
       {
        "indice": 1,
@@ -1699,15 +1938,18 @@
         1.246
        ],
        "orden": null,
-       "dt_pelvis_a_torso_ms": 208.3,
+       "motivo_no_auditable": "sin pico auditable para: brazo",
+       "dt_pelvis_a_torso_ms": 208.4,
+       "dt_torso_a_brazo_ms": null,
        "pico_pelvis_en_vuelo": false,
+       "brazo_global_fuera_de_ventana": null,
        "picos": {
         "pelvis": {
-         "instante_s": 0.3333,
+         "instante_abs_s": 0.3333,
          "velocidad": 376.0
         },
         "torso": {
-         "instante_s": 0.5417,
+         "instante_abs_s": 0.5417,
          "velocidad": 580.5
         },
         "brazo": {
@@ -1715,8 +1957,7 @@
         }
        }
       }
-     ],
-     "archivo": "20260924_VCR_reves_perfil_240_01_rep04.mov"
+     ]
     },
     {
      "n_frames": 360,
@@ -1743,6 +1984,11 @@
      },
      "inversiones_z": 5,
      "frames_con_tramo_excluido_pct": 35.3,
+     "ancla_torso_s": 0.2958,
+     "ancla_pelvis_s": 0.4375,
+     "ancla_torso_vs_pelvis_ms": 141.7,
+     "brazo_pico_global_s": 0.925,
+     "archivo": "20260924_VCR_reves_perfil_240_01_rep05.mov",
      "repeticiones": [
       {
        "indice": 1,
@@ -1755,25 +2001,27 @@
         "torso",
         "brazo"
        ],
+       "motivo_no_auditable": null,
        "dt_pelvis_a_torso_ms": 162.5,
+       "dt_torso_a_brazo_ms": 266.7,
        "pico_pelvis_en_vuelo": false,
+       "brazo_global_fuera_de_ventana": true,
        "picos": {
         "pelvis": {
-         "instante_s": 0.0833,
+         "instante_abs_s": 0.4375,
          "velocidad": 249.9
         },
         "torso": {
-         "instante_s": 0.2458,
+         "instante_abs_s": 0.6,
          "velocidad": 300.7
         },
         "brazo": {
-         "instante_s": 0.5125,
+         "instante_abs_s": 0.8667,
          "velocidad": 3124.8
         }
        }
       }
-     ],
-     "archivo": "20260924_VCR_reves_perfil_240_01_rep05.mov"
+     ]
     },
     {
      "n_frames": 360,
@@ -1800,6 +2048,11 @@
      },
      "inversiones_z": 10,
      "frames_con_tramo_excluido_pct": 49.7,
+     "ancla_torso_s": 0.375,
+     "ancla_pelvis_s": 0.375,
+     "ancla_torso_vs_pelvis_ms": 0.0,
+     "brazo_pico_global_s": null,
+     "archivo": "20260924_VCR_reves_perfil_240_01_rep06.mov",
      "repeticiones": [
       {
        "indice": 1,
@@ -1808,15 +2061,18 @@
         1.496
        ],
        "orden": null,
+       "motivo_no_auditable": "sin pico auditable para: brazo",
        "dt_pelvis_a_torso_ms": 0.0,
+       "dt_torso_a_brazo_ms": null,
        "pico_pelvis_en_vuelo": false,
+       "brazo_global_fuera_de_ventana": null,
        "picos": {
         "pelvis": {
-         "instante_s": 0.375,
+         "instante_abs_s": 0.375,
          "velocidad": 379.9
         },
         "torso": {
-         "instante_s": 0.375,
+         "instante_abs_s": 0.375,
          "velocidad": 526.1
         },
         "brazo": {
@@ -1824,8 +2080,7 @@
         }
        }
       }
-     ],
-     "archivo": "20260924_VCR_reves_perfil_240_01_rep06.mov"
+     ]
     }
    ],
    "resumen": {
@@ -1837,6 +2092,14 @@
     "caida_pelvis_k1_a_k8_pct": 3.422270648435144,
     "caida_brazo_k1_a_k8_pct": 69.83575205324456,
     "inversiones_z_mediana": 5.5
+   },
+   "ordenes": {
+    "repeticiones": 8,
+    "auditables": 4,
+    "pelvis_torso_brazo": 2,
+    "brazo_primero": 0,
+    "brazo_global_fuera_de_ventana": 3,
+    "anclas_torso_vs_pelvis_dif_mediana_ms": 6.25
    }
   },
   "reves_trescuartos": {
@@ -1866,6 +2129,11 @@
      },
      "inversiones_z": 12,
      "frames_con_tramo_excluido_pct": 18.1,
+     "ancla_torso_s": 0.8708,
+     "ancla_pelvis_s": 0.9,
+     "ancla_torso_vs_pelvis_ms": 29.2,
+     "brazo_pico_global_s": 1.0042,
+     "archivo": "20260924_VCR_reves_trescuartos_240_01_rep01.mov",
      "repeticiones": [
       {
        "indice": 1,
@@ -1878,25 +2146,27 @@
         "pelvis",
         "brazo"
        ],
+       "motivo_no_auditable": null,
        "dt_pelvis_a_torso_ms": -29.2,
+       "dt_torso_a_brazo_ms": 133.4,
        "pico_pelvis_en_vuelo": false,
+       "brazo_global_fuera_de_ventana": false,
        "picos": {
         "pelvis": {
-         "instante_s": 0.7875,
+         "instante_abs_s": 0.9,
          "velocidad": 268.9
         },
         "torso": {
-         "instante_s": 0.7583,
+         "instante_abs_s": 0.8708,
          "velocidad": 472.1
         },
         "brazo": {
-         "instante_s": 0.8917,
+         "instante_abs_s": 1.0042,
          "velocidad": 1001.7
         }
        }
       }
-     ],
-     "archivo": "20260924_VCR_reves_trescuartos_240_01_rep01.mov"
+     ]
     },
     {
      "n_frames": 360,
@@ -1923,6 +2193,11 @@
      },
      "inversiones_z": 6,
      "frames_con_tramo_excluido_pct": 9.4,
+     "ancla_torso_s": 0.6042,
+     "ancla_pelvis_s": 0.6042,
+     "ancla_torso_vs_pelvis_ms": 0.0,
+     "brazo_pico_global_s": 0.7,
+     "archivo": "20260924_VCR_reves_trescuartos_240_01_rep02.mov",
      "repeticiones": [
       {
        "indice": 1,
@@ -1935,19 +2210,22 @@
         "torso",
         "brazo"
        ],
+       "motivo_no_auditable": null,
        "dt_pelvis_a_torso_ms": 0.0,
+       "dt_torso_a_brazo_ms": 95.8,
        "pico_pelvis_en_vuelo": false,
+       "brazo_global_fuera_de_ventana": false,
        "picos": {
         "pelvis": {
-         "instante_s": 0.5792,
+         "instante_abs_s": 0.6042,
          "velocidad": 235.9
         },
         "torso": {
-         "instante_s": 0.5792,
+         "instante_abs_s": 0.6042,
          "velocidad": 532.7
         },
         "brazo": {
-         "instante_s": 0.675,
+         "instante_abs_s": 0.7,
          "velocidad": 917.6
         }
        }
@@ -1959,11 +2237,14 @@
         1.496
        ],
        "orden": null,
+       "motivo_no_auditable": "sin pico auditable para: torso, brazo",
        "dt_pelvis_a_torso_ms": null,
+       "dt_torso_a_brazo_ms": null,
        "pico_pelvis_en_vuelo": false,
+       "brazo_global_fuera_de_ventana": true,
        "picos": {
         "pelvis": {
-         "instante_s": 0.1667,
+         "instante_abs_s": 1.4625,
          "velocidad": 145.4
         },
         "torso": {
@@ -1974,8 +2255,7 @@
         }
        }
       }
-     ],
-     "archivo": "20260924_VCR_reves_trescuartos_240_01_rep02.mov"
+     ]
     },
     {
      "n_frames": 360,
@@ -2002,6 +2282,11 @@
      },
      "inversiones_z": 0,
      "frames_con_tramo_excluido_pct": 5.6,
+     "ancla_torso_s": 0.6375,
+     "ancla_pelvis_s": 0.6292,
+     "ancla_torso_vs_pelvis_ms": 8.3,
+     "brazo_pico_global_s": 0.7042,
+     "archivo": "20260924_VCR_reves_trescuartos_240_01_rep03.mov",
      "repeticiones": [
       {
        "indice": 1,
@@ -2014,19 +2299,22 @@
         "torso",
         "brazo"
        ],
+       "motivo_no_auditable": null,
        "dt_pelvis_a_torso_ms": 8.3,
+       "dt_torso_a_brazo_ms": 66.7,
        "pico_pelvis_en_vuelo": false,
+       "brazo_global_fuera_de_ventana": false,
        "picos": {
         "pelvis": {
-         "instante_s": 0.5458,
+         "instante_abs_s": 0.6292,
          "velocidad": 221.4
         },
         "torso": {
-         "instante_s": 0.5542,
+         "instante_abs_s": 0.6375,
          "velocidad": 502.5
         },
         "brazo": {
-         "instante_s": 0.6208,
+         "instante_abs_s": 0.7042,
          "velocidad": 855.0
         }
        }
@@ -2038,24 +2326,26 @@
         1.342
        ],
        "orden": null,
+       "motivo_no_auditable": "sin pico auditable para: torso",
        "dt_pelvis_a_torso_ms": null,
+       "dt_torso_a_brazo_ms": null,
        "pico_pelvis_en_vuelo": false,
+       "brazo_global_fuera_de_ventana": true,
        "picos": {
         "pelvis": {
-         "instante_s": 0.1,
+         "instante_abs_s": 1.0083,
          "velocidad": 153.0
         },
         "torso": {
          "no_auditable": "sin picos marcados por encima de la prominencia mínima"
         },
         "brazo": {
-         "instante_s": 0.1,
+         "instante_abs_s": 1.0083,
          "velocidad": 589.3
         }
        }
       }
-     ],
-     "archivo": "20260924_VCR_reves_trescuartos_240_01_rep03.mov"
+     ]
     },
     {
      "n_frames": 390,
@@ -2082,6 +2372,11 @@
      },
      "inversiones_z": 2,
      "frames_con_tramo_excluido_pct": 22.6,
+     "ancla_torso_s": 0.8625,
+     "ancla_pelvis_s": 0.8708,
+     "ancla_torso_vs_pelvis_ms": 8.3,
+     "brazo_pico_global_s": 0.7,
+     "archivo": "20260924_VCR_reves_trescuartos_240_01_rep04.mov",
      "repeticiones": [
       {
        "indice": 1,
@@ -2094,19 +2389,22 @@
         "torso",
         "brazo"
        ],
-       "dt_pelvis_a_torso_ms": 129.2,
+       "motivo_no_auditable": null,
+       "dt_pelvis_a_torso_ms": 129.1,
+       "dt_torso_a_brazo_ms": 66.7,
        "pico_pelvis_en_vuelo": true,
+       "brazo_global_fuera_de_ventana": false,
        "picos": {
         "pelvis": {
-         "instante_s": 0.0792,
+         "instante_abs_s": 0.5042,
          "velocidad": 186.1
         },
         "torso": {
-         "instante_s": 0.2083,
+         "instante_abs_s": 0.6333,
          "velocidad": 217.9
         },
         "brazo": {
-         "instante_s": 0.275,
+         "instante_abs_s": 0.7,
          "velocidad": 2589.6
         }
        }
@@ -2122,19 +2420,22 @@
         "pelvis",
         "brazo"
        ],
+       "motivo_no_auditable": null,
        "dt_pelvis_a_torso_ms": -8.3,
+       "dt_torso_a_brazo_ms": 87.5,
        "pico_pelvis_en_vuelo": false,
+       "brazo_global_fuera_de_ventana": true,
        "picos": {
         "pelvis": {
-         "instante_s": 0.0875,
+         "instante_abs_s": 0.8708,
          "velocidad": 230.5
         },
         "torso": {
-         "instante_s": 0.0792,
+         "instante_abs_s": 0.8625,
          "velocidad": 548.8
         },
         "brazo": {
-         "instante_s": 0.1667,
+         "instante_abs_s": 0.95,
          "velocidad": 2431.5
         }
        }
@@ -2146,24 +2447,26 @@
         1.346
        ],
        "orden": null,
+       "motivo_no_auditable": "sin pico auditable para: torso",
        "dt_pelvis_a_torso_ms": null,
+       "dt_torso_a_brazo_ms": null,
        "pico_pelvis_en_vuelo": false,
+       "brazo_global_fuera_de_ventana": true,
        "picos": {
         "pelvis": {
-         "instante_s": 0.0875,
+         "instante_abs_s": 1.2333,
          "velocidad": 195.7
         },
         "torso": {
          "no_auditable": "sin picos marcados por encima de la prominencia mínima"
         },
         "brazo": {
-         "instante_s": 0.0208,
+         "instante_abs_s": 1.1667,
          "velocidad": 2089.0
         }
        }
       }
-     ],
-     "archivo": "20260924_VCR_reves_trescuartos_240_01_rep04.mov"
+     ]
     },
     {
      "n_frames": 360,
@@ -2190,6 +2493,11 @@
      },
      "inversiones_z": 15,
      "frames_con_tramo_excluido_pct": 14.7,
+     "ancla_torso_s": 0.5625,
+     "ancla_pelvis_s": 1.4042,
+     "ancla_torso_vs_pelvis_ms": 841.7,
+     "brazo_pico_global_s": 0.6333,
+     "archivo": "20260924_VCR_reves_trescuartos_240_01_rep05.mov",
      "repeticiones": [
       {
        "indice": 1,
@@ -2202,19 +2510,22 @@
         "torso",
         "brazo"
        ],
+       "motivo_no_auditable": null,
        "dt_pelvis_a_torso_ms": 329.2,
+       "dt_torso_a_brazo_ms": 70.8,
        "pico_pelvis_en_vuelo": true,
+       "brazo_global_fuera_de_ventana": false,
        "picos": {
         "pelvis": {
-         "instante_s": 0.2333,
+         "instante_abs_s": 0.2333,
          "velocidad": 287.4
         },
         "torso": {
-         "instante_s": 0.5625,
+         "instante_abs_s": 0.5625,
          "velocidad": 477.1
         },
         "brazo": {
-         "instante_s": 0.6333,
+         "instante_abs_s": 0.6333,
          "velocidad": 803.7
         }
        }
@@ -2230,19 +2541,22 @@
         "brazo",
         "pelvis"
        ],
+       "motivo_no_auditable": null,
        "dt_pelvis_a_torso_ms": -83.3,
+       "dt_torso_a_brazo_ms": 25.0,
        "pico_pelvis_en_vuelo": true,
+       "brazo_global_fuera_de_ventana": true,
        "picos": {
         "pelvis": {
-         "instante_s": 0.125,
+         "instante_abs_s": 0.925,
          "velocidad": 154.7
         },
         "torso": {
-         "instante_s": 0.0417,
+         "instante_abs_s": 0.8417,
          "velocidad": 104.3
         },
         "brazo": {
-         "instante_s": 0.0667,
+         "instante_abs_s": 0.8667,
          "velocidad": 673.8
         }
        }
@@ -2258,25 +2572,27 @@
         "torso",
         "pelvis"
        ],
+       "motivo_no_auditable": null,
        "dt_pelvis_a_torso_ms": -25.0,
+       "dt_torso_a_brazo_ms": -150.0,
        "pico_pelvis_en_vuelo": false,
+       "brazo_global_fuera_de_ventana": true,
        "picos": {
         "pelvis": {
-         "instante_s": 0.2708,
+         "instante_abs_s": 1.4042,
          "velocidad": 300.8
         },
         "torso": {
-         "instante_s": 0.2458,
+         "instante_abs_s": 1.3792,
          "velocidad": 173.7
         },
         "brazo": {
-         "instante_s": 0.0958,
+         "instante_abs_s": 1.2292,
          "velocidad": 126.3
         }
        }
       }
-     ],
-     "archivo": "20260924_VCR_reves_trescuartos_240_01_rep05.mov"
+     ]
     },
     {
      "n_frames": 390,
@@ -2303,6 +2619,11 @@
      },
      "inversiones_z": 4,
      "frames_con_tramo_excluido_pct": 17.4,
+     "ancla_torso_s": 0.7,
+     "ancla_pelvis_s": 0.7042,
+     "ancla_torso_vs_pelvis_ms": 4.2,
+     "brazo_pico_global_s": 0.8208,
+     "archivo": "20260924_VCR_reves_trescuartos_240_01_rep06.mov",
      "repeticiones": [
       {
        "indice": 1,
@@ -2315,25 +2636,27 @@
         "pelvis",
         "brazo"
        ],
+       "motivo_no_auditable": null,
        "dt_pelvis_a_torso_ms": -4.2,
+       "dt_torso_a_brazo_ms": 120.8,
        "pico_pelvis_en_vuelo": false,
+       "brazo_global_fuera_de_ventana": false,
        "picos": {
         "pelvis": {
-         "instante_s": 0.4458,
+         "instante_abs_s": 0.7042,
          "velocidad": 335.8
         },
         "torso": {
-         "instante_s": 0.4417,
+         "instante_abs_s": 0.7,
          "velocidad": 755.8
         },
         "brazo": {
-         "instante_s": 0.5625,
+         "instante_abs_s": 0.8208,
          "velocidad": 2830.0
         }
        }
       }
-     ],
-     "archivo": "20260924_VCR_reves_trescuartos_240_01_rep06.mov"
+     ]
     }
    ],
    "resumen": {
@@ -2345,6 +2668,14 @@
     "caida_pelvis_k1_a_k8_pct": 2.9198814321966973,
     "caida_brazo_k1_a_k8_pct": 2.4680106441053615,
     "inversiones_z_mediana": 5.0
+   },
+   "ordenes": {
+    "repeticiones": 12,
+    "auditables": 9,
+    "pelvis_torso_brazo": 4,
+    "brazo_primero": 1,
+    "brazo_global_fuera_de_ventana": 6,
+    "anclas_torso_vs_pelvis_dif_mediana_ms": 8.3
    }
   }
  }

@@ -3,8 +3,8 @@
  "version_motor": "0.4.0",
  "backend_pose": "mediapipe-0.10.18",
  "maquina": "Windows-10-10.0.26200-SP0",
- "segmentacion": "clip",
- "margen_ancla_ms": null,
+ "segmentacion": "ancla-torso",
+ "margen_ancla_ms": 300.0,
  "brazo_via": "codo",
  "pasos_k": [
   1,
@@ -50,8 +50,8 @@
       {
        "indice": 1,
        "ventana_s": [
-        0.0,
-        1.812
+        0.933,
+        1.533
        ],
        "orden": [
         "brazo",
@@ -114,15 +114,15 @@
       {
        "indice": 1,
        "ventana_s": [
-        0.0,
-        2.729
+        1.867,
+        2.467
        ],
        "orden": null,
        "motivo_no_auditable": "sin pico auditable para: pelvis",
        "dt_pelvis_a_torso_ms": null,
-       "dt_torso_a_brazo_ms": -304.2,
+       "dt_torso_a_brazo_ms": 91.6,
        "pico_pelvis_en_vuelo": null,
-       "brazo_global_fuera_de_ventana": false,
+       "brazo_global_fuera_de_ventana": true,
        "picos": {
         "pelvis": {
          "no_auditable": "velocidad implausible (1325 °/s > techo 1320): probable error de detección"
@@ -132,8 +132,8 @@
          "velocidad": 803.6
         },
         "brazo": {
-         "instante_abs_s": 1.8625,
-         "velocidad": 6931.0
+         "instante_abs_s": 2.2583,
+         "velocidad": 5241.8
         }
        }
       }
@@ -173,8 +173,8 @@
       {
        "indice": 1,
        "ventana_s": [
-        0.0,
-        1.762
+        0.404,
+        1.004
        ],
        "orden": null,
        "motivo_no_auditable": "sin pico auditable para: pelvis, brazo",
@@ -231,19 +231,19 @@
       {
        "indice": 1,
        "ventana_s": [
-        0.0,
-        1.529
+        0.583,
+        1.183
        ],
        "orden": [
-        "brazo",
         "torso",
-        "pelvis"
+        "pelvis",
+        "brazo"
        ],
        "motivo_no_auditable": null,
        "dt_pelvis_a_torso_ms": -12.5,
-       "dt_torso_a_brazo_ms": -445.8,
+       "dt_torso_a_brazo_ms": 112.5,
        "pico_pelvis_en_vuelo": true,
-       "brazo_global_fuera_de_ventana": false,
+       "brazo_global_fuera_de_ventana": true,
        "picos": {
         "pelvis": {
          "instante_abs_s": 0.8958,
@@ -254,8 +254,8 @@
          "velocidad": 751.7
         },
         "brazo": {
-         "instante_abs_s": 0.4375,
-         "velocidad": 5582.4
+         "instante_abs_s": 0.9958,
+         "velocidad": 5120.1
         }
        }
       }
@@ -295,8 +295,8 @@
       {
        "indice": 1,
        "ventana_s": [
-        0.0,
-        1.837
+        0.787,
+        1.387
        ],
        "orden": [
         "torso",
@@ -359,15 +359,15 @@
       {
        "indice": 1,
        "ventana_s": [
-        0.0,
-        1.917
+        0.954,
+        1.554
        ],
        "orden": null,
        "motivo_no_auditable": "sin pico auditable para: pelvis",
        "dt_pelvis_a_torso_ms": null,
-       "dt_torso_a_brazo_ms": -604.2,
+       "dt_torso_a_brazo_ms": -75.0,
        "pico_pelvis_en_vuelo": null,
-       "brazo_global_fuera_de_ventana": false,
+       "brazo_global_fuera_de_ventana": true,
        "picos": {
         "pelvis": {
          "no_auditable": "velocidad implausible (1386 °/s > techo 1320): probable error de detección"
@@ -377,8 +377,8 @@
          "velocidad": 901.2
         },
         "brazo": {
-         "instante_abs_s": 0.65,
-         "velocidad": 5160.2
+         "instante_abs_s": 1.1792,
+         "velocidad": 4186.1
         }
        }
       }
@@ -399,8 +399,8 @@
     "repeticiones": 6,
     "auditables": 3,
     "pelvis_torso_brazo": 0,
-    "brazo_primero": 2,
-    "brazo_global_fuera_de_ventana": 0,
+    "brazo_primero": 1,
+    "brazo_global_fuera_de_ventana": 3,
     "anclas_torso_vs_pelvis_dif_mediana_ms": 12.5
    }
   },
@@ -440,8 +440,8 @@
       {
        "indice": 1,
        "ventana_s": [
-        0.0,
-        1.871
+        0.971,
+        1.571
        ],
        "orden": [
         "pelvis",
@@ -504,8 +504,8 @@
       {
        "indice": 1,
        "ventana_s": [
-        0.0,
-        1.996
+        1.179,
+        1.779
        ],
        "orden": [
         "pelvis",
@@ -568,8 +568,8 @@
       {
        "indice": 1,
        "ventana_s": [
-        0.0,
-        1.871
+        0.963,
+        1.562
        ],
        "orden": [
         "pelvis",
@@ -632,19 +632,19 @@
       {
        "indice": 1,
        "ventana_s": [
-        0.0,
-        1.871
+        0.958,
+        1.558
        ],
        "orden": [
-        "brazo",
         "pelvis",
-        "torso"
+        "torso",
+        "brazo"
        ],
        "motivo_no_auditable": null,
        "dt_pelvis_a_torso_ms": 4.1,
-       "dt_torso_a_brazo_ms": -512.5,
+       "dt_torso_a_brazo_ms": 16.7,
        "pico_pelvis_en_vuelo": true,
-       "brazo_global_fuera_de_ventana": false,
+       "brazo_global_fuera_de_ventana": true,
        "picos": {
         "pelvis": {
          "instante_abs_s": 1.2542,
@@ -655,8 +655,8 @@
          "velocidad": 674.8
         },
         "brazo": {
-         "instante_abs_s": 0.7458,
-         "velocidad": 5053.1
+         "instante_abs_s": 1.275,
+         "velocidad": 4373.9
         }
        }
       }
@@ -696,8 +696,8 @@
       {
        "indice": 1,
        "ventana_s": [
-        0.0,
-        2.496
+        1.579,
+        2.179
        ],
        "orden": [
         "torso",
@@ -760,8 +760,8 @@
       {
        "indice": 1,
        "ventana_s": [
-        0.0,
-        1.746
+        0.954,
+        1.554
        ],
        "orden": [
         "pelvis",
@@ -804,9 +804,9 @@
    "ordenes": {
     "repeticiones": 6,
     "auditables": 6,
-    "pelvis_torso_brazo": 4,
-    "brazo_primero": 1,
-    "brazo_global_fuera_de_ventana": 0,
+    "pelvis_torso_brazo": 5,
+    "brazo_primero": 0,
+    "brazo_global_fuera_de_ventana": 1,
     "anclas_torso_vs_pelvis_dif_mediana_ms": 6.25
    }
   },
@@ -846,8 +846,8 @@
       {
        "indice": 1,
        "ventana_s": [
-        0.0,
-        1.496
+        0.825,
+        1.425
        ],
        "orden": null,
        "motivo_no_auditable": "sin pico auditable para: brazo",
@@ -905,8 +905,8 @@
       {
        "indice": 1,
        "ventana_s": [
-        0.0,
-        1.246
+        0.521,
+        1.121
        ],
        "orden": null,
        "motivo_no_auditable": "sin pico auditable para: brazo",
@@ -964,8 +964,8 @@
       {
        "indice": 1,
        "ventana_s": [
-        0.0,
-        1.246
+        0.25,
+        0.85
        ],
        "orden": [
         "brazo",
@@ -1028,8 +1028,8 @@
       {
        "indice": 1,
        "ventana_s": [
-        0.0,
-        1.246
+        0.092,
+        0.692
        ],
        "orden": [
         "brazo",
@@ -1092,8 +1092,8 @@
       {
        "indice": 1,
        "ventana_s": [
-        0.0,
-        1.871
+        0.621,
+        1.221
        ],
        "orden": [
         "brazo",
@@ -1102,9 +1102,9 @@
        ],
        "motivo_no_auditable": null,
        "dt_pelvis_a_torso_ms": -4.2,
-       "dt_torso_a_brazo_ms": -345.8,
+       "dt_torso_a_brazo_ms": -133.3,
        "pico_pelvis_en_vuelo": false,
-       "brazo_global_fuera_de_ventana": false,
+       "brazo_global_fuera_de_ventana": true,
        "picos": {
         "pelvis": {
          "instante_abs_s": 0.925,
@@ -1115,8 +1115,8 @@
          "velocidad": 585.6
         },
         "brazo": {
-         "instante_abs_s": 0.575,
-         "velocidad": 3919.7
+         "instante_abs_s": 0.7875,
+         "velocidad": 3000.0
         }
        }
       }
@@ -1156,8 +1156,8 @@
       {
        "indice": 1,
        "ventana_s": [
-        0.0,
-        1.996
+        0.554,
+        1.154
        ],
        "orden": [
         "brazo",
@@ -1166,9 +1166,9 @@
        ],
        "motivo_no_auditable": null,
        "dt_pelvis_a_torso_ms": -75.0,
-       "dt_torso_a_brazo_ms": -441.7,
+       "dt_torso_a_brazo_ms": -279.2,
        "pico_pelvis_en_vuelo": false,
-       "brazo_global_fuera_de_ventana": false,
+       "brazo_global_fuera_de_ventana": true,
        "picos": {
         "pelvis": {
          "instante_abs_s": 0.9292,
@@ -1179,8 +1179,8 @@
          "velocidad": 741.1
         },
         "brazo": {
-         "instante_abs_s": 0.4125,
-         "velocidad": 3547.4
+         "instante_abs_s": 0.575,
+         "velocidad": 2594.5
         }
        }
       }
@@ -1202,7 +1202,7 @@
     "auditables": 4,
     "pelvis_torso_brazo": 0,
     "brazo_primero": 4,
-    "brazo_global_fuera_de_ventana": 0,
+    "brazo_global_fuera_de_ventana": 2,
     "anclas_torso_vs_pelvis_dif_mediana_ms": 16.7
    }
   },
@@ -1242,8 +1242,8 @@
       {
        "indice": 1,
        "ventana_s": [
-        0.0,
-        1.996
+        1.021,
+        1.621
        ],
        "orden": null,
        "motivo_no_auditable": "sin pico auditable para: brazo",
@@ -1261,7 +1261,7 @@
          "velocidad": 712.7
         },
         "brazo": {
-         "no_auditable": "velocidad implausible (13481 °/s > techo 7104): probable error de detección"
+         "no_auditable": "velocidad implausible (7779 °/s > techo 7104): probable error de detección"
         }
        }
       }
@@ -1301,8 +1301,8 @@
       {
        "indice": 1,
        "ventana_s": [
-        0.0,
-        1.246
+        0.267,
+        0.867
        ],
        "orden": null,
        "motivo_no_auditable": "sin pico auditable para: brazo",
@@ -1320,7 +1320,7 @@
          "velocidad": 662.9
         },
         "brazo": {
-         "no_auditable": "velocidad implausible (18038 °/s > techo 7104): probable error de detección"
+         "no_auditable": "velocidad implausible (10174 °/s > techo 7104): probable error de detección"
         }
        }
       }
@@ -1360,8 +1360,8 @@
       {
        "indice": 1,
        "ventana_s": [
-        0.0,
-        1.496
+        0.45,
+        1.05
        ],
        "orden": null,
        "motivo_no_auditable": "sin pico auditable para: brazo",
@@ -1419,19 +1419,19 @@
       {
        "indice": 1,
        "ventana_s": [
-        0.0,
-        1.246
+        0.287,
+        0.887
        ],
        "orden": [
-        "brazo",
         "torso",
-        "pelvis"
+        "pelvis",
+        "brazo"
        ],
        "motivo_no_auditable": null,
        "dt_pelvis_a_torso_ms": -4.2,
-       "dt_torso_a_brazo_ms": -337.5,
+       "dt_torso_a_brazo_ms": 108.3,
        "pico_pelvis_en_vuelo": false,
-       "brazo_global_fuera_de_ventana": false,
+       "brazo_global_fuera_de_ventana": true,
        "picos": {
         "pelvis": {
          "instante_abs_s": 0.5917,
@@ -1442,8 +1442,8 @@
          "velocidad": 694.0
         },
         "brazo": {
-         "instante_abs_s": 0.25,
-         "velocidad": 4035.0
+         "instante_abs_s": 0.6958,
+         "velocidad": 2414.8
         }
        }
       }
@@ -1483,8 +1483,8 @@
       {
        "indice": 1,
        "ventana_s": [
-        0.0,
-        1.746
+        0.417,
+        1.017
        ],
        "orden": [
         "torso",
@@ -1547,8 +1547,8 @@
       {
        "indice": 1,
        "ventana_s": [
-        0.0,
-        1.746
+        0.404,
+        1.004
        ],
        "orden": null,
        "motivo_no_auditable": "sin pico auditable para: brazo",
@@ -1587,8 +1587,8 @@
     "repeticiones": 6,
     "auditables": 2,
     "pelvis_torso_brazo": 0,
-    "brazo_primero": 1,
-    "brazo_global_fuera_de_ventana": 0,
+    "brazo_primero": 0,
+    "brazo_global_fuera_de_ventana": 1,
     "anclas_torso_vs_pelvis_dif_mediana_ms": 6.25
    }
   },
@@ -1628,8 +1628,8 @@
       {
        "indice": 1,
        "ventana_s": [
-        0.0,
-        1.621
+        0.371,
+        0.971
        ],
        "orden": null,
        "motivo_no_auditable": "sin pico auditable para: brazo",
@@ -1687,8 +1687,8 @@
       {
        "indice": 1,
        "ventana_s": [
-        0.0,
-        1.496
+        0.204,
+        0.804
        ],
        "orden": [
         "pelvis",
@@ -1697,9 +1697,9 @@
        ],
        "motivo_no_auditable": null,
        "dt_pelvis_a_torso_ms": 4.2,
-       "dt_torso_a_brazo_ms": 304.1,
+       "dt_torso_a_brazo_ms": 41.6,
        "pico_pelvis_en_vuelo": false,
-       "brazo_global_fuera_de_ventana": false,
+       "brazo_global_fuera_de_ventana": true,
        "picos": {
         "pelvis": {
          "instante_abs_s": 0.5,
@@ -1710,8 +1710,8 @@
          "velocidad": 407.8
         },
         "brazo": {
-         "instante_abs_s": 0.8083,
-         "velocidad": 2842.4
+         "instante_abs_s": 0.5458,
+         "velocidad": 2787.6
         }
        }
       }
@@ -1752,7 +1752,7 @@
        "indice": 1,
        "ventana_s": [
         0.0,
-        1.246
+        0.558
        ],
        "orden": null,
        "motivo_no_auditable": "sin pico auditable para: brazo",
@@ -1810,8 +1810,8 @@
       {
        "indice": 1,
        "ventana_s": [
-        0.0,
-        1.246
+        0.242,
+        0.842
        ],
        "orden": null,
        "motivo_no_auditable": "sin pico auditable para: brazo",
@@ -1870,7 +1870,7 @@
        "indice": 1,
        "ventana_s": [
         0.0,
-        1.496
+        0.596
        ],
        "orden": [
         "torso",
@@ -1879,9 +1879,9 @@
        ],
        "motivo_no_auditable": null,
        "dt_pelvis_a_torso_ms": -141.7,
-       "dt_torso_a_brazo_ms": 629.2,
+       "dt_torso_a_brazo_ms": 187.5,
        "pico_pelvis_en_vuelo": false,
-       "brazo_global_fuera_de_ventana": false,
+       "brazo_global_fuera_de_ventana": true,
        "picos": {
         "pelvis": {
          "instante_abs_s": 0.4375,
@@ -1892,8 +1892,8 @@
          "velocidad": 305.1
         },
         "brazo": {
-         "instante_abs_s": 0.925,
-         "velocidad": 3153.4
+         "instante_abs_s": 0.4833,
+         "velocidad": 2740.8
         }
        }
       }
@@ -1933,8 +1933,8 @@
       {
        "indice": 1,
        "ventana_s": [
-        0.0,
-        1.496
+        0.075,
+        0.675
        ],
        "orden": null,
        "motivo_no_auditable": "sin pico auditable para: brazo",
@@ -1974,7 +1974,7 @@
     "auditables": 2,
     "pelvis_torso_brazo": 1,
     "brazo_primero": 0,
-    "brazo_global_fuera_de_ventana": 0,
+    "brazo_global_fuera_de_ventana": 2,
     "anclas_torso_vs_pelvis_dif_mediana_ms": 6.25
    }
   },
@@ -2014,8 +2014,8 @@
       {
        "indice": 1,
        "ventana_s": [
-        0.0,
-        1.496
+        0.571,
+        1.171
        ],
        "orden": [
         "torso",
@@ -2078,8 +2078,8 @@
       {
        "indice": 1,
        "ventana_s": [
-        0.0,
-        1.496
+        0.304,
+        0.904
        ],
        "orden": [
         "pelvis",
@@ -2142,8 +2142,8 @@
       {
        "indice": 1,
        "ventana_s": [
-        0.0,
-        1.496
+        0.338,
+        0.938
        ],
        "orden": [
         "pelvis",
@@ -2206,8 +2206,8 @@
       {
        "indice": 1,
        "ventana_s": [
-        0.0,
-        1.621
+        0.562,
+        1.163
        ],
        "orden": [
         "brazo",
@@ -2270,23 +2270,23 @@
       {
        "indice": 1,
        "ventana_s": [
-        0.0,
-        1.496
+        0.263,
+        0.863
        ],
        "orden": [
+        "pelvis",
         "torso",
-        "brazo",
-        "pelvis"
+        "brazo"
        ],
        "motivo_no_auditable": null,
-       "dt_pelvis_a_torso_ms": -841.7,
+       "dt_pelvis_a_torso_ms": 4.2,
        "dt_torso_a_brazo_ms": 70.8,
        "pico_pelvis_en_vuelo": false,
        "brazo_global_fuera_de_ventana": false,
        "picos": {
         "pelvis": {
-         "instante_abs_s": 1.4042,
-         "velocidad": 300.8
+         "instante_abs_s": 0.5583,
+         "velocidad": 205.4
         },
         "torso": {
          "instante_abs_s": 0.5625,
@@ -2334,8 +2334,8 @@
       {
        "indice": 1,
        "ventana_s": [
-        0.0,
-        1.621
+        0.4,
+        1.0
        ],
        "orden": [
         "torso",
@@ -2378,7 +2378,7 @@
    "ordenes": {
     "repeticiones": 6,
     "auditables": 6,
-    "pelvis_torso_brazo": 2,
+    "pelvis_torso_brazo": 3,
     "brazo_primero": 1,
     "brazo_global_fuera_de_ventana": 0,
     "anclas_torso_vs_pelvis_dif_mediana_ms": 8.3

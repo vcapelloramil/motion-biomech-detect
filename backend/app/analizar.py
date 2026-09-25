@@ -72,6 +72,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--clip-completo", action="store_true",
                         help="Todo el clip es UNA repetición (material pre-cortado, p. ej. Fase B); "
                              "no se intenta segmentar. Excluye --manual.")
+    parser.add_argument("--ancla", choices=["torso", "pelvis"], default=None,
+                        help="UNA repetición por clip, ventana centrada en el pico de ese segmento "
+                             "(± 300 ms). Excluye --manual y --clip-completo.")
     parser.add_argument("--brazo-via", default="codo", choices=["codo", "muneca"],
                         help="Articulación distal del segmento 'brazo' (default: codo).")
     parser.add_argument("--backend", default="mediapipe", choices=["mediapipe"])
@@ -115,6 +118,7 @@ def main(argv: list[str] | None = None) -> int:
         brazo_via=args.brazo_via,
         manual=_parse_manual(args.manual),
         clip_completo=args.clip_completo,
+        ancla=args.ancla,
         corpus_publico=es_corpus_publico(catalogo, args.clip),
     )
 

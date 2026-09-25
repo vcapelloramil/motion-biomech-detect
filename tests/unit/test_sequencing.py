@@ -155,3 +155,56 @@ def test_secuenciar_con_clip_completo_evalua_una_repeticion():
     resultados, resumen = secuenciar(seq, lado_dominante="der", clip_completo=True)
     assert len(resultados) == 1
     assert resumen.repeticiones_evaluadas == 1
+
+
+# --- ventana anclada al gesto ---------------------------------------------------
+
+def test_ventana_anclada_se_centra_en_el_pico_del_ancla():
+    from app.engine.sequencing import instante_ancla, ventana_anclada
+
+    seq = _seq_con_picos(0.25, 0.42, 0.60, semilla=1)
+    frame, _ = instante_ancla(seq, "der", "torso")
+    assert abs(frame / FPS - 0.42) < 0.03
+    v, motivo = ventana_anclada(seq, "der", "torso", margen_s=0.1)
+    assert motivo is None
+    assert v.desde_frame == frame - int(round(0.1 * FPS))
+    assert v.hasta_frame == frame + int(round(0.1 * FPS))
+
+
+def test_ventana_anclada_se_recorta_a_los_bordes_del_clip():
+    from app.engine.sequencing import ventana_anclada
+
+    seq = _seq_con_picos(0.25, 0.42, 0.60, semilla=1)
+    v, _ = ventana_anclada(seq, "der", "torso", margen_s=5.0)
+    assert (v.desde_frame, v.hasta_frame) == (0, seq.n_frames - 1)
+
+
+@pytest.mark.parametrize("ancla", ["torso", "pelvis"])
+def test_secuenciar_anclado_es_una_repeticion_y_recupera_el_orden(ancla):
+    seq = _seq_con_picos(0.25, 0.42, 0.60, semilla=1)
+    resultados, _ = secuenciar(seq, lado_dominante="der", ancla=ancla, margen_ancla_s=0.3)
+    assert len(resultados) == 1
+    assert resultados[0].orden_observado == (S.PELVIS, S.TORSO, S.BRAZO)
+
+
+def test_ancla_no_auditable_no_inventa_una_ventana():
+    seq = _seq_con_picos(0.25, 0.42, 0.60, semilla=3)
+    tramos = [TramoExcluido(A.HOMBRO_IZQ, "x", 0, 179), TramoExcluido(A.HOMBRO_DER, "x", 0, 179)]
+    resultados, resumen = secuenciar(
+        seq, lado_dominante="der", tramos_excluidos=tramos, ancla="torso"
+    )
+    assert len(resultados) == 1
+    r = resultados[0]
+    assert r.auditable is False and r.picos == {}
+    assert "sin ancla" in r.motivo_no_auditable
+    assert resumen.repeticiones_auditables == 0
+
+
+def test_ancla_invalida_o_combinada_con_otro_modo_se_rechaza():
+    seq = _seq_con_picos(0.25, 0.42, 0.60)
+    with pytest.raises(ValueError, match="ancla debe ser"):
+        secuenciar(seq, lado_dominante="der", ancla="brazo")
+    with pytest.raises(ValueError, match="excluyente"):
+        secuenciar(seq, lado_dominante="der", ancla="torso", clip_completo=True)
+    with pytest.raises(ValueError, match="excluyente"):
+        secuenciar(seq, lado_dominante="der", ancla="torso", manual=[(0.0, 0.3)])

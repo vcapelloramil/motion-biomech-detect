@@ -11,6 +11,7 @@ Principio 5 del plan de desarrollo: *"Nada se mide sin poder reproducirse."*
 | `e2-velocidad-inferencia.json` | `python -m app.bench_pose` (desde `backend/`) | fotogramas por segundo de la estimación de pose sobre el hardware disponible (tarea 2.6 / indicador §2.4 de la tesis). Lista de corridas; cada una anota máquina, backend, config, clip y resolución. |
 | `e4-fase-b-exploratorio-clip.json` | `python -m app.explorar_fase_b` (desde `backend/`) | Exploración cualitativa de la Fase B por gesto y encuadre: pico de ω de pelvis/torso/brazo según el paso de muestreo, inversiones de z, orden y desfase pelvis→torso. Cada clip pre-cortado = 1 repetición. **Exploratorio: no calibra ni mide criterios.** |
 | `e4-fase-b-exploratorio-auto.json` | `python -m app.explorar_fase_b --segmentacion auto` | Lo mismo con segmentación automática (valles de quietud), para comparar. |
+| `e4-fase-b-exploratorio-ancla-torso.json`, `...-ancla-pelvis.json` | `python -m app.explorar_fase_b -s ancla-torso -s ancla-pelvis` | Lo mismo con ventana anclada al pico global de torso (o de pelvis) ± 300 ms: una repetición por clip. Registra si el pico global del brazo cae fuera de la ventana y cuánto difieren entre sí ambas anclas. Los cuatro modos se calculan en una sola pasada (`-s` es repetible). |
 
 Los resultados dependen del hardware: no se comparan entre máquinas, solo consigo
 mismos a lo largo del tiempo.

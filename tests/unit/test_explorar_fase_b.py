@@ -46,3 +46,25 @@ def test_resumir_grupo_ignora_clips_no_auditables():
 
 def test_resumir_grupo_sin_clips_utilizables():
     assert resumir_grupo([{"no_auditable": "x"}]) == {"clips": 0, "clips_no_auditables": 1}
+
+
+def _rep(orden, fuera=None):
+    return {"orden": orden, "brazo_global_fuera_de_ventana": fuera}
+
+
+def test_resumir_ordenes_cuenta_correctas_brazo_primero_y_fuera_de_ventana():
+    from app.explorar_fase_b import resumir_ordenes
+
+    clips = [
+        {"repeticiones": [_rep(["pelvis", "torso", "brazo"], False)], "ancla_torso_vs_pelvis_ms": 10.0},
+        {"repeticiones": [_rep(["brazo", "torso", "pelvis"], True)], "ancla_torso_vs_pelvis_ms": 30.0},
+        {"repeticiones": [_rep(None, None)], "ancla_torso_vs_pelvis_ms": None},
+        {"no_auditable": "sin series"},
+    ]
+    o = resumir_ordenes(clips)
+    assert o["repeticiones"] == 3
+    assert o["auditables"] == 2
+    assert o["pelvis_torso_brazo"] == 1
+    assert o["brazo_primero"] == 1
+    assert o["brazo_global_fuera_de_ventana"] == 1
+    assert o["anclas_torso_vs_pelvis_dif_mediana_ms"] == pytest.approx(20.0)

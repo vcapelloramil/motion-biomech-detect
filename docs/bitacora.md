@@ -86,6 +86,34 @@ con `manual`) y se comparó con el automático (`docs/resultados/e4-fase-b-explo
   es sensible a la ventana en ambos sentidos; falta una ventana anclada al gesto (p. ej.
   alrededor del pico de pelvis/torso, o marcas manuales).
 
+### Ventana anclada al gesto (2026-09-25)
+
+Se implementó `secuenciar(..., ancla="torso"|"pelvis", margen_ancla_s=0.3)` (`instante_ancla`,
+`ventana_anclada`; `analizar --ancla`; excluyente con `manual` y `clip_completo`): UNA
+repetición por clip, ventana centrada en el pico global del segmento ancla ± 300 ms. Si el
+ancla no es auditable (tramo excluido o techo de plausibilidad) no se inventa una ventana
+(R3). Salidas en `docs/resultados/e4-fase-b-exploratorio-ancla-{torso,pelvis}.json`.
+
+**Sesgo a tener presente:** restringir la búsqueda a la vecindad del tronco excluye por
+construcción los picos tempranos del brazo. Por eso cada repetición registra
+`brazo_global_fuera_de_ventana`. Y anclar en un segmento no vuelve circular el orden
+pelvis→torso solo si se compara contra el otro segmento (el ancla queda en el centro).
+
+- **Las dos anclas coinciden:** torso vs pelvis difieren ≤ 75 ms en 30 de los 33 clips con
+  ambas auditables (mediana 8–21 ms por grupo). Excepciones: 142 y 208 ms (revés perfil) y
+  842 ms (revés tres cuartos rep05). En saque de perfil solo 3 de 6 clips tienen ambas auditables.
+- **Saque tres cuartos (ancla torso):** el brazo llega DESPUÉS del torso en 6/6 (+12 a
+  +138 ms) y pelvis→torso→brazo sale en 5/6 (igual que `auto`).
+- **Drive de perfil: la inversión PERSISTE.** En las 4 repeticiones con brazo auditable el
+  pico del brazo llega 133–288 ms ANTES del torso, con la ventana anclada y con las dos anclas.
+  En rep03 y rep06 el máximo dentro de la ventana queda a ≤ 21 ms del borde: el pico real
+  está aún más atrás. (Drive tres cuartos: brazo después del torso en 2/2 auditables.)
+- **Revés tres cuartos, brazo: la anomalía PERSISTE.** Los picos son idénticos a los del clip
+  completo (0 fuera de ventana): 4 de 6 en 800–1000 °/s, casi constantes con k; los otros 2 en
+  2590–2830. El brazo queda último en 5/6: lo anómalo es la magnitud, no el orden.
+- Criterio de Valentín cumplido: ambas anomalías persisten con la ventana bien anclada, así
+  que se tratan como hallazgos a investigar, no como artefactos de ventana.
+
 ### Hipótesis a contrastar (Valentín, 2026-09-25)
 
 El saque tiene fase aérea y drive/revés no. **Si la pelvis de drive y revés se acerca más a
