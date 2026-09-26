@@ -101,6 +101,14 @@ Proporciones con intervalo de Wilson de 95 %. Si no se cumple: replegarse a la f
   sesiones) y Δ = |mediana s1 − mediana s2|, con intervalo bootstrap de Δ. **Consistente si Δ ≤ σ_w.**
   Cumplimiento: ≥ 75 % de las combinaciones métrica × grupo consistentes. *(Propuesta de Claude; no
   objetada.)*
+- **Corrección de la propia propuesta, agregada el 26/9 ANTES de medir el Criterio 3** (a partir de una
+  simulación, no de datos): con **n = 6 por sesión** y **ningún cambio real**, la regla `Δ ≤ σ_w` da
+  "consistente" solo el **75,6 %** de las veces (n = 12: 92 %; n = 18: 97,6 %). Es decir, el umbral de 75 %
+  coincide con lo que se espera **por azar** cuando no cambió nada, y el veredicto quedaría casi determinado
+  por el ruido. Se agrega una **lectura calibrada**: el **p-valor de permutación de Δ** (10 000 permutaciones)
+  y la fracción de combinaciones **sin evidencia de diferencia entre sesiones (p > 0,05)**, que bajo el mismo
+  proceso da ~95 %. **La regla original se conserva y se informa**; el resultado se lee con las dos. La
+  propiedad queda fijada en `tests/unit/test_medicion_criterio3.py`.
 - **(i) Separación cadera-hombro máxima:** máximo, dentro de la ventana ± 300 ms del ancla, del ángulo entre
   el eje de caderas y el de hombros (3D, series filtradas por E3).
 - **(ii) "Instante de pico": DEFINICIÓN PENDIENTE — [A CONFIRMAR].** Con una repetición por clip y la
