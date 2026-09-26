@@ -6,6 +6,68 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-09-26 — Medición formal: Criterio 1, Criterio 3 (métrica i) y paquete ciego del Criterio 2
+
+**Rama:** `etapa/4-cinematica`. Motor `0.4.1`. Diseño y reglas: decisión **014**, vigente desde el commit de
+congelamiento `cefadb6` (Criterio 3 con lectura calibrada: `c970bf6`). Cada resultado registra su commit y que
+el árbol estaba limpio. **Sesión 2 = medición; sesión 1 = réplica exploratoria.** Resumen legible y reproducible:
+`docs/resultados/criterio1-resumen.md` (`python -m app.resumen_criterio1`).
+
+### Criterio 1 (τ = 1 fotograma, primaria; sesión 2)
+
+Dos mediciones separadas (1 = repetibilidad del orden, regla del criterio; 1c = coincidencia con el orden esperado,
+aparte y sin umbral). n = 6 por grupo salvo el saque de tres cuartos (18, tres tomas).
+
+| Grupo (sesión 2) | Ordenables / n (1a) | 1b (orden modal) | 1c (esperado) | Criterio 1 |
+| --- | --- | --- | --- | --- |
+| drive · perfil (par) | 6/6 | 1,00 `tp` | 0,00 | **cumple** (repetible pero invertido) |
+| saque · perfil (par) | 6/6 | 1,00 `tp` | 0,00 | **cumple** (repetible pero invertido) |
+| revés · tres cuartos (par / cadena) | 6/6 | 0,83 `tp` / 0,83 `tpb` | 0,17 / 0,17 | **cumple** (orden invertido) |
+| revés · perfil (par) | 4/6 | 0,75 `pt` | 0,75 | no cumple |
+| saque · tres cuartos (par / cadena) | 9/18 y 9/18 | 1,00 `pt` / 0,89 `ptb` | 1,00 / 0,89 | no cumple (1a = 0,50) |
+| drive · tres cuartos (par / cadena) | **0/6** | — | — | no cumple |
+
+- **Sensibilidad (τ = 2 y 3, declarada de antemano):** solo cumplen el saque y el drive de perfil (par pelvis-torso);
+  el revés de tres cuartos deja de cumplir (1a 0,33).
+- **Réplica exploratoria (sesión 1, no independiente):** **ningún grupo cumple** con τ = 1 (1a entre 0,33 y 0,67).
+  Donde el orden es ordenable, coincide con la sesión 2 (perfil: torso primero; tres cuartos: saque `pt`).
+- **Complemento DESCRIPTIVO (no pre-registrado), sesión 2:** el eslabón que limita a la cadena es **pelvis-torso**,
+  no el brazo. En tres cuartos |pelvis − torso| tiene mediana de 1,0–2,0 fotogramas (en el drive, los 6 picos caen
+  a 0 o ±1 fotograma: no es un artefacto, todos son válidos y auditables), mientras que torso→brazo se separa
+  22–28,5 fotogramas (≈ 92–119 ms) con el brazo después en 6/6, 6/6 y 16/17 (la sesión 1: 5/6, 6/6, 6/6).
+- **Con n = 6 por grupo** el intervalo de Wilson de "6 de 6" es [0,61–1,00]: "cumple" no establece estadísticamente
+  la meta de 0,8. Se informa en el JSON y en el resumen.
+- **No se decide nada sobre el punto de decisión de la Etapa 4** (tabla del plan: Criterio 1 falla → replegarse a
+  la fase de preparación). Lo que se observa es que, a 240 fps, **pelvis y torso en tres cuartos no se separan más
+  de 1–2 fotogramas**, un límite de resolución; y que perfil los separa de forma repetible pero invertida.
+
+### Criterio 3, métrica (i): separación cadera-hombro máxima (parcial)
+
+Sesión 1 contra sesión 2, saque de tres cuartos solo con la toma `02` (pedido de Valentín). **5 de 6** combinaciones
+con Δ ≤ σ_w (83 %, umbral 75 %); 5 de 6 sin evidencia de diferencia (p de permutación > 0,05). El grupo que no
+cumple es el **drive de perfil**: Δ = 6,03° contra σ_w = 3,14° (medianas 30,65° y 24,62°; p = 0,044, **sin corrección
+por 6 comparaciones**). El revés de tres cuartos queda al borde (p = 0,074) y es donde el encuadre difiere más
+entre sesiones (torso en píxeles 17 %, por debajo del 20 % de señalamiento). **Falta la métrica (ii); no hay
+veredicto del Criterio 3.** Corrección previa a medir: con n = 6 por sesión y ningún cambio real la regla
+Δ ≤ σ_w da "consistente" solo 75,6 % de las veces (igual al umbral); por eso se agregó el p de permutación (014).
+
+### Criterio 2: paquete ciego listo
+
+`C:\Users\valen\kinetiq-data\fase-b\criterio2\`: 18 recortes sin esqueleto (`ciego/C2-01.png` … `C2-18.png`),
+`planilla-manual.csv` (36 mediciones: rodilla y codo), `LEEME.md`; la clave está en `.clave-NO-ABRIR/` y **no se abre
+hasta terminar**. Selección con semilla `26092026`, 3 fotogramas por estrato (gesto × encuadre), solo donde el sistema
+reporta confianza ≥ 0,6; 5 fotogramas marcados para repetir la medición. Al completar la planilla:
+`python -m app.criterio2 analizar <carpeta>`.
+
+### Pendiente
+
+- **Valentín:** goniometría manual del Criterio 2; y confirmar la **definición del "instante de pico"** del
+  Criterio 3 (la propuesta es el instante del pico de torso desde el instante de máxima separación cadera-hombro;
+  la métrica (ii) queda detrás de un flag y no se mide hasta entonces).
+- Veredictos del Criterio 2 y del Criterio 3 completo; punto de decisión de la Etapa 4 (Valentín).
+
+---
+
 ## 2026-09-26 — Sesión 2 completa, Criterio 3 redefinido y diseño de la medición formal (propuesta)
 
 **Rama:** `etapa/4-cinematica`. Motor `0.4.1` (sin cambios). Sesión 2 catalogada: 48 repeticiones

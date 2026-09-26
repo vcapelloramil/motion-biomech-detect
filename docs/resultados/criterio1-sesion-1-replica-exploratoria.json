@@ -1,0 +1,1419 @@
+{
+ "generado_utc": "2026-09-26T18:31:47+00:00",
+ "decision": "014",
+ "sesion": 1,
+ "rol": "RÉPLICA EXPLORATORIA (no independiente)",
+ "etiqueta": "replica-exploratoria",
+ "version_motor": "0.4.1",
+ "commit": "cefadb65753cfdfc0a1537f91db18b607dd3458a",
+ "arbol_sucio": false,
+ "tau_primaria": 1,
+ "taus": [
+  1,
+  2,
+  3
+ ],
+ "umbral": 0.8,
+ "margen_ancla_s": 0.3,
+ "brazo_via": "codo",
+ "repeticiones": [
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep01.mov",
+   "gesto": "drive",
+   "encuadre": "perfil",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "frames": {
+    "p": 280,
+    "t": 270,
+    "b": 261
+   },
+   "corte_hz": 10.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep02.mov",
+   "gesto": "drive",
+   "encuadre": "perfil",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "frames": {
+    "p": 202,
+    "t": 197,
+    "b": 234
+   },
+   "corte_hz": 8.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep03.mov",
+   "gesto": "drive",
+   "encuadre": "perfil",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "frames": {
+    "p": 133,
+    "t": 132,
+    "b": 120
+   },
+   "corte_hz": 10.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep04.mov",
+   "gesto": "drive",
+   "encuadre": "perfil",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "frames": {
+    "p": 97,
+    "t": 94,
+    "b": 77
+   },
+   "corte_hz": 8.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep05.mov",
+   "gesto": "drive",
+   "encuadre": "perfil",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "frames": {
+    "p": 222,
+    "t": 221,
+    "b": 199
+   },
+   "corte_hz": 8.0
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep06.mov",
+   "gesto": "drive",
+   "encuadre": "perfil",
+   "toma": "01",
+   "valida": true,
+   "motivo": "sin pico auditable para: brazo",
+   "frames": {
+    "p": 223,
+    "t": 205,
+    "b": null
+   },
+   "corte_hz": 8.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep01.mov",
+   "gesto": "drive",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "frames": {
+    "p": 318,
+    "t": 317,
+    "b": 352
+   },
+   "corte_hz": 9.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep02.mov",
+   "gesto": "drive",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "frames": {
+    "p": 133,
+    "t": 136,
+    "b": 165
+   },
+   "corte_hz": 9.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep03.mov",
+   "gesto": "drive",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "frames": {
+    "p": 178,
+    "t": 180,
+    "b": 211
+   },
+   "corte_hz": 9.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep04.mov",
+   "gesto": "drive",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "frames": {
+    "p": 142,
+    "t": 141,
+    "b": 121
+   },
+   "corte_hz": 8.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep05.mov",
+   "gesto": "drive",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "frames": {
+    "p": 173,
+    "t": 172,
+    "b": 195
+   },
+   "corte_hz": 8.0
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep06.mov",
+   "gesto": "drive",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "frames": {
+    "p": 164,
+    "t": 169,
+    "b": 195
+   },
+   "corte_hz": 9.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep01.mov",
+   "gesto": "reves",
+   "encuadre": "perfil",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "frames": {
+    "p": 159,
+    "t": 161,
+    "b": 156
+   },
+   "corte_hz": 8.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep02.mov",
+   "gesto": "reves",
+   "encuadre": "perfil",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "frames": {
+    "p": 120,
+    "t": 121,
+    "b": 124
+   },
+   "corte_hz": 9.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep03.mov",
+   "gesto": "reves",
+   "encuadre": "perfil",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "frames": {
+    "p": 63,
+    "t": 62,
+    "b": 59
+   },
+   "corte_hz": 8.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep04.mov",
+   "gesto": "reves",
+   "encuadre": "perfil",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "frames": {
+    "p": 80,
+    "t": 130,
+    "b": 74
+   },
+   "corte_hz": 9.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep05.mov",
+   "gesto": "reves",
+   "encuadre": "perfil",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "frames": {
+    "p": 105,
+    "t": 71,
+    "b": 67
+   },
+   "corte_hz": 8.0
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep06.mov",
+   "gesto": "reves",
+   "encuadre": "perfil",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "frames": {
+    "p": 90,
+    "t": 90,
+    "b": 43
+   },
+   "corte_hz": 8.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep01.mov",
+   "gesto": "reves",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "frames": {
+    "p": 216,
+    "t": 209,
+    "b": 241
+   },
+   "corte_hz": 8.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep02.mov",
+   "gesto": "reves",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "frames": {
+    "p": 145,
+    "t": 145,
+    "b": 168
+   },
+   "corte_hz": 8.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep03.mov",
+   "gesto": "reves",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "frames": {
+    "p": 151,
+    "t": 153,
+    "b": 169
+   },
+   "corte_hz": 8.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep04.mov",
+   "gesto": "reves",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "frames": {
+    "p": 209,
+    "t": 207,
+    "b": 227
+   },
+   "corte_hz": 9.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep05.mov",
+   "gesto": "reves",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "frames": {
+    "p": 134,
+    "t": 135,
+    "b": 152
+   },
+   "corte_hz": 9.0
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep06.mov",
+   "gesto": "reves",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "frames": {
+    "p": 169,
+    "t": 168,
+    "b": 186
+   },
+   "corte_hz": 9.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep01.mov",
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "frames": {
+    "p": 297,
+    "t": 296,
+    "b": 311
+   },
+   "corte_hz": 9.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep02.mov",
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "toma": "01",
+   "valida": true,
+   "motivo": "sin pico auditable para: pelvis",
+   "frames": {
+    "p": null,
+    "t": 520,
+    "b": 503
+   },
+   "corte_hz": 9.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep03.mov",
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "toma": "01",
+   "valida": true,
+   "motivo": "sin pico auditable para: pelvis, brazo",
+   "frames": {
+    "p": null,
+    "t": 169,
+    "b": null
+   },
+   "corte_hz": 9.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep04.mov",
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "frames": {
+    "p": 215,
+    "t": 212,
+    "b": 231
+   },
+   "corte_hz": 8.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep05.mov",
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "frames": {
+    "p": 264,
+    "t": 261,
+    "b": 277
+   },
+   "corte_hz": 9.0
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep06.mov",
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "toma": "01",
+   "valida": true,
+   "motivo": "sin pico auditable para: pelvis",
+   "frames": {
+    "p": null,
+    "t": 301,
+    "b": 284
+   },
+   "corte_hz": 9.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep01.mov",
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "frames": {
+    "p": 303,
+    "t": 305,
+    "b": 331
+   },
+   "corte_hz": 8.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep02.mov",
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "frames": {
+    "p": 352,
+    "t": 355,
+    "b": 357
+   },
+   "corte_hz": 9.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep03.mov",
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "frames": {
+    "p": 302,
+    "t": 303,
+    "b": 334
+   },
+   "corte_hz": 9.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep04.mov",
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "frames": {
+    "p": 301,
+    "t": 302,
+    "b": 331
+   },
+   "corte_hz": 8.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep05.mov",
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "frames": {
+    "p": 454,
+    "t": 451,
+    "b": 452
+   },
+   "corte_hz": 11.0
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep06.mov",
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "frames": {
+    "p": 301,
+    "t": 301,
+    "b": 328
+   },
+   "corte_hz": 9.0
+  }
+ ],
+ "resultado_por_tau": {
+  "1": {
+   "drive|perfil": {
+    "par_pelvis_torso": {
+     "n": 6,
+     "validas": 6,
+     "ordenables": 4,
+     "1a_sobre_todas": 0.6666666666666666,
+     "1a_sobre_todas_ic95": [
+      0.29998832134152864,
+      0.9032306674407831
+     ],
+     "1a_sobre_validas": 0.6666666666666666,
+     "1b_orden_modal": "tp",
+     "1b_repetibilidad": 1.0,
+     "1b_ic95": [
+      0.5100999795960008,
+      1.0
+     ],
+     "1c_esperado": "pt",
+     "1c_coincidencia": 0.0,
+     "1c_ic95": [
+      0.0,
+      0.48990002040399916
+     ],
+     "ordenes": {
+      "tp": 4
+     },
+     "criterio_1_cumplido": false
+    }
+   },
+   "drive|trescuartos": {
+    "par_pelvis_torso": {
+     "n": 6,
+     "validas": 6,
+     "ordenables": 3,
+     "1a_sobre_todas": 0.5,
+     "1a_sobre_todas_ic95": [
+      0.18761280689940868,
+      0.8123871931005913
+     ],
+     "1a_sobre_validas": 0.5,
+     "1b_orden_modal": "pt",
+     "1b_repetibilidad": 1.0,
+     "1b_ic95": [
+      0.43849391955098227,
+      1.0
+     ],
+     "1c_esperado": "pt",
+     "1c_coincidencia": 1.0,
+     "1c_ic95": [
+      0.43849391955098227,
+      1.0
+     ],
+     "ordenes": {
+      "pt": 3
+     },
+     "criterio_1_cumplido": false
+    },
+    "cadena": {
+     "n": 6,
+     "validas": 6,
+     "ordenables": 3,
+     "1a_sobre_todas": 0.5,
+     "1a_sobre_todas_ic95": [
+      0.18761280689940868,
+      0.8123871931005913
+     ],
+     "1a_sobre_validas": 0.5,
+     "1b_orden_modal": "ptb",
+     "1b_repetibilidad": 1.0,
+     "1b_ic95": [
+      0.43849391955098227,
+      1.0
+     ],
+     "1c_esperado": "ptb",
+     "1c_coincidencia": 1.0,
+     "1c_ic95": [
+      0.43849391955098227,
+      1.0
+     ],
+     "ordenes": {
+      "ptb": 3
+     },
+     "criterio_1_cumplido": false
+    }
+   },
+   "reves|perfil": {
+    "par_pelvis_torso": {
+     "n": 6,
+     "validas": 6,
+     "ordenables": 3,
+     "1a_sobre_todas": 0.5,
+     "1a_sobre_todas_ic95": [
+      0.18761280689940868,
+      0.8123871931005913
+     ],
+     "1a_sobre_validas": 0.5,
+     "1b_orden_modal": "pt",
+     "1b_repetibilidad": 0.6666666666666666,
+     "1b_ic95": [
+      0.2076549551264879,
+      0.9385096847238394
+     ],
+     "1c_esperado": "pt",
+     "1c_coincidencia": 0.6666666666666666,
+     "1c_ic95": [
+      0.2076549551264879,
+      0.9385096847238394
+     ],
+     "ordenes": {
+      "pt": 2,
+      "tp": 1
+     },
+     "criterio_1_cumplido": false
+    }
+   },
+   "reves|trescuartos": {
+    "par_pelvis_torso": {
+     "n": 6,
+     "validas": 6,
+     "ordenables": 3,
+     "1a_sobre_todas": 0.5,
+     "1a_sobre_todas_ic95": [
+      0.18761280689940868,
+      0.8123871931005913
+     ],
+     "1a_sobre_validas": 0.5,
+     "1b_orden_modal": "tp",
+     "1b_repetibilidad": 0.6666666666666666,
+     "1b_ic95": [
+      0.2076549551264879,
+      0.9385096847238394
+     ],
+     "1c_esperado": "pt",
+     "1c_coincidencia": 0.3333333333333333,
+     "1c_ic95": [
+      0.0614903152761605,
+      0.7923450448735121
+     ],
+     "ordenes": {
+      "tp": 2,
+      "pt": 1
+     },
+     "criterio_1_cumplido": false
+    },
+    "cadena": {
+     "n": 6,
+     "validas": 6,
+     "ordenables": 3,
+     "1a_sobre_todas": 0.5,
+     "1a_sobre_todas_ic95": [
+      0.18761280689940868,
+      0.8123871931005913
+     ],
+     "1a_sobre_validas": 0.5,
+     "1b_orden_modal": "tpb",
+     "1b_repetibilidad": 0.6666666666666666,
+     "1b_ic95": [
+      0.2076549551264879,
+      0.9385096847238394
+     ],
+     "1c_esperado": "ptb",
+     "1c_coincidencia": 0.3333333333333333,
+     "1c_ic95": [
+      0.0614903152761605,
+      0.7923450448735121
+     ],
+     "ordenes": {
+      "tpb": 2,
+      "ptb": 1
+     },
+     "criterio_1_cumplido": false
+    }
+   },
+   "saque|perfil": {
+    "par_pelvis_torso": {
+     "n": 6,
+     "validas": 6,
+     "ordenables": 2,
+     "1a_sobre_todas": 0.3333333333333333,
+     "1a_sobre_todas_ic95": [
+      0.09676933255921683,
+      0.7000116786584712
+     ],
+     "1a_sobre_validas": 0.3333333333333333,
+     "1b_orden_modal": "tp",
+     "1b_repetibilidad": 1.0,
+     "1b_ic95": [
+      0.34237195288961925,
+      1.0
+     ],
+     "1c_esperado": "pt",
+     "1c_coincidencia": 0.0,
+     "1c_ic95": [
+      0.0,
+      0.6576280471103807
+     ],
+     "ordenes": {
+      "tp": 2
+     },
+     "criterio_1_cumplido": false
+    }
+   },
+   "saque|trescuartos": {
+    "par_pelvis_torso": {
+     "n": 6,
+     "validas": 6,
+     "ordenables": 3,
+     "1a_sobre_todas": 0.5,
+     "1a_sobre_todas_ic95": [
+      0.18761280689940868,
+      0.8123871931005913
+     ],
+     "1a_sobre_validas": 0.5,
+     "1b_orden_modal": "pt",
+     "1b_repetibilidad": 0.6666666666666666,
+     "1b_ic95": [
+      0.2076549551264879,
+      0.9385096847238394
+     ],
+     "1c_esperado": "pt",
+     "1c_coincidencia": 0.6666666666666666,
+     "1c_ic95": [
+      0.2076549551264879,
+      0.9385096847238394
+     ],
+     "ordenes": {
+      "pt": 2,
+      "tp": 1
+     },
+     "criterio_1_cumplido": false
+    },
+    "cadena": {
+     "n": 6,
+     "validas": 6,
+     "ordenables": 2,
+     "1a_sobre_todas": 0.3333333333333333,
+     "1a_sobre_todas_ic95": [
+      0.09676933255921683,
+      0.7000116786584712
+     ],
+     "1a_sobre_validas": 0.3333333333333333,
+     "1b_orden_modal": "ptb",
+     "1b_repetibilidad": 1.0,
+     "1b_ic95": [
+      0.34237195288961925,
+      1.0
+     ],
+     "1c_esperado": "ptb",
+     "1c_coincidencia": 1.0,
+     "1c_ic95": [
+      0.34237195288961925,
+      1.0
+     ],
+     "ordenes": {
+      "ptb": 2
+     },
+     "criterio_1_cumplido": false
+    }
+   },
+   "saque|trescuartos|toma 01": {
+    "par_pelvis_torso": {
+     "n": 6,
+     "validas": 6,
+     "ordenables": 3,
+     "1a_sobre_todas": 0.5,
+     "1a_sobre_todas_ic95": [
+      0.18761280689940868,
+      0.8123871931005913
+     ],
+     "1a_sobre_validas": 0.5,
+     "1b_orden_modal": "pt",
+     "1b_repetibilidad": 0.6666666666666666,
+     "1b_ic95": [
+      0.2076549551264879,
+      0.9385096847238394
+     ],
+     "1c_esperado": "pt",
+     "1c_coincidencia": 0.6666666666666666,
+     "1c_ic95": [
+      0.2076549551264879,
+      0.9385096847238394
+     ],
+     "ordenes": {
+      "pt": 2,
+      "tp": 1
+     },
+     "criterio_1_cumplido": false
+    },
+    "cadena": {
+     "n": 6,
+     "validas": 6,
+     "ordenables": 2,
+     "1a_sobre_todas": 0.3333333333333333,
+     "1a_sobre_todas_ic95": [
+      0.09676933255921683,
+      0.7000116786584712
+     ],
+     "1a_sobre_validas": 0.3333333333333333,
+     "1b_orden_modal": "ptb",
+     "1b_repetibilidad": 1.0,
+     "1b_ic95": [
+      0.34237195288961925,
+      1.0
+     ],
+     "1c_esperado": "ptb",
+     "1c_coincidencia": 1.0,
+     "1c_ic95": [
+      0.34237195288961925,
+      1.0
+     ],
+     "ordenes": {
+      "ptb": 2
+     },
+     "criterio_1_cumplido": false
+    }
+   }
+  },
+  "2": {
+   "drive|perfil": {
+    "par_pelvis_torso": {
+     "n": 6,
+     "validas": 6,
+     "ordenables": 4,
+     "1a_sobre_todas": 0.6666666666666666,
+     "1a_sobre_todas_ic95": [
+      0.29998832134152864,
+      0.9032306674407831
+     ],
+     "1a_sobre_validas": 0.6666666666666666,
+     "1b_orden_modal": "tp",
+     "1b_repetibilidad": 1.0,
+     "1b_ic95": [
+      0.5100999795960008,
+      1.0
+     ],
+     "1c_esperado": "pt",
+     "1c_coincidencia": 0.0,
+     "1c_ic95": [
+      0.0,
+      0.48990002040399916
+     ],
+     "ordenes": {
+      "tp": 4
+     },
+     "criterio_1_cumplido": false
+    }
+   },
+   "drive|trescuartos": {
+    "par_pelvis_torso": {
+     "n": 6,
+     "validas": 6,
+     "ordenables": 2,
+     "1a_sobre_todas": 0.3333333333333333,
+     "1a_sobre_todas_ic95": [
+      0.09676933255921683,
+      0.7000116786584712
+     ],
+     "1a_sobre_validas": 0.3333333333333333,
+     "1b_orden_modal": "pt",
+     "1b_repetibilidad": 1.0,
+     "1b_ic95": [
+      0.34237195288961925,
+      1.0
+     ],
+     "1c_esperado": "pt",
+     "1c_coincidencia": 1.0,
+     "1c_ic95": [
+      0.34237195288961925,
+      1.0
+     ],
+     "ordenes": {
+      "pt": 2
+     },
+     "criterio_1_cumplido": false
+    },
+    "cadena": {
+     "n": 6,
+     "validas": 6,
+     "ordenables": 2,
+     "1a_sobre_todas": 0.3333333333333333,
+     "1a_sobre_todas_ic95": [
+      0.09676933255921683,
+      0.7000116786584712
+     ],
+     "1a_sobre_validas": 0.3333333333333333,
+     "1b_orden_modal": "ptb",
+     "1b_repetibilidad": 1.0,
+     "1b_ic95": [
+      0.34237195288961925,
+      1.0
+     ],
+     "1c_esperado": "ptb",
+     "1c_coincidencia": 1.0,
+     "1c_ic95": [
+      0.34237195288961925,
+      1.0
+     ],
+     "ordenes": {
+      "ptb": 2
+     },
+     "criterio_1_cumplido": false
+    }
+   },
+   "reves|perfil": {
+    "par_pelvis_torso": {
+     "n": 6,
+     "validas": 6,
+     "ordenables": 2,
+     "1a_sobre_todas": 0.3333333333333333,
+     "1a_sobre_todas_ic95": [
+      0.09676933255921683,
+      0.7000116786584712
+     ],
+     "1a_sobre_validas": 0.3333333333333333,
+     "1b_orden_modal": "pt",
+     "1b_repetibilidad": 0.5,
+     "1b_ic95": [
+      0.09452865480086614,
+      0.9054713451991339
+     ],
+     "1c_esperado": "pt",
+     "1c_coincidencia": 0.5,
+     "1c_ic95": [
+      0.09452865480086614,
+      0.9054713451991339
+     ],
+     "ordenes": {
+      "pt": 1,
+      "tp": 1
+     },
+     "criterio_1_cumplido": false
+    }
+   },
+   "reves|trescuartos": {
+    "par_pelvis_torso": {
+     "n": 6,
+     "validas": 6,
+     "ordenables": 1,
+     "1a_sobre_todas": 0.16666666666666666,
+     "1a_sobre_todas_ic95": [
+      0.03005258587173032,
+      0.563509436563646
+     ],
+     "1a_sobre_validas": 0.16666666666666666,
+     "1b_orden_modal": "tp",
+     "1b_repetibilidad": 1.0,
+     "1b_ic95": [
+      0.20654329147389294,
+      1.0
+     ],
+     "1c_esperado": "pt",
+     "1c_coincidencia": 0.0,
+     "1c_ic95": [
+      0.0,
+      0.7934567085261071
+     ],
+     "ordenes": {
+      "tp": 1
+     },
+     "criterio_1_cumplido": false
+    },
+    "cadena": {
+     "n": 6,
+     "validas": 6,
+     "ordenables": 1,
+     "1a_sobre_todas": 0.16666666666666666,
+     "1a_sobre_todas_ic95": [
+      0.03005258587173032,
+      0.563509436563646
+     ],
+     "1a_sobre_validas": 0.16666666666666666,
+     "1b_orden_modal": "tpb",
+     "1b_repetibilidad": 1.0,
+     "1b_ic95": [
+      0.20654329147389294,
+      1.0
+     ],
+     "1c_esperado": "ptb",
+     "1c_coincidencia": 0.0,
+     "1c_ic95": [
+      0.0,
+      0.7934567085261071
+     ],
+     "ordenes": {
+      "tpb": 1
+     },
+     "criterio_1_cumplido": false
+    }
+   },
+   "saque|perfil": {
+    "par_pelvis_torso": {
+     "n": 6,
+     "validas": 6,
+     "ordenables": 2,
+     "1a_sobre_todas": 0.3333333333333333,
+     "1a_sobre_todas_ic95": [
+      0.09676933255921683,
+      0.7000116786584712
+     ],
+     "1a_sobre_validas": 0.3333333333333333,
+     "1b_orden_modal": "tp",
+     "1b_repetibilidad": 1.0,
+     "1b_ic95": [
+      0.34237195288961925,
+      1.0
+     ],
+     "1c_esperado": "pt",
+     "1c_coincidencia": 0.0,
+     "1c_ic95": [
+      0.0,
+      0.6576280471103807
+     ],
+     "ordenes": {
+      "tp": 2
+     },
+     "criterio_1_cumplido": false
+    }
+   },
+   "saque|trescuartos": {
+    "par_pelvis_torso": {
+     "n": 6,
+     "validas": 6,
+     "ordenables": 2,
+     "1a_sobre_todas": 0.3333333333333333,
+     "1a_sobre_todas_ic95": [
+      0.09676933255921683,
+      0.7000116786584712
+     ],
+     "1a_sobre_validas": 0.3333333333333333,
+     "1b_orden_modal": "pt",
+     "1b_repetibilidad": 0.5,
+     "1b_ic95": [
+      0.09452865480086614,
+      0.9054713451991339
+     ],
+     "1c_esperado": "pt",
+     "1c_coincidencia": 0.5,
+     "1c_ic95": [
+      0.09452865480086614,
+      0.9054713451991339
+     ],
+     "ordenes": {
+      "pt": 1,
+      "tp": 1
+     },
+     "criterio_1_cumplido": false
+    },
+    "cadena": {
+     "n": 6,
+     "validas": 6,
+     "ordenables": 0,
+     "1a_sobre_todas": 0.0,
+     "1a_sobre_todas_ic95": [
+      0.0,
+      0.3903430336530645
+     ],
+     "1a_sobre_validas": 0.0,
+     "1b_orden_modal": null,
+     "1b_repetibilidad": null,
+     "1b_ic95": null,
+     "1c_esperado": "ptb",
+     "1c_coincidencia": null,
+     "1c_ic95": null,
+     "ordenes": {},
+     "criterio_1_cumplido": false
+    }
+   },
+   "saque|trescuartos|toma 01": {
+    "par_pelvis_torso": {
+     "n": 6,
+     "validas": 6,
+     "ordenables": 2,
+     "1a_sobre_todas": 0.3333333333333333,
+     "1a_sobre_todas_ic95": [
+      0.09676933255921683,
+      0.7000116786584712
+     ],
+     "1a_sobre_validas": 0.3333333333333333,
+     "1b_orden_modal": "pt",
+     "1b_repetibilidad": 0.5,
+     "1b_ic95": [
+      0.09452865480086614,
+      0.9054713451991339
+     ],
+     "1c_esperado": "pt",
+     "1c_coincidencia": 0.5,
+     "1c_ic95": [
+      0.09452865480086614,
+      0.9054713451991339
+     ],
+     "ordenes": {
+      "pt": 1,
+      "tp": 1
+     },
+     "criterio_1_cumplido": false
+    },
+    "cadena": {
+     "n": 6,
+     "validas": 6,
+     "ordenables": 0,
+     "1a_sobre_todas": 0.0,
+     "1a_sobre_todas_ic95": [
+      0.0,
+      0.3903430336530645
+     ],
+     "1a_sobre_validas": 0.0,
+     "1b_orden_modal": null,
+     "1b_repetibilidad": null,
+     "1b_ic95": null,
+     "1c_esperado": "ptb",
+     "1c_coincidencia": null,
+     "1c_ic95": null,
+     "ordenes": {},
+     "criterio_1_cumplido": false
+    }
+   }
+  },
+  "3": {
+   "drive|perfil": {
+    "par_pelvis_torso": {
+     "n": 6,
+     "validas": 6,
+     "ordenables": 3,
+     "1a_sobre_todas": 0.5,
+     "1a_sobre_todas_ic95": [
+      0.18761280689940868,
+      0.8123871931005913
+     ],
+     "1a_sobre_validas": 0.5,
+     "1b_orden_modal": "tp",
+     "1b_repetibilidad": 1.0,
+     "1b_ic95": [
+      0.43849391955098227,
+      1.0
+     ],
+     "1c_esperado": "pt",
+     "1c_coincidencia": 0.0,
+     "1c_ic95": [
+      0.0,
+      0.5615060804490177
+     ],
+     "ordenes": {
+      "tp": 3
+     },
+     "criterio_1_cumplido": false
+    }
+   },
+   "drive|trescuartos": {
+    "par_pelvis_torso": {
+     "n": 6,
+     "validas": 6,
+     "ordenables": 1,
+     "1a_sobre_todas": 0.16666666666666666,
+     "1a_sobre_todas_ic95": [
+      0.03005258587173032,
+      0.563509436563646
+     ],
+     "1a_sobre_validas": 0.16666666666666666,
+     "1b_orden_modal": "pt",
+     "1b_repetibilidad": 1.0,
+     "1b_ic95": [
+      0.20654329147389294,
+      1.0
+     ],
+     "1c_esperado": "pt",
+     "1c_coincidencia": 1.0,
+     "1c_ic95": [
+      0.20654329147389294,
+      1.0
+     ],
+     "ordenes": {
+      "pt": 1
+     },
+     "criterio_1_cumplido": false
+    },
+    "cadena": {
+     "n": 6,
+     "validas": 6,
+     "ordenables": 1,
+     "1a_sobre_todas": 0.16666666666666666,
+     "1a_sobre_todas_ic95": [
+      0.03005258587173032,
+      0.563509436563646
+     ],
+     "1a_sobre_validas": 0.16666666666666666,
+     "1b_orden_modal": "ptb",
+     "1b_repetibilidad": 1.0,
+     "1b_ic95": [
+      0.20654329147389294,
+      1.0
+     ],
+     "1c_esperado": "ptb",
+     "1c_coincidencia": 1.0,
+     "1c_ic95": [
+      0.20654329147389294,
+      1.0
+     ],
+     "ordenes": {
+      "ptb": 1
+     },
+     "criterio_1_cumplido": false
+    }
+   },
+   "reves|perfil": {
+    "par_pelvis_torso": {
+     "n": 6,
+     "validas": 6,
+     "ordenables": 2,
+     "1a_sobre_todas": 0.3333333333333333,
+     "1a_sobre_todas_ic95": [
+      0.09676933255921683,
+      0.7000116786584712
+     ],
+     "1a_sobre_validas": 0.3333333333333333,
+     "1b_orden_modal": "pt",
+     "1b_repetibilidad": 0.5,
+     "1b_ic95": [
+      0.09452865480086614,
+      0.9054713451991339
+     ],
+     "1c_esperado": "pt",
+     "1c_coincidencia": 0.5,
+     "1c_ic95": [
+      0.09452865480086614,
+      0.9054713451991339
+     ],
+     "ordenes": {
+      "pt": 1,
+      "tp": 1
+     },
+     "criterio_1_cumplido": false
+    }
+   },
+   "reves|trescuartos": {
+    "par_pelvis_torso": {
+     "n": 6,
+     "validas": 6,
+     "ordenables": 1,
+     "1a_sobre_todas": 0.16666666666666666,
+     "1a_sobre_todas_ic95": [
+      0.03005258587173032,
+      0.563509436563646
+     ],
+     "1a_sobre_validas": 0.16666666666666666,
+     "1b_orden_modal": "tp",
+     "1b_repetibilidad": 1.0,
+     "1b_ic95": [
+      0.20654329147389294,
+      1.0
+     ],
+     "1c_esperado": "pt",
+     "1c_coincidencia": 0.0,
+     "1c_ic95": [
+      0.0,
+      0.7934567085261071
+     ],
+     "ordenes": {
+      "tp": 1
+     },
+     "criterio_1_cumplido": false
+    },
+    "cadena": {
+     "n": 6,
+     "validas": 6,
+     "ordenables": 1,
+     "1a_sobre_todas": 0.16666666666666666,
+     "1a_sobre_todas_ic95": [
+      0.03005258587173032,
+      0.563509436563646
+     ],
+     "1a_sobre_validas": 0.16666666666666666,
+     "1b_orden_modal": "tpb",
+     "1b_repetibilidad": 1.0,
+     "1b_ic95": [
+      0.20654329147389294,
+      1.0
+     ],
+     "1c_esperado": "ptb",
+     "1c_coincidencia": 0.0,
+     "1c_ic95": [
+      0.0,
+      0.7934567085261071
+     ],
+     "ordenes": {
+      "tpb": 1
+     },
+     "criterio_1_cumplido": false
+    }
+   },
+   "saque|perfil": {
+    "par_pelvis_torso": {
+     "n": 6,
+     "validas": 6,
+     "ordenables": 0,
+     "1a_sobre_todas": 0.0,
+     "1a_sobre_todas_ic95": [
+      0.0,
+      0.3903430336530645
+     ],
+     "1a_sobre_validas": 0.0,
+     "1b_orden_modal": null,
+     "1b_repetibilidad": null,
+     "1b_ic95": null,
+     "1c_esperado": "pt",
+     "1c_coincidencia": null,
+     "1c_ic95": null,
+     "ordenes": {},
+     "criterio_1_cumplido": false
+    }
+   },
+   "saque|trescuartos": {
+    "par_pelvis_torso": {
+     "n": 6,
+     "validas": 6,
+     "ordenables": 0,
+     "1a_sobre_todas": 0.0,
+     "1a_sobre_todas_ic95": [
+      0.0,
+      0.3903430336530645
+     ],
+     "1a_sobre_validas": 0.0,
+     "1b_orden_modal": null,
+     "1b_repetibilidad": null,
+     "1b_ic95": null,
+     "1c_esperado": "pt",
+     "1c_coincidencia": null,
+     "1c_ic95": null,
+     "ordenes": {},
+     "criterio_1_cumplido": false
+    },
+    "cadena": {
+     "n": 6,
+     "validas": 6,
+     "ordenables": 0,
+     "1a_sobre_todas": 0.0,
+     "1a_sobre_todas_ic95": [
+      0.0,
+      0.3903430336530645
+     ],
+     "1a_sobre_validas": 0.0,
+     "1b_orden_modal": null,
+     "1b_repetibilidad": null,
+     "1b_ic95": null,
+     "1c_esperado": "ptb",
+     "1c_coincidencia": null,
+     "1c_ic95": null,
+     "ordenes": {},
+     "criterio_1_cumplido": false
+    }
+   },
+   "saque|trescuartos|toma 01": {
+    "par_pelvis_torso": {
+     "n": 6,
+     "validas": 6,
+     "ordenables": 0,
+     "1a_sobre_todas": 0.0,
+     "1a_sobre_todas_ic95": [
+      0.0,
+      0.3903430336530645
+     ],
+     "1a_sobre_validas": 0.0,
+     "1b_orden_modal": null,
+     "1b_repetibilidad": null,
+     "1b_ic95": null,
+     "1c_esperado": "pt",
+     "1c_coincidencia": null,
+     "1c_ic95": null,
+     "ordenes": {},
+     "criterio_1_cumplido": false
+    },
+    "cadena": {
+     "n": 6,
+     "validas": 6,
+     "ordenables": 0,
+     "1a_sobre_todas": 0.0,
+     "1a_sobre_todas_ic95": [
+      0.0,
+      0.3903430336530645
+     ],
+     "1a_sobre_validas": 0.0,
+     "1b_orden_modal": null,
+     "1b_repetibilidad": null,
+     "1b_ic95": null,
+     "1c_esperado": "ptb",
+     "1c_coincidencia": null,
+     "1c_ic95": null,
+     "ordenes": {},
+     "criterio_1_cumplido": false
+    }
+   }
+  }
+ }
+}
