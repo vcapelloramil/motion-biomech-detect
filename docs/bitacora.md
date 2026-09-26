@@ -30,17 +30,32 @@ catálogo de 110 clips sin errores.
    "comparar consigo mismo" queda sin validación de sensibilidad); el encuadre no es idéntico entre
    sesiones; el espaciado se aparta del plan.
 
+**Hecho:** pose extraída para los **110 clips** (110/110 cachés). Diagnóstico de oclusión con la sesión 2
+completa (n = 18 perfil y 30 tres cuartos) y **decisión 013** con la cobertura del brazo dominante por
+sesión, encuadre y gesto: cámara del lado no dominante (izquierdo cercano en 74 de 84 clips; saque 36/36 y
+drive 24/24); codo dominante con cobertura 0,03–0,53 en la ventana del saque y el drive y 0,87–0,99 en el
+revés; en la sesión 2 de tres cuartos el codo se ve bien en reposo (0,79–0,84) pero vuelve a caer en la
+ventana (0,30–0,46). Causa (desenfoque o autooclusión) no separada.
+
 **Herramientas:** `--sesion` en `explorar_fase_b` y en los diagnósticos por grupo (`corte-brazo`,
 `ventana-brazo`, `fleisig-brazo`), para no mezclar sesiones.
+
+**Sesión 2 = conjunto de medición reservado.** Una tanda automática llegó a ejecutar `explorar_fase_b` sobre
+la sesión 2 **sin leer los resultados**; se detuvo el resto y se **descartaron** los archivos generados,
+porque la propuesta 014 exige fijar las definiciones antes de mirar órdenes y tiempos de esa sesión. De la
+sesión 2 solo se leyeron confianza y cobertura de pose. Se regenera tras confirmar la 014.
 
 **Propuesta, NO vigente:** decisión 014, diseño de la medición formal de los Criterios 1, 2 y 3
 (definiciones, umbrales y reglas de cumplimiento a fijar **antes** de mirar la sesión 2; la sesión 1 =
 exploratoria, la sesión 2 = medición). Tiene cinco grupos de preguntas para Valentín. **El Criterio 2
 requiere goniometría manual sobre fotogramas y no puede hacerla Claude.**
 
-**Siguiente paso:** al terminar la extracción: `explorar_fase_b --sesion 1` y `--sesion 2`,
-`diagnosticos_e3` (oclusión completa, corte y ventana del brazo) y la decisión 013; después Valentín
-confirma la 014 y recién entonces se corre la medición formal.
+**Siguiente paso:** Valentín confirma o corrige la **decisión 014** (τ del Criterio 1 y reglas de
+cumplimiento; qué sesión es la de medición; grupos del Criterio 1; Criterio 2: ángulos, cantidad de
+fotogramas y quién mide; Criterio 3: métricas, regla y las tres tomas del saque de tres cuartos). Se
+commitea la 014 como vigente (congelamiento, con el hash del motor `0.4.1`) y **recién entonces** se
+corren `explorar_fase_b --sesion 2` y los diagnósticos sobre la sesión 2, y la medición formal. El
+Criterio 2 espera además la goniometría manual de Valentín.
 
 ---
 

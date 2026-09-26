@@ -50,4 +50,5 @@ Qué habilita, qué cierra, qué hay que recordar más adelante.
 | [010](010-filtrado-por-segmentos.md) | E3 filtra por segmentos continuos (antes dejaba crudas las series con huecos) | vigente (motor 0.4.1; pendiente de redacción Cap. 4: justificación de hombro→codo) |
 | [011](011-referencia-fleisig-del-brazo.md) | Los valores de Fleisig para el brazo no son comparables con ω del vector hombro→codo (error conceptual de referencia) | vigente (orden del brazo en perfil no concluyente; lectura por encuadre; pendiente de redacción Cap. 3 y 4, CLAUDE.md e interfaz) |
 | [012](012-criterio-3-dos-sesiones-consecutivas.md) | Criterio 3: alcance con dos sesiones consecutivas (redefinición: consistencia, no sensibilidad a un cambio real) | vigente |
+| [013](013-cobertura-del-brazo-dominante.md) | Cobertura del brazo dominante: limitación física conocida del material (cámara del lado no dominante; codo con 30–50 % en la ventana del saque y el drive) | vigente |
 | [014](014-diseno-medicion-formal.md) | Diseño de la medición formal de los Criterios 1, 2 y 3 | **PROPUESTA** (a confirmar antes de medir) |

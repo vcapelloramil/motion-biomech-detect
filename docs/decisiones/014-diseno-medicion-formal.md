@@ -22,6 +22,11 @@ y las reglas de cumplimiento se fijan y se commitean **antes** de correr la medi
    trabajo: es el **conjunto exploratorio**. De la sesión 2 solo se miró la confianza de pose (no
    órdenes ni tiempos): es el **conjunto de medición**. *[A CONFIRMAR]* Medición primaria sobre la
    sesión 2; la sesión 1 se informa aparte como réplica, marcada como no independiente.
+   *Registro de transparencia (26/9):* una tanda automática de exploración llegó a ejecutar
+   `explorar_fase_b` sobre la sesión 2 **sin que se leyera ningún resultado**; se detuvo el resto y se
+   **descartaron** los archivos generados (`e4-fase-b-exploratorio-*-s2-*.json`). De la sesión 2 solo se
+   leyeron la confianza y la cobertura de pose (decisión 013). Los análisis de órdenes y tiempos se
+   generarán **después** de confirmar y commitear esta decisión.
 3. **Unidad de análisis:** la repetición (un clip pre-cortado), con la ventana anclada al torso
    (`ancla-torso`, decisión de la ventana anclada). Se reportan **todos** los resultados, también los
    que no cumplen, y cuántas repeticiones quedan fuera por no ser válidas.
