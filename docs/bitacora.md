@@ -6,6 +6,44 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-09-26 — Sesión 2 completa, Criterio 3 redefinido y diseño de la medición formal (propuesta)
+
+**Rama:** `etapa/4-cinematica`. Motor `0.4.1` (sin cambios). Sesión 2 catalogada: 48 repeticiones
+(saque: 6 de perfil y 18 de tres cuartos en tres tomas `02`/`02b`/`02c`; drive 12; revés 12), 240 fps;
+catálogo de 110 clips sin errores.
+
+**Decisiones de Valentín:**
+1. **No se graba del lado derecho** (el piloto no se justifica). Razón dada: la evidencia sugiere que el
+   límite es el desenfoque durante el golpe y no el lado de la cámara. *Nota de Claude:* la evidencia
+   (en reposo el brazo se ve mejor en la sesión 2, la ventana del gesto no mejora) es compatible con
+   desenfoque **o** autooclusión y no las separa; y "grabar del lado dominante mejora la cobertura" queda
+   **sin probar, no refutada** (el revés de tres cuartos, con el brazo de cara a la cámara, sí se ve
+   bien). Va a la decisión 013.
+2. **Extraer las 35 poses restantes** de la sesión 2 (en curso al escribir esto) y **documentar la
+   cobertura del brazo tal como está, como limitación física conocida** (decisión 013, a escribir con las
+   cifras de la sesión 2 completa).
+3. **Criterio 3 redefinido, sin esperar una semana** (decisión 012): mide la repetibilidad del método
+   aplicado por el mismo jugador en dos sesiones distintas, con variación natural y sin intervención
+   deliberada. **Demuestra consistencia del sistema entre tomas del mismo jugador; NO permite afirmar que
+   detectaría un cambio real de técnica** (fuera de alcance con este diseño, sin importar los días entre
+   sesiones). Consecuencias anotadas en la 012: no restablece el criterio original (la base clínica de
+   "comparar consigo mismo" queda sin validación de sensibilidad); el encuadre no es idéntico entre
+   sesiones; el espaciado se aparta del plan.
+
+**Herramientas:** `--sesion` en `explorar_fase_b` y en los diagnósticos por grupo (`corte-brazo`,
+`ventana-brazo`, `fleisig-brazo`), para no mezclar sesiones.
+
+**Propuesta, NO vigente:** decisión 014, diseño de la medición formal de los Criterios 1, 2 y 3
+(definiciones, umbrales y reglas de cumplimiento a fijar **antes** de mirar la sesión 2; la sesión 1 =
+exploratoria, la sesión 2 = medición). Tiene cinco grupos de preguntas para Valentín. **El Criterio 2
+requiere goniometría manual sobre fotogramas y no puede hacerla Claude.**
+
+**Siguiente paso:** al terminar la extracción: `explorar_fase_b --sesion 1` y `--sesion 2`,
+`diagnosticos_e3` (oclusión completa, corte y ventana del brazo) y la decisión 013; después Valentín
+confirma la 014 y recién entonces se corre la medición formal.
+
+---
+
 ## 2026-09-25 — Diagnóstico de oclusión del lado dominante (sesiones 1 y 2 de la Fase B)
 
 **Rama:** `etapa/4-cinematica`. Sin cambios en el motor. Pedido de Valentín: en ambas sesiones la cámara

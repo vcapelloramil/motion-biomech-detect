@@ -298,6 +298,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--brazo-via", choices=["codo", "muneca"], default="codo")
     parser.add_argument("--grupo", action="append", default=None,
                         help="gesto_encuadre (repetible), p. ej. drive_perfil. Default: los seis grupos base.")
+    parser.add_argument("--sesion", type=int, default=None,
+                        help="1 o 2 (fecha del nombre del clip). Default: todas las sesiones juntas.")
     parser.add_argument("--etiqueta", default="",
                         help="Sufijo del nombre de los JSON (p. ej. e3-0.4.1) para no pisar corridas previas.")
     parser.add_argument("--salida-dir", type=Path, default=_RESULTADOS,
@@ -313,11 +315,14 @@ def main(argv: list[str] | None = None) -> int:
         filas = [r for r in csv.DictReader(f)
                  if r.get("fuente") == "propio" and "_rep" in r["archivo"]]
 
+    fechas = sorted({r["archivo"][:8] for r in filas})
     # grupos[modo][grupo] = {"clips": [...]}
     grupos: dict[str, dict[str, dict]] = {m: defaultdict(lambda: {"clips": []}) for m in modos}
     for fila in filas:
         g = f"{fila['gesto']}_{fila['angulo']}"
         if g not in (args.grupo or GRUPOS_BASE):
+            continue
+        if args.sesion and fila["archivo"][:8] != fechas[args.sesion - 1]:
             continue
         video = next((p for p in (base / "fase-b").rglob(fila["archivo"])
                       if "originales" not in p.parts), None)

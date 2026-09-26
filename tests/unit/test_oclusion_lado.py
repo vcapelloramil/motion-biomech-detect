@@ -80,3 +80,15 @@ def test_ancla_cruda_cae_donde_gira_mas_rapido_el_eje_de_hombros():
     seq = SecuenciaPose(backend_id="s", backend_version="0", articulaciones=[A.HOMBRO_IZQ, A.HOMBRO_DER],
                         dims=3, ancho=1, alto=1, fps_efectivos=fps, config_hash="x", frames=frames)
     assert 140 <= ancla_cruda(seq) <= 160
+
+
+def test_en_sesion_filtra_por_la_fecha_del_nombre():
+    from app.diagnosticos_e3 import en_sesion, fechas_propias
+
+    cat = {"20260924_a_rep01.mov": {"fuente": "propio"}, "20260925_b_rep01.mov": {"fuente": "propio"},
+           "zverev.mp4": {"fuente": "youtube"}}
+    fechas = fechas_propias(cat)
+    assert fechas == ["20260924", "20260925"]
+    assert en_sesion("20260924_a_rep01.mov", 1, fechas) and not en_sesion("20260925_b_rep01.mov", 1, fechas)
+    assert en_sesion("20260925_b_rep01.mov", 2, fechas)
+    assert en_sesion("cualquiera.mov", None, fechas)                 # None = todas

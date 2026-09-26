@@ -95,6 +95,16 @@ def _catalogo(base: Path) -> dict[str, dict]:
         return {r["archivo"]: r for r in csv.DictReader(f) if r.get("archivo")}
 
 
+def fechas_propias(cat: dict) -> list[str]:
+    """Fechas (AAAAMMDD, prefijo del nombre) de las sesiones propias, en orden: la 1.ª es la sesión 1."""
+    return sorted({n[:8] for n, r in cat.items() if r.get("fuente") == "propio"})
+
+
+def en_sesion(nombre: str, sesion: int | None, fechas: list[str]) -> bool:
+    """True si ``sesion`` es None (todas) o el clip es de esa sesión (1, 2, ...)."""
+    return sesion is None or nombre[:8] == fechas[sesion - 1]
+
+
 def _buscar_video(base: Path, nombre: str) -> Path:
     for fase in ("fase-a", "fase-b"):
         for p in (base / fase).rglob(nombre):
@@ -270,6 +280,7 @@ def cmd_comparar_brazo(args) -> int:
     from app.config import get_data_dir
 
     cat = _catalogo(get_data_dir())
+    fechas = fechas_propias(cat)
     nombres = args.clip or [n for n, r in cat.items()
                             if (r.get("fuente") != "propio") and r.get("lado_dominante") in ("der", "izq")]
     resultados = {}
@@ -374,11 +385,12 @@ def cmd_corte_brazo(args) -> int:
     from app.config import get_data_dir
 
     cat = _catalogo(get_data_dir())
+    fechas = fechas_propias(cat)
     grupos = args.grupo or [f"{g}_{e}" for g in ("saque", "drive", "reves") for e in ("perfil", "trescuartos")]
     filas = {}
     for nombre, r in cat.items():
         g = f"{r.get('gesto')}_{r.get('angulo')}"
-        if r.get("fuente") != "propio" or "_rep" not in nombre or g not in grupos:
+        if r.get("fuente") != "propio" or "_rep" not in nombre or g not in grupos or not en_sesion(nombre, args.sesion, fechas):
             continue
         seq, _ = cargar(nombre)
         lado = r["lado_dominante"]
@@ -461,11 +473,12 @@ def cmd_fleisig_brazo(args) -> int:
     from app.config import get_data_dir
 
     cat = _catalogo(get_data_dir())
+    fechas = fechas_propias(cat)
     grupos = args.grupo or ["saque_perfil", "saque_trescuartos"]
     filas = {}
     for nombre, r in cat.items():
         g = f"{r.get('gesto')}_{r.get('angulo')}"
-        if r.get("fuente") != "propio" or "_rep" not in nombre or g not in grupos:
+        if r.get("fuente") != "propio" or "_rep" not in nombre or g not in grupos or not en_sesion(nombre, args.sesion, fechas):
             continue
         seq, _ = cargar(nombre)
         lado = r["lado_dominante"]
@@ -535,11 +548,12 @@ def cmd_ventana_brazo(args) -> int:
     from app.config import get_data_dir
 
     cat = _catalogo(get_data_dir())
+    fechas = fechas_propias(cat)
     grupos = args.grupo or [f"{g}_{e}" for g in ("saque", "drive", "reves") for e in ("perfil", "trescuartos")]
     filas = {}
     for nombre, r in cat.items():
         g = f"{r.get('gesto')}_{r.get('angulo')}"
-        if r.get("fuente") != "propio" or "_rep" not in nombre or g not in grupos:
+        if r.get("fuente") != "propio" or "_rep" not in nombre or g not in grupos or not en_sesion(nombre, args.sesion, fechas):
             continue
         seq, _ = cargar(nombre)
         lado = r["lado_dominante"]
@@ -893,16 +907,19 @@ def main(argv: list[str] | None = None) -> int:
 
     p = sub.add_parser("corte-brazo", help="¿un corte por clip sirve para el brazo?")
     p.add_argument("--grupo", action="append", default=None)
+    p.add_argument("--sesion", type=int, default=None, help="1 o 2 (fecha del nombre del clip); default: todas")
     p.add_argument("--salida", default=None)
     p.set_defaults(fn=cmd_corte_brazo)
 
     p = sub.add_parser("fleisig-brazo", help="ω del vector vs ω del ángulo del codo, contra Fleisig")
     p.add_argument("--grupo", action="append", default=None)
+    p.add_argument("--sesion", type=int, default=None, help="1 o 2 (fecha del nombre del clip); default: todas")
     p.add_argument("--salida", default=None)
     p.set_defaults(fn=cmd_fleisig_brazo)
 
     p = sub.add_parser("ventana-brazo", help="barrido del adelanto de la ventana del brazo")
     p.add_argument("--grupo", action="append", default=None)
+    p.add_argument("--sesion", type=int, default=None, help="1 o 2 (fecha del nombre del clip); default: todas")
     p.add_argument("--salida", default=None)
     p.set_defaults(fn=cmd_ventana_brazo)
 
