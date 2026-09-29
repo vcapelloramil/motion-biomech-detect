@@ -26,8 +26,11 @@ completo, con cinco salvedades documentadas en la **decisión 015**:
 5. Criterio 2 del codo: cumple por la media (12,5°), pero el p95 (36,4°) supera la meta — se informan
    siempre juntos.
 
-Consecuencia señalada para la Etapa 5 (no aplicada ahora): el contrato del reporte (Anexo A) necesita un
-estado para "auditable pero no ordenable", distinto de "no auditable" y de "correcto/incorrecto".
+**Corrección (mismo día, Valentín):** "no ordenable" **no es un quinto estado** — R3 se queda en sus cuatro.
+Es un motivo dentro de la observación de secuenciación, mostrado en gris (no auditable) con una explicación,
+igual que los demás motivos que ya usa el motor. Lo que sí queda abierto para la Etapa 5 es distinto: cómo
+representar un orden auditable Y ordenable (perfil invertido, salvedad 2) sin veredicto de correcto/incorrecto
+por falta de referencia bibliográfica — ver decisión 015, corregida.
 
 **Siguiente paso concreto:** Etapa 5 — Auditoría y reporte, sobre `main` desde la etiqueta `v0.5.0-etapa4`.
 

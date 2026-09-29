@@ -203,6 +203,22 @@ ffmpeg -i entrada.mov -ss 00:00:05 -to 00:00:45 -c copy salida.mov
 
 La opción `-c copy` es la que evita la recodificación. Sin ella, el archivo se vuelve a comprimir.
 
+### Recortar a un solo golpe (decisión 016, tentativa)
+
+**Para el MVP, la unidad que recibe el sistema es un video con un solo golpe**, no la sesión completa con
+sus varias repeticiones. Es una decisión tentativa —se confirma o se revierte probando el flujo completo,
+ver decisión 016— motivada por el límite de 50 MB por archivo del plan gratuito de Supabase Storage: un
+clip de una repetición pesa habitualmente 20–45 MB; un clip sin cortar con varias repeticiones pesa
+400 MB o más y no entra.
+
+Esto **no cambia cómo se graba** la sesión (sigue grabándose corrido, con las 6 repeticiones y las pausas en
+posición neutra del apartado 2.5/2.6 de la tesis): cambia qué archivo se considera la unidad de subida al
+sistema. Al recortar para la Fase B (como ya se hace a mano, ver `catalogo.csv`), cada repetición recortada
+es directamente la unidad que en producción subiría un usuario. Verificar con `ffprobe` (más abajo) que
+cada recorte de una repetición pesa menos de 50 MB antes de darlo por bueno; si algún gesto da
+sistemáticamente clips más pesados (saques largos, tomas con mucha preparación), anotarlo — es justo el tipo
+de caso que puede hacer reevaluar la decisión 016.
+
 ### Verificación obligatoria
 
 Después de transferir, verificar **cada archivo**:

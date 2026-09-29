@@ -87,14 +87,20 @@ juntos** en cualquier reporte o capítulo que cite este resultado.
 
 ## Consecuencia para el contrato del reporte (Etapa 5, no aplicado ahora)
 
-El contrato congelado en la Etapa 0 (Anexo A) representa el orden de una repetición como
-`orden_observado: [...] | null` y `correcto: bool | null`. Las salvedades 1 y 2 necesitan un tercer estado
-que hoy no existe explícitamente: una repetición puede ser **auditable pero no ordenable** (los picos se
-detectaron, pero su separación no supera el umbral de resolución) y, cuando lo es, puede no tener una
-etiqueta de correcto/incorrecto por falta de referencia bibliográfica para ese segmento. Queda para la
-Etapa 5 decidir cómo se refleja esto en el contrato (candidatos: un campo `ordenable: bool` separado de
-`auditable`, y que `correcto` acepte `null` con un motivo distinto de "no auditable" para el caso "sin
-referencia bibliográfica"). No se modifica el contrato en esta decisión.
+**Corrección (29/9/2026, Valentín): "no ordenable" NO es un quinto estado.** R3 tiene cuatro estados —
+correcto, desvío leve, alerta de carga, no auditable— y se quedan así. "No ordenable" es un **motivo** dentro
+de la observación de secuenciación de una repetición, igual que los demás motivos que ya usa el motor
+(`PicoSegmento.motivo`, `motivo_no_auditable`): cuando la separación entre pelvis y torso no supera el umbral
+de resolución, esa repetición se muestra en **gris** (no auditable) con la explicación puntual —p. ej.
+"simultaneidad al límite de resolución de 240 fps"—, sin inventar un color ni un estado nuevo. No hace falta
+un campo nuevo en el contrato para esto.
+
+Queda abierta, en cambio, una pregunta distinta para la Etapa 5: la salvedad 2 (perfil invertido) tiene picos
+auditables **y** ordenables —el orden sí se determina— pero sin una referencia bibliográfica para juzgarlo
+correcto o incorrecto. Ahí `correcto` no puede ser `null` por el motivo "no auditable" (R3 exige que `null`
+signifique "no se pudo medir", y acá sí se midió), pero tampoco corresponde forzar `true` o `false` sin
+fundamento (R4). Se deja para la Etapa 5 decidir cómo se representa un orden observado, auditable y
+ordenable, sin veredicto de corrección por falta de referencia. No se modifica el contrato en esta decisión.
 
 ## Decisión final
 

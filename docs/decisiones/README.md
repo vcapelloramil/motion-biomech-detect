@@ -53,3 +53,4 @@ Qué habilita, qué cierra, qué hay que recordar más adelante.
 | [013](013-cobertura-del-brazo-dominante.md) | Cobertura del brazo dominante: limitación física conocida del material (cámara del lado no dominante; codo con 30–50 % en la ventana del saque y el drive) | vigente |
 | [014](014-diseno-medicion-formal.md) | Diseño de la medición formal de los Criterios 1, 2 y 3 | vigente (congelada; los tres criterios medidos) |
 | [015](015-cierre-etapa-4.md) | Cierre de la Etapa 4: sin repliegue, cinco salvedades documentadas | vigente |
+| [016](016-limite-subida-un-golpe.md) | Límite de subida del MVP: un video por golpe, hasta 50 MB | **TENTATIVA** (se confirma probando el flujo completo) |
