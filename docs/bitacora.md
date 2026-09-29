@@ -59,12 +59,64 @@ hasta terminar**. Selección con semilla `26092026`, 3 fotogramas por estrato (g
 reporta confianza ≥ 0,6; 5 fotogramas marcados para repetir la medición. Al completar la planilla:
 `python -m app.criterio2 analizar <carpeta>`.
 
-### Pendiente
+### Pendiente (al cierre de esta entrada)
 
 - **Valentín:** goniometría manual del Criterio 2; y confirmar la **definición del "instante de pico"** del
   Criterio 3 (la propuesta es el instante del pico de torso desde el instante de máxima separación cadera-hombro;
   la métrica (ii) queda detrás de un flag y no se mide hasta entonces).
 - Veredictos del Criterio 2 y del Criterio 3 completo; punto de decisión de la Etapa 4 (Valentín).
+
+---
+
+## 2026-09-29 — Criterio 3 completo (ambas métricas) y hallazgo de censura en la métrica (ii)
+
+**Rama:** `etapa/4-cinematica`. Motor `0.4.1`, sin cambios de motor. Decisión 014 confirmada por Valentín
+(instante de pico = desde la máxima separación cadera-hombro: "la única de las tres opciones que corresponde
+a un evento medido, no a una decisión de diseño o de edición") y **queda vigente sin excepciones** desde el
+commit `260d03c`. Resultado: `docs/resultados/criterio3.json` (reemplaza a `criterio3-parcial-metrica-i.json`,
+que queda como registro histórico de la corrida parcial del 26/9 — mismos números en la métrica (i)).
+
+**Resultado combinado (ambas métricas, 6 grupos × 2 = 12 combinaciones):**
+
+- **Regla original (Δ ≤ σ_w): 10/12 = 83 %** (umbral 75 %).
+- **Lectura calibrada (sin evidencia de diferencia, p de permutación > 0,05): 11/12 = 92 %.**
+- **El único grupo con señal de diferencia real en las DOS métricas es drive · perfil:** separación
+  cadera-hombro Δ = 6,03° (σ_w = 3,14°, p = 0,044) e instante de pico Δ = 156 ms (σ_w = 37 ms, p = 0,050),
+  sin corrección por las 6 comparaciones. Sesión 1: mediana −166,7 ms (el pico de torso antecede a la máxima
+  separación); sesión 2: mediana −10,4 ms (casi simultáneos). Es el mismo grupo que en el Criterio 1 tuvo
+  **0 de 6 repeticiones ordenables** (pelvis y torso a ≤ 1 fotograma): converge con la lectura de que el
+  drive de perfil es el grupo más inestable de los seis.
+- Revés de tres cuartos queda al borde en la métrica (i) (p = 0,074) y es donde el encuadre difiere más entre
+  sesiones (torso en píxeles, 17 %, señalado pero bajo el 20 %).
+
+**Hallazgo metodológico, encontrado ANTES de aceptar el resultado, no buscado a propósito:** la máxima
+separación cadera-hombro se busca dentro de la misma ventana de ±300 ms de todo lo demás. Se agregó un
+diagnóstico de censura (`max_sep_dist_borde_ms`, umbral `CERCA_DEL_BORDE_MS = 50`, commit `699778d`, antes de
+volver a correr la medición) que muestra:
+
+| grupo | en el borde exacto (de 12) | cerca del borde (< 50 ms) |
+| --- | --- | --- |
+| revés · perfil | **5** | **9** |
+| revés · tres cuartos | 0 | 4 |
+| resto (4 grupos) | 0 | 0–1 |
+
+**La métrica (ii) del revés de perfil no es confiable:** en 9 de 12 repeticiones el "máximo" encontrado está
+pegado al borde de la ventana, así que el verdadero instante de máxima separación probablemente cae fuera de
+ella. Que ese grupo salga "consistente" (Δ = 6,25 ms, p = 0,868) puede ser solo el artefacto de que las dos
+sesiones chocan contra el mismo límite, no evidencia real de consistencia. **No se ensanchó la ventana**
+(afectaría también la métrica (i), ya aceptada, y el Criterio 1, ya medido y commiteado): queda como
+limitación a declarar en los Capítulos 6 y 7, no como corrección aplicada.
+
+**No se hizo la goniometría manual del Criterio 2** (Claude se abstuvo explícitamente: es la medición
+independiente que separa al sistema de su propia verificación; hacerla mirando las imágenes invalidaría el
+protocolo ciego). El paquete sigue esperando en `C:\Users\valen\kinetiq-data\fase-b\criterio2\`.
+
+### Pendiente
+
+- **Valentín:** goniometría manual del Criterio 2 (paquete listo, sin tocar); decidir qué hacer con la
+  censura de revés-perfil en el Criterio 3 (declarar la limitación tal cual, repetir con ventana más ancha
+  solo para esa métrica, u otra alternativa); punto de decisión de la Etapa 4 (Criterios 1 y 3 medidos,
+  falta el 2).
 
 ---
 
