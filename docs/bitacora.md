@@ -83,9 +83,14 @@ que queda como registro histórico de la corrida parcial del 26/9 — mismos nú
 - **El único grupo con señal de diferencia real en las DOS métricas es drive · perfil:** separación
   cadera-hombro Δ = 6,03° (σ_w = 3,14°, p = 0,044) e instante de pico Δ = 156 ms (σ_w = 37 ms, p = 0,050),
   sin corrección por las 6 comparaciones. Sesión 1: mediana −166,7 ms (el pico de torso antecede a la máxima
-  separación); sesión 2: mediana −10,4 ms (casi simultáneos). Es el mismo grupo que en el Criterio 1 tuvo
-  **0 de 6 repeticiones ordenables** (pelvis y torso a ≤ 1 fotograma): converge con la lectura de que el
-  drive de perfil es el grupo más inestable de los seis.
+  separación); sesión 2: mediana −10,4 ms (casi simultáneos).
+  **CORRECCIÓN (29/9/2026, Valentín):** el párrafo original decía acá que este era "el mismo grupo que en el
+  Criterio 1 tuvo 0 de 6 repeticiones ordenables" — **es un error**. El drive de perfil dio **6 de 6**
+  ordenables en el Criterio 1 (cumple, orden `tp` invertido); el que dio 0 de 6 es el **drive de tres
+  cuartos**, un grupo distinto. Son dos hallazgos separados, en dos grupos distintos: el drive de perfil
+  tiene el orden estable pero la magnitud/instante inestables entre sesiones (este hallazgo, Criterio 3); el
+  drive de tres cuartos no llega a ser ordenable en ninguna repetición (Criterio 1). No hay convergencia
+  entre ambos criterios sobre un mismo grupo: cada uno señala un problema distinto en un grupo distinto.
 - Revés de tres cuartos queda al borde en la métrica (i) (p = 0,074) y es donde el encuadre difiere más entre
   sesiones (torso en píxeles, 17 %, señalado pero bajo el 20 %).
 
