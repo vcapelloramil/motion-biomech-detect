@@ -124,15 +124,42 @@ E5 Auditoría y alertas
 
 ## 5. Estado actual
 
-- Capítulos 1, 2 y 3 de la tesis entregados. Capítulo 4 en redacción, entrega 25/8/2026.
-- Frontend: prototipo navegable generado con Lovable (TanStack Start, React 19, Tailwind 4,
-  shadcn/ui, configurado para Cloudflare Workers). Diseño visual bueno; contenido y semántica
-  requieren corrección según las reglas de la sección 2.
-- Motor: pruebas exploratorias con YOLO sobre video. Sin pipeline integrado.
-- Sin Supabase conectado todavía.
+**Fecha de referencia: 29/9/2026.**
 
-**Prioridad inmediata:** dejar el prototipo coherente con la tesis para poder capturar pantallas.
-No se requiere despliegue público: alcanza con el servidor de desarrollo local.
+- Capítulos 1, 2 y 3 de la tesis entregados. Capítulo 4: fecha objetivo 25/8/2026 (ya pasada); el texto
+  vigente quedó escrito antes de que existiera motor funcional ("no existe código productivo" en su propia
+  sección de limitaciones) y tiene varias secciones que ya no reflejan lo construido — lista de pendientes
+  de redacción acumulados en las decisiones 006, 010, 011, 012, 013, 014 y 015. Repasar esa lista antes de
+  dar el capítulo por actualizado.
+- **Motor: Etapas 0 a 4 del plan cerradas** (`v0.5.0-etapa4`, en `main`). Versión `0.4.1`. Pipeline completo
+  de punta a punta (ingesta → pose → filtrado de fase cero → cinemática → secuenciación) sobre corpus público
+  y sobre la Fase B propia (dos sesiones, 110 clips, un jugador). Criterios 1, 2 y 3 del apartado 4.3.4
+  medidos formalmente; decisión 015 (sin repliegue de arquitectura, cinco salvedades documentadas sobre el
+  orden por encuadre y gesto). Sin API ni base de datos todavía: el motor corre desde la línea de comandos,
+  contra archivos locales.
+- Frontend: prototipo navegable generado con Lovable (TanStack Start, React 19, Tailwind 4,
+  shadcn/ui, configurado para Cloudflare Workers), sin tocar desde que se movió al monorepo (26/8/2026).
+  Diseño visual bueno; contenido y semántica todavía requieren corrección según las reglas de la sección 2,
+  y ahora además según las salvedades de la decisión 015 (p. ej. no etiquetar "correcto/incorrecto" donde
+  no corresponde).
+- Sin Supabase conectado todavía; sin despliegue en la nube todavía (ver más abajo).
+
+**Prioridad inmediata:** un esqueleto desplegado en la nube que confirme la arquitectura (Supabase + motor en
+contenedor) antes de la Etapa 5, y después la Etapa 5 en sí (auditoría y reporte). Plan detallado en
+`docs/plan-desarrollo.md`.
+
+### Despliegue objetivo (Capítulo 4, apartado 4.5)
+
+**"No se requiere despliegue público: alcanza con el servidor de desarrollo local" ya NO vale** (era la
+prioridad de cuando el prototipo era solo de interfaz, sin motor). El MVP se despliega en la nube:
+
+- **Frontend:** Vercel (plan Hobby).
+- **Datos, identidad y archivos:** Supabase Cloud (PostgreSQL, Auth, Storage).
+- **Motor:** contenedor persistente de bajo costo (candidatos evaluados en el plan: Render, Railway,
+  Fly.io — decisión con datos reales de tiempo y memoria medidos en contenedor, no solo de folleto).
+
+**Calendario:** MVP completo el **2/11/2026**; entrega final el **17/11/2026**. Si el ritmo de trabajo lo
+permite, se prioriza terminar antes de esas fechas, no llegar justo a ellas.
 
 ---
 

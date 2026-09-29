@@ -54,37 +54,42 @@ gantt
     title Desarrollo del MVP · agosto a noviembre 2026
 
     section Fundaciones
-    E0 · Monorepo, contrato y corpus web :e0, 2026-08-26, 7d
+    E0 · Monorepo, contrato y corpus web :done, e0, 2026-08-26, 2026-09-01
     C1 · Grabacion propia (limite)      :milestone, c1, 2026-09-22, 0d
     section Motor biomecánico
-    E1 · Ingesta y validación de FPS    :e1, after e0, 7d
-    E2 · Estimación de pose             :e2, after e1, 7d
-    E3 · Procesamiento de señales       :e3, after e2, 7d
-    E4 · Cinemática y secuenciación     :crit, e4, after e3, 14d
-    E5 · Auditoría y reporte            :e5, after e4, 7d
-    section Plataforma
-    E6 · API y procesamiento asincrónico :e6, after e5, 7d
-    E7 · Persistencia e identidad       :e7, after e6, 7d
-    E8 · Integración de la interfaz     :e8, after e7, 7d
+    E1 · Ingesta y validación de FPS    :done, e1, 2026-09-02, 2026-09-08
+    E2 · Estimación de pose             :done, e2, 2026-09-09, 2026-09-15
+    E3 · Procesamiento de señales       :done, e3, 2026-09-16, 2026-09-22
+    E4 · Cinemática y secuenciación     :done, crit, e4, 2026-09-23, 2026-09-29
+    section Plataforma en la nube
+    E4.5 · Esqueleto desplegado         :active, crit, e45, 2026-09-29, 2026-10-05
+    E5 · Auditoría y reporte            :e5, 2026-10-06, 2026-10-12
+    E6-E7 · API + Auth + RLS            :e67, 2026-10-13, 2026-10-19
+    E8 · Interfaz conectada (Vercel)    :e8, 2026-10-20, 2026-10-26
     section Cierre
-    E9 · Validación y medición          :e9, after e8, 7d
-    E10 · Congelamiento y entrega       :e10, after e9, 7d
+    E9 · Validación y medición          :e9, 2026-10-27, 2026-11-02
+    E10 · Congelamiento y entrega       :e10, 2026-11-03, 2026-11-17
 ```
 
-| Etapa | Semana | Fechas | Entregable central | Hito de tesis |
-| --- | --- | --- | --- | --- |
-| E0 | 1 | 26/8 – 1/9 | Monorepo, contrato de datos, corpus público (Fase A) | Hito 5 (1/9) |
-| E1 | 2 | 2/9 – 8/9 | Ingesta con validación de FPS | |
-| E2 | 3 | 9/9 – 15/9 | Extracción de pose con confianza | |
-| E3 | 4 | 16/9 – 22/9 | Filtrado de fase cero | |
-| **C1** | — | **límite 22/9** | **Conjunto propio grabado (Fase B)** | *bloquea E4* |
-| **E4** | **5–6** | **23/9 – 6/10** | **Secuenciación · punto de decisión** | Hito 6 (29/9), Hito 7 (6/10) |
-| E5 | 7 | 7/10 – 13/10 | Reporte JSON completo | |
-| E6 | 8 | 14/10 – 20/10 | API asincrónica | |
-| E7 | 9 | 21/10 – 27/10 | Supabase integrado | |
-| E8 | 10 | 28/10 – 3/11 | Interfaz conectada al motor | |
-| E9 | 11 | 4/11 – 10/11 | Indicadores medidos | Hito 8 |
-| E10 | 12 | 11/11 – 17/11 | Sistema congelado y documentado | Hito 8 |
+| Etapa | Fechas | Entregable central | Hito de tesis |
+| --- | --- | --- | --- |
+| E0 | 26/8 – 1/9 ✅ | Monorepo, contrato de datos, corpus público (Fase A) | Hito 5 (1/9) |
+| E1 | 2/9 – 8/9 ✅ | Ingesta con validación de FPS | |
+| E2 | 9/9 – 15/9 ✅ | Extracción de pose con confianza | |
+| E3 | 16/9 – 22/9 ✅ | Filtrado de fase cero | |
+| **C1** | **límite 22/9** ✅ | **Conjunto propio grabado (Fase B)** | *bloquea E4* |
+| **E4** | **23/9 – 29/9** ✅ | **Secuenciación · punto de decisión** — cerrada 6 días antes de lo previsto (decisión 015, `v0.5.0-etapa4`) | Hito 6, Hito 7 |
+| **E4.5** | **29/9 – 5/10** | **Esqueleto desplegado en la nube** (nueva, ver más abajo) | — |
+| E5 | 6/10 – 12/10 | Reporte JSON completo | |
+| E6-E7 | 13/10 – 19/10 | API asincrónica + Supabase (persistencia, Auth, RLS) — comprimidas en un solo tramo de calendario | |
+| E8 | 20/10 – 26/10 | Interfaz conectada al motor, en Vercel | |
+| E9 | 27/10 – 2/11 | Indicadores medidos, pruebas de usabilidad — **MVP completo** | Hito 8 |
+| E10 | 3/11 – 17/11 | Sistema congelado y documentado — incluye margen de contingencia | Hito 8 |
+
+**Calendario recomprimido el 29/9/2026** (Valentín), tras cerrar la Etapa 4 seis días antes de lo previsto:
+E6 y E7 pasan a compartir un tramo de calendario (sin fusionar sus criterios de aceptación, que siguen
+siendo los de sus secciones respectivas más abajo); E10 gana margen de contingencia (2 semanas en vez de 1).
+Objetivo: MVP completo el 2/11, entrega final el 17/11, terminando antes si el ritmo lo permite.
 
 ---
 
@@ -380,7 +385,7 @@ efectivamente detecta el problema que dice detectar.
 
 # ETAPA 4 — Cinemática y secuenciación · PUNTO DE DECISIÓN
 
-**Semanas 5–6 · 23/9 – 6/10**
+**Semanas 5–6 · 23/9 – 29/9** (cerrada 6 días antes de lo previsto; ver "Punto de decisión" más abajo)
 
 ## Objetivo
 
@@ -457,11 +462,148 @@ sentido perfeccionar un detector cuyos criterios de éxito no se pueden medir.
 Cualquiera sea el resultado, documentarlo en `docs/decisiones/`: alimenta el Capítulo 6 de análisis
 de riesgos y el Capítulo 7 de resultados.
 
+**Resultado (29/9/2026):** ✅ **sin repliegue**, cadena `pelvis → torso → brazo` completa, con cinco
+salvedades documentadas — decisión 015 (`docs/decisiones/015-cierre-etapa-4.md`). Cerrada seis días antes
+de lo previsto (`v0.5.0-etapa4`).
+
+---
+
+# ETAPA 4.5 — Esqueleto desplegado en la nube
+
+**Semana 6 (extra) · 29/9 – 5/10**
+
+## Objetivo
+
+Antes de escribir una sola línea de la Etapa 5, confirmar en la nube real —no en teoría— que la arquitectura
+del apartado 4.5 de la tesis funciona: un proyecto Supabase con el esquema del apartado 4.4.6 como
+migraciones SQL, un bucket de Storage, y el motor corriendo dentro de un contenedor que baja un clip corto
+de Storage, corre el pipeline y escribe un resultado mínimo en la base. Medir tiempo y memoria reales del
+contenedor para elegir proveedor y plan con datos, no con folletos, y confirmar que el tamaño de los clips
+reales entra dentro de los límites del plan elegido.
+
+## Por qué ahora, antes de la Etapa 5
+
+Migrar la persistencia y el despliegue es la parte de la arquitectura que Claude Code **no puede validar
+localmente**: depende de cuentas, de límites de un proveedor externo y de la latencia real de red. Si el
+contenedor no alcanza para cargar el modelo de pose con la memoria del plan elegido, o si el límite de tamaño
+de archivo del plan gratuito de Supabase resulta incompatible con los clips reales, es mucho más barato
+descubrirlo ahora — con un esqueleto de una tarea, sin lógica de negocio — que después de construir encima la
+Etapa 5 completa (auditoría, PDF, overlay) y la API de la Etapa 6.
+
+## Hallazgos ya reunidos (para decidir con datos, no de memoria)
+
+**Tamaño real de los clips de la Fase B** (`kinetiq-data/fase-b/*/recortes/`, medido el 29/9/2026):
+
+| tipo de clip | tamaño típico | ¿entra en 50 MB (límite de subida del plan gratuito de Supabase)? |
+| --- | --- | --- |
+| repetición recortada (1 gesto, ~240 fps) | 20–45 MB (media ≈ 31 MB; 96 clips) | sí, con margen ajustado — 1 de 96 lo supera (91 MB) |
+| clip original sin cortar (varias repeticiones) | 400–430 MB | **no** |
+
+El plan gratuito de Supabase permite 1 GB de almacenamiento total y **50 MB por archivo subido**, límite
+que no se puede subir en ese plan (el plan Pro, USD 25/mes, sube a 100 GB de almacenamiento y 500 GB por
+archivo). [Supabase — Limits](https://supabase.com/docs/guides/storage/uploads/file-limits),
+[Supabase Pricing](https://supabase.com/pricing). **Consecuencia:** el esqueleto (una repetición corta) entra
+cómodo en el plan gratuito; el caso de uso real de la tesis —el usuario sube un clip con varias repeticiones,
+que el motor segmenta (apartado 4.3.3)— probablemente **no** entra en el plan gratuito. Esto no bloquea el
+esqueleto, pero sí es una decisión a tomar antes de la Etapa 8 (subida real desde el frontend): plan Pro de
+Supabase, o subida por partes (protocolo TUS, que Supabase Storage soporta), o pedirle al usuario que suba
+por repetición. Se decide con el dato real, no ahora.
+
+**Opciones de contenedor para el motor** (investigado el 29/9/2026, sujeto a cambios de precio del
+proveedor): Render tiene un plan gratuito real pero con apagado tras 15 minutos de inactividad y arranque
+en frío de 30–60 s (aceptable para un esqueleto, no para producción); su plan pago más chico, Starter, cuesta
+USD 7/mes con 512 MB de memoria y 0,5 vCPU — coincide exactamente con el **mínimo** que el apartado 4.5.2 de
+la tesis declara para el servidor de cómputo, así que hay que medir si alcanza o si hace falta el escalón
+siguiente. Railway y Fly.io ya no ofrecen nivel gratuito real (Railway lo retiró; Fly.io da solo una prueba
+corta) y un contenedor de 1 GB de memoria siempre activo ronda USD 10–25/mes en cualquiera de los tres.
+[Comparación 2026](https://dev.to/pavel-hostim/render-vs-railway-vs-flyio-pricing-compared-2026-2e5p),
+[Render pricing](https://checkthat.ai/brands/render/pricing). **La medición real de memoria del contenedor
+(tarea 4.5.3 más abajo) decide si el plan de USD 7 alcanza o si hace falta el de USD 25**, que es exactamente
+el rango que la tesis (apartado 4.5.4) ya había estimado sin medir.
+
+## Tareas
+
+**4.5.1 — Proyecto Supabase.** Crear el proyecto (plan Free para esta etapa). Migraciones SQL numeradas
+(`supabase/migrations/`, ya previsto en la estructura del monorepo desde la Etapa 0) que implementen el
+esquema del apartado 4.4.6: las siete tablas (`usuarios`, `atletas`, `videos`, `reportes_biomecanicos`,
+`metricas`, `alertas`, `versiones_motor`), sus relaciones, restricciones de verificación sobre los campos de
+dominio acotado, y **al menos una política de seguridad a nivel de fila** de prueba (aunque la autenticación
+completa sea de la Etapa 7). Aplicar las migraciones contra el proyecto real y confirmarlo con una captura
+del editor de tablas (el apartado 4.4.6 de la tesis tiene ese inserto pendiente).
+
+**4.5.2 — Bucket de Storage.** Un bucket privado para video. Subir a mano uno de los clips cortos de la
+Fase B (dentro del límite de 50 MB) y confirmar que se puede descargar por URL firmada.
+
+**4.5.3 — Motor en contenedor.** `Dockerfile` mínimo (Python 3.11, dependencias del motor, sin frontend) que:
+lea una variable de entorno con la ruta del clip en Storage, lo descargue, corra el pipeline existente
+(ingesta → pose → E3 → E4) sobre ese clip, y escriba una fila mínima en `reportes_biomecanicos` (o en una
+tabla de prueba si el esquema completo de identidad todavía no está resuelto) con al menos
+`version_motor`, el orden observado y un timestamp. **Medir dentro del contenedor:** tiempo total (descarga +
+inferencia + cálculo) y memoria pico (en especial al cargar el modelo de MediaPipe, que el apartado 4.5.2 ya
+señala como el factor limitante). Registrar los números en `docs/resultados/` (script versionado, principio 5
+del plan), igual que se hizo con la velocidad de inferencia local en la Etapa 2.
+
+**4.5.4 — Despliegue del contenedor.** Subir la imagen al proveedor elegido (candidato inicial: Render,
+por tener nivel gratuito real para esta prueba) y correrlo una vez de punta a punta contra el proyecto
+Supabase real, no contra `localhost`.
+
+**4.5.5 — Documentar la decisión de proveedor y plan** en `docs/decisiones/`, con los números medidos en
+4.5.3 (no con las cifras de folleto de más arriba, que son solo el punto de partida).
+
+## Pruebas
+
+- El contenedor, corriendo en el proveedor elegido, descarga el clip de prueba desde Storage, produce un
+  resultado y lo persiste en Supabase, sin intervención manual.
+- Las migraciones se pueden aplicar desde cero a un proyecto Supabase vacío y llegar al mismo esquema
+  (principio de reproducibilidad de las migraciones, apartado 4.4.6).
+- La política de seguridad a nivel de fila de prueba efectivamente excluye a un usuario que no es el dueño
+  de la fila (aunque sea con datos de prueba, no con Auth completo todavía).
+
+## Criterio de aceptación
+
+Un clip de la Fase B, subido a mano a Supabase Storage, produce una fila en la base de datos a través del
+contenedor desplegado, con tiempo y memoria reales medidos y registrados, y una decisión documentada de
+proveedor y plan para el motor.
+
+## Riesgos y qué recortar primero si el tiempo no alcanza
+
+Orden de recorte, del menos al más costoso de sacrificar (según lo que compromete río abajo):
+
+1. **Primero lo que se recorta:** la búsqueda de "el proveedor más barato". Si Render con el plan Starter
+   mide bien, se usa y no se pierde tiempo comparando Railway y Fly.io en profundidad — la tesis ya trata a
+   los tres como intercambiables (apartado 4.5.1) porque la imagen del contenedor es la misma en cualquiera.
+2. **Segundo:** la política de seguridad a nivel de fila de prueba de la tarea 4.5.1 puede diferirse a la
+   Etapa 7 (que ya la tiene como tarea propia) si el tiempo aprieta; lo indispensable de esta etapa es que
+   el esquema y las migraciones existan y se puedan aplicar, no que la seguridad esté completa.
+3. **No se recorta:** la medición real de tiempo y memoria en el contenedor (4.5.3). Es el dato que decide
+   el plan de despliegue y, si se omite, la Etapa 4.5 no cumplió su objetivo (confirmar la arquitectura con
+   datos, no con folletos).
+4. **No se recorta:** la revisión del límite de tamaño de archivo de Supabase contra los clips reales. Ya
+   está hecha (ver más arriba) y es la que anticipa el problema de la Etapa 8, antes de llegar a ella.
+
+## Qué necesito que crees vos (cuentas y credenciales)
+
+Ninguna de estas cuentas puede crearla Claude Code (entrar contraseñas o pagar es una acción que le
+corresponde solo al usuario, por las reglas de seguridad de la sesión):
+
+1. **Cuenta de Supabase** (Free para esta etapa) y un proyecto nuevo para KinetiQ. Vos creás el proyecto y
+   me pasás la URL y las claves (`anon` y `service_role`) para configurarlas como variables de entorno; la
+   clave `service_role` no se versiona, va en `.env` local o en el panel del proveedor del contenedor.
+2. **Cuenta en el proveedor de contenedor elegido** (Render para empezar). Un plan gratuito alcanza para la
+   medición de 4.5.3; si el resultado obliga a un plan pago, te aviso antes de que se cobre nada.
+3. **Cuenta de Vercel**, para cuando llegue la Etapa 8 (no hace falta todavía, pero conviene crearla ahora
+   si no la tenés, porque el despliegue de vista previa por rama es útil desde el primer commit del
+   frontend conectado).
+
+Con la URL y las claves de Supabase y con acceso al proveedor de contenedor (invitación de colaborador, o
+las credenciales que decidas compartir), puedo encargarme de las migraciones, el `Dockerfile` y el
+despliegue.
+
 ---
 
 # ETAPA 5 — Auditoría y reporte
 
-**Semana 7 · 7/10 – 13/10**
+**Semana 7 · 6/10 – 12/10**
 
 ## Objetivo
 
@@ -498,7 +640,7 @@ consistentes entre sí y con sello de versión.
 
 # ETAPA 6 — API y procesamiento asincrónico
 
-**Semana 8 · 14/10 – 20/10**
+**Semana 8 · 13/10 – 19/10** (comparte tramo de calendario con la Etapa 7, calendario recomprimido el 29/9)
 
 ## Objetivo
 
@@ -531,7 +673,9 @@ encolar.
 
 # ETAPA 7 — Persistencia e identidad
 
-**Semana 9 · 21/10 – 27/10**
+**Semana 9 · 13/10 – 19/10** (comparte tramo de calendario con la Etapa 6; el esqueleto de las migraciones y
+la primera política de seguridad a nivel de fila ya salen de la Etapa 4.5, así que esta etapa completa
+identidad y el resto de las políticas, no arranca desde cero)
 
 ## Objetivo
 
@@ -568,7 +712,7 @@ es una garantía.
 
 # ETAPA 8 — Integración de la interfaz
 
-**Semana 10 · 28/10 – 3/11**
+**Semana 10 · 20/10 – 26/10** (en Vercel; calendario recomprimido el 29/9)
 
 ## Objetivo
 
@@ -599,7 +743,7 @@ Un usuario carga un video desde el navegador y obtiene su reporte sin intervenci
 
 # ETAPA 9 — Validación y medición
 
-**Semana 11 · 4/11 – 10/11**
+**Semana 11 · 27/10 – 2/11** (MVP completo al cierre de esta etapa; calendario recomprimido el 29/9)
 
 ## Objetivo
 
@@ -630,7 +774,9 @@ Cada indicador tiene un número, un método y un script que lo reproduce.
 
 # ETAPA 10 — Congelamiento y entrega
 
-**Semana 12 · 11/11 – 17/11**
+**Semana 12 · 3/11 – 17/11** (dos semanas, no una: margen de contingencia ganado al cerrar la Etapa 4 seis
+días antes de lo previsto; calendario recomprimido el 29/9. Si el ritmo lo permite, no hace falta usarlo
+entero — la prioridad sigue siendo terminar antes, no llegar justo a la fecha)
 
 ## Objetivo
 
