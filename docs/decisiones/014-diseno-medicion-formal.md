@@ -118,6 +118,16 @@ Proporciones con intervalo de Wilson de 95 %. Si no se cumple: replegarse a la f
   cadera-hombro) **la máxima separación cadera-hombro es la única que corresponde a un evento medido, no a
   una decisión de diseño o de edición.** Implementado en `medicion_criterio3.py` (bandera
   `--con-instante-pico`, ya sin restricción).
+  - **Hallazgo posterior a implementar, ANTES de aceptar el resultado (29/9/2026):** la máxima separación
+    cadera-hombro se busca **dentro de la misma ventana de ±300 ms** usada para todo lo demás (la ventana
+    anclada al torso). Eso puede **censurar** la métrica: si el verdadero máximo de separación ocurre fuera
+    de esa ventana, lo que se mide es un valor recortado en el borde, no el evento real. Diagnóstico agregado
+    (`max_sep_dist_borde_ms`, `CERCA_DEL_BORDE_MS = 50`): sobre las 72 repeticiones válidas, **revés de
+    perfil tiene 6 de 12 exactamente en el borde y 11 de 12 a menos de 50 ms** — la métrica (ii) en ese
+    grupo **no es confiable**, y su resultado "consistente" puede ser solo el artefacto de que las dos
+    sesiones chocan contra el mismo límite. Revés de tres cuartos: 5 de 12 cerca del borde (moderado).
+    El resto de los grupos no muestra censura relevante. **No se ensanchó la ventana** (afectaría también
+    la métrica (i) y el Criterio 1); queda como limitación a declarar, no como corrección aplicada.
 - **Precondición (decisión 012):** informar la equivalencia de encuadre entre sesiones (tamaño del torso en
   píxeles y posición horizontal del jugador, mediana por clip) y **señalar** las diferencias de más de
   20 % *(criterio informativo; no excluye clips)*.

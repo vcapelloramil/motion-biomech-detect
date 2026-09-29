@@ -44,6 +44,9 @@ from app.engine.version import __version__ as version_motor
 
 UMBRAL_CUMPLIMIENTO = 0.75
 DIF_ENCUADRE_INFORMATIVA = 0.20
+# Diagnóstico de censura de la métrica (ii): si el máximo de separación cadera-hombro queda a menos
+# de esto del borde de la ventana, el valor puede estar recortado (el verdadero máximo cae fuera).
+CERCA_DEL_BORDE_MS = 50.0
 BOOTSTRAP_N = 10000
 SEMILLA = 26092026
 
@@ -97,6 +100,11 @@ def fraccion_sin_evidencia(resultados: list[dict]) -> tuple[int, int, float | No
     return k, len(ev), (k / len(ev) if ev else None)
 
 
+def distancia_a_borde_ms(k: int, n: int, fps: float) -> float:
+    """Distancia (ms) desde la posición ``k`` (0-based, de un array de largo ``n``) al borde más cercano."""
+    return float(min(k, n - 1 - k) / fps * 1000)
+
+
 def diferencia_relativa(a: float, b: float) -> float:
     return abs(a - b) / ((abs(a) + abs(b)) / 2) if (a or b) else 0.0
 
@@ -126,6 +134,11 @@ def metricas_clip(seq, lado: str, con_instante: bool) -> dict:
     out = {"valida": True, "separacion_max_grados": float(sep[k])}
     if con_instante:
         out["instante_pico_torso_desde_max_sep_ms"] = float((ft - (d + k)) / fps * 1000)
+        # Diagnóstico de censura: distancia (ms) del máximo encontrado al borde MÁS CERCANO de la
+        # ventana. 0 significa que el máximo cae justo en el borde: el verdadero máximo de la
+        # separación cadera-hombro puede estar FUERA de la ventana de ±300 ms, y lo que se mide no
+        # es el evento real sino un valor recortado por la ventana (decisión 014 no contempló esto).
+        out["max_sep_dist_borde_ms"] = distancia_a_borde_ms(k, len(sep), fps)
     return out
 
 
@@ -224,12 +237,25 @@ def main(argv: list[str] | None = None) -> int:
     for g, e in encuadre.items():
         print(f"  {g:22} s1 {e['torso_px_s1']:6.1f}  s2 {e['torso_px_s2']:6.1f}  dif {e['dif_torso_relativa']:.0%}{'  <-- SEÑALADO' if e['senalado_por_mas_de_20_pct'] else ''}")
 
+    censura = {}
+    if args.con_instante_pico:
+        print(f"\nCensura de la métrica (ii): distancia del máximo de separación al borde de la ventana "
+              f"(< {CERCA_DEL_BORDE_MS:g} ms = posible censura; el verdadero máximo puede estar fuera de la ventana)")
+        for g, s in sorted(grupos.items()):
+            dist = [f["max_sep_dist_borde_ms"] for ses in (1, 2) for f in s[ses] if f.get("valida") and "max_sep_dist_borde_ms" in f]
+            en_borde = sum(d == 0.0 for d in dist)
+            cerca = sum(d < CERCA_DEL_BORDE_MS for d in dist)
+            censura[g] = {"n": len(dist), "en_el_borde_exacto": en_borde, "cerca_del_borde": cerca}
+            alerta = "  <-- métrica (ii) POCO CONFIABLE en este grupo" if cerca >= len(dist) / 2 else ""
+            print(f"  {g:22} n={len(dist):2d}  en el borde exacto: {en_borde:2d}  cerca del borde: {cerca:2d}{alerta}")
+
     args.salida.parent.mkdir(parents=True, exist_ok=True)
     args.salida.write_text(json.dumps({
         "generado_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"), "decision": "012/014",
         "version_motor": version_motor, "commit": _git(["rev-parse", "HEAD"], repo), "arbol_sucio": bool(sucio),
         "metricas": list(metricas), "parcial": not args.con_instante_pico, "umbral_cumplimiento": UMBRAL_CUMPLIMIENTO,
-        "combinaciones_consistentes": [k, ev], "combinaciones_sin_evidencia_de_diferencia": [k2, ev2], "resultado_por_grupo": resultado, "encuadre": encuadre, "repeticiones": filas,
+        "combinaciones_consistentes": [k, ev], "combinaciones_sin_evidencia_de_diferencia": [k2, ev2],
+        "resultado_por_grupo": resultado, "encuadre": encuadre, "censura_metrica_ii": censura, "repeticiones": filas,
     }, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"\nEscrito: {args.salida}")
     return 0

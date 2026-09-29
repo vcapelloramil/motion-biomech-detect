@@ -6,6 +6,7 @@ import pytest
 from app.medicion_criterio3 import (
     comparar_sesiones,
     diferencia_relativa,
+    distancia_a_borde_ms,
     fraccion_consistente,
     fraccion_sin_evidencia,
     mad_sigma,
@@ -65,6 +66,15 @@ def test_fraccion_sin_evidencia():
     rs = [{"sin_evidencia_de_diferencia": True}, {"sin_evidencia_de_diferencia": False},
           {"sin_evidencia_de_diferencia": None}]
     assert fraccion_sin_evidencia(rs) == (1, 2, 0.5)
+
+
+def test_distancia_a_borde_ms_es_cero_justo_en_el_borde_y_maxima_en_el_centro():
+    fps = 240.0
+    n = 145                            # ventana de ±300 ms a 240 fps: 2*72+1 = 145 muestras
+    assert distancia_a_borde_ms(0, n, fps) == 0.0             # el máximo cae en el primer fotograma: censurado
+    assert distancia_a_borde_ms(n - 1, n, fps) == 0.0          # o en el último: censurado igual
+    assert distancia_a_borde_ms(n // 2, n, fps) == pytest.approx(300.0, abs=5.0)   # centro = lejos de ambos bordes
+    assert distancia_a_borde_ms(5, n, fps) == pytest.approx(5 / fps * 1000)
 
 
 def test_diferencia_relativa():
