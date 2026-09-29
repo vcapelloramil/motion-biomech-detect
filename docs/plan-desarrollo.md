@@ -517,9 +517,9 @@ la tesis declara para el servidor de cómputo, así que hay que medir si alcanza
 siguiente. Railway y Fly.io ya no ofrecen nivel gratuito real (Railway lo retiró; Fly.io da solo una prueba
 corta) y un contenedor de 1 GB de memoria siempre activo ronda USD 10–25/mes en cualquiera de los tres.
 [Comparación 2026](https://dev.to/pavel-hostim/render-vs-railway-vs-flyio-pricing-compared-2026-2e5p),
-[Render pricing](https://checkthat.ai/brands/render/pricing). **La medición real de memoria del contenedor
-(tarea 4.5.3 más abajo) decide si el plan de USD 7 alcanza o si hace falta el de USD 25**, que es exactamente
-el rango que la tesis (apartado 4.5.4) ya había estimado sin medir.
+[Render pricing](https://checkthat.ai/brands/render/pricing). **Medido (29/9/2026, decisión 017): el plan
+de USD 7 alcanza.** 512 MB/0,5 vCPU procesa un clip real sin caerse (176–185 s, 426–427 MB de pico), muy
+por debajo del rango 7–25 USD que la tesis (apartado 4.5.4) había estimado sin medir.
 
 ## Tareas
 
@@ -534,21 +534,22 @@ del editor de tablas (el apartado 4.4.6 de la tesis tiene ese inserto pendiente)
 **4.5.2 — Bucket de Storage.** Un bucket privado para video. Subir a mano uno de los clips cortos de la
 Fase B (dentro del límite de 50 MB) y confirmar que se puede descargar por URL firmada.
 
-**4.5.3 — Motor en contenedor.** `Dockerfile` mínimo (Python 3.11, dependencias del motor, sin frontend) que:
-lea una variable de entorno con la ruta del clip en Storage, lo descargue, corra el pipeline existente
-(ingesta → pose → E3 → E4) sobre ese clip, y escriba una fila mínima en `reportes_biomecanicos` (o en una
-tabla de prueba si el esquema completo de identidad todavía no está resuelto) con al menos
-`version_motor`, el orden observado y un timestamp. **Medir dentro del contenedor:** tiempo total (descarga +
-inferencia + cálculo) y memoria pico (en especial al cargar el modelo de MediaPipe, que el apartado 4.5.2 ya
-señala como el factor limitante). Registrar los números en `docs/resultados/` (script versionado, principio 5
-del plan), igual que se hizo con la velocidad de inferencia local en la Etapa 2.
+**4.5.3 — Motor en contenedor. ✅ Parte de medición hecha (29/9/2026), falta la parte de Storage/DB.**
+`Dockerfile` (`backend/Dockerfile`) y `app/medir_contenedor.py` corren el pipeline existente (ingesta →
+pose → E3 → E4) sobre un clip montado y miden tiempo total y memoria pico (`resource.getrusage`), con el
+modelo de MediaPipe precalentado en tiempo de build para no mezclar descarga con inferencia. **Medido con
+Docker real, `--memory`/`--cpus` simulando planes de proveedor** (512 MB/0,5 vCPU no se cae, 176–185 s;
+comparación de `model_complexity` 0/1/2, ver decisión 017). Resultados en
+`docs/resultados/e4.5-contenedor-tiempo-memoria.json`. **Falta todavía:** que el contenedor descargue el
+clip desde Supabase Storage (hoy se monta un archivo local) y escriba la fila mínima en la base — eso
+espera a que existan el bucket (4.5.2) y las migraciones (4.5.1).
 
-**4.5.4 — Despliegue del contenedor.** Subir la imagen al proveedor elegido (candidato inicial: Render,
-por tener nivel gratuito real para esta prueba) y correrlo una vez de punta a punta contra el proyecto
-Supabase real, no contra `localhost`.
+**4.5.4 — Despliegue del contenedor.** Proveedor y plan ya decididos con datos reales: **Render Starter,
+USD 7/mes** (decisión 017). Falta desplegar ahí de verdad (hoy la medición es con Docker local) y correrlo
+una vez de punta a punta contra el proyecto Supabase real, no contra `localhost`.
 
-**4.5.5 — Documentar la decisión de proveedor y plan** en `docs/decisiones/`, con los números medidos en
-4.5.3 (no con las cifras de folleto de más arriba, que son solo el punto de partida).
+**4.5.5 — Documentar la decisión de proveedor y plan. ✅ Hecho** — decisión 017, con los números medidos en
+4.5.3 (no con las cifras de folleto del punto de partida de más arriba).
 
 ## Pruebas
 
@@ -589,8 +590,8 @@ corresponde solo al usuario, por las reglas de seguridad de la sesión):
 1. **Cuenta de Supabase** (Free para esta etapa) y un proyecto nuevo para KinetiQ. Vos creás el proyecto y
    me pasás la URL y las claves (`anon` y `service_role`) para configurarlas como variables de entorno; la
    clave `service_role` no se versiona, va en `.env` local o en el panel del proveedor del contenedor.
-2. **Cuenta en el proveedor de contenedor elegido** (Render para empezar). Un plan gratuito alcanza para la
-   medición de 4.5.3; si el resultado obliga a un plan pago, te aviso antes de que se cobre nada.
+2. **Cuenta en Render**, con el plan **Starter (USD 7/mes)** — decisión 017, ya medido con Docker real
+   (512 MB/0,5 vCPU alcanza, sin caerse). Antes de pagar cualquier cosa te aviso y confirmás.
 3. **Cuenta de Vercel**, para cuando llegue la Etapa 8 (no hace falta todavía, pero conviene crearla ahora
    si no la tenés, porque el despliegue de vista previa por rama es útil desde el primer commit del
    frontend conectado).

@@ -1,0 +1,32 @@
+{
+ "generado": "2026-09-29",
+ "decision": "017",
+ "metodo": "docker build -t kinetiq-motor:medicion backend/ ; docker run --rm --memory=X --cpus=Y -v <clip>:/datos/clip.mov:ro kinetiq-motor:medicion python -m app.medir_contenedor /datos/clip.mov --lado der [--model-complexity N] [--reducir-resolucion W]",
+ "clip_de_prueba": {
+  "archivo": "20260924_VCR_drive_perfil_240_01_rep01.mov (Fase B, una repetición)",
+  "tamano_mb": 25.2,
+  "n_frames": 360,
+  "nota": "una repetición típica; el rango real en la Fase B es 300-460 fotogramas (ver decisión 016)"
+ },
+ "maquina_anfitriona": "Docker Desktop / WSL2 sobre Windows 11, misma PC de desarrollo (no es una medición en el proveedor final; sirve para comparar configuraciones entre sí, no como cota absoluta)",
+ "imagen_docker": {"tag": "kinetiq-motor:medicion", "tamano": "2.24 GB", "base": "python:3.11-slim"},
+ "comparacion_memoria_cpu": {
+  "nota": "todas con model_complexity=2 (el default actual del motor, mediapipe_backend.py)",
+  "512mb_0.5cpu (~Render Starter, 7 USD/mes)": [
+   {"total_s": 179.57, "rss_pico_mb": 426.9},
+   {"total_s": 176.01, "rss_pico_mb": 426.4},
+   {"total_s": 185.10, "rss_pico_mb": 426.6}
+  ],
+  "1gb_1cpu": [{"total_s": 91.27, "rss_pico_mb": 427.3}],
+  "2gb_2cpu (~Render Standard, 25 USD/mes)": [{"total_s": 81.01, "rss_pico_mb": 441.1}],
+  "ningun_caso_crasheo_ni_dio_oom": true
+ },
+ "comparacion_model_complexity": {
+  "nota": "todas con el límite más ajustado, 512mb/0.5cpu, mismo clip",
+  "2_heavy_default_actual": {"total_s": 176.01, "rss_pico_mb": 426.4, "cobertura": 1.0},
+  "1_full": {"total_s": 91.28, "rss_pico_mb": 323.8, "cobertura": 1.0},
+  "1_full_mas_resolucion_480px": {"total_s": 94.77, "rss_pico_mb": 311.1, "cobertura": 1.0},
+  "0_lite": {"total_s": 80.00, "rss_pico_mb": 309.4, "cobertura": 1.0}
+ },
+ "limitacion_de_esta_comparacion": "cobertura = fracción de fotogramas con persona detectada (binaria); en este clip (Fase B, bien iluminado, encuadre controlado) da 100% en los tres niveles de complejidad, así que NO discrimina precisión entre ellos. No mide confianza por articulación ni error angular. Antes de cambiar el model_complexity de producción hace falta repetir el Criterio 2 (goniometría manual) con ese ajuste: el 'cumple' medido (decisión 015) es con complexity=2."
+}

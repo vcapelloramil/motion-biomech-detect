@@ -26,6 +26,18 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY app/ ./app/
 
+# Precalentamiento: MediaPipe descarga el modelo (.tflite) la PRIMERA vez que se instancia el
+# backend, y `docker run --rm` no conserva esa descarga entre corridas (capa efímera). Sin este
+# paso, cada medición de tiempo incluiría la descarga por red, mezclada con el tiempo de
+# inferencia real. Se descargan los tres model_complexity (0/1/2) porque la tarea 4.5.3 los
+# compara entre sí (velocidad/memoria vs cobertura).
+RUN python -c "\
+import numpy as np; \
+from app.engine.pose.mediapipe_backend import MediaPipeBackend; \
+img = np.zeros((128, 128, 3), dtype=np.uint8); \
+[MediaPipeBackend(model_complexity=c).estimar_frame(img, 0) for c in (0, 1, 2)]; \
+print('modelos de pose precalentados (complexity 0, 1, 2)')"
+
 # Sin ENTRYPOINT fijo todavía: se invoca explícitamente `python -m app.medir_contenedor ...` (o lo
 # que corresponda) al correr el contenedor, hasta que la tarea 4.5.4 defina el comando de producción.
 CMD ["bash"]

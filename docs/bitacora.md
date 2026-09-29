@@ -6,6 +6,59 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-09-29 (tarde) — Etapa 4.5 en marcha: medición real en contenedor, decisión 016 y 017
+
+**Rama:** `main`. Continuación de la entrada de esta misma fecha (cierre de la Etapa 4).
+
+**Correcciones a lo ya escrito hoy** (Valentín):
+- La decisión 015 decía que el contrato necesitaba "un tercer estado" para "auditable pero no ordenable" —
+  **mal formulado**. "No ordenable" **no es un quinto estado de R3** (que se queda en sus cuatro: correcto,
+  desvío leve, alerta de carga, no auditable): es un **motivo** dentro de la observación de secuenciación,
+  mostrado en gris con una explicación, igual que los demás motivos que ya usa el motor. Corregido en la
+  decisión 015 y en la entrada anterior de esta bitácora.
+
+**Decisión 016 (tentativa):** para el MVP, se sube un video por golpe, hasta 50 MB; la pantalla de carga
+rechaza archivos más grandes pidiendo recortar. Subida por partes queda fuera del MVP. Se confirma o se
+revierte probando el flujo completo (subida → procesamiento → reporte) con clips reales — no antes.
+Protocolo de grabación actualizado (`docs/protocolo-grabacion.md`, §7) con la indicación de recortar a un
+solo golpe.
+
+**Docker Desktop no arrancaba** (bug conocido del "Inference manager" / IA integrada de Docker, sockets
+huérfanos de un apagado anterior sucio en `%LOCALAPPDATA%\Docker\run\` y `%LOCALAPPDATA%\docker-secrets-engine\`).
+Solucionado: se renombraron ambas carpetas para que Docker las recree limpias y se desactivó
+`EnableDockerAI` en `settings-store.json` (la función de IA no la necesita este proyecto). Reproducible si
+vuelve a pasar tras un apagado sucio.
+
+**Medición real en contenedor** (`backend/Dockerfile`, `app/medir_contenedor.py`, resultados en
+`docs/resultados/e4.5-contenedor-tiempo-memoria.json`, decisión **017**):
+- **512 MB/0,5 vCPU (Render Starter, USD 7/mes) alcanza:** procesa un clip real de una repetición en
+  176–185 s (3 corridas) sin caerse, 426–427 MB de pico. La lectura inicial de 516 MB sin restricciones
+  (sesión de la mañana) era un artefacto de la descarga del modelo en caliente, no reproducible con el
+  modelo precalentado en la imagen. **No se paga el plan de USD 25/mes.**
+- **Hallazgo colateral, pendiente de decisión:** `model_complexity=1` en vez de `2` (el default del motor)
+  corta el tiempo a la mitad (91 s) y la memoria ~100 MB, en el mismo plan de 7 dólares. **No se aplica
+  ahora:** la cobertura (100 % en los tres niveles) no discrimina precisión en este clip fácil, y el
+  Criterio 2 (decisión 015, "cumple") se midió con `complexity=2` — bajarlo necesitaría repetir esa
+  medición. Reducir la resolución del fotograma no aportó nada más sobre `complexity=1`.
+
+**Supabase:** proyecto creado por Valentín (región São Paulo, sin integración GitHub, Data API activada,
+"exponer tablas nuevas automáticamente" desactivado, RLS automático activado). Variables nuevas documentadas
+en `backend/.env.example` (`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`); confirmado que `.env` sigue
+ignorado por git. Con "exponer automáticamente" desactivado, cada tabla nueva va a necesitar `GRANT`
+explícitos además de sus políticas RLS — anotado para cuando se escriban las migraciones (tarea 4.5.1, no
+hecha todavía).
+
+### Pendiente
+
+- **Tarea 4.5.1** (migraciones SQL) y **4.5.2** (bucket de Storage): no empezadas.
+- **Tarea 4.5.3:** falta que el contenedor descargue el clip desde Storage y escriba en la base (hoy usa un
+  archivo montado localmente).
+- **Tarea 4.5.4:** desplegar de verdad en Render Starter (hoy la medición es con Docker local).
+- **Valentín:** decidir sobre `model_complexity` (decisión 017) cuando corresponda. El Criterio 2 ya se
+  midió (goniometría manual completa, ver la entrada de esta misma fecha más abajo): no está pendiente.
+
+---
+
 ## 2026-09-29 — Cierre de la Etapa 4 (decisión 015): sin repliegue, cinco salvedades
 
 **Rama:** `etapa/4-cinematica` → merge a `main`, tag `v0.5.0-etapa4`, push. Con los tres criterios medidos

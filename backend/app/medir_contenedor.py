@@ -46,6 +46,13 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("clip", type=Path)
     ap.add_argument("--lado", choices=["der", "izq"], default="der")
     ap.add_argument("--backend", choices=["mediapipe", "fake"], default="mediapipe")
+    ap.add_argument("--model-complexity", type=int, choices=[0, 1, 2], default=2,
+                    help="0=lite, 1=full, 2=heavy (default, el que usa el motor hoy). Compara velocidad/memoria "
+                         "contra cobertura: --model-complexity 1 puede ser la diferencia entre el plan de "
+                         "contenedor de 7 o de 25 USD/mes.")
+    ap.add_argument("--reducir-resolucion", type=int, default=None, metavar="ANCHO",
+                    help="Reescala cada fotograma a este ancho (alto proporcional) antes de la pose. "
+                         "Reduce memoria y tiempo a costa de precisión; no implementado sobre 'fake'.")
     ap.add_argument("--salida", type=Path, default=None, help="JSON con los tiempos/memoria por etapa.")
     args = ap.parse_args(argv)
 
@@ -72,19 +79,39 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.backend == "mediapipe":
         from app.engine.pose.mediapipe_backend import MediaPipeBackend
-        backend = MediaPipeBackend()
+        backend = MediaPipeBackend(model_complexity=args.model_complexity)
     else:
         from app.engine.pose.fake_backend import FakeBackend
         backend = FakeBackend(dims=3)
-    t = marca(f"cargar backend de pose ({args.backend})", t)
+    t = marca(f"cargar backend de pose ({args.backend}, model_complexity={args.model_complexity})", t)
 
     from app.engine.ingest import iterar_fotogramas
+    fotogramas = iterar_fotogramas(args.clip)
+    if args.reducir_resolucion:
+        # Se resamplea el FOTOGRAMA que ve MediaPipe, pero se sigue declarando ancho/alto del video
+        # ORIGINAL a procesar() (más abajo): las coordenadas que devuelve MediaPipe son normalizadas
+        # [0,1] y no dependen de la resolución de entrada, así que multiplicarlas por el tamaño
+        # original sigue dando la posición correcta en píxeles del video real.
+        import cv2
+
+        ancho_reducido = args.reducir_resolucion
+        alto_reducido = round(md.alto * ancho_reducido / md.ancho)
+
+        def _reescalar(frames):
+            for f in frames:
+                yield cv2.resize(f, (ancho_reducido, alto_reducido), interpolation=cv2.INTER_AREA)
+
+        fotogramas = _reescalar(fotogramas)
+        t = marca(f"(reducción de resolución activa: {ancho_reducido}x{alto_reducido})", t)
+
     with backend:
         seq = backend.procesar(
-            iterar_fotogramas(args.clip), ancho=md.ancho, alto=md.alto,
+            fotogramas, ancho=md.ancho, alto=md.alto,
             fps_efectivos=md.fps_declarados,  # el clip de prueba ya viene a la frecuencia real
         )
     t = marca(f"inferencia de pose ({seq.n_frames} fotogramas)", t)
+    cobertura_general = round(seq.cobertura, 4)
+    print(f"  cobertura (fracción de fotogramas con persona detectada): {cobertura_general:.1%}")
 
     from app.engine.pipeline import procesar_e3
     filt = procesar_e3(seq)
@@ -106,9 +133,11 @@ def main(argv: list[str] | None = None) -> int:
 
     salida = {
         "clip": str(args.clip), "tamano_mb": round(args.clip.stat().st_size / 1_048_576, 1),
-        "backend": args.backend, "fps_declarados": md.fps_declarados, "n_frames": seq.n_frames,
+        "backend": args.backend, "model_complexity": args.model_complexity,
+        "reducir_resolucion": args.reducir_resolucion, "cobertura": cobertura_general,
+        "fps_declarados": md.fps_declarados, "n_frames": seq.n_frames,
         "python": platform.python_version(), "plataforma": platform.platform(),
-        "total_segundos": round(total_s, 2), "rss_pico_mb": round(pico_final_mb, 1),
+        "total_segundos": round(total_s, 2), "rss_pico_mb": pico_final_mb,
         "hitos": hitos,
     }
     if args.salida:
