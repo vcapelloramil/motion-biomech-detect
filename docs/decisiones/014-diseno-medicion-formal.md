@@ -1,9 +1,8 @@
 # Decisión 014 — Diseño de la medición formal de los Criterios 1, 2 y 3
 
-**Fecha:** 26 de septiembre de 2026
-**Estado:** **VIGENTE (congelada)** desde el commit que incluye esta versión y el código de medición, con
-**una excepción**: la definición del "instante de pico" del Criterio 3 (ver más abajo) queda pendiente de
-confirmación de Valentín. **Ese punto no se mide hasta confirmarlo.**
+**Fecha:** 26 de septiembre de 2026 (métrica (ii) del Criterio 3 confirmada el 29 de septiembre)
+**Estado:** **VIGENTE (congelada)**, sin excepciones, desde el commit que confirma la definición de la
+métrica (ii) del Criterio 3 (ver más abajo).
 **Afecta a:** tareas 4.7 y 4.8 del plan · punto de decisión de la Etapa 4 · Capítulos 6 y 7 · decisiones
 011, 012 y 013
 
@@ -111,11 +110,14 @@ Proporciones con intervalo de Wilson de 95 %. Si no se cumple: replegarse a la f
   propiedad queda fijada en `tests/unit/test_medicion_criterio3.py`.
 - **(i) Separación cadera-hombro máxima:** máximo, dentro de la ventana ± 300 ms del ancla, del ángulo entre
   el eje de caderas y el de hombros (3D, series filtradas por E3).
-- **(ii) "Instante de pico": DEFINICIÓN PENDIENTE — [A CONFIRMAR].** Con una repetición por clip y la
-  ventana anclada al pico del torso, "el instante del pico dentro de la ventana" es una constante; y el
-  instante dentro del clip depende de cómo se cortó. Hace falta un **origen** propio del gesto.
-  **Propuesta:** *instante del pico de torso medido desde el instante de máxima separación cadera-hombro*
-  (ms), ambos eventos de la misma repetición. **No se mide (ii) hasta que Valentín confirme la definición.**
+- **(ii) "Instante de pico" — CONFIRMADO por Valentín (29/9/2026):** *instante del pico de torso medido
+  desde el instante de máxima separación cadera-hombro* (ms), ambos eventos de la misma repetición. Con una
+  repetición por clip y la ventana anclada al pico del torso, "el instante del pico dentro de la ventana"
+  sería una constante y el instante dentro del clip dependería de cómo se cortó; hacía falta un **origen**
+  propio del gesto, y de las alternativas consideradas (pico del torso, corte del clip, máxima separación
+  cadera-hombro) **la máxima separación cadera-hombro es la única que corresponde a un evento medido, no a
+  una decisión de diseño o de edición.** Implementado en `medicion_criterio3.py` (bandera
+  `--con-instante-pico`, ya sin restricción).
 - **Precondición (decisión 012):** informar la equivalencia de encuadre entre sesiones (tamaño del torso en
   píxeles y posición horizontal del jugador, mediana por clip) y **señalar** las diferencias de más de
   20 % *(criterio informativo; no excluye clips)*.
