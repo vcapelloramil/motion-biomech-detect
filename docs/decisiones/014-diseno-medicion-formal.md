@@ -128,6 +128,19 @@ Proporciones con intervalo de Wilson de 95 %. Si no se cumple: replegarse a la f
     sesiones chocan contra el mismo límite. Revés de tres cuartos: 5 de 12 cerca del borde (moderado).
     El resto de los grupos no muestra censura relevante. **No se ensanchó la ventana** (afectaría también
     la métrica (i) y el Criterio 1); queda como limitación a declarar, no como corrección aplicada.
+  - **Override de Valentín (29/9/2026):** el resultado de revés · perfil para la métrica (ii) se reporta
+    como **NO AUDITABLE** (no como "consistente"): "reportar Δ=6,25 ms / p=0,868 ahí sería presentar un
+    artefacto de censura como dato bueno". Es una decisión manual sobre este grupo puntual, no una regla
+    automática de umbral (`GRUPOS_NO_AUDITABLES` en `medicion_criterio3.py`); el cálculo bruto se conserva
+    en el JSON (`bruto_censurado`) para trazabilidad y **no cuenta** en las combinaciones de cumplimiento
+    ni en la lectura calibrada. La métrica (i) de ese mismo grupo **no se toca** (sigue "consistente",
+    p = 0,577): la censura afecta específicamente a la búsqueda del instante, no al valor máximo de
+    separación en sí. **Candidato de trabajo futuro:** una ventana específica por gesto, pre-registrada
+    **antes** de volver a medir (no aplicado).
+  - **Con el override aplicado, el resultado del Criterio 3 pasa de 10/12 (83 %) a 9/11 (82 %)** con la
+    regla original, y de 11/12 (92 %) a 10/11 (91 %) con la lectura calibrada; ambos siguen por encima
+    del umbral de 75 %. (El grupo excluido era uno de los diez que contaban como "consistente"; sacarlo
+    baja levemente el numerador y el denominador a la vez.)
 - **Precondición (decisión 012):** informar la equivalencia de encuadre entre sesiones (tamaño del torso en
   píxeles y posición horizontal del jugador, mediana por clip) y **señalar** las diferencias de más de
   20 % *(criterio informativo; no excluye clips)*.

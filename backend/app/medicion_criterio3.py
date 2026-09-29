@@ -11,9 +11,17 @@ la variación INTRA-sesión.
 Métricas:
   (i)  separación cadera-hombro máxima (°): máximo, dentro de la ventana ± 300 ms del ancla de torso, del
        ángulo entre el eje de caderas y el de hombros (3D, series filtradas por E3).
-  (ii) instante de pico: DEFINICIÓN PENDIENTE de confirmación de Valentín (decisión 014). Propuesta:
-       instante del pico de torso medido desde el instante de máxima separación cadera-hombro (ms).
-       Solo se calcula con --con-instante-pico; no se usa hasta confirmar la definición.
+  (ii) instante de pico: instante del pico de torso medido desde el instante de máxima separación
+       cadera-hombro (ms), ambos eventos de la misma repetición. Definición confirmada por Valentín
+       (29/9/2026, decisión 014): la única de las alternativas consideradas que corresponde a un evento
+       medido, no a una decisión de diseño o de edición. Solo se calcula con --con-instante-pico.
+
+Censura de la métrica (ii) (decisión 014, 29/9/2026): la máxima separación cadera-hombro se busca DENTRO de
+la misma ventana de ±300 ms; si el verdadero máximo cae fuera, el valor medido queda recortado en el borde.
+GRUPOS_NO_AUDITABLES marca a mano (no es una regla automática de umbral) los grupos donde Valentín decidió,
+vistos los datos, que la censura es demasiado extendida para reportar el resultado como "consistente": hoy
+solo revés · perfil (5 de 12 repeticiones con el máximo exactamente en el borde). El resultado bruto se
+conserva en el JSON para trazabilidad; no cuenta en las combinaciones de cumplimiento.
 
 Grupos: gesto × encuadre. Del saque de tres cuartos, la sesión 2 usa SOLO la toma 02 (las tomas 02b y 02c
 quedan para el Criterio 1). Precondición (decisión 012): se informa la equivalencia de encuadre entre sesiones
@@ -47,6 +55,18 @@ DIF_ENCUADRE_INFORMATIVA = 0.20
 # Diagnóstico de censura de la métrica (ii): si el máximo de separación cadera-hombro queda a menos
 # de esto del borde de la ventana, el valor puede estar recortado (el verdadero máximo cae fuera).
 CERCA_DEL_BORDE_MS = 50.0
+
+# Override MANUAL de Valentín (29/9/2026, decisión 014), no una regla automática: grupos cuyo resultado en
+# una métrica se reporta como NO AUDITABLE (no "consistente") por censura de ventana demasiado extendida.
+# "Marcala como no auditable... no como consistente — reportar Δ=6,25ms/p=0,868 ahí sería presentar un
+# artefacto de censura como dato bueno." No se ensancha la ventana (parámetro compartido con el Criterio 1
+# y la métrica (i), ya congelados). Candidato de trabajo futuro: ventana específica por gesto, pre-registrada
+# antes de volver a medir (no aplicado aquí).
+GRUPOS_NO_AUDITABLES = {
+    ("reves", "perfil", "instante_pico_torso_desde_max_sep_ms"):
+        "censura de ventana: 5 de 12 repeticiones con el máximo de separación cadera-hombro exactamente "
+        "en el borde de ±300 ms (probablemente fuera de la ventana); ver decisión 014.",
+}
 BOOTSTRAP_N = 10000
 SEMILLA = 26092026
 
@@ -103,6 +123,15 @@ def fraccion_sin_evidencia(resultados: list[dict]) -> tuple[int, int, float | No
 def distancia_a_borde_ms(k: int, n: int, fps: float) -> float:
     """Distancia (ms) desde la posición ``k`` (0-based, de un array de largo ``n``) al borde más cercano."""
     return float(min(k, n - 1 - k) / fps * 1000)
+
+
+def aplicar_no_auditable(r: dict, motivo: str) -> dict:
+    """Override manual: conserva el cálculo bruto (trazabilidad) pero lo saca de las combinaciones de
+    cumplimiento (no cuenta como consistente ni como sin evidencia de diferencia)."""
+    return {**r, "bruto_censurado": {"consistente": r.get("consistente"), "delta": r.get("delta"),
+                                     "p_permutacion": r.get("p_permutacion")},
+            "consistente": None, "sin_evidencia_de_diferencia": None,
+            "no_auditable_censura": True, "motivo_no_auditable": motivo}
 
 
 def diferencia_relativa(a: float, b: float) -> float:
@@ -202,10 +231,15 @@ def main(argv: list[str] | None = None) -> int:
         metricas["instante_pico_torso_desde_max_sep_ms"] = "instante_pico_torso_desde_max_sep_ms"
     resultado, encuadre = {}, {}
     for g, s in sorted(grupos.items()):
+        gesto_g, encuadre_g = g.split("|")
         resultado[g] = {}
         for nombre, campo in metricas.items():
-            resultado[g][nombre] = comparar_sesiones([f.get(campo) for f in s[1] if f["valida"]],
-                                                     [f.get(campo) for f in s[2] if f["valida"]])
+            r = comparar_sesiones([f.get(campo) for f in s[1] if f["valida"]],
+                                  [f.get(campo) for f in s[2] if f["valida"]])
+            motivo = GRUPOS_NO_AUDITABLES.get((gesto_g, encuadre_g, nombre))
+            if motivo:
+                r = aplicar_no_auditable(r, motivo)
+            resultado[g][nombre] = r
         t1 = np.median([f["torso_px"] for f in s[1] if f["torso_px"]])
         t2 = np.median([f["torso_px"] for f in s[2] if f["torso_px"]])
         x1 = np.median([f["x_caderas"] for f in s[1] if f["x_caderas"]])
@@ -220,6 +254,9 @@ def main(argv: list[str] | None = None) -> int:
         print(f"{'grupo':22} n1 n2 | mediana s1  mediana s2 | σ_w    Δ     IC95(Δ)          | Δ<=σ_w  p_perm")
         for g, r in resultado.items():
             x = r[nombre]
+            if x.get("no_auditable_censura"):
+                print(f"{g:22} {x['n1']:2d} {x['n2']:2d} | NO AUDITABLE — {x['motivo_no_auditable']}")
+                continue
             if x.get("consistente") is None:
                 print(f"{g:22} {x['n1']:2d} {x['n2']:2d} | (insuficiente)")
                 continue

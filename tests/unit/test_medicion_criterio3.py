@@ -4,6 +4,8 @@ import numpy as np
 import pytest
 
 from app.medicion_criterio3 import (
+    GRUPOS_NO_AUDITABLES,
+    aplicar_no_auditable,
     comparar_sesiones,
     diferencia_relativa,
     distancia_a_borde_ms,
@@ -75,6 +77,25 @@ def test_distancia_a_borde_ms_es_cero_justo_en_el_borde_y_maxima_en_el_centro():
     assert distancia_a_borde_ms(n - 1, n, fps) == 0.0          # o en el último: censurado igual
     assert distancia_a_borde_ms(n // 2, n, fps) == pytest.approx(300.0, abs=5.0)   # centro = lejos de ambos bordes
     assert distancia_a_borde_ms(5, n, fps) == pytest.approx(5 / fps * 1000)
+
+
+def test_aplicar_no_auditable_saca_el_resultado_de_ambos_conteos_pero_conserva_lo_bruto():
+    r = comparar_sesiones([1.0, 2.0, 3.0, 4.0, 5.0, 6.0], [1.5, 2.5, 3.5, 4.5, 5.5, 6.5], n_boot=200)
+    assert r["consistente"] is not None                                    # de partida, sí se pudo calcular
+    r2 = aplicar_no_auditable(r, "censura de ventana (prueba)")
+    assert r2["consistente"] is None and r2["sin_evidencia_de_diferencia"] is None
+    assert r2["no_auditable_censura"] is True and r2["motivo_no_auditable"] == "censura de ventana (prueba)"
+    assert r2["bruto_censurado"]["consistente"] == r["consistente"]        # el cálculo original no se pierde
+    k, ev, _ = fraccion_consistente([r2, {"consistente": True}])
+    assert (k, ev) == (1, 1)                                                # r2 no entra en el denominador
+    k2, ev2, _ = fraccion_sin_evidencia([r2, {"sin_evidencia_de_diferencia": True}])
+    assert (k2, ev2) == (1, 1)
+
+
+def test_reves_perfil_esta_marcado_no_auditable_para_el_instante_de_pico_y_ningun_otro_grupo():
+    assert GRUPOS_NO_AUDITABLES.get(("reves", "perfil", "instante_pico_torso_desde_max_sep_ms"))
+    assert ("reves", "perfil", "separacion_cadera_hombro_max") not in GRUPOS_NO_AUDITABLES   # métrica (i) intacta
+    assert not any(g[:2] != ("reves", "perfil") for g in GRUPOS_NO_AUDITABLES)
 
 
 def test_diferencia_relativa():

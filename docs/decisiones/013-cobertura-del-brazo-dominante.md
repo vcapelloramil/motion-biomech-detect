@@ -61,10 +61,27 @@ rotar) y **no las separan**. **No se probó** grabar del lado dominante: se deci
 caso de "brazo que golpea de cara a la cámara" es el revés (cobertura ≈ 1,0), un gesto más lento que el
 saque.
 
+### Actualización (29/9/2026) — el revés de tres cuartos apoya la hipótesis geométrica
+
+En el revés de tres cuartos el lado **dominante** (derecho) es el más cercano a la cámara (10 de 24
+clips de revés, decisión 013 original), y ahí la cobertura del codo dominante es alta (0,87–0,99)
+**incluso durante el golpe** (ventana del gesto), no solo en reposo. Es el único caso en todo el material
+donde el brazo que golpea queda de cara a la cámara. Que justo ese caso sea el de mejor cobertura, y que
+en la sesión 2 de tres cuartos el codo se viera bien en reposo pero volviera a perderse durante el golpe
+(decisión 013 original), es **evidencia más fuerte a favor de que el problema es geométrico** (qué lado
+del cuerpo mira a la cámara) **y no solo desenfoque de movimiento** — aunque, con un solo jugador y sin
+haber grabado el saque o el drive con el lado dominante cerca, sigue sin ser una prueba concluyente
+(interpretación de Valentín, 29/9/2026).
+
 ## Decisión
 
-No se graba del lado derecho ni se hace un piloto. La cobertura del brazo dominante **se documenta tal
-como está, como limitación conocida** de este material (una cámara, un lado, un jugador diestro).
+No se graba del lado derecho ni se hace un piloto **ahora**: está en curso la medición formal y no se
+quiere introducir otra variable no controlada. La cobertura del brazo dominante **se documenta tal como
+está, como limitación conocida** de este material (una cámara, un lado, un jugador diestro).
+
+**Trabajo futuro (candidato, no programado):** una eventual sesión con encuadre invertido (cámara del
+lado dominante) en saque y drive, para contrastar directamente la hipótesis geométrica contra la del
+desenfoque — usando el revés de tres cuartos de este material como el caso de control ya disponible.
 
 ## Consecuencias
 
