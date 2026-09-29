@@ -136,12 +136,40 @@ incluso durante el golpe) se documenta como evidencia más fuerte a favor de la 
 de desenfoque puro — sin ser concluyente con un solo jugador. Una sesión con encuadre invertido queda como
 trabajo futuro candidato, explícitamente no programada ahora.
 
+### Criterio 2 medido — cumple en agregado; el codo dominante (n=2) queda sin validar bien
+
+Planilla completa (36 mediciones). `python -m app.criterio2 analizar` →
+`docs/resultados/criterio2.json` (commit del paquete: `cefadb6`).
+
+| articulación | n | media | mediana | p95 | sesgo | veredicto (< 20,6°) |
+| --- | --- | --- | --- | --- | --- | --- |
+| rodilla | 18 | 8,5° | 5,9° | 19,2° | −1,5° | **cumple** |
+| codo | 18 | 12,5° | 10,5° | 36,4° | +2,1° | **cumple** |
+
+Error intra-observador (5 fotogramas repetidos, 10 mediciones): 4,1°.
+
+**Hallazgo al abrir la clave (Claude, no pedido por Valentín):** el codo agregado "cumple" está dominado por
+16 mediciones del lado **no dominante** (media 10,7°). Las únicas **2 mediciones del codo dominante**
+(las que decisión 013 identificó como el único caso de cobertura alta durante el golpe: `C2-10` y `C2-15`,
+ambas revés · tres cuartos) dan **27,2° de media (11,9° y 42,5°)** — el 42,5° es el error máximo de todo el
+conjunto. Valentín comentó en la planilla, sobre `C2-10`, dificultad para medir "por posición del brazo (otro
+frame estaría mejor tal vez para codo derecho)", pese a calificar la imagen como nítida (calidad 1): apunta a
+escorzo (el codo gira hacia/desde la cámara) más que a desenfoque. Dato adicional, no decisivo: el ángulo 3D
+filtrado (secundario, no validado por esta vía) de `C2-10` está más cerca del valor manual (129,8° vs
+manual 118,5°, diferencia 11,3°) que el 2D (160,9°, diferencia 42,5°), compatible con que el problema sea
+específico de la proyección 2D en esa vista.
+
+**Con n = 2 no se puede concluir nada formal**, pero es una alerta a tener presente: la confianza de MediaPipe
+(0,81 y 0,89, ambas por encima del umbral 0,6) mide si el punto se detectó, no si el ángulo derivado es
+preciso — "cobertura alta" (decisión 013) no implica "ángulo preciso". El único caso de validación directa
+del brazo dominante salió mal en 1 de 2. No se tocó código ni se recalculó nada: se deja documentado tal cual
+para que Valentín lo pondere en el punto de decisión.
+
 ### Pendiente
 
-- **Valentín:** goniometría manual del Criterio 2 (paquete confirmado, sin cambios: no se abstuvo Claude de
-  tocar la planilla ni `.clave-NO-ABRIR`, solo leyó metadatos de estratificación para responder la pregunta
-  de arriba). Con Criterio 1 y Criterio 3 medidos, falta el Criterio 2 para llegar al punto de decisión de
-  la Etapa 4.
+- **Valentín toma el punto de decisión de la Etapa 4** con los tres criterios ya medidos (resumen consolidado
+  en la conversación de la sesión, no volcado aparte a un documento de decisión: es una decisión de Valentín,
+  no de Claude).
 
 ---
 
