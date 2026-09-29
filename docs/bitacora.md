@@ -6,6 +6,33 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-09-29 — Cierre de la Etapa 4 (decisión 015): sin repliegue, cinco salvedades
+
+**Rama:** `etapa/4-cinematica` → merge a `main`, tag `v0.5.0-etapa4`, push. Con los tres criterios medidos
+(Criterio 1: decisión 014; Criterio 3 redefinido con override: decisiones 012/014; Criterio 2: goniometría
+manual ciega), Valentín decidió **sin repliegue de arquitectura**: se mantiene `pelvis → torso → brazo`
+completo, con cinco salvedades documentadas en la **decisión 015**:
+
+1. Tres cuartos: el par pelvis-torso solo es auditable en revés (6/6); en drive es 0/6 y en saque 9/18 —
+   se reportan "no ordenables", no como fallo.
+2. Perfil: saque y drive dan el orden repetible pero invertido (sin etiqueta correcto/incorrecto, falta
+   fundamento bibliográfico); revés de perfil no llega al umbral de repetibilidad (4/6).
+3. Brazo: a lo ya dicho en la decisión 011, se suma que las únicas 2 mediciones ciegas del codo dominante
+   dieron 27,2° de error medio (11,9° y 42,5°) — causa no separada entre sistema, medición manual o
+   escorzo; trabajo futuro.
+4. **Drive de perfil** (no drive de tres cuartos — ver la corrección de atribución de esta misma fecha,
+   más abajo): orden estable (Criterio 1, 6/6) pero magnitud e instante NO estables entre sesiones
+   (Criterio 3, p = 0,044 y p = 0,050): grupo de menor confianza.
+5. Criterio 2 del codo: cumple por la media (12,5°), pero el p95 (36,4°) supera la meta — se informan
+   siempre juntos.
+
+Consecuencia señalada para la Etapa 5 (no aplicada ahora): el contrato del reporte (Anexo A) necesita un
+estado para "auditable pero no ordenable", distinto de "no auditable" y de "correcto/incorrecto".
+
+**Siguiente paso concreto:** Etapa 5 — Auditoría y reporte, sobre `main` desde la etiqueta `v0.5.0-etapa4`.
+
+---
+
 ## 2026-09-26 — Medición formal: Criterio 1, Criterio 3 (métrica i) y paquete ciego del Criterio 2
 
 **Rama:** `etapa/4-cinematica`. Motor `0.4.1`. Diseño y reglas: decisión **014**, vigente desde el commit de
