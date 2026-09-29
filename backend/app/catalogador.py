@@ -14,8 +14,8 @@ Escribe un CSV derivado (``catalogo-verificado.csv``) y NO toca ``catalogo.csv``
 y lo que dice el catálogo manual.
 
 Uso:
-    python -m app.catalogador                       # usa KINETIQ_DATA_DIR
-    python -m app.catalogador --dir RUTA --sin-hash
+    python -m app.catalogador                       # fase-a/ y fase-b/ de KINETIQ_DATA_DIR
+    python -m app.catalogador --dir RUTA --sin-hash # una sola carpeta
 """
 
 from __future__ import annotations
@@ -33,7 +33,15 @@ EXTENSIONES_VIDEO = {".mp4", ".mov", ".avi", ".mkv", ".m4v"}
 
 # Subcarpetas que se saltan por defecto: contienen material de origen (videos
 # largos de los que se recortan los segmentos), no unidades de análisis.
-CARPETAS_EXCLUIDAS = {"compilaciones"}
+# Fase A: compilaciones/. Fase B: <sesion>/<gesto>/originales/ (las unidades de
+# análisis van en <sesion>/<gesto>/recortes/, incluso las que no llevan corte).
+CARPETAS_EXCLUIDAS = {"compilaciones", "originales"}
+
+# Fases del corpus que se recorren cuando no se indica --dir.
+FASES_POR_DEFECTO = ("fase-a", "fase-b")
+
+# Diferencia relativa tolerada entre fps_declarados del catálogo y el del archivo.
+_TOL_FPS_CATALOGO = 0.01
 
 
 @dataclass
@@ -127,8 +135,13 @@ def catalogar_directorio(
     con_hash: bool = True,
     ventana: tuple[float, float] | None = None,
     incluir_todo: bool = False,
+    subcarpetas: tuple[str, ...] | None = None,
 ) -> tuple[list[FilaCatalogo], list[str]]:
     """Cataloga los videos bajo ``directorio``. No escribe nada.
+
+    Si ``subcarpetas`` se indica (p. ej. ``("fase-a", "fase-b")``), solo se recorren
+    esas subcarpetas de ``directorio``; las que no existen se avisan y se saltan. Las
+    rutas relativas quedan respecto de ``directorio`` en ambos casos.
 
     Salta las subcarpetas de ``CARPETAS_EXCLUIDAS`` (material de origen) salvo que
     ``incluir_todo`` sea True. Devuelve (filas, avisos_globales).
@@ -139,8 +152,18 @@ def catalogar_directorio(
     else:
         manual, mal_formados, avisos = {}, set(), []
 
+    if subcarpetas is None:
+        raices = [directorio]
+    else:
+        raices = []
+        for sub in subcarpetas:
+            if (directorio / sub).is_dir():
+                raices.append(directorio / sub)
+            else:
+                avisos.append(f"No existe la carpeta {directorio / sub}; se saltea.")
+
     videos = sorted(
-        p for p in directorio.rglob("*")
+        p for raiz in raices for p in raiz.rglob("*")
         if p.suffix.lower() in EXTENSIONES_VIDEO
         and (incluir_todo or not (CARPETAS_EXCLUIDAS & set(p.relative_to(directorio).parts)))
     )
@@ -216,6 +239,14 @@ def catalogar_directorio(
                     f"'uso' del catálogo ('{uso_manual}') no coincide con el "
                     f"calculado ('{fila.uso_final}')"
                 )
+            fps_decl_manual = _a_float(m.get("fps_declarados"))
+            if fps_decl_manual and abs(
+                fps_decl_manual - res.fps_declarados_normalizado
+            ) / fps_decl_manual > _TOL_FPS_CATALOGO:
+                avisos_fila.append(
+                    f"fps_declarados del catálogo ({fps_decl_manual:g}) difiere del "
+                    f"archivo ({res.fps_declarados_normalizado:g})"
+                )
             fps_ef_manual = _a_float(m.get("fps_efectivos"))
             if fps_ef_manual and fila.fps_efectivos and abs(
                 fps_ef_manual - fila.fps_efectivos
@@ -277,7 +308,7 @@ def main(argv: list[str] | None = None) -> int:
 
     parser = argparse.ArgumentParser(description="Catalogador del corpus de video (KinetiQ).")
     parser.add_argument("--dir", type=Path, default=None,
-                        help="Directorio de clips (default: KINETIQ_DATA_DIR/fase-a).")
+                        help="Directorio de clips (default: fase-a/ y fase-b/ de KINETIQ_DATA_DIR).")
     parser.add_argument("--catalogo", type=Path, default=None,
                         help="catalogo.csv manual (default: KINETIQ_DATA_DIR/catalogo.csv).")
     parser.add_argument("--salida", type=Path, default=None,
@@ -290,11 +321,13 @@ def main(argv: list[str] | None = None) -> int:
                         help=f"No saltear las subcarpetas de origen ({', '.join(sorted(CARPETAS_EXCLUIDAS))}).")
     args = parser.parse_args(argv)
 
+    subcarpetas = None
     if args.dir is None or args.catalogo is None or args.salida is None:
         from app.config import get_data_dir
 
         base = get_data_dir()
-        args.dir = args.dir or base / "fase-a"
+        if args.dir is None:
+            args.dir, subcarpetas = base, FASES_POR_DEFECTO
         args.catalogo = args.catalogo or base / "catalogo.csv"
         args.salida = args.salida or base / "catalogo-verificado.csv"
 
@@ -306,6 +339,7 @@ def main(argv: list[str] | None = None) -> int:
     filas, avisos = catalogar_directorio(
         args.dir, catalogo=args.catalogo, con_hash=not args.sin_hash,
         ventana=ventana, incluir_todo=args.incluir_todo,
+        subcarpetas=subcarpetas,
     )
 
     _imprimir_tabla(filas)

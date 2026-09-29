@@ -6,40 +6,938 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
-## 2026-08-27 (fix) — Detector de inversión de profundidad (z)
+## 2026-09-29 — Cierre de la Etapa 4 (decisión 015): sin repliegue, cinco salvedades
 
-**Rama:** `fix/inversion-z` (desde `main`). Fix a E2/E3 ya mergeadas, con su propia
-etiqueta `v0.3.1`, antes de seguir con la Etapa 4.
+**Rama:** `etapa/4-cinematica` → merge a `main`, tag `v0.5.0-etapa4`, push. Con los tres criterios medidos
+(Criterio 1: decisión 014; Criterio 3 redefinido con override: decisiones 012/014; Criterio 2: goniometría
+manual ciega), Valentín decidió **sin repliegue de arquitectura**: se mantiene `pelvis → torso → brazo`
+completo, con cinco salvedades documentadas en la **decisión 015**:
 
-Surgió de la validación cualitativa de la Etapa 4: el saque `zverev_saque_lateral_02`
-daba un pico de brazo de 24 932 °/s. Investigado (decisión 009): `CODO_DER` **invierte
-el signo de `z`** en el frame 566 (+0,098 → −0,050 m) y queda invertida hasta ~573.
-Confianza 0,65 (pasa el umbral de 0,5) y desplazamiento 3D 0,31 torsos (< 0,5): **ni la
-baja confianza ni el salto imposible lo marcaban.**
+1. Tres cuartos: el par pelvis-torso solo es auditable en revés (6/6); en drive es 0/6 y en saque 9/18 —
+   se reportan "no ordenables", no como fallo.
+2. Perfil: saque y drive dan el orden repetible pero invertido (sin etiqueta correcto/incorrecto, falta
+   fundamento bibliográfico); revés de perfil no llega al umbral de repetibilidad (4/6).
+3. Brazo: a lo ya dicho en la decisión 011, se suma que las únicas 2 mediciones ciegas del codo dominante
+   dieron 27,2° de error medio (11,9° y 42,5°) — causa no separada entre sistema, medición manual o
+   escorzo; trabajo futuro.
+4. **Drive de perfil** (no drive de tres cuartos — ver la corrección de atribución de esta misma fecha,
+   más abajo): orden estable (Criterio 1, 6/6) pero magnitud e instante NO estables entre sesiones
+   (Criterio 3, p = 0,044 y p = 0,050): grupo de menor confianza.
+5. Criterio 2 del codo: cumple por la media (12,5°), pero el p95 (36,4°) supera la meta — se informan
+   siempre juntos.
+
+Consecuencia señalada para la Etapa 5 (no aplicada ahora): el contrato del reporte (Anexo A) necesita un
+estado para "auditable pero no ordenable", distinto de "no auditable" y de "correcto/incorrecto".
+
+**Siguiente paso concreto:** Etapa 5 — Auditoría y reporte, sobre `main` desde la etiqueta `v0.5.0-etapa4`.
+
+---
+
+## 2026-09-26 — Medición formal: Criterio 1, Criterio 3 (métrica i) y paquete ciego del Criterio 2
+
+**Rama:** `etapa/4-cinematica`. Motor `0.4.1`. Diseño y reglas: decisión **014**, vigente desde el commit de
+congelamiento `cefadb6` (Criterio 3 con lectura calibrada: `c970bf6`). Cada resultado registra su commit y que
+el árbol estaba limpio. **Sesión 2 = medición; sesión 1 = réplica exploratoria.** Resumen legible y reproducible:
+`docs/resultados/criterio1-resumen.md` (`python -m app.resumen_criterio1`).
+
+### Criterio 1 (τ = 1 fotograma, primaria; sesión 2)
+
+Dos mediciones separadas (1 = repetibilidad del orden, regla del criterio; 1c = coincidencia con el orden esperado,
+aparte y sin umbral). n = 6 por grupo salvo el saque de tres cuartos (18, tres tomas).
+
+| Grupo (sesión 2) | Ordenables / n (1a) | 1b (orden modal) | 1c (esperado) | Criterio 1 |
+| --- | --- | --- | --- | --- |
+| drive · perfil (par) | 6/6 | 1,00 `tp` | 0,00 | **cumple** (repetible pero invertido) |
+| saque · perfil (par) | 6/6 | 1,00 `tp` | 0,00 | **cumple** (repetible pero invertido) |
+| revés · tres cuartos (par / cadena) | 6/6 | 0,83 `tp` / 0,83 `tpb` | 0,17 / 0,17 | **cumple** (orden invertido) |
+| revés · perfil (par) | 4/6 | 0,75 `pt` | 0,75 | no cumple |
+| saque · tres cuartos (par / cadena) | 9/18 y 9/18 | 1,00 `pt` / 0,89 `ptb` | 1,00 / 0,89 | no cumple (1a = 0,50) |
+| drive · tres cuartos (par / cadena) | **0/6** | — | — | no cumple |
+
+- **Sensibilidad (τ = 2 y 3, declarada de antemano):** solo cumplen el saque y el drive de perfil (par pelvis-torso);
+  el revés de tres cuartos deja de cumplir (1a 0,33).
+- **Réplica exploratoria (sesión 1, no independiente):** **ningún grupo cumple** con τ = 1 (1a entre 0,33 y 0,67).
+  Donde el orden es ordenable, coincide con la sesión 2 (perfil: torso primero; tres cuartos: saque `pt`).
+- **Complemento DESCRIPTIVO (no pre-registrado), sesión 2:** el eslabón que limita a la cadena es **pelvis-torso**,
+  no el brazo. En tres cuartos |pelvis − torso| tiene mediana de 1,0–2,0 fotogramas (en el drive, los 6 picos caen
+  a 0 o ±1 fotograma: no es un artefacto, todos son válidos y auditables), mientras que torso→brazo se separa
+  22–28,5 fotogramas (≈ 92–119 ms) con el brazo después en 6/6, 6/6 y 16/17 (la sesión 1: 5/6, 6/6, 6/6).
+- **Con n = 6 por grupo** el intervalo de Wilson de "6 de 6" es [0,61–1,00]: "cumple" no establece estadísticamente
+  la meta de 0,8. Se informa en el JSON y en el resumen.
+- **No se decide nada sobre el punto de decisión de la Etapa 4** (tabla del plan: Criterio 1 falla → replegarse a
+  la fase de preparación). Lo que se observa es que, a 240 fps, **pelvis y torso en tres cuartos no se separan más
+  de 1–2 fotogramas**, un límite de resolución; y que perfil los separa de forma repetible pero invertida.
+
+### Criterio 3, métrica (i): separación cadera-hombro máxima (parcial)
+
+Sesión 1 contra sesión 2, saque de tres cuartos solo con la toma `02` (pedido de Valentín). **5 de 6** combinaciones
+con Δ ≤ σ_w (83 %, umbral 75 %); 5 de 6 sin evidencia de diferencia (p de permutación > 0,05). El grupo que no
+cumple es el **drive de perfil**: Δ = 6,03° contra σ_w = 3,14° (medianas 30,65° y 24,62°; p = 0,044, **sin corrección
+por 6 comparaciones**). El revés de tres cuartos queda al borde (p = 0,074) y es donde el encuadre difiere más
+entre sesiones (torso en píxeles 17 %, por debajo del 20 % de señalamiento). **Falta la métrica (ii); no hay
+veredicto del Criterio 3.** Corrección previa a medir: con n = 6 por sesión y ningún cambio real la regla
+Δ ≤ σ_w da "consistente" solo 75,6 % de las veces (igual al umbral); por eso se agregó el p de permutación (014).
+
+### Criterio 2: paquete ciego listo
+
+`C:\Users\valen\kinetiq-data\fase-b\criterio2\`: 18 recortes sin esqueleto (`ciego/C2-01.png` … `C2-18.png`),
+`planilla-manual.csv` (36 mediciones: rodilla y codo), `LEEME.md`; la clave está en `.clave-NO-ABRIR/` y **no se abre
+hasta terminar**. Selección con semilla `26092026`, 3 fotogramas por estrato (gesto × encuadre), solo donde el sistema
+reporta confianza ≥ 0,6; 5 fotogramas marcados para repetir la medición. Al completar la planilla:
+`python -m app.criterio2 analizar <carpeta>`.
+
+### Pendiente (al cierre de esta entrada)
+
+- **Valentín:** goniometría manual del Criterio 2; y confirmar la **definición del "instante de pico"** del
+  Criterio 3 (la propuesta es el instante del pico de torso desde el instante de máxima separación cadera-hombro;
+  la métrica (ii) queda detrás de un flag y no se mide hasta entonces).
+- Veredictos del Criterio 2 y del Criterio 3 completo; punto de decisión de la Etapa 4 (Valentín).
+
+---
+
+## 2026-09-29 — Criterio 3 completo (ambas métricas) y hallazgo de censura en la métrica (ii)
+
+**Rama:** `etapa/4-cinematica`. Motor `0.4.1`, sin cambios de motor. Decisión 014 confirmada por Valentín
+(instante de pico = desde la máxima separación cadera-hombro: "la única de las tres opciones que corresponde
+a un evento medido, no a una decisión de diseño o de edición") y **queda vigente sin excepciones** desde el
+commit `260d03c`. Resultado: `docs/resultados/criterio3.json` (reemplaza a `criterio3-parcial-metrica-i.json`,
+que queda como registro histórico de la corrida parcial del 26/9 — mismos números en la métrica (i)).
+
+**Resultado combinado (ambas métricas, 6 grupos × 2 = 12 combinaciones):**
+
+- **Regla original (Δ ≤ σ_w): 10/12 = 83 %** (umbral 75 %).
+- **Lectura calibrada (sin evidencia de diferencia, p de permutación > 0,05): 11/12 = 92 %.**
+- **El único grupo con señal de diferencia real en las DOS métricas es drive · perfil:** separación
+  cadera-hombro Δ = 6,03° (σ_w = 3,14°, p = 0,044) e instante de pico Δ = 156 ms (σ_w = 37 ms, p = 0,050),
+  sin corrección por las 6 comparaciones. Sesión 1: mediana −166,7 ms (el pico de torso antecede a la máxima
+  separación); sesión 2: mediana −10,4 ms (casi simultáneos).
+  **CORRECCIÓN (29/9/2026, Valentín):** el párrafo original decía acá que este era "el mismo grupo que en el
+  Criterio 1 tuvo 0 de 6 repeticiones ordenables" — **es un error**. El drive de perfil dio **6 de 6**
+  ordenables en el Criterio 1 (cumple, orden `tp` invertido); el que dio 0 de 6 es el **drive de tres
+  cuartos**, un grupo distinto. Son dos hallazgos separados, en dos grupos distintos: el drive de perfil
+  tiene el orden estable pero la magnitud/instante inestables entre sesiones (este hallazgo, Criterio 3); el
+  drive de tres cuartos no llega a ser ordenable en ninguna repetición (Criterio 1). No hay convergencia
+  entre ambos criterios sobre un mismo grupo: cada uno señala un problema distinto en un grupo distinto.
+- Revés de tres cuartos queda al borde en la métrica (i) (p = 0,074) y es donde el encuadre difiere más entre
+  sesiones (torso en píxeles, 17 %, señalado pero bajo el 20 %).
+
+**Hallazgo metodológico, encontrado ANTES de aceptar el resultado, no buscado a propósito:** la máxima
+separación cadera-hombro se busca dentro de la misma ventana de ±300 ms de todo lo demás. Se agregó un
+diagnóstico de censura (`max_sep_dist_borde_ms`, umbral `CERCA_DEL_BORDE_MS = 50`, commit `699778d`, antes de
+volver a correr la medición) que muestra:
+
+| grupo | en el borde exacto (de 12) | cerca del borde (< 50 ms) |
+| --- | --- | --- |
+| revés · perfil | **5** | **9** |
+| revés · tres cuartos | 0 | 4 |
+| resto (4 grupos) | 0 | 0–1 |
+
+**La métrica (ii) del revés de perfil no es confiable:** en 9 de 12 repeticiones el "máximo" encontrado está
+pegado al borde de la ventana, así que el verdadero instante de máxima separación probablemente cae fuera de
+ella. Que ese grupo saliera "consistente" (Δ = 6,25 ms, p = 0,868) podía ser solo el artefacto de que las dos
+sesiones chocan contra el mismo límite, no evidencia real de consistencia. **No se ensanchó la ventana**
+(afectaría también la métrica (i), ya aceptada, y el Criterio 1, ya medido y commiteado): queda como
+limitación a declarar en los Capítulos 6 y 7, no como corrección aplicada.
+
+### Override aplicado y resultado final (mismo día, commit `6773ffd`)
+
+Decisión de Valentín: revés de perfil, métrica (ii), se reporta **NO AUDITABLE** (motivo: censura de ventana),
+no "consistente" — "reportar Δ=6,25ms/p=0,868 ahí sería presentar un artefacto de censura como dato bueno".
+Override manual y puntual (`GRUPOS_NO_AUDITABLES` en `medicion_criterio3.py`), no una regla automática de
+umbral; el cálculo bruto queda en el JSON (`bruto_censurado`) para trazabilidad y se excluye de las
+combinaciones de cumplimiento. La métrica (i) de ese grupo no se tocó. Candidato de trabajo futuro (no
+aplicado): ventana específica por gesto, pre-registrada antes de volver a medir.
+
+**Resultado final del Criterio 3 (11 combinaciones evaluables, no 12):**
+
+- **Regla original (Δ ≤ σ_w): 9/11 = 82 %** (antes 10/12 = 83 %; el grupo excluido contaba como consistente,
+  así que numerador y denominador bajan juntos).
+- **Lectura calibrada (p de permutación > 0,05): 10/11 = 91 %** (antes 11/12 = 92 %).
+- Ambos siguen por encima del umbral de 75 %. El único grupo con señal de diferencia real en las dos métricas
+  sigue siendo **drive de perfil**.
+
+**Paquete ciego del Criterio 2 — confirmado sin cambios.** Valentín preguntó si la estratificación incluía
+codo derecho (dominante) del revés de tres cuartos, el único caso de cobertura alta durante el golpe
+(decisión 013). Se verificó contra los metadatos de la clave (solo `estrato`/`clip`/`lado`, sin abrir los
+valores del sistema): **2 de los 3 fotogramas de ese estrato (`C2-10`, `C2-15`) ya usan el codo derecho** por
+tener mayor confianza que el izquierdo. No hizo falta regenerar el paquete; Valentín puede medir sobre el que
+ya tiene.
+
+**Decisión 013 ampliada:** el revés de tres cuartos (brazo dominante cercano a la cámara, cobertura alta
+incluso durante el golpe) se documenta como evidencia más fuerte a favor de la hipótesis geométrica sobre la
+de desenfoque puro — sin ser concluyente con un solo jugador. Una sesión con encuadre invertido queda como
+trabajo futuro candidato, explícitamente no programada ahora.
+
+### Criterio 2 medido — cumple en agregado; el codo dominante (n=2) queda sin validar bien
+
+Planilla completa (36 mediciones). `python -m app.criterio2 analizar` →
+`docs/resultados/criterio2.json` (commit del paquete: `cefadb6`).
+
+| articulación | n | media | mediana | p95 | sesgo | veredicto (< 20,6°) |
+| --- | --- | --- | --- | --- | --- | --- |
+| rodilla | 18 | 8,5° | 5,9° | 19,2° | −1,5° | **cumple** |
+| codo | 18 | 12,5° | 10,5° | 36,4° | +2,1° | **cumple** |
+
+Error intra-observador (5 fotogramas repetidos, 10 mediciones): 4,1°.
+
+**Hallazgo al abrir la clave (Claude, no pedido por Valentín):** el codo agregado "cumple" está dominado por
+16 mediciones del lado **no dominante** (media 10,7°). Las únicas **2 mediciones del codo dominante**
+(las que decisión 013 identificó como el único caso de cobertura alta durante el golpe: `C2-10` y `C2-15`,
+ambas revés · tres cuartos) dan **27,2° de media (11,9° y 42,5°)** — el 42,5° es el error máximo de todo el
+conjunto. Valentín comentó en la planilla, sobre `C2-10`, dificultad para medir "por posición del brazo (otro
+frame estaría mejor tal vez para codo derecho)", pese a calificar la imagen como nítida (calidad 1): apunta a
+escorzo (el codo gira hacia/desde la cámara) más que a desenfoque. Dato adicional, no decisivo: el ángulo 3D
+filtrado (secundario, no validado por esta vía) de `C2-10` está más cerca del valor manual (129,8° vs
+manual 118,5°, diferencia 11,3°) que el 2D (160,9°, diferencia 42,5°), compatible con que el problema sea
+específico de la proyección 2D en esa vista.
+
+**Con n = 2 no se puede concluir nada formal**, pero es una alerta a tener presente: la confianza de MediaPipe
+(0,81 y 0,89, ambas por encima del umbral 0,6) mide si el punto se detectó, no si el ángulo derivado es
+preciso — "cobertura alta" (decisión 013) no implica "ángulo preciso". El único caso de validación directa
+del brazo dominante salió mal en 1 de 2. No se tocó código ni se recalculó nada: se deja documentado tal cual
+para que Valentín lo pondere en el punto de decisión.
+
+### Pendiente
+
+- **Valentín toma el punto de decisión de la Etapa 4** con los tres criterios ya medidos (resumen consolidado
+  en la conversación de la sesión, no volcado aparte a un documento de decisión: es una decisión de Valentín,
+  no de Claude).
+
+---
+
+## 2026-09-26 — Sesión 2 completa, Criterio 3 redefinido y diseño de la medición formal (propuesta)
+
+**Rama:** `etapa/4-cinematica`. Motor `0.4.1` (sin cambios). Sesión 2 catalogada: 48 repeticiones
+(saque: 6 de perfil y 18 de tres cuartos en tres tomas `02`/`02b`/`02c`; drive 12; revés 12), 240 fps;
+catálogo de 110 clips sin errores.
+
+**Decisiones de Valentín:**
+1. **No se graba del lado derecho** (el piloto no se justifica). Razón dada: la evidencia sugiere que el
+   límite es el desenfoque durante el golpe y no el lado de la cámara. *Nota de Claude:* la evidencia
+   (en reposo el brazo se ve mejor en la sesión 2, la ventana del gesto no mejora) es compatible con
+   desenfoque **o** autooclusión y no las separa; y "grabar del lado dominante mejora la cobertura" queda
+   **sin probar, no refutada** (el revés de tres cuartos, con el brazo de cara a la cámara, sí se ve
+   bien). Va a la decisión 013.
+2. **Extraer las 35 poses restantes** de la sesión 2 (en curso al escribir esto) y **documentar la
+   cobertura del brazo tal como está, como limitación física conocida** (decisión 013, a escribir con las
+   cifras de la sesión 2 completa).
+3. **Criterio 3 redefinido, sin esperar una semana** (decisión 012): mide la repetibilidad del método
+   aplicado por el mismo jugador en dos sesiones distintas, con variación natural y sin intervención
+   deliberada. **Demuestra consistencia del sistema entre tomas del mismo jugador; NO permite afirmar que
+   detectaría un cambio real de técnica** (fuera de alcance con este diseño, sin importar los días entre
+   sesiones). Consecuencias anotadas en la 012: no restablece el criterio original (la base clínica de
+   "comparar consigo mismo" queda sin validación de sensibilidad); el encuadre no es idéntico entre
+   sesiones; el espaciado se aparta del plan.
+
+**Hecho:** pose extraída para los **110 clips** (110/110 cachés). Diagnóstico de oclusión con la sesión 2
+completa (n = 18 perfil y 30 tres cuartos) y **decisión 013** con la cobertura del brazo dominante por
+sesión, encuadre y gesto: cámara del lado no dominante (izquierdo cercano en 74 de 84 clips; saque 36/36 y
+drive 24/24); codo dominante con cobertura 0,03–0,53 en la ventana del saque y el drive y 0,87–0,99 en el
+revés; en la sesión 2 de tres cuartos el codo se ve bien en reposo (0,79–0,84) pero vuelve a caer en la
+ventana (0,30–0,46). Causa (desenfoque o autooclusión) no separada.
+
+**Herramientas:** `--sesion` en `explorar_fase_b` y en los diagnósticos por grupo (`corte-brazo`,
+`ventana-brazo`, `fleisig-brazo`), para no mezclar sesiones.
+
+**Sesión 2 = conjunto de medición reservado.** Una tanda automática llegó a ejecutar `explorar_fase_b` sobre
+la sesión 2 **sin leer los resultados**; se detuvo el resto y se **descartaron** los archivos generados,
+porque la propuesta 014 exige fijar las definiciones antes de mirar órdenes y tiempos de esa sesión. De la
+sesión 2 solo se leyeron confianza y cobertura de pose. Se regenera tras confirmar la 014.
+
+**Propuesta, NO vigente:** decisión 014, diseño de la medición formal de los Criterios 1, 2 y 3
+(definiciones, umbrales y reglas de cumplimiento a fijar **antes** de mirar la sesión 2; la sesión 1 =
+exploratoria, la sesión 2 = medición). Tiene cinco grupos de preguntas para Valentín. **El Criterio 2
+requiere goniometría manual sobre fotogramas y no puede hacerla Claude.**
+
+**Siguiente paso:** Valentín confirma o corrige la **decisión 014** (τ del Criterio 1 y reglas de
+cumplimiento; qué sesión es la de medición; grupos del Criterio 1; Criterio 2: ángulos, cantidad de
+fotogramas y quién mide; Criterio 3: métricas, regla y las tres tomas del saque de tres cuartos). Se
+commitea la 014 como vigente (congelamiento, con el hash del motor `0.4.1`) y **recién entonces** se
+corren `explorar_fase_b --sesion 2` y los diagnósticos sobre la sesión 2, y la medición formal. El
+Criterio 2 espera además la goniometría manual de Valentín.
+
+---
+
+## 2026-09-25 — Diagnóstico de oclusión del lado dominante (sesiones 1 y 2 de la Fase B)
+
+**Rama:** `etapa/4-cinematica`. Sin cambios en el motor. Pedido de Valentín: en ambas sesiones la cámara
+quedó del mismo lado y es diestro; ¿oclusión sistemática del brazo dominante? Decidir si hace falta una
+tercera sesión con la cámara del otro lado **antes** de extraer pose del resto y medir formalmente.
+
+**Herramienta:** `python -m app.diagnosticos_e3 oclusion-lado` (`docs/resultados/pose-oclusion-lado-dominante.json`;
+7 pruebas en `tests/unit/test_oclusion_lado.py`). Solo lee la caché de pose.
+**Muestra:** sesión 1 completa (36 clips de perfil y tres cuartos a 240 fps) y de la sesión 2 **solo 13 de 48**
+(2 por grupo y 1 por cada toma `02`/`02b`/`02c` del saque de tres cuartos); las otras 35 no tienen pose
+(no se extrajeron a propósito). n de la sesión 2 = 6 (perfil) y 7 (tres cuartos).
+**Método:** por clip y pareado, confianza media (`visibility`) y cobertura (fracción de fotogramas con
+confianza ≥ 0,5, la definición del motor) de hombro, codo, muñeca y cadera del lado dominante (der) contra
+el no dominante (izq), en tres tramos: **reposo** (a más de 0,6 s del pico crudo del torso: sin desenfoque
+posible), **ventana del gesto** (± 0,3 s) y clip completo. Criterio declarado antes de mirar (juicio de
+Claude, ajustable): mediana de Δcobertura ≤ −0,10, Δ < 0 en ≥ 75 % de los clips y p del signo < 0,05.
+
+**Resultados:**
+- **La cámara ve el lado izquierdo (no dominante):** es el más cercano en 43 de 49 clips; los 6 restantes son
+  todos revés (1 de perfil, 5 de tres cuartos), o sea que ese "lado cercano" está **confundido con el gesto**
+  (en el revés el giro del cuerpo expone el brazo derecho).
+- **Hombro y cadera: 1,00 en ambos lados en todos los grupos y sesiones.** Ojo: `visibility` satura en 1,0
+  para estos puntos; no prueba que estén bien ubicados (no descarta un error de profundidad de la cadera o
+  el hombro lejanos en perfil).
+- **Codo y muñeca dominantes en reposo (sin desenfoque):** perfil, codo 0,10 (s1) y 0,14 (s2) contra 0,99 del
+  izquierdo, cobertura 0,02 y 0,05; muñeca 0,29 y 0,37 contra 0,97–0,98; Δ < 0 en el 100 % de los clips
+  → **oclusión geométrica confirmada en perfil, en ambas sesiones** (p = 0,031 con n = 6, el mínimo posible).
+  Tres cuartos sesión 1: codo 0,21 (cobertura 0,16), muñeca 0,61 → marcado. Tres cuartos sesión 2 (n = 7):
+  codo 0,82, muñeca 0,95 → **no** marcado.
+- **En la ventana del gesto** el codo dominante ronda 0,45–0,53 de confianza y 0,46–0,54 de cobertura en todos
+  los grupos (no dominante 0,94–0,96 y 1,00); muñeca 0,71–0,81. Con mi criterio no se marca (Δ < 0 en 67–83 %
+  de los clips, p 0,02–0,45, porque los revés dejan ver el brazo y diluyen el signo), pero el efecto es grande
+  (Δ mediana de cobertura del codo −0,47 a −0,54).
+- **Revés de tres cuartos:** brazo dominante bien visible (confianza 0,84–0,89, cobertura 0,97–1,00 en la
+  ventana). Explica por qué fue el único grupo con la serie del brazo completa (y por eso ya estaba filtrado
+  antes del arreglo de E3, decisión 010).
+- **Sesión 2, saque y drive de tres cuartos:** en reposo se ve mucho mejor que en la sesión 1 (0,59–0,92 contra
+  0,03–0,27), pero **la ventana del gesto no mejora** (0,27–0,58). Es decir: aun con el brazo visible en reposo,
+  durante el golpe el codo se pierde (desenfoque o autooclusión), no solo por la posición de la cámara.
+
+**Lectura (para decidir; no se decidió):** la oclusión geométrica del brazo dominante está confirmada en perfil
+y en el saque/drive de tres cuartos de la sesión 1. Pero mover la cámara al lado dominante no garantiza
+resolver la cobertura durante el golpe: la mejora de reposo de la sesión 2 no se trasladó a la ventana. El
+único caso "brazo que golpea de cara a la cámara" es el revés de tres cuartos (cobertura ~1,0), que es un gesto
+más lento que el saque. Recomendación de Claude: **piloto corto** (p. ej. 6 saques y 6 drives de tres cuartos con
+la cámara del lado dominante) antes de una tercera sesión completa, comparando la cobertura en la ventana.
+**No se extrajeron las otras 35 poses de la sesión 2** a la espera de esa decisión.
+
+**A tener presente:** las dos sesiones son de fechas consecutivas (24 y 25/9), y el plan pide al menos una
+semana entre sesiones para el Criterio 3.
+
+---
+
+## 2026-09-25 — Fase B: extracción de pose, ventana anclada y corrección de E3 (motor 0.4.1)
+
+Sesión larga: primera pasada de la Fase B, corrección de E3, y tres correcciones de rumbo de lo
+que se había concluido (ver "CORRECCIÓN" y las decisiones 010 y 011).
+
+### Estado al cierre de la sesión
+
+**Rama/motor/tests:** `etapa/4-cinematica`, motor `0.4.1`, `pytest -m "not slow"` → **194 en verde**
+(los 5 tests lentos que usan E3 sobre pose real también pasan). Sin merge ni tag de la Etapa 4.
+
+**Decisiones de Valentín en esta sesión:**
+1. `recortes/` es la única carpeta de unidades de análisis de la Fase B; el catalogador,
+   `extraer_pose` y `analizar` recorren `fase-a/` y `fase-b/` y saltean `originales/`.
+2. Arreglo de E3 (series con huecos, decisión 010, motor 0.4.1); se mantiene **un corte de Winter
+   por clip** (sin cambio de contrato).
+3. Codo vs muñeca: la decisión anatómica se mantiene; la justificación empírica de la 008 queda
+   invalidada y es **pendiente de redacción del Capítulo 4**.
+4. Referencia de Fleisig del brazo: error conceptual (decisión 011). El techo del brazo no se
+   reancló a 1510 °/s; queda 7104 °/s como cota provisional sin respaldo en la literatura.
+5. **El orden del brazo en perfil se declara NO CONCLUYENTE; las afirmaciones que dependen del
+   brazo se apoyan en tres cuartos.** No se implementó ventana acotada del brazo.
+6. El marcador de fase independiente queda como **trabajo futuro** (no implementar ahora).
+
+**Lo medido (E3 0.4.1; 36 repeticiones propias, un jugador, una sesión):**
+- Pelvis y torso no se vieron afectados por el defecto de E3 (diferencia 0,0000 °/s); pelvis más
+  rápida que el torso en el saque (1,15–1,46×); gradiente saque > drive > revés en ambos encuadres.
+- Brazo (orientación del segmento, p99 de ω a k=1): 790–2165 °/s por grupo, caída k1→k8 de 1–10 %.
+  No hay referencia de Fleisig equivalente (decisión 011).
+- **Por encuadre** (ancla de torso): **torso → balanceo del brazo** con el brazo después en **17 de 18**
+  en tres cuartos (estable con el corte entre 6 y 15 Hz —a 20 Hz, 16 de 18— y con la ventana) y en **5 de 16** en perfil (no
+  concluyente). **Pelvis vs torso:** perfil con el torso primero en 11 de 15 (saque 3/3, drive 6/6);
+  tres cuartos 9 pelvis primero / 7 torso primero, |Δ| ≤ 3 fotogramas en 16 de 18.
+
+**Lo que NO queda establecido:**
+- **La cadena completa `pelvis → torso → brazo` no queda establecida en ningún encuadre**; tres
+  cuartos sostiene su segunda mitad (torso→brazo). Perfil no sostiene pelvis→torso (lo invierte
+  sistemáticamente), contra la formulación inicial; corregido en la decisión 011.
+- Etiquetar "correcto/incorrecto" cuando interviene el brazo no tiene fuente (R4).
+- Criterio 1 no medido formalmente; exploratoriamente, solo el saque de tres cuartos repite un mismo
+  orden completo en 5 de 6.
+
+**Pendientes (todos requieren decisión de Valentín salvo indicación):**
+- Redacción: Cap. 3 (tabla 3.3.2.8 y cadena cinética), Cap. 4 (hipótesis I1, Criterio 1, gráfico de
+  secuenciación; justificación de hombro→codo), CLAUDE.md §1 y §3, interfaz (R2/R3), y la
+  terminología "balanceo del brazo" vs "rotación interna" (lista completa en la decisión 011).
+- Propuesta: mapear el orden del brazo en perfil al estado gris "no auditable" (R3), y el orden que
+  incluye al brazo como "orden observado" sin juicio de correcto/incorrecto. No implementado.
+- Protocolo: recomendar tres cuartos para todo lo que involucre al brazo.
+- Umbral de salto imposible en unidades físicas (punto 2); opcional: Winter sobre el tramo continuo
+  más largo. Ambos con datos de ajuste y de medición separados.
+- 4.7 / 4.8 y el punto de decisión de la Etapa 4; segunda sesión de la Fase B (Criterio 3).
+- **Trabajo futuro (NO implementar ahora):** marcador de fase independiente (p. ej. punto más bajo
+  de la muñeca como inicio del golpe hacia adelante), validado con fotogramas; depende de la
+  cobertura de la muñeca (25–57 % en el saque; baja justo en el impacto).
+
+**Siguiente paso concreto — ETAPA 4 EN PAUSA (indicación de Valentín, 25/9):** no se toca más código
+de la Etapa 4 ni se decide nada sobre el **Criterio 1** ni el **punto de decisión** hasta que Valentín
+vuelva con material nuevo: la **segunda sesión de la Fase B** (necesaria para el Criterio 3) y más
+repeticiones de **tres cuartos**, el encuadre con la señal más clara. Al volver: catalogar
+(`python -m app.catalogador`), extraer pose, correr `python -m app.explorar_fase_b` y
+`python -m app.diagnosticos_e3` sobre lo nuevo, y recién entonces la medición formal (4.7 / 4.8) con
+umbrales congelados y datos de ajuste separados de los de medición. La decisión 011 se deja como está.
+Hallazgo a retomar: la inversión sistemática pelvis/torso en perfil (torso primero en 11 de 15).
+
+### Referencia de Fleisig del brazo (2026-09-25, decisión 011)
+
+- Prueba `test_omega_vector_vs_angulo.py` (geometrías de resultado conocido): el vector hombro→codo
+  mide el balanceo del brazo (ω real), da **0** ante extensión de codo y **0** ante rotación axial;
+  el ángulo de tres puntos ve la extensión y también da 0 ante rotación axial.
+- Comparación equivalente (`diagnosticos_e3 fleisig-brazo`, saque, E3 0.4.1): ángulo del codo vs
+  1510 °/s = **0,88×** en perfil y **0,50×** en tres cuartos, con baja cobertura (25–57 % de
+  fotogramas con los tres puntos). ω del vector = 1315/1379 °/s: 0,56–0,58× de 2368 (referencia
+  equivocada) y 0,87–0,91× de 1510 (coincidencia numérica, no comparación equivalente).
+- La "subestimación" que veníamos arrastrando desaparece **como argumento** (no había comparación
+  válida), y NO se reemplaza por "medido correctamente": no hay referencia equivalente.
+- **Techo del brazo:** sin cambios numéricos (7104 °/s), ahora rotulado como cota provisional sin
+  respaldo en la literatura. Reanclarlo a 1510 (×3 = 4530) da el mismo resultado práctico en la
+  Fase B pero repetiría el error con otro valor; **pendiente de decisión de Valentín**.
+
+**Alcance ampliado (decisión 011):** el "brazo" de `pelvis → torso → brazo` es un proxy de la
+**orientación espacial del segmento superior** (balanceo del brazo), no de la rotación interna del
+hombro que describe la literatura. Son dos eventos distintos que pueden no coincidir en el tiempo.
+Se sostiene "el sistema documenta el orden de los picos de pelvis, torso y balanceo del brazo" y el
+Criterio 1 (repetibilidad); NO se sostiene "el orden descripto en la literatura" ni etiquetar
+correcto/incorrecto cuando interviene el brazo (R4: sin fuente). Pendiente de decisión y de
+redacción: CLAUDE.md §1 y §3, Cap. 3 (3.3.2.8 y cadena cinética), Cap. 4 (I1, Criterio 1, gráfico de
+secuenciación), arquitectura, plan (Anexo A), interfaz. Lista completa en la decisión 011.
+
+### Ventana del brazo: barrido del adelanto (2026-09-25) — NO se implementó en el motor
+
+`python -m app.diagnosticos_e3 ventana-brazo` (`docs/resultados/e3-ventana-brazo-fase-b.json`).
+Se permite buscar el pico del brazo desde `torso − adelanto` hasta `torso + 300 ms` (adelanto 300,
+200, 150, 100, 50, 0 ms) y se mide cuántos picos CAMBIAN respecto de la ventana de ±300 (lo que la
+acotación enmascara). Con adelanto 0, "brazo antes que torso" es imposible por construcción.
+
+- **Tres cuartos (saque, drive y revés): la ventana es irrelevante.** El pico del brazo no cambia
+  al acotar (0 desplazados de 6 en casi todos los adelantos), y llega después del torso: +110 ms
+  (saque), +115–121 (drive), +79 (revés) de mediana.
+- **Drive de perfil:** brazo antes del torso en 4/5 con adelanto ≥ 150 ms (mediana −50 ms) y 3/4 a
+  100 ms; con adelanto ≤ 50 ms el brazo queda **no auditable** en 5 de 6 (1/6 auditable): no hay un
+  pico posterior identificable. Es decir, acotar no "arregla" el drive, lo vuelve no medible. Los
+  picos se ubican 50–100 ms antes del torso.
+- **Revés de perfil:** con ±300 el brazo va primero en 5/6 (mediana −19 ms), pero 2 de esos picos
+  están 200–300 ms antes del torso; con adelanto ≤ 200 la mediana pasa a 0 ms (3/6 antes, los tres con
+  −12 a −21 ms, prácticamente simultáneos) y con adelanto 0 los 4 auditables pasan a +165 ms
+  (4/4 desplazados). Coherente con que esos 2 picos tempranos sean la preparación.
+- **Saque de perfil:** 2/5 con el brazo antes (≥ 100 ms antes); con adelanto ≤ 50 esos 2 se
+  desplazan a picos posteriores (dt +67). Confirma la fragilidad de ese grupo (n = 3–5).
+
+**Lectura:** el patrón "brazo antes en perfil, después en tres cuartos" se sostiene con claridad
+solo en el **drive de perfil** (y en los tres grupos de tres cuartos como "después"); en el revés
+de perfil el brazo es casi simultáneo con el torso salvo dos picos de preparación; el saque de
+perfil depende de la ventana. **Ninguna ventana por sí sola discrimina golpe de preparación:**
+haría falta un marcador de fase independiente (p. ej. el punto más bajo de la muñeca como inicio del
+golpe hacia adelante), validado con fotogramas. Pendiente de decisión de Valentín.
+
+### Corte de Winter para el brazo (2026-09-25)
+
+Pregunta de Valentín: ¿un solo corte por clip sigue siendo válido para el brazo? **No se tocó
+código ni contrato** (`trazabilidad.filtro.corte_hz`). Datos: `docs/resultados/e3-corte-brazo-fase-b.json`,
+`python -m app.diagnosticos_e3 corte-brazo`.
+
+- **El corte del clip ya lo fija el brazo:** `elegir_corte` toma el MÁXIMO entre los cortes de las
+  series de codo y muñeca (ambos lados). No sale de pelvis/torso.
+- **Los cortes por articulación son parecidos:** codo 4–11 Hz (casi todos 7–9), muñeca 7–9,
+  pelvis 5–9, torso 6–9; el corte del clip es 8–11 (mayoría 8–9). Diferencia por articulación
+  ≲ 2 Hz: **no hay evidencia de que el brazo necesite un corte propio.**
+- **No es el corte lo que hace ver "bajo" al brazo:** barriendo solo el corte del codo, el p99
+  varía entre −2 % y +28 % entre 6 y 10 Hz (más al ir a 20 Hz), y a la vez la caída k1→k8 crece (p. ej. drive
+  tres cuartos 10 % → 28 %, revés perfil 4 % → 25 %): más corte mete ruido, no revela movimiento.
+- **Debilidades reales de la implementación (no del criterio "un corte por clip"):**
+  (a) Winter concatena los valores válidos saltando los huecos: las uniones son discontinuidades;
+  usando el tramo continuo más largo el corte del clip cambia en 19 de 36 clips (de −1 a +3 Hz,
+  mediana 0, media +0,4);
+  (b) el corte de una serie individual es inestable (codo 4 Hz en un clip); el máximo entre ~12
+  series lo vuelve conservador; (c) el corte tiene efecto sobre el orden del saque de perfil
+  (arriba): conviene registrar la sensibilidad en la trazabilidad.
+- Recomendación: **mantener un corte por clip y el contrato**; si se quiere tocar algo, arreglar
+  (a) sin cambiar el contrato. No hecho: espera la decisión de Valentín.
 
 ### Qué se hizo
 
-- `engine/validation.py`: `detectar_inversiones_z` — cambio de signo de `z` + `|Δz| /
-  torso > 0,18` + dominado por `z` (`|Δz| > 1,8·|Δxy|`). Detectada la entrada, extiende
-  la franja mientras `z` mantiene el signo invertido (tope 25 fotogramas).
-  `ResultadoValidacion.inversiones_z`.
-- `engine/preparacion.py`: excluye toda la franja `[frame_desde, frame_hasta]` antes de
-  filtrar (junto con baja confianza y saltos).
-- Calibrado con el único caso real (`zverev_02` frame 566); deja pasar los dos falsos
-  candidatos del mismo clip (dithering de z cerca del plano). Umbrales a revisar con la
-  Fase B.
-- Versión del motor → `0.3.1`. Decisión 009.
+- `extraer_pose` y `analizar` recorren `fase-a/` y `fase-b/` (mismas `CARPETAS_EXCLUIDAS` y
+  `FASES_POR_DEFECTO` que el catalogador) y saltean `originales/`.
+- `analizar` deducía `corpus_publico=True` siempre; ahora sale de la columna `fuente` del
+  catálogo (`propio` → sin caveat; sin dato → caveat, el error seguro).
+- Extracción de pose de fase-b (~2 min por clip, CPU).
+
+### Primera lectura: saque de perfil (6 repeticiones, 240 fps reales)
+
+Cualitativa, sin umbrales tocados. Ver la tabla completa en la conversación de la sesión.
+
+- **Pelvis-torso:** las 3 repeticiones auditables dan `torso → pelvis` (4, 12 y 13 ms):
+  mismo rango invertido que el corpus público. No se estabilizó con condiciones controladas.
+- **Brazo (codo):** 4 de 6 bajo el techo (4000–6100 °/s, 1,7–2,6× Fleisig); una en 37 124.
+- **Inversiones de z:** 8–28 por clip (público: 16–45 / 3): **no bajaron** con `z` métrica.
+- **Pelvis 1000–1400 °/s (2,3–3,2× Fleisig 440)** y ~1,4× más rápida que el torso
+  (Fleisig: al revés). Revisado el cálculo: **no hay error** (fórmula y `fps_efectivos`
+  correctos; el pico casi no cambia con el paso k=1,2,4,8; ~todo en el plano x–z; curva de
+  ángulo suave; caderas bien ubicadas en los fotogramas). No se puede distinguir "gira así"
+  de "cadera lejana mal estimada por la oclusión del perfil" sin una medición independiente.
+
+### Comparación entre gestos y encuadres (36 repeticiones, 1 jugador, 1 sesión)
+
+Medianas por grupo (pico p99 de ω sobre el clip completo, `puntos_mundo` filtrados, °/s;
+6 clips por grupo; **exploratorio**, umbrales sin tocar). Referencia de Fleisig: **solo saque**.
+
+| grupo | pelvis | torso | pelvis/torso | caída pelvis k=1→8 | inv. z por clip (mediana) | orden pelvis-torso |
+| --- | --- | --- | --- | --- | --- | --- |
+| saque perfil | 1174 | 791 | 1,46 | 4 % | 14,5 | 3 auditables: 3 invertidas (−4/−12/−13 ms) |
+| saque tres cuartos | 975 | 837 | 1,15 | 4 % | 5 | 6 auditables: 4 pelvis primero (0–13 ms), 1 empate 0 ms, 1 invertida (−13 ms) |
+| drive perfil | 702 | 628 | 1,12 | 3 % | 9,5 | — |
+| drive tres cuartos | 814 | 680 | 1,19 | 3 % | 7,5 | — |
+| revés perfil | 324 | 435 | 0,72 | 3 % | 5,5 | — |
+| revés tres cuartos | 257 | 507 | 0,46 | 3 % | 5 | — |
+
+- **Sensibilidad al paso (pregunta 3):** la pelvis cae 3–4 % entre k=1 y k=8 en los seis
+  grupos: no es un artefacto del saque; es una señal suave en todos los gestos.
+- **Hipótesis del salto: resultado mixto, no confirmada.** El revés (sin vuelo) no muestra
+  exceso (pelvis 257–324 °/s, pelvis/torso < 1, como en Fleisig). El drive (sin vuelo)
+  mantiene pelvis ≥ torso y 700–800 °/s. El orden de gestos saque > drive > revés se repite
+  en ambos encuadres; el encuadre mueve la magnitud (±20 %) sin cambiar ese orden.
+- **Tres cuartos vs perfil (saque):** mejora el orden auditable (6/6 vs 3/6) y baja las
+  inversiones de z (5 vs 14,5). Pero de los 5 "pelvis primero/empate", 3 quedan a ≤ 1
+  fotograma (4,17 ms): en el límite de resolución.
+- **Segmentación automática:** parte en 2–3 ventanas clips que contienen 1 repetición
+  (revés perfil rep02, revés tres cuartos rep04/rep05, etc.). Para el Criterio 1 la unidad
+  debe ser el clip (1 repetición), no las ventanas.
+- **Drive:** varios clips dan el orden `brazo > torso > pelvis` (invertido); no reproduce la
+  cadena que sí dio `drive_lateral_01` del corpus público. Sin analizar aún.
+- **Revés tres cuartos, brazo:** ω ~850–980 °/s y casi constante con k (2 % de caída), muy
+  distinto del resto (2000–5000 °/s, ~65–80 % de caída). Sospechoso; sin analizar aún.
+- Límites: n = 6 por grupo, un jugador, una sesión; detector de vuelo aproximado (tobillos
+  en imagen); p99 sobre el clip completo, no sobre la ventana del gesto.
+
+### Segmentación: `clip completo` vs `auto` (2026-09-25, mismo día)
+
+Hipótesis de Valentín: la segmentación automática elegía ventanas parciales y era la causa
+común del drive invertido y del brazo anómalo del revés de tres cuartos. Se agregó el modo
+explícito **`clip_completo`** (`segmentar`/`secuenciar`, `analizar --clip-completo`; excluyente
+con `manual`) y se comparó con el automático (`docs/resultados/e4-fase-b-exploratorio-*.json`).
+
+- **No era la causa.** Drive perfil: el pico del brazo cae 200–500 ms **antes** que los de
+  torso y pelvis en las 4 repeticiones auditables, con ventana automática y con clip completo.
+  Revés tres cuartos, brazo: los picos son los mismos valores (1001,7 / 917,6 / 855,0 /
+  803,7 °/s) en ambos modos; solo cambia el instante (relativo a la ventana).
+- **El clip completo tampoco es neutro:** el pico de cada segmento es el máximo global del
+  clip y puede ser otro evento. Saque de perfil: brazo primero en 2 de 3 auditables (0 con
+  auto); saque tres cuartos: pelvis→torso→brazo correcto 5 → 4 de 6; drive perfil 1 → 0; en el
+  revés aparecen desfases pelvis→torso de −842, −142 y +208 ms (picos de eventos distintos).
+- **Sí resuelve** el sobre-particionado (7, 7, 8 y 12 ventanas → 6 por grupo): para el
+  Criterio 1 la unidad es el clip.
+- Conclusión: las dos anomalías siguen abiertas y no son de ventana. La medición del orden
+  es sensible a la ventana en ambos sentidos; falta una ventana anclada al gesto (p. ej.
+  alrededor del pico de pelvis/torso, o marcas manuales).
+
+### Ventana anclada al gesto (2026-09-25)
+
+Se implementó `secuenciar(..., ancla="torso"|"pelvis", margen_ancla_s=0.3)` (`instante_ancla`,
+`ventana_anclada`; `analizar --ancla`; excluyente con `manual` y `clip_completo`): UNA
+repetición por clip, ventana centrada en el pico global del segmento ancla ± 300 ms. Si el
+ancla no es auditable (tramo excluido o techo de plausibilidad) no se inventa una ventana
+(R3). Salidas en `docs/resultados/e4-fase-b-exploratorio-ancla-{torso,pelvis}.json`.
+
+**Sesgo a tener presente:** restringir la búsqueda a la vecindad del tronco excluye por
+construcción los picos tempranos del brazo. Por eso cada repetición registra
+`brazo_global_fuera_de_ventana`. Y anclar en un segmento no vuelve circular el orden
+pelvis→torso solo si se compara contra el otro segmento (el ancla queda en el centro).
+
+- **Las dos anclas coinciden:** torso vs pelvis difieren ≤ 75 ms en 30 de los 33 clips con
+  ambas auditables (mediana 8–21 ms por grupo). Excepciones: 142 y 208 ms (revés perfil) y
+  842 ms (revés tres cuartos rep05). En saque de perfil solo 3 de 6 clips tienen ambas auditables.
+- **Saque tres cuartos (ancla torso):** el brazo llega DESPUÉS del torso en 6/6 (+12 a
+  +138 ms) y pelvis→torso→brazo sale en 5/6 (igual que `auto`).
+- **Drive de perfil: la inversión PERSISTE.** En las 4 repeticiones con brazo auditable el
+  pico del brazo llega 133–288 ms ANTES del torso, con la ventana anclada y con las dos anclas.
+  En rep03 y rep06 el máximo dentro de la ventana queda a ≤ 21 ms del borde: el pico real
+  está aún más atrás. (Drive tres cuartos: brazo después del torso en 2/2 auditables.)
+- **Revés tres cuartos, brazo: la anomalía PERSISTE.** Los picos son idénticos a los del clip
+  completo (0 fuera de ventana): 4 de 6 en 800–1000 °/s, casi constantes con k; los otros 2 en
+  2590–2830. El brazo queda último en 5/6: lo anómalo es la magnitud, no el orden.
+- Criterio de Valentín cumplido: ambas anomalías persisten con la ventana bien anclada, así
+  que se tratan como hallazgos a investigar, no como artefactos de ventana.
+
+### CORRECCIÓN (2026-09-25, misma sesión): las "anomalías del brazo" vienen de E3 y de la validación
+
+La serie fotograma a fotograma del codo (drive perfil rep04) y una revisión de `procesar_e3`
+**invalidan la lectura anterior** ("ambas anomalías persisten → hallazgos"). Lo que se vio:
+
+- **No es un salto de un fotograma.** Entre 0,196 y 0,242 s (fotogramas 47–58) el codo derecho
+  se mueve 5,0 cm/fotograma (mediana; máx. 11,9 cm = 28 m/s), con confianza 0,65–0,98 y `z`
+  alternando (0,168 → 0,225 → 0,172). Es una ráfaga de jitter, no un salto ni una inversión.
+- **Por qué la validación no lo atrapó:** (1) la confianza está por encima de 0,5; (2) el
+  umbral de salto imposible es 0,5 torsos = 25,7 cm/fotograma = **62 m/s** (torso 0,514 m): el
+  máximo de todo el clip es 24,4 cm (0,47 torsos) y el de la ráfaga 11,9 cm (0,23); un codo
+  real no supera ~10 m/s (≈ 4 cm/fotograma) y 79 de 299 fotogramas válidos lo superan;
+  (3) no hay cambio de signo de `z`. El umbral detecta teletransportes, no jitter.
+- **Hueco en E3 (`pipeline.py`, "Simplificación"):** toda serie con algún NaN (tramo largo
+  excluido, > 5 fotogramas) **se deja SIN filtrar completa**. En rep04 el codo tiene 223 de 368
+  fotogramas en NaN (60 %). Resultado: el codo crudo (ruidoso) entra a E4 contra un hombro ya
+  filtrado. Sobre las 36 repeticiones: **pelvis 0 % y torso 0 % sin filtrar; hombro/codo
+  derecho sin filtrar en 6/6 clips de cinco grupos** y en 2/6 del revés de tres cuartos.
+- **Lo que explica todo:** en el revés de tres cuartos, los 4 clips donde el brazo SÍ se filtra
+  dan 800–1000 °/s, planos con k (2 % de caída); los 2 sin filtrar dan 2590–2830 °/s y caen
+  ~58 %, igual que el resto de los grupos (58–81 %). La "anomalía" era el único grupo bien
+  filtrado; lo anómalo son los demás.
+- Diagnóstico (interpolando y filtrando el codo a 8 Hz, solo para mirar): en los fotogramas
+  47–58 la ω pasa de 4790 a 386 °/s. La cifra de todo el clip de ese diagnóstico NO es válida
+  (interpolé 223 fotogramas de hueco) y 8 Hz podría ser bajo para el brazo.
+
+**Consecuencias:**
+- Todas las velocidades del **brazo** reportadas hasta acá (incl. "1,7–2,6× Fleisig", los picos
+  de 4000–6100 °/s, el orden `brazo > torso > pelvis` del drive) están contaminadas por codo
+  sin filtrar: **no son evidencia**. (Ver la re-medición de abajo: las MAGNITUDES eran ruido;
+  el ORDEN del drive de perfil persiste aunque con un adelanto mucho menor. Esta frase decía
+  antes "el drive invertido NO es un hallazgo fisiológico": era demasiado fuerte.)
+- Pelvis y torso NO están afectados por este hueco: las conclusiones sobre ellos se mantienen.
+- La ventana acotada del brazo sigue siendo razonable, pero es secundaria: primero E3 y el
+  umbral de salto.
+
+**Candidatos (NO aplicados; tocan E3 y validación, y cambian todo lo medido del brazo):**
+1. E3: filtrar los segmentos continuos válidos de una serie con NaN en vez de dejarla cruda.
+2. Umbral de salto imposible en unidades físicas (cm/fotograma o m/s) y calibrado, no 0,5
+   torsos; evaluarlo separando datos de ajuste y de medición.
+3. Chequeo de consistencia entre pasos k (ver "pico sostenido"), con su límite para el brazo.
+4. Revisar el corte de Winter único por clip (8–9 Hz) para el brazo.
+
+Los diagnósticos que se hicieron primero en un scratchpad (serie del codo, conteo de series sin
+filtrar, comparación por grupo, salto por fotograma, montaje de fotogramas, ángulo en el plano)
+quedaron **versionados** en `backend/app/diagnosticos_e3.py` (principio 5).
+
+### Re-medición con E3 corregido (motor 0.4.1) sobre los 36 clips — validada por Valentín (25/9)
+
+**Estado:** Valentín validó esta re-medición el 25/9 (la conclusión previa sobre el drive y el
+revés de tres cuartos quedó reemplazada por ésta). Punto 1 de E3 hecho (decisión 010, `dsp.py`,
+`pipeline.py`, pruebas `test_dsp_segmentos.py` y `test_pipeline_e3_huecos.py`, que fallan con el
+E3 anterior). Los puntos 2 (umbral de salto) y 3 (corte de Winter) NO se tocaron.
+Datos: `docs/resultados/e4-fase-b-exploratorio-<modo>-e3-0.4.1.json` (0.4.0: sin sufijo).
+
+- **Regresión:** pelvis y torso idénticos entre 0.4.0 y 0.4.1 (diferencia máxima 0,0000 °/s).
+- **Brazo, p99 de ω a k=1 (mediana por grupo, viejo → nuevo, °/s):** saque perfil 4847 → 1300;
+  saque tres cuartos 3771 → 1371; drive perfil 3857 → 790; drive tres cuartos 6600 → 2165; revés
+  perfil 5226 → 953; revés tres cuartos 940 → 908 (ya estaba filtrado). Caída k=1→8: 63–81 % →
+  1–10 %. **La "anomalía" del revés de tres cuartos desaparece**: era el único grupo bien filtrado.
+- **Drive de perfil: la inversión persiste, más chica.** Brazo antes del torso en 4 de 5
+  repeticiones con ancla de torso, pero con un adelanto de 38–92 ms (antes 133–288 ms) y
+  velocidades de 380–676 °/s (antes 2594–4546). Con el fotograma: el pico cae en la caída de la
+  raqueta, justo antes del golpe hacia adelante. Drive tres cuartos: brazo después del torso en
+  5 de 6 (96–146 ms).
+- **Revés de perfil: aparece brazo primero en 5 de 6** (−12 a −233 ms; antes 0, porque casi
+  no era auditable). Saque perfil: brazo después del torso en 3/3 auditables (+62 a +79 ms) con
+  1072–1356 °/s. Saque tres cuartos: pelvis>torso>brazo en 5/6, sin cambios.
+- Patrón: con el brazo bien filtrado, **en perfil el pico del brazo (hombro→codo) tiende a llegar
+  ANTES que el del torso en drive y revés; en tres cuartos y en el saque, después.** Candidata
+  a explicación (no probada): el pico global del brazo captura la caída de la raqueta y no el
+  golpe (ventana de búsqueda del brazo); alternativa: el ángulo de perfil.
+- **Cuidado con las magnitudes:** con el corte de Winter por clip de 8–9 Hz el brazo probablemente
+  está subestimado (el saque queda en ~0,55× Fleisig). Es el punto 3.
+
+**Revisión retroactiva del corpus público** (`diagnosticos_e3 comparar-brazo`; A = E3 viejo sin
+detector de z = estado de la decisión 008):
+- En A, el codo "plausible" era el que SÍ se había filtrado y la muñeca "implausible" la que
+  quedaba cruda: `zverev_saque_lateral_01` (codo filtrado 2126 vs muñeca cruda 10 076),
+  `drive_lateral_01` (1567 vs 10 322). En `zverev_saque_lateral_03` ambas estaban filtradas y daban
+  lo mismo (1821 vs 1756). En `_02` ambas crudas (16 283 vs 26 063). La preferencia por el codo
+  estaba **confundida con qué serie se filtraba**.
+- Con E3 nuevo (C): muñeca/codo = 0,95–2,0 (mediana 1,39, n = 13), no 10–40; cobertura igual
+  (codo 0,83, muñeca 0,84). La decisión codo-vs-muñeca **no se revoca aquí**, pero su
+  justificación original ("la muñeca da 15 000–42 000 °/s") no se sostiene: hay que decidirla de
+  nuevo con datos limpios (anatomía: el codo es el eslabón del "brazo" de la cadena; desenfoque de
+  la muñeca en el impacto sigue siendo un argumento).
+- **Techo ×3 (Fleisig × 3 = 7104 °/s):** el codo filtrado del corpus público está en 0,40–0,94×
+  Fleisig (946–2234 °/s). Su justificación de "ruido de MediaPipe" ya no aplica (el ruido era el
+  hueco). Ojo: en el corpus público la escala temporal es estimada, así que estos múltiplos son
+  aproximados. No se recalibra todavía.
+
+### Hipótesis a contrastar (Valentín, 2026-09-25)
+
+El saque tiene fase aérea y drive/revés no. **Si la pelvis de drive y revés se acerca más a
+la referencia de Fleisig que la del saque, el salto explica el exceso** y no el ángulo de
+cámara. Si mantiene el mismo exceso, apunta a la estimación de la cadera en perfil. Se
+contrasta con el mismo análisis de sensibilidad al paso (k=1,2,4,8) aplicado a drive/revés.
+
+### Candidato de recalibración (NO aplicado)
+
+El techo de plausibilidad por segmento (Fleisig × `MARGEN_PLAUSIBILIDAD`) descartó picos de
+pelvis de 1325 y 1386 °/s (techo 1320) que se comportan como movimiento continuo. Un error
+de detección real es un salto puntual: **no sobrevive al cambio de paso de muestreo**.
+Criterio candidato, "pico sostenido": comparar el pico a k=1 contra k=4 (o k=8); si se
+mantiene (p. ej. cae menos de ~10 %), es movimiento; si colapsa, es glitch. Reemplazaría o
+complementaría el techo fijo. **Límite conocido:** un pico real pero breve (el brazo en el
+impacto dura <30 ms) también cae al promediar más fotogramas (saque de perfil: el brazo cae
+~70 % entre k=1 y k=8, la pelvis solo ~4 %). El criterio discrimina bien en segmentos lentos
+(pelvis, torso) y **no** debe aplicarse tal cual al brazo; para el brazo hay que buscar otra
+firma (p. ej. duración del pico a mitad de altura). **No se toca ahora**: recalibrar sobre estas mismas
+repeticiones contaminaría la medición del Criterio 1 (hace falta separar datos de ajuste y
+de medición: p. ej. ajustar con perfil, medir con la sesión 2).
+
+---
+
+## 2026-09-24 — Catalogador: soporte de `fase-b/`
+
+**Rama:** `etapa/4-cinematica`. Primera sesión de Fase B: 6 repeticiones del saque de perfil
+(iPhone, 240 fps, `r_frame_rate=30/1`, factor 8, `escala_temporal = conocida`) catalogadas
+a mano en `catalogo.csv`.
+
+### Qué se hizo
+
+- `app/catalogador.py`: sin `--dir` recorre `fase-a/` y `fase-b/` (rutas relativas a
+  `KINETIQ_DATA_DIR`); `originales/` se saltea junto a `compilaciones/`; subcarpeta
+  inexistente → aviso; chequeo cruzado `fps_declarados` catálogo vs archivo.
+- Verificado que la normalización NTSC no confunde el caso Apple (30 + conocida + factor 8
+  → 240 efectivos) con el caso público (factor estimado, escala desconocida): son
+  mecanismos independientes. Pruebas en `test_ingest_normalizacion.py`.
+- `test_corpus_fase_a.py` ajustado (escanea ambas fases, evalúa solo fase-a).
+- Docs: decisión 004 §8, `backend/README.md`.
+- Corrida real: 20 clips, 6 filas de fase-b OK (240 ef., unicidad 1.0), 0 avisos globales.
+- `pytest -m "not slow"` → 146 en verde.
+
+### Convención de carpetas (Fase B)
+
+`fase-b/<sesion>/<gesto>/recortes/` = unidades de análisis (también los clips sin corte,
+copiados tal cual); `originales/` = solo fuentes con recortes hermanos.
+
+### Pendiente
+
+Sumar al catálogo el resto de los cortes y los controles/deficientes; correr
+`python -m app.catalogador` y luego `extraer_pose` (checklist de Fase B, arriba).
+
+---
+
+## 2026-08-27 (fix) — Detector de inversión de profundidad (z), `v0.3.1` + `v0.3.2`
+
+**Ramas:** `fix/inversion-z` (`v0.3.1`) y `fix/inversion-z-calibracion` (`v0.3.2`),
+ambas mergeadas a `main`. Fix a E2/E3, antes de seguir con la Etapa 4.
+
+Surgió de la validación cualitativa de la Etapa 4: `zverev_saque_lateral_02` daba un
+pico de brazo de 24 932 °/s. Investigado (decisión 009): `CODO_DER` **invierte el signo
+de `z`** en el frame 566 (+0,098 → −0,050 m). Confianza 0,65 (pasa el umbral de 0,5) y
+desplazamiento 3D 0,31 torsos (< 0,5): **ni la baja confianza ni el salto imposible lo
+marcaban.**
+
+### Qué se hizo
+
+- `engine/validation.py`: `detectar_inversiones_z`. Firma de un glitch puntual real —
+  **cinco condiciones**: confianza previa ≥ 0,80, cambio de signo de `z`,
+  `|Δz|/torso > 0,20`, dominado por `z` (`|Δz| > 1,8·|Δxy|`), y **`z` vuelve** al signo
+  original en ≤ 15 fotogramas. `ResultadoValidacion.inversiones_z`.
+- `engine/preparacion.py`: excluye la franja `[frame_desde, frame_hasta]` antes de filtrar.
+- `v0.3.1` era más laxa (sin confianza previa ni retorno) y disparaba 35–95 veces por
+  clip, removiendo picos plausibles del brazo y exponiendo peores. `v0.3.2` la acota a
+  3–45/clip sin perder el caso real.
+
+### Hallazgo (para el Capítulo 6/7)
+
+Aun con las cinco condiciones, sobre el corpus público el detector **dispara 16–45 veces
+por saque** de Zverev (solo 3 en el drive). No son falsos positivos: en **toma lateral**
+la `z` de las articulaciones rápidas del brazo/mano que da MediaPipe es poco más que
+ruido que cruza el cero. Consecuencia: al excluir esas franjas, **las repeticiones de
+saque del corpus público quedan "no auditables"** en vez de reportar un orden con un
+número plausible por casualidad — correcto por R3, y la misma conclusión de la decisión
+008: la toma lateral no sirve para el brazo rápido; **Fase B con tres cuartos**. El
+`drive` (brazo más en el plano) sigue recuperando `pelvis → torso → brazo`.
 
 ### Pruebas
 
-`pytest -m "not slow"` → **121 en verde** (6 nuevas de inversión de z). `-m slow` → 14,
-incluida `test_inversion_z_corpus.py` (el detector atrapa el frame 566 real y la franja
-566–573 queda como `TramoExcluido` en E3).
+`pytest -m "not slow"` → **123 en verde**. `-m slow` → `test_inversion_z_corpus.py`
+atrapa el frame 566 real y la franja queda como `TramoExcluido` en E3.
 
-### Siguiente paso concreto
+---
 
-Merge `fix/inversion-z` → `main` con `v0.3.1`, traer `etapa/4-cinematica` sobre esa base,
-y seguir esperando la Fase B para 4.7/4.8 y el punto de decisión.
+## 2026-08-27 (sesión 3) — Etapa 4: Cinemática y secuenciación (arranque, 4.1–4.6)
+
+**Rama:** `etapa/4-cinematica` (desde `main`). **La Etapa 4 NO se cierra en esta sesión.**
+**Modelo:** Sonnet 5 Medio.
+
+Lecturas previas (convención): `capitulo-3` §3.3.3 y §3.3.4.1–§3.3.4.5. Confirmado con
+Valentín: se construyen 4.1–4.6 (+ 4.6b con caveat en el reporte) usando el corpus
+público; se difieren 4.7 (Criterio 1), 4.8 (Criterio 2) y el punto de decisión hasta
+tener la Fase B. Lado dominante: columna nueva en `catalogo.csv`, sin default.
+
+### Qué se hizo
+
+- **Housekeeping (al abrir la sesión):** `.gitattributes` con `eol=lf` (commit
+  `4fbce0e`; `renormalize` no tocó nada, los blobs ya estaban en LF). ADR 006 ampliado
+  con el orden de palancas de optimización de inferencia (`model_complexity` más bajo →
+  Vía A sobre ONNX). Ambos ya en `main`.
+- **`engine/segmentos_corporales.py`** — cadena `pelvis → torso → brazo` como vectores
+  directores. `brazo = HOMBRO_{dom} → MUNECA_{dom}`; `{dom}` de la columna
+  `lado_dominante` del `catalogo.csv` (agregada esta sesión), sin valor por defecto.
+- **`engine/kinematics.py`** (4.1–4.3) — `angulo_tres_puntos`, `serie_angulo_articular`,
+  `serie_separacion_cadera_hombro`, `velocidad_angular_segmento` (°/s, escalar).
+- **`engine/sequencing.py`** (4.4–4.6b) — `detectar_pico` (`find_peaks`; no auditable si
+  cae en `TramoExcluido` o supera 8000 °/s = techo de plausibilidad física, no un
+  ajuste), `orden_observado`, `segmentar` (auto/manual/fallback), `evaluar_repeticion`,
+  `agregar` (con `nota` de caveat de corpus público en la estructura).
+- **`app/analizar.py`** — CLI `python -m app.analizar --clip X` (pose caché → E3 → E4).
+- **`catalogo.csv`** — columna `lado_dominante` (zverev/sinner = `der`; `reves_lateral_01`
+  de Federer y los dos `desconocido` quedaron vacíos — ver pendientes).
+- Versión del motor → `0.4.0`. Decisión 008 (incluye los hallazgos de la validación).
+
+### Validación cualitativa sobre el corpus público (registrada tal cual salió)
+
+Corrida de `analizar` sobre 3 saques de Zverev + drive de Sinner:
+
+- **El pipeline corre de punta a punta sobre material profesional sin romperse.** El
+  manejo de no auditables funciona.
+- **La muñeca de la raqueta no es auditable en gestos rápidos:** `HOMBRO→MUNECA` da
+  15 000–42 000 °/s en 3 de 4 clips (MediaPipe pierde la mano por desenfoque). Con
+  `HOMBRO→CODO` (brazo superior) los valores son plausibles (1 700–2 300 °/s) en 3 de 4
+  y en el **drive el orden sale `pelvis → torso → brazo` completo y plausible**.
+- **Vista lateral:** en los saques, pelvis y torso pican a ~12–18 ms — al borde de lo
+  resoluble; el orden entre ambos se invierte según el clip. Es el riesgo anticipado:
+  rotación transversal sobre el eje de profundidad (§3.3.2.8). El brazo, cuando es
+  auditable, queda claramente último.
+- **Lectura para la tesis:** evidencia positiva (el drive recupera la cadena pese al
+  sesgo y a la vista lateral; la prueba sintética de ordenamiento con sesgo lo confirma)
+  y de límite (pelvis-vs-torso lateral ≈ 15 ms; muñeca no auditable). Ambas útiles;
+  guían el encuadre de la Fase B (tres cuartos pone la rotación en el plano de imagen).
+
+### Pruebas
+
+`pytest -m "not slow"` → **128 en verde**. Incluye la **prueba de ordenamiento con
+sesgo** (3 series sintéticas con offset constante + ruido → recupera pelvis→torso→brazo),
+ángulos de geometría conocida, pico en tramo no auditable → no se reporta. `-m slow`:
+`test_analizar_e4.py` (estructura coherente sobre pose real, sin aseverar correctitud).
+
+### Ajustes tras la revisión de Valentín (misma sesión)
+
+- **`brazo = HOMBRO→CODO` por defecto, configurable** (`brazo_via`).
+- **`catalogo.csv`:** `reves_lateral_01` → `lado_dominante = der` (Federer juega de
+  derecha; el "zurdo" era un dato equivocado).
+- **Techo de plausibilidad POR SEGMENTO, anclado a Fleisig et al. (2003)** (§3.4.2.2):
+  pelvis 440, torso 870, brazo 2368 °/s × `MARGEN_PLAUSIBILIDAD = 3` → 1320 / 2610 /
+  7104 °/s. Criterio del margen en decisión 008 (incertidumbre del factor de
+  ralentización estimado + ruido de MediaPipe).
+- **`zverev_saque_lateral_02` investigado:** el pico de 24 932 °/s (codo) es un error
+  de detección puntual, no un techo mal calibrado. Frame 566: la `z` de `CODO_DER`
+  **cambia de signo** (~14 cm) con `x`,`y` suaves (inversión de profundidad de
+  MediaPipe). Confianza 0,65 (pasa el umbral de 0,5) y desplazamiento 0,33 torsos
+  (< `MAX_SALTO_TORSOS = 0,5`): **ni E2 ni E3 lo marcaron**. El techo lo corta →
+  repetición no auditable (correcto). Propuesta (no aplicada): detector de inversión
+  de signo en `z` en `engine/validation.py`.
+- Efecto lateral del codo: la segmentación automática, antes inundada por los
+  *glitches* de 40 000 °/s de la muñeca, empieza a funcionar (el drive se parte y una
+  repetición sale `pelvis → torso → brazo` **correcta**, 827/1666/1744 °/s).
+
+`pytest -m "not slow"` → **130 en verde**.
+
+### Detector de inversión de z (aplicado, `v0.3.1` → `v0.3.2`)
+
+Salió de investigar el pico de 24 932 °/s del punto anterior. Se hizo en ramas
+propias (`fix/inversion-z`, `fix/inversion-z-calibracion`) y se mergeó a `main`
+antes de rebasar `etapa/4-cinematica`. Detalle completo en la entrada **"(fix)"** de
+más arriba y en la decisión 009.
+
+### Comparación con dos clips públicos de tres cuartos (Valentín los consiguió)
+
+`drive_trescuartos_01`, `saque_trescuartos_01` (240 fps efectivos, factor 8).
+`catalogo.csv` actualizado a 14 clips (`test_corpus_fase_a.py` a 14, corre limpio).
+También: `control_oclusion_02` jugador → alcaraz; `fps_efectivos` de los tres cuartos
+corregido a 240 (el catalogador detectó la discrepancia 480 arrastrada).
+
+**El tres cuartos, sobre estos dos clips no controlados, NO mejoró ninguna métrica:**
+
+| | lateral | tres cuartos |
+| --- | --- | --- |
+| separación pelvis–torso | ~2–18 ms, orden que se invierte | 271 / 317 ms **pero torso antes que pelvis**, sin pico claro de pelvis |
+| brazo auditable | drive sí (1744 °/s), saques no | drive al borde (6399 °/s), saque no (23365) |
+| inversiones de z | 16–45 saques / 3 drive | 40 saque / 14 drive |
+| tramos excluidos E3 | decenas | 75 (drive) / 150 (saque) — ~40 % del clip |
+
+**Dos lecturas distintas, no confundirlas:**
+
+1. **"El ángulo no lo resolvió":** con estos dos clips, cambiar a tres cuartos **no**
+   convirtió la ambigüedad pelvis-torso (~15 ms) en una secuencia limpia, **no**
+   volvió auditable el brazo del saque, y **no** bajó las inversiones de z. Si el
+   único cambio fuera el ángulo, no alcanzaría.
+2. **"No fue una prueba justa del ángulo":** estos dos clips son públicos, de baja
+   tasa de bits (3–4 MB para 13–16 s), origen desconocido, sin segmentar (la
+   ventana automática los recorta mal), `escala_temporal_conocida = False` y factor
+   estimado a ojo. La Fase B es otra cosa: 240 fps **reales**, luz controlada,
+   encuadre fijo medido, pausas en posición neutra que hacen la segmentación
+   trivial, y repeticiones del mismo gesto. La comparación honesta pelvis-torso
+   lateral vs tres cuartos **todavía no se hizo**; esto solo descartó el atajo.
+
+La única evidencia positiva limpia sigue siendo `drive_lateral_01` (toma lateral):
+`pelvis → torso → brazo` correcto, velocidades plausibles. Que el drive recupere la
+cadena y el saque no, mismo encuadre y mismo pipeline, apunta a que el cuello de
+botella es el gesto (velocidad de la mano en el impacto — límite del apartado 1),
+no el pipeline.
+
+---
+
+## Estado al cerrar la sesión (2026-08-27)
+
+**En `main` (pusheado):** Etapas 0–3 (`v0.1.0-etapa0` … `v0.4.0-etapa3`) + fixes
+`v0.3.1` y `v0.3.2` (detector de inversión de z). El motor en `main` está en
+`0.3.2`.
+
+**En `etapa/4-cinematica` (rama abierta, sin merge, sin tag):** pasos 4.1–4.6 de la
+Etapa 4 sobre esa base. Motor `0.4.0`. `pytest -m "not slow"` → **139 en verde**;
+`-m slow` → 15 (incluye `test_corpus_fase_a.py` con 14 clips, `test_analizar_e4.py`,
+`test_inversion_z_corpus.py`). Nada pendiente de commitear.
+
+**Corpus (`kinetiq-data/`):** 14 clips catalogados y verificados, catalogador limpio
+(solo avisos informativos de normalización NTSC). 12 laterales + 2 de tres cuartos.
+Caché de pose (`backend/.cache/`) poblada para los 14.
+
+**Lo que NO se hizo, a propósito** (precondición del plan — no tiene sentido pulir un
+detector cuyos criterios de éxito todavía no se pueden medir): tareas 4.7 (Criterio 1),
+4.8 (Criterio 2), 4.6b como medición formal, y el **punto de decisión de repliegue**.
+La Etapa 4 no se cierra hasta tener el material propio.
+
+## Cuando llegue el material de la Fase B — checklist
+
+Precondición: el conjunto propio grabado y verificado (protocolo de grabación,
+hito C1). Trabajar en `etapa/4-cinematica`.
+
+1. **Ingesta y catálogo.** Copiar los clips a `kinetiq-data/fase-b/`. Agregar una
+   fila por clip a `catalogo.csv` con **`escala_temporal = conocida`**, `factor_estimado = 1`,
+   `fps_efectivos` reales (240), `lado_dominante` del jugador. Correr, desde `backend/`:
+   `python -m app.catalogador` — debe salir sin avisos (ni siquiera de NTSC si se grabó
+   a 240 exactos).
+2. **Pose.** `python -m app.extraer_pose` (procesa lo nuevo, ~3–4 min por clip). Deja
+   la caché lista.
+3. **Análisis por clip.** `python -m app.analizar --clip <archivo> [--manual d1:h1,d2:h2]`.
+   Para clips con 6 repeticiones y pausas del protocolo, la segmentación automática
+   debería andar; si no, marcar las ventanas con `--manual`.
+4. **Qué comparar (las tres preguntas que quedaron abiertas):**
+   - **Pelvis-torso:** ¿la separación es estable y en el orden esperado
+     (pelvis→torso) entre repeticiones del mismo saque? ¿El encuadre de tres cuartos
+     da una separación más limpia que el de perfil? Comparar contra los ~2–18 ms
+     invertidos de la toma lateral (decisión 008 §2).
+   - **Brazo:** ¿el pico del segmento `brazo` (con `--brazo-via codo`) cae por debajo
+     del techo de plausibilidad, o el desenfoque en el impacto lo mantiene no
+     auditable también a 240 fps reales? Probar además `--brazo-via muneca`.
+   - **Inversiones de z:** ¿cuántas veces dispara `detectar_inversiones_z` con `z`
+     métrica real? Debería ser mucho menos que las 16–45/clip del corpus público.
+5. **Recalibrar con datos reales** (todo con `escala_temporal_conocida = True`):
+   - **Criterio de "pico sostenido vs. paso de muestreo"** como alternativa al techo fijo
+     (ver entrada 2026-09-25); no calibrar y medir sobre las mismas repeticiones.
+   - `MARGEN_PLAUSIBILIDAD` del techo (hoy ×3; sin la incertidumbre del factor
+     estimado, probablemente conviene bajarlo). `_FLEISIG_MAX` / `techo_velocidad` en
+     `engine/sequencing.py`.
+   - Los cinco umbrales de `detectar_inversiones_z` en `engine/validation.py`.
+   - `find_peaks` (`PROMINENCIA_*`, `SEPARACION_MIN_S`) y la segmentación
+     (`QUIETUD_REL`, `DUR_MIN_REPETICION_S`) en `engine/sequencing.py`.
+6. **Medición formal (4.7 / 4.8).** Implementar `4.7` (Criterio 1: proporción de
+   repeticiones con orden repetible; meta 8/10) y `4.8` (Criterio 2: error angular vs
+   medición manual sobre los mismos fotogramas; meta < 20,6°). Volcar los números a
+   `docs/resultados/` con un script versionado (principio 5 del plan).
+7. **Pruebas a activar / agregar:**
+   - En `tests/integration/test_analizar_e4.py`: pasar de "estructura coherente" a
+     aserciones reales sobre las repeticiones de la Fase B (orden, auditabilidad).
+   - Nueva prueba de **repetibilidad del orden** entre las 6 repeticiones de un clip
+     (base del Criterio 1).
+   - Nueva prueba de **coherencia temporal** con el par real 240 fps / ralentizado
+     del mismo gesto (pendiente desde la Etapa 1: hoy es sintética en
+     `test_slowmo_coherencia.py`).
+   - Reemplazar las pruebas de integración que hoy usan clips sintéticos de control
+     por el material real equivalente de la Fase B, si lo hay.
+8. **Punto de decisión.** Con los Criterios 1 y 2 medidos, aplicar la tabla del plan
+   (continuar a E5 / repliegue a fase de preparación / repliegue a 2D / reformular
+   alcance) y **documentar el resultado en `docs/decisiones/`** cualquiera sea —
+   alimenta los Capítulos 6 y 7. Recién ahí: merge `etapa/4-cinematica` → `main`,
+   tag `v0.5.0-etapa4`.
 
 ---
 

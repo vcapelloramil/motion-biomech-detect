@@ -74,10 +74,14 @@ Todas se corren desde `backend/` (para que `app` esté en el path).
 ```bash
 # Catalogar y verificar el corpus (Etapa 1). Escribe catalogo-verificado.csv
 # junto al corpus; NO modifica catalogo.csv.
+# Sin --dir recorre fase-a/ y fase-b/ de KINETIQ_DATA_DIR; saltea compilaciones/ y
+# originales/ (las unidades de análisis de fase-b van en <sesion>/<gesto>/recortes/).
 python -m app.catalogador
 python -m app.catalogador --sin-hash          # sin verificación de huella (rápido)
+python -m app.catalogador --dir RUTA          # una sola carpeta
 
 # Extraer y cachear las coordenadas de pose de los clips (Etapa 2).
+# Recorre fase-a/ y fase-b/ (sin originales/ ni compilaciones/).
 python -m app.extraer_pose                     # todos los clips, MediaPipe
 python -m app.extraer_pose --clip zverev_saque_lateral_01.mp4
 python -m app.extraer_pose --backend fake --max-frames 30
@@ -85,6 +89,10 @@ python -m app.extraer_pose --backend fake --max-frames 30
 # Medir la velocidad de inferencia de un backend (Etapa 2, tarea 2.6).
 # Agrega la corrida a docs/resultados/e2-velocidad-inferencia.json
 python -m app.bench_pose --clip zverev_saque_lateral_01.mp4 --frames 120
+
+# Analizar un clip de punta a punta: pose (caché) -> E3 -> E4 (Etapa 4).
+python -m app.analizar --clip zverev_saque_lateral_01.mp4
+python -m app.analizar --clip reves_lateral_01.mp4 --lado izq
 ```
 
 ## Estructura
@@ -110,6 +118,9 @@ backend/
       preparacion.py        E3: exclusión de atípicos + interpolación de huecos cortos
       winter.py             E3: análisis residual -> corte objetivo
       pipeline.py           E3: orden validar -> preparar -> Winter -> filtrar
+      segmentos_corporales.py  E4: la cadena pelvis -> torso -> brazo
+      kinematics.py         E4: ángulos, separación cadera-hombro, velocidad angular
+      sequencing.py         E4: picos, orden observado, segmentación, agregación
       pose/
         base.py             contrato PoseBackend + SecuenciaPose
         articulaciones.py   mapa articular canónico (MediaPipe 33 / COCO 17)

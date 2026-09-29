@@ -27,7 +27,7 @@ todo lo demás:
 | E2b · Validación | `engine/validation.py` | Marcado de puntos por confianza, saltos imposibles e inversiones de profundidad (z) | **construido** |
 | E3 · Elevación | — | No aplica: MediaPipe entrega 3D directo; no hay modelo de elevación | descartado |
 | E3 · Filtrado | `engine/dsp.py`, `engine/preparacion.py`, `engine/winter.py`, `engine/pipeline.py` | Remoción de atípicos, corte objetivo (Winter), Butterworth de fase cero sobre coordenadas métricas | **construido** |
-| E4 | `engine/kinematics.py`, `engine/sequencing.py` | Ángulos, velocidades, orden de picos | pendiente |
+| E4 | `engine/kinematics.py`, `engine/sequencing.py`, `engine/segmentos_corporales.py`, `app/analizar.py` | Ángulos, separación cadera-hombro, velocidades angulares, picos, orden observado, segmentación | **4.1–4.6 construido; 4.7/4.8 y punto de decisión diferidos a Fase B** |
 | E5 | `engine/audit.py`, `engine/render.py` | Auditoría, alertas, reporte, overlay | pendiente |
 
 Orden del procesamiento: detección → remoción de atípicos → filtrado → cálculo de
@@ -100,6 +100,26 @@ Se filtra el espacio **métrico** (`puntos_mundo`, metros) cuando existe; los ba
 reporte; los `TramoExcluido` alimentan `cobertura.tramos_no_auditables`.
 
 Ver `docs/decisiones/007-filtrado-de-senales.md`.
+
+### E4 — Cinemática y secuenciación (4.1–4.6; el punto de decisión está diferido)
+
+Opera sobre `SecuenciaFiltrada` de E3 (`puntos_mundo`).
+
+- **`engine/segmentos_corporales.py`** — la cadena `pelvis → torso → brazo` como
+  vectores directores entre articulaciones canónicas. `brazo` depende del **lado
+  dominante**, que se lee de `catalogo.csv` (columna `lado_dominante`); sin valor por
+  defecto (para no medir el brazo equivocado en silencio).
+- **`engine/kinematics.py`** (4.1–4.3) — `angulo_tres_puntos`, `serie_angulo_articular`
+  (rodilla/codo/tronco-muslo), `serie_separacion_cadera_hombro`,
+  `velocidad_angular_segmento` (°/s, escalar, sin elegir plano).
+- **`engine/sequencing.py`** (4.4–4.6b) — `detectar_pico` (`find_peaks`; no auditable
+  si cae en un `TramoExcluido` o supera un techo de plausibilidad física),
+  `orden_observado` (contra `pelvis → torso → brazo`), `segmentar` (auto por valles de
+  quietud / manual / fallback), `agregar` (con `nota` de caveat para corpus público).
+- **`app/analizar.py`** — `python -m app.analizar --clip X` corre pose (caché) → E3 → E4.
+
+Ver `docs/decisiones/008-cinematica-y-secuenciacion.md` (incluye los hallazgos de la
+validación cualitativa sobre el corpus público).
 
 ## Contrato del reporte
 

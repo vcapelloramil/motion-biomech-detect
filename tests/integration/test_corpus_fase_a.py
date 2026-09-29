@@ -29,13 +29,15 @@ pytestmark = [
     pytest.mark.skipif(FFMPEG is None, reason="ffmpeg no está en el PATH"),
 ]
 
-# fps de captura efectivos esperados por clip de gesto (25/60 declarados x factor).
+# fps de captura efectivos esperados por clip de gesto (declarados x factor).
 _FPS_EFECTIVOS_GESTOS = {
     "zverev_saque_lateral_01.mp4": 500,
     "zverev_saque_lateral_02.mp4": 500,
     "zverev_saque_lateral_03.mp4": 500,
     "drive_lateral_01.mp4": 480,
     "reves_lateral_01.mp4": 300,
+    "drive_trescuartos_01.mp4": 240,   # 30 (NTSC) x 8
+    "saque_trescuartos_01.mp4": 240,
 }
 
 
@@ -43,9 +45,13 @@ _FPS_EFECTIVOS_GESTOS = {
 def catalogo_fase_a():
     from app.catalogador import catalogar_directorio
 
+    # catalogo.csv tiene también las filas de fase-b: se escanean ambas fases para que
+    # no figuren como huérfanas, y acá solo se evalúan las de fase-a.
     filas, avisos = catalogar_directorio(
-        _DATA_DIR / "fase-a", catalogo=_DATA_DIR / "catalogo.csv"
+        _DATA_DIR, catalogo=_DATA_DIR / "catalogo.csv",
+        subcarpetas=("fase-a", "fase-b"),
     )
+    filas = [f for f in filas if f.ruta_relativa.startswith("fase-a/")]
     return filas, avisos, {f.archivo: f for f in filas}
 
 
@@ -55,9 +61,10 @@ def test_no_hay_errores_de_lectura(catalogo_fase_a):
     assert not con_error, f"clips que no se pudieron leer: {con_error}"
 
 
-def test_se_catalogan_los_12_clips_reales(catalogo_fase_a):
+def test_se_catalogan_los_14_clips_reales(catalogo_fase_a):
     filas, _, _ = catalogo_fase_a
-    assert len(filas) == 12  # 5 gestos en segmentos/ + 7 en control/
+    # 7 gestos en segmentos/ (5 laterales + 2 tres cuartos) + 7 en control/
+    assert len(filas) == 14
 
 
 def test_los_gestos_en_camara_lenta_son_aptos_para_fase_rapida(catalogo_fase_a):

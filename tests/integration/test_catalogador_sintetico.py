@@ -115,3 +115,71 @@ def test_sin_hash_no_calcula_unicidad(corpus):
     # sin el dato de unicidad, el uso no puede degradar a E1-E2
     trip = next(f for f in filas if f.archivo == "triplicado_720.mp4")
     assert trip.uso_final.startswith("E1-E4")
+
+
+# --- Fase B: estructura fase-b/<sesion>/<gesto>/{recortes,originales}/ ---------------
+
+@pytest.fixture
+def datos_con_fase_b(tmp_path):
+    base = tmp_path / "datos"
+    nativo = generar_clip(base / "fase-a" / "segmentos" / "a_240.mp4", fps=240, segundos=1.0)
+    rec = base / "fase-b" / "sesion-01" / "saque" / "recortes"
+    ori = base / "fase-b" / "sesion-01" / "saque" / "originales"
+    ralentizar(nativo, rec / "b_rep01.mp4", factor=8, fps_salida=30)
+    generar_clip(rec / "control_060.mp4", fps=60, segundos=1.0)
+    generar_clip(ori / "fuente_larga.mp4", fps=240, segundos=1.0)
+    catalogo = base / "catalogo.csv"
+    catalogo.write_text(
+        "archivo,fps_declarados,escala_temporal,factor_estimado,fps_efectivos,uso\n"
+        "a_240.mp4,240,conocida,1,240,E1-E4\n"
+        "b_rep01.mp4,30,conocida,8,240,E1-E4\n"
+        "control_060.mp4,60,conocida,1,60,E1-E2 (solo preparacion)\n",
+        encoding="utf-8",
+    )
+    return base, catalogo
+
+
+def test_recorre_fase_a_y_fase_b_y_saltea_originales(datos_con_fase_b):
+    base, catalogo = datos_con_fase_b
+    filas, avisos = catalogar_directorio(
+        base, catalogo=catalogo, subcarpetas=("fase-a", "fase-b")
+    )
+    por_nombre = {f.archivo: f for f in filas}
+    assert set(por_nombre) == {"a_240.mp4", "b_rep01.mp4", "control_060.mp4"}
+    assert por_nombre["b_rep01.mp4"].ruta_relativa == "fase-b/sesion-01/saque/recortes/b_rep01.mp4"
+    b = por_nombre["b_rep01.mp4"]
+    assert b.fps_efectivos == pytest.approx(240, rel=0.02)
+    assert b.escala_temporal_conocida is True
+    assert b.uso_final == "E1-E4"
+    # ninguna fila del catálogo queda huérfana ni hay avisos globales
+    assert avisos == []
+
+
+def test_incluir_todo_recorre_originales(datos_con_fase_b):
+    base, catalogo = datos_con_fase_b
+    filas, _ = catalogar_directorio(
+        base, catalogo=catalogo, subcarpetas=("fase-a", "fase-b"), incluir_todo=True
+    )
+    assert "fuente_larga.mp4" in {f.archivo for f in filas}
+
+
+def test_subcarpeta_inexistente_se_avisa_y_no_falla(datos_con_fase_b):
+    base, catalogo = datos_con_fase_b
+    filas, avisos = catalogar_directorio(
+        base, catalogo=catalogo, subcarpetas=("fase-a", "fase-c")
+    )
+    assert {f.archivo for f in filas} == {"a_240.mp4"}
+    assert any("fase-c" in a for a in avisos)
+
+
+def test_avisa_si_fps_declarados_del_catalogo_no_coincide_con_el_archivo(tmp_path):
+    d = tmp_path / "clips"
+    generar_clip(d / "x_60.mp4", fps=60, segundos=1.0)
+    catalogo = tmp_path / "catalogo.csv"
+    catalogo.write_text(
+        "archivo,fps_declarados,escala_temporal,factor_estimado,fps_efectivos,uso\n"
+        "x_60.mp4,30,conocida,1,60,E1-E2 (solo preparacion)\n",
+        encoding="utf-8",
+    )
+    filas, _ = catalogar_directorio(d, catalogo=catalogo, con_hash=False)
+    assert "fps_declarados del catálogo" in filas[0].avisos
