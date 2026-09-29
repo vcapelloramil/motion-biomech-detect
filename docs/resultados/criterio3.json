@@ -1,8 +1,8 @@
 {
- "generado_utc": "2026-09-29T05:40:37+00:00",
+ "generado_utc": "2026-09-29T06:33:12+00:00",
  "decision": "012/014",
  "version_motor": "0.4.1",
- "commit": "699778df458a2f8322ae5eeeef21e821a27714f7",
+ "commit": "6773ffd1040b7216cafa94c2c1f8d05a058d7c12",
  "arbol_sucio": false,
  "metricas": [
   "separacion_cadera_hombro_max",
@@ -11,12 +11,12 @@
  "parcial": false,
  "umbral_cumplimiento": 0.75,
  "combinaciones_consistentes": [
-  10,
-  12
+  9,
+  11
  ],
  "combinaciones_sin_evidencia_de_diferencia": [
-  11,
-  12
+  10,
+  11
  ],
  "resultado_por_grupo": {
   "drive|perfil": {
@@ -122,9 +122,16 @@
      0.0,
      483.3333333333333
     ],
-    "consistente": true,
+    "consistente": null,
     "p_permutacion": 0.8683131686831317,
-    "sin_evidencia_de_diferencia": true
+    "sin_evidencia_de_diferencia": null,
+    "bruto_censurado": {
+     "consistente": true,
+     "delta": 6.25,
+     "p_permutacion": 0.8683131686831317
+    },
+    "no_auditable_censura": true,
+    "motivo_no_auditable": "censura de ventana: 5 de 12 repeticiones con el máximo de separación cadera-hombro exactamente en el borde de ±300 ms (probablemente fuera de la ventana); ver decisión 014."
    }
   },
   "reves|trescuartos": {

@@ -102,21 +102,46 @@ volver a correr la medición) que muestra:
 
 **La métrica (ii) del revés de perfil no es confiable:** en 9 de 12 repeticiones el "máximo" encontrado está
 pegado al borde de la ventana, así que el verdadero instante de máxima separación probablemente cae fuera de
-ella. Que ese grupo salga "consistente" (Δ = 6,25 ms, p = 0,868) puede ser solo el artefacto de que las dos
+ella. Que ese grupo saliera "consistente" (Δ = 6,25 ms, p = 0,868) podía ser solo el artefacto de que las dos
 sesiones chocan contra el mismo límite, no evidencia real de consistencia. **No se ensanchó la ventana**
 (afectaría también la métrica (i), ya aceptada, y el Criterio 1, ya medido y commiteado): queda como
 limitación a declarar en los Capítulos 6 y 7, no como corrección aplicada.
 
-**No se hizo la goniometría manual del Criterio 2** (Claude se abstuvo explícitamente: es la medición
-independiente que separa al sistema de su propia verificación; hacerla mirando las imágenes invalidaría el
-protocolo ciego). El paquete sigue esperando en `C:\Users\valen\kinetiq-data\fase-b\criterio2\`.
+### Override aplicado y resultado final (mismo día, commit `6773ffd`)
+
+Decisión de Valentín: revés de perfil, métrica (ii), se reporta **NO AUDITABLE** (motivo: censura de ventana),
+no "consistente" — "reportar Δ=6,25ms/p=0,868 ahí sería presentar un artefacto de censura como dato bueno".
+Override manual y puntual (`GRUPOS_NO_AUDITABLES` en `medicion_criterio3.py`), no una regla automática de
+umbral; el cálculo bruto queda en el JSON (`bruto_censurado`) para trazabilidad y se excluye de las
+combinaciones de cumplimiento. La métrica (i) de ese grupo no se tocó. Candidato de trabajo futuro (no
+aplicado): ventana específica por gesto, pre-registrada antes de volver a medir.
+
+**Resultado final del Criterio 3 (11 combinaciones evaluables, no 12):**
+
+- **Regla original (Δ ≤ σ_w): 9/11 = 82 %** (antes 10/12 = 83 %; el grupo excluido contaba como consistente,
+  así que numerador y denominador bajan juntos).
+- **Lectura calibrada (p de permutación > 0,05): 10/11 = 91 %** (antes 11/12 = 92 %).
+- Ambos siguen por encima del umbral de 75 %. El único grupo con señal de diferencia real en las dos métricas
+  sigue siendo **drive de perfil**.
+
+**Paquete ciego del Criterio 2 — confirmado sin cambios.** Valentín preguntó si la estratificación incluía
+codo derecho (dominante) del revés de tres cuartos, el único caso de cobertura alta durante el golpe
+(decisión 013). Se verificó contra los metadatos de la clave (solo `estrato`/`clip`/`lado`, sin abrir los
+valores del sistema): **2 de los 3 fotogramas de ese estrato (`C2-10`, `C2-15`) ya usan el codo derecho** por
+tener mayor confianza que el izquierdo. No hizo falta regenerar el paquete; Valentín puede medir sobre el que
+ya tiene.
+
+**Decisión 013 ampliada:** el revés de tres cuartos (brazo dominante cercano a la cámara, cobertura alta
+incluso durante el golpe) se documenta como evidencia más fuerte a favor de la hipótesis geométrica sobre la
+de desenfoque puro — sin ser concluyente con un solo jugador. Una sesión con encuadre invertido queda como
+trabajo futuro candidato, explícitamente no programada ahora.
 
 ### Pendiente
 
-- **Valentín:** goniometría manual del Criterio 2 (paquete listo, sin tocar); decidir qué hacer con la
-  censura de revés-perfil en el Criterio 3 (declarar la limitación tal cual, repetir con ventana más ancha
-  solo para esa métrica, u otra alternativa); punto de decisión de la Etapa 4 (Criterios 1 y 3 medidos,
-  falta el 2).
+- **Valentín:** goniometría manual del Criterio 2 (paquete confirmado, sin cambios: no se abstuvo Claude de
+  tocar la planilla ni `.clave-NO-ABRIR`, solo leyó metadatos de estratificación para responder la pregunta
+  de arriba). Con Criterio 1 y Criterio 3 medidos, falta el Criterio 2 para llegar al punto de decisión de
+  la Etapa 4.
 
 ---
 
