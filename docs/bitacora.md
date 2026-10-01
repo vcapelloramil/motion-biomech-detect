@@ -6,6 +6,50 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-01 (noche) — Tarea 4.5.2: bucket de Storage, cerrada
+
+**Rama:** `main`. Continuación directa de la entrada anterior (4.5.1 cerrada y pusheada, commit `030cd84`).
+
+**Hecho:**
+
+- **`supabase/migrations/20261001090300_bucket_videos.sql`** (aplicada por Valentín desde el editor SQL):
+  bucket privado `videos`, con `file_size_limit` (52428800 bytes = 50 MB, decisión 016) y
+  `allowed_mime_types` (`video/mp4`, `video/quicktime`) — un segundo cerco del lado del servidor, no solo la
+  validación del navegador de la especificación de frontend §5. RLS de `storage.objects` con la misma
+  convención de ruta `<usuario_id>/...` que ya usan las tablas de `public/`.
+- **Tres archivos de prueba nuevos**, los dos últimos a pedido explícito de Valentín:
+  - `tests/integration/test_storage_bucket.py`: sube un clip real de la Fase B (lo resuelve solo vía
+    `KINETIQ_DATA_DIR`, cualquier recorte de una repetición sirve) y confirma la descarga byte a byte, tanto
+    con `service_role` como por URL firmada sin ninguna credencial — lo que haría el frontend.
+  - Sumado al mismo archivo: rechazo del servidor para un archivo de 50 MB + 1 byte y para un tipo no
+    permitido (`text/plain`) — confirma que `file_size_limit`/`allowed_mime_types` del bucket se aplican de
+    verdad, no solo están declarados.
+  - `tests/integration/test_storage_aislamiento.py`: mismo principio RNF-07 de `test_rls_aislamiento.py`
+    (Etapa 4.5.1) aplicado a objetos en vez de a filas — un usuario no puede leer ni subir archivos en la
+    carpeta de otro, y un cliente sin sesión no lee nada.
+- **Hallazgo distinto al de la 4.5.1:** acá `service_role` sí tuvo acceso completo a Storage sin necesitar un
+  `GRANT` aparte — confirmado corriendo la prueba real, no asumido. La Storage API de Supabase es un servicio
+  separado de PostgREST (no pasa por los `GRANT` de tabla que hubo que agregar en 4.5.1 para `public/`), así
+  que la lección de la decisión 018 (RLS y privilegios de tabla son capas independientes) no se repite acá de
+  la misma forma — documentado en la propia migración para que quede donde se vuelve a leer.
+- **Limpieza confirmada, no asumida** (pedido explícito de Valentín): `auth.admin.list_users()` en 0 y
+  `storage.from_("videos").list()` en 0 después de la corrida completa.
+- **35 pruebas en verde** con `pytest -m requiere_supabase` contra el proyecto real (las 28 de la 4.5.1 más
+  las 7 nuevas de Storage).
+
+### Pendiente
+
+Nada bloqueante para 4.5.2. Sigue abierta la captura del editor de tablas del apartado 4.4.6 (heredada de la
+4.5.1, no bloquea).
+
+### Siguiente paso concreto
+
+Commit y push de 4.5.2, y arrancar la tarea 4.5.3 (completar el contenedor: que descargue el clip de Storage
+y escriba el resultado mínimo en la base — ya tiene la medición de tiempo/memoria hecha desde el 29/9, ahora
+existen el esquema y el bucket que le faltaban).
+
+---
+
 ## 2026-10-01 (tarde) — Esquema de datos rediseñado (decisión 018) y migraciones escritas
 
 **Rama:** `main`. Continuación de la tarea 4.5.1 desde el checkpoint de esta misma mañana.

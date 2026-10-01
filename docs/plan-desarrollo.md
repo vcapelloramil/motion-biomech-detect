@@ -542,8 +542,18 @@ aislamiento (RNF-07, `tests/integration/test_rls_aislamiento.py`), cascada de bo
 corrigieron para que un fallo de setup no deje cuentas de prueba huérfanas (pasó una vez, se detectó y se
 limpió). **Sigue pendiente, no bloquea:** la captura del editor de tablas que pide el apartado 4.4.6.
 
-**4.5.2 — Bucket de Storage.** Un bucket privado para video. Subir a mano uno de los clips cortos de la
-Fase B (dentro del límite de 50 MB) y confirmar que se puede descargar por URL firmada.
+**4.5.2 — Bucket de Storage. ✅ Cerrada (1/10).** Bucket privado `videos`
+(`supabase/migrations/20261001090300_bucket_videos.sql`), con `file_size_limit` (50 MB, decisión 016) y
+`allowed_mime_types` (`video/mp4`, `video/quicktime`) como cerco del lado del servidor, no solo del
+navegador, y RLS de `storage.objects` con la misma convención `<usuario_id>/...` que las tablas. Confirmado
+con pruebas reales contra el proyecto (no a mano, para que quede reproducible): subida de un clip real de la
+Fase B y descarga por URL firmada (`tests/integration/test_storage_bucket.py`), rechazo del servidor para un
+archivo de más de 50 MB y para un tipo no permitido, y aislamiento entre usuarios —lectura y subida— sobre
+`storage.objects` (`tests/integration/test_storage_aislamiento.py`, mismo principio RNF-07 que la tarea
+4.5.1). **Hallazgo a diferencia de la 4.5.1:** acá `service_role` sí tuvo acceso completo sin necesitar un
+`GRANT` aparte — la API de Storage de Supabase es un servicio separado de PostgREST, no le aplica la misma
+corrección. 35 pruebas en verde contra el proyecto real (`pytest -m requiere_supabase`), sin dejar cuentas de
+Auth ni objetos de prueba sueltos (confirmado con `list_users()` y `storage.from_("videos").list()`).
 
 **4.5.3 — Motor en contenedor. ✅ Parte de medición hecha (29/9/2026), falta la parte de Storage/DB.**
 `Dockerfile` (`backend/Dockerfile`) y `app/medir_contenedor.py` corren el pipeline existente (ingesta →
