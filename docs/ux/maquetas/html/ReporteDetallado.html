@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>KinetiQ · Reporte detallado</title>
+
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;background:#081015}
+a{color:#4ade80;text-decoration:none}a:hover{color:#86efac}
+.kq{font-family:'DM Sans',system-ui,sans-serif;color:#e6edf2;background-color:#081015;background-image:linear-gradient(rgba(148,163,184,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(148,163,184,.05) 1px,transparent 1px);background-size:72px 72px;box-sizing:border-box}
+.kq *{box-sizing:border-box}
+.d{font-family:'Sora',system-ui,sans-serif;letter-spacing:-0.025em}
+.mono{font-family:'JetBrains Mono',monospace}
+.eb{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:#4ade80}
+.mu{color:#9aabb6}
+.card{background:#0d181e;border:1px solid #1c2a32;border-radius:20px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 22px;border-radius:14px;font-weight:600;font-size:15px;white-space:nowrap}
+.bp{background:linear-gradient(90deg,#4ade80,#10b981);color:#03140b}
+a.bp:hover{color:#03140b;filter:brightness(1.06)}
+.bg{border:1px solid #2b3b45;color:#e6edf2;background:#0d181e}
+a.bg:hover{color:#fff}
+.st{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;border:1px solid;white-space:nowrap}
+.ok{color:#4ade80;border-color:#1e6a3e;background:#0b2217}
+.lv{color:#fbbf24;border-color:#6e5418;background:#221a08}
+.al{color:#f87171;border-color:#72282a;background:#250e10}
+.na{color:#b4c1ca;border-color:#3b4b56;background:#131e25}
+.nav a{color:#b8c6cf;font-size:15px;padding:10px 16px;border-radius:12px}
+.nav a:hover{color:#fff}
+.nav a.on{background:#13222b;color:#fff}
+.tg{display:flex;padding:5px;gap:4px;border:1px solid #22323c;border-radius:14px;background:#0a141a}
+.tg a{display:flex;align-items:center;min-height:40px;padding:0 18px;border-radius:10px;font-size:14px;font-weight:600;color:#9aabb6}
+.tg a.on{background:#16303a;color:#fff;box-shadow:inset 0 0 0 1px #2f5563}
+.gc{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 14px;border-radius:11px;border:1px solid #22323c;background:#0a141a;color:#b8c6cf;font-size:13px;font-weight:600;font-family:'JetBrains Mono',monospace}
+.gc.on{border-color:#2f5563;background:#16303a;color:#fff}
+.lvl{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#8a9ba6}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th{text-align:left;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:#8a9ba6;padding:0 16px 14px;border-bottom:1px solid #22323c}
+td{padding:16px;border-bottom:1px solid #16242c;vertical-align:top;color:#d5dfe5;line-height:1.45}
+.kv{display:flex;flex-direction:column;gap:6px;padding:16px 18px;border-radius:14px;background:#0a151b;border:1px solid #1c2a32}
+.kv span:first-child{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#8a9ba6}
+.kv span:last-child{font-size:15px;font-weight:600;color:#e6edf2}
+</style>
+</helmet>
+<div class="kq" style="width: 1440px; height: 3020px; display: flex; flex-direction: column">
+
+<header style="display: flex; align-items: center; justify-content: space-between; height: 88px; padding: 0 72px; border-bottom: 1px solid #16242c; flex-shrink: 0">
+<a href="Biblioteca.html" style="display: flex; align-items: center; gap: 12px; color: #ffffff">
+<span style="width: 44px; height: 44px; border-radius: 13px; background: linear-gradient(135deg,#4ade80,#10b981); display: flex; align-items: center; justify-content: center; color: #03140b"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h4l2.5-6 4.5 12 2.5-6H22"></path></svg></span>
+<span style="display: flex; flex-direction: column"><span class="d" style="font-size: 20px; font-weight: 700">KinetiQ</span><span class="mono" style="font-size: 10px; letter-spacing: .2em; color: #8a9ba6">TENNIS · VISION · AI</span></span>
+</a>
+<nav class="nav" style="display: flex; gap: 4px"><a href="Biblioteca.html" class="on">Biblioteca</a><a href="Cargar.html">Cargar</a><a href="Perfil.html">Perfil</a></nav>
+<div style="display: flex; align-items: center; gap: 12px"><a class="btn bp" href="Cargar.html">+ Nueva sesión</a><a href="Perfil.html" aria-label="Perfil de Martín R." style="display: flex; align-items: center; gap: 10px; padding: 6px 14px 6px 6px; border: 1px solid #22323c; border-radius: 999px; color: #c9d5dc"><span class="mono" style="width: 34px; height: 34px; border-radius: 50%; background: #16303a; color: #22d3ee; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600">MR</span><span class="mono" style="font-size: 13px">Martín R.</span></a></div>
+</header>
+
+<main style="padding: 40px 72px 56px; display: flex; flex-direction: column; gap: 40px">
+
+<div style="display: flex; flex-direction: column; gap: 18px">
+<nav aria-label="Ruta" class="mono" style="font-size: 13px; color: #8a9ba6; display: flex; gap: 10px"><a href="Biblioteca.html" style="color: #9aabb6">Biblioteca</a><span aria-hidden="true">/</span><span>Saque · tres cuartos · 28 sep 2026</span></nav>
+<div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 32px">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h1 class="d" style="margin: 0; font-size: 60px; font-weight: 800; color: #ffffff">Saque · <span style="color: #4ade80">6 golpes</span></h1>
+<p class="mu" style="margin: 0; font-size: 17px">28 sep 2026 · 240 fps reales · tres cuartos · cámara a la izquierda del jugador · Martín R. (diestro)</p>
+</div>
+<div style="display: flex; align-items: center; gap: 12px">
+<div class="tg" role="group" aria-label="Vista del reporte"><a href="ReporteSimple.html">Simple</a><a href="ReporteDetallado.html" class="on" aria-current="page">Detallado</a></div>
+<a class="btn bg" href="ReportePDF1.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v12"></path><path d="m7 11 5 5 5-5"></path><path d="M4 20h16"></path></svg>Descargar PDF</a>
+</div>
+</div>
+</div>
+
+<section style="display: flex; flex-direction: column; gap: 14px">
+<span class="lvl">Nivel 1 · Veredicto</span>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">
+<div class="card" style="padding: 18px 20px; display: flex; gap: 14px; align-items: flex-start; border-radius: 16px"><span class="st ok"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="m8.5 12.5 2.5 2.5 4.5-5"></path></svg>Correcto</span><span style="font-size: 15px; line-height: 1.45">Cadera antes que tronco en 4 de 6 golpes</span></div>
+<div class="card" style="padding: 18px 20px; display: flex; gap: 14px; align-items: flex-start; border-radius: 16px"><span class="st lv"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2 20h20z"></path><path d="M12 10v4"></path><path d="M12 17h.01"></path></svg>Desvío leve</span><span style="font-size: 15px; line-height: 1.45">Separación cadera-hombro 31° (sesión anterior 37°)</span></div>
+<div class="card" style="padding: 18px 20px; display: flex; gap: 14px; align-items: flex-start; border-radius: 16px"><span class="st na"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M5.6 18.4 18.4 5.6"></path></svg>No auditable</span><span style="font-size: 15px; line-height: 1.45">Ángulo de codo derecho en 5 de 6 golpes</span></div>
+</div>
+</section>
+
+<section style="display: flex; flex-direction: column; gap: 14px">
+<span class="lvl">Rendimiento · desglose del puntaje</span>
+<div class="card" style="padding: 24px 28px; display: flex; gap: 36px; align-items: flex-start">
+<div style="width: 220px; flex-shrink: 0; display: flex; flex-direction: column; gap: 8px"><div style="display: flex; align-items: baseline; gap: 8px"><span class="d" style="font-size: 64px; line-height: 1; font-weight: 800; color: #ffffff">74</span><span class="mono" style="font-size: 16px; color: #8a9ba6">/ 100</span></div><span class="mono" style="font-size: 12px; color: #8a9ba6; line-height: 1.6">FÓRMULA v1 · PROMEDIO DE 3 COMPONENTES AUDITABLES · REFERENCIA: TUS 4 SESIONES PREVIAS</span></div>
+<table style="flex: 1 1 0">
+<thead><tr><th>Componente</th><th>Medición</th><th>Referencia propia</th><th>Puntaje</th><th>Peso</th></tr></thead>
+<tbody>
+<tr><td style="font-weight: 600">Consistencia entre golpes</td><td>Dispersión de la separación cadera-hombro ±2,1°</td><td class="mu">Tu promedio ±3,4°</td><td class="mono">82</td><td class="mono">1/3</td></tr>
+<tr><td style="font-weight: 600">Velocidad de giro del tronco</td><td>910 °/s (mediana de 6 golpes)</td><td class="mu">Tu mejor sesión: 980 °/s</td><td class="mono">93</td><td class="mono">1/3</td></tr>
+<tr><td style="font-weight: 600">Separación cadera-hombro</td><td>31° (mediana)</td><td class="mu">Tu rango habitual: 34–40°</td><td class="mono">48</td><td class="mono">1/3</td></tr>
+</tbody>
+</table>
+</div>
+<p class="mu" style="margin: 0; font-size: 14px; line-height: 1.55">Índice descriptivo propio de KinetiQ. Un componente no auditable se excluye y se informa; con menos de dos componentes auditables el puntaje no se calcula. No está validado contra la velocidad de pelota.</p>
+</section>
+
+<section style="display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; justify-content: space-between; align-items: center">
+<span class="lvl">Nivel 2 · Evidencia</span>
+<div role="group" aria-label="Elegir golpe" style="display: flex; gap: 8px"><a class="gc" href="#">G1</a><a class="gc" href="#"><span style="width: 7px; height: 7px; border-radius: 50%; background: #8a9ba6"></span>G2</a><a class="gc on" href="#" aria-current="true">G3</a><a class="gc" href="#">G4</a><a class="gc" href="#"><span style="width: 7px; height: 7px; border-radius: 50%; background: #8a9ba6"></span>G5</a><a class="gc" href="#">G6</a></div>
+</div>
+
+<div class="card" style="padding: 28px; display: flex; gap: 28px">
+<div style="width: 440px; flex-shrink: 0; display: flex; flex-direction: column; gap: 14px">
+<div style="position: relative; height: 520px; border-radius: 16px; overflow: hidden; background: radial-gradient(120% 90% at 50% 20%,#1b3340 0%,#0b161c 70%); border: 1px solid #1f2f38; display: flex; align-items: center; justify-content: center">
+<div style="width: 280px; height: 420px"><svg viewBox="0 0 200 300" width="100%" height="100%" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g stroke="#6b7c87" stroke-width="3"><path d="M100 50v20"></path><path d="M82 70 68 42 64 14"></path><path d="M82 70 88 150"></path><path d="M118 70 112 150"></path><path d="M88 150 76 212 68 274"></path><path d="M112 150 126 210 138 272"></path></g><circle cx="100" cy="36" r="13" stroke="#6b7c87" stroke-width="3"></circle><path d="M88 150h24" stroke="#a78bfa" stroke-width="7"></path><path d="M82 70h36" stroke="#22d3ee" stroke-width="7"></path><path d="M118 70 136 54 126 28" stroke="#f1f5f9" stroke-width="7"></path><g fill="#e6edf2"><circle cx="82" cy="70" r="4"></circle><circle cx="118" cy="70" r="4"></circle><circle cx="88" cy="150" r="4"></circle><circle cx="112" cy="150" r="4"></circle><circle cx="136" cy="54" r="4"></circle><circle cx="76" cy="212" r="3.5"></circle><circle cx="126" cy="210" r="3.5"></circle></g></svg></div>
+<span class="mono" style="position: absolute; top: 14px; left: 14px; font-size: 12px; padding: 8px 12px; border-radius: 10px; background: rgba(8,16,21,.84); border: 1px solid #22323c; color: #c9d5dc; line-height: 1.6">t = 0,418 s<br><span style="color: #a78bfa">pico de cadera</span></span>
+<span class="mono" style="position: absolute; bottom: 14px; left: 14px; font-size: 11px; letter-spacing: .06em; color: #8a9ba6">[VIDEO REAL CON ESQUELETO SUPERPUESTO]</span>
+</div>
+<div style="display: flex; align-items: center; gap: 14px">
+<button type="button" aria-label="Reproducir" style="width: 44px; height: 44px; border-radius: 50%; border: 0; background: linear-gradient(135deg,#4ade80,#10b981); color: #03140b; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg></button>
+<span class="mono" style="font-size: 13px; color: #9aabb6">Velocidad 0,25×</span>
+<span class="mono" style="font-size: 13px; color: #9aabb6; margin-left: auto">cuadro 100 / 216</span>
+</div>
+</div>
+
+<div style="flex: 1 1 0; display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; justify-content: space-between; align-items: center"><span class="mono" style="font-size: 12px; letter-spacing: .12em; color: #8a9ba6">VELOCIDAD DE GIRO NORMALIZADA · 0,30–0,70 s</span><div style="display: flex; gap: 16px; font-size: 13px"><span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 14px; height: 3px; background: #a78bfa"></span>Cadera</span><span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 14px; height: 3px; background: #22d3ee"></span>Tronco</span><span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 14px; height: 3px; background: #f1f5f9"></span>Brazo</span></div></div>
+<div style="height: 250px"><svg viewBox="0 0 700 230" width="100%" height="100%" preserveAspectRatio="none" aria-label="Curvas de velocidad de giro de cadera, tronco y brazo"><rect x="490" y="10" width="140" height="190" fill="#8a9ba6" fill-opacity=".08"></rect><path d="M0 200H700" stroke="#22323c" stroke-width="1"></path><path d="M0 190 C 110 190 150 70 206 70 C 262 70 300 190 400 190 L700 190" stroke="#a78bfa" stroke-width="2.5" fill="none"></path><path d="M0 190 C 120 190 160 45 220 45 C 280 45 330 190 440 190 L700 190" stroke="#22d3ee" stroke-width="2.5" fill="none"></path><path d="M0 190 C 250 190 340 25 420 25 C 500 25 560 180 700 186" stroke="#f1f5f9" stroke-width="2.5" fill="none"></path><path d="M206 10V200" stroke="#e6edf2" stroke-width="1" stroke-dasharray="4 4"></path><circle cx="206" cy="70" r="6" fill="#a78bfa"></circle><circle cx="220" cy="45" r="6" fill="#22d3ee"></circle><circle cx="420" cy="25" r="6" fill="#f1f5f9"></circle></svg></div>
+<div style="position: relative; height: 34px; border-top: 1px solid #22323c">
+<span class="mono" style="position: absolute; left: 25%; top: 10px; font-size: 12px; color: #a78bfa">▲ cadera 0,418</span>
+<span class="mono" style="position: absolute; left: 60%; top: 10px; font-size: 12px; color: #f1f5f9">▲ brazo 0,540</span>
+</div>
+<div style="height: 8px; border-radius: 999px; background: #13222b; position: relative"><div style="width: 29%; height: 100%; border-radius: 999px; background: #4ade80"></div><span style="position: absolute; left: 29%; top: -6px; width: 20px; height: 20px; margin-left: -10px; border-radius: 50%; background: #ffffff; box-shadow: 0 0 0 4px rgba(74,222,128,.35)"></span></div>
+<div style="display: flex; gap: 14px; align-items: flex-start; padding: 14px 16px; border-radius: 12px; border: 1px solid #3b4b56; background: #111b21"><span class="st na"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M5.6 18.4 18.4 5.6"></path></svg>0,58–0,66 s</span><span style="font-size: 14px; line-height: 1.5; color: #c9d5dc">La confianza de la muñeca derecha quedó por debajo del umbral (0,50). El ángulo del codo no se calcula en ese tramo; no se muestra un valor estimado.</span></div>
+</div>
+</div>
+
+<div class="card" style="padding: 28px 32px; display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><h2 class="d" style="margin: 0; font-size: 24px; font-weight: 700; color: #ffffff">Secuenciación de la cadena · golpe 3</h2><span class="mu" style="font-size: 14px">Instante en que cada segmento alcanza su máxima velocidad de giro</span></div>
+<div style="height: 260px"><svg viewBox="0 0 1000 270" width="100%" height="100%" aria-label="Gráfico de secuenciación: cadera 0,418 s, tronco 0,426 s, brazo 0,540 s"><g font-family="JetBrains Mono, monospace" font-size="15" fill="#9aabb6" letter-spacing="2"><text x="0" y="65">CADERA</text><text x="0" y="145">TRONCO</text><text x="0" y="225">BRAZO</text></g><g stroke="#1f2f38" stroke-dasharray="3 6"><path d="M120 60H1000"></path><path d="M120 140H1000"></path><path d="M120 220H1000"></path></g><path d="M120 250H1000" stroke="#2b3b45"></path><g font-family="JetBrains Mono, monospace" font-size="13" fill="#6f808b"><text x="120" y="268" text-anchor="middle">0,30</text><text x="340" y="268" text-anchor="middle">0,40</text><text x="560" y="268" text-anchor="middle">0,50</text><text x="780" y="268" text-anchor="middle">0,60</text><text x="990" y="268" text-anchor="end">0,70 s</text></g><path d="M380 60 397 140 648 220" stroke="#4ade80" stroke-width="2" stroke-opacity=".6" fill="none"></path><circle cx="380" cy="60" r="10" fill="#a78bfa"></circle><circle cx="397" cy="140" r="10" fill="#22d3ee"></circle><circle cx="648" cy="220" r="10" fill="#f1f5f9"></circle><g font-family="JetBrains Mono, monospace" font-size="15" font-weight="600" fill="#ffffff"><text x="398" y="46">0,418 s</text><text x="415" y="126">0,426 s</text><text x="666" y="206">0,540 s</text></g></svg></div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px">
+<div style="padding: 18px 20px; border-radius: 14px; border: 1px solid #1e6a3e; background: #0a1c13; display: flex; flex-direction: column; gap: 10px"><div style="display: flex; gap: 12px; align-items: center"><span class="st ok"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="m8.5 12.5 2.5 2.5 4.5-5"></path></svg>Correcto</span><span style="font-weight: 700; font-size: 16px">Cadera → Tronco</span></div><span style="font-size: 14px; line-height: 1.55; color: #c9d5dc">Cadera primero, Δ 8 ms (2 fotogramas). Coincide con el orden descripto en la literatura (Kovacs y Ellenbecker, 2011).</span></div>
+<div style="padding: 18px 20px; border-radius: 14px; border: 1px solid #22323c; background: #0a151b; display: flex; flex-direction: column; gap: 10px"><div style="display: flex; gap: 12px; align-items: center"><span class="mono" style="font-size: 11px; letter-spacing: .1em; color: #9aabb6; padding: 4px 10px; border: 1px dashed #3b4b56; border-radius: 999px">SIN EVALUAR</span><span style="font-weight: 700; font-size: 16px">Tronco → Brazo</span></div><span style="font-size: 14px; line-height: 1.55; color: #c9d5dc">Brazo 114 ms después del tronco. Se mide el balanceo del brazo, que no tiene una referencia equivalente en la literatura: se informa como dato, sin juicio.</span></div>
+</div>
+</div>
+</section>
+
+<section style="display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; justify-content: space-between; align-items: center">
+<span class="lvl">Nivel 3 · Dato y fundamento</span>
+<div style="display: flex; gap: 8px; align-items: center"><span class="mu" style="font-size: 13px; margin-right: 4px">Estados:</span><span class="st ok">Correcto</span><span class="st lv">Desvío leve</span><span class="st al">Alerta de carga</span><span class="st na">No auditable</span></div>
+</div>
+<div class="card" style="padding: 24px 12px 8px">
+<table>
+<thead><tr><th>Magnitud</th><th>Valor</th><th>Confianza</th><th>Estado</th><th>Fundamento</th></tr></thead>
+<tbody>
+<tr><td style="font-weight: 600">Orden cadera → tronco (G3)</td><td>Cadera primero · Δ 8 ms</td><td class="mono">0,99</td><td><span class="st ok">Correcto</span></td><td class="mu">Kovacs y Ellenbecker (2011)</td></tr>
+<tr><td style="font-weight: 600">Orden cadera → tronco (sesión)</td><td>4 ordenados · 2 a ≤1 fotograma</td><td class="mono">—</td><td><span class="st ok">Correcto</span></td><td class="mu">Golpes 2 y 5: no ordenables a 240 fps</td></tr>
+<tr><td style="font-weight: 600">Balanceo del brazo tras el tronco</td><td>+114 ms</td><td class="mono">0,86</td><td><span class="mono mu" style="font-size: 12px">SIN EVALUAR</span></td><td class="mu">Sin referencia equivalente (dato descriptivo)</td></tr>
+<tr><td style="font-weight: 600">Separación cadera-hombro máx.</td><td>31°</td><td class="mono">0,98</td><td><span class="st lv">Desvío leve</span></td><td class="mu">Sesión 25/9: 37° · variación habitual ±3°</td></tr>
+<tr><td style="font-weight: 600">Flexión máx. rodilla delantera</td><td>48°</td><td class="mono">0,95</td><td><span class="st ok">Correcto</span></td><td class="mu">[Rango de referencia y cita]</td></tr>
+<tr><td style="font-weight: 600">Ángulo de codo derecho en el golpe</td><td class="mu">No se muestra</td><td class="mono">0,31</td><td><span class="st na">No auditable</span></td><td class="mu">Confianza por debajo del umbral (0,50)</td></tr>
+<tr><td style="font-weight: 600">Velocidad pico de giro</td><td>Cadera 640 °/s · Tronco 910 °/s · Brazo 1380 °/s</td><td class="mono">0,99 · 0,99 · 0,86</td><td><span class="mono mu" style="font-size: 12px">SIN EVALUAR</span></td><td class="mu">Dato de apoyo para la secuenciación</td></tr>
+</tbody>
+</table>
+</div>
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px">
+<div class="kv"><span>Motor</span><span>KinetiQ v0.5.0</span></div>
+<div class="kv"><span>Estimación de pose</span><span>MediaPipe Pose · 33 puntos</span></div>
+<div class="kv"><span>Filtro</span><span>Butterworth 4.º orden · fase cero</span></div>
+<div class="kv"><span>Frecuencia de corte</span><span>9 Hz · análisis residual de Winter</span></div>
+<div class="kv"><span>Captura</span><span>240 fps reales</span></div>
+<div class="kv"><span>Umbral de confianza</span><span>0,50</span></div>
+<div class="kv"><span>Cobertura auditable</span><span>Cadera y tronco 6/6 · brazo 5/6</span></div>
+<div class="kv"><span>Generado</span><span>28/09/2026 18:02</span></div>
+</div>
+</section>
+
+<p class="mu" style="margin: 0; font-size: 14px; text-align: center">KinetiQ documenta el movimiento. No diagnostica ni reemplaza la evaluación de un profesional.</p>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":3020}}'>
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

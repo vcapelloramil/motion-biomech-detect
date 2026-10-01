@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>KinetiQ · Evolución</title>
+
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;background:#081015}
+a{color:#4ade80;text-decoration:none}a:hover{color:#86efac}
+.kq{font-family:'DM Sans',system-ui,sans-serif;color:#e6edf2;background-color:#081015;background-image:linear-gradient(rgba(148,163,184,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(148,163,184,.05) 1px,transparent 1px);background-size:72px 72px;box-sizing:border-box}
+.kq *{box-sizing:border-box}
+.d{font-family:'Sora',system-ui,sans-serif;letter-spacing:-0.025em}
+.mono{font-family:'JetBrains Mono',monospace}
+.eb{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:#4ade80}
+.mu{color:#9aabb6}
+.card{background:#0d181e;border:1px solid #1c2a32;border-radius:20px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 22px;border-radius:14px;font-weight:600;font-size:15px;white-space:nowrap}
+.bp{background:linear-gradient(90deg,#4ade80,#10b981);color:#03140b}
+a.bp:hover{color:#03140b}
+.st{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;border:1px solid}
+.na{color:#b4c1ca;border-color:#3b4b56;background:#131e25}
+.nav a{color:#b8c6cf;font-size:15px;padding:10px 16px;border-radius:12px}
+.nav a:hover{color:#fff}
+.nav a.on{background:#13222b;color:#fff}
+.chip{display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border-radius:12px;border:1px solid #22323c;background:#0a141a;color:#b8c6cf;font-size:14px;font-weight:600}
+.chip.on{background:#13222b;color:#fff;border-color:#2f4552}
+.tile{padding:26px 28px;display:flex;flex-direction:column;gap:12px}
+</style>
+</helmet>
+<div class="kq" style="width: 1440px; height: 1300px; display: flex; flex-direction: column">
+
+<header style="display: flex; align-items: center; justify-content: space-between; height: 88px; padding: 0 72px; border-bottom: 1px solid #16242c; flex-shrink: 0">
+<a href="Biblioteca.html" style="display: flex; align-items: center; gap: 12px; color: #ffffff">
+<span style="width: 44px; height: 44px; border-radius: 13px; background: linear-gradient(135deg,#4ade80,#10b981); display: flex; align-items: center; justify-content: center; color: #03140b"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h4l2.5-6 4.5 12 2.5-6H22"></path></svg></span>
+<span style="display: flex; flex-direction: column"><span class="d" style="font-size: 20px; font-weight: 700">KinetiQ</span><span class="mono" style="font-size: 10px; letter-spacing: .2em; color: #8a9ba6">TENNIS · VISION · AI</span></span>
+</a>
+<nav class="nav" style="display: flex; gap: 4px"><a href="Biblioteca.html" class="on">Biblioteca</a><a href="Cargar.html">Cargar</a><a href="Perfil.html">Perfil</a></nav>
+<div style="display: flex; align-items: center; gap: 12px"><a class="btn bp" href="Cargar.html">+ Nueva sesión</a><a href="Perfil.html" aria-label="Perfil de Martín R." style="display: flex; align-items: center; gap: 10px; padding: 6px 14px 6px 6px; border: 1px solid #22323c; border-radius: 999px; color: #c9d5dc"><span class="mono" style="width: 34px; height: 34px; border-radius: 50%; background: #16303a; color: #22d3ee; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600">MR</span><span class="mono" style="font-size: 13px">Martín R.</span></a></div>
+</header>
+
+<main style="padding: 48px 72px 64px; display: flex; flex-direction: column; gap: 32px">
+<div style="display: flex; justify-content: space-between; align-items: flex-end">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<span class="eb">/ Evolución</span>
+<h1 class="d" style="margin: 0; font-size: 58px; font-weight: 800; color: #ffffff">Vos, frente a <span style="color: #4ade80">vos mismo</span></h1>
+<p class="mu" style="margin: 0; font-size: 17px">Martín R. · saque en tres cuartos · últimas 5 sesiones. Solo se comparan sesiones con el mismo encuadre.</p>
+</div>
+<div style="display: flex; gap: 8px"><a class="chip on" href="#">Saque</a><a class="chip" href="#">Drive</a><a class="chip" href="#">Revés</a></div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px">
+<div class="card tile" style="border-color: #1d4350; background: #0b1d23"><span class="mu" style="font-size: 15px">Puntaje de rendimiento</span><div style="display: flex; align-items: baseline; gap: 10px"><span class="d" style="font-size: 44px; line-height: 1; font-weight: 800; color: #ffffff">74</span><span style="font-size: 16px; color: #22d3ee">↑ +3</span></div><span class="mono" style="font-size: 14px; color: #9aabb6">68 → 71 → s/d → 71 → 74</span></div>
+<div class="card tile"><span class="mu" style="font-size: 15px">Separación cadera-hombro</span><div style="display: flex; align-items: center; gap: 12px"><span style="color: #fbbf24; display: flex"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"></path><path d="m6 13 6 6 6-6"></path></svg></span><span class="d" style="font-size: 30px; font-weight: 700; color: #ffffff">Bajó en la última</span></div><span class="mono" style="font-size: 14px; color: #9aabb6">31° · tu rango habitual 34–40°</span></div>
+<div class="card tile"><span class="mu" style="font-size: 15px">Cadera antes que tronco</span><div style="display: flex; align-items: center; gap: 12px"><span style="color: #9aabb6; display: flex"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9h14"></path><path d="M5 15h14"></path></svg></span><span class="d" style="font-size: 30px; font-weight: 700; color: #ffffff">Estable</span></div><span class="mono" style="font-size: 14px; color: #9aabb6">4 de 6 en las últimas tres sesiones</span></div>
+<div class="card tile"><span class="mu" style="font-size: 15px">Golpes medidos completos</span><div style="display: flex; align-items: center; gap: 12px"><span style="color: #4ade80; display: flex"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"></path><path d="m6 11 6-6 6 6"></path></svg></span><span class="d" style="font-size: 30px; font-weight: 700; color: #ffffff">Mejoró</span></div><span class="mono" style="font-size: 14px; color: #9aabb6">5 de 6 · antes 3 de 6</span></div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px">
+<section class="card" style="padding: 28px 30px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><h2 class="d" style="margin: 0; font-size: 21px; font-weight: 700; color: #ffffff">Separación cadera-hombro máxima</h2><span class="mono" style="font-size: 12px; color: #8a9ba6">GRADOS</span></div>
+<div style="height: 280px"><svg viewBox="0 0 600 270" width="100%" height="100%" aria-label="Separación cadera-hombro por sesión: 35, 36, sin dato, 37 y 31 grados"><rect x="30" y="66" width="560" height="77" fill="#4ade80" fill-opacity=".07"></rect><text x="590" y="60" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="12" fill="#6f9e80">rango habitual</text><g font-family="JetBrains Mono, monospace" font-size="12" fill="#6f808b"><text x="22" y="224" text-anchor="end">28°</text><text x="22" y="147" text-anchor="end">34°</text><text x="22" y="70" text-anchor="end">40°</text></g><path d="M30 220H590" stroke="#22323c"></path><path d="M60 130 180 117" stroke="#e6edf2" stroke-width="2.5"></path><path d="M180 117 420 104" stroke="#e6edf2" stroke-width="1.5" stroke-dasharray="5 6" stroke-opacity=".5"></path><path d="M420 104 540 181" stroke="#fbbf24" stroke-width="2.5"></path><circle cx="60" cy="130" r="6" fill="#e6edf2"></circle><circle cx="180" cy="117" r="6" fill="#e6edf2"></circle><circle cx="300" cy="140" r="7" fill="none" stroke="#8a9ba6" stroke-width="2" stroke-dasharray="3 3"></circle><circle cx="420" cy="104" r="6" fill="#e6edf2"></circle><circle cx="540" cy="181" r="7" fill="#fbbf24"></circle><g font-family="JetBrains Mono, monospace" font-size="13" font-weight="600" fill="#e6edf2"><text x="60" y="114" text-anchor="middle">35°</text><text x="180" y="101" text-anchor="middle">36°</text><text x="300" y="124" text-anchor="middle" fill="#8a9ba6" font-weight="400">sin dato</text><text x="420" y="88" text-anchor="middle">37°</text><text x="540" y="206" text-anchor="middle" fill="#fbbf24">31°</text></g><g font-family="JetBrains Mono, monospace" font-size="12" fill="#8a9ba6"><text x="60" y="250" text-anchor="middle">12 sep</text><text x="180" y="250" text-anchor="middle">15 sep</text><text x="300" y="250" text-anchor="middle">18 sep</text><text x="420" y="250" text-anchor="middle">25 sep</text><text x="540" y="250" text-anchor="middle">28 sep</text></g></svg></div>
+<div style="display: flex; gap: 12px; align-items: flex-start"><span class="st na"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M5.6 18.4 18.4 5.6"></path></svg>18 sep</span><span class="mu" style="font-size: 14px; line-height: 1.5">No se midió: la confianza de las caderas quedó por debajo del umbral. No se completa con un valor estimado.</span></div>
+</section>
+
+<section class="card" style="padding: 28px 30px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><h2 class="d" style="margin: 0; font-size: 21px; font-weight: 700; color: #ffffff">Golpes con cadera antes que tronco</h2><span class="mono" style="font-size: 12px; color: #8a9ba6">DE 6 GOLPES</span></div>
+<div style="height: 280px; display: flex; align-items: flex-end; gap: 28px; padding: 0 12px 34px; border-bottom: 1px solid #22323c; position: relative">
+<div style="flex: 1 1 0; display: flex; flex-direction: column; align-items: center; gap: 8px"><span class="mono" style="font-size: 13px; font-weight: 600">3</span><div style="width: 100%; height: 105px; border-radius: 8px 8px 0 0; background: #2a4a57"></div><span class="mono" style="position: absolute; bottom: 8px; font-size: 12px; color: #8a9ba6">12 sep</span></div>
+<div style="flex: 1 1 0; display: flex; flex-direction: column; align-items: center; gap: 8px"><span class="mono" style="font-size: 13px; font-weight: 600">4</span><div style="width: 100%; height: 140px; border-radius: 8px 8px 0 0; background: #2a4a57"></div></div>
+<div style="flex: 1 1 0; display: flex; flex-direction: column; align-items: center; gap: 8px"><span class="mono" style="font-size: 13px; font-weight: 600">2</span><div style="width: 100%; height: 70px; border-radius: 8px 8px 0 0; background: #2a4a57"></div></div>
+<div style="flex: 1 1 0; display: flex; flex-direction: column; align-items: center; gap: 8px"><span class="mono" style="font-size: 13px; font-weight: 600">4</span><div style="width: 100%; height: 140px; border-radius: 8px 8px 0 0; background: #2a4a57"></div></div>
+<div style="flex: 1 1 0; display: flex; flex-direction: column; align-items: center; gap: 8px"><span class="mono" style="font-size: 13px; font-weight: 600; color: #22d3ee">4</span><div style="width: 100%; height: 140px; border-radius: 8px 8px 0 0; background: #22d3ee"></div></div>
+</div>
+<div class="mono" style="display: flex; gap: 28px; padding: 0 12px; margin-top: -8px; font-size: 12px; color: #8a9ba6"><span style="flex: 1 1 0; text-align: center">12 sep</span><span style="flex: 1 1 0; text-align: center">15 sep</span><span style="flex: 1 1 0; text-align: center">18 sep</span><span style="flex: 1 1 0; text-align: center">25 sep</span><span style="flex: 1 1 0; text-align: center; color: #22d3ee">28 sep</span></div>
+<p class="mu" style="margin: 0; font-size: 14px; line-height: 1.5">El resto de los golpes quedaron casi simultáneos (no ordenables a 240 fps) o sin datos suficientes.</p>
+</section>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1300}}'>
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

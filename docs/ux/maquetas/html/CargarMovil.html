@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>KinetiQ · Cargar desde el celular</title>
+
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;background:#081015}
+a{color:#4ade80;text-decoration:none}
+.kq{font-family:'DM Sans',system-ui,sans-serif;color:#e6edf2;background-color:#081015;box-sizing:border-box}
+.kq *{box-sizing:border-box}
+.d{font-family:'Sora',system-ui,sans-serif;letter-spacing:-0.02em}
+.mono{font-family:'JetBrains Mono',monospace}
+.eb{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:#4ade80}
+.mu{color:#9aabb6}
+.card{background:#0d181e;border:1px solid #1c2a32;border-radius:18px}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;min-height:54px;padding:0 20px;border-radius:14px;font-weight:600;font-size:16px}
+.bp{background:linear-gradient(90deg,#4ade80,#10b981);color:#03140b}
+.lb{display:flex;flex-direction:column;gap:8px;font-size:14px;font-weight:600;color:#c9d5dc}
+.seg{display:flex;gap:4px;padding:4px;border:1px solid #22323c;border-radius:13px;background:#0a141a}
+.seg label{position:relative;flex:1 1 0;display:flex;align-items:center;justify-content:center;min-height:44px;border-radius:10px;font-size:14px;font-weight:600;color:#9aabb6;text-align:center}
+.seg label.sel{background:#16303a;color:#fff;box-shadow:inset 0 0 0 1px #2f5563}
+.seg input{position:absolute;opacity:0;width:1px;height:1px}
+.row{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid #1c2a32;border-radius:14px;background:#0a151b}
+.fi{width:40px;height:40px;border-radius:11px;background:#13222b;color:#9aabb6;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tab{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;font-weight:600;color:#8a9ba6;min-width:72px;padding:8px 0}
+.tab.on{color:#4ade80}
+</style>
+</helmet>
+<div class="kq" style="width: 390px; height: 1500px; display: flex; flex-direction: column; position: relative">
+
+<header style="display: flex; align-items: center; justify-content: space-between; height: 64px; padding: 0 16px; border-bottom: 1px solid #16242c; flex-shrink: 0">
+<span style="display: flex; align-items: center; gap: 10px"><span style="width: 34px; height: 34px; border-radius: 10px; background: linear-gradient(135deg,#4ade80,#10b981); display: flex; align-items: center; justify-content: center; color: #03140b"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h4l2.5-6 4.5 12 2.5-6H22"></path></svg></span><span class="d" style="font-size: 17px; font-weight: 700">KinetiQ</span></span>
+<a href="Perfil.html" aria-label="Perfil" class="mono" style="width: 40px; height: 40px; border-radius: 50%; background: #16303a; color: #22d3ee; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600">MR</a>
+</header>
+
+<main style="padding: 22px 16px 120px; display: flex; flex-direction: column; gap: 22px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span class="eb">/ Nueva sesión</span>
+<h1 class="d" style="margin: 0; font-size: 32px; font-weight: 800; color: #ffffff">Cargá tus <span style="color: #4ade80">golpes</span></h1>
+<p class="mu" style="margin: 0; font-size: 15px; line-height: 1.5">Un golpe por video · 120 fps mínimo · hasta 50 MB</p>
+</div>
+
+<div class="lb">Golpe<div class="seg" role="radiogroup" aria-label="Golpe"><label class="sel"><input type="radio" name="g" checked>Saque</label><label><input type="radio" name="g">Drive</label><label><input type="radio" name="g">Revés</label></div></div>
+<div class="lb">Cámara<div class="seg" role="radiogroup" aria-label="Encuadre"><label class="sel"><input type="radio" name="e" checked>De perfil</label><label><input type="radio" name="e">Tres cuartos</label></div></div>
+<div class="lb">Lado de la cámara<div class="seg" role="radiogroup" aria-label="Lado de la cámara"><label><input type="radio" name="l">A tu derecha</label><label class="sel"><input type="radio" name="l" checked>A tu izquierda</label></div></div>
+
+<label style="position: relative; display: flex; align-items: center; gap: 14px; padding: 18px; border: 1.5px dashed #2b3b45; border-radius: 16px; background: #0a141a">
+<span style="width: 48px; height: 48px; border-radius: 14px; background: linear-gradient(135deg,#4ade80,#10b981); color: #03140b; display: flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M10 9.5v5l4-2.5z"></path></svg></span>
+<span style="display: flex; flex-direction: column; gap: 3px"><span style="font-weight: 700; font-size: 16px; color: #ffffff">Elegir de la galería</span><span class="mu" style="font-size: 14px">Podés elegir varios a la vez.</span></span>
+<input type="file" multiple accept="video/mp4,video/quicktime" style="position: absolute; opacity: 0; width: 1px; height: 1px">
+</label>
+
+<div style="display: flex; flex-direction: column; gap: 10px">
+<div class="row"><span class="fi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M10 9.5v5l4-2.5z"></path></svg></span><div style="flex: 1 1 0; display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 600; font-size: 15px">IMG_4012.MOV</span><span class="mono" style="font-size: 12px; color: #8a9ba6">34 MB · 240 fps</span></div><span style="color: #4ade80; display: flex" aria-label="Listo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="m8.5 12.5 2.5 2.5 4.5-5"></path></svg></span></div>
+<div class="row"><span class="fi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M10 9.5v5l4-2.5z"></path></svg></span><div style="flex: 1 1 0; display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 600; font-size: 15px">IMG_4013.MOV</span><span class="mono" style="font-size: 12px; color: #8a9ba6">41 MB · 240 fps</span></div><span style="color: #4ade80; display: flex" aria-label="Listo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="m8.5 12.5 2.5 2.5 4.5-5"></path></svg></span></div>
+<div style="border: 1px solid #72282a; border-radius: 14px; background: #150b0d; display: flex; flex-direction: column">
+<div class="row" style="border: 0; background: transparent"><span class="fi" style="background: #2a1113; color: #f87171"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M10 9.5v5l4-2.5z"></path></svg></span><div style="flex: 1 1 0; display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 600; font-size: 15px">IMG_4015.MOV</span><span class="mono" style="font-size: 12px; color: #8a9ba6">88 MB · 0:19</span></div><span style="color: #f87171; font-weight: 600; font-size: 13px">No entra</span></div>
+<p style="margin: 0; padding: 0 14px 14px; font-size: 14px; line-height: 1.5; color: #f3c4c4">Tiene varios golpes. Recortalo a uno solo: Fotos → Editar → arrastrá los bordes → Guardar como clip nuevo.</p>
+</div>
+</div>
+
+<div class="card" style="padding: 16px; display: flex; gap: 12px; align-items: flex-start">
+<span style="color: #22d3ee; display: flex; margin-top: 2px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></span>
+<p style="margin: 0; font-size: 14px; line-height: 1.5; color: #c9d5dc">Cada golpe tarda unos minutos en analizarse. Podés cerrar la app: te avisamos en la biblioteca cuando esté listo.</p>
+</div>
+</main>
+
+<div style="position: absolute; left: 0; right: 0; bottom: 64px; padding: 12px 16px; background: linear-gradient(180deg,rgba(8,16,21,0),#081015 35%)">
+<a class="btn bp" href="Procesando.html">Analizar 2 golpes</a>
+</div>
+<nav aria-label="Navegación principal" style="position: absolute; left: 0; right: 0; bottom: 0; height: 64px; border-top: 1px solid #16242c; background: #0a141a; display: flex; justify-content: space-around; align-items: center">
+<a class="tab" href="Biblioteca.html"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg>Biblioteca</a>
+<a class="tab on" href="CargarMovil.html" aria-current="page"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4"></path><path d="m7 9 5-5 5 5"></path><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"></path></svg>Cargar</a>
+<a class="tab" href="Perfil.html"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"></path></svg>Perfil</a>
+</nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1500}}'>
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

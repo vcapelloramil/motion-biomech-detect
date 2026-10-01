@@ -6,6 +6,56 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-01 — Checkpoint de la Etapa 4.5 antes de limpiar contexto
+
+**Rama:** `main`. Punto de situación exacto para retomar, sin trabajo nuevo esta entrada (pedido explícito
+de Valentín: solo documentar y commitear).
+
+### Qué está HECHO de la Etapa 4.5
+
+- **Decisión 016 (tentativa):** el MVP parte de un video por golpe, hasta 50 MB; la pantalla de carga
+  rechaza archivos más grandes pidiendo recortar. Subida por partes queda fuera del MVP. Protocolo de
+  grabación actualizado. Se confirma o se revierte recién probando el flujo completo con clips reales — no
+  antes.
+- **Decisión 017:** proveedor y plan de contenedor del motor decididos con datos reales, no con folletos:
+  **Render Starter, USD 7/mes** (512 MB, 0,5 vCPU) procesa un clip real de una repetición en 176–185 s sin
+  caerse (426–427 MB de pico, 3 corridas). No se paga el plan de USD 25.
+- **`model_complexity` queda en `2` hasta nuevo aviso** (instrucción explícita de Valentín, 1/10/2026). El
+  hallazgo de que `complexity=1` corta tiempo y memoria a la mitad en el mismo plan de 7 dólares sigue
+  anotado en la decisión 017 como candidato, **no aplicado**: cambiarlo exige repetir el Criterio 2
+  (se midió con `complexity=2`) y eso no se hace por iniciativa propia.
+- **Dockerfile + `app/medir_contenedor.py`** (`backend/`): corren el pipeline completo dentro de un
+  contenedor Linux real y miden tiempo/RSS por etapa, con el modelo de MediaPipe precalentado en el build.
+  Soportan `--model-complexity` y `--reducir-resolucion` para comparar, no para cambiar el default.
+- **Docker Desktop**, que no arrancaba (bug del "Inference manager"/IA integrada con sockets huérfanos de un
+  apagado anterior sucio), quedó resuelto: carpetas renombradas, `EnableDockerAI` desactivado. Documentado
+  por si vuelve a pasar tras otro apagado sucio.
+- **Supabase:** proyecto creado por Valentín (São Paulo, sin integración GitHub, Data API activa, "exponer
+  tablas nuevas automáticamente" desactivado, RLS automático activado). `backend/.env.example` documenta
+  `SUPABASE_URL` y `SUPABASE_SERVICE_ROLE_KEY`; `.env` sigue ignorado por git.
+- **`docs/ux/`** agregado (especificación del frontend + maquetas: HTML y capturas de Biblioteca, Cargar,
+  Evolución, Perfil, Procesando, Registro, Reporte en sus variantes). **Contenido de Valentín, commiteado sin
+  que Claude lo modifique.**
+
+### Qué FALTA de la Etapa 4.5 (en orden)
+
+1. **4.5.1 — Migraciones SQL.** No empezadas. Esquema del apartado 4.4.6: siete tablas, restricciones,
+   políticas RLS. Con "exponer automáticamente" desactivado en Supabase, cada tabla nueva va a necesitar
+   `GRANT` explícitos además de sus políticas — tenerlo presente al escribirlas.
+2. **4.5.2 — Bucket de Storage.** No empezado.
+3. **4.5.3 — Completar el contenedor.** Hoy corre sobre un archivo montado a mano; falta que descargue el
+   clip de Storage y escriba el resultado mínimo en la base (espera a 4.5.1 y 4.5.2).
+4. **4.5.4 — Despliegue real en Render Starter.** Hoy la medición es con Docker local; falta desplegarlo de
+   punta a punta contra el proyecto Supabase real.
+5. Recién con eso cerrada, el criterio de aceptación completo de la Etapa 4.5 y pasar a la Etapa 5.
+
+### Siguiente paso concreto
+
+Retomar por la tarea 4.5.1 (migraciones SQL del esquema del apartado 4.4.6), con los `GRANT` explícitos que
+pide la configuración de Supabase ya creada.
+
+---
+
 ## 2026-09-29 (tarde) — Etapa 4.5 en marcha: medición real en contenedor, decisión 016 y 017
 
 **Rama:** `main`. Continuación de la entrada de esta misma fecha (cierre de la Etapa 4).

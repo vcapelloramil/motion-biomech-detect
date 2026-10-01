@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>KinetiQ · Reporte simple</title>
+
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;background:#081015}
+a{color:#4ade80;text-decoration:none}a:hover{color:#86efac}
+.kq{font-family:'DM Sans',system-ui,sans-serif;color:#e6edf2;background-color:#081015;background-image:linear-gradient(rgba(148,163,184,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(148,163,184,.05) 1px,transparent 1px);background-size:72px 72px;box-sizing:border-box}
+.kq *{box-sizing:border-box}
+.d{font-family:'Sora',system-ui,sans-serif;letter-spacing:-0.025em}
+.mono{font-family:'JetBrains Mono',monospace}
+.eb{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:#4ade80}
+.mu{color:#9aabb6}
+.card{background:#0d181e;border:1px solid #1c2a32;border-radius:20px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 22px;border-radius:14px;font-weight:600;font-size:15px;white-space:nowrap}
+.bp{background:linear-gradient(90deg,#4ade80,#10b981);color:#03140b}
+a.bp:hover{color:#03140b;filter:brightness(1.06)}
+.bg{border:1px solid #2b3b45;color:#e6edf2;background:#0d181e}
+a.bg:hover{color:#fff}
+.st{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;border:1px solid}
+.ok{color:#4ade80;border-color:#1e6a3e;background:#0b2217}
+.lv{color:#fbbf24;border-color:#6e5418;background:#221a08}
+.na{color:#b4c1ca;border-color:#3b4b56;background:#131e25}
+.nav a{color:#b8c6cf;font-size:15px;padding:10px 16px;border-radius:12px}
+.nav a:hover{color:#fff}
+.nav a.on{background:#13222b;color:#fff}
+.tg{display:flex;padding:5px;gap:4px;border:1px solid #22323c;border-radius:14px;background:#0a141a}
+.tg a{display:flex;align-items:center;min-height:40px;padding:0 18px;border-radius:10px;font-size:14px;font-weight:600;color:#9aabb6}
+.tg a.on{background:#16303a;color:#fff;box-shadow:inset 0 0 0 1px #2f5563}
+.gc{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border-radius:12px;border:1px solid #22323c;background:#0a141a;color:#b8c6cf;font-size:14px;font-weight:600}
+.gc.on{border-color:#2f5563;background:#16303a;color:#fff}
+.fr{position:relative;height:380px;border-radius:18px;overflow:hidden;background:radial-gradient(120% 90% at 50% 20%,#1b3340 0%,#0b161c 70%);border:1px solid #1f2f38;display:flex;align-items:center;justify-content:center}
+.ft{position:absolute;top:14px;left:14px;font-family:'JetBrains Mono',monospace;font-size:12px;padding:7px 11px;border-radius:9px;background:rgba(8,16,21,.82);border:1px solid #22323c;color:#c9d5dc}
+.tile{padding:26px 28px;display:flex;flex-direction:column;gap:12px}
+</style>
+</helmet>
+<div class="kq" style="width: 1440px; height: 2420px; display: flex; flex-direction: column">
+
+<header style="display: flex; align-items: center; justify-content: space-between; height: 88px; padding: 0 72px; border-bottom: 1px solid #16242c; flex-shrink: 0">
+<a href="Biblioteca.html" style="display: flex; align-items: center; gap: 12px; color: #ffffff">
+<span style="width: 44px; height: 44px; border-radius: 13px; background: linear-gradient(135deg,#4ade80,#10b981); display: flex; align-items: center; justify-content: center; color: #03140b"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h4l2.5-6 4.5 12 2.5-6H22"></path></svg></span>
+<span style="display: flex; flex-direction: column"><span class="d" style="font-size: 20px; font-weight: 700">KinetiQ</span><span class="mono" style="font-size: 10px; letter-spacing: .2em; color: #8a9ba6">TENNIS · VISION · AI</span></span>
+</a>
+<nav class="nav" style="display: flex; gap: 4px"><a href="Biblioteca.html" class="on">Biblioteca</a><a href="Cargar.html">Cargar</a><a href="Perfil.html">Perfil</a></nav>
+<div style="display: flex; align-items: center; gap: 12px"><a class="btn bp" href="Cargar.html">+ Nueva sesión</a><a href="Perfil.html" aria-label="Perfil de Martín R." style="display: flex; align-items: center; gap: 10px; padding: 6px 14px 6px 6px; border: 1px solid #22323c; border-radius: 999px; color: #c9d5dc"><span class="mono" style="width: 34px; height: 34px; border-radius: 50%; background: #16303a; color: #22d3ee; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600">MR</span><span class="mono" style="font-size: 13px">Martín R.</span></a></div>
+</header>
+
+<main style="padding: 40px 72px 56px; display: flex; flex-direction: column; gap: 44px">
+
+<div style="display: flex; flex-direction: column; gap: 18px">
+<nav aria-label="Ruta" class="mono" style="font-size: 13px; color: #8a9ba6; display: flex; gap: 10px"><a href="Biblioteca.html" style="color: #9aabb6">Biblioteca</a><span aria-hidden="true">/</span><span>Saque · tres cuartos · 28 sep 2026</span></nav>
+<div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 32px">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h1 class="d" style="margin: 0; font-size: 60px; font-weight: 800; color: #ffffff">Saque · <span style="color: #4ade80">6 golpes</span></h1>
+<p class="mu" style="margin: 0; font-size: 17px">28 sep 2026 · grabado a 240 fps · cámara en tres cuartos · Martín R.</p>
+</div>
+<div style="display: flex; align-items: center; gap: 12px">
+<div class="tg" role="group" aria-label="Vista del reporte"><a href="ReporteSimple.html" class="on" aria-current="page">Simple</a><a href="ReporteDetallado.html">Detallado</a></div>
+<a class="btn bg" href="ReportePDF1.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v12"></path><path d="m7 11 5 5 5-5"></path><path d="M4 20h16"></path></svg>Descargar PDF</a>
+</div>
+</div>
+</div>
+
+<section class="card" style="padding: 30px 36px; display: flex; gap: 44px; align-items: center; border-color: #1d4350; background: linear-gradient(90deg,#0b1d23 0%,#0d181e 55%)">
+<div style="width: 300px; flex-shrink: 0; display: flex; flex-direction: column; gap: 10px">
+<span class="eb" style="color: #22d3ee">Puntaje de rendimiento</span>
+<div style="display: flex; align-items: baseline; gap: 8px"><span class="d" style="font-size: 88px; line-height: 1; font-weight: 800; color: #ffffff">74</span><span class="mono" style="font-size: 20px; color: #8a9ba6">/ 100</span></div>
+<span style="display: inline-flex; align-items: center; gap: 8px; font-size: 15px; color: #c9d5dc"><span style="color: #22d3ee; display: flex"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"></path><path d="m6 11 6-6 6 6"></path></svg></span>+3 frente a tu sesión del 25 sep</span>
+<span class="mu" style="font-size: 13px; line-height: 1.5">Comparado con tus propias sesiones, no con otros jugadores.</span>
+</div>
+<div style="flex: 1 1 0; display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font-weight: 700; font-size: 16px">Consistencia entre golpes</span><span class="mono" style="font-size: 15px; font-weight: 600">82</span></div><div style="height: 8px; border-radius: 999px; background: #13222b"><div style="width: 82%; height: 100%; border-radius: 999px; background: #22d3ee"></div></div><span class="mu" style="font-size: 14px">Tus 6 saques se parecieron mucho entre sí.</span></div>
+<div style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font-weight: 700; font-size: 16px">Velocidad de giro del tronco</span><span class="mono" style="font-size: 15px; font-weight: 600">93</span></div><div style="height: 8px; border-radius: 999px; background: #13222b"><div style="width: 93%; height: 100%; border-radius: 999px; background: #22d3ee"></div></div><span class="mu" style="font-size: 14px">910 °/s. Tu mejor sesión llegó a 980 °/s.</span></div>
+<div style="display: flex; flex-direction: column; gap: 8px"><div style="display: flex; justify-content: space-between; align-items: baseline"><span style="font-weight: 700; font-size: 16px">Separación cadera-hombro</span><span class="mono" style="font-size: 15px; font-weight: 600">48</span></div><div style="height: 8px; border-radius: 999px; background: #13222b"><div style="width: 48%; height: 100%; border-radius: 999px; background: #22d3ee"></div></div><span class="mu" style="font-size: 14px">31°, por debajo de tu rango habitual (34–40°).</span></div>
+<a href="ReporteDetallado.html" style="font-weight: 600; font-size: 15px">Cómo se calcula →</a>
+</div>
+</section>
+
+<section style="display: flex; flex-direction: column; gap: 20px">
+<span class="eb">Lo más importante</span>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px">
+
+<article class="card" style="padding: 28px; display: flex; flex-direction: column; gap: 16px; border-color: #1e6a3e">
+<span class="st ok" style="align-self: flex-start"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="m8.5 12.5 2.5 2.5 4.5-5"></path></svg>Correcto</span>
+<h2 class="d" style="margin: 0; font-size: 23px; line-height: 1.3; font-weight: 700; color: #ffffff">Tu cadera empezó a girar antes que tu tronco</h2>
+<p style="margin: 0; font-size: 16px; line-height: 1.6; color: #c9d5dc">Pasó en 4 de 6 saques. Es el orden que describe la literatura para el saque: el giro arranca abajo y sube.</p>
+<a href="#momentos" style="margin-top: auto; font-weight: 600; font-size: 15px">Verlo en tu video →</a>
+</article>
+
+<article class="card" style="padding: 28px; display: flex; flex-direction: column; gap: 16px; border-color: #6e5418">
+<span class="st lv" style="align-self: flex-start"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2 20h20z"></path><path d="M12 10v4"></path><path d="M12 17h.01"></path></svg>Desvío leve</span>
+<h2 class="d" style="margin: 0; font-size: 23px; line-height: 1.3; font-weight: 700; color: #ffffff">Tu cadera y tus hombros se separaron menos que la vez anterior</h2>
+<p style="margin: 0; font-size: 16px; line-height: 1.6; color: #c9d5dc">31° hoy contra 37° el 25 de septiembre. La diferencia es mayor que lo que suele variar entre tus sesiones.</p>
+<a href="Evolucion.html" style="margin-top: auto; font-weight: 600; font-size: 15px">Ver tu evolución →</a>
+</article>
+
+<article class="card" style="padding: 28px; display: flex; flex-direction: column; gap: 16px; border-color: #3b4b56">
+<span class="st na" style="align-self: flex-start"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M5.6 18.4 18.4 5.6"></path></svg>No auditable</span>
+<h2 class="d" style="margin: 0; font-size: 23px; line-height: 1.3; font-weight: 700; color: #ffffff">No pudimos medir el ángulo de tu codo derecho al golpear</h2>
+<p style="margin: 0; font-size: 16px; line-height: 1.6; color: #c9d5dc">En 5 de 6 saques la cámara no veía bien tu brazo derecho. No mostramos un valor estimado. Para la próxima, probá grabar desde tu lado derecho.</p>
+<a href="ReporteDetallado.html" style="margin-top: auto; font-weight: 600; font-size: 15px">Ver qué se midió →</a>
+</article>
+</div>
+</section>
+
+<section id="momentos" style="display: flex; flex-direction: column; gap: 22px">
+<div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 24px">
+<div style="display: flex; flex-direction: column; gap: 10px"><span class="eb">Tu saque en tres momentos</span><h2 class="d" style="margin: 0; font-size: 34px; font-weight: 700; color: #ffffff">Así se movió tu cuerpo en el golpe 3</h2></div>
+<div role="group" aria-label="Elegir golpe" style="display: flex; gap: 8px">
+<a class="gc" href="#momentos">1</a><a class="gc" href="#momentos"><span style="width: 8px; height: 8px; border-radius: 50%; background: #8a9ba6"></span>2</a><a class="gc on" href="#momentos" aria-current="true">3</a><a class="gc" href="#momentos">4</a><a class="gc" href="#momentos"><span style="width: 8px; height: 8px; border-radius: 50%; background: #8a9ba6"></span>5</a><a class="gc" href="#momentos">6</a>
+</div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px">
+<figure style="margin: 0; display: flex; flex-direction: column; gap: 14px">
+<div class="fr"><div style="width: 230px; height: 345px"><svg viewBox="0 0 200 300" width="100%" height="100%" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g stroke="#56666f" stroke-width="3"><path d="M100 50v20"></path><path d="M82 70 68 42 64 14"></path><path d="M82 70h36"></path><path d="M82 70 88 150"></path><path d="M118 70 112 150"></path><path d="M118 70 136 54 126 28"></path><path d="M88 150 76 212 68 274"></path><path d="M112 150 126 210 138 272"></path></g><circle cx="100" cy="36" r="13" stroke="#56666f" stroke-width="3"></circle><path d="M88 150h24" stroke="#a78bfa" stroke-width="18" stroke-opacity=".25"></path><path d="M88 150h24" stroke="#a78bfa" stroke-width="7"></path><g fill="#e6edf2"><circle cx="88" cy="150" r="4.5"></circle><circle cx="112" cy="150" r="4.5"></circle></g></svg></div><span class="ft">0,418 s</span></div>
+<figcaption style="display: flex; gap: 14px; align-items: flex-start"><span class="mono" style="width: 34px; height: 34px; border-radius: 50%; background: #1d1733; color: #a78bfa; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; flex-shrink: 0">1</span><span style="display: flex; flex-direction: column; gap: 4px"><span class="d" style="font-size: 20px; font-weight: 700; color: #ffffff">Cadera</span><span class="mu" style="font-size: 15px">Llega a su giro más rápido.</span></span></figcaption>
+</figure>
+
+<figure style="margin: 0; display: flex; flex-direction: column; gap: 14px">
+<div class="fr"><div style="width: 230px; height: 345px"><svg viewBox="0 0 200 300" width="100%" height="100%" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g stroke="#56666f" stroke-width="3"><path d="M100 50v20"></path><path d="M82 70 68 42 64 14"></path><path d="M88 150h24"></path><path d="M82 70 88 150"></path><path d="M118 70 112 150"></path><path d="M118 70 140 50 142 22"></path><path d="M88 150 76 212 68 274"></path><path d="M112 150 126 210 138 272"></path></g><circle cx="100" cy="36" r="13" stroke="#56666f" stroke-width="3"></circle><path d="M82 70h36" stroke="#22d3ee" stroke-width="18" stroke-opacity=".25"></path><path d="M82 70h36" stroke="#22d3ee" stroke-width="7"></path><g fill="#e6edf2"><circle cx="82" cy="70" r="4.5"></circle><circle cx="118" cy="70" r="4.5"></circle></g></svg></div><span class="ft">0,426 s</span></div>
+<figcaption style="display: flex; gap: 14px; align-items: flex-start"><span class="mono" style="width: 34px; height: 34px; border-radius: 50%; background: #0c2830; color: #22d3ee; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; flex-shrink: 0">2</span><span style="display: flex; flex-direction: column; gap: 4px"><span class="d" style="font-size: 20px; font-weight: 700; color: #ffffff">Tronco</span><span class="mu" style="font-size: 15px">Casi enseguida, gira el tronco.</span></span></figcaption>
+</figure>
+
+<figure style="margin: 0; display: flex; flex-direction: column; gap: 14px">
+<div class="fr"><div style="width: 230px; height: 345px"><svg viewBox="0 0 200 300" width="100%" height="100%" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g stroke="#56666f" stroke-width="3"><path d="M100 50v20"></path><path d="M82 70 72 50 72 24"></path><path d="M82 70h36"></path><path d="M88 150h24"></path><path d="M82 70 88 150"></path><path d="M118 70 112 150"></path><path d="M88 150 76 212 68 274"></path><path d="M112 150 126 210 138 272"></path></g><circle cx="100" cy="36" r="13" stroke="#56666f" stroke-width="3"></circle><path d="M118 70 124 38 128 6" stroke="#f1f5f9" stroke-width="18" stroke-opacity=".2"></path><path d="M118 70 124 38 128 6" stroke="#f1f5f9" stroke-width="7"></path><g fill="#e6edf2"><circle cx="118" cy="70" r="4.5"></circle><circle cx="124" cy="38" r="4.5"></circle></g></svg></div><span class="ft">0,540 s</span></div>
+<figcaption style="display: flex; gap: 14px; align-items: flex-start"><span class="mono" style="width: 34px; height: 34px; border-radius: 50%; background: #1d2a32; color: #f1f5f9; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; flex-shrink: 0">3</span><span style="display: flex; flex-direction: column; gap: 4px"><span class="d" style="font-size: 20px; font-weight: 700; color: #ffffff">Brazo</span><span class="mu" style="font-size: 15px">Un instante después, el brazo.</span></span></figcaption>
+</figure>
+</div>
+
+<div style="display: flex; gap: 20px">
+<div class="card" style="flex: 1 1 0; padding: 22px 26px; display: flex; align-items: center; gap: 16px">
+<span style="color: #4ade80; display: flex"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="m13 6 6 6-6 6"></path></svg></span>
+<p style="margin: 0; font-size: 17px; line-height: 1.5; color: #e6edf2">Primero giró tu <strong style="color: #a78bfa">cadera</strong>, casi enseguida tu <strong style="color: #22d3ee">tronco</strong> y un instante después tu <strong style="color: #ffffff">brazo</strong>.</p>
+</div>
+<div class="card" style="flex: 1 1 0; padding: 22px 26px; display: flex; align-items: flex-start; gap: 16px; border-color: #3b4b56">
+<span class="st na" style="flex-shrink: 0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M5.6 18.4 18.4 5.6"></path></svg>Golpes 2 y 5</span>
+<p style="margin: 0; font-size: 16px; line-height: 1.55; color: #c9d5dc">Tu cadera y tu tronco giraron casi al mismo tiempo. A 240 fps no se puede saber cuál fue primero, así que no lo evaluamos.</p>
+</div>
+</div>
+</section>
+
+<section style="display: flex; flex-direction: column; gap: 20px">
+<div style="display: flex; justify-content: space-between; align-items: flex-end"><div style="display: flex; flex-direction: column; gap: 10px"><span class="eb">Comparado con vos mismo</span><h2 class="d" style="margin: 0; font-size: 34px; font-weight: 700; color: #ffffff">Frente a tu sesión del 25 sep</h2></div><a href="Evolucion.html" style="font-weight: 600; font-size: 15px">Ver toda tu evolución →</a></div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px">
+<div class="card tile"><span class="mu" style="font-size: 15px">Separación cadera-hombro</span><div style="display: flex; align-items: center; gap: 12px"><span style="color: #fbbf24; display: flex"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"></path><path d="m6 13 6 6 6-6"></path></svg></span><span class="d" style="font-size: 30px; font-weight: 700; color: #ffffff">Menor</span></div><span class="mono" style="font-size: 14px; color: #9aabb6">31° · antes 37°</span></div>
+<div class="card tile"><span class="mu" style="font-size: 15px">Cadera antes que tronco</span><div style="display: flex; align-items: center; gap: 12px"><span style="color: #9aabb6; display: flex"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9h14"></path><path d="M5 15h14"></path></svg></span><span class="d" style="font-size: 30px; font-weight: 700; color: #ffffff">Igual</span></div><span class="mono" style="font-size: 14px; color: #9aabb6">4 de 6 golpes · antes 4 de 6</span></div>
+<div class="card tile"><span class="mu" style="font-size: 15px">Golpes medidos completos</span><div style="display: flex; align-items: center; gap: 12px"><span style="color: #4ade80; display: flex"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"></path><path d="m6 11 6-6 6 6"></path></svg></span><span class="d" style="font-size: 30px; font-weight: 700; color: #ffffff">Más</span></div><span class="mono" style="font-size: 14px; color: #9aabb6">5 de 6 golpes · antes 3 de 6</span></div>
+</div>
+</section>
+
+<section class="card" style="padding: 32px 36px; display: flex; justify-content: space-between; align-items: center; gap: 32px; border-color: #1d4350; background: linear-gradient(90deg,#0b1d23,#0d181e)">
+<div style="display: flex; flex-direction: column; gap: 8px"><h2 class="d" style="margin: 0; font-size: 24px; font-weight: 700; color: #ffffff">¿Se lo querés mostrar a tu entrenador o kinesiólogo?</h2><p class="mu" style="margin: 0; font-size: 16px; line-height: 1.55; max-width: 680px">El PDF trae el detalle técnico: cada valor, qué tan confiable fue la medición y la referencia de cada criterio.</p></div>
+<div style="display: flex; gap: 12px"><a class="btn bg" href="ReporteDetallado.html">Ver detalle técnico</a><a class="btn bp" href="ReportePDF1.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v12"></path><path d="m7 11 5 5 5-5"></path><path d="M4 20h16"></path></svg>Descargar PDF</a></div>
+</section>
+
+<p class="mu" style="margin: 0; font-size: 14px; text-align: center">KinetiQ documenta el movimiento. No diagnostica ni reemplaza la evaluación de un profesional.</p>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2420}}'>
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

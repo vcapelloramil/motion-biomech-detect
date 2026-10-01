@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>KinetiQ · Procesando</title>
+
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;background:#081015}
+a{color:#4ade80;text-decoration:none}a:hover{color:#86efac}
+.kq{font-family:'DM Sans',system-ui,sans-serif;color:#e6edf2;background-color:#081015;background-image:linear-gradient(rgba(148,163,184,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(148,163,184,.05) 1px,transparent 1px);background-size:72px 72px;box-sizing:border-box}
+.kq *{box-sizing:border-box}
+.d{font-family:'Sora',system-ui,sans-serif;letter-spacing:-0.025em}
+.mono{font-family:'JetBrains Mono',monospace}
+.eb{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:#4ade80}
+.mu{color:#9aabb6}
+.card{background:#0d181e;border:1px solid #1c2a32;border-radius:20px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 22px;border-radius:14px;font-weight:600;font-size:15px;white-space:nowrap}
+.bg{border:1px solid #2b3b45;color:#e6edf2;background:#0d181e}
+a.bg:hover{color:#fff}
+.nav a{color:#b8c6cf;font-size:15px;padding:10px 16px;border-radius:12px}
+.nav a:hover{color:#fff}
+.nav a.on{background:#13222b;color:#fff}
+.stg{display:flex;gap:16px;align-items:flex-start;padding:14px 0}
+.dot{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tech{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;color:#6f808b;text-transform:uppercase}
+.cl{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:14px;background:#0a151b;border:1px solid #1c2a32}
+</style>
+</helmet>
+<div class="kq" style="width: 1440px; height: 1100px; display: flex; flex-direction: column">
+
+<header style="display: flex; align-items: center; justify-content: space-between; height: 88px; padding: 0 72px; border-bottom: 1px solid #16242c; flex-shrink: 0">
+<a href="Biblioteca.html" style="display: flex; align-items: center; gap: 12px; color: #ffffff">
+<span style="width: 44px; height: 44px; border-radius: 13px; background: linear-gradient(135deg,#4ade80,#10b981); display: flex; align-items: center; justify-content: center; color: #03140b"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h4l2.5-6 4.5 12 2.5-6H22"></path></svg></span>
+<span style="display: flex; flex-direction: column"><span class="d" style="font-size: 20px; font-weight: 700">KinetiQ</span><span class="mono" style="font-size: 10px; letter-spacing: .2em; color: #8a9ba6">TENNIS · VISION · AI</span></span>
+</a>
+<nav class="nav" style="display: flex; gap: 4px"><a href="Biblioteca.html" class="on">Biblioteca</a><a href="Cargar.html">Cargar</a><a href="Perfil.html">Perfil</a></nav>
+<div style="display: flex; align-items: center; gap: 12px"><a href="Perfil.html" aria-label="Perfil de Martín R." style="display: flex; align-items: center; gap: 10px; padding: 6px 14px 6px 6px; border: 1px solid #22323c; border-radius: 999px; color: #c9d5dc"><span class="mono" style="width: 34px; height: 34px; border-radius: 50%; background: #16303a; color: #22d3ee; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600">MR</span><span class="mono" style="font-size: 13px">Martín R.</span></a></div>
+</header>
+
+<main style="padding: 56px 72px; display: flex; flex-direction: column; gap: 32px">
+<div style="display: flex; justify-content: space-between; align-items: flex-end">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<span class="eb" style="color: #22d3ee">/ Procesando</span>
+<h1 class="d" style="margin: 0; font-size: 56px; font-weight: 800; color: #ffffff">Estamos analizando <span style="color: #22d3ee">tu sesión</span></h1>
+<p class="mu" style="margin: 0; font-size: 18px">Saque · de perfil · 3 golpes · empezó hoy a las 17:40</p>
+</div>
+<a class="btn bg" href="Biblioteca.html">Volver a la biblioteca</a>
+</div>
+
+<div style="display: flex; align-items: center; gap: 16px; padding: 18px 22px; border-radius: 16px; border: 1px solid #1d4350; background: #0b1b21">
+<span style="color: #22d3ee; display: flex"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></span>
+<p style="margin: 0; font-size: 16px; color: #d5dfe5">Cada golpe tarda unos minutos. <strong style="color: #ffffff">Podés cerrar esta página:</strong> cuando termine, la sesión aparece lista en tu biblioteca.</p>
+</div>
+
+<div style="display: flex; gap: 28px; align-items: flex-start">
+<section class="card" style="flex: 1 1 0; padding: 30px 34px; display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px"><h2 class="d" style="margin: 0; font-size: 22px; font-weight: 700; color: #ffffff">Golpe 2 de 3 · saque_02.mov</h2><span class="mono" style="font-size: 13px; color: #22d3ee">EN CURSO</span></div>
+
+<div class="stg"><span class="dot" style="background: #0b2217; color: #4ade80"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg></span><div style="flex: 1 1 0; display: flex; flex-direction: column; gap: 4px"><span style="font-weight: 600; font-size: 16px">Leyendo el video</span><span class="mu" style="font-size: 14px">Se detectaron 240 fps reales: se puede medir el golpe completo.</span><span class="tech">E0 · Ingesta</span></div></div>
+
+<div class="stg"><span class="dot" style="background: #0b2217; color: #4ade80"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg></span><div style="flex: 1 1 0; display: flex; flex-direction: column; gap: 4px"><span style="font-weight: 600; font-size: 16px">Detectando tu cuerpo</span><span class="mu" style="font-size: 14px">33 puntos del cuerpo en cada cuadro del video.</span><span class="tech">E1 · Pose (MediaPipe)</span></div></div>
+
+<div class="stg"><span class="dot" style="background: #0b1b21; color: #22d3ee; box-shadow: inset 0 0 0 2px #22d3ee"><span style="width: 8px; height: 8px; border-radius: 50%; background: #22d3ee"></span></span><div style="flex: 1 1 0; display: flex; flex-direction: column; gap: 8px"><span style="font-weight: 600; font-size: 16px; color: #ffffff">Descartando puntos dudosos</span><span class="mu" style="font-size: 14px">Lo que no se ve con confianza se marca como no auditable, nunca se inventa.</span><div style="height: 8px; border-radius: 999px; background: #13222b; overflow: hidden"><div style="width: 58%; height: 100%; background: #22d3ee; border-radius: 999px"></div></div><span class="tech">E1b · Validación · 58 %</span></div></div>
+
+<div class="stg" style="opacity: .55"><span class="dot" style="box-shadow: inset 0 0 0 2px #2b3b45"></span><div style="flex: 1 1 0; display: flex; flex-direction: column; gap: 4px"><span style="font-weight: 600; font-size: 16px">Limpiando la señal</span><span class="tech">E3 · Filtro de fase cero</span></div></div>
+<div class="stg" style="opacity: .55"><span class="dot" style="box-shadow: inset 0 0 0 2px #2b3b45"></span><div style="flex: 1 1 0; display: flex; flex-direction: column; gap: 4px"><span style="font-weight: 600; font-size: 16px">Midiendo giros y ángulos</span><span class="tech">E4 · Cinemática y orden de picos</span></div></div>
+<div class="stg" style="opacity: .55"><span class="dot" style="box-shadow: inset 0 0 0 2px #2b3b45"></span><div style="flex: 1 1 0; display: flex; flex-direction: column; gap: 4px"><span style="font-weight: 600; font-size: 16px">Armando tu reporte</span><span class="tech">E5 · Auditoría</span></div></div>
+</section>
+
+<aside style="width: 460px; flex-shrink: 0; display: flex; flex-direction: column; gap: 20px">
+<section class="card" style="padding: 26px 28px; display: flex; flex-direction: column; gap: 12px">
+<h2 class="d" style="margin: 0 0 6px; font-size: 19px; font-weight: 700; color: #ffffff">Golpes de esta sesión</h2>
+<div class="cl"><span style="color: #4ade80; display: flex"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="m8.5 12.5 2.5 2.5 4.5-5"></path></svg></span><div style="flex: 1 1 0; display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 600; font-size: 15px">saque_01.mov</span><span class="mono" style="font-size: 12px; color: #8a9ba6">240 fps · listo</span></div></div>
+<div class="cl" style="border-color: #1d4350"><span style="color: #22d3ee; display: flex"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></span><div style="flex: 1 1 0; display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 600; font-size: 15px">saque_02.mov</span><span class="mono" style="font-size: 12px; color: #8a9ba6">240 fps · en curso</span></div></div>
+<div class="cl"><span style="color: #8a9ba6; display: flex"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M8 12h8"></path></svg></span><div style="flex: 1 1 0; display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 600; font-size: 15px">saque_04.mov</span><span class="mono" style="font-size: 12px; color: #8a9ba6">60 fps · en cola · solo preparación</span></div></div>
+<p class="mu" style="margin: 6px 0 0; font-size: 14px; line-height: 1.5">saque_03.mov no se subió porque pesaba más de 50 MB.</p>
+</section>
+</aside>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
