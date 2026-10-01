@@ -6,6 +6,127 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-01 (tarde) — Esquema de datos rediseñado (decisión 018) y migraciones escritas
+
+**Rama:** `main`. Continuación de la tarea 4.5.1 desde el checkpoint de esta misma mañana.
+
+**Lo pedido por Valentín al retomar:** antes de escribir las migraciones, revisar que el esquema del apartado
+4.4.6 contemplara lo que ya muestra `docs/ux/especificacion-frontend.md` §9 (sesión como grupo de videos, rol
+y vista por defecto del usuario, reporte a nivel de sesión con puntaje) — para no tener que rehacer las
+migraciones en la Etapa 5. Presentar el esquema propuesto y esperar el OK antes de aplicarlo.
+
+**Hecho:**
+
+- **Decisión 018:** esquema de nueve tablas, no siete. Se agregan `sesiones` (agrupa videos del mismo
+  atleta/gesto/encuadre/lado de cámara) y `reportes_sesion` (puntaje, componentes, observaciones agregadas);
+  se modifican `usuarios` (`vista_por_defecto`) y `videos` (`sesion_id`, pierde `gesto`/`atleta_id`, gana
+  rutas de miniatura y de los tres fotogramas clave). Tres puntos de diseño confirmados por Valentín, cada
+  uno con su razón documentada en la decisión:
+  1. `estado_agregado` de la sesión es una vista (`sesiones_resumen`), no una columna — evita un trigger de
+     sincronización que el volumen actual no justifica.
+  2. `alertas.severidad` usa los cuatro estados de R3 (`correcto`/`desvio_leve`/`alerta_de_carga`/
+     `no_auditable`), no los tres que trae congelados `reporte.py` desde la Etapa 0. **Desalineación
+     conocida entre la base y el contrato del motor, dejada a propósito**: Valentín pidió que sea
+     explícitamente **lo primero que se resuelve al arrancar la Etapa 5**, antes de generar cualquier JSON
+     real — no se toca `reporte.py` ahora.
+  3. RLS completo en las nueve tablas ahora (no solo una de prueba, aunque el plan lo permitía diferir a la
+     Etapa 7), con una prueba automática de aislamiento pedida por Valentín (verifica RNF-07: un usuario no
+     lee/modifica/borra datos de otro, y un cliente sin sesión no lee nada).
+  - Además, a pedido de Valentín: el puntaje total de `reportes_sesion` sale del jsonb y queda en columnas
+    tipadas (`puntaje`, `estado_puntaje`, `version_formula`) — la pantalla de Evolución lo consulta a
+    través de varias sesiones, y la versión de la fórmula es trazabilidad (R4). `componentes` y
+    `observaciones` siguen en jsonb: su forma recién se congela en una decisión de la Etapa 5.
+- **Migraciones escritas, no aplicadas todavía:** `supabase/migrations/20261001090000_esquema_inicial.sql`
+  (extensión, nueve tablas, restricciones, índices, la vista `sesiones_resumen` con
+  `security_invoker = true` — sin eso, una vista ignora la RLS de quien consulta) y
+  `supabase/migrations/20261001090100_rls_policies.sql` (RLS + políticas + `GRANT` explícito a
+  `authenticated` por tabla, nunca a `anon`). *(Corrección más abajo: lo que decía acá sobre
+  `service_role` resultó estar mal — sí necesita su propio GRANT.)*
+- **Prueba de aislamiento:** `tests/integration/test_rls_aislamiento.py`. Crea dos usuarios de prueba y datos
+  de ejemplo del usuario A contra el proyecto Supabase real (vía `service_role`), verifica que el usuario B y
+  un cliente sin sesión no pueden leer/modificar/borrar nada ajeno (incluida la vista `sesiones_resumen`, que
+  es justo donde se notaría si `security_invoker` se hubiera olvidado), y limpia todo al terminar. Se salta
+  sin `SUPABASE_URL`/`SUPABASE_ANON_KEY`/`SUPABASE_SERVICE_ROLE_KEY`. Agregado `supabase==2.31.0` a
+  `backend/requirements.txt` (lo va a necesitar también el contenedor en la tarea 4.5.3) y helpers
+  `get_supabase_*()` en `backend/app/config.py`, mismo patrón que `get_data_dir()`.
+- **`backend/.env.example`:** se agrega `SUPABASE_ANON_KEY` (antes decía "no hace falta hasta la Etapa 6-8";
+  hace falta ahora porque la prueba de aislamiento se autentica como los usuarios de prueba). No es secreta,
+  pero sigue sin versionarse.
+- **Render, plan gratuito — verificado contra la documentación oficial (no folletos), a pedido de Valentín:**
+  misma RAM que Starter (512 MB), pero **0,1 vCPU contra 0,5 de Starter** (5 veces menos) y **el tipo de
+  servicio "Background Worker" no existe en el plan gratuito** (solo Web Service, Postgres, Key Value,
+  estático). Para probarlo gratis, el contenedor se va a tener que desplegar como Web Service (responde a
+  HTTP), no como worker. Con la CPU 5 veces menor, es esperable que el mismo clip de la decisión 017 tarde
+  bastante más que los 176–185 s medidos a 0,5 vCPU — posiblemente cerca o por encima de los 10 minutos que
+  Valentín marcó como aceptable, pero **no se proyectó, queda para medir de verdad en la tarea 4.5.4**, con el
+  mismo clip, cuando se despliegue. Fuentes: render.com/docs/free, render.com/docs/compute-plans,
+  render.com/docs/background-workers.
+
+**Tres ajustes de Valentín al esquema, mismo día, antes de aplicar nada** (migraciones editadas directamente,
+no aplicadas todavía — no hay regla de "nunca editar" que violar):
+
+1. **`estado_puntaje` reemplaza a `puntaje_auditable`.** Un booleano no distinguía "no auditable" de "Desde tu
+   2.ª sesión de este golpe" (sin referencia previa), y la especificación de frontend §7 los muestra distinto.
+   Ahora `estado_puntaje check in ('calculado', 'no_auditable', 'sin_referencia')`, `not null` sin default;
+   `puntaje` no nulo solo si `estado_puntaje = 'calculado'`.
+2. **Borrado en cascada: confirmado, no corregido.** Las FK ya estaban bien encadenadas desde
+   `auth.users` hasta las siete tablas de datos de usuario; lo que faltaba era demostrarlo. Prueba nueva:
+   `tests/integration/test_cascada_borrado_usuario.py`. Anotado lo que la cascada NO hace: no borra los
+   archivos en Storage (son `storage.objects`, no filas de estas tablas) — pendiente de la Etapa 7.
+3. **Trigger de alta de usuario.** `public.manejar_alta_usuario()` + trigger `al_registrarse` sobre
+   `auth.users` (`after insert`): crea la fila de `usuarios` sola al registrarse, `rol` desde los metadatos
+   del registro o `'jugador'` por defecto. Un rol inválido en los metadatos hace fallar el alta completa (la
+   restricción CHECK corre en la misma transacción) — comportamiento buscado, no un bug. Prueba nueva:
+   `tests/integration/test_trigger_alta_usuario.py`.
+
+Con el trigger de alta, la prueba de aislamiento ya no inserta la fila de `usuarios` a mano: la crea el
+trigger. Decisión 018 actualizada con los tres ajustes.
+
+**Render:** confirmado por Valentín — se mide una sola vez en la tarea 4.5.4, con el mismo clip de la
+decisión 017; si no entra en el plan gratis (10 minutos o suspensión que corta un análisis), se pasa directo
+a Starter sin iterar buscando que entre gratis.
+
+### Aplicación real contra Supabase (mismo día, más tarde) — falló una vez, dos hallazgos reales
+
+Valentín aplicó las dos migraciones desde el editor SQL y agregó `SUPABASE_ANON_KEY`. Al instalar las
+dependencias nuevas en el venv hizo falta subir `pydantic` de `2.10.3` a `2.11.7` (piso que exige
+`realtime`, dependencia de `supabase==2.31.0`; no se tocó nada más, la suite completa se re-corrió para
+confirmarlo — sigue en verde, 232 en verde).
+
+**`pytest -m requiere_supabase` falló la primera vez**, con `permission denied for table usuarios` sobre
+`service_role`. El comentario de `20261001090100_rls_policies.sql` ("service_role no necesita nada de
+esto, ya tiene BYPASSRLS") estaba mal: `BYPASSRLS` exime de las políticas de fila, pero el `GRANT` de tabla
+es una capa de permisos de Postgres **aparte**, y hace falta igual. Con "exponer automáticamente"
+desactivado y las tablas creadas por SQL crudo (no desde el panel), Supabase no se lo dio solo a
+`service_role` — **la misma razón por la que `authenticated` ya necesitaba `GRANT` explícito, aplicada
+también al rol que no tiene RLS.** Corregido con una migración nueva (las dos primeras ya estaban
+aplicadas, no se editan): `supabase/migrations/20261001090200_grants_service_role.sql`. Comentario de la
+migración de RLS corregido a pedido de Valentín, para que la lección quede donde se vuelve a leer.
+
+**Esa primera corrida fallida dejó 3 usuarios de Auth de prueba sin borrar** (`kinetiq-rls-a-*`,
+`kinetiq-rls-b-*`, `kinetiq-cascada-*`) — confirmado con `auth.admin.list_users()`, a pedido explícito de
+Valentín de verificar que las pruebas no dejaran cuentas sueltas. Causa: el `try/finally` que borra el
+usuario de prueba envolvía solo una parte del cuerpo de la prueba; cuando el insert siguiente fallaba por
+el permiso faltante, la excepción saltaba por encima del borrado sin ejecutarlo. Se borraron las 3 cuentas a
+mano y se corrigió la causa en `test_rls_aislamiento.py` y `test_cascada_borrado_usuario.py`: el
+`try/finally` ahora envuelve todo lo que pasa después de crear los usuarios de Auth, no solo la parte que se
+esperaba que fallara (`test_trigger_alta_usuario.py` ya estaba bien escrito desde el principio). Con la
+corrección: 28 pruebas en verde, `list_users()` en 0 antes y después — limpieza confirmada.
+
+**Decisión 018 ampliada** con esta sección (la lección para tablas futuras: RLS y privilegios de tabla son
+dos sistemas independientes, hay que otorgar los dos siempre).
+
+### Pendiente
+
+Captura del editor de tablas de Supabase con el esquema aplicado (pendiente del apartado 4.4.6; no bloquea
+seguir). **Tarea 4.5.1 cerrada.**
+
+### Siguiente paso concreto
+
+Commit y push de todo lo de 4.5.1, y arrancar la tarea 4.5.2 (bucket de Storage).
+
+---
+
 ## 2026-10-01 — Checkpoint de la Etapa 4.5 antes de limpiar contexto
 
 **Rama:** `main`. Punto de situación exacto para retomar, sin trabajo nuevo esta entrada (pedido explícito

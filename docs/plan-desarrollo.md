@@ -523,13 +523,24 @@ por debajo del rango 7–25 USD que la tesis (apartado 4.5.4) había estimado si
 
 ## Tareas
 
-**4.5.1 — Proyecto Supabase.** Crear el proyecto (plan Free para esta etapa). Migraciones SQL numeradas
-(`supabase/migrations/`, ya previsto en la estructura del monorepo desde la Etapa 0) que implementen el
-esquema del apartado 4.4.6: las siete tablas (`usuarios`, `atletas`, `videos`, `reportes_biomecanicos`,
-`metricas`, `alertas`, `versiones_motor`), sus relaciones, restricciones de verificación sobre los campos de
-dominio acotado, y **al menos una política de seguridad a nivel de fila** de prueba (aunque la autenticación
-completa sea de la Etapa 7). Aplicar las migraciones contra el proyecto real y confirmarlo con una captura
-del editor de tablas (el apartado 4.4.6 de la tesis tiene ese inserto pendiente).
+**4.5.1 — Proyecto Supabase. ✅ Cerrada (1/10).** El esquema del apartado 4.4.6 (siete tablas) quedó
+desactualizado por la especificación del frontend (`docs/ux/especificacion-frontend.md` §9): ver
+**decisión 018**, que lo rediseña a nueve tablas (agrega `sesiones` y `reportes_sesion`) antes de escribir
+una sola migración, para no rehacerlas en la Etapa 5. Tres migraciones SQL numeradas en
+`supabase/migrations/`, aplicadas contra el proyecto real: `20261001090000_esquema_inicial.sql` (las nueve
+tablas, restricciones de verificación, el trigger que crea la fila de `usuarios` al registrarse),
+`20261001090100_rls_policies.sql` (RLS completo — no solo una política de prueba, decisión 018 punto 3 —
+con `GRANT` explícito a `authenticated` por tabla) y `20261001090200_grants_service_role.sql` (agregada al
+encontrar, recién contra el proyecto real, que `service_role` también necesita su propio `GRANT` de tabla:
+`BYPASSRLS` exime de la RLS pero no del privilegio SQL, son dos capas independientes — lección para
+cualquier tabla futura, ver decisión 018). Tres ajustes de Valentín al esquema: `estado_puntaje` en vez de
+un booleano (distingue "no auditable" de "sin sesión previa comparable"), trigger de alta, y borrado en
+cascada confirmado con prueba (no borra los archivos de Storage — pendiente de la Etapa 7). Tres pruebas
+automáticas contra el proyecto real, **28 en verde**, se saltan sin credenciales de Supabase configuradas:
+aislamiento (RNF-07, `tests/integration/test_rls_aislamiento.py`), cascada de borrado
+(`test_cascada_borrado_usuario.py`) y trigger de alta (`test_trigger_alta_usuario.py`); las dos primeras se
+corrigieron para que un fallo de setup no deje cuentas de prueba huérfanas (pasó una vez, se detectó y se
+limpió). **Sigue pendiente, no bloquea:** la captura del editor de tablas que pide el apartado 4.4.6.
 
 **4.5.2 — Bucket de Storage.** Un bucket privado para video. Subir a mano uno de los clips cortos de la
 Fase B (dentro del límite de 50 MB) y confirmar que se puede descargar por URL firmada.

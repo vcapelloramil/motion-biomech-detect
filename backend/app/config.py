@@ -21,6 +21,9 @@ from dotenv import load_dotenv
 
 _ENV_VAR = "KINETIQ_DATA_DIR"
 _CACHE_ENV_VAR = "KINETIQ_CACHE_DIR"
+_SUPABASE_URL_VAR = "SUPABASE_URL"
+_SUPABASE_ANON_KEY_VAR = "SUPABASE_ANON_KEY"
+_SUPABASE_SERVICE_ROLE_KEY_VAR = "SUPABASE_SERVICE_ROLE_KEY"
 
 # Este archivo es backend/app/config.py -> parents[1] es la carpeta backend/.
 _BACKEND_DIR = Path(__file__).resolve().parents[1]
@@ -93,3 +96,52 @@ def get_cache_dir() -> Path:
     cache_dir = Path(raw).expanduser().resolve() if raw else _CACHE_DIR_POR_DEFECTO
     cache_dir.mkdir(parents=True, exist_ok=True)
     return cache_dir
+
+
+def _read_env_var(var: str) -> str | None:
+    """Mismo orden de lectura que ``_read_raw_data_dir``: entorno del proceso primero,
+    ``backend/.env`` después, sin pisar lo que ya haya en el entorno."""
+    value = os.environ.get(var)
+    if value:
+        return value
+    if _DOTENV_PATH.is_file():
+        load_dotenv(_DOTENV_PATH, override=False)
+        value = os.environ.get(var)
+    return value
+
+
+def get_supabase_url() -> str:
+    """URL del proyecto Supabase. No es secreta (CLAUDE.md §4.5, Etapa 4.5)."""
+    value = _read_env_var(_SUPABASE_URL_VAR)
+    if not value:
+        raise ConfigError(
+            f"No se encontró la variable {_SUPABASE_URL_VAR}.\n"
+            f"Configurala en backend/.env (ver backend/.env.example)."
+        )
+    return value
+
+
+def get_supabase_anon_key() -> str:
+    """Clave pública ('anon') del proyecto. Necesaria para autenticarse como un usuario
+    normal (p. ej. en tests/integration/test_rls_aislamiento.py); distinta de
+    SUPABASE_SERVICE_ROLE_KEY, que bypasea RLS y nunca debe usarse para esto."""
+    value = _read_env_var(_SUPABASE_ANON_KEY_VAR)
+    if not value:
+        raise ConfigError(
+            f"No se encontró la variable {_SUPABASE_ANON_KEY_VAR}.\n"
+            f"Configurala en backend/.env (ver backend/.env.example)."
+        )
+    return value
+
+
+def get_supabase_service_role_key() -> str:
+    """Clave secreta que bypasea Row Level Security. Solo la usa el contenedor del motor
+    o las pruebas que necesitan preparar datos de prueba como administrador — nunca el
+    frontend. No se versiona (CLAUDE.md §4.5)."""
+    value = _read_env_var(_SUPABASE_SERVICE_ROLE_KEY_VAR)
+    if not value:
+        raise ConfigError(
+            f"No se encontró la variable {_SUPABASE_SERVICE_ROLE_KEY_VAR}.\n"
+            f"Configurala en backend/.env (ver backend/.env.example)."
+        )
+    return value

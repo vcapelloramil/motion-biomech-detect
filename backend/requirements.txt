@@ -22,5 +22,15 @@ mediapipe==0.10.18
 
 fastapi==0.115.5
 uvicorn==0.32.1
-pydantic==2.10.3
+# 2.10.3 -> 2.11.7 al agregar supabase==2.31.0 (Etapa 4.5): su dependencia `realtime`
+# exige pydantic>=2.11.7. Es el piso mínimo que resuelve el conflicto, no una
+# actualización oportunista a la última (2.13.x); fastapi y el contrato de
+# backend/app/schemas/reporte.py siguen funcionando igual (es un salto menor dentro de
+# Pydantic v2, no v1->v2).
+pydantic==2.11.7
 python-dotenv==1.0.1
+
+# Etapa 4.5: cliente de Supabase (Auth + Storage + Postgres vía PostgREST). Lo usa el
+# contenedor del motor (tarea 4.5.3, pendiente) para bajar el clip de Storage y escribir
+# el resultado, y por ahora también la prueba de aislamiento de RLS (tarea 4.5.1).
+supabase==2.31.0
