@@ -572,9 +572,20 @@ corre `procesar_video`, confirma el reporte y las métricas, y limpia todo salvo
 corriendo en esta sesión) — lo prueba de punta a punta la tarea 4.5.4, que de todos modos necesita correrlo
 en un contenedor real para desplegarlo.
 
-**4.5.4 — Despliegue del contenedor.** Proveedor y plan ya decididos con datos reales: **Render Starter,
-USD 7/mes** (decisión 017). Falta desplegar ahí de verdad (hoy la medición es con Docker local) y correrlo
-una vez de punta a punta contra el proyecto Supabase real, no contra `localhost`.
+**4.5.4 — Despliegue del contenedor. Código listo (1/10/2026), falta que Valentín conecte el repo en
+Render.** A pedido de Valentín: antes de pagar el plan Starter de la decisión 017, probar primero el plan
+**gratuito** de Render con datos reales — el hallazgo de la decisión 018 (0,1 vCPU, sin tipo de servicio
+"Background Worker" en el plan gratis) obliga a envolver el motor en un servidor HTTP real para poder
+probarlo. Ver **decisión 019**: semilla completa de la API de la Etapa 6 (`backend/app/{main.py,
+security.py, routers/, workers/}`, antes vacíos desde la decisión 003), no un wrapper descartable —
+`GET /health` público y `POST /analisis/{video_id}/procesar` protegido por token (202 inmediato, procesa en
+segundo plano, decisión de MVP del apartado 4.4.2: sin cola externa). `render.yaml` en la raíz, sin ningún
+secreto (`sync: false`, se cargan a mano en el panel). `procesar_video.py` ahora mide tiempo y RSS pico desde
+adentro del proceso (mismo método que `medir_contenedor.py`, decisión 017) y lo deja en el log. 44 pruebas
+en verde (6 nuevas de la API, rápidas con fakes; 1 nueva de punta a punta contra Supabase real). **Falta:**
+que Valentín conecte el repo en Render (plan Free), cargue las tres variables de entorno y mida de verdad
+—tiempo por golpe, RSS pico, si la suspensión por inactividad corta un análisis en curso—; con esos números
+se decide Free o Starter (actualiza la decisión 017).
 
 **4.5.5 — Documentar la decisión de proveedor y plan. ✅ Hecho** — decisión 017, con los números medidos en
 4.5.3 (no con las cifras de folleto del punto de partida de más arriba).

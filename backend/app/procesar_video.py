@@ -31,10 +31,17 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import platform
 import sys
 import tempfile
+import time
 from pathlib import Path
 from typing import Any
+
+try:
+    import resource  # solo Unix/Linux: es lo que corre en el contenedor y en Render.
+except ImportError:
+    resource = None  # Windows (desarrollo local): sin medición de RSS, no rompe el import.
 
 from app.config import get_supabase_service_role_key, get_supabase_url
 from app.engine.version import __version__ as VERSION_MOTOR
@@ -46,6 +53,17 @@ MODEL_COMPLEXITY = 2
 BUCKET = "videos"
 
 _MANO_A_LADO = {"derecha": "der", "izquierda": "izq"}
+
+
+def _rss_pico_mb() -> float | None:
+    """RSS pico del proceso en MB — mismo método que ``medir_contenedor.py`` (decisión
+    017), reutilizado acá para que la medición real de la tarea 4.5.4 (tiempo y memoria
+    contra el plan gratuito de Render) salga del log del servicio, no de una lectura
+    aparte del panel."""
+    if resource is None:
+        return None
+    pico = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+    return round(pico / 1024, 1) if platform.system() == "Linux" else round(pico / 1_048_576, 1)
 
 
 def _version_motor_id(admin, parametros_dsp: dict[str, Any]) -> str:
@@ -100,6 +118,7 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
 
     admin.table("videos").update({"estado": "procesando"}).eq("id", video_id).execute()
 
+    t_inicio = time.monotonic()
     try:
         contenido = admin.storage.from_(BUCKET).download(video["ruta_almacenamiento"])
 
@@ -204,12 +223,23 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
             }
         ).eq("id", video_id).execute()
 
+        segundos_totales = round(time.monotonic() - t_inicio, 2)
+        rss_pico_mb = _rss_pico_mb()
+        print(
+            f"[procesar_video] {video_id}: {segundos_totales} s, "
+            f"RSS pico {rss_pico_mb if rss_pico_mb is not None else 'no disponible'} MB "
+            f"(tarea 4.5.4: esto es lo que hay que leer del log de Render para decidir "
+            f"Free vs Starter)"
+        )
+
         return {
             "video_id": video_id,
             "reporte_id": reporte["id"],
             "estado": estado_final,
             "orden_observado": orden_observado,
             "metricas_insertadas": metricas_insertadas,
+            "segundos_totales": segundos_totales,
+            "rss_pico_mb": rss_pico_mb,
         }
     except Exception:
         admin.table("videos").update({"estado": "fallido"}).eq("id", video_id).execute()

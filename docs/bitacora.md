@@ -6,6 +6,63 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-01 (noche, aún más tarde) — Tarea 4.5.4: semilla de la API lista, falta conectar Render
+
+**Rama:** `main`. Continuación directa de la entrada anterior (4.5.3 cerrada y pusheada, commit `aa8d0ee`).
+
+**Pedido de Valentín:** antes de pagar el plan Starter, probar primero el plan gratuito de Render con datos
+reales. Con cuatro condiciones explícitas: endpoint protegido por token (401 sin él, `/health` público
+aparte), responde 202 y procesa en segundo plano (para medir de verdad si la suspensión del plan gratis
+corta un análisis en curso), ningún secreto en el repo, y que sea la semilla real de la API de la Etapa 6
+(estructura `routers/`), no código descartable.
+
+**Hecho — decisión 019, detalle completo ahí:**
+
+- **`backend/app/{main.py, security.py, routers/, workers/}`:** la estructura que la decisión 003 reservó
+  para la Etapa 6 desde la Etapa 0 (hasta ahora solo `.gitkeep`), llenada por primera vez. `GET /health`
+  (público, estado + versión del motor) y `POST /analisis/{video_id}/procesar` (protegido por
+  `X-Kinetiq-Token` contra `KINETIQ_API_TOKEN`, `secrets.compare_digest`; 202 inmediato,
+  `BackgroundTasks` de FastAPI llama a `procesar_video` de la tarea 4.5.3 — decisión de MVP del apartado
+  4.4.2, sin cola externa). `backend/app/schemas/api.py` con los esquemas Pydantic de entrada/salida.
+- **`render.yaml`** en la raíz: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `KINETIQ_API_TOKEN` con
+  `sync: false` — Render los pide al aplicar el blueprint, no quedan en el repo.
+- **`backend/Dockerfile`:** `CMD` pasa de `["bash"]` (abierto desde la 4.5.3) a
+  `uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}` — el comando de producción real.
+- **`app/procesar_video.py`** ahora mide tiempo total y RSS pico desde adentro del proceso (mismo método que
+  `medir_contenedor.py`, decisión 017) y lo imprime en el log — para leer los números reales del log de
+  Render directamente, sin depender de una lectura aparte del panel de métricas.
+- **8 pruebas nuevas:** `tests/unit/test_api_salud.py` y `test_api_analisis.py` (rápidas, con un cliente de
+  Supabase falso y el worker de fondo espiado — sin red: 401 sin token, 401 con token incorrecto, 404 si no
+  existe el video, 202 si todo está bien, 500 si el servidor no tiene el token configurado) y
+  `tests/integration/test_api_analisis_e2e.py` (dispara un análisis real a través de la API, contra Supabase
+  real, con inferencia de MediaPipe completa — confirma que el cableado nuevo funciona con el stack real,
+  no solo con falsos).
+- **Suite completa confirmada en verde** tras los cambios: 238 pasan en la rápida, 37 en
+  `pytest -m requiere_supabase` (después, 1 más al re-correr solo la de 4.5.3 tras agregar la instrumentación
+  de tiempo/memoria). Limpieza confirmada de nuevo: 0 usuarios, 0 objetos, una sola fila real de
+  `versiones_motor`.
+- **No verificado en Docker local:** Docker Desktop no estaba corriendo en esta sesión; no se insistió en
+  levantarlo porque el propio build de Render es la verificación real (y reporta cualquier error del
+  `Dockerfile` en su log), no hace falta duplicarla en local.
+
+### Pendiente — lo que le toca a Valentín
+
+1. Generar `KINETIQ_API_TOKEN` (comando en la decisión 019).
+2. Conectar el repo a Render con `render.yaml` (plan Free).
+3. Cargar a mano, en el panel → Environment del servicio: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`,
+   `KINETIQ_API_TOKEN`.
+4. Probar `GET /health` y disparar un análisis real con `POST /analisis/<video_id>/procesar`.
+5. Leer el log del servicio para tiempo/RSS pico y observar si la suspensión por inactividad corta un
+   análisis en curso. Con esos números: Free alcanza, o se pasa a Starter (actualiza `render.yaml` y la
+   decisión 017).
+
+### Siguiente paso concreto
+
+Commit y push de 4.5.4. Pasos exactos de conexión a Render, para Valentín, en el mensaje de cierre de esta
+tarea (no se repiten acá para no desincronizarse si cambian).
+
+---
+
 ## 2026-10-01 (noche, más tarde) — Tarea 4.5.3: el contenedor habla con Storage y la base
 
 **Rama:** `main`. Continuación directa de la entrada anterior (4.5.2 cerrada y pusheada, commit `e1c2604`).
