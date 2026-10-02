@@ -593,8 +593,14 @@ motor (medido limpio dentro de un contenedor real), el resto sin medición limpi
 otro proceso); aplicada una corrección real igual (`del` explícito de los bytes del clip antes de la
 inferencia). (2) **`procesar_video.py` tenía un bug real** (decisión 020): ignoraba la cámara lenta de los
 clips Apple del corpus (fps efectivos calculados 8 veces mal), no detectado hasta que se comparó contra el
-diagnóstico de la tarea del brazo (ver más abajo). Corregido y verificado contra Supabase real; R1 ahora se
-aplica de verdad (sin secuenciación completa por debajo de 120 fps efectivos).
+diagnóstico de la tarea del brazo (ver más abajo). **Primer arreglo (buscar el factor en `catalogo.csv`)
+insuficiente para producción** — Valentín lo objetó antes de aplicarlo: un usuario real sube un video sin
+fila de catálogo. **Diseño final:** el usuario declara el modo de captura al cargar, una vez por sesión
+(`sesiones.modo_captura`); el motor lo combina con el fps real del contenedor y, si no cierra con un factor
+entero, el video queda `fallido` con un código cerrado (`videos.motivo_fallo`), nunca en silencio. Esquema
+ampliado en la migración `20261002000000` (pendiente de aplicar). R1 se aplica de verdad (sin secuenciación
+completa por debajo de 120 fps efectivos). Detalle y las dos correcciones de Valentín sobre mi primera
+propuesta, en la decisión 020 y la bitácora.
 
 **Frecuencia del brazo no auditable, el pedido original de esta tarea:** `app/diagnostico_brazo_corpus.py`
 (nuevo, solo lectura sobre la pose ya cacheada de los 84 clips propios) — 3,6 % de golpes no auditables en

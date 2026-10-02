@@ -62,13 +62,17 @@ Con sesión: **Biblioteca** · **Cargar** · **Perfil**. El reporte, el procesam
 ## 5. Carga de una sesión
 
 - **Una sesión = un grupo de videos** del mismo atleta, gesto, encuadre y lado de cámara. **Cada video es un golpe.**
-- Campos: atleta, golpe (saque, drive, revés), encuadre (perfil, tres cuartos), lado de la cámara respecto del jugador (derecha, izquierda).
+- Campos: atleta, golpe (saque, drive, revés), encuadre (perfil, tres cuartos), lado de la cámara respecto del jugador (derecha, izquierda), **¿Cómo lo grabaste?** (ver abajo).
+- **¿Cómo lo grabaste?** (decisión 020, 2/10/2026): una sola vez por sesión, no por video. Tres opciones, en lenguaje llano, ninguna marcada por defecto — el usuario tiene que elegir a propósito:
+  - "Modo cámara lenta de 240 fps (o "slow-mo" a la velocidad más alta)" → `camara_lenta_240`.
+  - "Modo cámara lenta de 120 fps" → `camara_lenta_120`.
+  - "Grabación normal (sin cámara lenta)" → `normal`.
+  - Texto de ayuda: "en el iPhone, es el modo que elegiste en la app Cámara antes de grabar — no se puede saber mirando el archivo". El motor combina esto con los datos reales del archivo; si no coinciden, el golpe se marca con un error claro en vez de adivinar (ver más abajo).
 - Selección múltiple de archivos (MP4, MOV). Validación previa en el navegador, por archivo:
   - más de 50 MB → no se sube, con instrucciones para recortar (decisión 016, tentativa);
   - duración mayor a ~8 s → aviso de que probablemente tenga varios golpes;
-  - menos de 120 fps → "solo preparación", requiere casilla de confirmación;
-  - 120 fps o más → listo.
-- La validación del navegador es una cortesía; la definitiva la hace el motor (Capítulo 4 §4.2.3).
+  - el aviso de "menos de 120 fps → solo preparación" del navegador usa el fps que declara el propio archivo, **sin corregir por cámara lenta todavía** (esa corrección la hace el motor, no el navegador): si el usuario ya eligió "cámara lenta" más arriba, no hace falta asustarlo con este aviso — se muestra solo cuando el modo elegido es "normal", o antes de que haya elegido el modo.
+- La validación del navegador es una cortesía; la definitiva la hace el motor (Capítulo 4 §4.2.3). Si el modo declarado no coincide con el archivo (p. ej. "cámara lenta de 240" sobre un archivo que no es múltiplo entero de su propio fps), el golpe queda en error con un mensaje en lenguaje llano ("no pudimos confirmar la velocidad de este video; revisá el modo de captura o volvé a grabarlo") — nunca se procesa adivinando la escala temporal (R3).
 - Panel lateral (o desplegable en móvil) con "cómo recortar" para iPhone y Android y "antes de grabar".
 
 ## 6. Contenido del reporte

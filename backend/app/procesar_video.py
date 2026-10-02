@@ -12,21 +12,28 @@ hoy. NO calcula alertas (``engine/audit.py`` todavía no existe, es la tarea 5.1
 puntaje de rendimiento (``reportes_sesion``, fórmula a congelar en la Etapa 5): dejarlos
 vacíos en esta etapa es correcto, no una omisión.
 
-**Corrección del 2/10/2026 (encontrada al investigar el tarea 4.5.4, pedido de Valentín):**
-la versión anterior de este módulo tomaba ``fps_declarados`` de ``probe()`` como
-``fps_efectivos`` directamente, con el comentario "los clips de la Fase B ya vienen a la
-frecuencia real" — **FALSO**: son capturas Apple en cámara lenta, el contenedor declara
-30 fps y la captura real es 240 fps (factor 8, confirmado por formato y huella en el
-catálogo). Con el valor sin corregir, toda velocidad angular y el tamaño de la ventana de
-secuenciación salían mal por un factor de 8 — no un caso límite, un resultado inválido en
-cualquier clip de este corpus. Corregido: si el nombre de archivo tiene una fila en
-``catalogo.csv`` (``KINETIQ_DATA_DIR``), se usa su ``factor_estimado``/``escala_temporal``
-reales (ver ``_factor_de_catalogo``); si no (un upload real sin catálogo, el caso de la
-Etapa 8), se usa ``factor=1.0`` sin inventar un valor, y la regla R1 decide si corresponde
-análisis completo según la aptitud resultante — nunca se corre la secuenciación completa
-por debajo de 120 fps efectivos. La detección automática de cámara lenta para uploads
-sin catálogo sigue sin resolver (depende de la pantalla de carga real, Etapa 8); no se
-inventa acá.
+**Corrección del 2/10/2026, en dos pasos (decisión 020):**
+
+1. Primer hallazgo: la versión original tomaba ``fps_declarados`` de ``probe()`` como
+   ``fps_efectivos`` directamente, con el comentario "los clips de la Fase B ya vienen a
+   la frecuencia real" — **FALSO**: son capturas Apple en cámara lenta, el contenedor
+   declara 30 fps y la captura real es 240 fps. Primer arreglo (buscar el factor en
+   ``catalogo.csv`` por nombre de archivo) servía para el corpus de prueba, pero NO para
+   producción: un usuario sube "IMG_4012.MOV" sin fila de catálogo, y el archivo solo no
+   alcanza para saber si es cámara lenta (confirmado por Valentín: el contenedor declara
+   30 fps sea cual sea el recorte o el dispositivo donde se recortó).
+2. **Diseño final:** el usuario declara el modo de captura al cargar, una vez por sesión
+   (``sesiones.modo_captura``: ``normal`` | ``camara_lenta_120`` | ``camara_lenta_240`` —
+   especificación de frontend §5). El motor combina esa declaración con el fps real del
+   contenedor (normalizado NTSC, ``engine.ingest.normalizar_fps``) — ver
+   ``_factor_y_motivo``. ``normal`` nunca falla (significa "sin cámara lenta": los fps
+   efectivos son los del contenedor, sean los que sean — hay teléfonos que graban 120+ fps
+   en modo normal). ``camara_lenta_120``/``camara_lenta_240`` fallan con
+   ``videos.motivo_fallo = 'modo_captura_incompatible'`` (código cerrado, no texto libre —
+   el texto en lenguaje llano para el usuario lo resuelve el frontend, R2) si el factor
+   resultante no es un entero ≥ 1: nunca se adivina en silencio (R3). La detección
+   automática de cámara lenta sin que el usuario la declare sigue sin resolver — no hace
+   falta: el usuario siempre la declara.
 
 Uso:
     python -m app.procesar_video <video_id>
@@ -113,41 +120,45 @@ def _version_motor_id(admin, parametros_dsp: dict[str, Any]) -> str:
     return creada["id"]
 
 
-def _factor_de_catalogo(nombre_archivo: str) -> tuple[float, bool, str]:
-    """(factor, escala_conocida, origen_factor) para ``ingest.evaluar`` — ver
-    ``app/engine/ingest.py::evaluar``: el factor de ralentización "casi nunca puede
-    inferirse automáticamente (decisión 001): se pasa a mano o se toma del catálogo".
+_FPS_OBJETIVO_POR_MODO = {"camara_lenta_240": 240.0, "camara_lenta_120": 120.0}
+_TOLERANCIA_FACTOR_ENTERO = 1e-6
 
-    Acá se toma del catálogo (``catalogo.csv`` en ``KINETIQ_DATA_DIR``) cuando el
-    archivo tiene una fila — es el caso de todo clip de prueba de la Fase B, incluidos
-    los que usan las pruebas de integración de este proyecto. Si no hay catálogo o el
-    archivo no tiene fila (un upload real sin antecedente, el caso futuro de la Etapa 8),
-    se devuelve factor=1.0 sin inventar nada: R1, más abajo en ``procesar_video``, se
-    encarga de que un fps efectivo insuficiente no corra la secuenciación completa en
-    vez de correrla con un factor adivinado.
+# Códigos cerrados de videos.motivo_fallo (migración 20261002000000). El texto en
+# lenguaje llano para el jugador lo resuelve el frontend (R2); acá solo el código.
+MOTIVO_FALLO_MODO_CAPTURA_INCOMPATIBLE = "modo_captura_incompatible"
+
+
+def _factor_y_motivo(modo_captura: str, fps_contenedor: float) -> tuple[float, bool, str, str | None]:
+    """(factor, escala_conocida, origen_factor, codigo_motivo_fallo) para
+    ``ingest.evaluar``. ``codigo_motivo_fallo`` es ``None`` si la combinación cierra; si
+    no, es uno de los códigos cerrados de ``videos.motivo_fallo`` — el detalle técnico
+    (fps del contenedor, factor calculado) se imprime en el log, no se guarda en la
+    columna ni se le muestra al usuario tal cual (R2/R3, decisión 020, ajuste de
+    Valentín).
+
+    ``normal`` NUNCA falla acá: significa "sin cámara lenta", así que los fps efectivos
+    son los del contenedor tal cual, sean los que sean (hay teléfonos que graban 120+ fps
+    en modo normal, y eso es válido). La regla R1, en ``procesar_video``, es la que
+    decide si esos fps alcanzan para la secuenciación completa — no esta función.
     """
-    try:
-        from app.config import get_data_dir
+    from app.engine.ingest import normalizar_fps  # import perezoso: ver nota en procesar_video.
 
-        ruta_catalogo = get_data_dir() / "catalogo.csv"
-    except Exception:
-        return 1.0, False, "declarado"
-    if not ruta_catalogo.is_file():
-        return 1.0, False, "declarado"
+    fps_norm = normalizar_fps(fps_contenedor)
 
-    import csv
+    if modo_captura == "normal":
+        return 1.0, True, "declaracion_usuario", None
 
-    with ruta_catalogo.open(encoding="utf-8", newline="") as f:
-        fila = next((r for r in csv.DictReader(f) if r.get("archivo") == nombre_archivo), None)
-    if fila is None or not fila.get("factor_estimado"):
-        return 1.0, False, "declarado"
-
-    try:
-        factor = float(fila["factor_estimado"])
-    except ValueError:
-        return 1.0, False, "declarado"
-    escala_conocida = fila.get("escala_temporal") == "conocida"
-    return factor, escala_conocida, "catalogo"
+    objetivo = _FPS_OBJETIVO_POR_MODO[modo_captura]
+    factor = objetivo / fps_norm
+    if round(factor) < 1 or abs(factor - round(factor)) > _TOLERANCIA_FACTOR_ENTERO:
+        print(
+            f"[procesar_video] {MOTIVO_FALLO_MODO_CAPTURA_INCOMPATIBLE}: "
+            f"modo_captura={modo_captura!r} (objetivo {objetivo:.0f} fps), "
+            f"contenedor={fps_norm:.1f} fps, factor calculado={factor:.4f} "
+            "(no es un múltiplo entero ≥ 1)."
+        )
+        return 1.0, False, "declaracion_usuario", MOTIVO_FALLO_MODO_CAPTURA_INCOMPATIBLE
+    return float(round(factor)), True, "declaracion_usuario", None
 
 
 def procesar_video(admin, video_id: str) -> dict[str, Any]:
@@ -159,7 +170,10 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
     "fallido" y visible."""
     video = (
         admin.table("videos")
-        .select("id, ruta_almacenamiento, sesiones(encuadre, atletas(mano_dominante))")
+        .select(
+            "id, ruta_almacenamiento, "
+            "sesiones(encuadre, modo_captura, atletas(mano_dominante))"
+        )
         .eq("id", video_id)
         .single()
         .execute()
@@ -167,6 +181,7 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
     )
     mano_dominante = video["sesiones"]["atletas"]["mano_dominante"]
     lado_dominante = _MANO_A_LADO[mano_dominante]
+    modo_captura = video["sesiones"]["modo_captura"]
 
     admin.table("videos").update({"estado": "procesando"}).eq("id", video_id).execute()
 
@@ -189,7 +204,35 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
             from app.engine.ingest import iterar_fotogramas, probe
 
             md = probe(clip)
-            factor, escala_conocida, origen_factor = _factor_de_catalogo(clip.name)
+            factor, escala_conocida, origen_factor, codigo_motivo_fallo = _factor_y_motivo(
+                modo_captura, md.fps_declarados
+            )
+
+            if codigo_motivo_fallo is not None:
+                # No se adivina en silencio (R3): modo_captura declarado no cierra con el
+                # fps del contenedor. fps_real y apto_fase_rapida quedan null — no se
+                # guarda un valor que ya se demostró no confiable.
+                admin.table("videos").update(
+                    {
+                        "estado": "fallido",
+                        "motivo_fallo": codigo_motivo_fallo,
+                        "total_fotogramas": md.nb_frames,
+                        "duracion_s": md.duracion_s,
+                        "resolucion": f"{md.ancho}x{md.alto}",
+                    }
+                ).eq("id", video_id).execute()
+                segundos_totales = round(time.monotonic() - t_inicio, 2)
+                return {
+                    "video_id": video_id,
+                    "reporte_id": None,
+                    "estado": "fallido",
+                    "orden_observado": None,
+                    "metricas_insertadas": 0,
+                    "segundos_totales": segundos_totales,
+                    "rss_pico_mb": _rss_pico_mb(),
+                    "motivo_fallo": codigo_motivo_fallo,
+                }
+
             ingesta = ingest.evaluar(
                 md, factor=factor, escala_conocida=escala_conocida, origen_factor=origen_factor
             )
@@ -273,6 +316,8 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
                     "secuencia_correcta": repeticion.correcto if repeticion else None,
                     "corte_filtro_hz": filt.corte_hz,
                     "cobertura_auditable_pct": round(seq.cobertura * 100, 2),
+                    "escala_temporal_conocida": ingesta.escala_temporal_conocida,
+                    "origen_factor": origen_factor,
                 }
             )
             .execute()

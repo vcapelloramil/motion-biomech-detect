@@ -6,6 +6,82 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-02 (más tarde) — El arreglo del bug de fps no servía para producción: diseño final con declaración del usuario
+
+**Rama:** `main`. Continuación directa de la entrada anterior. Valentín objetó el primer arreglo del bug de
+fps (decisión 020) antes de que llegara a aplicarse: buscar el factor en `catalogo.csv` por nombre de archivo
+solo funciona con clips del corpus de prueba — un usuario real sube `IMG_4012.MOV` sin fila de catálogo, y
+confirmó con sus propios clips que los slow-mo de iPhone declaran 30 fps aunque se hayan capturado a 240, se
+recorten donde se recorten. Pidió diseño nuevo, lo presenté, lo aprobó con dos correcciones, e implementé.
+
+**Diseño:** el usuario declara el modo de captura al cargar, una vez por sesión (`sesiones.modo_captura`:
+`normal` | `camara_lenta_120` | `camara_lenta_240`). El motor combina esa declaración con el fps real del
+contenedor (`_factor_y_motivo`, reemplaza a `_factor_de_catalogo`); si no cierra con un factor entero, el
+video queda `fallido` con un código cerrado (`videos.motivo_fallo`), nunca se adivina en silencio.
+
+**Las dos correcciones de Valentín sobre mi primera propuesta, las dos reales, no cosméticas:**
+
+1. **"`normal` nunca falla por fps altos."** Mi primera versión hacía fallar `normal` si el contenedor
+   declaraba ≥ 120 fps, razonando que era "una combinación inusual". Valentín: equivocado — `normal` significa
+   "sin cámara lenta", no "fps bajo"; hay teléfonos que graban 120+ fps en modo normal, y eso es válido.
+   Saqué esa rama de fallo por completo: `normal` usa el fps del contenedor tal cual, sea cual sea, y R1
+   decide después si alcanza para el análisis completo.
+2. **`motivo_fallo` como código cerrado, no texto libre.** Mi primera versión iba a guardar el texto técnico
+   directo en la columna. Valentín: el texto en lenguaje llano para el jugador lo resuelve el frontend (R2);
+   el detalle técnico (fps del contenedor, factor calculado) va al log, no a lo que ve el usuario ni a la
+   base. `videos.motivo_fallo` queda con un `check` de vocabulario cerrado (hoy un solo código,
+   `modo_captura_incompatible`; motivos nuevos se agregan cuando existan de verdad, no se anticipan).
+
+**Esquema (migración `20261002000000_modo_captura_y_trazabilidad_escala.sql`, nueva, no toca las ya
+aplicadas — no aplicada todavía, queda para que Valentín la corra):**
+- `sesiones.modo_captura` (`not null`, sin default — fuerza a declarar).
+- `videos.motivo_fallo` (código cerrado).
+- `reportes_biomecanicos.escala_temporal_conocida` + `.origen_factor`: el contrato JSON congelado
+  (`schemas/reporte.py: Trazabilidad.escala_temporal_conocida`) nunca se persistía en la base — se cierra ese
+  hueco de trazabilidad (R4) de paso, ya que se estaba tocando la escala temporal por el mismo motivo.
+
+**Pruebas:**
+- `tests/unit/test_procesar_video_factor.py` (15 casos, sin red, nuevo): `normal` nunca falla en ningún fps
+  probado (23,976 a 480), los factores de cámara lenta dan el entero esperado incluida la normalización
+  NTSC, las combinaciones inconsistentes fallan con el código cerrado.
+- `tests/integration/test_procesar_video_modo_captura_fallido.py` (nuevo): un clip real de 25 fps del corpus
+  público declarado `camara_lenta_240` (240/25 = 9,6, no cierra) deja el video `fallido` de verdad contra
+  Supabase real, con `fps_real`/`apto_fase_rapida` en `null` (no se guesea un valor ya demostrado no
+  confiable) y sin `reportes_biomecanicos`.
+- **No hay en el corpus ningún clip de un solo golpe grabado en modo normal** (todos los recortes de la Fase
+  B son cámara lenta) para probar de punta a punta "normal con fps alto → análisis completo" contra un
+  archivo real — se prueba con la unidad pura en vez de forzar un archivo que no existe; anotado así en el
+  test, no silenciado.
+- `test_procesar_video_e2e.py` y `test_api_analisis_e2e.py` actualizados: declaran `camara_lenta_240` (los
+  clips reales de la Fase B lo son) en vez de depender del catálogo.
+- Las otras dos pruebas que insertan `sesiones` (aislamiento, cascada) actualizadas con `modo_captura:
+  'normal'` — no procesan video de verdad, cualquier valor válido alcanza.
+- Suite rápida: ver más abajo si terminó antes del commit. Las pruebas que dependen de Supabase no se
+  pueden correr todavía — necesitan la columna `sesiones.modo_captura`, que no existe hasta que se aplique
+  la migración.
+
+**Especificación de frontend (`docs/ux/especificacion-frontend.md` §5):** campo nuevo "¿Cómo lo grabaste?",
+una vez por sesión, sin opción marcada por defecto; nota de que el aviso de "< 120 fps" del navegador usa el
+fps crudo del archivo (sin corregir por cámara lenta, eso lo hace el motor) y no debería asustar al usuario
+si ya eligió cámara lenta más arriba; y que una combinación que no cierra se muestra como error en lenguaje
+llano, nunca procesada adivinando.
+
+**Decisión 020 ampliada** con el diseño final, las dos correcciones de Valentín documentadas explícitamente
+(para que quede el razonamiento, no solo el resultado), y la verificación completa.
+
+### Pendiente
+
+1. Valentín aplica `supabase/migrations/20261002000000_modo_captura_y_trazabilidad_escala.sql` desde el
+   editor SQL.
+2. Con la migración aplicada: correr `pytest -m requiere_supabase` completo (ahora con 2 archivos nuevos) y
+   confirmar limpieza, como siempre.
+
+### Siguiente paso concreto
+
+Avisarle a Valentín que la migración está lista; cuando la aplique, correr la suite completa y commitear.
+
+---
+
 ## 2026-10-02 — Tarea 4.5.4 cerrada: medición real en Render, bug de fps corregido, Etapa 4.5 completa
 
 **Rama:** `main`. Continuación directa de la entrada anterior (semilla de la API lista, 1/10 noche). Valentín

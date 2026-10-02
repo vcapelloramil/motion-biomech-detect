@@ -92,6 +92,11 @@ def test_procesar_video_produce_reporte_real():
                     "gesto": "drive",
                     "encuadre": "perfil",
                     "lado_camara": "izquierda",
+                    # Los clips de la Fase B son capturas Apple en cámara lenta (el
+                    # contenedor declara 30 fps, la captura real es 240 — decisión 020):
+                    # declarar el modo real es justo lo que prueba esta corrida de
+                    # punta a punta.
+                    "modo_captura": "camara_lenta_240",
                 }
             )
             .execute()

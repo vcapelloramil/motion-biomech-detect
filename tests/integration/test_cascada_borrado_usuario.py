@@ -79,6 +79,7 @@ def test_borrar_usuario_arrastra_todos_sus_datos():
                     "gesto": "drive",
                     "encuadre": "tres_cuartos",
                     "lado_camara": "derecha",
+                    "modo_captura": "normal",
                 }
             )
             .execute()

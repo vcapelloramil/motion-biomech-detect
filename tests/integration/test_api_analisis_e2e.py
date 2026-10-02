@@ -89,6 +89,9 @@ def test_disparar_analisis_por_api_produce_reporte_real(monkeypatch):
                     "gesto": "saque",
                     "encuadre": "tres_cuartos",
                     "lado_camara": "derecha",
+                    # Los clips de la Fase B son capturas Apple en cámara lenta (el
+                    # contenedor declara 30 fps, la captura real es 240 — decisión 020).
+                    "modo_captura": "camara_lenta_240",
                 }
             )
             .execute()

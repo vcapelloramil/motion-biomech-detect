@@ -1,9 +1,13 @@
-# Decisión 020 — Bug real: `procesar_video.py` ignoraba la cámara lenta (fps efectivos x8 mal)
+# Decisión 020 — Bug real de fps, corregido con una declaración de modo de captura del usuario
 
 **Fecha:** 2 de octubre de 2026
-**Estado:** corregido y verificado contra datos reales
-**Afecta a:** `backend/app/procesar_video.py` (tarea 4.5.3) · R1 (CLAUDE.md §2) · decisión 019 (semilla de la
-API) · investigación de la tarea 4.5.4 (frecuencia del brazo no auditable, pedida por Valentín)
+**Estado:** corregido e implementado (diseño final aprobado por Valentín, con dos correcciones sobre la
+primera propuesta — ver "Primer arreglo" y "Diseño final" más abajo); falta que Valentín aplique la
+migración `20261002000000_modo_captura_y_trazabilidad_escala.sql` desde el editor SQL.
+**Afecta a:** `backend/app/procesar_video.py` (tarea 4.5.3) · esquema de datos (`sesiones.modo_captura`,
+`videos.motivo_fallo`, `reportes_biomecanicos.escala_temporal_conocida`/`.origen_factor` — decisión 018
+ampliada) · `docs/ux/especificacion-frontend.md` §5 · R1/R2/R3/R4 (CLAUDE.md §2) · decisión 019 (semilla de
+la API) · investigación de la tarea 4.5.4 (frecuencia del brazo no auditable, pedida por Valentín)
 
 ---
 
@@ -38,35 +42,64 @@ se les pidió con el `fps_efectivos` que recibieron — el problema es que `proc
 valor equivocado. La detección de cámara lenta (factor, escala temporal) ya existía
 (`engine/ingest.py::evaluar`, decisión 001) pero `procesar_video.py` no la invocaba.
 
-## La corrección
+## Primer arreglo (insuficiente, reemplazado el mismo día)
 
-1. **`_factor_de_catalogo(nombre_archivo)`** (nueva función en `procesar_video.py`): busca el archivo en
-   `catalogo.csv` (`KINETIQ_DATA_DIR`) y devuelve su `factor_estimado`/`escala_temporal` reales si existe la
-   fila; si no (un upload real sin antecedente — el caso futuro de la Etapa 8), devuelve `factor=1.0` **sin
-   inventar nada**, documentado como límite conocido: la detección automática de cámara lenta para uploads
-   nuevos sigue sin resolver, depende de la pantalla de carga real (Etapa 8) o de que el usuario confirme el
-   factor, y no se improvisa acá.
-2. **`procesar_video` ahora llama a `engine.ingest.evaluar(md, factor=..., escala_conocida=..., origen_factor=...)`**
-   en vez de usar `md.fps_declarados` a secas, y usa `ingesta.fps_efectivos` (no `md.fps_declarados`) en
-   todos lados: al pasarle la frecuencia al backend de pose, y al guardar `videos.fps_real` y
-   `videos.apto_fase_rapida`.
-3. **R1 aplicado de verdad, no solo registrado:** si `ingesta.fps_efectivos < 120`, **no se corre la
-   secuenciación completa** — la fase de preparación (lo único que R1 permitiría analizar por debajo de 120
-   fps) todavía no está implementada (es de la Etapa 5), así que el video queda `estado = 'parcial'` con los
-   metadatos reales y ningún `reportes_biomecanicos` que sugiera un análisis completo que no corresponde.
-   Antes de esta corrección, `procesar_video.py` corría la secuenciación completa sin importar el fps,
-   violando R1 en silencio.
+Primera versión: `_factor_de_catalogo(nombre_archivo)` buscaba el archivo en `catalogo.csv`
+(`KINETIQ_DATA_DIR`) y usaba su `factor_estimado`/`escala_temporal` reales. **Valentín lo objetó antes de
+aplicarlo a producción:** solo funciona con clips del corpus de prueba. Un usuario sube `IMG_4012.MOV` sin
+fila de catálogo, y el archivo solo no alcanza para saber si es cámara lenta — confirmado por Valentín con
+sus propios clips: los slow-mo de iPhone declaran 30 fps aunque se hayan capturado a 240, se recorten donde
+se recorten (PC o teléfono). El catálogo queda para el corpus de prueba, nunca como fuente del factor en
+producción.
+
+## Diseño final: el usuario declara el modo de captura
+
+1. **`sesiones.modo_captura`** (migración `20261002000000`, no edita las ya aplicadas): `'normal'` |
+   `'camara_lenta_120'` | `'camara_lenta_240'`, `not null` sin default — una declaración por sesión
+   (especificación de frontend §5, campo "¿Cómo lo grabaste?"), no por video.
+2. **`_factor_y_motivo(modo_captura, fps_contenedor)`** (reemplaza a `_factor_de_catalogo`) combina la
+   declaración con el fps real del contenedor (normalizado NTSC, `engine.ingest.normalizar_fps`, ya
+   existente):
+   - `'normal'` → **nunca falla**: `fps_efectivos` = fps del contenedor, sean los que sean. Corrección de
+     Valentín sobre la primera versión de esta decisión, que hacía fallar "normal" con un contenedor ≥ 120 fps
+     — **equivocado**: "normal" significa "sin cámara lenta", no "fps bajo"; hay teléfonos que graban 120+ fps
+     en modo normal, y eso es válido. R1 decide después si esos fps alcanzan para el análisis completo.
+   - `'camara_lenta_120'` / `'camara_lenta_240'` → factor = fps objetivo ÷ fps del contenedor. Si el factor es
+     un entero ≥ 1, `fps_efectivos` = el fps que declaró el usuario (120 o 240). Si no, el video queda
+     `'fallido'`.
+3. **`videos.motivo_fallo`** (migración `20261002000000`): **código cerrado** (`check`), no texto libre —
+   hoy solo `'modo_captura_incompatible'`. El texto en lenguaje llano para el jugador lo resuelve el frontend
+   (R2); el detalle técnico (fps del contenedor, factor calculado) va al log del contenedor, nunca a esta
+   columna ni a lo que ve el usuario (corrección de Valentín sobre la primera versión, que iba a guardar
+   texto libre). Motivos nuevos se agregan con una migración nueva cuando existan de verdad (video corrupto,
+   formato no soportado, etc.), no se anticipan.
+4. **`reportes_biomecanicos.escala_temporal_conocida` y `.origen_factor`** (mismas migración): el contrato
+   JSON congelado (`schemas/reporte.py: Trazabilidad.escala_temporal_conocida`) nunca se persistía en la
+   base — se agrega ahora, junto con este ajuste, como trazabilidad (R4) de dónde salió `fps_efectivos`.
+5. **R1 aplicado de verdad, no solo registrado:** por debajo de 120 fps efectivos (independientemente del
+   modo), no se corre la secuenciación completa — la fase de preparación todavía no está implementada (Etapa
+   5), así que el video queda `'parcial'` con los metadatos reales, sin `reportes_biomecanicos` que sugiera
+   un análisis completo que no corresponde.
+6. **El catálogo queda solo para el corpus y las pruebas**, nunca como fuente del factor en producción — ya
+   no interviene en `procesar_video.py` en absoluto.
 
 ## Verificado, no solo corregido en el código
 
-- `tests/integration/test_procesar_video_e2e.py` y `test_api_analisis_e2e.py` tenían el mismo problema que
-  expuso el bug: subían el clip a Storage con un nombre aleatorio (UUID), así que `procesar_video.py` nunca
-  podía encontrarlo en el catálogo. Corregido para conservar el nombre real del archivo dentro de una carpeta
-  con UUID (`{usuario}/{uuid}/{nombre_real}.mov`) — necesario para que la prueba ejercite el camino real, no
-  uno que accidentalmente evita el bug por otro motivo.
-- Con la corrección, ambas pruebas de punta a punta contra Supabase real vuelven a pasar, y **ya no aparece
-  el aviso de pico no finito** para este clip — confirma que era exactamente este bug, no un problema del
-  motor ni de los datos.
+- `tests/unit/test_procesar_video_factor.py` (15 casos, sin red): `'normal'` nunca falla en ningún fps
+  probado (23,976 a 480), los factores de cámara lenta dan el entero esperado incluyendo normalización NTSC,
+  y las combinaciones inconsistentes fallan con el código cerrado.
+- `tests/integration/test_procesar_video_modo_captura_fallido.py`: un clip real de 25 fps del corpus público
+  declarado `camara_lenta_240` (240/25 = 9,6, no cierra) deja el video `'fallido'`, con
+  `motivo_fallo = 'modo_captura_incompatible'`, `fps_real` y `apto_fase_rapida` en `null` (no se guesea un
+  valor ya demostrado no confiable), y ningún `reportes_biomecanicos`.
+- `tests/integration/test_procesar_video_e2e.py` y `test_api_analisis_e2e.py`: declaran `camara_lenta_240`
+  sobre un clip real de la Fase B (en vez de depender del catálogo) y conservan el nombre real del archivo
+  dentro de una carpeta con UUID — con la corrección, vuelven a pasar y **ya no aparece el aviso de pico no
+  finito**.
+- **No hay en el corpus ningún clip real de un solo golpe grabado en modo normal** (todos los recortes de la
+  Fase B son cámara lenta) para probar de punta a punta "normal con fps alto → análisis completo" contra un
+  archivo real — se prueba con la unidad pura (`_factor_y_motivo`) en vez de inventar o forzar un archivo que
+  no existe; anotado así en el propio test, no silenciado.
 
 ## Qué significa para la tarea 3 original (oclusión vs. problema de cálculo)
 
@@ -75,10 +108,3 @@ que sí calcula bien `fps_efectivos`), no por el camino con el bug. Su resultado
 diagnostico-brazo-corpus.json`, tabla en la bitácora) sigue siendo válido tal cual: representa el
 comportamiento correcto del motor, no el bug. El bug era específico de `procesar_video.py` (código de la
 tarea 4.5.3, no del motor ni del corpus ya extraído) y ya está corregido y verificado.
-
-## Pendiente, con límite declarado
-
-Detección automática del factor de cámara lenta para un video SIN fila de catálogo (un upload real de un
-usuario, Etapa 8): no resuelta. `_factor_de_catalogo` devuelve `factor=1.0` en ese caso, lo cual es seguro
-(R1 rechaza o limita el análisis si el fps declarado resulta insuficiente) pero **no detecta** una cámara
-lenta que el usuario no declare — queda abierto para el diseño de la pantalla de carga real.

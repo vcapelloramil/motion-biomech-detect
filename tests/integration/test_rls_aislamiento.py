@@ -93,6 +93,7 @@ def datos_aislamiento():
                     "gesto": "saque",
                     "encuadre": "perfil",
                     "lado_camara": "izquierda",
+                    "modo_captura": "normal",
                 }
             )
             .execute()
