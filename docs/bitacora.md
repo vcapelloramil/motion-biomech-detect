@@ -6,6 +6,52 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-01 (noche, más tarde) — Tarea 4.5.3: el contenedor habla con Storage y la base
+
+**Rama:** `main`. Continuación directa de la entrada anterior (4.5.2 cerrada y pusheada, commit `e1c2604`).
+
+**Hecho:**
+
+- **`backend/app/procesar_video.py`** (nuevo, `python -m app.procesar_video <video_id>`): baja un video de
+  Storage por su `video_id`, resuelve el lado dominante (`sesiones` → `atletas.mano_dominante`), corre el
+  pipeline existente sin tocarlo (ingesta → pose → E3 → secuenciación) y escribe `reportes_biomecanicos` +
+  `metricas` + los campos reales de `videos` (fps, fotogramas, duración, resolución, `apto_fase_rapida`). Es
+  el primer código que cierra el círculo completo de la arquitectura del apartado 4.5 (Storage → motor →
+  base) con datos reales. **No es la Etapa 5:** no calcula alertas ni el puntaje de sesión a propósito, esos
+  módulos no existen todavía.
+- **`versiones_motor` se reutiliza, no se duplica por análisis:** `_version_motor_id()` busca por
+  `version_motor` + `backend_pose` antes de insertar — confirmado con la prueba real, sigue habiendo una sola
+  fila tras varias corridas.
+- **Hallazgo real al correr contra un clip real, no anticipado:** un pico de velocidad del brazo salió `NaN`
+  en un clip de perfil (consistente con las limitaciones del brazo en esa vista ya documentadas en las
+  decisiones 011/013/015) — `json`/Postgres no aceptan un valor no finito, y al principio tiró la prueba
+  abajo (`ValueError: Out of range float values are not JSON compliant`). Corregido: un pico no finito se
+  trata igual que un pico ausente (se omite la métrica, con aviso en el log), no se escribe un dato inventado
+  — mismo principio R3 aplicado a un caso que no estaba cubierto todavía.
+- **`tests/integration/test_procesar_video_e2e.py`:** sube un clip real de la Fase B, registra la
+  sesión/atleta/video que le correspondería, corre `procesar_video` de verdad (inferencia de MediaPipe
+  completa, no simulada) y confirma el reporte, las métricas y los campos de `videos`. Limpia usuario de
+  prueba y objeto de Storage al terminar; **no borra la fila de `versiones_motor`** a propósito — es un dato
+  real, no sintético (se reutiliza entre corridas de prueba y reales por igual).
+- **36 pruebas en verde** con `pytest -m requiere_supabase` (la de este archivo tarda ~100 s: es inferencia
+  real de MediaPipe, no una medición simulada). Limpieza confirmada de nuevo con `list_users()` y
+  `storage.from_("videos").list()` en 0, y una sola fila de `versiones_motor` (la real, no una de prueba).
+
+### Pendiente
+
+**No verificado todavía dentro de un contenedor Docker real** — Docker Desktop no estaba corriendo en esta
+sesión y no se insistió en levantarlo, porque la tarea 4.5.4 (despliegue real en Render) de todos modos
+necesita correr esto dentro de un contenedor de verdad para desplegarlo; no tiene sentido duplicar ese paso
+acá. Si al llegar a 4.5.4 conviene primero una prueba en Docker local antes del despliegue en la nube, se
+decide ahí, no se da por hecho ahora.
+
+### Siguiente paso concreto
+
+Commit y push de 4.5.3, y arrancar la tarea 4.5.4 (desplegar el contenedor en Render Starter, correrlo de
+punta a punta contra el proyecto real, y medir el plan gratuito como pidió Valentín antes de pagar nada).
+
+---
+
 ## 2026-10-01 (noche) — Tarea 4.5.2: bucket de Storage, cerrada
 
 **Rama:** `main`. Continuación directa de la entrada anterior (4.5.1 cerrada y pusheada, commit `030cd84`).

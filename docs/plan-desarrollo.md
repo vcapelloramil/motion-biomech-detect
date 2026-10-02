@@ -555,15 +555,22 @@ archivo de más de 50 MB y para un tipo no permitido, y aislamiento entre usuari
 corrección. 35 pruebas en verde contra el proyecto real (`pytest -m requiere_supabase`), sin dejar cuentas de
 Auth ni objetos de prueba sueltos (confirmado con `list_users()` y `storage.from_("videos").list()`).
 
-**4.5.3 — Motor en contenedor. ✅ Parte de medición hecha (29/9/2026), falta la parte de Storage/DB.**
-`Dockerfile` (`backend/Dockerfile`) y `app/medir_contenedor.py` corren el pipeline existente (ingesta →
-pose → E3 → E4) sobre un clip montado y miden tiempo total y memoria pico (`resource.getrusage`), con el
-modelo de MediaPipe precalentado en tiempo de build para no mezclar descarga con inferencia. **Medido con
-Docker real, `--memory`/`--cpus` simulando planes de proveedor** (512 MB/0,5 vCPU no se cae, 176–185 s;
-comparación de `model_complexity` 0/1/2, ver decisión 017). Resultados en
-`docs/resultados/e4.5-contenedor-tiempo-memoria.json`. **Falta todavía:** que el contenedor descargue el
-clip desde Supabase Storage (hoy se monta un archivo local) y escriba la fila mínima en la base — eso
-espera a que existan el bucket (4.5.2) y las migraciones (4.5.1).
+**4.5.3 — Motor en contenedor. ✅ Cerrada (1/10/2026).** Medición de tiempo/memoria hecha el 29/9 (decisión
+017, sin cambios). Lo que faltaba — que el motor descargue el clip de Storage y escriba el resultado mínimo
+en la base — está en `backend/app/procesar_video.py` (`python -m app.procesar_video <video_id>`):
+baja el video por `video_id` (resuelve `sesiones` → `atletas.mano_dominante` para el lado dominante), corre
+el pipeline existente sin cambiarlo (ingesta → pose → E3 → secuenciación), y escribe `reportes_biomecanicos`
++ `metricas` + los campos reales de `videos` (fps, fotogramas, duración, resolución, aptitud). **Alcance
+deliberadamente mínimo, no la Etapa 5:** no calcula alertas ni el puntaje de sesión (esos módulos no existen
+todavía). Hallazgo real al correrlo contra un clip real: un pico de velocidad puede salir `NaN` (observado en
+el brazo de un clip de perfil — coherente con las limitaciones ya documentadas del brazo en esa vista); se
+omite esa métrica en vez de escribir un valor no finito (R3), con aviso en el log. Probado de punta a punta
+contra el proyecto Supabase real (`tests/integration/test_procesar_video_e2e.py`): sube un clip de la Fase B,
+corre `procesar_video`, confirma el reporte y las métricas, y limpia todo salvo la fila de `versiones_motor`
+(es una fila de referencia real del motor, no un dato sintético — se reutiliza por `version_motor` +
+`backend_pose`). **No verificado todavía dentro de un contenedor Docker real** (Docker Desktop no estaba
+corriendo en esta sesión) — lo prueba de punta a punta la tarea 4.5.4, que de todos modos necesita correrlo
+en un contenedor real para desplegarlo.
 
 **4.5.4 — Despliegue del contenedor.** Proveedor y plan ya decididos con datos reales: **Render Starter,
 USD 7/mes** (decisión 017). Falta desplegar ahí de verdad (hoy la medición es con Docker local) y correrlo
