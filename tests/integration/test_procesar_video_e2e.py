@@ -98,7 +98,11 @@ def test_procesar_video_produce_reporte_real():
             .data[0]
         )
 
-        ruta_storage = f"{usuario_id}/{uuid.uuid4().hex}{_CLIP.suffix}"
+        # El nombre real del archivo (no solo la carpeta) se conserva a propósito: es
+        # la clave con la que procesar_video busca el factor de cámara lenta en
+        # catalogo.csv (ver app/procesar_video._factor_de_catalogo). Perderlo acá
+        # haría que la prueba corriera con factor=1.0 en vez del real.
+        ruta_storage = f"{usuario_id}/{uuid.uuid4().hex}/{_CLIP.name}"
         admin.storage.from_("videos").upload(
             ruta_storage, _CLIP.read_bytes(), file_options={"content-type": "video/quicktime"}
         )

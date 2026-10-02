@@ -12,11 +12,21 @@ hoy. NO calcula alertas (``engine/audit.py`` todavía no existe, es la tarea 5.1
 puntaje de rendimiento (``reportes_sesion``, fórmula a congelar en la Etapa 5): dejarlos
 vacíos en esta etapa es correcto, no una omisión.
 
-**Simplificación deliberada frente al flujo real de la Etapa 8.** Toma ``fps_declarados``
-de ``probe()`` como ``fps_efectivos`` directamente, igual que ``medir_contenedor.py``: los
-clips de la Fase B ya vienen a la frecuencia real. La clasificación completa de aptitud
-(factor de cámara lenta, origen del factor, regla R1) es del catalogador
-(``app/catalogador.py``) y de la futura pantalla de carga (Etapa 8); no se reimplementa acá.
+**Corrección del 2/10/2026 (encontrada al investigar el tarea 4.5.4, pedido de Valentín):**
+la versión anterior de este módulo tomaba ``fps_declarados`` de ``probe()`` como
+``fps_efectivos`` directamente, con el comentario "los clips de la Fase B ya vienen a la
+frecuencia real" — **FALSO**: son capturas Apple en cámara lenta, el contenedor declara
+30 fps y la captura real es 240 fps (factor 8, confirmado por formato y huella en el
+catálogo). Con el valor sin corregir, toda velocidad angular y el tamaño de la ventana de
+secuenciación salían mal por un factor de 8 — no un caso límite, un resultado inválido en
+cualquier clip de este corpus. Corregido: si el nombre de archivo tiene una fila en
+``catalogo.csv`` (``KINETIQ_DATA_DIR``), se usa su ``factor_estimado``/``escala_temporal``
+reales (ver ``_factor_de_catalogo``); si no (un upload real sin catálogo, el caso de la
+Etapa 8), se usa ``factor=1.0`` sin inventar un valor, y la regla R1 decide si corresponde
+análisis completo según la aptitud resultante — nunca se corre la secuenciación completa
+por debajo de 120 fps efectivos. La detección automática de cámara lenta para uploads
+sin catálogo sigue sin resolver (depende de la pantalla de carga real, Etapa 8); no se
+inventa acá.
 
 Uso:
     python -m app.procesar_video <video_id>
@@ -47,6 +57,11 @@ from app.config import get_supabase_service_role_key, get_supabase_url
 from app.engine.version import __version__ as VERSION_MOTOR
 
 BACKEND_POSE = "mediapipe"
+# fps efectivos mínimos para la secuenciación completa (R3/R1 vía AptitudFaseRapida):
+# por debajo de esto ("solo_preparacion" o "rechazado" en engine/ingest.py) no se corre
+# la secuenciación — mejor un video "parcial" sin resultado que un resultado calculado
+# sobre una base temporal que la propia regla R1 considera insuficiente.
+_UMBRAL_SECUENCIACION_FPS = 120.0
 # decisión 017: model_complexity queda en 2 ("heavy") hasta nuevo aviso explícito de
 # Valentín. El hallazgo de que 1 corta tiempo/memoria a la mitad sigue sin aplicarse.
 MODEL_COMPLEXITY = 2
@@ -98,6 +113,43 @@ def _version_motor_id(admin, parametros_dsp: dict[str, Any]) -> str:
     return creada["id"]
 
 
+def _factor_de_catalogo(nombre_archivo: str) -> tuple[float, bool, str]:
+    """(factor, escala_conocida, origen_factor) para ``ingest.evaluar`` — ver
+    ``app/engine/ingest.py::evaluar``: el factor de ralentización "casi nunca puede
+    inferirse automáticamente (decisión 001): se pasa a mano o se toma del catálogo".
+
+    Acá se toma del catálogo (``catalogo.csv`` en ``KINETIQ_DATA_DIR``) cuando el
+    archivo tiene una fila — es el caso de todo clip de prueba de la Fase B, incluidos
+    los que usan las pruebas de integración de este proyecto. Si no hay catálogo o el
+    archivo no tiene fila (un upload real sin antecedente, el caso futuro de la Etapa 8),
+    se devuelve factor=1.0 sin inventar nada: R1, más abajo en ``procesar_video``, se
+    encarga de que un fps efectivo insuficiente no corra la secuenciación completa en
+    vez de correrla con un factor adivinado.
+    """
+    try:
+        from app.config import get_data_dir
+
+        ruta_catalogo = get_data_dir() / "catalogo.csv"
+    except Exception:
+        return 1.0, False, "declarado"
+    if not ruta_catalogo.is_file():
+        return 1.0, False, "declarado"
+
+    import csv
+
+    with ruta_catalogo.open(encoding="utf-8", newline="") as f:
+        fila = next((r for r in csv.DictReader(f) if r.get("archivo") == nombre_archivo), None)
+    if fila is None or not fila.get("factor_estimado"):
+        return 1.0, False, "declarado"
+
+    try:
+        factor = float(fila["factor_estimado"])
+    except ValueError:
+        return 1.0, False, "declarado"
+    escala_conocida = fila.get("escala_temporal") == "conocida"
+    return factor, escala_conocida, "catalogo"
+
+
 def procesar_video(admin, video_id: str) -> dict[str, Any]:
     """Corre el pipeline completo sobre un video ya registrado y escribe el resultado en
     reportes_biomecanicos/metricas. Devuelve un resumen (también sirve como salida de log
@@ -125,10 +177,55 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
         with tempfile.TemporaryDirectory() as directorio_tmp:
             clip = Path(directorio_tmp) / Path(video["ruta_almacenamiento"]).name
             clip.write_bytes(contenido)
+            # Soltar los bytes del clip ANTES de la inferencia: si no, quedan vivos en
+            # memoria (referenciados por esta variable) durante toda la inferencia de
+            # MediaPipe, superpuestos con sus propios buffers — el pico de RSS mide el
+            # máximo del proceso completo, así que esta superposición es pura cuenta
+            # doble (tarea 4.5.4: investigación del salto de RSS de 426 a 480 MB en
+            # Render, decisión 017).
+            del contenido
 
+            from app.engine import ingest
             from app.engine.ingest import iterar_fotogramas, probe
 
             md = probe(clip)
+            factor, escala_conocida, origen_factor = _factor_de_catalogo(clip.name)
+            ingesta = ingest.evaluar(
+                md, factor=factor, escala_conocida=escala_conocida, origen_factor=origen_factor
+            )
+
+            if ingesta.fps_efectivos < _UMBRAL_SECUENCIACION_FPS:
+                # R1: por debajo de 120 fps efectivos solo se habilita la fase de
+                # preparación, que este script todavía no implementa (Etapa 5). No se
+                # corre la secuenciación completa sobre una base temporal que la propia
+                # regla considera insuficiente (R3: un dato faltante es mejor que uno
+                # equivocado presentado como bueno).
+                admin.table("videos").update(
+                    {
+                        "estado": "parcial",
+                        "fps_real": ingesta.fps_efectivos,
+                        "total_fotogramas": md.nb_frames,
+                        "duracion_s": md.duracion_s,
+                        "resolucion": f"{md.ancho}x{md.alto}",
+                        "apto_fase_rapida": False,
+                    }
+                ).eq("id", video_id).execute()
+                segundos_totales = round(time.monotonic() - t_inicio, 2)
+                print(
+                    f"[procesar_video] {video_id}: fps efectivos {ingesta.fps_efectivos:.1f} "
+                    f"(aptitud {ingesta.aptitud.value}) < {_UMBRAL_SECUENCIACION_FPS:.0f} — "
+                    "no se corre la secuenciación completa (R1)."
+                )
+                return {
+                    "video_id": video_id,
+                    "reporte_id": None,
+                    "estado": "parcial",
+                    "orden_observado": None,
+                    "metricas_insertadas": 0,
+                    "segundos_totales": segundos_totales,
+                    "rss_pico_mb": _rss_pico_mb(),
+                    "motivo": f"fps efectivos insuficientes para R1 ({ingesta.aptitud.value})",
+                }
 
             from app.engine.pose.mediapipe_backend import MediaPipeBackend
 
@@ -137,7 +234,7 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
                     iterar_fotogramas(clip),
                     ancho=md.ancho,
                     alto=md.alto,
-                    fps_efectivos=md.fps_declarados,
+                    fps_efectivos=ingesta.fps_efectivos,
                 )
 
         from app.engine.pipeline import procesar_e3
@@ -215,11 +312,11 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
         admin.table("videos").update(
             {
                 "estado": estado_final,
-                "fps_real": md.fps_declarados,
+                "fps_real": ingesta.fps_efectivos,
                 "total_fotogramas": md.nb_frames,
                 "duracion_s": md.duracion_s,
                 "resolucion": f"{md.ancho}x{md.alto}",
-                "apto_fase_rapida": md.fps_declarados >= 120,
+                "apto_fase_rapida": ingesta.aptitud.value in ("completo", "reducido"),
             }
         ).eq("id", video_id).execute()
 

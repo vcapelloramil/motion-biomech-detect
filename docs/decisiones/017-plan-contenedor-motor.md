@@ -1,9 +1,12 @@
-# Decisión 017 — Plan de contenedor para el motor: Render Starter (USD 7/mes) alcanza
+# Decisión 017 — Plan de contenedor para el motor: Free durante el desarrollo, Starter antes de usabilidad
 
-**Fecha:** 29 de septiembre de 2026
-**Estado:** vigente para el MVP; con un hallazgo colateral que queda **pendiente de decisión** (ver abajo)
+**Fecha:** 29 de septiembre de 2026 (medición local); **ampliada el 2 de octubre de 2026** con la medición
+real contra Render.
+**Estado:** vigente para el MVP, con el hallazgo colateral de `model_complexity` todavía **pendiente de
+decisión** (ver abajo)
 **Afecta a:** Etapa 4.5 (tarea 4.5.3/4.5.4/4.5.5) · apartado 4.5.4 de la tesis (estimación de costos) ·
-Criterio 2 (decisión 015), si se decide bajar `model_complexity`
+Criterio 2 (decisión 015), si se decide bajar `model_complexity` · decisión 018 (plan gratuito de Render,
+hallazgo de 0,1 vCPU) · decisión 019 (semilla de la API que hizo posible esta medición)
 
 ---
 
@@ -71,10 +74,50 @@ angular ya validada** y necesitaría repetir esa medición (o al menos una parte
 de adoptarlo — no se decide por costo de contenedor solamente. Queda anotado como candidato fuerte a
 evaluar, no aplicado en esta decisión.
 
+## Ampliación (2/10/2026): medición real contra Render, plan Free
+
+Antes de pagar Starter, Valentín pidió medir primero el plan **gratuito** de Render con datos reales (no con
+la simulación de Docker local de más arriba). Hecho posible por la decisión 019 (semilla de la API,
+`POST /analisis/{video_id}/procesar`), con el mismo clip de la Fase B usado en la medición de Docker local.
+
+| | Docker local, 512 MB/0,5 vCPU (medición de arriba) | Render Free (medido) |
+| --- | --- | --- |
+| CPU | 0,5 vCPU (simulada) | **0,1 vCPU** (real — decisión 018) |
+| RAM | 512 MB (límite simulado) | 512 MB (límite real del plan) |
+| Tiempo | 176–185 s | **414,1 s** |
+| RSS pico | 426–427 MB | **480,4 MB** |
+| ¿Se cae / se corta? | No | **No** (sin cortes por suspensión por inactividad) |
+
+El tiempo sube de forma consistente con la CPU 5 veces menor (176 s a 0,5 vCPU → 414 s a 0,1 vCPU no es un
+5×, pero tampoco se esperaba lineal: `static_image_mode` de MediaPipe no escala simétricamente por debajo de
+0,5 vCPU). La memoria sube **54 MB** (426→480); investigado por separado, ver la bitácora del 2/10 y el
+comentario agregado en `app/procesar_video.py` (se soltaban los bytes del clip recién al final de la función,
+superpuestos en memoria con los buffers de la inferencia — corregido con un `del` explícito apenas se escribe
+el archivo temporal). Durante la misma corrida apareció el aviso `[aviso] pico de brazo no finito (nan)` —
+no es un bug de esta medición: es el comportamiento ya conocido del motor con el codo dominante en perfil
+(decisión 013), cuantificado aparte en `docs/resultados/diagnostico-brazo-corpus.json`.
+
+### Decisión final
+
+**Render Free durante el desarrollo** (Etapas 5–8, mientras el único tráfico es el propio Valentín probando).
+**Pasar a Starter antes de las pruebas de usabilidad de la Etapa 9**, con este criterio explícito de
+activación (decisión de Valentín, no depende de que alguien se acuerde de revisarlo):
+
+- memoria pico por encima de 460 MB en cualquier clip real (margen de 52 MB debajo del límite de 512 MB,
+  no los ~32 MB que dejaba la medición de Render), **o**
+- cualquier corte por suspensión de inactividad (un análisis que quede "procesando" porque Render durmió el
+  servicio a mitad de camino).
+
+No se decide por tiempo de procesamiento solo (414 s para un trabajador de fondo sigue siendo aceptable
+según el apartado 4.2.5 de la tesis, que ya asume asincronía) — el criterio es memoria y continuidad, los dos
+riesgos reales de un plan con 5 veces menos CPU y el mismo techo de RAM.
+
 ## Consecuencias
 
-- Task 4.5.4 (desplegar en Render de verdad) usa el plan **Starter**.
+- Task 4.5.4 (desplegar en Render de verdad) usa el plan **Free** para el desarrollo, con el criterio de
+  arriba para pasar a Starter — no un "ya se verá".
 - El apartado 4.5.4 de la tesis puede actualizarse con datos medidos en vez de la estimación de folleto
-  (pendiente de redacción, igual que las decisiones 006/010/011).
+  (pendiente de redacción, igual que las decisiones 006/010/011), ahora con dos juegos de números: Docker
+  local y Render real.
 - Si en algún momento se decide bajar `model_complexity`, hay que volver a esta decisión y a la 015
   (Criterio 2) juntas, no por separado.

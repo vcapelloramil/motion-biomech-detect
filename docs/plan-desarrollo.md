@@ -562,9 +562,11 @@ baja el video por `video_id` (resuelve `sesiones` → `atletas.mano_dominante` p
 el pipeline existente sin cambiarlo (ingesta → pose → E3 → secuenciación), y escribe `reportes_biomecanicos`
 + `metricas` + los campos reales de `videos` (fps, fotogramas, duración, resolución, aptitud). **Alcance
 deliberadamente mínimo, no la Etapa 5:** no calcula alertas ni el puntaje de sesión (esos módulos no existen
-todavía). Hallazgo real al correrlo contra un clip real: un pico de velocidad puede salir `NaN` (observado en
-el brazo de un clip de perfil — coherente con las limitaciones ya documentadas del brazo en esa vista); se
-omite esa métrica en vez de escribir un valor no finito (R3), con aviso en el log. Probado de punta a punta
+todavía). Hallazgo real al correrlo contra un clip real: un pico de velocidad puede salir `NaN`; se omite esa
+métrica en vez de escribir un valor no finito (R3), con aviso en el log. *(Corrección del 2/10, decisión 020:
+el NaN de este clip en particular no era oclusión del brazo — era un bug real, `procesar_video.py` ignoraba
+la cámara lenta y calculaba con fps 8 veces mal. Corregido; ver la tarea 4.5.4 más abajo.)* Probado de punta
+a punta
 contra el proyecto Supabase real (`tests/integration/test_procesar_video_e2e.py`): sube un clip de la Fase B,
 corre `procesar_video`, confirma el reporte y las métricas, y limpia todo salvo la fila de `versiones_motor`
 (es una fila de referencia real del motor, no un dato sintético — se reutiliza por `version_motor` +
@@ -572,20 +574,35 @@ corre `procesar_video`, confirma el reporte y las métricas, y limpia todo salvo
 corriendo en esta sesión) — lo prueba de punta a punta la tarea 4.5.4, que de todos modos necesita correrlo
 en un contenedor real para desplegarlo.
 
-**4.5.4 — Despliegue del contenedor. Código listo (1/10/2026), falta que Valentín conecte el repo en
-Render.** A pedido de Valentín: antes de pagar el plan Starter de la decisión 017, probar primero el plan
-**gratuito** de Render con datos reales — el hallazgo de la decisión 018 (0,1 vCPU, sin tipo de servicio
-"Background Worker" en el plan gratis) obliga a envolver el motor en un servidor HTTP real para poder
-probarlo. Ver **decisión 019**: semilla completa de la API de la Etapa 6 (`backend/app/{main.py,
-security.py, routers/, workers/}`, antes vacíos desde la decisión 003), no un wrapper descartable —
-`GET /health` público y `POST /analisis/{video_id}/procesar` protegido por token (202 inmediato, procesa en
-segundo plano, decisión de MVP del apartado 4.4.2: sin cola externa). `render.yaml` en la raíz, sin ningún
-secreto (`sync: false`, se cargan a mano en el panel). `procesar_video.py` ahora mide tiempo y RSS pico desde
-adentro del proceso (mismo método que `medir_contenedor.py`, decisión 017) y lo deja en el log. 44 pruebas
-en verde (6 nuevas de la API, rápidas con fakes; 1 nueva de punta a punta contra Supabase real). **Falta:**
-que Valentín conecte el repo en Render (plan Free), cargue las tres variables de entorno y mida de verdad
-—tiempo por golpe, RSS pico, si la suspensión por inactividad corta un análisis en curso—; con esos números
-se decide Free o Starter (actualiza la decisión 017).
+**4.5.4 — Despliegue del contenedor. ✅ Cerrada (2/10/2026).** A pedido de Valentín: antes de pagar el plan
+Starter de la decisión 017, probar primero el plan **gratuito** de Render con datos reales — el hallazgo de
+la decisión 018 (0,1 vCPU, sin tipo de servicio "Background Worker" en el plan gratis) obligó a envolver el
+motor en un servidor HTTP real para poder probarlo. Ver **decisión 019**: semilla completa de la API de la
+Etapa 6 (`backend/app/{main.py, security.py, routers/, workers/}`, antes vacíos desde la decisión 003), no un
+wrapper descartable — `GET /health` público y `POST /analisis/{video_id}/procesar` protegido por token (202
+inmediato, procesa en segundo plano, decisión de MVP del apartado 4.4.2: sin cola externa). `render.yaml` en
+la raíz, sin ningún secreto (`sync: false`, cargado a mano en el panel).
+
+**Medido de verdad contra Render Free** (decisión 017 ampliada): 414,1 s, RSS pico 480,4 MB, sin cortes por
+suspensión. **Decisión: Free durante el desarrollo, Starter antes de las pruebas de usabilidad de la Etapa 9**,
+con criterio explícito de activación (memoria > 460 MB en algún clip real, o cualquier corte por suspensión).
+
+**Dos hallazgos reales en el camino, no buscados a propósito:** (1) investigado el salto de memoria de 426 a
+480 MB — 38,6 MB confirmados como overhead de tener FastAPI/uvicorn/supabase en el mismo proceso que el
+motor (medido limpio dentro de un contenedor real), el resto sin medición limpia todavía (contención con
+otro proceso); aplicada una corrección real igual (`del` explícito de los bytes del clip antes de la
+inferencia). (2) **`procesar_video.py` tenía un bug real** (decisión 020): ignoraba la cámara lenta de los
+clips Apple del corpus (fps efectivos calculados 8 veces mal), no detectado hasta que se comparó contra el
+diagnóstico de la tarea del brazo (ver más abajo). Corregido y verificado contra Supabase real; R1 ahora se
+aplica de verdad (sin secuenciación completa por debajo de 120 fps efectivos).
+
+**Frecuencia del brazo no auditable, el pedido original de esta tarea:** `app/diagnostico_brazo_corpus.py`
+(nuevo, solo lectura sobre la pose ya cacheada de los 84 clips propios) — 3,6 % de golpes no auditables en
+total, cero por oclusión dentro de la ventana anclada al torso, 1 caso real de "velocidad implausible"
+(problema de cálculo aislado, no un patrón). Tabla completa en la bitácora del 2/10 y en
+`docs/resultados/diagnostico-brazo-corpus.json`. El lado de cámara no se pudo usar como variable
+discriminante: es "opuesto al dominante" en las 84 repeticiones, por protocolo (decisión 013), no hay
+variación que medir en este corpus.
 
 **4.5.5 — Documentar la decisión de proveedor y plan. ✅ Hecho** — decisión 017, con los números medidos en
 4.5.3 (no con las cifras de folleto del punto de partida de más arriba).

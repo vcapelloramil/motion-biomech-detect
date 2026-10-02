@@ -1,0 +1,841 @@
+{
+ "resumen": [
+  {
+   "gesto": "drive",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "n_evaluadas": 12,
+   "no_evaluadas_sin_ancla_o_e3": 0,
+   "auditable": 11,
+   "oclusion": 0,
+   "problema_de_calculo": 0,
+   "senal_plana": 1,
+   "otro_no_catalogado": 0,
+   "pct_no_auditable": 8.3
+  },
+  {
+   "gesto": "drive",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "n_evaluadas": 12,
+   "no_evaluadas_sin_ancla_o_e3": 0,
+   "auditable": 12,
+   "oclusion": 0,
+   "problema_de_calculo": 0,
+   "senal_plana": 0,
+   "otro_no_catalogado": 0,
+   "pct_no_auditable": 0.0
+  },
+  {
+   "gesto": "reves",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "n_evaluadas": 12,
+   "no_evaluadas_sin_ancla_o_e3": 0,
+   "auditable": 12,
+   "oclusion": 0,
+   "problema_de_calculo": 0,
+   "senal_plana": 0,
+   "otro_no_catalogado": 0,
+   "pct_no_auditable": 0.0
+  },
+  {
+   "gesto": "reves",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "n_evaluadas": 12,
+   "no_evaluadas_sin_ancla_o_e3": 0,
+   "auditable": 12,
+   "oclusion": 0,
+   "problema_de_calculo": 0,
+   "senal_plana": 0,
+   "otro_no_catalogado": 0,
+   "pct_no_auditable": 0.0
+  },
+  {
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "n_evaluadas": 12,
+   "no_evaluadas_sin_ancla_o_e3": 0,
+   "auditable": 11,
+   "oclusion": 0,
+   "problema_de_calculo": 1,
+   "senal_plana": 0,
+   "otro_no_catalogado": 0,
+   "pct_no_auditable": 8.3
+  },
+  {
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "n_evaluadas": 24,
+   "no_evaluadas_sin_ancla_o_e3": 0,
+   "auditable": 23,
+   "oclusion": 0,
+   "problema_de_calculo": 0,
+   "senal_plana": 1,
+   "otro_no_catalogado": 0,
+   "pct_no_auditable": 4.2
+  }
+ ],
+ "filas": [
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep01.mov",
+   "sesion": 1,
+   "gesto": "drive",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep02.mov",
+   "sesion": 1,
+   "gesto": "drive",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep03.mov",
+   "sesion": 1,
+   "gesto": "drive",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep04.mov",
+   "sesion": 1,
+   "gesto": "drive",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep05.mov",
+   "sesion": 1,
+   "gesto": "drive",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep06.mov",
+   "sesion": 1,
+   "gesto": "drive",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "senal_plana_sin_pico_claro",
+   "motivo": "sin picos marcados por encima de la prominencia mínima"
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep01.mov",
+   "sesion": 1,
+   "gesto": "drive",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep02.mov",
+   "sesion": 1,
+   "gesto": "drive",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep03.mov",
+   "sesion": 1,
+   "gesto": "drive",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep04.mov",
+   "sesion": 1,
+   "gesto": "drive",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep05.mov",
+   "sesion": 1,
+   "gesto": "drive",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep06.mov",
+   "sesion": 1,
+   "gesto": "drive",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep01.mov",
+   "sesion": 1,
+   "gesto": "reves",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep02.mov",
+   "sesion": 1,
+   "gesto": "reves",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep03.mov",
+   "sesion": 1,
+   "gesto": "reves",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep04.mov",
+   "sesion": 1,
+   "gesto": "reves",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep05.mov",
+   "sesion": 1,
+   "gesto": "reves",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep06.mov",
+   "sesion": 1,
+   "gesto": "reves",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep01.mov",
+   "sesion": 1,
+   "gesto": "reves",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep02.mov",
+   "sesion": 1,
+   "gesto": "reves",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep03.mov",
+   "sesion": 1,
+   "gesto": "reves",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep04.mov",
+   "sesion": 1,
+   "gesto": "reves",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep05.mov",
+   "sesion": 1,
+   "gesto": "reves",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep06.mov",
+   "sesion": 1,
+   "gesto": "reves",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep01.mov",
+   "sesion": 1,
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep02.mov",
+   "sesion": 1,
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep03.mov",
+   "sesion": 1,
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "problema_de_calculo",
+   "motivo": "velocidad implausible (19283 °/s > techo 7104): probable error de detección"
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep04.mov",
+   "sesion": 1,
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep05.mov",
+   "sesion": 1,
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep06.mov",
+   "sesion": 1,
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep01.mov",
+   "sesion": 1,
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep02.mov",
+   "sesion": 1,
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep03.mov",
+   "sesion": 1,
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep04.mov",
+   "sesion": 1,
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep05.mov",
+   "sesion": 1,
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep06.mov",
+   "sesion": 1,
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_drive_perfil_240_02_rep01.mov",
+   "sesion": 2,
+   "gesto": "drive",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_drive_perfil_240_02_rep02.mov",
+   "sesion": 2,
+   "gesto": "drive",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_drive_perfil_240_02_rep03.mov",
+   "sesion": 2,
+   "gesto": "drive",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_drive_perfil_240_02_rep04.mov",
+   "sesion": 2,
+   "gesto": "drive",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_drive_perfil_240_02_rep05.mov",
+   "sesion": 2,
+   "gesto": "drive",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_drive_perfil_240_02_rep06.mov",
+   "sesion": 2,
+   "gesto": "drive",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_drive_trescuartos_240_02_rep01.mov",
+   "sesion": 2,
+   "gesto": "drive",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_drive_trescuartos_240_02_rep02.mov",
+   "sesion": 2,
+   "gesto": "drive",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_drive_trescuartos_240_02_rep03.mov",
+   "sesion": 2,
+   "gesto": "drive",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_drive_trescuartos_240_02_rep04.mov",
+   "sesion": 2,
+   "gesto": "drive",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_drive_trescuartos_240_02_rep05.mov",
+   "sesion": 2,
+   "gesto": "drive",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_drive_trescuartos_240_02_rep06.mov",
+   "sesion": 2,
+   "gesto": "drive",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_reves_perfil_240_02_rep01.mov",
+   "sesion": 2,
+   "gesto": "reves",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_reves_perfil_240_02_rep02.mov",
+   "sesion": 2,
+   "gesto": "reves",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_reves_perfil_240_02_rep03.mov",
+   "sesion": 2,
+   "gesto": "reves",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_reves_perfil_240_02_rep04.mov",
+   "sesion": 2,
+   "gesto": "reves",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_reves_perfil_240_02_rep05.mov",
+   "sesion": 2,
+   "gesto": "reves",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_reves_perfil_240_02_rep06.mov",
+   "sesion": 2,
+   "gesto": "reves",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_reves_trescuartos_240_02_rep01.mov",
+   "sesion": 2,
+   "gesto": "reves",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_reves_trescuartos_240_02_rep02.mov",
+   "sesion": 2,
+   "gesto": "reves",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_reves_trescuartos_240_02_rep03.mov",
+   "sesion": 2,
+   "gesto": "reves",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_reves_trescuartos_240_02_rep04.mov",
+   "sesion": 2,
+   "gesto": "reves",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_reves_trescuartos_240_02_rep05.mov",
+   "sesion": 2,
+   "gesto": "reves",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_reves_trescuartos_240_02_rep06.mov",
+   "sesion": 2,
+   "gesto": "reves",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_saque_perfil_240_02_rep01.mov",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_saque_perfil_240_02_rep02.mov",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_saque_perfil_240_02_rep03.mov",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_saque_perfil_240_02_rep04.mov",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_saque_perfil_240_02_rep05.mov",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_saque_perfil_240_02_rep06.mov",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_saque_trescuartos_240_02_rep01.mov",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_saque_trescuartos_240_02_rep02.mov",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_saque_trescuartos_240_02_rep03.mov",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_saque_trescuartos_240_02_rep04.mov",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_saque_trescuartos_240_02_rep05.mov",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_saque_trescuartos_240_02_rep06.mov",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_saque_trescuartos_240_02b_rep01.mov",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_saque_trescuartos_240_02b_rep02.mov",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_saque_trescuartos_240_02b_rep03.mov",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_saque_trescuartos_240_02b_rep04.mov",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_saque_trescuartos_240_02b_rep05.mov",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_saque_trescuartos_240_02b_rep06.mov",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "senal_plana_sin_pico_claro",
+   "motivo": "sin picos marcados por encima de la prominencia mínima"
+  },
+  {
+   "clip": "20260925_VCR_saque_trescuartos_240_02c_rep01.mov",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_saque_trescuartos_240_02c_rep02.mov",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_saque_trescuartos_240_02c_rep03.mov",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_saque_trescuartos_240_02c_rep04.mov",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_saque_trescuartos_240_02c_rep05.mov",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  },
+  {
+   "clip": "20260925_VCR_saque_trescuartos_240_02c_rep06.mov",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "lado_camara_vs_dominante": "lado_opuesto_al_dominante",
+   "categoria": "auditable",
+   "motivo": null
+  }
+ ],
+ "sin_pose": []
+}

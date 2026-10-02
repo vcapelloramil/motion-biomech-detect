@@ -6,6 +6,132 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-02 — Tarea 4.5.4 cerrada: medición real en Render, bug de fps corregido, Etapa 4.5 completa
+
+**Rama:** `main`. Continuación directa de la entrada anterior (semilla de la API lista, 1/10 noche). Valentín
+conectó el repo a Render (plan Free) y corrió el análisis real; esta entrada cubre las seis tareas que pidió
+al traer el resultado.
+
+### 1. Números de Render registrados (decisión 017 ampliada)
+
+Free: 414,1 s, RSS pico 480,4 MB, sin cortes por suspensión, sobre el mismo video de prueba. Comparado contra
+Docker local (0,5 vCPU simulado): 176–185 s / 426–427 MB. **Decisión de Valentín: Render Free durante el
+desarrollo; pasar a Starter antes de las pruebas de usabilidad de la Etapa 9**, con criterio explícito (no
+"ya se verá"): memoria pico > 460 MB en cualquier clip real, o cualquier corte por suspensión.
+
+### 2. Investigado el salto de memoria (426→480 MB) — parcialmente explicado, con dato limpio
+
+Con Docker Desktop recuperado (mismo bug del "Inference manager" de sockets huérfanos que ya documentó la
+bitácora el 29/9 — mismo arreglo, renombrar las carpetas y desactivar `EnableDockerAI`), medido DENTRO del
+contenedor real, sin contaminar con nada más:
+
+- Solo motor (numpy + mediapipe + engine/*, igual que `medir_contenedor.py`): **89,2 MB** tras los imports.
+- Motor + FastAPI + uvicorn + supabase (igual que `app.main`, lo que corre en Render): **127,8 MB** tras los
+  imports, antes de procesar nada.
+
+**38,6 MB de los ~54 MB de diferencia salen de tener FastAPI/uvicorn/supabase en el mismo proceso que el
+motor — confirmado, no una sospecha.** El resto queda sin explicación limpia: una corrida completa dentro de
+Docker dio 485,4 MB, pero compitiendo por CPU con el diagnóstico del corpus (tarea 3) corriendo al mismo
+tiempo — no es una medición limpia, se dice así en vez de maquillarla. Se aplicó igual una corrección real y
+justificada en `app/procesar_video.py`: los bytes del clip descargado quedaban vivos en memoria durante toda
+la inferencia (se liberan con un `del` explícito apenas se escribe el archivo temporal) — reduce la
+superposición de memoria en principio, no remedida limpia todavía. La medición que importa de verdad es la
+próxima vez que Valentín corra esto en Render.
+
+### 3. Frecuencia del brazo no auditable — tabla hecha, y un hallazgo más importante en el camino
+
+`app/diagnostico_brazo_corpus.py` (nuevo, de solo lectura, sobre la pose ya cacheada de los 84 clips
+propios de perfil/tres cuartos a 240 fps, sesiones 1 y 2 — mismo método que `medicion_criterio1.py`):
+
+| gesto | encuadre | lado cámara | n | no auditable | oclusión | cálculo | señal plana |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| drive | perfil | opuesto al dominante | 12 | 8,3% | 0 | 0 | 1 |
+| drive | tres cuartos | opuesto al dominante | 12 | 0,0% | 0 | 0 | 0 |
+| revés | perfil | opuesto al dominante | 12 | 0,0% | 0 | 0 | 0 |
+| revés | tres cuartos | opuesto al dominante | 12 | 0,0% | 0 | 0 | 0 |
+| saque | perfil | opuesto al dominante | 12 | 8,3% | 0 | 1 | 0 |
+| saque | tres cuartos | opuesto al dominante | 24 | 4,2% | 0 | 0 | 1 |
+
+**El lado de cámara no discrimina nada: es "opuesto al dominante" en las 84 repeticiones**, porque la
+decisión 013 ya fijó "no se graba del lado derecho" como protocolo para toda la Fase B — no hay variación
+que medir en este corpus sobre ese eje, no es un error del script.
+
+**Cero casos de oclusión** dentro de la ventana anclada al torso (±300 ms) — la oclusión del brazo que
+documentan las decisiones 011/013 existe en el clip completo, pero en la ventana angosta del pico el codo
+dominante suele estar justo arriba del umbral de confianza. Solo 3 de 84 golpes (3,6%) no auditables: 2
+"señal plana" (hay serie pero ningún pico se destaca) y 1 "velocidad implausible... probable error de
+detección" (saque de perfil, rep03) — la única que calza con "problema de cálculo" tal como lo pidió
+Valentín, y es un caso aislado, no un patrón. Resultado completo en
+`docs/resultados/diagnostico-brazo-corpus.json`.
+
+**Al cruzar este resultado contra lo que procesaba `procesar_video.py` en vivo apareció un bug real y más
+serio, no solo el que se estaba buscando** — ver el punto siguiente.
+
+### Bug encontrado y corregido: `procesar_video.py` ignoraba la cámara lenta (decisión 020)
+
+El clip que disparó el aviso "pico de brazo no finito" en las dos pruebas anteriores
+(`..._drive_perfil_240_01_rep01.mov`) daba auditable en el diagnóstico del corpus (pose cacheada) pero NaN en
+`procesar_video.py` (extracción en vivo). Comparando landmark por landmark: **idénticos, diferencia 0** — no
+es un problema de determinismo de MediaPipe. La diferencia real: `fps_efectivos` cacheado = 240,0; en vivo =
+30,0. Es una captura Apple en cámara lenta (contenedor declara 30 fps, captura real 240, factor 8, confirmado
+en `catalogo.csv`). `procesar_video.py` (escrito en la tarea 4.5.3) tomaba `fps_declarados` directo, con un
+comentario ("los clips de la Fase B ya vienen a la frecuencia real") que resultó **falso**, nunca verificado
+contra el catálogo. Con el valor sin corregir, toda velocidad salía calculada 8 veces mal — no solo el brazo,
+cualquier resultado de ese clip.
+
+**No es un bug del motor** (`engine/sequencing.py` hizo lo correcto con el fps que le dieron); es un bug de
+`procesar_video.py`, que no llamaba a la detección de cámara lenta que `engine/ingest.py::evaluar` ya tenía
+desde la Etapa 1. Corregido: `_factor_de_catalogo()` busca el factor real en `catalogo.csv` cuando el archivo
+tiene fila (todo lo que se prueba hoy); sin catálogo (un upload real futuro, Etapa 8) usa `factor=1.0` sin
+inventar nada, y **R1 ahora se aplica de verdad**: por debajo de 120 fps efectivos no se corre la
+secuenciación completa, el video queda `parcial` en vez de un resultado inválido presentado como bueno. Las
+pruebas de integración tenían el mismo problema (subían el clip con nombre aleatorio, impidiendo la búsqueda
+en el catálogo) — corregidas para conservar el nombre real. Verificado: con la corrección, las pruebas de
+punta a punta vuelven a pasar y **ya no aparece el aviso de pico no finito** en ese clip. Detalle completo en
+la decisión 020.
+
+### 4. Aviso de MediaPipe confirmado también en local
+
+`Using NORM_RECT without IMAGE_DIMENSIONS is only supported for the square ROI` aparece igual corriendo
+`medir_contenedor.py` en Windows que en Render — no es un resultado distinto por el entorno, es el
+comportamiento normal de MediaPipe con esta configuración.
+
+### 5. Versión del motor — no está desactualizada
+
+Revisadas las cinco etiquetas de etapa cerradas (`v0.1.0-etapa0` … `v0.5.0-etapa4`): el `__version__` del
+motor en cada una es siempre un minor menos que la etiqueta (etapa4 → tag `v0.5.0`, motor `0.4.1`) — patrón
+consistente en las cinco, no una excepción de la Etapa 4. Ningún commit tocó `engine/` entre el último bump
+(`0.4.1`, decisión 010) y el cierre de la Etapa 4 (decisión 015) salvo un comentario sin cambio numérico
+(decisión 011). `engine/version.py` ahora documenta el desfasaje a propósito para que no vuelva a generar la
+duda.
+
+### 6. Datos de prueba borrados, Docker reparado
+
+Usuario/atleta/sesión/video de prueba de Render borrados (cascada). Docker Desktop, que volvió a chocar con
+el bug conocido del "Inference manager", reparado con el mismo procedimiento documentado el 29/9.
+
+**Confirmado en carne propia el límite que ya anotaba la decisión 018:** borrar el usuario no se llevó el
+clip de Storage (26 MB, `f16a8b3f-.../00e1efba....mov`) — son dos sistemas distintos, la cascada de Postgres
+no toca `storage.objects`. Encontrado al verificar la limpieza final, no asumido; borrado a mano. Sigue
+pendiente de la Etapa 7 (el flujo real de "eliminar mi cuenta" tiene que borrar Storage aparte).
+
+### Pendiente
+
+- La medición limpia de RSS en Docker local (sin contención con otro proceso), si hace falta más precisión
+  que la medición real de Render — no bloquea nada, Render es la fuente de verdad de todos modos.
+- Detección automática de cámara lenta para un upload SIN fila de catálogo: declarado como límite conocido,
+  no resuelto, depende del diseño de la pantalla de carga real (Etapa 8).
+
+### Siguiente paso concreto
+
+Commit y push de todo lo de esta entrada. Con eso, **la Etapa 4.5 completa queda cerrada** (4.5.1 a 4.5.5):
+siguiente paso del plan es la Etapa 5 (auditoría y reporte) — y lo primero ahí, por pedido explícito de
+Valentín en la decisión 018, es resolver la desalineación entre `alertas.severidad` en la base (cuatro
+estados de R3) y el `Literal` de tres valores todavía congelado en `reporte.py`, antes de generar cualquier
+JSON real.
+
+---
+
 ## 2026-10-01 (noche, aún más tarde) — Tarea 4.5.4: semilla de la API lista, falta conectar Render
 
 **Rama:** `main`. Continuación directa de la entrada anterior (4.5.3 cerrada y pusheada, commit `aa8d0ee`).

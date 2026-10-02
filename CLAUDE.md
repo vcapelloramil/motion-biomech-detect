@@ -124,29 +124,37 @@ E5 Auditoría y alertas
 
 ## 5. Estado actual
 
-**Fecha de referencia: 29/9/2026.**
+**Fecha de referencia: 2/10/2026.**
 
 - Capítulos 1, 2 y 3 de la tesis entregados. Capítulo 4: fecha objetivo 25/8/2026 (ya pasada); el texto
   vigente quedó escrito antes de que existiera motor funcional ("no existe código productivo" en su propia
   sección de limitaciones) y tiene varias secciones que ya no reflejan lo construido — lista de pendientes
-  de redacción acumulados en las decisiones 006, 010, 011, 012, 013, 014 y 015. Repasar esa lista antes de
-  dar el capítulo por actualizado.
-- **Motor: Etapas 0 a 4 del plan cerradas** (`v0.5.0-etapa4`, en `main`). Versión `0.4.1`. Pipeline completo
-  de punta a punta (ingesta → pose → filtrado de fase cero → cinemática → secuenciación) sobre corpus público
-  y sobre la Fase B propia (dos sesiones, 110 clips, un jugador). Criterios 1, 2 y 3 del apartado 4.3.4
-  medidos formalmente; decisión 015 (sin repliegue de arquitectura, cinco salvedades documentadas sobre el
-  orden por encuadre y gesto). Sin API ni base de datos todavía: el motor corre desde la línea de comandos,
-  contra archivos locales.
+  de redacción acumulados en las decisiones 006, 010, 011, 012, 013, 014, 015, 018 y 019. Repasar esa lista
+  antes de dar el capítulo por actualizado (incluye el esquema de datos del apartado 4.4.6, que pasó de
+  siete a nueve tablas).
+- **Motor: Etapas 0 a 4 del plan cerradas** (`v0.5.0-etapa4`, en `main`). Versión `0.4.1` (no desactualizada:
+  ningún cambio en `engine/` desde ese bump, ver el propio `engine/version.py`). Pipeline completo de punta a
+  punta (ingesta → pose → filtrado de fase cero → cinemática → secuenciación) sobre corpus público y sobre la
+  Fase B propia (dos sesiones, 110 clips, un jugador). Criterios 1, 2 y 3 del apartado 4.3.4 medidos
+  formalmente; decisión 015 (sin repliegue de arquitectura, cinco salvedades documentadas sobre el orden por
+  encuadre y gesto).
+- **Etapa 4.5 (esqueleto en la nube) cerrada.** Supabase conectado: esquema de nueve tablas con RLS completo
+  (decisión 018), bucket de Storage privado, el motor corre dentro de un contenedor que baja un clip de
+  Storage, procesa y escribe el resultado en la base (`backend/app/procesar_video.py`), y ese contenedor está
+  desplegado de verdad en Render (plan Free durante el desarrollo, decisión 017 ampliada; criterio explícito
+  para pasar a Starter). Semilla de la API de la Etapa 6 ya escrita (decisión 019): `GET /health` y
+  `POST /analisis/{video_id}/procesar`, sobre la estructura `backend/app/{main.py, security.py, routers/,
+  workers/}` prevista desde la decisión 003.
 - Frontend: prototipo navegable generado con Lovable (TanStack Start, React 19, Tailwind 4,
   shadcn/ui, configurado para Cloudflare Workers), sin tocar desde que se movió al monorepo (26/8/2026).
   Diseño visual bueno; contenido y semántica todavía requieren corrección según las reglas de la sección 2,
   y ahora además según las salvedades de la decisión 015 (p. ej. no etiquetar "correcto/incorrecto" donde
-  no corresponde).
-- Sin Supabase conectado todavía; sin despliegue en la nube todavía (ver más abajo).
+  no corresponde). Especificación completa en `docs/ux/especificacion-frontend.md` (1/10/2026).
 
-**Prioridad inmediata:** un esqueleto desplegado en la nube que confirme la arquitectura (Supabase + motor en
-contenedor) antes de la Etapa 5, y después la Etapa 5 en sí (auditoría y reporte). Plan detallado en
-`docs/plan-desarrollo.md`.
+**Prioridad inmediata:** Etapa 5 (auditoría y reporte). Primer paso explícito, pedido por Valentín en la
+decisión 018: resolver la desalineación entre `alertas.severidad` en la base de datos (cuatro estados de R3)
+y el `Literal` de tres valores todavía congelado en `reporte.py` (Etapa 0) — antes de generar cualquier JSON
+real. Plan detallado en `docs/plan-desarrollo.md`.
 
 ### Despliegue objetivo (Capítulo 4, apartado 4.5)
 
