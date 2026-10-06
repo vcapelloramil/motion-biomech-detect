@@ -68,3 +68,6 @@ kinetiq-data/
 # --- Gestor de paquetes del frontend ---
 # El proyecto usa bun (bun.lock). No mantener un segundo lockfile de npm.
 package-lock.json
+
+# --- Página de prueba del iPhone (carpeta generada por tools/prueba-iphone/armar.py) ---
+tools/prueba-iphone/publicar/
