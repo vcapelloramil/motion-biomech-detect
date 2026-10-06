@@ -57,6 +57,10 @@
           distinto a Safari, y por eso puede entregar un archivo distinto. Se sube apenas lo elegís.
         </p>
 
+        <label for="nota">Nota para lo que subas ahora (opcional)</label>
+        <input id="nota" type="text" placeholder="p. ej. original-sin-recortar, desde-archivos" autocapitalize="off" autocomplete="off" style="width:100%;padding:12px;font-size:16px;border:1px solid var(--borde);border-radius:6px;" />
+        <small style="color:var(--gris)">Se agrega al nombre del archivo para distinguir cada prueba. Cambiala antes de elegir el video.</small>
+
         <div class="selector">
           <label for="f-A">A · cualquier video</label>
           <small>accept="video/*"</small>
@@ -135,7 +139,9 @@
         const meta = await leerEnElNavegador(archivo);
         anotar(`en el navegador: ${JSON.stringify(meta)}`);
 
-        const ruta = `${usuarioId}/prueba-iphone/${etiqueta}-${Date.now()}.${extension(archivo.name, archivo.type)}`;
+        const nota = ($("nota").value || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 40);
+        const ruta = `${usuarioId}/prueba-iphone/${etiqueta}${nota ? "~" + nota : ""}-${Date.now()}.${extension(archivo.name, archivo.type)}`;
+        anotar(`nota: ${nota || "(ninguna)"}`);
         anotar(`subiendo a: ${ruta} …`);
         const { error } = await sb.storage.from("videos").upload(ruta, archivo, {
           contentType: archivo.type || "video/quicktime",

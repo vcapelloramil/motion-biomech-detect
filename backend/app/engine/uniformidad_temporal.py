@@ -2,9 +2,9 @@
 
 Un golpe grabado a 240 fps en un iPhone puede llegar al servidor de **tres formas** (decisión 028):
 
-* **(a) 240 fps en tiempo real:** las marcas de tiempo (``pts``) están separadas 1/240 s. Pasa cuando el golpe se
-  recorta del medio de una cámara lenta en Fotos: el archivo conserva la frecuencia de captura y pierde la indicación
-  de reproducción lenta. Válido.
+* **(a) Tiempo real a alta frecuencia:** las marcas de tiempo (``pts``) están separadas 1/240 s (o 1/120). Era la hipótesis de que el
+  golpe recortado del medio de una cámara lenta en Fotos llega así. **El 7/10/2026 no se cumplió** con el iPhone de Valentín vía Safari:
+  llegó en tiempo real a **100 fps**, H.264 (decisión 028). Válido solo si alcanza R1 (>= 120 fps).
 * **(b) cámara lenta horneada a 30 fps:** el archivo conserva **todos** los fotogramas de la captura pero con las
   marcas separadas 1/30 s (reproducido, el golpe dura 8 veces más). Es el formato del corpus propio. Válido.
 * **(c) 30 fps en tiempo real, con fotogramas descartados:** las marcas también están separadas 1/30 s, pero faltan 7
@@ -41,9 +41,11 @@ from pathlib import Path
 
 import numpy as np
 
-# Una frecuencia de marcas de tiempo a partir de la cual se considera captura en tiempo real de alta frecuencia
-# (120 o 240 fps). Un archivo normal (24-60 fps) queda por debajo.
-FPS_MARCAS_TIEMPO_REAL = 100.0
+# Frecuencia de marcas de tiempo a partir de la cual el archivo está en "tiempo real": 240, 120, **100** (lo que entregó Safari del iPhone
+# el 7/10/2026, ver la decisión 028), 60 fps, etc. Por debajo (24-30 fps) las marcas no dicen nada sobre la captura: puede ser un video
+# normal a 30 fps, una cámara lenta horneada (b) o 30 fps con fotogramas descartados (c). Que esté en tiempo real NO significa que alcance
+# para la fase rápida: eso lo decide R1 (>= 120 fps efectivos) en ``ingest``.
+FPS_MARCAS_TIEMPO_REAL = 45.0
 # Tolerancia al comparar la cantidad de fotogramas contra la esperada para una duración real conocida.
 TOLERANCIA_FOTOGRAMAS = 0.35
 # Una separación entre marcas es "regular" si difiere de la mediana en menos de esto (relativo).
@@ -54,7 +56,7 @@ FRACCION_MINIMA_REGULAR = 0.97
 
 
 class CasoArchivo(str, Enum):
-    TIEMPO_REAL = "a"          # 240 (o 120) fps en tiempo real
+    TIEMPO_REAL = "a"          # marcas en tiempo real (>= 45 fps): 240, 120, 100, 60...
     HORNEADO = "b"             # cámara lenta horneada: todos los fotogramas, marcas a ~30
     DESCARTADO = "c"           # 30 fps reales con fotogramas descartados: INVÁLIDO
     INDETERMINADO = "indeterminado"  # marcas a ~30: puede ser (b) o (c); falta la duración real
@@ -108,9 +110,13 @@ def clasificar_caso(
     ~30 fps queda ``INDETERMINADO``: las marcas no distinguen (b) de (c).
     """
     if marcas.fps_por_marcas >= FPS_MARCAS_TIEMPO_REAL:
+        from app.engine.ingest import clasificar_fps, normalizar_fps
+
+        aptitud = clasificar_fps(normalizar_fps(marcas.fps_por_marcas))
         return ClasificacionCaso(
             CasoArchivo.TIEMPO_REAL,
-            f"las marcas de tiempo están a {marcas.fps_por_marcas:.0f} fps: frecuencia de captura en tiempo real",
+            f"las marcas de tiempo están a {marcas.fps_por_marcas:.0f} fps: tiempo real, sin cámara lenta horneada; "
+            f"por la tabla de aptitud (R1) eso es '{aptitud.value}'",
         )
 
     if duracion_real_s is None or duracion_real_s <= 0:

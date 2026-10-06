@@ -28,6 +28,20 @@ def test_a_marcas_a_240_es_tiempo_real_aunque_no_se_sepa_la_duracion():
     assert c.caso is CasoArchivo.TIEMPO_REAL and c.es_valido is True
 
 
+def test_100_fps_en_tiempo_real_no_es_el_caso_c():
+    """Caso real del 7/10/2026: Safari del iPhone entregó el recorte a 100 fps (H.264), 201 fotogramas en 2,01 s. Con el umbral anterior
+    (100,0) quedaba justo por debajo y se lo clasificaba, mal, como (c) "fotogramas descartados"."""
+    for fps_marcas in (100.0, 99.99, 100.01):
+        c = clasificar_caso(_marcas(fps_marcas, 201), 201, 2.0)
+        assert c.caso is CasoArchivo.TIEMPO_REAL, fps_marcas
+        assert "solo_preparacion" in c.explicacion  # 100 fps: no alcanza para la fase rápida (R1)
+
+
+@pytest.mark.parametrize("fps,aptitud", [(240.0, "completo"), (120.0, "reducido"), (100.0, "solo_preparacion"), (60.0, "solo_preparacion")])
+def test_tiempo_real_informa_la_aptitud_de_r1(fps, aptitud):
+    assert aptitud in clasificar_caso(_marcas(fps, 300), 300, 2.0).explicacion
+
+
 def test_a_tambien_a_120():
     assert clasificar_caso(_marcas(120.0, 180), 180, 1.5, fps_captura=120.0).caso is CasoArchivo.TIEMPO_REAL
 

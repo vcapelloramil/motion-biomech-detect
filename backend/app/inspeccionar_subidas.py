@@ -63,6 +63,33 @@ def _ffprobe_completo(ruta: Path) -> dict:
         return {"error": f"ffprobe no disponible o falló: {exc}"}
 
 
+def _que_haria_el_sistema(fps_contenedor: float, nb_frames: int) -> dict[str, str]:
+    """Qué haría ``procesar_video`` HOY con este archivo según el modo que declare el usuario (decisión 020), sin correrlo.
+
+    Usa las mismas funciones que producción: ``_factor_y_motivo`` (declaración x fps del contenedor) y, si cierra, ``ingest.evaluar`` más
+    el umbral de R1 (< 120 fps efectivos: no se corre la secuenciación, el video queda 'parcial')."""
+    from pathlib import Path
+
+    from app.engine import ingest
+    from app.procesar_video import _UMBRAL_SECUENCIACION_FPS, _factor_y_motivo
+
+    md = ingest.MetadatosVideo(
+        ruta=Path("x"), fps_declarados=fps_contenedor, nb_frames=nb_frames, duracion_s=nb_frames / fps_contenedor if fps_contenedor else 0.0, ancho=0, alto=0
+    )
+    salida = {}
+    for modo in ("camara_lenta_240", "camara_lenta_120", "normal"):
+        factor, escala, origen, motivo = _factor_y_motivo(modo, fps_contenedor)
+        if motivo is not None:
+            salida[modo] = f"FALLA ({motivo}): el factor no es un entero >= 1"
+            continue
+        r = ingest.evaluar(md, factor=factor, escala_conocida=escala, origen_factor=origen)
+        if r.fps_efectivos < _UMBRAL_SECUENCIACION_FPS:
+            salida[modo] = f"queda PARCIAL por R1: {r.fps_efectivos:g} fps efectivos (< {_UMBRAL_SECUENCIACION_FPS:g}), sin análisis de la fase rápida"
+        else:
+            salida[modo] = f"SE ANALIZA con {r.fps_efectivos:g} fps efectivos (factor {factor:g})"
+    return salida
+
+
 def _resumir(nombre: str, tamano: int, ruta: Path, duracion_real: float | None, fps_captura: float) -> dict:
     from app.engine.ingest import probe
 
@@ -93,6 +120,7 @@ def _resumir(nombre: str, tamano: int, ruta: Path, duracion_real: float | None, 
             "constantes": marcas.es_constante,
             "tipo": "tiempo real (>= 100 fps)" if marcas.fps_por_marcas >= 100 else "estiradas a ~30 fps (cámara lenta horneada o tiempo real a 30)",
         },
+        "que_haria_el_sistema": _que_haria_el_sistema(md.fps_declarados, fotogramas),
         "caso": caso.caso.value,
         "caso_valido": caso.es_valido,
         "caso_explicacion": caso.explicacion,
@@ -110,15 +138,17 @@ def _resumir(nombre: str, tamano: int, ruta: Path, duracion_real: float | None, 
 def _veredicto(r: dict) -> str:
     if "error" in r:
         return f"{r['objeto']}: ERROR {r['error']}"
-    caso = {"a": "(a) 240 fps en tiempo real", "b": "(b) cámara lenta horneada", "c": "(c) INVÁLIDO: fotogramas descartados",
+    caso = {"a": "(a) tiempo real (sin cámara lenta horneada)", "b": "(b) cámara lenta horneada", "c": "(c) INVÁLIDO: fotogramas descartados",
             "indeterminado": "(b o c) falta --duracion-real"}[r["caso"]]
     vel = (
         "movimiento parejo"
         if r["sin_tramos_de_mucho_movimiento"]
         else f"TRAMOS CON MUCHO MÁS MOVIMIENTO POR FOTOGRAMA (¿rampa de velocidad o manejo de la cámara?): {r['tramos_de_mucho_movimiento']}"
     )
+    prod = " | ".join(f"{m}: {t}" for m, t in r["que_haria_el_sistema"].items())
     return (f"{r['selector']}: contenedor {r['fps_contenedor']:g} fps · {r['fotogramas']} fotogramas · {r['duracion_reproducida_s']} s · "
-            f"marcas a {r['marcas_de_tiempo']['fps_por_marcas']:g} fps → {caso} · {vel}")
+            f"marcas a {r['marcas_de_tiempo']['fps_por_marcas']:g} fps → {caso} · {vel}\n"
+            f"      El sistema, según lo que declares → {prod}")
 
 
 def main(argv: list[str] | None = None) -> int:
