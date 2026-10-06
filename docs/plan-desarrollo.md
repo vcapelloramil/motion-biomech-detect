@@ -644,6 +644,13 @@ Orden de recorte, del menos al más costoso de sacrificar (según lo que comprom
 4. **No se recorta:** la revisión del límite de tamaño de archivo de Supabase contra los clips reales. Ya
    está hecha (ver más arriba) y es la que anticipa el problema de la Etapa 8, antes de llegar a ella.
 
+> **Nota de traspaso (6/10/2026).** Último commit de código `36a60fd`. Pendientes en orden: (1) **keep-alive de
+> Supabase con GitHub Actions — urgente**, el plan gratuito pausa el proyecto tras 7 días sin actividad (vence
+> ~13/10); (2) reintento `fallido → encolado`, con diseño a aprobar por Valentín antes de implementar;
+> (3) control contra historial, diferido (requiere datos del Criterio 3). Después, Etapa 5, empezando por
+> alinear `reporte.py` (severidad de 4 estados + `modo_captura`, `factor_ralentizacion`, `origen_factor`).
+> Detalle completo y estado de las suites en `docs/bitacora.md`, entrada del 6/10.
+
 ## Qué necesito que crees vos (cuentas y credenciales)
 
 Ninguna de estas cuentas puede crearla Claude Code (entrar contraseñas o pagar es una acción que le

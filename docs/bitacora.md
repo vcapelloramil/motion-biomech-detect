@@ -6,6 +6,67 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-06 — Trazabilidad del modo y el factor en el reporte · NOTA DE TRASPASO (antes de /clear)
+
+**Rama:** `main`. **Último commit de código: `36a60fd`** ("feat: trazabilidad del modo de captura y del factor de
+ralentizacion en el reporte"), pusheado. La nota de traspaso va en el commit siguiente (solo documentación).
+
+### Qué se hizo
+
+- **Control contra historial: DIFERIDO** (decisión 020, propuesta no implementada; requiere datos del
+  Criterio 3 para calibrar). Sumada a las limitaciones de la tesis: la detección del error inverso (normal
+  declarado como cámara lenta) por techos de plausibilidad es **condicional** — un factor ×2 o golpes lentos
+  pueden pasar sin ser detectados.
+- **Trazabilidad (R4):** migración `20261006000000` (aplicada y verificada por Valentín): `modo_captura` y
+  `factor_ralentizacion`, ambas NOT NULL sin default, en `reportes_biomecanicos`. Se congelan en el reporte
+  (la declaración de la sesión es editable después). `procesar_video` las escribe; el e2e las verifica.
+  Especificación de frontend: el nivel 3 muestra modo, factor y origen.
+- **Prueba contra Render** con marcador propio `requiere_render`: no corre en la suite normal ni con
+  `-m requiere_supabase`; solo con `-m requiere_render` (la corrida real pasó en 74 s).
+- **Tropiezo propio, ya corregido:** al hacer NOT NULL las columnas nuevas, la primera corrida de
+  `requiere_supabase` dio 1 failed + 24 errors: dos pruebas (`test_rls_aislamiento`, `test_cascada_borrado_usuario`)
+  insertaban reportes a mano sin esas columnas. Corregidas; el esquema NO se aflojó (sin default a propósito).
+
+### Estado verificado (6/10)
+
+| Suite | Comando | Resultado |
+| --- | --- | --- |
+| Rápida | `pytest -m "not slow"` | 253 passed |
+| Supabase real | `pytest -m requiere_supabase` | 39 passed (~7 min); sin restos: 0 usuarios Auth, 0 objetos Storage, 1 `versiones_motor` |
+| Render real | `pytest -m requiere_render` | a demanda, no corre sola |
+
+### PENDIENTES, EN ORDEN
+
+1. **URGENTE — keep-alive de Supabase con GitHub Actions.** El plan gratuito **pausa el proyecto tras 7 días
+   sin actividad**; última actividad conocida: hoy 6/10 (pruebas) → vence ~13/10 si no se hace nada. Ya existe
+   `.github/workflows/` pero está **vacío**. Idea: workflow con `schedule` (cron cada ~3 días) +
+   `workflow_dispatch`, que haga una consulta barata vía PostgREST con la clave guardada como *secret* del repo
+   (nunca en el repo). Valentín tiene que cargar los secrets en GitHub (Settings → Secrets); el workflow no
+   puede crearlos. Verificar con una corrida manual.
+2. **Reintento `fallido → encolado`.** Hoy `POST /analisis/{id}/procesar` pone `encolado` sin validar el estado
+   previo. Falta definir las transiciones permitidas, limpiar `videos.motivo_fallo`, y resolver la restricción
+   única `reportes_biomecanicos.video_id` (hoy `procesar_video` borra el reporte previo). **Valentín quiere ver
+   el diseño y aprobarlo antes de implementar.**
+3. **Control contra historial** (decisión 020): diferido; recién con datos del Criterio 3.
+
+### Otros pendientes, sin orden de urgencia
+
+- **Primer paso de la Etapa 5:** alinear `schemas/reporte.py` — `severidad` de 4 estados (decisión 018) y
+  los campos de `Trazabilidad` `modo_captura`, `factor_ralentizacion`, `origen_factor` (decisión 020) —
+  antes de generar cualquier JSON real. Un solo cambio de contrato, registrado.
+- Render Free → Starter por criterio (RSS > 460 MB o corte por suspensión), antes de la Etapa 9.
+- Captura del editor de tablas de Supabase (apartado 4.4.6) pendiente.
+- Borrado de objetos de Storage al eliminar la cuenta (Etapa 7; la cascada de Postgres no los toca).
+- Frontend: campo "¿Cómo lo grabaste?" (especificación §5).
+- Redacción del Capítulo 4 y de los Capítulos 6 y 7 (lista en `CLAUDE.md` §5; incluye las limitaciones de la 020).
+
+### Siguiente paso concreto
+
+Pendiente 1 (keep-alive): escribir el workflow y pedirle a Valentín que cargue los secrets; después presentar el
+diseño del reintento (pendiente 2) para aprobación; recién después la Etapa 5.
+
+---
+
 ## 2026-10-02 (más tarde) — El arreglo del bug de fps no servía para producción: diseño final con declaración del usuario
 
 **Rama:** `main`. Continuación directa de la entrada anterior. Valentín objetó el primer arreglo del bug de

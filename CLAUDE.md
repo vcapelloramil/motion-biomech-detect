@@ -152,7 +152,11 @@ E5 Auditoría y alertas
   y ahora además según las salvedades de la decisión 015 (p. ej. no etiquetar "correcto/incorrecto" donde
   no corresponde). Especificación completa en `docs/ux/especificacion-frontend.md` (1/10/2026).
 
-**Prioridad inmediata:** Etapa 5 (auditoría y reporte). Primer paso explícito, pedido por Valentín en la
+**Pendientes previos a la Etapa 5 (nota de traspaso del 6/10, detalle en la bitácora):** (1) keep-alive de
+Supabase con GitHub Actions — urgente, el plan gratuito pausa el proyecto tras 7 días sin actividad; (2) reintento
+`fallido → encolado` (diseño a aprobar antes de implementar); (3) control contra historial, diferido.
+
+**Prioridad inmediata, después de esos pendientes:** Etapa 5 (auditoría y reporte). Primer paso explícito, pedido por Valentín en la
 decisión 018: resolver la desalineación entre `alertas.severidad` en la base de datos (cuatro estados de R3)
 y el `Literal` de tres valores todavía congelado en `reporte.py` (Etapa 0) — antes de generar cualquier JSON
 real. Plan detallado en `docs/plan-desarrollo.md`.
