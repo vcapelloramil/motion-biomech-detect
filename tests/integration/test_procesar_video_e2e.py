@@ -71,6 +71,7 @@ def test_procesar_video_produce_reporte_real():
     # El trigger de alta (decisión 018, ajuste 3) ya creó la fila en usuarios.
 
     ruta_storage = None
+    version_previa_id = None
     try:
         atleta = (
             admin.table("atletas")
@@ -127,10 +128,39 @@ def test_procesar_video_produce_reporte_real():
             .data[0]
         )
 
+        # Reporte previo (resto de un intento anterior que falló después de insertarlo): la restricción
+        # única de video_id haría fallar el insert y dejar 'fallido' un video que sí se analizó. La
+        # decisión 022 hace que procesar_video lo reemplace en vez de chocar con él.
+        version_previa = (
+            admin.table("versiones_motor")
+            .insert({"version_motor": "test-reporte-previo", "backend_pose": "fake"})
+            .execute()
+            .data[0]
+        )
+        version_previa_id = version_previa["id"]
+        reporte_previo = (
+            admin.table("reportes_biomecanicos")
+            .insert(
+                {
+                    "video_id": video["id"],
+                    "version_motor_id": version_previa_id,
+                    "modo_captura": "normal",
+                    "factor_ralentizacion": 1,
+                }
+            )
+            .execute()
+            .data[0]
+        )
+
         resultado = procesar_video(admin, video["id"])
 
         assert resultado["estado"] in ("completado", "parcial")
         assert resultado["reporte_id"]
+        assert resultado["reporte_id"] != reporte_previo["id"], "el reporte previo no se reemplazó"
+        reportes_del_video = (
+            admin.table("reportes_biomecanicos").select("id").eq("video_id", video["id"]).execute().data
+        )
+        assert [r["id"] for r in reportes_del_video] == [resultado["reporte_id"]]
 
         fila_video = (
             admin.table("videos")
@@ -184,7 +214,10 @@ def test_procesar_video_produce_reporte_real():
         if ruta_storage:
             admin.storage.from_("videos").remove([ruta_storage])
         admin.auth.admin.delete_user(usuario_id)
-        # La fila de versiones_motor NO se borra: a diferencia del resto de los datos de
+        if version_previa_id:
+            # Después de borrar al usuario: esa FK no tiene cascada y un reporte aún la apuntaría.
+            admin.table("versiones_motor").delete().eq("id", version_previa_id).execute()
+        # La fila de versiones_motor real NO se borra: a diferencia del resto de los datos de
         # este test, es una fila legítima de referencia (qué versión del motor existe), no
         # un dato sintético — la reutilizan corridas futuras, de prueba o reales, por
         # version_motor + backend_pose (ver app/procesar_video._version_motor_id).

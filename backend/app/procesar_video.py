@@ -126,6 +126,8 @@ _TOLERANCIA_FACTOR_ENTERO = 1e-6
 # Códigos cerrados de videos.motivo_fallo (migración 20261002000000). El texto en
 # lenguaje llano para el jugador lo resuelve el frontend (R2); acá solo el código.
 MOTIVO_FALLO_MODO_CAPTURA_INCOMPATIBLE = "modo_captura_incompatible"
+# Cualquier otra excepción durante el procesamiento (migración 20261007000000, decisión 022).
+MOTIVO_FALLO_ERROR_INESPERADO = "error_inesperado"
 
 
 def _factor_y_motivo(modo_captura: str, fps_contenedor: float) -> tuple[float, bool, str, str | None]:
@@ -183,7 +185,11 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
     lado_dominante = _MANO_A_LADO[mano_dominante]
     modo_captura = video["sesiones"]["modo_captura"]
 
-    admin.table("videos").update({"estado": "procesando"}).eq("id", video_id).execute()
+    # modo_captura_intentado (decisión 022): con qué declaración se intenta, para saber después si el
+    # usuario la corrigió antes de reintentar.
+    admin.table("videos").update(
+        {"estado": "procesando", "modo_captura_intentado": modo_captura}
+    ).eq("id", video_id).execute()
 
     t_inicio = time.monotonic()
     try:
@@ -306,6 +312,13 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
             else None
         )
 
+        # reportes_biomecanicos.video_id es único: un reporte previo (resto de un intento anterior que
+        # falló después de insertarlo, o una corrida manual por línea de comandos sobre un video ya
+        # analizado) haría fallar el insert y dejaría 'fallido' un video con reporte (decisión 022).
+        # Se borra recién ahora, con el resultado nuevo ya calculado: si algo falla antes, el previo
+        # no se pierde. La cascada se lleva sus métricas y alertas.
+        admin.table("reportes_biomecanicos").delete().eq("video_id", video_id).execute()
+
         reporte = (
             admin.table("reportes_biomecanicos")
             .insert(
@@ -389,7 +402,11 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
             "rss_pico_mb": rss_pico_mb,
         }
     except Exception:
-        admin.table("videos").update({"estado": "fallido"}).eq("id", video_id).execute()
+        # Con código (decisión 022): sin él, el fallo quedaba indistinguible de "nunca falló" o
+        # arrastraba el motivo de una corrida anterior, y el reintento no sabría qué regla aplicar.
+        admin.table("videos").update(
+            {"estado": "fallido", "motivo_fallo": MOTIVO_FALLO_ERROR_INESPERADO}
+        ).eq("id", video_id).execute()
         raise
 
 

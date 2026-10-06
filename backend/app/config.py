@@ -158,6 +158,26 @@ def get_kinetiq_api_token() -> str:
     return value
 
 
+_MAX_INTENTOS_VAR = "KINETIQ_MAX_INTENTOS"
+_MAX_INTENTOS_POR_DEFECTO = 3
+
+
+def get_max_intentos() -> int:
+    """Tope de intentos para reintentar un video que falló por un error inesperado (decisión 022).
+    Opcional: 3 si no está configurado. No es un secreto ni depende de la máquina; es un
+    parámetro de operación para poder subirlo o bajarlo sin tocar código."""
+    value = _read_env_var(_MAX_INTENTOS_VAR)
+    if not value:
+        return _MAX_INTENTOS_POR_DEFECTO
+    try:
+        intentos = int(value)
+    except ValueError:
+        raise ConfigError(f"{_MAX_INTENTOS_VAR} tiene que ser un entero, y es {value!r}.") from None
+    if intentos < 1:
+        raise ConfigError(f"{_MAX_INTENTOS_VAR} tiene que ser >= 1, y es {intentos}.")
+    return intentos
+
+
 def get_supabase_service_role_key() -> str:
     """Clave secreta que bypasea Row Level Security. Solo la usa el contenedor del motor
     o las pruebas que necesitan preparar datos de prueba como administrador — nunca el
