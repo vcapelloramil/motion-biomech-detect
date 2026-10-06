@@ -134,6 +134,30 @@ def get_supabase_anon_key() -> str:
     return value
 
 
+def get_kinetiq_api_url() -> str:
+    """URL base del servicio desplegado en Render (sin barra final). Solo la usan las
+    pruebas contra el despliegue real; no es secreta pero tampoco se versiona."""
+    value = _read_env_var("KINETIQ_API_URL")
+    if not value:
+        raise ConfigError(
+            "No se encontró la variable KINETIQ_API_URL.\n"
+            "Configurala en backend/.env (ver backend/.env.example)."
+        )
+    return value.rstrip("/")
+
+
+def get_kinetiq_api_token() -> str:
+    """Token compartido que protege POST /analisis/... (el mismo que está cargado como
+    KINETIQ_API_TOKEN en el panel de Render). SECRETO: nunca se imprime ni se versiona."""
+    value = _read_env_var("KINETIQ_API_TOKEN")
+    if not value:
+        raise ConfigError(
+            "No se encontró la variable KINETIQ_API_TOKEN.\n"
+            "Configurala en backend/.env (ver backend/.env.example)."
+        )
+    return value
+
+
 def get_supabase_service_role_key() -> str:
     """Clave secreta que bypasea Row Level Security. Solo la usa el contenedor del motor
     o las pruebas que necesitan preparar datos de prueba como administrador — nunca el

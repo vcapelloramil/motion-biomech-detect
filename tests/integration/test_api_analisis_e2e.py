@@ -30,7 +30,9 @@ except Exception:  # ConfigError u otra: no hay proyecto Supabase configurado
 try:
     from app.config import get_data_dir
 
-    _CLIP = next(get_data_dir().glob("fase-b/*/*/recortes/*.mov"), None)
+    # Solo recortes a 240 fps (cámara lenta real): estas pruebas declaran `camara_lenta_240`, y desde que
+    # existe el recorte de 60 fps en modo normal ("el primer .mov") ya no garantiza un clip de cámara lenta.
+    _CLIP = next(get_data_dir().glob("fase-b/*/*/recortes/*_240_*.mov"), None)
 except Exception:
     _CLIP = None
 

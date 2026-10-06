@@ -313,7 +313,8 @@ def main(argv: list[str] | None = None) -> int:
     backend = MediaPipeBackend()
     with (base / "catalogo.csv").open(encoding="utf-8", newline="") as f:
         filas = [r for r in csv.DictReader(f)
-                 if r.get("fuente") == "propio" and "_rep" in r["archivo"]]
+                 if r.get("fuente") == "propio" and "_rep" in r["archivo"]
+                 and str(r.get("fps_efectivos")).strip() in ("240", "240.0")]  # los controles a 60/30 fps no son parte del conjunto
 
     fechas = sorted({r["archivo"][:8] for r in filas})
     # grupos[modo][grupo] = {"clips": [...]}

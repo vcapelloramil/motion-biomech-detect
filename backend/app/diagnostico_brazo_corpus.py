@@ -89,6 +89,7 @@ def diagnosticar(sesion: int | None) -> dict:
         for n, r in cat.items()
         if r.get("fuente") == "propio"
         and "_rep" in n
+        and str(r.get("fps_efectivos")).strip() in ("240", "240.0")  # solo el conjunto a 240 fps
         and r.get("angulo") in GRUPOS
         and (sesion is None or sesion_de(n, fechas) == sesion)
     )

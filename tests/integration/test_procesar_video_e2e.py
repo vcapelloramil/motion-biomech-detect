@@ -38,7 +38,9 @@ try:
 
     # Cualquier recorte de una repetición de la Fase B alcanza para probar el circuito
     # completo; no hace falta que sea el mismo que usó la decisión 017.
-    _CLIP = next(get_data_dir().glob("fase-b/*/*/recortes/*.mov"), None)
+    # Solo recortes a 240 fps (cámara lenta real): estas pruebas declaran `camara_lenta_240`, y desde que
+    # existe el recorte de 60 fps en modo normal ("el primer .mov") ya no garantiza un clip de cámara lenta.
+    _CLIP = next(get_data_dir().glob("fase-b/*/*/recortes/*_240_*.mov"), None)
 except Exception:
     _CLIP = None
 

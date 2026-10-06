@@ -390,7 +390,9 @@ def cmd_corte_brazo(args) -> int:
     filas = {}
     for nombre, r in cat.items():
         g = f"{r.get('gesto')}_{r.get('angulo')}"
-        if r.get("fuente") != "propio" or "_rep" not in nombre or g not in grupos or not en_sesion(nombre, args.sesion, fechas):
+        if (r.get("fuente") != "propio" or "_rep" not in nombre or g not in grupos
+                or str(r.get("fps_efectivos")).strip() not in ("240", "240.0")  # solo el conjunto a 240 fps (los controles a 60/30 no)
+                or not en_sesion(nombre, args.sesion, fechas)):
             continue
         seq, _ = cargar(nombre)
         lado = r["lado_dominante"]
@@ -478,7 +480,9 @@ def cmd_fleisig_brazo(args) -> int:
     filas = {}
     for nombre, r in cat.items():
         g = f"{r.get('gesto')}_{r.get('angulo')}"
-        if r.get("fuente") != "propio" or "_rep" not in nombre or g not in grupos or not en_sesion(nombre, args.sesion, fechas):
+        if (r.get("fuente") != "propio" or "_rep" not in nombre or g not in grupos
+                or str(r.get("fps_efectivos")).strip() not in ("240", "240.0")  # solo el conjunto a 240 fps (los controles a 60/30 no)
+                or not en_sesion(nombre, args.sesion, fechas)):
             continue
         seq, _ = cargar(nombre)
         lado = r["lado_dominante"]
@@ -553,7 +557,9 @@ def cmd_ventana_brazo(args) -> int:
     filas = {}
     for nombre, r in cat.items():
         g = f"{r.get('gesto')}_{r.get('angulo')}"
-        if r.get("fuente") != "propio" or "_rep" not in nombre or g not in grupos or not en_sesion(nombre, args.sesion, fechas):
+        if (r.get("fuente") != "propio" or "_rep" not in nombre or g not in grupos
+                or str(r.get("fps_efectivos")).strip() not in ("240", "240.0")  # solo el conjunto a 240 fps (los controles a 60/30 no)
+                or not en_sesion(nombre, args.sesion, fechas)):
             continue
         seq, _ = cargar(nombre)
         lado = r["lado_dominante"]

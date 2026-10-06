@@ -129,7 +129,8 @@ E5 Auditoría y alertas
 - Capítulos 1, 2 y 3 de la tesis entregados. Capítulo 4: fecha objetivo 25/8/2026 (ya pasada); el texto
   vigente quedó escrito antes de que existiera motor funcional ("no existe código productivo" en su propia
   sección de limitaciones) y tiene varias secciones que ya no reflejan lo construido — lista de pendientes
-  de redacción acumulados en las decisiones 006, 010, 011, 012, 013, 014, 015, 018 y 019. Repasar esa lista
+  de redacción acumulados en las decisiones 006, 010, 011, 012, 013, 014, 015, 018, 019 y 020 (esta última con las limitaciones del
+  modo de captura declarado a incluir en los Capítulos 6 y 7). Repasar esa lista
   antes de dar el capítulo por actualizado (incluye el esquema de datos del apartado 4.4.6, que pasó de
   siete a nueve tablas).
 - **Motor: Etapas 0 a 4 del plan cerradas** (`v0.5.0-etapa4`, en `main`). Versión `0.4.1` (no desactualizada:

@@ -6,14 +6,14 @@ Usa un clip real de 25 fps del corpus público (`fase-a/segmentos/zverev_saque_l
 no es cámara lenta real) declarado `camara_lenta_240`: 240/25 = 9,6, no es un múltiplo
 entero — tiene que fallar.
 
-**Por qué no hay acá un clip real para "normal con fps alto → análisis completo"
-(el otro caso nuevo que pidió Valentín):** no existe en el corpus ningún recorte de un
-solo golpe grabado en modo normal (sin cámara lenta) — todos los recortes de la Fase B
-son capturas Apple en cámara lenta (240 fps reales declarados como 30). El único clip
-genuino a 60 fps del catálogo (`..._saque_perfil_060_01.mov`) es el ORIGINAL sin cortar
-(90 MB, varias repeticiones), no una unidad de un golpe. Ese caso queda cubierto por
+**Por qué no hay acá un clip real para "normal con ≥ 120 fps → análisis completo":** el
+iPhone con el que se grabó el corpus solo graba a 120 fps o más en modo cámara lenta; en
+modo normal el máximo es 60 fps, así que ese archivo no existe ni se puede producir con
+este equipo (decisión 020). Ese caso queda cubierto por
 `tests/unit/test_procesar_video_factor.py::test_normal_nunca_falla_sea_cual_sea_el_fps`
-(prueba pura, sin necesitar un archivo real) — no se inventa un archivo para esto.
+(prueba pura, sin archivo) — no se inventa un archivo para esto. El caso real de modo
+normal que sí existe (60 fps, un recorte propio) se prueba de punta a punta en
+`tests/integration/test_procesar_video_modo_normal_60fps.py`.
 
 Corre contra un proyecto Supabase real; se salta sin credenciales configuradas o sin el
 clip del corpus público en KINETIQ_DATA_DIR.

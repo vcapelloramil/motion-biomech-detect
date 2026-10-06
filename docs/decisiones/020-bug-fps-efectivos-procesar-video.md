@@ -96,10 +96,127 @@ producción.
   sobre un clip real de la Fase B (en vez de depender del catálogo) y conservan el nombre real del archivo
   dentro de una carpeta con UUID — con la corrección, vuelven a pasar y **ya no aparece el aviso de pico no
   finito**.
-- **No hay en el corpus ningún clip real de un solo golpe grabado en modo normal** (todos los recortes de la
-  Fase B son cámara lenta) para probar de punta a punta "normal con fps alto → análisis completo" contra un
-  archivo real — se prueba con la unidad pura (`_factor_y_motivo`) en vez de inventar o forzar un archivo que
-  no existe; anotado así en el propio test, no silenciado.
+- **"Normal con ≥ 120 fps" se prueba solo con la función pura, y no es un descuido:** el iPhone con el que se
+  grabó el corpus (iPhone 15 Pro Max) solo graba a 120 fps (o más) en modo cámara lenta; en modo normal el
+  máximo es 60 fps. Por eso no existe —ni se puede producir con este equipo— un clip real grabado en modo
+  normal con un contenedor de 120 fps o más. La rama se cubre con `_factor_y_motivo` (9 valores de fps de
+  23,976 a 480) en vez de forzar o fabricar un archivo; el caso real de modo normal que sí existe (60 fps) se
+  prueba de punta a punta (ver "Error inverso" más abajo). Otros teléfonos que sí graban 120 fps en normal
+  quedan cubiertos por la misma función pura, sin haberse probado con un archivo propio.
+
+## Metadatos de cámara lenta de un `.MOV` de iPhone, según ffprobe (2/10/2026)
+
+Medido sobre los originales del corpus (iPhone 15 Pro Max, iOS 26.6.2, HEVC 1920x1080): **ningún campo del
+archivo dice "cámara lenta" ni "240"**. No hay etiqueta, ni átomo `slo`/`slow` (se buscó en el contenedor), y
+`com.apple.quicktime.full-frame-rate-playback-intent` vale `0` tanto en cámara lenta como en normal, así que
+no discrimina. Lo único que cambia es indirecto y propio de este equipo:
+
+| | normal 30 fps | normal 60 fps | cámara lenta 240 (original) | cámara lenta 240 (recorte `-c copy`) |
+| --- | --- | --- | --- | --- |
+| `r_frame_rate` / `avg_frame_rate` | 30/1 · 29,99 (VFR) | 59,94 · 59,96 (VFR) | 30/1 · 30/1 (CFR exacto) | 30/1 · 30/1 |
+| `time_base` | 1/600 | 1/600 | 1/2400 | 1/19200 |
+| formato de pixel | 10 bit, HLG, Dolby Vision | 10 bit, HLG, Dolby Vision | 8 bit SDR, bt709 | 8 bit SDR, bt709 |
+| flujos en el contenedor | 7 (con metadatos por cuadro) | 7 | 3 | 2 |
+| tags Apple (marca, modelo, ubicación, fecha) | sí | sí | sí | **no** (el recorte los pierde) |
+
+- El enlentecimiento ya viene **horneado**: los paquetes del original de cámara lenta están separados 1/30 s
+  (4861 cuadros en 162,03 s del contenedor = 30,0 fps); la duración real de captura (162,03 / 8 = 20,25 s) solo
+  se conoce asumiendo el factor, el archivo no la declara.
+- El recorte con `ffmpeg -c copy` (el procedimiento del protocolo) conserva el formato de pixel y el CFR de 30
+  fps pero pierde la fecha, el modelo del equipo y los flujos de metadatos: deja menos pistas, no más.
+- **Conclusión: nada útil para decidir el factor.** Las diferencias (8 bit SDR + CFR + 3 flujos para cámara
+  lenta; 10 bit HLG + VFR + 7 flujos para normal) son un efecto colateral de cómo este iPhone graba cada modo
+  con la configuración por defecto de video HDR, no un dato declarado: sirven, como mucho, para descartar un
+  caso (un archivo 10 bit HLG con tasa variable **no puede** ser una cámara lenta exportada de este teléfono),
+  nunca para confirmarla, y no valen para Android ni para un iPhone con el video HDR apagado. La declaración
+  del usuario sigue siendo la única fuente del factor, como pide este diseño.
+
+## Error inverso: declarar cámara lenta sobre un video normal (2/10/2026)
+
+El caso que `_factor_y_motivo` **acepta a propósito** (240/60 = 4 y 240/30 = 8 son enteros ≥ 1): el usuario
+declara `camara_lenta_240` sobre un video grabado en modo normal. Probado con tres clips reales:
+el recorte propio de 60 fps (`20260924_VCR_saque_perfil_060_01_rep01.mov`, un saque de 5 s cortado con
+`-c copy` del original de ~1 minuto grabado a propósito en modo normal; sumado a `catalogo.csv` con
+`factor_estimado = 1`), `control_drive_30fps_01` y `saque_perfil_030`.
+
+- **`normal` + 60 fps, de punta a punta contra Supabase real:** `fps_real = 60`, `apto_fase_rapida = false`,
+  aptitud `solo_preparacion`, video `parcial`, sin reporte, sin `motivo_fallo` (no es un fallo).
+- **Declarados `camara_lenta_240` — los techos de plausibilidad (Fleisig x 3) los marcan, los tres, pero con
+  poco margen y por un solo segmento:**
+
+| clip (contenedor → factor) | segmento que dispara el techo | velocidad medida / techo | resultado |
+| --- | --- | --- | --- |
+| recorte 60 fps (x4) | pelvis | 1783 / 1320 °/s (x1,35) | repetición no auditable |
+| `control_drive_30fps_01` (x8) | torso (el ancla) | 2826 / 2610 °/s (x1,08) | "sin ancla", no auditable |
+| `saque_perfil_030` (x8) | pelvis | 2385 / 1320 °/s (x1,81) | repetición no auditable |
+
+  Con los fps correctos, ningún techo se dispara en ninguno. **Pero la detección es condicional, no una
+  garantía:** salta porque el segmento más rápido de *estos* jugadores supera techo/factor (pelvis > 330 °/s
+  reales con factor 4, torso > 326 °/s con factor 8). Un golpe más lento, o un `camara_lenta_120` sobre 60 fps
+  (factor 2), pasaría los techos con un orden "correcto" y números inflados — un reporte limpio y falso. Los
+  techos son una red de seguridad contra el ruido de detección, no un control de la declaración.
+- Dejado como prueba automática (`tests/integration/test_techos_plausibilidad_declaracion_erronea.py`, 6
+  casos, sin Supabase): caracteriza lo observado — correcta no dispara ningún techo; declarada de más, la
+  repetición no sale auditable. Si cambian los techos o el pipeline y falla, es una señal real, no un detalle.
+
+### Control adicional explorado y propuesta (NO implementada: DIFERIDA por decisión de Valentín, 6/10/2026)
+
+**Estado:** diferida. No se implementa hasta contar con la calibración de su umbral con datos del Criterio 3
+(variación entre sesiones del mismo atleta, `docs/resultados/criterio3.json`). Queda acá como propuesta, no
+como pendiente de aprobación.
+
+**Descartado con datos — banda de duración del gesto.** Se midió la duración real de la fase activa (ventana
+alrededor del pico global donde la velocidad total supera el 10 % del máximo) en los 84 clips de 240 fps bien
+declarados y en los tres clips normales bajo ambas declaraciones:
+
+| | duración real de la fase activa (s) |
+| --- | --- |
+| corpus 240 fps, saque (n = 36) | mín 0,04 · p10 0,31 · mediana 0,39 · máx 0,89 |
+| corpus 240 fps, drive (n = 24) | mín 0,05 · p10 0,09 · mediana 0,39 · máx 0,97 |
+| corpus 240 fps, revés (n = 24) | mín 0,16 · p10 0,70 · mediana 0,92 · máx 1,39 |
+| normales, declarados bien (60 / 30 / 30 fps) | 0,70 · 0,73 · 0,63 |
+| normales, declarados `camara_lenta_240` | 0,18 · 0,08 · 0,11 |
+
+Los valores de la declaración errónea (0,08–0,18 s) caen **dentro** del rango del corpus bien declarado
+(drive: p10 = 0,09; saque: mín 0,04): una banda por gesto con esta definición de "duración" no separa. Una
+duración útil necesita el marcador de fase independiente (inicio y fin del golpe), que sigue siendo trabajo
+futuro (decisión 011) — no se improvisa un umbral.
+
+**Propuesta: comparar contra el propio atleta** (CLAUDE.md §3, "comparar al jugador consigo mismo"). Un error
+de declaración escala **los tres segmentos a la vez** por el mismo factor (x2, x4, x8), cosa que un cambio real
+de técnica no hace. Con al menos una sesión previa del mismo atleta, gesto y encuadre, si los picos de
+pelvis, torso y brazo de una sesión nueva superan (o quedan por debajo de) la mediana de las anteriores por un
+factor ≥ 2 en los tres a la vez, el video queda `fallido` con un código nuevo
+(`velocidad_inconsistente_con_historial`, migración nueva) y el frontend le pide al jugador confirmar el modo
+de captura. Cubre justamente los casos que los techos dejan pasar (golpe lento, factor 2 o 4). **Límites,
+declarados:** necesita historial — la primera sesión de un atleta solo tiene los techos, que es el caso de
+menor protección; y su umbral (≥ 2) hay que calibrarlo con la variación entre sesiones que ya se midió en el
+Criterio 3 antes de fijarlo, no se elige a ojo. Se implementaría junto con la comparación contra la sesión
+anterior de la Etapa 5 (tarea 5.2), que ya necesita ese historial.
+
+## Limitaciones a declarar en la tesis (Capítulos 6 y 7)
+
+Registradas acá según la práctica del proyecto (esta decisión se suma a la lista de pendientes de redacción
+de CLAUDE.md §5); no se edita ningún capítulo todavía.
+
+1. **La detección del error inverso por techos de plausibilidad es condicional, no una garantía.** Cuando el
+   usuario declara cámara lenta sobre un video grabado en modo normal, la combinación declaración + contenedor
+   se acepta si el factor es un entero ≥ 1 (240/60 = 4, 240/30 = 8) — es lo esperado, no un fallo. Lo único
+   que frena entonces un reporte limpio pero falso son los techos de plausibilidad (Fleisig × 3 por segmento),
+   que saltan solo si el segmento más rápido supera techo/factor: en las tres pruebas reales saltaron, con
+   márgenes de ×1,08 a ×1,81. **Un factor ×2** (p. ej. `camara_lenta_120` sobre un video de 60 fps) **o un
+   golpe lento pueden pasar** los techos con un orden "correcto" y velocidades infladas. Se declara así: el
+   sistema no detecta de forma confiable una declaración de modo de captura equivocada; la fuente del factor
+   es la declaración del usuario.
+2. **Sin historial, la protección es solo la de los techos.** El control contra el propio atleta (propuesta
+   de arriba, diferida) necesita al menos una sesión previa; la primera sesión de un atleta es el caso de
+   menor protección.
+3. **El caso "normal con ≥ 120 fps" se probó solo con la función pura**, no con un archivo real: el equipo
+   de grabación (iPhone 15 Pro Max) solo graba a 120 fps o más en cámara lenta.
+4. **No hay detección de cámara lenta a partir del archivo.** Los metadatos de un `.MOV` de iPhone no
+   traen ninguna marca de cámara lenta; las diferencias indirectas (8 bit SDR / CFR / 3 flujos) son un efecto
+   de cómo este teléfono graba cada modo con la configuración de HDR por defecto, no un dato declarado, y se
+   pierden o no aplican a otros equipos.
 
 ## Qué significa para la tarea 3 original (oclusión vs. problema de cálculo)
 
