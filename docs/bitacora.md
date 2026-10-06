@@ -6,6 +6,17 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-07 (noche) — Resultado de la prueba del iPhone: el recorte llegó a 100 fps (decisión 028)
+
+- **Valentín subió el mismo recorte (2 s, se reproduce a velocidad normal) con los cuatro selectores.** Los cuatro archivos son **el mismo video** (15 bytes de metadatos distintos): **H.264 a 100 fps, 201 fotogramas, 2,01 s, 8,2 MB, con audio**, sin
+  etiqueta de cámara lenta. **La hipótesis "el recorte conserva los 240 fps" no se cumple por este camino.** Un saque entero entra en esos 201 fotogramas (en el corpus un saque dura 436–656 a 240 fps): se infiere tiempo real a 100 fps, no medido.
+- **El sistema no lo analizaría con ninguna declaración** (calculado con las funciones de producción): `camara_lenta_240`/`120` → `fallido` por `modo_captura_incompatible` (240/100 = 2,4); `normal` → `parcial` por R1 (100 < 120). **Riesgo grave para el 20/10.**
+- **Error mío corregido:** el primer informe del inspector clasificó los archivos como (c) por un umbral mal elegido (100 fps justo en el límite); ahora cualquier archivo con marcas ≥ 45 fps es "tiempo real" y se informa su aptitud (R1). El inspector además calcula qué haría el sistema según la declaración.
+- **Página republicada** con un campo "nota" para distinguir cada prueba. **Pendiente (Valentín):** (1) el mismo recorte guardado en **Archivos** y subido con "Elegir archivos"; (2) una cámara lenta **sin recortar** (≤ ~3 s reales); (3) anotar si el selector de Fotos muestra "Opciones" y qué ofrece.
+- **Especificación §5 corregida:** se retiró la afirmación de que el recorte conserva los 240 fps. El mensaje `modo_captura_incompatible` ("revisá el modo de captura") es **engañoso** para este caso (la declaración está bien, cambió el archivo): hace falta un motivo propio o tratarlo como `parcial` por R1; no se implementa hasta conocer los caminos alternativos.
+
+---
+
 ## 2026-10-07 (más tarde) — Página del iPhone publicada; casos a/b/c; Student Pack (decisiones 027 y 028)
 
 - **Página de prueba del iPhone PUBLICADA:** https://kinetiq-prueba-iphone.pages.dev/ (Cloudflare Pages, proyecto `kinetiq-prueba-iphone`). Se publicó con `wrangler`. El primer `wrangler login` falló con `request_forbidden`; el

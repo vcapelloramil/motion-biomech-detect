@@ -68,14 +68,12 @@ Con sesión: **Biblioteca** · **Cargar** · **Perfil**. El reporte, el procesam
   - "Modo cámara lenta de 120 fps" → `camara_lenta_120`.
   - "Grabación normal (sin cámara lenta)" → `normal`.
   - Texto de ayuda: "en el iPhone, es el modo que elegiste en la app Cámara antes de grabar — no se puede saber mirando el archivo". El motor combina esto con los datos reales del archivo; si no coinciden, el golpe se marca con un error claro en vez de adivinar (ver más abajo).
-  - **Qué elegir (decisión 028).** La pregunta es **cómo grabaste, no cómo se ve ni cómo llega el archivo**. Un golpe grabado en cámara lenta puede llegar al sistema de dos formas, y las dos son válidas:
-    - **Con la cámara lenta incorporada** (el video se ve lento, el archivo dice 30 fps): es lo que se obtiene al elegir el video entero o al recortarlo con la herramienta de recorte del sistema.
-    - **En tiempo real a 240 fotogramas por segundo** (el video se ve a velocidad normal, el archivo dice 240 fps): es lo que entrega el iPhone al **recortar un golpe del medio** de una cámara lenta en Fotos, que conserva los fotogramas y pierde la indicación de reproducción lenta.
-    - Por eso, **si grabaste en cámara lenta, elegí cámara lenta aunque tu video se vea a velocidad normal**. El sistema lee los dos formatos y calcula lo mismo. Elegí "Grabación normal" **solo** si no usaste el modo cámara lenta de la cámara.
-    - Texto sugerido bajo las tres opciones: *"Elegí cómo grabaste, no cómo se ve el video. Si usaste cámara lenta, elegí cámara lenta aunque el video recortado se vea a velocidad normal."*
-    - **Lo que no vale:** un video que perdió fotogramas por el camino (por ejemplo, reenviado por una aplicación de mensajería o convertido a 30 fps con un editor que descarta cuadros) **no se puede recuperar** con ninguna de las tres opciones. El panel de "cómo recortar" lo advierte: usar la herramienta de recorte del teléfono y subir el archivo directo, sin reenviarlo ni exportarlo con otra aplicación.
-    - El navegador muestra, cuando puede leerlos, los fps que declara el archivo elegido ("este archivo declara 240 fps" / "30 fps"), sin afirmar nada sobre la cámara lenta.
-  - **Pendiente de confirmar con la prueba del iPhone (decisión 028):** que el selector de archivos de Safari entregue el video con sus fotogramas originales; si transcodifica, el texto de esta sección cambia.
+  - **Qué elegir (decisión 028).** La pregunta es **cómo grabaste, no cómo se ve ni cómo llega el archivo**: si usaste el modo cámara lenta de la cámara, elegí cámara lenta, aunque el video recortado se vea a velocidad normal. Elegí "Grabación normal" **solo** si no usaste ese modo.
+    - Texto sugerido bajo las tres opciones: *"Elegí cómo grabaste, no cómo se ve el video."*
+  - **Lo que llega puede no ser lo que grabaste (medido el 7/10/2026).** Un clip grabado a 240 fps y **recortado en Fotos** llegó desde Safari del iPhone como un archivo **H.264 a 100 fps** (no 240, ni cámara lenta horneada a 30): por debajo del mínimo de 120 fps (R1), el sistema no puede analizar la fase rápida con ninguna de las tres opciones. Por eso:
+    - El navegador muestra, **antes de subir** y cuando puede leerlos, los fps que declara el archivo elegido ("este archivo llega a 100 fps") y, si son menos de 120, **avisa que el teléfono lo convirtió** y que no alcanza para el análisis completo, sin esperar a que falle en el servidor.
+    - **Qué camino recomendar al usuario es una pregunta abierta**: depende de las pruebas pendientes (decisión 028) sobre subir el original sin recortar y subir desde la app Archivos. Hasta tenerlas, esta sección **no promete** ningún camino. *(Una versión anterior de esta sección afirmaba que el recorte conservaba los 240 fps reales; la prueba lo refutó y se retiró.)*
+    - Un video que perdió fotogramas por el camino **no se puede recuperar** con ninguna de las tres opciones.
 - Selección múltiple de archivos (MP4, MOV). Validación previa en el navegador, por archivo:
   - más de 50 MB → no se sube, con instrucciones para recortar (decisión 016, tentativa);
   - duración mayor a ~8 s → aviso de que probablemente tenga varios golpes;

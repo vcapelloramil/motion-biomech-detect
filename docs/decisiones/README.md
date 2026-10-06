@@ -65,4 +65,4 @@ Qué habilita, qué cierra, qué hay que recordar más adelante.
 | [025](025-carga-directa-estado-directo-y-autenticacion-api.md) | Carga directa a Storage, estado por lectura directa y autenticación de la API con JWKS (desvío de §4.2.3 y §4.2.5) | vigente (Capítulo 4 por corregir) |
 | [026](026-hosting-cloudflare-y-frontend-en-el-repo.md) | El frontend se publica en Cloudflare y el repositorio es la única fuente del código | vigente (Capítulo 4 por corregir) |
 | [027](027-correo-de-confirmacion-smtp.md) | Correo de confirmación de registro: SMTP propio | vigente (A en curso con el Student Pack; B de respaldo) |
-| [028](028-llegada-del-golpe-a-240fps-casos-a-b-c.md) | Cómo llega un golpe grabado a 240 fps (casos a, b y c) y qué hace E0 con ellos | vigente; abierta en dos puntos que dependen de la prueba del iPhone |
+| [028](028-llegada-del-golpe-a-240fps-casos-a-b-c.md) | Cómo llega un golpe grabado a 240 fps (casos a, b y c) y qué hace E0 con ellos | vigente; **la prueba del iPhone refutó el caso (a)**: el recorte llegó a 100 fps; caminos alternativos pendientes |

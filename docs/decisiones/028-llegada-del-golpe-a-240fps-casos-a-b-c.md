@@ -1,7 +1,7 @@
 # Decisión 028 — Cómo llega un golpe grabado a 240 fps (casos a, b y c) y qué hace E0 con ellos
 
 **Fecha:** 7 de octubre de 2026
-**Estado:** vigente en lo implementado y medido; **abierta** en dos puntos que dependen de la prueba del iPhone (ver "Pendiente").
+**Estado:** vigente en lo implementado y medido. **La prueba del iPhone (7/10) refutó la hipótesis del caso (a)**: el recorte llegó a 100 fps, no a 240 (ver "Resultado de la prueba del iPhone"). Abierta en los caminos alternativos (ver "Pendiente").
 **Afecta a:** `backend/app/engine/uniformidad_temporal.py` · `backend/app/inspeccionar_subidas.py` · `procesar_video._factor_y_motivo` (decisión 020) ·
 `docs/ux/especificacion-frontend.md` §5 · E0 (`engine/ingest.py`) · Capítulos 6 y 7 (limitaciones)
 
@@ -71,14 +71,46 @@ El módulo conserva `detectar_tramos_acelerados` como **diagnóstico experimenta
 con las mismas defensas condicionales (techos de plausibilidad) y la misma propuesta diferida (control contra historial, decisión 020). Qué puede cambiar esto: la prueba del iPhone dirá **si Safari entrega (c)** (fotogramas descartados al pasar por el selector de archivos).
 Si lo hace, el formulario tiene que dejar de ofrecer ese camino o pedir la duración real del gesto.
 
+## Resultado de la prueba del iPhone (7/10/2026)
+
+Valentín grabó a 240 fps, **recortó un golpe del medio en Fotos** (2 s, se reproduce a velocidad normal) y lo subió con los **cuatro selectores** de la página de prueba. Medido con `app.inspeccionar_subidas`:
+
+| | Valor |
+| --- | --- |
+| Archivos | 4 (`A`, `B`, `C`, `D`), todos `.mov` / `video/quicktime`, 8,21 MB |
+| ¿Cambió algo según el selector? | **No.** Los cuatro son el mismo video: difieren en **15 bytes** de metadatos (hora de creación). Safari entrega lo mismo con `accept="video/*"`, `video/quicktime`, `video/mp4` y sin filtro; incluso con `video/mp4` entregó un `.mov`. |
+| Video | **H.264 (High) 1920×1080, 100 fps (`r_frame_rate` 100/1), 201 fotogramas, 2,01 s**, 34 Mbps; marcas de tiempo constantes |
+| Otras pistas | audio AAC de 2,005 s y una pista de metadatos de Apple (`mebx`); **ninguna etiqueta de cámara lenta ni de 240** |
+| Caso | **ni (a) a 240, ni (b) a 30, ni (c)**: tiempo real a **100 fps** |
+
+**La hipótesis de Valentín ("el recorte conserva los 240 fotogramas por segundo") no se cumple por este camino.** El archivo que llega tiene 100 fps. Lo que se sabe: es un reexportado de iOS (H.264, con audio) y un saque completo (toma de la pelota hasta la finalización) entra en sus 201 fotogramas.
+Lo que **se infiere, sin medir**: un saque del corpus dura 436 a 656 fotogramas a 240 fps (1,8 a 2,7 s), así que 2 s para el saque entero es coherente con **tiempo real a 100 fps**, es decir, iOS descartó fotogramas respecto de la captura. No se sabe qué hace iOS exactamente.
+Nota: Valentín informó "el golpe real dura aproximadamente 10/12 s"; se tomó el recorte de 2 s como duración real. La clasificación a 100 fps **no depende** de ese dato (solo (b) y (c) lo usan).
+
+**Qué haría hoy el sistema con ese archivo** (calculado con las mismas funciones que producción, sin correrlo):
+
+| Declaración | Resultado |
+| --- | --- |
+| `camara_lenta_240` | **Falla** (`modo_captura_incompatible`): 240/100 = 2,4, no es entero |
+| `camara_lenta_120` | **Falla** (`modo_captura_incompatible`): 120/100 = 1,2 |
+| `normal` | **Queda `parcial` por R1**: 100 fps efectivos (< 120), sin análisis de la fase rápida |
+
+**Conclusión: por este camino (iPhone → Fotos → recorte → selector de archivos de Safari) un golpe grabado a 240 fps no es analizable.** Es el riesgo que la prueba buscaba y es **grave para el objetivo del 20/10**.
+
+**Un error del clasificador, corregido.** El primer informe del inspector marcó estos archivos como el caso (c) ("fotogramas descartados"), por un umbral mal elegido: el límite de "tiempo real" era 100 fps justo, y 100 fps quedaba por debajo por una décima. Ahora cualquier archivo con marcas a ≥ 45 fps es "tiempo real" y se informa su aptitud según R1; se probó con 99,99, 100 y 100,01.
+
 ## Pendiente
 
-1. **Prueba del iPhone** (https://kinetiq-prueba-iphone.pages.dev/, cuatro selectores): dirá si Safari entrega el recorte como (a), como (b) o como (c) **y si el recorte del medio conserva realmente los 240 fps** (por ahora es la lectura de Valentín, no un dato medido). Necesita la duración real del golpe.
-2. **Una rampa real:** para calibrar un detector hay que tener una. Valentín puede producirla editando en Fotos las barras de cámara lenta de un video (dejando los extremos a velocidad normal) y subiéndolo con el selector A. Con ella se decide si vale la pena un detector basado en la pose (la velocidad de las articulaciones da un escalón ×8 que el manejo de la cámara no produce de la misma forma), o si basta con la advertencia al usuario.
-3. **Limitaciones para los Capítulos 6 y 7:** el caso (c) se detecta solo de forma condicional; las rampas no se detectan.
+1. **Caminos alternativos** (Valentín los prueba con la misma página, usando el campo "nota"):
+   - **El mismo recorte guardado en la app Archivos** (Fotos → Compartir → "Guardar en Archivos") y subido con "Elegir archivos". Es la prueba clave: si el archivo conserva el formato original, Archivos es el camino.
+   - **Una cámara lenta sin recortar** (corta, de ≤ ~3 s reales, menos de 50 MB), elegida desde Fotos.
+   - Si el selector de Fotos de Safari muestra un botón **"Opciones"**, anotar qué ofrece (formato "Actual" o "Más compatible").
+2. **Cómo avisar al usuario.** Hoy un archivo a 100 fps con la declaración correcta (`camara_lenta_240`) falla con `modo_captura_incompatible`, y el mensaje del frontend ("revisá el modo de captura") es **engañoso**: la declaración está bien y lo que cambió es el archivo. Hace falta un motivo propio (con migración) o decidir si E0 trata un archivo en tiempo real de menos de 120 fps como `parcial` por R1 sin importar el modo declarado. **No se implementa hasta conocer los caminos alternativos.**
+3. **Una rampa real:** descartada por Valentín (no es prioridad para el MVP). El detector de tramos queda como diagnóstico experimental.
+4. **Limitaciones para los Capítulos 6 y 7:** el caso (c) se detecta solo de forma condicional; las rampas no se detectan; **el video que entrega el navegador del teléfono puede tener menos fotogramas que el que se grabó**.
 
 ## Consecuencias
 
 - El inspector y el diagnóstico del corpus quedan como instrumentos de medición (solo lectura). Ninguno cambia el comportamiento de producción.
-- **E0 no cambia en esta decisión.** Si la prueba del iPhone muestra (c), se abre una decisión nueva que supersede a esta.
+- **E0 no cambia en esta decisión.** Si los caminos alternativos tampoco entregan 120 fps o más, el MVP no puede prometer análisis de la fase rápida desde un celular, y hay que decidir el alcance (por ejemplo, subir desde una computadora, o restringir a lo que sí llega bien).
 - Las marcas de tiempo del archivo (`fps_por_marcas`) todavía no se guardan en la trazabilidad del reporte; se evaluará al ensamblar el reporte (tarea 5.4).
