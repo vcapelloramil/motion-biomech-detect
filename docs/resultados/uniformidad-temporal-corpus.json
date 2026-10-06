@@ -1,0 +1,1356 @@
+{
+ "descripcion": "Diagnóstico de uniformidad temporal del corpus propio (decisión 028). Solo lectura.",
+ "parametros_por_defecto": {
+  "razon_minima": 5.0,
+  "duracion_minima_s": 0.5,
+  "ventana_mediana": 15,
+  "percentil_base": 25.0
+ },
+ "archivos": {
+  "original": 18,
+  "golpe": 95,
+  "clip_completo": 2
+ },
+ "marcas_de_tiempo": {
+  "todas_constantes": true,
+  "fps_por_marcas_distintos": [
+   30,
+   60
+  ]
+ },
+ "marcados_segun_umbral": {
+  "razon>=3_duracion>=0.3s": {
+   "golpe": 38,
+   "clip_completo": 2,
+   "original": 18
+  },
+  "razon>=3_duracion>=0.5s": {
+   "golpe": 32,
+   "clip_completo": 2,
+   "original": 18
+  },
+  "razon>=3_duracion>=1.0s": {
+   "golpe": 20,
+   "clip_completo": 2,
+   "original": 18
+  },
+  "razon>=4_duracion>=0.3s": {
+   "golpe": 15,
+   "clip_completo": 2,
+   "original": 18
+  },
+  "razon>=4_duracion>=0.5s": {
+   "golpe": 13,
+   "clip_completo": 2,
+   "original": 18
+  },
+  "razon>=4_duracion>=1.0s": {
+   "golpe": 6,
+   "clip_completo": 2,
+   "original": 18
+  },
+  "razon>=5_duracion>=0.3s": {
+   "golpe": 7,
+   "clip_completo": 2,
+   "original": 18
+  },
+  "razon>=5_duracion>=0.5s": {
+   "golpe": 5,
+   "clip_completo": 2,
+   "original": 18
+  },
+  "razon>=5_duracion>=1.0s": {
+   "golpe": 2,
+   "clip_completo": 2,
+   "original": 18
+  },
+  "razon>=6_duracion>=0.3s": {
+   "golpe": 2,
+   "clip_completo": 2,
+   "original": 18
+  },
+  "razon>=6_duracion>=0.5s": {
+   "golpe": 1,
+   "clip_completo": 2,
+   "original": 18
+  },
+  "razon>=6_duracion>=1.0s": {
+   "golpe": 0,
+   "clip_completo": 2,
+   "original": 18
+  },
+  "razon>=8_duracion>=0.3s": {
+   "golpe": 0,
+   "clip_completo": 2,
+   "original": 18
+  },
+  "razon>=8_duracion>=0.5s": {
+   "golpe": 0,
+   "clip_completo": 2,
+   "original": 18
+  },
+  "razon>=8_duracion>=1.0s": {
+   "golpe": 0,
+   "clip_completo": 2,
+   "original": 18
+  },
+  "razon>=10_duracion>=0.3s": {
+   "golpe": 0,
+   "clip_completo": 2,
+   "original": 18
+  },
+  "razon>=10_duracion>=0.5s": {
+   "golpe": 0,
+   "clip_completo": 2,
+   "original": 18
+  },
+  "razon>=10_duracion>=1.0s": {
+   "golpe": 0,
+   "clip_completo": 1,
+   "original": 17
+  }
+ },
+ "nota": "Los originales NO tienen rampas de velocidad (toda la grabación es cámara lenta): lo que marca el detector al principio y al final es la persona caminando hacia el teléfono y manipulándolo. Se verificó mirando los fotogramas. El corpus no contiene ninguna rampa real.",
+ "archivos_detalle": [
+  {
+   "archivo": "sesion-01__drive__originales__20260924_VCR_drive_perfil_240_01",
+   "tipo": "original",
+   "fotogramas": 5719,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": [
+    {
+     "desde_s": 6.2,
+     "hasta_s": 7.9,
+     "razon_maxima": 17.9
+    },
+    {
+     "desde_s": 186.7,
+     "hasta_s": 190.6,
+     "razon_maxima": 42.2
+    }
+   ]
+  },
+  {
+   "archivo": "sesion-01__drive__originales__20260924_VCR_drive_trescuartos_240_01",
+   "tipo": "original",
+   "fotogramas": 6293,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": [
+    {
+     "desde_s": 5.9,
+     "hasta_s": 7.3,
+     "razon_maxima": 15.8
+    },
+    {
+     "desde_s": 206.0,
+     "hasta_s": 209.7,
+     "razon_maxima": 38.0
+    }
+   ]
+  },
+  {
+   "archivo": "sesion-01__drive__recortes__20260924_VCR_drive_perfil_240_01_rep01",
+   "tipo": "golpe",
+   "fotogramas": 360,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__drive__recortes__20260924_VCR_drive_perfil_240_01_rep02",
+   "tipo": "golpe",
+   "fotogramas": 300,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__drive__recortes__20260924_VCR_drive_perfil_240_01_rep03",
+   "tipo": "golpe",
+   "fotogramas": 300,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__drive__recortes__20260924_VCR_drive_perfil_240_01_rep04",
+   "tipo": "golpe",
+   "fotogramas": 300,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__drive__recortes__20260924_VCR_drive_perfil_240_01_rep05",
+   "tipo": "golpe",
+   "fotogramas": 450,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__drive__recortes__20260924_VCR_drive_perfil_240_01_rep06",
+   "tipo": "golpe",
+   "fotogramas": 480,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__drive__recortes__20260924_VCR_drive_trescuartos_240_01_rep01",
+   "tipo": "golpe",
+   "fotogramas": 480,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__drive__recortes__20260924_VCR_drive_trescuartos_240_01_rep02",
+   "tipo": "golpe",
+   "fotogramas": 300,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__drive__recortes__20260924_VCR_drive_trescuartos_240_01_rep03",
+   "tipo": "golpe",
+   "fotogramas": 360,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__drive__recortes__20260924_VCR_drive_trescuartos_240_01_rep04",
+   "tipo": "golpe",
+   "fotogramas": 300,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__drive__recortes__20260924_VCR_drive_trescuartos_240_01_rep05",
+   "tipo": "golpe",
+   "fotogramas": 420,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__drive__recortes__20260924_VCR_drive_trescuartos_240_01_rep06",
+   "tipo": "golpe",
+   "fotogramas": 420,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__reves__originales__20260924_VCR_reves_perfil_240_01",
+   "tipo": "original",
+   "fotogramas": 9132,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": [
+    {
+     "desde_s": 7.0,
+     "hasta_s": 8.4,
+     "razon_maxima": 14.1
+    },
+    {
+     "desde_s": 300.1,
+     "hasta_s": 304.3,
+     "razon_maxima": 20.4
+    }
+   ]
+  },
+  {
+   "archivo": "sesion-01__reves__originales__20260924_VCR_reves_trescuartos_240_01",
+   "tipo": "original",
+   "fotogramas": 8930,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": [
+    {
+     "desde_s": 6.4,
+     "hasta_s": 7.7,
+     "razon_maxima": 16.3
+    },
+    {
+     "desde_s": 293.5,
+     "hasta_s": 296.0,
+     "razon_maxima": 9.6
+    },
+    {
+     "desde_s": 296.1,
+     "hasta_s": 297.4,
+     "razon_maxima": 14.8
+    }
+   ]
+  },
+  {
+   "archivo": "sesion-01__reves__recortes__20260924_VCR_reves_perfil_240_01_rep01",
+   "tipo": "golpe",
+   "fotogramas": 390,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__reves__recortes__20260924_VCR_reves_perfil_240_01_rep02",
+   "tipo": "golpe",
+   "fotogramas": 360,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__reves__recortes__20260924_VCR_reves_perfil_240_01_rep03",
+   "tipo": "golpe",
+   "fotogramas": 300,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__reves__recortes__20260924_VCR_reves_perfil_240_01_rep04",
+   "tipo": "golpe",
+   "fotogramas": 300,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__reves__recortes__20260924_VCR_reves_perfil_240_01_rep05",
+   "tipo": "golpe",
+   "fotogramas": 360,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__reves__recortes__20260924_VCR_reves_perfil_240_01_rep06",
+   "tipo": "golpe",
+   "fotogramas": 360,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__reves__recortes__20260924_VCR_reves_trescuartos_240_01_rep01",
+   "tipo": "golpe",
+   "fotogramas": 360,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__reves__recortes__20260924_VCR_reves_trescuartos_240_01_rep02",
+   "tipo": "golpe",
+   "fotogramas": 360,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__reves__recortes__20260924_VCR_reves_trescuartos_240_01_rep03",
+   "tipo": "golpe",
+   "fotogramas": 360,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__reves__recortes__20260924_VCR_reves_trescuartos_240_01_rep04",
+   "tipo": "golpe",
+   "fotogramas": 390,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__reves__recortes__20260924_VCR_reves_trescuartos_240_01_rep05",
+   "tipo": "golpe",
+   "fotogramas": 360,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__reves__recortes__20260924_VCR_reves_trescuartos_240_01_rep06",
+   "tipo": "golpe",
+   "fotogramas": 390,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__saque__originales__20260924_VCR_saque_espaldas_240_01",
+   "tipo": "original",
+   "fotogramas": 6031,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": [
+    {
+     "desde_s": 5.3,
+     "hasta_s": 7.0,
+     "razon_maxima": 18.2
+    },
+    {
+     "desde_s": 7.9,
+     "hasta_s": 8.4,
+     "razon_maxima": 5.1
+    },
+    {
+     "desde_s": 196.9,
+     "hasta_s": 201.0,
+     "razon_maxima": 48.0
+    }
+   ]
+  },
+  {
+   "archivo": "sesion-01__saque__originales__20260924_VCR_saque_fueracuadro_240_01",
+   "tipo": "original",
+   "fotogramas": 5400,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": [
+    {
+     "desde_s": 6.1,
+     "hasta_s": 8.4,
+     "razon_maxima": 17.3
+    },
+    {
+     "desde_s": 176.2,
+     "hasta_s": 180.0,
+     "razon_maxima": 64.7
+    }
+   ]
+  },
+  {
+   "archivo": "sesion-01__saque__originales__20260924_VCR_saque_perfil_030_01",
+   "tipo": "original",
+   "fotogramas": 1385,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": [
+    {
+     "desde_s": 6.1,
+     "hasta_s": 7.0,
+     "razon_maxima": 9.0
+    },
+    {
+     "desde_s": 42.6,
+     "hasta_s": 45.7,
+     "razon_maxima": 12.9
+    }
+   ]
+  },
+  {
+   "archivo": "sesion-01__saque__originales__20260924_VCR_saque_perfil_060_01",
+   "tipo": "original",
+   "fotogramas": 3376,
+   "fps_por_marcas": 59.999,
+   "marcas_constantes": true,
+   "tramos_por_defecto": [
+    {
+     "desde_s": 13.0,
+     "hasta_s": 15.5,
+     "razon_maxima": 11.6
+    },
+    {
+     "desde_s": 105.1,
+     "hasta_s": 105.9,
+     "razon_maxima": 6.9
+    },
+    {
+     "desde_s": 108.3,
+     "hasta_s": 112.5,
+     "razon_maxima": 15.4
+    }
+   ]
+  },
+  {
+   "archivo": "sesion-01__saque__originales__20260924_VCR_saque_perfil_240_01",
+   "tipo": "original",
+   "fotogramas": 4861,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": [
+    {
+     "desde_s": 1.0,
+     "hasta_s": 1.9,
+     "razon_maxima": 15.3
+    },
+    {
+     "desde_s": 2.7,
+     "hasta_s": 4.3,
+     "razon_maxima": 11.0
+    },
+    {
+     "desde_s": 4.7,
+     "hasta_s": 5.5,
+     "razon_maxima": 5.5
+    },
+    {
+     "desde_s": 155.6,
+     "hasta_s": 158.8,
+     "razon_maxima": 15.7
+    },
+    {
+     "desde_s": 160.2,
+     "hasta_s": 162.0,
+     "razon_maxima": 62.9
+    }
+   ]
+  },
+  {
+   "archivo": "sesion-01__saque__originales__20260924_VCR_saque_trescuartos_240_01",
+   "tipo": "original",
+   "fotogramas": 7009,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": [
+    {
+     "desde_s": 6.1,
+     "hasta_s": 8.2,
+     "razon_maxima": 23.2
+    },
+    {
+     "desde_s": 228.5,
+     "hasta_s": 233.6,
+     "razon_maxima": 62.1
+    }
+   ]
+  },
+  {
+   "archivo": "sesion-01__saque__recortes__20260924_VCR_saque_espaldas_240_01_rep01",
+   "tipo": "golpe",
+   "fotogramas": 510,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__saque__recortes__20260924_VCR_saque_espaldas_240_01_rep02",
+   "tipo": "golpe",
+   "fotogramas": 450,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__saque__recortes__20260924_VCR_saque_espaldas_240_01_rep03",
+   "tipo": "golpe",
+   "fotogramas": 420,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__saque__recortes__20260924_VCR_saque_espaldas_240_01_rep04",
+   "tipo": "golpe",
+   "fotogramas": 450,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__saque__recortes__20260924_VCR_saque_espaldas_240_01_rep05",
+   "tipo": "golpe",
+   "fotogramas": 420,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__saque__recortes__20260924_VCR_saque_fueracuadro_240_01_rep01",
+   "tipo": "golpe",
+   "fotogramas": 496,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__saque__recortes__20260924_VCR_saque_fueracuadro_240_01_rep02",
+   "tipo": "golpe",
+   "fotogramas": 424,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__saque__recortes__20260924_VCR_saque_fueracuadro_240_01_rep03",
+   "tipo": "golpe",
+   "fotogramas": 436,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__saque__recortes__20260924_VCR_saque_fueracuadro_240_01_rep04",
+   "tipo": "golpe",
+   "fotogramas": 552,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__saque__recortes__20260924_VCR_saque_fueracuadro_240_01_rep05",
+   "tipo": "golpe",
+   "fotogramas": 480,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__saque__recortes__20260924_VCR_saque_perfil_030_01",
+   "tipo": "clip_completo",
+   "fotogramas": 1385,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": [
+    {
+     "desde_s": 6.1,
+     "hasta_s": 7.0,
+     "razon_maxima": 9.0
+    },
+    {
+     "desde_s": 42.6,
+     "hasta_s": 45.7,
+     "razon_maxima": 12.9
+    }
+   ]
+  },
+  {
+   "archivo": "sesion-01__saque__recortes__20260924_VCR_saque_perfil_060_01",
+   "tipo": "clip_completo",
+   "fotogramas": 3376,
+   "fps_por_marcas": 59.999,
+   "marcas_constantes": true,
+   "tramos_por_defecto": [
+    {
+     "desde_s": 13.0,
+     "hasta_s": 15.5,
+     "razon_maxima": 11.6
+    },
+    {
+     "desde_s": 105.1,
+     "hasta_s": 105.9,
+     "razon_maxima": 6.9
+    },
+    {
+     "desde_s": 108.3,
+     "hasta_s": 112.5,
+     "razon_maxima": 15.4
+    }
+   ]
+  },
+  {
+   "archivo": "sesion-01__saque__recortes__20260924_VCR_saque_perfil_060_01_rep01",
+   "tipo": "golpe",
+   "fotogramas": 254,
+   "fps_por_marcas": 59.999,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__saque__recortes__20260924_VCR_saque_perfil_240_01_rep01",
+   "tipo": "golpe",
+   "fotogramas": 436,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__saque__recortes__20260924_VCR_saque_perfil_240_01_rep02",
+   "tipo": "golpe",
+   "fotogramas": 656,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__saque__recortes__20260924_VCR_saque_perfil_240_01_rep03",
+   "tipo": "golpe",
+   "fotogramas": 424,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__saque__recortes__20260924_VCR_saque_perfil_240_01_rep04",
+   "tipo": "golpe",
+   "fotogramas": 368,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__saque__recortes__20260924_VCR_saque_perfil_240_01_rep05",
+   "tipo": "golpe",
+   "fotogramas": 442,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__saque__recortes__20260924_VCR_saque_perfil_240_01_rep06",
+   "tipo": "golpe",
+   "fotogramas": 461,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__saque__recortes__20260924_VCR_saque_trescuartos_240_01_rep01",
+   "tipo": "golpe",
+   "fotogramas": 450,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__saque__recortes__20260924_VCR_saque_trescuartos_240_01_rep02",
+   "tipo": "golpe",
+   "fotogramas": 480,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__saque__recortes__20260924_VCR_saque_trescuartos_240_01_rep03",
+   "tipo": "golpe",
+   "fotogramas": 450,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__saque__recortes__20260924_VCR_saque_trescuartos_240_01_rep04",
+   "tipo": "golpe",
+   "fotogramas": 450,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__saque__recortes__20260924_VCR_saque_trescuartos_240_01_rep05",
+   "tipo": "golpe",
+   "fotogramas": 600,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-01__saque__recortes__20260924_VCR_saque_trescuartos_240_01_rep06",
+   "tipo": "golpe",
+   "fotogramas": 420,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__drive__originales__20260925_VCR_drive_perfil_240_02",
+   "tipo": "original",
+   "fotogramas": 7369,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": [
+    {
+     "desde_s": 5.7,
+     "hasta_s": 7.5,
+     "razon_maxima": 20.2
+    },
+    {
+     "desde_s": 236.9,
+     "hasta_s": 237.6,
+     "razon_maxima": 5.9
+    },
+    {
+     "desde_s": 241.2,
+     "hasta_s": 245.6,
+     "razon_maxima": 61.3
+    }
+   ]
+  },
+  {
+   "archivo": "sesion-02__drive__originales__20260925_VCR_drive_trescuartos_240_02",
+   "tipo": "original",
+   "fotogramas": 9168,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": [
+    {
+     "desde_s": 6.5,
+     "hasta_s": 8.7,
+     "razon_maxima": 28.6
+    },
+    {
+     "desde_s": 298.5,
+     "hasta_s": 299.2,
+     "razon_maxima": 6.3
+    },
+    {
+     "desde_s": 301.7,
+     "hasta_s": 305.6,
+     "razon_maxima": 118.4
+    }
+   ]
+  },
+  {
+   "archivo": "sesion-02__drive__recortes__20260925_VCR_drive_perfil_240_02_rep01",
+   "tipo": "golpe",
+   "fotogramas": 390,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__drive__recortes__20260925_VCR_drive_perfil_240_02_rep02",
+   "tipo": "golpe",
+   "fotogramas": 420,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__drive__recortes__20260925_VCR_drive_perfil_240_02_rep03",
+   "tipo": "golpe",
+   "fotogramas": 360,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__drive__recortes__20260925_VCR_drive_perfil_240_02_rep04",
+   "tipo": "golpe",
+   "fotogramas": 450,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__drive__recortes__20260925_VCR_drive_perfil_240_02_rep05",
+   "tipo": "golpe",
+   "fotogramas": 510,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__drive__recortes__20260925_VCR_drive_perfil_240_02_rep06",
+   "tipo": "golpe",
+   "fotogramas": 450,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__drive__recortes__20260925_VCR_drive_trescuartos_240_02_rep01",
+   "tipo": "golpe",
+   "fotogramas": 300,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__drive__recortes__20260925_VCR_drive_trescuartos_240_02_rep02",
+   "tipo": "golpe",
+   "fotogramas": 540,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__drive__recortes__20260925_VCR_drive_trescuartos_240_02_rep03",
+   "tipo": "golpe",
+   "fotogramas": 390,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__drive__recortes__20260925_VCR_drive_trescuartos_240_02_rep04",
+   "tipo": "golpe",
+   "fotogramas": 420,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__drive__recortes__20260925_VCR_drive_trescuartos_240_02_rep05",
+   "tipo": "golpe",
+   "fotogramas": 420,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__drive__recortes__20260925_VCR_drive_trescuartos_240_02_rep06",
+   "tipo": "golpe",
+   "fotogramas": 390,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__reves__originales__20260925_VCR_reves_perfil_240_02",
+   "tipo": "original",
+   "fotogramas": 9609,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": [
+    {
+     "desde_s": 5.9,
+     "hasta_s": 7.8,
+     "razon_maxima": 25.7
+    },
+    {
+     "desde_s": 307.0,
+     "hasta_s": 307.5,
+     "razon_maxima": 6.2
+    },
+    {
+     "desde_s": 312.0,
+     "hasta_s": 312.5,
+     "razon_maxima": 6.2
+    },
+    {
+     "desde_s": 316.2,
+     "hasta_s": 320.3,
+     "razon_maxima": 91.3
+    }
+   ]
+  },
+  {
+   "archivo": "sesion-02__reves__originales__20260925_VCR_reves_trescuartos_240_02",
+   "tipo": "original",
+   "fotogramas": 8170,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": [
+    {
+     "desde_s": 5.9,
+     "hasta_s": 8.4,
+     "razon_maxima": 26.3
+    },
+    {
+     "desde_s": 266.2,
+     "hasta_s": 266.8,
+     "razon_maxima": 6.3
+    },
+    {
+     "desde_s": 267.0,
+     "hasta_s": 272.3,
+     "razon_maxima": 85.8
+    }
+   ]
+  },
+  {
+   "archivo": "sesion-02__reves__recortes__20260925_VCR_reves_perfil_240_02_rep01",
+   "tipo": "golpe",
+   "fotogramas": 330,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__reves__recortes__20260925_VCR_reves_perfil_240_02_rep02",
+   "tipo": "golpe",
+   "fotogramas": 360,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__reves__recortes__20260925_VCR_reves_perfil_240_02_rep03",
+   "tipo": "golpe",
+   "fotogramas": 300,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__reves__recortes__20260925_VCR_reves_perfil_240_02_rep04",
+   "tipo": "golpe",
+   "fotogramas": 300,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__reves__recortes__20260925_VCR_reves_perfil_240_02_rep05",
+   "tipo": "golpe",
+   "fotogramas": 360,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__reves__recortes__20260925_VCR_reves_perfil_240_02_rep06",
+   "tipo": "golpe",
+   "fotogramas": 420,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__reves__recortes__20260925_VCR_reves_trescuartos_240_02_rep01",
+   "tipo": "golpe",
+   "fotogramas": 390,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__reves__recortes__20260925_VCR_reves_trescuartos_240_02_rep02",
+   "tipo": "golpe",
+   "fotogramas": 330,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__reves__recortes__20260925_VCR_reves_trescuartos_240_02_rep03",
+   "tipo": "golpe",
+   "fotogramas": 480,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": [
+    {
+     "desde_s": 6.3,
+     "hasta_s": 6.8,
+     "razon_maxima": 5.3
+    }
+   ]
+  },
+  {
+   "archivo": "sesion-02__reves__recortes__20260925_VCR_reves_trescuartos_240_02_rep04",
+   "tipo": "golpe",
+   "fotogramas": 360,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__reves__recortes__20260925_VCR_reves_trescuartos_240_02_rep05",
+   "tipo": "golpe",
+   "fotogramas": 330,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__reves__recortes__20260925_VCR_reves_trescuartos_240_02_rep06",
+   "tipo": "golpe",
+   "fotogramas": 360,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__saque__originales__20260925_VCR_saque_perfil_240_02",
+   "tipo": "original",
+   "fotogramas": 7578,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": [
+    {
+     "desde_s": 6.4,
+     "hasta_s": 8.1,
+     "razon_maxima": 23.7
+    },
+    {
+     "desde_s": 247.7,
+     "hasta_s": 252.6,
+     "razon_maxima": 76.8
+    }
+   ]
+  },
+  {
+   "archivo": "sesion-02__saque__originales__20260925_VCR_saque_trescuartos_240_02",
+   "tipo": "original",
+   "fotogramas": 7011,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": [
+    {
+     "desde_s": 4.9,
+     "hasta_s": 6.9,
+     "razon_maxima": 23.7
+    },
+    {
+     "desde_s": 226.9,
+     "hasta_s": 227.8,
+     "razon_maxima": 6.6
+    },
+    {
+     "desde_s": 228.7,
+     "hasta_s": 233.7,
+     "razon_maxima": 84.4
+    }
+   ]
+  },
+  {
+   "archivo": "sesion-02__saque__originales__20260925_VCR_saque_trescuartos_240_02b",
+   "tipo": "original",
+   "fotogramas": 8230,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": [
+    {
+     "desde_s": 4.6,
+     "hasta_s": 6.8,
+     "razon_maxima": 24.9
+    },
+    {
+     "desde_s": 260.9,
+     "hasta_s": 261.5,
+     "razon_maxima": 5.9
+    },
+    {
+     "desde_s": 268.3,
+     "hasta_s": 274.3,
+     "razon_maxima": 70.4
+    }
+   ]
+  },
+  {
+   "archivo": "sesion-02__saque__originales__20260925_VCR_saque_trescuartos_240_02c",
+   "tipo": "original",
+   "fotogramas": 8895,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": [
+    {
+     "desde_s": 5.5,
+     "hasta_s": 7.4,
+     "razon_maxima": 23.2
+    },
+    {
+     "desde_s": 291.0,
+     "hasta_s": 296.5,
+     "razon_maxima": 74.0
+    }
+   ]
+  },
+  {
+   "archivo": "sesion-02__saque__recortes__20260925_VCR_saque_perfil_240_02_rep01",
+   "tipo": "golpe",
+   "fotogramas": 600,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__saque__recortes__20260925_VCR_saque_perfil_240_02_rep02",
+   "tipo": "golpe",
+   "fotogramas": 570,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__saque__recortes__20260925_VCR_saque_perfil_240_02_rep03",
+   "tipo": "golpe",
+   "fotogramas": 540,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__saque__recortes__20260925_VCR_saque_perfil_240_02_rep04",
+   "tipo": "golpe",
+   "fotogramas": 600,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__saque__recortes__20260925_VCR_saque_perfil_240_02_rep05",
+   "tipo": "golpe",
+   "fotogramas": 600,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__saque__recortes__20260925_VCR_saque_perfil_240_02_rep06",
+   "tipo": "golpe",
+   "fotogramas": 600,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__saque__recortes__20260925_VCR_saque_trescuartos_240_02_rep01",
+   "tipo": "golpe",
+   "fotogramas": 630,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__saque__recortes__20260925_VCR_saque_trescuartos_240_02_rep02",
+   "tipo": "golpe",
+   "fotogramas": 510,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__saque__recortes__20260925_VCR_saque_trescuartos_240_02_rep03",
+   "tipo": "golpe",
+   "fotogramas": 510,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__saque__recortes__20260925_VCR_saque_trescuartos_240_02_rep04",
+   "tipo": "golpe",
+   "fotogramas": 660,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__saque__recortes__20260925_VCR_saque_trescuartos_240_02_rep05",
+   "tipo": "golpe",
+   "fotogramas": 690,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": [
+    {
+     "desde_s": 16.5,
+     "hasta_s": 17.7,
+     "razon_maxima": 6.3
+    }
+   ]
+  },
+  {
+   "archivo": "sesion-02__saque__recortes__20260925_VCR_saque_trescuartos_240_02_rep06",
+   "tipo": "golpe",
+   "fotogramas": 660,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__saque__recortes__20260925_VCR_saque_trescuartos_240_02b_rep01",
+   "tipo": "golpe",
+   "fotogramas": 750,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__saque__recortes__20260925_VCR_saque_trescuartos_240_02b_rep02",
+   "tipo": "golpe",
+   "fotogramas": 780,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__saque__recortes__20260925_VCR_saque_trescuartos_240_02b_rep03",
+   "tipo": "golpe",
+   "fotogramas": 660,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__saque__recortes__20260925_VCR_saque_trescuartos_240_02b_rep04",
+   "tipo": "golpe",
+   "fotogramas": 720,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": [
+    {
+     "desde_s": 19.8,
+     "hasta_s": 20.8,
+     "razon_maxima": 8.0
+    }
+   ]
+  },
+  {
+   "archivo": "sesion-02__saque__recortes__20260925_VCR_saque_trescuartos_240_02b_rep05",
+   "tipo": "golpe",
+   "fotogramas": 480,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__saque__recortes__20260925_VCR_saque_trescuartos_240_02b_rep06",
+   "tipo": "golpe",
+   "fotogramas": 660,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": [
+    {
+     "desde_s": 17.9,
+     "hasta_s": 18.4,
+     "razon_maxima": 5.7
+    }
+   ]
+  },
+  {
+   "archivo": "sesion-02__saque__recortes__20260925_VCR_saque_trescuartos_240_02c_rep01",
+   "tipo": "golpe",
+   "fotogramas": 570,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__saque__recortes__20260925_VCR_saque_trescuartos_240_02c_rep02",
+   "tipo": "golpe",
+   "fotogramas": 600,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__saque__recortes__20260925_VCR_saque_trescuartos_240_02c_rep03",
+   "tipo": "golpe",
+   "fotogramas": 600,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": [
+    {
+     "desde_s": 14.8,
+     "hasta_s": 15.6,
+     "razon_maxima": 6.6
+    }
+   ]
+  },
+  {
+   "archivo": "sesion-02__saque__recortes__20260925_VCR_saque_trescuartos_240_02c_rep04",
+   "tipo": "golpe",
+   "fotogramas": 600,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__saque__recortes__20260925_VCR_saque_trescuartos_240_02c_rep05",
+   "tipo": "golpe",
+   "fotogramas": 600,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  },
+  {
+   "archivo": "sesion-02__saque__recortes__20260925_VCR_saque_trescuartos_240_02c_rep06",
+   "tipo": "golpe",
+   "fotogramas": 600,
+   "fps_por_marcas": 30.0,
+   "marcas_constantes": true,
+   "tramos_por_defecto": []
+  }
+ ]
+}

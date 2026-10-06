@@ -5,6 +5,17 @@ del iPhone conserva los fotogramas y la duración del original? La página (``to
 video elegido con cuatro selectores distintos; este script baja cada objeto y mide lo que el motor mide
 (``engine.ingest.probe``) más lo que ``ffprobe`` sabe del contenedor (códec, rotación, etiquetas).
 
+Por cada archivo informa (decisión 028): fps del contenedor, cantidad de fotogramas, duración, si las marcas de
+tiempo son de **tiempo real a 240** o de **cámara lenta horneada a 30**, y en cuál de los tres casos cae:
+
+* **(a)** 240 fps en tiempo real (válido),
+* **(b)** 30 fps con la cámara lenta horneada, todos los fotogramas (válido, como el corpus),
+* **(c)** 30 fps en tiempo real con fotogramas descartados (**inválido**).
+
+Las marcas de tiempo distinguen (a) de (b)/(c) pero **no (b) de (c)**: para eso hace falta ``--duracion-real``. Además
+informa **tramos con mucho más movimiento por fotograma** que el resto del archivo (heurística experimental, decisión 028: puede ser una
+rampa de velocidad de la cámara lenta o simplemente manejo de la cámara; **no las distingue**).
+
 Es de solo lectura sobre Storage salvo ``--borrar``. Usa ``service_role``, así que corre en la máquina de Valentín,
 no en Render.
 
@@ -12,8 +23,8 @@ Uso (desde ``backend/`` o con ``PYTHONPATH=backend``):
     python -m app.inspeccionar_subidas --email tu-correo@... [--duracion-real 2.0]
 
 ``--duracion-real`` es la duración **en tiempo real** del gesto grabado (segundos, lo que dura en la vida real, no lo
-que dura reproducido en cámara lenta). Con ella se calcula cuántos fotogramas tendría que tener el archivo si se
-conservaron todos los de 240 fps.
+que dura reproducido en cámara lenta). Sin ella, un archivo con marcas a ~30 fps queda "indeterminado" (b o c).
+``--captura`` es la frecuencia de captura declarada (240 por defecto).
 """
 
 from __future__ import annotations
@@ -26,6 +37,12 @@ import tempfile
 from pathlib import Path
 
 from app.config import get_supabase_service_role_key, get_supabase_url
+from app.engine.uniformidad_temporal import (
+    clasificar_caso,
+    detectar_tramos_acelerados,
+    energia_de_movimiento,
+    marcas_de_tiempo,
+)
 
 BUCKET = "videos"
 PREFIJO = "prueba-iphone"
@@ -46,39 +63,62 @@ def _ffprobe_completo(ruta: Path) -> dict:
         return {"error": f"ffprobe no disponible o falló: {exc}"}
 
 
-def _resumir(nombre: str, tamano: int, ruta: Path, duracion_real: float | None) -> dict:
+def _resumir(nombre: str, tamano: int, ruta: Path, duracion_real: float | None, fps_captura: float) -> dict:
     from app.engine.ingest import probe
 
     md = probe(ruta)
     raw = _ffprobe_completo(ruta)
     stream = (raw.get("streams") or [{}])[0]
     fmt = raw.get("format") or {}
+    fotogramas = md.nb_frames_ffprobe or md.nb_frames
+
+    marcas = marcas_de_tiempo(ruta)
+    caso = clasificar_caso(marcas, fotogramas, duracion_real, fps_captura=fps_captura)
+    tramos = detectar_tramos_acelerados(energia_de_movimiento(ruta), fps_reproduccion=marcas.fps_por_marcas)
+
     resumen = {
         "objeto": nombre,
+        "selector": nombre.split("-")[0],
         "tamano_mb": round(tamano / 1_048_576, 2),
         "contenedor": fmt.get("format_name"),
         "codec": stream.get("codec_name"),
         "perfil": stream.get("profile"),
         "resolucion": f"{md.ancho}x{md.alto}",
-        "fps_declarados": md.fps_declarados,
-        "r_frame_rate": md.r_frame_rate,
-        "avg_frame_rate": md.avg_frame_rate,
-        "fotogramas_opencv": md.nb_frames,
-        "fotogramas_ffprobe": md.nb_frames_ffprobe,
+        "fps_contenedor": md.fps_declarados,
+        "fotogramas": fotogramas,
         "duracion_reproducida_s": round(md.duracion_ffprobe_s or md.duracion_s, 3),
-        "rotacion": next(
-            (d.get("rotation") for d in stream.get("side_data_list", []) if "rotation" in d), None
-        ),
+        "marcas_de_tiempo": {
+            "fps_por_marcas": round(marcas.fps_por_marcas, 2),
+            "separacion_mediana_ms": round(marcas.separacion_mediana_s * 1000, 3),
+            "constantes": marcas.es_constante,
+            "tipo": "tiempo real (>= 100 fps)" if marcas.fps_por_marcas >= 100 else "estiradas a ~30 fps (cámara lenta horneada o tiempo real a 30)",
+        },
+        "caso": caso.caso.value,
+        "caso_valido": caso.es_valido,
+        "caso_explicacion": caso.explicacion,
+        "fraccion_de_fotogramas_esperados": round(caso.fraccion_del_esperado, 3) if caso.fraccion_del_esperado is not None else None,
+        "sin_tramos_de_mucho_movimiento": not tramos,
+        "tramos_de_mucho_movimiento": [
+            {"desde_s": round(t.desde_s, 2), "hasta_s": round(t.hasta_s, 2), "razon_maxima": round(t.razon_maxima, 1)} for t in tramos
+        ],
+        "rotacion": next((d.get("rotation") for d in stream.get("side_data_list", []) if "rotation" in d), None),
         "etiquetas_stream": stream.get("tags"),
-        "etiquetas_formato": fmt.get("tags"),
     }
-    fotogramas = md.nb_frames_ffprobe or md.nb_frames
-    if duracion_real:
-        esperados_240 = round(duracion_real * 240)
-        resumen["fotogramas_esperados_a_240fps"] = esperados_240
-        resumen["fotogramas_vs_esperados"] = round(fotogramas / esperados_240, 3) if esperados_240 else None
-        resumen["fps_efectivos_si_duracion_real"] = round(fotogramas / duracion_real, 1)
     return resumen
+
+
+def _veredicto(r: dict) -> str:
+    if "error" in r:
+        return f"{r['objeto']}: ERROR {r['error']}"
+    caso = {"a": "(a) 240 fps en tiempo real", "b": "(b) cámara lenta horneada", "c": "(c) INVÁLIDO: fotogramas descartados",
+            "indeterminado": "(b o c) falta --duracion-real"}[r["caso"]]
+    vel = (
+        "movimiento parejo"
+        if r["sin_tramos_de_mucho_movimiento"]
+        else f"TRAMOS CON MUCHO MÁS MOVIMIENTO POR FOTOGRAMA (¿rampa de velocidad o manejo de la cámara?): {r['tramos_de_mucho_movimiento']}"
+    )
+    return (f"{r['selector']}: contenedor {r['fps_contenedor']:g} fps · {r['fotogramas']} fotogramas · {r['duracion_reproducida_s']} s · "
+            f"marcas a {r['marcas_de_tiempo']['fps_por_marcas']:g} fps → {caso} · {vel}")
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -87,6 +127,7 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Mide los archivos subidos por la página de prueba del iPhone.")
     ap.add_argument("--email", required=True, help="correo del usuario de prueba con el que se subió")
     ap.add_argument("--duracion-real", type=float, default=None, help="duración real del gesto, en segundos")
+    ap.add_argument("--captura", type=float, default=240.0, help="frecuencia de captura declarada (fps), 240 por defecto")
     ap.add_argument("--borrar", action="store_true", help="borra de Storage lo inspeccionado, al terminar")
     args = ap.parse_args(argv)
 
@@ -110,11 +151,14 @@ def main(argv: list[str] | None = None) -> int:
             destino = Path(tmp) / o["name"]
             destino.write_bytes(contenido)
             try:
-                resultados.append(_resumir(o["name"], len(contenido), destino, args.duracion_real))
+                resultados.append(_resumir(o["name"], len(contenido), destino, args.duracion_real, args.captura))
             except Exception as exc:  # noqa: BLE001 - un archivo ilegible es un resultado, no un error del script
                 resultados.append({"objeto": o["name"], "tamano_mb": round(len(contenido) / 1_048_576, 2), "error": repr(exc)})
 
     print(json.dumps(resultados, ensure_ascii=False, indent=1))
+    print("\n== Resumen por selector ==")
+    for r in resultados:
+        print(" ", _veredicto(r))
     if args.borrar:
         admin.storage.from_(BUCKET).remove([f"{carpeta}/{o['name']}" for o in objetos])
         print(f"\nBorrados {len(objetos)} objetos de {BUCKET}/{carpeta}/.")
