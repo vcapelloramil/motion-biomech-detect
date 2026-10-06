@@ -6,6 +6,21 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-07 (más tarde) — Página del iPhone publicada; casos a/b/c; Student Pack (decisiones 027 y 028)
+
+- **Página de prueba del iPhone PUBLICADA:** https://kinetiq-prueba-iphone.pages.dev/ (Cloudflare Pages, proyecto `kinetiq-prueba-iphone`). Se publicó con `wrangler`. El primer `wrangler login` falló con `request_forbidden`; el
+  reintento con permisos mínimos (`--scopes account:read user:read pages:write`) funcionó. Valentín creó el usuario de prueba (confirmado) en Supabase. **Pendiente: que grabe, recorte un golpe del medio y suba con los cuatro selectores.**
+- **Decisión 028 — tres casos de llegada de un golpe a 240 fps:** (a) 240 fps en tiempo real, (b) cámara lenta horneada a 30, (c) 30 fps con fotogramas descartados (el único inválido). Las marcas de tiempo distinguen (a) de (b)/(c),
+  **no (b) de (c)**: hace falta la duración real del gesto. Implementado `engine/uniformidad_temporal.py` (17 pruebas) y el inspector informa el caso por selector. `_factor_y_motivo` con 240 fps en tiempo real declarado
+  `camara_lenta_240`: factor 1, 240 efectivos (8 pruebas nuevas). (c) **no se puede detectar con `_factor_y_motivo`** (30 × 8 = 240 cierra igual): solo lo cubren, de forma condicional, los techos de plausibilidad (decisión 020).
+- **Rampas de velocidad: error mío corregido.** Primero interpreté que los saltos de movimiento al principio y al final de los originales eran rampas; **era manejo de la cámara** (el final del original muestra a la persona agarrando el teléfono), y
+  los dos originales de velocidad normal dan el mismo patrón. **El corpus no tiene ninguna rampa real.** Medido en los 115 clips (`docs/resultados/uniformidad-temporal-corpus.json`, reproducible): el detector marca los 18 originales, los 2 clips
+  completos de velocidad normal y 5 de 95 recortes de golpe válidos (5,3 %; 0 con 8×). **Decisión: E0 no rechaza por velocidad no uniforme**; queda como diagnóstico experimental. Para calibrar uno hace falta una rampa real (pedido a Valentín).
+- **Decisión 027 actualizada:** opción **A en curso** (dominio `.me` gratis del GitHub Student Developer Pack con Namecheap —1 año, verificado en la página del Pack— + Brevo) y **B de respaldo** (Gmail dedicado). Procedimientos de las dos documentados.
+- **Decisión 026:** Lovable desconectado de GitHub por Valentín (hecho). **Especificación de frontend §5:** explica qué elegir en "¿Cómo lo grabaste?" (cómo se grabó, no cómo se ve ni llega el archivo).
+
+---
+
 ## 2026-10-07 — Plan de punta a punta aprobado; contrato v1.0; decisiones 024 a 027
 
 **Rama:** `main`. Valentín aprobó el plan de punta a punta (`docs/plan-mvp-punta-a-punta.md`) con ajustes (puntaje y comparación diferidos; fotogramas clave a la

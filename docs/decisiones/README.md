@@ -64,4 +64,5 @@ Qué habilita, qué cierra, qué hay que recordar más adelante.
 | [024](024-contrato-del-reporte-v1.md) | Contrato del reporte v1.0: el único cambio antes de generar JSON reales | vigente (implementado) |
 | [025](025-carga-directa-estado-directo-y-autenticacion-api.md) | Carga directa a Storage, estado por lectura directa y autenticación de la API con JWKS (desvío de §4.2.3 y §4.2.5) | vigente (Capítulo 4 por corregir) |
 | [026](026-hosting-cloudflare-y-frontend-en-el-repo.md) | El frontend se publica en Cloudflare y el repositorio es la única fuente del código | vigente (Capítulo 4 por corregir) |
-| [027](027-correo-de-confirmacion-smtp.md) | Correo de confirmación de registro: SMTP propio | **propuesta, pendiente de elegir A o B** |
+| [027](027-correo-de-confirmacion-smtp.md) | Correo de confirmación de registro: SMTP propio | vigente (A en curso con el Student Pack; B de respaldo) |
+| [028](028-llegada-del-golpe-a-240fps-casos-a-b-c.md) | Cómo llega un golpe grabado a 240 fps (casos a, b y c) y qué hace E0 con ellos | vigente; abierta en dos puntos que dependen de la prueba del iPhone |

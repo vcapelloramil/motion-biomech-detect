@@ -21,7 +21,7 @@ Dos cosas del plan original ya no reflejan la realidad:
 
 1. **Hosting del frontend: Cloudflare**, donde ya está configurado. No se porta a Vercel.
 2. **El repositorio es la única fuente del código del frontend.** Lovable **deja de editar código** a partir del 7/10/2026. Las modificaciones las hace Claude Code en este
-   repositorio, con commits revisables. (Valentín confirma en Lovable que el proyecto deje de sincronizar cambios hacia el repositorio, para que no vuelva a pisarlo.)
+   repositorio, con commits revisables. **Hecho el 7/10/2026:** Valentín desconectó la sincronización con GitHub en Lovable (Project settings → Git → GitHub → Disconnect).
 3. **Variables del frontend:** solo valores públicos (URL de Supabase, clave anon, URL de la API). Ningún secreto en el frontend (CLAUDE.md §4).
 
 ## Alternativas consideradas

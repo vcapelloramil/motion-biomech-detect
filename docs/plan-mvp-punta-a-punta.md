@@ -42,10 +42,10 @@ No hace falta para el 20/10: PDF, video con esqueleto, evolución, puntaje.
 
 | Cuándo | Qué | Hecho cuando |
 | --- | --- | --- |
-| **7–8/10** | **Prueba de riesgo del iPhone:** página mínima (`tools/prueba-iphone/`) publicada en Cloudflare; Valentín graba un golpe a 240 fps, lo deja en Fotos y lo sube desde Safari con **cuatro selectores distintos** (cada uno le pide algo diferente al navegador); el servidor mide cada archivo (`app.inspeccionar_subidas`). | Se sabe si Safari entrega el video con sus fotogramas y duración. Si transcodifica, se descubre acá y no el 19/10. |
+| **7–8/10** | **Prueba de riesgo del iPhone:** página mínima (`tools/prueba-iphone/`) **publicada el 7/10 en https://kinetiq-prueba-iphone.pages.dev/**; Valentín graba un golpe a 240 fps, lo deja en Fotos, **recorta un golpe del medio** y lo sube desde Safari con **cuatro selectores distintos**; el servidor mide cada archivo (`app.inspeccionar_subidas`) y lo clasifica en uno de **tres casos** (decisión 028): (a) 240 fps en tiempo real, (b) cámara lenta horneada a 30, (c) 30 fps con fotogramas descartados (el único inválido). También detecta rampas de velocidad. | Se sabe en cuál de los tres casos llega cada selector. Si Safari descarta fotogramas (c), se descubre acá y no el 19/10. |
 | 7–8/10 | **E5.4 mínimo:** ensamblador del reporte (trazabilidad, cobertura, secuenciación, métricas y observación de secuenciación, con la **confianza por pico** que el contrato exige), migración de la columna `jsonb`, validación contra el contrato. **E5.7:** prueba automática de vocabulario R2. | Un video real produce un JSON v1.0 que valida y queda guardado. |
 | 9–10/10 | **7.4 en el servidor** (decisión 025): JWT por JWKS + chequeo de propiedad (404), **CORS** acotado al dominio del frontend, retiro del token compartido, y endurecer `usuarios` (pendiente de la 022). | Un `curl` con el token de un usuario procesa su video; con el de otro, 404. |
-| 10–12/10 | **Correo de confirmación** (decisión 027): SMTP elegido y cargado en Supabase, plantilla en español, *Site URL* apuntando al frontend publicado; **una prueba manual de entrega real**. | Un correo real llega y su enlace lleva al frontend. |
+| 10–12/10 | **Correo de confirmación** (decisión 027): **A en curso** (dominio `.me` del GitHub Student Developer Pack + Brevo, verificación estudiantil pendiente) y **B de respaldo** (Gmail dedicado) si el Pack no sale a tiempo; plantilla en español, *Site URL* apuntando al frontend publicado; **una prueba manual de entrega real**. | Un correo real llega y su enlace lleva al frontend. |
 | **(a) 10–12/10, si hay atraso** | **Los tres fotogramas clave pasan a la semana 3** (el Reporte simple sale con la observación y la trazabilidad, sin los tres momentos). | — |
 | 10–12/10 | **Fotogramas clave con esqueleto** (3 PNG en el pico de pelvis, torso y brazo, en Storage; las rutas quedan en `videos`). | Tres rutas en `videos`. |
 
@@ -125,9 +125,7 @@ Cambio de alcance del 7/10: **no hay pruebas con otros usuarios; se mide con gra
 
 ## 7. Lo que necesito de vos
 
-1. **Elegir la opción del correo (decisión 027):** A (dominio propio + Brevo) o B (cuenta Gmail dedicada). Es lo único que bloquea el registro de usuarios nuevos.
-2. **Publicar la página de prueba del iPhone** (pasos en el mensaje de entrega) y avisarme; **grabar el golpe a 240 fps y dejarlo en Fotos.**
-3. **Crear en el panel de Supabase un usuario de prueba ya confirmado** (Authentication → Users → Add user, con *Auto Confirm User*) para esa prueba.
-4. **Confirmar en Lovable que el proyecto deje de sincronizar cambios hacia el repositorio** (decisión 026).
-5. **Confirmar que "eliminar cuenta y datos" real entra en la semana 3** (nuevo por el requisito "como si fuera público").
-6. **Render:** el cambio a Standard lo hacés vos cuando decidas, y en el mismo paso me avisás para actualizar `render.yaml`.
+1. **Prueba del iPhone:** grabar el golpe a 240 fps, **recortar un golpe del medio** en Fotos, subirlo con los cuatro selectores en https://kinetiq-prueba-iphone.pages.dev/, y avisarme **con cuánto dura el golpe en la vida real** (para distinguir los casos b y c). **Opcional pero muy útil:** un segundo video con **rampas reales** (en Fotos → Editar, dejar los extremos a velocidad normal moviendo las barras de la cámara lenta, sin recortar) subido con el selector A: el corpus no tiene ninguna rampa y sin una no se puede calibrar un detector (decisión 028).
+2. **Correo (decisión 027):** esperar la verificación del Student Pack (A); si no sale, B. Es lo único que bloquea el registro de usuarios nuevos.
+3. **Render:** el cambio a Standard lo hacés vos cuando decidas, y en el mismo paso me avisás para actualizar `render.yaml`.
+4. Hechos el 7/10: usuario de prueba creado y confirmado en Supabase; Lovable desconectado de GitHub; tarea de eliminar cuenta y datos aprobada para la semana 3.
