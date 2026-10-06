@@ -127,7 +127,7 @@ Estructura JSON de salida, congelada en la Etapa 0:
 
 - Definición: `backend/app/schemas/reporte.py` (Pydantic).
 - Ejemplo válido: `docs/contrato-reporte.ejemplo.json`.
-- Especificación: Anexo A de `docs/plan-desarrollo.md`.
+- Especificación: la fuente es `reporte.py` (v1.0) y el ejemplo; el Anexo A de `docs/plan-desarrollo.md` quedó superado (decisión 024).
 - Cambios posteriores: Etapa 1 agregó `trazabilidad.escala_temporal_conocida`
   (decisión 004). Todo cambio al contrato se registra en `docs/decisiones/`.
 

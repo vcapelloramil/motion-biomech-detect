@@ -904,6 +904,9 @@ Una etapa está terminada cuando, y solo cuando:
 
 # Anexo A — Contrato del reporte
 
+> **SUPERADO (decisión 024, 7/10/2026).** Este anexo transcribe el contrato **de la Etapa 0**. La fuente vigente es
+> `backend/app/schemas/reporte.py` (v1.0) junto con `docs/contrato-reporte.ejemplo.json`. Se conserva como historia.
+
 Estructura a congelar en la Etapa 0. Sirve como referencia para el motor, para la API y para la
 interfaz.
 
