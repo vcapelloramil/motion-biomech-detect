@@ -88,7 +88,7 @@ Con sesión: **Biblioteca** · **Cargar** · **Perfil**. El reporte, el procesam
 - Nivel 1: las mismas observaciones, compactas.
 - Desglose del puntaje: tabla con medición, referencia propia, puntaje y peso.
 - Nivel 2: reproductor del video con esqueleto, sincronizado con las curvas de velocidad de giro (eje temporal único), marcas de los picos y tramos no auditables sombreados con su explicación. Gráfico de secuenciación (escalera cadera → tronco → brazo) con la evaluación del par cadera-tronco y el brazo "sin evaluar".
-- Nivel 3: tabla de magnitudes (valor, confianza, estado, fundamento) y bloque de trazabilidad.
+- Nivel 3: tabla de magnitudes (valor, confianza, estado, fundamento) y bloque de trazabilidad (motor, pose, filtro, frecuencia de corte, fps efectivos y, desde la decisión 020, cómo se obtuvieron: modo de captura declarado, factor de ralentización y origen).
 
 ### PDF
 Página 1: datos de la sesión, resumen (puntaje + observaciones), secuenciación de un golpe y tabla por golpe. Página 2: métricas con confianza y fundamento, cómo leer los estados, trazabilidad y limitaciones.
@@ -128,7 +128,7 @@ El esquema del Capítulo 4 §4.4.6 no contempla todo lo que muestran las maqueta
 
 ## 10. Lo que el JSON del reporte (Etapa 5) tiene que traer
 
-Todo lo que las pantallas muestran y nada que no muestren: datos de la sesión; puntaje y componentes con su medición y referencia; hasta tres observaciones (estado, título, texto llano, enlace a evidencia, magnitud que la disparó, fundamento); por golpe: instantes de pico de cadera, tronco y brazo, Δ, motivo si no es ordenable, rutas de los tres fotogramas clave; series de velocidad normalizadas para las curvas; tramos no auditables con su motivo; comparación con la sesión anterior comparable; tabla de magnitudes con valor, unidad, confianza, estado y fundamento; bloque de trazabilidad.
+Todo lo que las pantallas muestran y nada que no muestren: datos de la sesión; puntaje y componentes con su medición y referencia; hasta tres observaciones (estado, título, texto llano, enlace a evidencia, magnitud que la disparó, fundamento); por golpe: instantes de pico de cadera, tronco y brazo, Δ, motivo si no es ordenable, rutas de los tres fotogramas clave; series de velocidad normalizadas para las curvas; tramos no auditables con su motivo; comparación con la sesión anterior comparable; tabla de magnitudes con valor, unidad, confianza, estado y fundamento; bloque de trazabilidad (incluye, por la decisión 020, el **modo de captura declarado**, el **factor de ralentización** y su origen, además de los fps efectivos).
 
 ## 11. Fuera del MVP
 

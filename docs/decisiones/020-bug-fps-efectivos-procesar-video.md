@@ -194,6 +194,29 @@ menor protección; y su umbral (≥ 2) hay que calibrarlo con la variación entr
 Criterio 3 antes de fijarlo, no se elige a ojo. Se implementaría junto con la comparación contra la sesión
 anterior de la Etapa 5 (tarea 5.2), que ya necesita ese historial.
 
+## Trazabilidad del modo declarado y del factor en el reporte (R4, 6/10/2026)
+
+Pedido de Valentín: el modo declarado y el factor tienen que quedar visibles en la trazabilidad del reporte.
+Hasta acá el reporte solo guardaba `escala_temporal_conocida` y `origen_factor`; el modo vivía en
+`sesiones.modo_captura` y el factor no se guardaba en ningún lado (era un cálculo intermedio de
+`procesar_video`). Migración `20261006000000_trazabilidad_modo_captura_factor.sql`:
+
+- `reportes_biomecanicos.modo_captura` (`normal` | `camara_lenta_120` | `camara_lenta_240`, `not null`) y
+  `reportes_biomecanicos.factor_ralentizacion` (`numeric >= 1`, `not null`; 1 en modo normal).
+- **Se congelan en el reporte, no se leen de la sesión después:** `sesiones.modo_captura` es editable (el
+  frontend va a dejar corregir una declaración equivocada y reintentar), así que el reporte guarda lo que se
+  usó *en ese análisis* — la misma razón por la que ya guarda `version_motor_id` y `corte_filtro_hz`.
+- Con esto la cuenta se puede rehacer y auditar desde la fila del reporte: `fps_efectivos` = fps del
+  contenedor (normalizado NTSC) × `factor_ralentizacion`, con `videos.fps_real` como resultado,
+  `modo_captura` como lo declarado, `origen_factor` (`declaracion_usuario`) y `escala_temporal_conocida`.
+- `procesar_video` los escribe en cada reporte, y `test_procesar_video_e2e.py` los verifica contra Supabase
+  real (modo `camara_lenta_240`, factor 8, origen `declaracion_usuario`, escala conocida).
+- **Pendiente, primer paso de la Etapa 5 (junto con la alineación de `severidad`, decisión 018):** el contrato
+  JSON congelado (`schemas/reporte.py`, `Trazabilidad`) todavía no tiene `modo_captura`,
+  `factor_ralentizacion` ni `origen_factor`; se agregan antes de generar cualquier JSON real, para que el
+  nivel 3 del reporte (especificación de frontend §6 y §10) los muestre. No se toca el contrato congelado en
+  esta decisión: son dos cambios de contrato y conviene hacerlos juntos, en un solo paso, registrado.
+
 ## Limitaciones a declarar en la tesis (Capítulos 6 y 7)
 
 Registradas acá según la práctica del proyecto (esta decisión se suma a la lista de pendientes de redacción

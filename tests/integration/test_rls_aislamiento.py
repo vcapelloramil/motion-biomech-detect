@@ -124,7 +124,15 @@ def datos_aislamiento():
 
         reporte = (
             admin.table("reportes_biomecanicos")
-            .insert({"video_id": video["id"], "version_motor_id": version_motor_id})
+            .insert(
+                {
+                    "video_id": video["id"],
+                    "version_motor_id": version_motor_id,
+                    # NOT NULL sin default (migración 20261006): un reporte sin esto no es auditable (R4).
+                    "modo_captura": "normal",
+                    "factor_ralentizacion": 1,
+                }
+            )
             .execute()
             .data[0]
         )

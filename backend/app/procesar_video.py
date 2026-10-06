@@ -316,6 +316,11 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
                     "secuencia_correcta": repeticion.correcto if repeticion else None,
                     "corte_filtro_hz": filt.corte_hz,
                     "cobertura_auditable_pct": round(seq.cobertura * 100, 2),
+                    # Trazabilidad (R4) de la escala temporal, congelada en el reporte: lo que
+                    # declaró el usuario (sesiones.modo_captura es editable después), el factor
+                    # que resultó de combinarlo con el contenedor, y su origen.
+                    "modo_captura": modo_captura,
+                    "factor_ralentizacion": factor,
                     "escala_temporal_conocida": ingesta.escala_temporal_conocida,
                     "origen_factor": origen_factor,
                 }

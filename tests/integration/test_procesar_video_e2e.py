@@ -148,7 +148,10 @@ def test_procesar_video_produce_reporte_real():
 
         fila_reporte = (
             admin.table("reportes_biomecanicos")
-            .select("video_id, cobertura_auditable_pct, corte_filtro_hz, orden_picos_observado, version_motor_id")
+            .select(
+                "video_id, cobertura_auditable_pct, corte_filtro_hz, orden_picos_observado, version_motor_id, "
+                "modo_captura, factor_ralentizacion, origen_factor, escala_temporal_conocida"
+            )
             .eq("id", resultado["reporte_id"])
             .single()
             .execute()
@@ -158,6 +161,12 @@ def test_procesar_video_produce_reporte_real():
         assert fila_reporte["cobertura_auditable_pct"] is not None
         assert fila_reporte["corte_filtro_hz"] is not None
         assert fila_reporte["version_motor_id"]
+        # Trazabilidad (R4) de la escala temporal, congelada en el reporte: lo declarado, el factor
+        # (240 declarado / 30 del contenedor = 8) y su origen — visibles sin leer la sesión.
+        assert fila_reporte["modo_captura"] == "camara_lenta_240"
+        assert float(fila_reporte["factor_ralentizacion"]) == 8.0
+        assert fila_reporte["origen_factor"] == "declaracion_usuario"
+        assert fila_reporte["escala_temporal_conocida"] is True
 
         metricas = (
             admin.table("metricas")
