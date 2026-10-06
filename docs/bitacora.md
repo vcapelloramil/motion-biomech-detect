@@ -6,6 +6,34 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-07 — Plan de punta a punta aprobado; contrato v1.0; decisiones 024 a 027
+
+**Rama:** `main`. Valentín aprobó el plan de punta a punta (`docs/plan-mvp-punta-a-punta.md`) con ajustes (puntaje y comparación diferidos; fotogramas clave a la
+semana 3 si hay atraso; respaldo con restauración probada antes de la semana 4; **autovalidación** en la semana 4, sin pruebas con otros usuarios; el sistema igual
+tiene que funcionar para cualquier usuario nuevo).
+
+- **Decisión 024 — contrato del reporte v1.0, IMPLEMENTADO:** `schemas/reporte.py` + `contrato-reporte.ejemplo.json` + 18 pruebas (`test_contrato_reporte.py`). Severidad de 4 estados;
+  `modo_captura`/`factor_ralentizacion`/`origen_factor` en la trazabilidad; `version_contrato`; `dispersion` opcional; artefactos opcionales **por ruta, no URL** (refinamiento mío sobre lo aprobado:
+  una URL firmada vence) y `fotogramas_clave`. Dos pruebas mantienen alineados el contrato y las migraciones. El Anexo A queda superado.
+- **Decisión 025 — carga directa a Storage, estado por lectura directa, API autenticada con JWT por JWKS + chequeo de propiedad (404).** Desvío de §4.2.3/§4.2.5. Verificado contra el proyecto
+  real: el JWKS es público y publica una clave ES256; los tokens de usuario se validan contra él (prueba automática).
+- **Decisión 026 — frontend en Cloudflare; el repositorio es la única fuente (Lovable deja de editar).** `CLAUDE.md` §5 actualizado. Correcciones del Capítulo 4 en
+  `docs/tesis/correcciones-pendientes-capitulo-4.md` (nueve ítems).
+- **Decisión 027 — correo de confirmación: PROPUESTA, pendiente de que Valentín elija.** **Hallazgo:** la propuesta "Brevo sin dominio propio" no es confiable: Brevo exige dominio propio
+  (no deja autenticar `gmail.com`, reemplaza el remitente por `t-sender-sib.com`/`brevosend.com`, y hay reportes de correos a Gmail que no llegan sin error). Supabase: el SMTP integrado entrega 2
+  por hora y solo a miembros del equipo. Opciones: **A** dominio propio + Brevo (recomendada) o **B** cuenta Gmail dedicada (puente; límites sin verificar). Plantilla en español en
+  `supabase/templates/confirmar-registro.html`.
+- **Prueba automática de registro → confirmación → login** (`test_registro_confirmacion_login.py`): un usuario nuevo no entra sin confirmar, confirma con el enlace y entra; el token se valida por JWKS.
+  Confirma que **la confirmación por correo está activa en el proyecto**. No prueba la entrega del correo (el enlace sale de la API de administración, sin enviar nada).
+- **Decisión 023 actualizada:** Free primero (sesiones de 2–3 golpes), Standard si la espera o los cortes molestan y siempre para la defensa; precios verificados por Valentín en render.com/pricing.
+  El cambio lo hace Valentín y en el mismo paso se actualiza `render.yaml` (hoy `plan: free`).
+- **Prueba de riesgo del iPhone, lista para publicar:** `tools/prueba-iphone/` (página con cuatro selectores) + `armar.py` (genera `publicar/` con URL y clave **anon**, nunca la `service_role`) +
+  `backend/app/inspeccionar_subidas.py` (mide cada archivo subido: códec, fps, fotogramas, duración). Probado el inspector con un archivo real; la página, solo su sintaxis (no se la ejercitó con un
+  login real). **Pendiente: que Valentín la publique, grabe y suba.**
+- Con "como si fuera público" aparece trabajo nuevo, ahora en el plan (semana 3): **eliminar cuenta y datos funcional** (incluye objetos de Storage), a confirmar por Valentín.
+
+---
+
 ## 2026-10-06 (al final del día) — Reintento `fallido → encolado`, permisos por columna y plan de Render (decisiones 022 y 023)
 
 **Rama:** `main`. Diseño aprobado por Valentín y registrado como **decisión 022**. Orden de trabajo: (a) migración de

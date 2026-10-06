@@ -60,4 +60,8 @@ Qué habilita, qué cierra, qué hay que recordar más adelante.
 | [020](020-bug-fps-efectivos-procesar-video.md) | Bug real de fps, corregido con una declaración de modo de captura del usuario | vigente (implementada y aplicada; control contra historial diferido) |
 | [021](021-keepalive-supabase-funcion-anon.md) | Keep-alive de Supabase: función `keepalive()` ejecutable por `anon` (excepción acotada a "nada a anon") | vigente |
 | [022](022-reintento-fallido-y-columnas-protegidas.md) | Reintento `fallido → encolado` y permisos por columna sobre `videos` y `sesiones` | vigente (en implementación; ver "Avance") |
-| [023](023-instancia-render-pruebas-con-usuarios.md) | Instancia de Render: Standard (1 CPU, 2 GB) solo durante las pruebas con usuarios y la defensa; Free y Starter descartados para esas pruebas | vigente (cambio de plan hacia el 20/10) |
+| [023](023-instancia-render-pruebas-con-usuarios.md) | Instancia de Render: Free primero, Standard (1 CPU, 2 GB) cuando la espera o los cortes molesten y siempre para la defensa; Starter descartado | vigente (actualizada el 7/10; el cambio lo hace Valentín) |
+| [024](024-contrato-del-reporte-v1.md) | Contrato del reporte v1.0: el único cambio antes de generar JSON reales | vigente (implementado) |
+| [025](025-carga-directa-estado-directo-y-autenticacion-api.md) | Carga directa a Storage, estado por lectura directa y autenticación de la API con JWKS (desvío de §4.2.3 y §4.2.5) | vigente (Capítulo 4 por corregir) |
+| [026](026-hosting-cloudflare-y-frontend-en-el-repo.md) | El frontend se publica en Cloudflare y el repositorio es la única fuente del código | vigente (Capítulo 4 por corregir) |
+| [027](027-correo-de-confirmacion-smtp.md) | Correo de confirmación de registro: SMTP propio | **propuesta, pendiente de elegir A o B** |

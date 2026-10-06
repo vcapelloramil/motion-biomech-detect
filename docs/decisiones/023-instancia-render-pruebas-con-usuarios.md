@@ -1,13 +1,22 @@
-# Decisión 023 — Instancia de Render: Free y Starter descartados para las pruebas con usuarios; Standard solo durante el período de pruebas y defensa
+# Decisión 023 — Instancia de Render: Free primero, Standard cuando la espera o los cortes molesten y siempre para la defensa; Starter descartado
 
 **Fecha:** 6 de octubre de 2026
-**Estado:** vigente — decisión de Valentín. El cambio de plan se hace hacia el **20/10/2026** y se revierte a Free
-al terminar las pruebas con usuarios y la defensa.
+**Estado:** vigente — decisión de Valentín, **actualizada el 7/10/2026** (ver "Actualización"). Ya **no hay una fecha fija** de cambio:
+se prueba primero en Free y se pasa a Standard por criterio; en cualquier caso, Standard para la defensa.
 **Afecta a:** decisión 017 (criterio de pase a Starter, superado; error "Standard = 2 vCPU" corregido ahí) ·
 `render.yaml` (`plan: free` hasta el cambio) · Etapa 9 (pruebas de usabilidad) · modelo de costos del Capítulo 5 ·
 apartado 4.5.4 de la tesis (pendiente de redacción)
 
 ---
+
+## Actualización del 7/10/2026 (reemplaza lo anterior donde discrepa)
+
+1. **El cambio a Standard ya no depende de pruebas con usuarios.** La validación la hace Valentín solo, grabándose (no habrá pruebas con otros usuarios; el sistema igual tiene que
+   funcionar para cualquier usuario nuevo). La versión del 6/10 fijaba el cambio "hacia el 20/10"; esa fecha queda sin efecto.
+2. **Criterio nuevo:** Valentín prueba **primero en Free con sesiones de 2 o 3 golpes** y **pasa a Standard si la espera o los cortes molestan**. **En cualquier caso, Standard para la defensa.**
+3. **El cambio de plan lo hace Valentín en el panel de Render, y en el mismo paso se actualiza `render.yaml`** (`plan:`) y se anota en la bitácora. `render.yaml` no se toca antes.
+4. **Precios verificados por Valentín el 7/10/2026 en render.com/pricing:** Starter USD 7 (0,5 CPU / 512 MB), Standard USD 25 (1 CPU / 2 GB), Pro USD 85 (2 CPU / 4 GB). Ya no figuran como "sin verificar".
+5. **Qué se mide al probar en Free (para decidir con datos, no de memoria):** tiempo de espera de una sesión de 2 y de 3 golpes, RSS pico, y si algún análisis queda `procesando` (corte por suspensión).
 
 ## El problema
 
@@ -30,9 +39,8 @@ documentación de planes de Render, y no se sostiene:
 
 ## Planes de Render comparados
 
-CPU y RAM: documentación de planes de Render, verificada el 6/10/2026. Precios: los de Starter y Standard son los
-que maneja el proyecto (no figuran en esa página; confirmar en el panel de Render antes del cambio); el de Pro salió
-de un resultado de búsqueda, **sin verificar**, y no interviene en la decisión.
+CPU y RAM: documentación de planes de Render, verificada el 6/10/2026. **Precios: verificados por Valentín el 7/10/2026 en render.com/pricing**
+(Starter USD 7, Standard USD 25, Pro USD 85).
 
 | Plan | CPU | RAM | USD/mes | Tiempo por golpe (360 fotogramas) | Sesión de 6 golpes | Origen del tiempo |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -56,25 +64,20 @@ absoluta (decisión 017). Escalar por cantidad de fotogramas supone relación li
 
 ## Decisión
 
-1. **Standard (1 CPU, 2 GB, USD 25/mes) solo durante el período de pruebas con usuarios y la defensa.** El cambio se
-   hace hacia el **20/10**, antes de la primera prueba de punta a punta con un video subido desde el celular.
-2. **Después se vuelve a Free.** El cambio de plan lo hace Valentín en el panel de Render y, **en el mismo paso**, se
-   actualiza `render.yaml` (`plan:`) y se anota en la bitácora. `render.yaml` **no se edita antes**: si el servicio
-   está sincronizado con el blueprint, pushear un cambio de `plan` podría cambiar la facturación sin querer.
-3. El **criterio de la decisión 017** ("RSS > 460 MB → Starter") queda **superado** por esta decisión, no se aplica.
+1. **Free para empezar:** las primeras pruebas de punta a punta se hacen en Free, con sesiones de 2 o 3 golpes.
+2. **Standard (1 CPU, 2 GB, USD 25/mes) cuando la espera o los cortes de Free molesten**, a criterio de Valentín con las mediciones del punto 5 de la actualización.
+3. **Standard siempre para la defensa.**
+4. **Después de la defensa, se vuelve a Free.** El cambio lo hace Valentín en el panel de Render y, **en el mismo paso**, se actualiza `render.yaml` y la bitácora.
+5. El **criterio de la decisión 017** ("RSS > 460 MB → Starter") queda **superado** por esta decisión, no se aplica.
 
 ## Consecuencias
 
-- **Costo estimado del período:** de 1 a 2 meses de Standard, **USD 25–50** (estimación; Render factura según el
-  plan y el tiempo, verificar en el panel). Entra en el modelo de costos del Capítulo 5 como costo de la etapa de
-  validación, separado del costo de operación posterior.
-- **Para el modelo de costos del Capítulo 5, producción:** no se decide acá. Cuando haya medición real sobre Standard
-  se compara contra Starter con datos de Render, no de Docker.
-- **A medir apenas se cambie a Standard** (reemplaza los números derivados de Docker por números de Render): RSS pico
-  y tiempo por golpe de un clip real, y una **sesión de 6 golpes seguidos** de punta a punta. Con ese resultado se
-  puede cerrar el modelo de costos del Capítulo 5.
-- **Después del 20/10 con Free otra vez:** el servicio sigue funcionando pero con las limitaciones de arriba; es
-  aceptable para una demostración de un solo golpe, no para sesiones completas.
-- Las instancias de pago no se duermen por inactividad (comportamiento documentado de Render para el plan Free; no
-  medido acá): con Standard desaparece el riesgo de suspensión, que sigue siendo la razón de existir de la tarea 6.5.
+- **Costo estimado:** depende de cuánto tiempo se use Standard (Render factura por plan y tiempo; verificar en el panel). Si se usa solo hacia la defensa, el costo es de una fracción de mes
+  a un mes (USD 25 o menos por mes de uso). Entra en el modelo de costos del Capítulo 5 como costo de la etapa de validación, separado del de operación posterior.
+- **Para el modelo de costos del Capítulo 5, producción:** no se decide acá. Cuando haya medición real sobre Standard se compara contra Starter con datos de Render, no de Docker.
+- **A medir cuando se pruebe en Free y cuando se pase a Standard** (reemplaza los números derivados de Docker por números de Render): RSS pico y tiempo por golpe de un clip real, y una
+  **sesión de 2–3 golpes seguidos** de punta a punta; en Standard, también una de 6.
+- **Free otra vez después de la defensa:** el servicio sigue funcionando pero con las limitaciones de arriba; es aceptable para una demostración de un solo golpe, no para sesiones completas.
+- Las instancias de pago no se duermen por inactividad (comportamiento documentado de Render para el plan Free; no medido acá): con Standard desaparece el riesgo de suspensión, que sigue
+  siendo la razón de existir de la tarea 6.5.
 - No hacer el cambio de plan mientras haya análisis en curso: reinicia el servicio.

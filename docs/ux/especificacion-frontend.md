@@ -42,7 +42,7 @@ Con sesión: **Biblioteca** · **Cargar** · **Perfil**. El reporte, el procesam
 | Pantalla | Maqueta | Notas |
 |---|---|---|
 | Landing | `Main` | Incluye "qué mide y qué no" y la explicación de los cuatro estados. |
-| Registro | `Registro` | Pide el rol (jugador, entrenador, profesional de la salud) y el consentimiento (Ley 25.326). |
+| Registro | `Registro` | Pide el rol (jugador, entrenador, profesional de la salud) y el consentimiento (Ley 25.326). **La cuenta se activa al confirmar el correo** (decisión 027): al enviar el formulario se muestra "Te enviamos un correo para confirmar tu cuenta. **Revisá también la carpeta de spam o correo no deseado.**", con el correo al que se envió y la opción de reenviarlo. Sin confirmar, el inicio de sesión responde "Confirmá tu correo para entrar" (no un error genérico). |
 | Biblioteca | `Biblioteca` | Tarjetas por sesión con miniatura real del video, estado de procesamiento, puntaje de rendimiento y conteo de observaciones por estado. |
 | Cargar | `Cargar`, `CargarMovil` | Ver §5. |
 | Procesando | `Procesando` | Estados de la máquina de estados del Capítulo 4 §4.2.4, progreso por etapa con texto llano y la etiqueta técnica (E0–E5) en chico. Aclara que se puede cerrar la página. |

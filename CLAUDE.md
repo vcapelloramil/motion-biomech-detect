@@ -124,7 +124,7 @@ E5 Auditoría y alertas
 
 ## 5. Estado actual
 
-**Fecha de referencia: 2/10/2026.**
+**Fecha de referencia: 7/10/2026.**
 
 - Capítulos 1, 2 y 3 de la tesis entregados. Capítulo 4: fecha objetivo 25/8/2026 (ya pasada); el texto
   vigente quedó escrito antes de que existiera motor funcional ("no existe código productivo" en su propia
@@ -142,31 +142,33 @@ E5 Auditoría y alertas
 - **Etapa 4.5 (esqueleto en la nube) cerrada.** Supabase conectado: esquema de nueve tablas con RLS completo
   (decisión 018), bucket de Storage privado, el motor corre dentro de un contenedor que baja un clip de
   Storage, procesa y escribe el resultado en la base (`backend/app/procesar_video.py`), y ese contenedor está
-  desplegado de verdad en Render (plan Free durante el desarrollo, decisión 017 ampliada; criterio explícito
-  para pasar a Starter). Semilla de la API de la Etapa 6 ya escrita (decisión 019): `GET /health` y
+  desplegado de verdad en Render (plan Free primero; Standard —1 CPU, 2 GB— cuando la espera o los cortes molesten y siempre para la defensa,
+  decisión 023; Starter descartado: misma memoria que Free). Semilla de la API de la Etapa 6 ya escrita (decisión 019): `GET /health` y
   `POST /analisis/{video_id}/procesar`, sobre la estructura `backend/app/{main.py, security.py, routers/,
   workers/}` prevista desde la decisión 003.
 - Frontend: prototipo navegable generado con Lovable (TanStack Start, React 19, Tailwind 4,
-  shadcn/ui, configurado para Cloudflare Workers), sin tocar desde que se movió al monorepo (26/8/2026).
+  shadcn/ui, configurado para Cloudflare Workers). **Desde el 7/10/2026 el repositorio es la única fuente del código:
+  Lovable ya no edita (decisión 026).**
   Diseño visual bueno; contenido y semántica todavía requieren corrección según las reglas de la sección 2,
   y ahora además según las salvedades de la decisión 015 (p. ej. no etiquetar "correcto/incorrecto" donde
   no corresponde). Especificación completa en `docs/ux/especificacion-frontend.md` (1/10/2026).
 
-**Pendientes previos a la Etapa 5 (nota de traspaso del 6/10, detalle en la bitácora):** (1) keep-alive de
-Supabase con GitHub Actions — urgente, el plan gratuito pausa el proyecto tras 7 días sin actividad; (2) reintento
-`fallido → encolado` (diseño a aprobar antes de implementar); (3) control contra historial, diferido.
+**Estado al 7/10/2026 (detalle en `docs/bitacora.md`):** keep-alive de Supabase hecho (decisión 021); reintento `fallido → encolado` y
+permisos por columna hechos (decisión 022); **contrato del reporte v1.0 hecho (decisión 024)**. Quedan decididos, sin implementar:
+carga directa a Storage y autenticación de la API por JWKS (025), frontend en Cloudflare (026), correo de confirmación (027, **pendiente de
+elegir** dominio propio + Brevo o Gmail dedicado). Control contra historial, diferido.
 
-**Prioridad inmediata, después de esos pendientes:** Etapa 5 (auditoría y reporte). Primer paso explícito, pedido por Valentín en la
-decisión 018: resolver la desalineación entre `alertas.severidad` en la base de datos (cuatro estados de R3)
-y el `Literal` de tres valores todavía congelado en `reporte.py` (Etapa 0) — antes de generar cualquier JSON
-real. Plan detallado en `docs/plan-desarrollo.md`.
+**Prioridad inmediata:** el plan de punta a punta, `docs/plan-mvp-punta-a-punta.md` (aprobado el 7/10): Etapa 5 mínima (ensamblador del
+reporte), login (7.4) y la interfaz conectada (Cargar, Procesando, Reporte simple) para probarlo desde el celular hacia el 20/10. La
+validación es **autovalidación** (grabaciones propias, sin otros usuarios); el sistema igual tiene que funcionar para cualquier usuario
+nuevo. Correcciones pendientes del Capítulo 4: `docs/tesis/correcciones-pendientes-capitulo-4.md`.
 
 ### Despliegue objetivo (Capítulo 4, apartado 4.5)
 
 **"No se requiere despliegue público: alcanza con el servidor de desarrollo local" ya NO vale** (era la
 prioridad de cuando el prototipo era solo de interfaz, sin motor). El MVP se despliega en la nube:
 
-- **Frontend:** Vercel (plan Hobby).
+- **Frontend:** **Cloudflare** (Workers), donde ya venía configurado; no Vercel (decisión 026; corrección del Capítulo 4 pendiente).
 - **Datos, identidad y archivos:** Supabase Cloud (PostgreSQL, Auth, Storage).
 - **Motor:** contenedor persistente de bajo costo (candidatos evaluados en el plan: Render, Railway,
   Fly.io — decisión con datos reales de tiempo y memoria medidos en contenedor, no solo de folleto).
