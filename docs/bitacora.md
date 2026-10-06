@@ -15,9 +15,35 @@ migración está lista.
 
 - **Hallazgo:** `authenticated` podía escribir cualquier columna de `videos` (`estado`, `motivo_fallo`, `fps_real`…).
   Comprobado contra el proyecto real: la prueba nueva dio 20 fallas / 3 pasadas antes de la migración.
-- **(a) hecho, pendiente de aplicar:** `20261006130000_columnas_protegidas_videos_sesiones.sql` +
-  `tests/integration/test_columnas_protegidas.py` (commit `4a666f0`, sin pushear).
+- **(a) HECHO, aplicado y pusheado:** `20261006130000_columnas_protegidas_videos_sesiones.sql` +
+  `tests/integration/test_columnas_protegidas.py` (commit `4a666f0`). Valentín aplicó la migración;
+  `pytest -m requiere_supabase` dio 62 passed (39 anteriores + 23 nuevos), sin restos (0 usuarios Auth, 0 objetos
+  Storage, 1 `versiones_motor`). Se restringió también el INSERT de `videos` (aprobado por Valentín).
+- **(b)–(e) escritos, SIN PUSHEAR:** (b) `20261007000000_reintento_fallido.sql` — **pendiente de aplicar por
+  Valentín**; (c) `app/reintento.py`, `routers/analisis.py`, `procesar_video.py` (escribe `modo_captura_intentado`,
+  borra el reporte previo, marca `error_inesperado`), `config.get_max_intentos` (`KINETIQ_MAX_INTENTOS`, 3 por
+  defecto); (d) `tests/unit/test_reintento.py`, `test_api_analisis.py` ampliado y
+  `tests/integration/test_reintento_supabase.py` (todavía sin correr: necesita la migración aplicada) + reporte
+  previo sembrado en `test_procesar_video_e2e.py`; (e) especificación de frontend §5. Suite rápida:
+  284 passed. El trigger de (b) incluye también `atleta_id` además de modo/gesto/encuadre/lado (decisión 022).
+- **No se pushea (c)/(d) hasta aplicar (b):** el código escribe columnas que todavía no existen en la base.
 - **Corregido** el dato falso de la nota de traspaso (que `procesar_video` borraba el reporte previo): ver pendiente 2.
+- **PENDIENTE (anotado a pedido de Valentín): procedimiento de respaldo manual de la base antes de las pruebas
+  con usuarios.** Supabase se queda en el plan Free (el keep-alive de la decisión 021 resuelve la pausa; el límite
+  de 50 MB por archivo coincide con la decisión 016), y **Free no incluye respaldos**: un error propio (migración
+  mal aplicada, `delete` sin filtro) o una pérdida del proyecto no tendría vuelta atrás. Hay que definir y probar
+  UNA restauración real de punta a punta (volcado de las tablas del esquema `public` y de los usuarios de Auth, con
+  qué herramienta, dónde se guarda —nunca en el repo, son datos de salud—, cada cuánto y cómo se restaura) antes
+  de que entre el primer usuario real (Etapa 9).
+- **PENDIENTE DE DECISIÓN — revisar el criterio de instancia de Render (decisión 017), tres hallazgos de la
+  revisión del 6/10 (no repetí la medición, ya existía: Render Free, 414,1 s, RSS pico 480,4 MB, un clip de 240 fps de
+  360 fotogramas, una sola corrida):** (1) el criterio "pasar a Starter si RSS > 460 MB" no se corresponde con el
+  plan: Starter tiene los mismos 512 MB que Free; solo Standard (1 CPU / 2 GB) agrega memoria — y 480,4 MB ya supera
+  ese umbral; (2) la decisión 017 mapea Standard a "2 GB / 2 vCPU", pero Render Standard es 1 CPU / 2 GB (verificado en
+  la documentación de planes), así que su comparable en Docker es la fila de 1 vCPU (91 s), no la de 2 (81 s); (3) la
+  corrida de 414 s duró menos de los 15 min de inactividad tras los que Free se duerme, así que "sin cortes por
+  suspensión" no cubre una sesión de 6 golpes (~41 min seguidos). El `del` de los bytes del clip no se re-midió en
+  Render. Propuesta: nueva decisión (023) tras medir un clip largo en Render.
 - **Decisiones de Valentín:** `error_inesperado` reintentable con tope 3 (parámetro); `parcial` queda fuera
   (anotado como pendiente: reintento desde `parcial` cuando se declaró "normal" un slow-mo); el aviso de "<120 fps"
   del frontend pregunta "¿Lo grabaste en cámara lenta?" antes de subir; trigger en `sesiones` sí.

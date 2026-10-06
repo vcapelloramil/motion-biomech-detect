@@ -71,7 +71,10 @@ diseñarlo aparecieron cinco hallazgos que condicionan el diseño:
    actualizarlo después.
 2. *(paso b)* `videos.motivo_fallo` suma `error_inesperado`; `videos.modo_captura_intentado` (el modo con el
    que se intentó) y `videos.intentos` (entero, default 0); **trigger en `sesiones`** que rechaza cambiar
-   `modo_captura` si algún video de la sesión está `encolado`, `procesando`, `completado` o `parcial`. Así los
+   `modo_captura` **ni `gesto`, `encuadre`, `lado_camara` ni `atleta_id`** (ampliación pedida por Valentín
+   a los tres primeros; `atleta_id` se suma por el mismo motivo: de él sale la mano dominante que usa el
+   análisis; `fecha` queda libre) si algún video de la sesión está `encolado`, `procesando`, `completado` o
+   `parcial`. Así los
    golpes ya analizados nunca quedan "desactualizados": el modo solo se corrige si todos los golpes fallaron o
    están pendientes; si no, se crea otra sesión. Va en la base porque el usuario edita `sesiones` directo con
    RLS.
@@ -105,9 +108,9 @@ y `procesando` (la guarda real es el 409). **Prevención del error más común (
   su propia migración.
 - **Pendiente anotado:** reintento desde `parcial` (declaró "normal" un slow-mo), con código de motivo propio
   para distinguir la causa R1 de los tramos no auditables.
-- **No revisado en esta decisión:** `sesiones.gesto`, `encuadre` y `lado_camara` también son editables con
-  golpes ya analizados y cambiarlos invalidaría los reportes igual que `modo_captura`; y `usuarios` conserva
-  `UPDATE` de tabla para `authenticated`. Quedan para una revisión aparte, no se mezclan acá.
+- **No revisado en esta decisión:** `usuarios` conserva `UPDATE` de tabla para `authenticated`; queda para
+  la tarea 7.4 (autenticación), por indicación de Valentín. (`gesto`, `encuadre` y `lado_camara`, que en el
+  diseño original quedaban sin revisar, ya están cubiertos por el trigger.)
 - Un video `procesando` huérfano tras un reinicio del proceso sigue sin resolverse: es la tarea 6.5, no este
   reintento.
 

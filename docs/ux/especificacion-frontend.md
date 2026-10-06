@@ -72,8 +72,22 @@ Con sesión: **Biblioteca** · **Cargar** · **Perfil**. El reporte, el procesam
   - más de 50 MB → no se sube, con instrucciones para recortar (decisión 016, tentativa);
   - duración mayor a ~8 s → aviso de que probablemente tenga varios golpes;
   - el aviso de "menos de 120 fps → solo preparación" del navegador usa el fps que declara el propio archivo, **sin corregir por cámara lenta todavía** (esa corrección la hace el motor, no el navegador): si el usuario ya eligió "cámara lenta" más arriba, no hace falta asustarlo con este aviso — se muestra solo cuando el modo elegido es "normal", o antes de que haya elegido el modo.
+    - **Ese aviso pregunta explícitamente "¿Lo grabaste en cámara lenta?"** (decisión 022) y ofrece, ahí mismo, cambiar "¿Cómo lo grabaste?" **antes de subir**. Es la prevención barata del error más común: declarar "normal" un clip de cámara lenta (el iPhone lo guarda declarando 30 fps) lo deja en `parcial` por R1 sin posibilidad de reintento (ver "Pendiente" más abajo). Mejor que el usuario lo corrija con el archivo todavía sin subir.
 - La validación del navegador es una cortesía; la definitiva la hace el motor (Capítulo 4 §4.2.3). Si el modo declarado no coincide con el archivo (p. ej. "cámara lenta de 240" sobre un archivo que no es múltiplo entero de su propio fps), el golpe queda en error con un mensaje en lenguaje llano ("no pudimos confirmar la velocidad de este video; revisá el modo de captura o volvé a grabarlo") — nunca se procesa adivinando la escala temporal (R3).
 - Panel lateral (o desplegable en móvil) con "cómo recortar" para iPhone y Android y "antes de grabar".
+
+### Reintento de un golpe que falló (decisión 022)
+
+Solo un golpe en estado `fallido` se puede reintentar, y lo que se ofrece depende del código `motivo_fallo` (el texto en lenguaje llano lo pone el frontend, R2):
+
+- **`modo_captura_incompatible`** → mensaje llano (el de arriba) y botón **"Corregir el modo y reintentar"**. Abre "¿Cómo lo grabaste?" con la declaración actual; al guardar, recién entonces llama al reintento. Si el usuario no cambió nada, no se llama: el servidor respondería `declaracion_sin_cambios` y fallaría igual.
+- **`error_inesperado`** → "No pudimos procesar este video. Podés reintentar", botón **"Reintentar"** con el contador de intentos ("intento 2 de 3"). Con el tope agotado (`intentos_agotados`), el botón desaparece y se explica que conviene volver a subir el video.
+- **Edición de la declaración bloqueada.** Si la sesión tiene algún golpe en proceso o ya analizado (`encolado`, `procesando`, `completado`, `parcial`), cambiar modo de captura, gesto, encuadre, lado de cámara o atleta la rechaza la base. Mensaje: "Esta sesión ya tiene golpes analizados con otra configuración. Para este video, creá una sesión nueva". Conviene **deshabilitar esos campos de antemano** en una sesión con golpes analizados, en vez de dejar que el usuario choque con el error; la fecha sí se puede editar siempre.
+- **Botón deshabilitado** mientras el golpe esté `encolado` o `procesando`. La guarda real es el servidor (responde 409 `estado_no_reintentable`); el botón deshabilitado es cortesía.
+- Un golpe `completado` o `parcial` **no ofrece reintento**.
+- **Pendiente de implementación:** el endpoint hoy se protege con un token compartido que no puede vivir en el navegador. El botón real queda atado a la tarea 7.4 (autenticación de usuario); hasta entonces el flujo se maqueta.
+
+> **Pendiente anotado (decisión 022): reintento desde `parcial`.** Quien declara "normal" un clip de cámara lenta recibe `parcial` (R1: menos de 120 fps efectivos), que hoy es un estado final: tiene que crear otra sesión. Requiere un código de motivo propio para distinguir `parcial` por R1 (sin reporte) de `parcial` con tramos no auditables (con reporte), y relajar el trigger de la sesión para ese caso. Se diseña aparte; mientras tanto la prevención es el aviso de arriba.
 
 ## 6. Contenido del reporte
 
