@@ -60,3 +60,4 @@ Qué habilita, qué cierra, qué hay que recordar más adelante.
 | [020](020-bug-fps-efectivos-procesar-video.md) | Bug real de fps, corregido con una declaración de modo de captura del usuario | vigente (implementada y aplicada; control contra historial diferido) |
 | [021](021-keepalive-supabase-funcion-anon.md) | Keep-alive de Supabase: función `keepalive()` ejecutable por `anon` (excepción acotada a "nada a anon") | vigente |
 | [022](022-reintento-fallido-y-columnas-protegidas.md) | Reintento `fallido → encolado` y permisos por columna sobre `videos` y `sesiones` | vigente (en implementación; ver "Avance") |
+| [023](023-instancia-render-pruebas-con-usuarios.md) | Instancia de Render: Standard (1 CPU, 2 GB) solo durante las pruebas con usuarios y la defensa; Free y Starter descartados para esas pruebas | vigente (cambio de plan hacia el 20/10) |

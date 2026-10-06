@@ -26,7 +26,15 @@ sirve para comparar configuraciones entre sí, no como cota absoluta de lo que d
 | --- | --- | --- | --- |
 | **512 MB / 0,5 vCPU** (≈ Render Starter, USD 7/mes) | 176–185 s (3 corridas) | 426–427 MB | **no** |
 | 1 GB / 1 vCPU | 91,3 s | 427,3 MB | no |
-| 2 GB / 2 vCPU (≈ Render Standard, USD 25/mes) | 81,0 s | 441,1 MB | no |
+| 2 GB / 2 vCPU (~~≈ Render Standard, USD 25/mes~~ — **no es un plan de Render**, ver corrección) | 81,0 s | 441,1 MB | no |
+
+> **Corrección (6/10/2026, decisión 023).** Esta tabla atribuía la fila "2 GB / 2 vCPU" a Render Standard, y es un
+> **error**: según la documentación de planes de Render, **Standard es 1 CPU / 2 GB** (USD 25/mes), no 2 vCPU. La
+> medición de Docker sigue siendo válida como medición de esa configuración, pero el comparable de Standard es la
+> fila de **1 vCPU (91,3 s)**, no la de 2 vCPU (81,0 s). Además, **Starter tiene los mismos 512 MB que Free**
+> (solo cambia la CPU, 0,1 → 0,5): el criterio de la sección "Decisión final" más abajo ("RSS > 460 MB → pasar a
+> Starter") no resuelve la memoria, y queda superado por la decisión 023 (Standard solo durante las pruebas con
+> usuarios).
 
 **Ninguna configuración se cayó ni dio OOM, ni siquiera la más ajustada.** Esto contradice la primera
 lectura apresurada de la corrida sin restricciones (516 MB de RSS, que hizo pensar que 512 MB no
