@@ -6,6 +6,24 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-06 (al final del día) — Reintento `fallido → encolado` y permisos por columna · EN CURSO (decisión 022)
+
+**Rama:** `main`. Diseño aprobado por Valentín y registrado como **decisión 022**. Orden de trabajo: (a) migración de
+seguridad + prueba → (b) migración del reintento → (c) `procesar_video` y API → (d) pruebas → (e) especificación de
+frontend. Regla: no se pushea código que dependa de una migración sin aplicar; se avisa a Valentín cuando cada
+migración está lista.
+
+- **Hallazgo:** `authenticated` podía escribir cualquier columna de `videos` (`estado`, `motivo_fallo`, `fps_real`…).
+  Comprobado contra el proyecto real: la prueba nueva dio 20 fallas / 3 pasadas antes de la migración.
+- **(a) hecho, pendiente de aplicar:** `20261006130000_columnas_protegidas_videos_sesiones.sql` +
+  `tests/integration/test_columnas_protegidas.py` (commit `4a666f0`, sin pushear).
+- **Corregido** el dato falso de la nota de traspaso (que `procesar_video` borraba el reporte previo): ver pendiente 2.
+- **Decisiones de Valentín:** `error_inesperado` reintentable con tope 3 (parámetro); `parcial` queda fuera
+  (anotado como pendiente: reintento desde `parcial` cuando se declaró "normal" un slow-mo); el aviso de "<120 fps"
+  del frontend pregunta "¿Lo grabaste en cámara lenta?" antes de subir; trigger en `sesiones` sí.
+
+---
+
 ## 2026-10-06 (más tarde) — Keep-alive de Supabase (pendiente 1 de la nota de traspaso)
 
 **Rama:** `main`. Workflow `.github/workflows/supabase-keepalive.yml` (cron cada 3 días + `workflow_dispatch`,
@@ -61,8 +79,10 @@ ralentizacion en el reporte"), pusheado. La nota de traspaso va en el commit sig
    puede crearlos. Verificar con una corrida manual.
 2. **Reintento `fallido → encolado`.** Hoy `POST /analisis/{id}/procesar` pone `encolado` sin validar el estado
    previo. Falta definir las transiciones permitidas, limpiar `videos.motivo_fallo`, y resolver la restricción
-   única `reportes_biomecanicos.video_id` (hoy `procesar_video` borra el reporte previo). **Valentín quiere ver
-   el diseño y aprobarlo antes de implementar.**
+   única `reportes_biomecanicos.video_id` (~~hoy `procesar_video` borra el reporte previo~~ — **dato FALSO,
+   corregido el 6/10 más tarde:** `procesar_video` NO borra nada; no hay `delete` ni `upsert`, así que un segundo
+   análisis falla en el `insert` por la restricción única y marca `fallido` un video que ya tenía reporte válido).
+   ~~Valentín quiere ver el diseño y aprobarlo antes de implementar.~~ **Diseño aprobado el 6/10: decisión 022.**
 3. **Control contra historial** (decisión 020): diferido; recién con datos del Criterio 3.
 
 ### Otros pendientes, sin orden de urgencia

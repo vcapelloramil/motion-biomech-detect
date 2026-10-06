@@ -55,4 +55,8 @@ Qué habilita, qué cierra, qué hay que recordar más adelante.
 | [015](015-cierre-etapa-4.md) | Cierre de la Etapa 4: sin repliegue, cinco salvedades documentadas | vigente |
 | [016](016-limite-subida-un-golpe.md) | Límite de subida del MVP: un video por golpe, hasta 50 MB | **TENTATIVA** (se confirma probando el flujo completo) |
 | [017](017-plan-contenedor-motor.md) | Plan de contenedor para el motor: Render Starter (USD 7/mes) alcanza, medido con Docker real | vigente (hallazgo de `model_complexity` pendiente de decisión) |
+| [018](018-esquema-datos-etapa-4.5.md) | Esquema de datos de la Etapa 4.5: sesión como grupo de golpes | vigente |
+| [019](019-semilla-api-despliegue-render.md) | Semilla de la API (FastAPI) para desplegar y medir el plan gratuito de Render | vigente |
+| [020](020-bug-fps-efectivos-procesar-video.md) | Bug real de fps, corregido con una declaración de modo de captura del usuario | vigente (implementada y aplicada; control contra historial diferido) |
 | [021](021-keepalive-supabase-funcion-anon.md) | Keep-alive de Supabase: función `keepalive()` ejecutable por `anon` (excepción acotada a "nada a anon") | vigente |
+| [022](022-reintento-fallido-y-columnas-protegidas.md) | Reintento `fallido → encolado` y permisos por columna sobre `videos` y `sesiones` | vigente (en implementación; ver "Avance") |
