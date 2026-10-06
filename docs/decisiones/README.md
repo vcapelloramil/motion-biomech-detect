@@ -55,3 +55,4 @@ Qué habilita, qué cierra, qué hay que recordar más adelante.
 | [015](015-cierre-etapa-4.md) | Cierre de la Etapa 4: sin repliegue, cinco salvedades documentadas | vigente |
 | [016](016-limite-subida-un-golpe.md) | Límite de subida del MVP: un video por golpe, hasta 50 MB | **TENTATIVA** (se confirma probando el flujo completo) |
 | [017](017-plan-contenedor-motor.md) | Plan de contenedor para el motor: Render Starter (USD 7/mes) alcanza, medido con Docker real | vigente (hallazgo de `model_complexity` pendiente de decisión) |
+| [021](021-keepalive-supabase-funcion-anon.md) | Keep-alive de Supabase: función `keepalive()` ejecutable por `anon` (excepción acotada a "nada a anon") | vigente |

@@ -1,0 +1,70 @@
+name: Supabase keep-alive
+
+# El plan gratuito de Supabase pausa el proyecto tras 7 días sin actividad. Este workflow llama a
+# la función public.keepalive() (supabase/migrations/20261006120000_keepalive_rpc.sql) por la API
+# REST con la clave anon/publishable, que viene de los secretos del repo. Nunca la service_role.
+#
+# Secretos del repo (Settings -> Secrets and variables -> Actions): SUPABASE_URL y SUPABASE_ANON_KEY.
+
+on:
+  schedule:
+    # Día 1, 4, 7, ... de cada mes, 06:17 UTC (minuto no redondo: a las :00 GitHub se satura).
+    # La brecha máxima es de 3 días, también al cambiar de mes.
+    - cron: "17 6 */3 * *"
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Llamar a public.keepalive() por la API REST
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          set -u
+
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ]; then
+            echo "::error::Faltan los secretos SUPABASE_URL y/o SUPABASE_ANON_KEY del repositorio."
+            exit 1
+          fi
+
+          # Defensa: rechazar una clave de servidor puesta por error en el secreto.
+          case "$SUPABASE_ANON_KEY" in
+            sb_secret_*)
+              echo "::error::SUPABASE_ANON_KEY es una clave secreta (sb_secret_). Usá la anon/publishable."
+              exit 1 ;;
+            eyJ*)
+              role=$(printf '%s' "$SUPABASE_ANON_KEY" | cut -d. -f2 | tr '_-' '/+' | { base64 -d 2>/dev/null || true; } | grep -o '"role":"[a-z_]*"' || true)
+              if [ "$role" = '"role":"service_role"' ]; then
+                echo "::error::SUPABASE_ANON_KEY es la clave service_role. Usá la anon/publishable."
+                exit 1
+              fi ;;
+          esac
+
+          # Las claves JWT clásicas van también como Bearer; las sb_publishable_ solo en apikey.
+          auth=()
+          case "$SUPABASE_ANON_KEY" in
+            eyJ*) auth=(-H "Authorization: Bearer $SUPABASE_ANON_KEY") ;;
+          esac
+
+          url="${SUPABASE_URL%/}/rest/v1/rpc/keepalive"
+          rm -f response.txt
+          code=$(curl -sS -o response.txt -w '%{http_code}' \
+            --max-time 30 --retry 2 --retry-delay 5 \
+            -X POST "$url" \
+            -H "apikey: $SUPABASE_ANON_KEY" "${auth[@]}" \
+            -H "Content-Type: application/json" \
+            -d '{}') || code="000"
+
+          echo "HTTP $code"
+          if [ "$code" -lt 200 ] || [ "$code" -ge 300 ]; then
+            echo "::error::Supabase respondió HTTP $code (se esperaba 2xx)."
+            head -c 500 response.txt 2>/dev/null || true
+            echo
+            exit 1
+          fi
+          echo "Keep-alive OK: la base respondió $(head -c 100 response.txt)"

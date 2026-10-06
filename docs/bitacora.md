@@ -6,6 +6,22 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-06 (más tarde) — Keep-alive de Supabase (pendiente 1 de la nota de traspaso)
+
+**Rama:** `main`. Workflow `.github/workflows/supabase-keepalive.yml` (cron cada 3 días + `workflow_dispatch`,
+`POST /rest/v1/rpc/keepalive` con la clave anon desde los secrets `SUPABASE_URL` y `SUPABASE_ANON_KEY`; falla si
+no hay 2xx) y migración `20261006120000_keepalive_rpc.sql` (aplicada por Valentín; `select public.keepalive()`
+devuelve la hora). **Decisión 021:** con `anon` no se podía consultar ninguna tabla (401, comprobado), así que se
+aprobó una excepción acotada: una función que solo devuelve `now()`; alternativa descartada, `service_role` como
+secret de GitHub.
+
+Verificado: el script exacto del YAML corrido en local contra el proyecto real dio HTTP 200; falla con exit 1 en
+secretos vacíos, clave service_role/`sb_secret_`, URL inalcanzable y función inexistente (404). **Falta** la
+corrida manual en GitHub (Actions → Supabase keep-alive → Run workflow) y confirmar en el panel, pasado el 13/10,
+que el proyecto sigue activo. Quedan los pendientes 2 y 3 de la nota de traspaso.
+
+---
+
 ## 2026-10-06 — Trazabilidad del modo y el factor en el reporte · NOTA DE TRASPASO (antes de /clear)
 
 **Rama:** `main`. **Último commit de código: `36a60fd`** ("feat: trazabilidad del modo de captura y del factor de
