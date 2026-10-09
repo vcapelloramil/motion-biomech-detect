@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import avatar from "@/assets/profile-avatar.jpg";
 import { RutaProtegida } from "@/components/ruta-protegida";
+import { DatosDeEjemplo } from "@/components/datos-de-ejemplo";
 
 export const Route = createFileRoute("/profile")({
   head: () => ({
@@ -66,6 +67,7 @@ function ProfilePage() {
 
   return (
     <main className="mx-auto max-w-7xl px-6 py-16">
+      <DatosDeEjemplo detalle="Tu perfil, los planes y los datos son una maqueta: todavía no se leen ni se guardan." />
       <div className="font-mono text-xs uppercase tracking-widest text-neon">/ Perfil</div>
 
       {/* HEADER */}

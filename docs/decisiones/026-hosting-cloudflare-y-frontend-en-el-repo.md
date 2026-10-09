@@ -37,3 +37,7 @@ Dos cosas del plan original ya no reflejan la realidad:
   conectada al repositorio, o `wrangler` por línea de comandos) se decide al hacer la primera publicación.
 - **CORS de la API:** el origen público del frontend en Cloudflare es el único que se permite en Render.
 - La URL de Supabase Auth (*Site URL*) tiene que apuntar a ese dominio público para que el enlace del correo de confirmación funcione (decisión 027).
+
+## Actualización del 9/10/2026 — publicado en Cloudflare Workers
+
+El mecanismo quedó decidido: **Cloudflare Workers** (el build de TanStack Start es un Worker con assets estáticos), publicado con `wrangler deploy` desde `frontend/`, no Pages. URL: **https://kinetiq.v-capelloramil.workers.dev** (Worker `kinetiq`). El origen único permitido en `KINETIQ_CORS_ORIGINS` es ese, más `http://localhost:8080` para desarrollo. Solo valores públicos en el bundle (verificado: sin `service_role`).

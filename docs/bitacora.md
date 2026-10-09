@@ -6,6 +6,46 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-09 (noche, 6) — Frontend publicado en Cloudflare Workers; pieza 6: Cargar real y marca "Datos de ejemplo"
+
+### Publicación (decisión 026, mecanismo definido)
+
+- **URL: https://kinetiq.v-capelloramil.workers.dev** (Worker `kinetiq`, `wrangler deploy` desde `frontend/`, build con las variables públicas). Verificado: `/`, `/registro`, `/ingreso` y `/tecnologia` dan 200,
+  una ruta inexistente 404, los assets cargan y el bundle lleva la URL pública de Supabase y ningún secreto.
+- **Workers y no Pages:** el build de TanStack Start es un Worker con assets estáticos; Pages exigía convertirlo (decisión de Valentín, 9/10).
+- **Particularidad del login de Wrangler:** `wrangler login` con scopes de Workers dijo "Successfully logged in" pero el archivo de credenciales visible desde esta sesión no cambió; el deploy lo hizo Valentín desde su
+  PowerShell. Para volver a publicar: `cd frontend; bun run build; .\node_modules\.bin\wrangler.exe deploy` **desde su PowerShell** (el build necesita `frontend/.env`, que no se versiona).
+- **Valores que carga Valentín** (origen = `https://kinetiq.v-capelloramil.workers.dev`):
+  Supabase → Authentication → URL Configuration: *Site URL* = el origen; *Redirect URLs* = `<origen>/**` y `http://localhost:8080/**`.
+  Render → `KINETIQ_CORS_ORIGINS` = `https://kinetiq.v-capelloramil.workers.dev,http://localhost:8080`.
+
+### Pieza 6 — Cargar real (sin commit pusheado)
+
+- **`/upload` deja de ser una maqueta.** Flujo: jugador (existente o nuevo: nombre, mano dominante, nivel) → golpe, encuadre, lado de la cámara, fecha → **"¿Cómo lo grabaste?"** sin opción marcada y con la ayuda
+  "elegí cómo grabaste, no cómo se ve" → archivo. La **instrucción "Opciones → Formato: Actual / app Archivos" va antes de elegir el archivo.** Con "Grabación normal" aparece la pregunta
+  "¿Lo grabaste en cámara lenta?" con la opción de cambiar la respuesta.
+- **Validación en el navegador (cortesía; la definitiva es del motor):** MP4 o MOV, máximo 50 MB, aviso si dura más de 8 s. No se lee la tasa de fotogramas en el navegador (no es confiable); la mide el motor.
+- **Subida directa a Storage** con la sesión del usuario y progreso real (XHR), en `<usuario_id>/<video_id>/<nombre seguro>` (solo letras ASCII, números, `-`, `_` y `.`: lo medido con la página del iPhone).
+  Después: alta de `atletas`, `sesiones` y `videos` (las cuatro columnas permitidas) y `POST /analisis/{id}/procesar` con el JWT. Si falla antes de guardar, se deshace la carga; si falla solo el envío,
+  el video queda guardado y se ofrece **"Enviar a analizar de nuevo"**. 409 `estado_no_reintentable` cuenta como éxito (ya estaba en cola o analizado).
+- **Marca "Datos de ejemplo"** (ícono + texto, no solo color) en `/videos`, `/reporte` y `/profile`, que siguen simuladas (plan §5; piezas 7 y 8).
+- **Verificado:** `bun test` 25 pasan (validación, clave de Storage con entradas hostiles, vocabulario contra los CHECK de la base, interpretación de la API), `tsc --noEmit` y eslint limpios, build OK sin secretos.
+  **Contrato de red contra el Supabase real** con un usuario temporal (ya borrado): alta de atleta y sesión con la sesión del usuario, subida con los mismos headers que la pantalla (200), subida a una carpeta
+  ajena rechazada (400), alta del video en `pendiente` y descarte completo en cascada.
+- **No verificado:** el flujo completo en el navegador (necesita una sesión real, no manejo contraseñas) ni el envío a la API desde el navegador (falta `KINETIQ_CORS_ORIGINS` en Render).
+
+### Acciones de Valentín
+
+1. **Volver a publicar** (pieza 5 y 6 están en el código, el sitio en vivo tiene solo la 5): `cd frontend`, `bun run build`, `.\node_modules\.bin\wrangler.exe deploy`.
+2. Cargar los valores de Supabase y Render de arriba.
+3. Probar desde el celular: registrarse (o ingresar), **Cargar**, subir un golpe con Opciones → Formato: Actual.
+
+### Siguiente
+
+Pieza 7: **Procesando real** (polling del estado, mensajes por estado y por `motivo_fallo` —incluido `archivo_convertido`—, reintento) y Biblioteca real; después el Reporte simple real (pieza 8).
+
+---
+
 ## 2026-10-09 (noche, 5) — Publicación del frontend en Cloudflare Workers: build listo, falta el permiso de Wrangler
 
 - **Push de `9488ffc` hecho** (`1b62091..9488ffc`).

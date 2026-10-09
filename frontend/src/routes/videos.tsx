@@ -16,6 +16,7 @@ import t1 from "@/assets/video-thumb-1.jpg";
 import t2 from "@/assets/video-thumb-2.jpg";
 import t3 from "@/assets/video-thumb-3.jpg";
 import { RutaProtegida } from "@/components/ruta-protegida";
+import { DatosDeEjemplo } from "@/components/datos-de-ejemplo";
 
 export const Route = createFileRoute("/videos")({
   head: () => ({
@@ -163,6 +164,7 @@ function VideosPage() {
 
   return (
     <main className="mx-auto max-w-7xl px-6 py-16">
+      <DatosDeEjemplo detalle="Las tarjetas de sesiones son una maqueta: todavía no se leen tus sesiones reales (pieza 7 del plan)." />
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <div className="font-mono text-xs uppercase tracking-widest text-neon">/ Sesiones</div>

@@ -13,6 +13,13 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 const URL = import.meta.env.VITE_SUPABASE_URL as string | undefined;
 const CLAVE_ANON = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
 
+/** Valores públicos tal cual, para las llamadas que no pasan por el cliente (la subida con progreso usa XMLHttpRequest). */
+export const SUPABASE_URL_PUBLICA = URL?.replace(/\/+$/, "");
+export const SUPABASE_CLAVE_ANON = CLAVE_ANON;
+
+/** URL base de la API del motor (Render). Pública; sin barra final no hace falta, se normaliza al usarla. */
+export const API_URL = import.meta.env.VITE_API_URL as string | undefined;
+
 /** ¿Están cargadas las variables públicas? La pantalla de ingreso lo avisa en vez de fallar en silencio. */
 export const supabaseConfigurado = Boolean(URL && CLAVE_ANON);
 

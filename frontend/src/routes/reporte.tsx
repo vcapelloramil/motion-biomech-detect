@@ -21,6 +21,7 @@ import {
   type Caso,
 } from "@/lib/reporte-mock";
 import { RutaProtegida } from "@/components/ruta-protegida";
+import { DatosDeEjemplo } from "@/components/datos-de-ejemplo";
 
 /**
  * Parametros de captura de pantalla. Dejan la pantalla en un estado concreto sin
@@ -111,6 +112,7 @@ function ReportePage() {
 
   return (
     <main className="mx-auto max-w-6xl px-6 py-16">
+      <DatosDeEjemplo detalle="Este reporte es una maqueta con valores inventados: todavía no muestra el resultado real de tu video (pieza 8 del plan)." />
       {import.meta.env.DEV && busqueda.demo !== false && (
         <div className="mb-8 rounded-2xl border border-dashed border-border bg-card/50 p-4">
           <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
