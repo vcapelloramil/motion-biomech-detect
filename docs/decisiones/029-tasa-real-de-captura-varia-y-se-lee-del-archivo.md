@@ -120,3 +120,27 @@ recalcular el corpus horneado sin las marcas reales solo cambiaría una escala q
 - La página de prueba y el inspector ya miden la **tasa real media** y los fotogramas visibles; `uniformidad_temporal.marcas_de_tiempo` pasó a leer solo los visibles. **E0 no cambia en esta decisión.**
 - El mensaje que ve el usuario cuando falla la tasa tiene que explicar el **camino que funciona** (Opciones → Actual), no pedir que revise el modo.
 - Con esto la prueba del iPhone **cambia de estado**: hay un camino que llega a ≥ 120 fps. El riesgo del 20/10 pasa de "bloqueante" a "a verificar con 'cámara lenta sin recortar' y con la regularización temporal".
+
+---
+
+## Actualización del 9/10/2026 — tolerancia del 5 % sobre los pisos de R1 (decisión de Valentín)
+
+**Qué cambia.** La aptitud (R1) se evalúa sobre la **tasa real media** de las marcas de tiempo (propuesta 3). Esa media baja con unos pocos fotogramas perdidos: una captura
+legítima de 120 fps con un par de huecos da 118,6 y quedaba fuera de R1. **Los pisos de la tabla de aptitud llevan ahora una tolerancia del 5 %:**
+
+| Aptitud | Antes | Ahora |
+| --- | --- | --- |
+| `completo` (incluye el impacto) | ≥ 240 fps | ≥ 240 fps (**sin tolerancia**) |
+| `reducido` (secuenciación completa, R1) | ≥ 120 fps | **≥ 114 fps** |
+| `solo_preparacion` | ≥ 60 fps | **≥ 57 fps** |
+| `rechazado` | < 60 fps | < 57 fps |
+
+**Por qué solo los dos pisos de abajo.** El pedido nombró el 114 (120 × 0,95); lo apliqué también al piso de 60 (mismo mecanismo: el clip de 60 fps de la Fase B, con un hueco de
+3 fotogramas en 4,3 s, medía 59,26 y salía "rechazado") y **no** al de 240: ese umbral es el que asegura que el impacto esté cubierto, y la propuesta 3 ya lo clasifica "reducido"
+con los ~199 fps que entrega el iPhone. Si se quiere la tolerancia también ahí, es una línea (`TOLERANCIA_UMBRAL` en `engine/ingest.py`).
+
+**Dónde.** `engine/ingest.py` (`UMBRAL_R1_FPS = 114`, `UMBRAL_PREPARACION_FPS = 57`, `clasificar_fps`) y `procesar_video._UMBRAL_SECUENCIACION_FPS`, que usa el mismo valor. El
+motivo `archivo_convertido` (decisión 030) también lo usa: una captura de 120 con pérdidas no es un archivo convertido. La tasa **no se corrige**: `fps_real` sigue siendo la media
+medida; la tolerancia solo mueve el umbral con el que se la compara. `CLAUDE.md` R1 lo anota.
+
+**Límite declarado.** Es una regla de medición, no un cambio del fundamento de Nyquist: a 114 fps el margen sobre las velocidades de Fleisig et al. (2003) es un 5 % menor que a 120.

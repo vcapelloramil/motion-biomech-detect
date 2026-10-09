@@ -6,6 +6,84 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-09 (noche) — Migración aplicada y corridas en verde; decisión 031 (veredicto por gesto y encuadre); tolerancia del 5 % en R1
+
+**Corridas (con la migración `20261009120000` ya aplicada por Valentín): `test_procesar_video_e2e.py` pasó (2 min) y `pytest -m requiere_supabase` completo dio 79 passed, 0 failed (8 min 55 s), sin restos.
+Suite rápida: 419 passed.** El e2e ahora verifica que el `reporte` guardado valida contra el contrato y que cada métrica trae `confianza_media`.
+
+### Decisiones de Valentín (9/10, a continuación del cierre de arriba)
+
+1. **Veredicto de la secuencia → decisión 031.** Mi propuesta (veredicto solo en revés, el resto `no_auditable`) fue rechazada: contradecía la tesis (§4.3.3, tabla 4.8: el saque tiene el respaldo bibliográfico) y
+   `no_auditable` significa "no se pudo medir". **Regla:** veredicto del par cadera → tronco solo donde hay **(a)** referencia del orden esperado y **(b)** Criterio 1 cumplido para ese gesto y encuadre; donde falta una,
+   el orden se documenta como **`sin_evaluar`** (la etiqueta del brazo, decisión 011). Contrato **v1.2** (aditivo: `Observacion.severidad` admite `sin_evaluar`; los cuatro estados de R3 no cambian).
+2. **Escala desconocida → velocidades `null`:** aprobado, implementado.
+3. **Citas:** Kovacs y Ellenbecker (2011), Fleisig et al. (2003) y Martin et al. (2014), sin capítulos. Verificadas contra el **texto** de los capítulos 3 y 4; **la lista formal de Referencias no está en el repositorio**
+   (queda cotejar autores, título y revista contra ella). Martin (2014) no se usa en estos veredictos: no respalda "tronco antes que cadera".
+4. **R1 con fotogramas perdidos:** tolerancia del 5 %: **114 fps** para la secuenciación completa y **57** para la preparación; el umbral de 240 no tiene tolerancia. Documentado en la decisión 029 (actualización) y en
+   CLAUDE.md R1. Con eso el clip de 60 fps (59,26 reales por un hueco de 3 fotogramas) vuelve a ser `solo_preparacion`.
+
+### Qué grupos quedan con veredicto (cifras de `criterio1-resumen.md`, sesión 2, τ = 1, par pelvis-torso)
+
+| Gesto · encuadre | (a) referencia | (b) Criterio 1 | Veredicto |
+| --- | --- | --- | --- |
+| **Saque · perfil** | Kovacs y Ellenbecker (2011); Fleisig et al. (2003) | cumple (1a 1,00 · 1b 1,00) | **sí** |
+| Saque · tres cuartos | sí | no (1a 0,50) | sin evaluar |
+| Drive · perfil | no | cumple (1,00 · 1,00) | sin evaluar |
+| Drive · tres cuartos | no | no (0,00) | sin evaluar |
+| Revés · perfil | no | no (0,67) | sin evaluar |
+| Revés · tres cuartos | no | cumple (1,00 · 0,83) | sin evaluar |
+
+**Se revisa cuando se haga el recálculo (Paso A):** anotado en la decisión 031 y en `docs/plan-recalculo-corpus-tasa-real.md`.
+
+### Hallazgos que quedan anotados (sin investigar)
+
+- **El Criterio 1 no lo cumplió solo el drive de perfil:** a τ = 1 lo cumplen tres grupos (saque perfil, drive perfil, revés tres cuartos); a τ = 2 y 3, dos (saque perfil y drive perfil). La frase de la decisión 029
+  ("el único grupo que cumple es `drive|perfil`, 1a = 0,83") no coincide con `criterio1-resumen.md`: reconciliar al recalcular.
+- **Efecto visible de la regla:** en el saque de perfil el orden modal medido es tronco antes que cadera (6 de 6; coincidencia con lo esperado 0,00). Con la regla, **todo saque de perfil con ese orden sale como
+  `desvío leve`** (nunca alerta de carga). Puede ser una característica del jugador o un artefacto de la vista de perfil monocular: la 015 (salvedad 2) lo había evitado por falta de fuente. Anotado para el Capítulo 7.
+- Mi reproche a una prueba vieja: `test_normal_60fps_queda_parcial_solo_preparacion` estaba desactualizada respecto de la 029 (tasa medida, no la del contenedor); ahora cubre la tolerancia.
+
+---
+
+## 2026-10-09 (tarde) — `requiere_supabase` corrido; piezas 1 a 3 del flujo listas, **falta aplicar una migración**
+
+**Corrida real contra el proyecto Supabase (primera desde el 6/10): 78 passed, 1 failed** (9 min 21 s, sin restos). La falla era una prueba vieja, no un fallo del producto:
+`test_normal_60fps_queda_parcial_solo_preparacion` pedía `fps_real == 60` y la aptitud "solo_preparacion". Desde la decisión 029 la tasa es la **medida**: ese clip es nominal 60 fps pero trae **un hueco de 3 fotogramas
+(66,7 ms) en 4,3 s**, así que la media real es **59,26** (1,2 % bajo 60) y la aptitud sale "rechazado". Para el producto da lo mismo (queda `parcial`, sin reporte, en los dos casos), pero la etiqueta cambió. Actualicé la prueba
+a la semántica de la 029 (`fps_real` entre 59 y 60,1; `R1` en el motivo) y volvió a pasar.
+**Anotado, no investigado:** los umbrales de 60 y 120 fps sobre la media medida son frágiles con pocas pérdidas (un 120 fps legítimo con un par de fotogramas perdidos da 118,6 → `parcial`). Decisión tuya si conviene
+una tolerancia o evaluar sobre la grilla nominal; hoy se aplica la 029 tal cual.
+
+### Qué se hizo (piezas 1, 2 y 3 del plan; sin commit, sin push)
+
+- **Migración única `20261009120000_reporte_json_y_motivo_archivo_convertido.sql`:** `reportes_biomecanicos.reporte jsonb` (nullable, debe ser un objeto) y el código `archivo_convertido` en `videos.motivo_fallo`.
+  **Sin aplicar.** El código nuevo depende de ella: hasta aplicarla, `procesar_video` falla al guardar el reporte (no desplegar ni pushear antes).
+- **Ensamblador del reporte** `backend/app/ensamblar_reporte.py` (E5.4 mínimo): arma el JSON v1.1 y lo **valida contra el contrato antes de guardarlo**. Confianza por pico = media de la confianza de las articulaciones del
+  segmento en el fotograma del pico (como pidió la 024); tramos no auditables en segundos; cobertura auditable = unión de los tramos excluidos de la cadena; observaciones en el vocabulario de R2 con **prueba automática del
+  vocabulario** (E5.7). `procesar_video` guarda el JSON, el mismo `secuencia_correcta` y las métricas **desde esa única fuente**, y ahora escribe `confianza_media` en cada métrica.
+- **Motivo `archivo_convertido`:** `fallido` con `fps_real` medido, cuando se declaró cámara lenta, el archivo llegó en tiempo real y **la grilla nominal de sus marcas ya está bajo 120 fps** (100 o 60 fps convertidos). No aplica con
+  "normal" (60 fps genuinos → `parcial` por R1) ni a una captura de 120 con fotogramas perdidos. Reintento: solo si cambia la declaración (igual que `modo_captura_incompatible`); el arreglo real es subir otro archivo.
+  Texto y botón "Subir otro archivo" en la especificación de frontend §5.
+- **Pruebas:** 34 nuevas (21 del ensamblador, 13 de archivo convertido con cliente falso y vocabulario de la migración); suite rápida **400 passed**. `test_procesar_video_e2e` ahora exige el `reporte` válido y `confianza_media`.
+- **Corrida en seco** de `procesar_video` con un clip real de Fase B y un cliente falso (96 s, sin tocar la base): el JSON sale válido y serializable. Ahí apareció un defecto mío (cobertura 100 % junto a tramos no
+  auditables) que quedó corregido y con prueba.
+
+### Decisiones mías que necesitan tu confirmación (están aisladas, se cambian en un solo lugar)
+
+1. **Veredicto de la secuencia (la 015 lo dejó abierto "para la Etapa 5").** Solo el **revés** emite `correcto` / `desvío leve`. En **saque y drive** el orden se documenta (`orden_observado`, instantes) pero `correcto = null` y la
+   observación va en gris (`no_auditable`) con el texto "se documenta el orden pero no se clasifica como correcto o incorrecto". Razón: perfil invertido sin fuente (salvedad 2) y tres cuartos no ordenable (salvedad 1).
+   Constante `GESTOS_CON_VEREDICTO` en `ensamblar_reporte.py`. **Consecuencia visible:** en el MVP, saque y drive nunca salen en verde ni en ámbar. El gris para "medido pero sin veredicto" es el estado más cercano de los cuatro de R3.
+2. **Escala desconocida** (`escala_temporal_conocida = false`): las velocidades pasan a `valor = null`, `auditable = false` y se agrega una observación; el orden sí se documenta. Antes quedaban como auditables (R3).
+3. **Referencia del orden:** "Capítulo 3, apartado 3.3.3", no una cita con año; no inventé una.
+
+### Siguiente paso concreto
+
+1. **Valentín aplica la migración** `supabase/migrations/20261009120000_reporte_json_y_motivo_archivo_convertido.sql` en el SQL Editor y avisa.
+2. Correr `pytest tests/integration/test_procesar_video_e2e.py` y después `pytest -m requiere_supabase` (el e2e tarda ~1,5 min).
+3. Pieza 4 (7.4: JWT por JWKS, propiedad del video, CORS, retiro del token compartido) y recién después el frontend.
+
+---
+
 ## 2026-10-09 (cierre) — NOTA DE TRASPASO (antes de /clear) · decisiones de Valentín y estado
 
 **Rama:** `main`. **Último commit de código: `18942d5`** (E0 lee fotogramas visibles y tasa real, rotación, regularización, contrato v1.1); `68df5ff` es el de documentación (decisión 030, plan de recálculo). El commit

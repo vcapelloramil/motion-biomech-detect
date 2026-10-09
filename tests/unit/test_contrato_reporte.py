@@ -125,7 +125,7 @@ def test_modo_normal_con_factor_uno_es_valido():
 def test_la_version_del_contrato_es_obligatoria_y_conocida():
     from app.schemas.reporte import VERSION_CONTRATO
 
-    assert Reporte.model_validate(_ejemplo_dict()).version_contrato == VERSION_CONTRATO == "1.1"
+    assert Reporte.model_validate(_ejemplo_dict()).version_contrato == VERSION_CONTRATO == "1.2"
     datos = _ejemplo_dict()
     del datos["version_contrato"]
     with pytest.raises(ValidationError):

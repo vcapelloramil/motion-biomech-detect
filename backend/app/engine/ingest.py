@@ -41,15 +41,23 @@ class AptitudFaseRapida(str, Enum):
     """
 
     COMPLETO = "completo"                # >= 240 fps: incluye el impacto
-    REDUCIDO = "reducido"               # 120-239 fps: impacto con confianza reducida
-    SOLO_PREPARACION = "solo_preparacion"  # 60-119 fps: solo fase de preparación
-    RECHAZADO = "rechazado"             # < 60 fps: no se analiza
+    REDUCIDO = "reducido"               # >= 114 fps (120 con tolerancia) y < 240: impacto con confianza reducida
+    SOLO_PREPARACION = "solo_preparacion"  # >= 57 fps (60 con tolerancia) y < 114: solo fase de preparación
+    RECHAZADO = "rechazado"             # < 57 fps: no se analiza
 
 
 # Umbrales de la tabla 1.3, en fps efectivos.
 _UMBRAL_COMPLETO = 240.0
 _UMBRAL_REDUCIDO = 120.0
 _UMBRAL_PREPARACION = 60.0
+
+# Tolerancia de medición sobre los PISOS de R1 (decisión 029, actualización del 9/10/2026). La tasa que se compara es la real MEDIA de
+# las marcas de tiempo: un par de fotogramas perdidos en una captura legítima de 120 fps da 118 y la dejaría fuera por una pérdida
+# que no cambia lo que se puede medir. 5 % = 114 fps para R1 (120) y 57 fps para la preparación (60). El umbral de 240 (impacto
+# completo) NO tiene tolerancia: asegura que el impacto esté cubierto, y la 029 ya lo clasifica "reducido" con ~199 fps reales.
+TOLERANCIA_UMBRAL = 0.05
+UMBRAL_R1_FPS = _UMBRAL_REDUCIDO * (1.0 - TOLERANCIA_UMBRAL)           # 114: mínimo para la secuenciación completa
+UMBRAL_PREPARACION_FPS = _UMBRAL_PREPARACION * (1.0 - TOLERANCIA_UMBRAL)  # 57
 
 # Tasas de captura estándar. Las tasas NTSC (24000/1001 = 23.976, 30000/1001 =
 # 29.97, 60000/1001 = 59.94, ...) son artefactos de la aritmética de video, no
@@ -76,9 +84,9 @@ def clasificar_fps(fps_efectivos: float) -> AptitudFaseRapida:
     """Aplica la tabla de aptitud del plan (tarea 1.3) a una frecuencia efectiva."""
     if fps_efectivos >= _UMBRAL_COMPLETO:
         return AptitudFaseRapida.COMPLETO
-    if fps_efectivos >= _UMBRAL_REDUCIDO:
+    if fps_efectivos >= UMBRAL_R1_FPS:
         return AptitudFaseRapida.REDUCIDO
-    if fps_efectivos >= _UMBRAL_PREPARACION:
+    if fps_efectivos >= UMBRAL_PREPARACION_FPS:
         return AptitudFaseRapida.SOLO_PREPARACION
     return AptitudFaseRapida.RECHAZADO
 
@@ -249,7 +257,7 @@ def evaluar(
         # o en el reporte; se mantiene ASCII.
         motivo = (
             f"Frecuencia de captura efectiva {fps_efectivos:.1f} fps < "
-            f"{_UMBRAL_PREPARACION:.0f} fps: insuficiente incluso para la fase de "
+            f"{UMBRAL_PREPARACION_FPS:.0f} fps: insuficiente incluso para la fase de "
             f"preparacion."
         )
 

@@ -21,6 +21,9 @@
 
 ## 2. Dos pasos, de menor a mayor costo
 
+> **Al terminar el Paso A (decisión 031):** revisar `RESPALDO_POR_GRUPO` en `backend/app/ensamblar_reporte.py` con los 1a/1b recalculados. La condición (b) del veredicto del
+> orden cadera → tronco usa las cifras de la decisión 014; si algún grupo deja de cumplir (o pasa a cumplir), su veredicto cambia.
+
 ### Paso A — corrección rápida sobre las poses ya extraídas (horas de trabajo, minutos de cómputo)
 
 Reusa la **caché de pose del horneado** y le pone la **tasa real del muestreo**: 120,2 fps uniformes (la meseta). No re-extrae pose.

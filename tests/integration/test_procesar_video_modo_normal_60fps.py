@@ -3,10 +3,13 @@
 El recorte `20260924_VCR_saque_perfil_060_01_rep01.mov` (un saque, 5 s, cortado con
 `ffmpeg -c copy` del original de ~1 minuto grabado a propósito en modo normal a 60 fps) es
 el caso inverso al del resto del corpus: el contenedor dice la verdad. Declarado `normal`:
-- `fps_efectivos` = 60 (el del contenedor, normalizado NTSC: 59,94 -> 60),
-- aptitud "solo_preparacion" (R1: entre 60 y 119 fps), así que NO se corre la secuenciación
-  completa: el video queda `parcial`, `fps_real = 60`, `apto_fase_rapida = False` y sin
-  `reportes_biomecanicos`.
+- `fps_efectivos` = la tasa REAL MEDIA de las marcas de tiempo (decisión 029): ~59,3, porque el
+  clip trae un hueco de 3 fotogramas (66,7 ms) en 4,3 s. Antes de la 029 era el 60 del contenedor
+  (59,94 normalizado).
+- aptitud "solo_preparacion": 59,3 cae 1,2 % bajo 60, dentro de la tolerancia del 5 % sobre los
+  pisos de R1 (decisión 029, actualización del 9/10: 57 y 114 fps). Sin esa tolerancia daba "rechazado".
+- NO se corre la secuenciación completa: el video queda `parcial`, `apto_fase_rapida = False` y
+  sin `reportes_biomecanicos`.
 - No es un fallo: `normal` nunca falla, por fps alto o bajo (corrección de Valentín).
 
 No corre inferencia de pose (R1 corta antes), así que es rápida. Corre contra un proyecto
@@ -119,7 +122,7 @@ def test_normal_60fps_queda_parcial_solo_preparacion():
         )
         assert fila["estado"] == "parcial"
         assert fila["motivo_fallo"] is None
-        assert float(fila["fps_real"]) == 60.0
+        assert 59.0 <= float(fila["fps_real"]) <= 60.1  # la tasa medida, no la declarada (decisión 029)
         assert fila["apto_fase_rapida"] is False
         assert (
             admin.table("reportes_biomecanicos").select("id").eq("video_id", video["id"]).execute().data == []

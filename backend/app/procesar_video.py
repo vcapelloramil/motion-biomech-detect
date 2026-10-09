@@ -52,8 +52,10 @@ import platform
 import sys
 import tempfile
 import time
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+from uuid import uuid4
 
 try:
     import resource  # solo Unix/Linux: es lo que corre en el contenedor y en Render.
@@ -61,6 +63,7 @@ except ImportError:
     resource = None  # Windows (desarrollo local): sin medición de RSS, no rompe el import.
 
 from app.config import get_supabase_service_role_key, get_supabase_url
+from app.engine.ingest import UMBRAL_R1_FPS
 from app.engine.version import __version__ as VERSION_MOTOR
 
 BACKEND_POSE = "mediapipe"
@@ -68,7 +71,8 @@ BACKEND_POSE = "mediapipe"
 # por debajo de esto ("solo_preparacion" o "rechazado" en engine/ingest.py) no se corre
 # la secuenciación — mejor un video "parcial" sin resultado que un resultado calculado
 # sobre una base temporal que la propia regla R1 considera insuficiente.
-_UMBRAL_SECUENCIACION_FPS = 120.0
+# 120 fps con la tolerancia de medición de la decisión 029 (114): una captura legítima con unos fotogramas perdidos no se rechaza.
+_UMBRAL_SECUENCIACION_FPS = UMBRAL_R1_FPS
 # decisión 017: model_complexity queda en 2 ("heavy") hasta nuevo aviso explícito de
 # Valentín. El hallazgo de que 1 corta tiempo/memoria a la mitad sigue sin aplicarse.
 MODEL_COMPLEXITY = 2
@@ -130,6 +134,9 @@ MOTIVO_FALLO_MODO_CAPTURA_INCOMPATIBLE = "modo_captura_incompatible"
 ORIGEN_FACTOR_MARCAS = "marcas_de_tiempo"
 # Cualquier otra excepción durante el procesamiento (migración 20261007000000, decisión 022).
 MOTIVO_FALLO_ERROR_INESPERADO = "error_inesperado"
+# El teléfono convirtió el video al subirlo y llegó con menos de 120 fps reales aunque se declaró cámara lenta (migración
+# 20261009120000, decisiones 029 y 030). Mensaje propio: "Opciones -> Formato: Actual", no "revisá el modo de captura".
+MOTIVO_FALLO_ARCHIVO_CONVERTIDO = "archivo_convertido"
 
 
 def _factor_y_motivo(modo_captura: str, fps_contenedor: float) -> tuple[float, bool, str, str | None]:
@@ -179,6 +186,27 @@ def _tasa_del_archivo(md, modo_captura: str) -> tuple[float, bool, str, str | No
     return _factor_y_motivo(modo_captura, md.fps_declarados)
 
 
+def _motivo_archivo_convertido(md, modo_captura: str, fps_efectivos: float) -> str | None:
+    """``MOTIVO_FALLO_ARCHIVO_CONVERTIDO`` si el archivo llegó en tiempo real con la grilla por debajo de R1 y se declaró cámara lenta.
+
+    La combinación es la firma de un archivo que el teléfono convirtió al subirlo (p. ej. 240 -> 100 fps con el formato por defecto de
+    Fotos): la declaración dice "grabé a >= 120 fps" y las marcas de tiempo del archivo dicen que la captura no está.
+
+    * Exige que la tasa **nominal** de las marcas (la grilla del archivo) esté bajo 120, no solo la real media: una captura legítima
+      de 120 fps con un par de fotogramas perdidos tiene real media 118 y nominal 120, y ahí el teléfono no convirtió nada (R1 la deja
+      en ``parcial`` sin culpar a nadie). Un archivo cuya grilla ya es de 100 o 60 fps sí fue convertido.
+    * Con ``normal`` NO aplica: un video grabado a 60 fps en modo normal es válido como tal y R1 lo deja en ``parcial``.
+    * Un horneado (marcas a ~30 fps constantes, no tiempo real) tampoco entra: ahí la tasa sale de la declaración (decisión 020).
+    """
+    from app.engine.ingest import normalizar_fps  # import perezoso: ver nota en procesar_video.
+
+    if not md.es_tiempo_real or modo_captura == "normal" or fps_efectivos >= _UMBRAL_SECUENCIACION_FPS:
+        return None
+    if normalizar_fps(md.fps_nominal_marcas) < _UMBRAL_SECUENCIACION_FPS:
+        return MOTIVO_FALLO_ARCHIVO_CONVERTIDO
+    return None
+
+
 def procesar_video(admin, video_id: str) -> dict[str, Any]:
     """Corre el pipeline completo sobre un video ya registrado y escribe el resultado en
     reportes_biomecanicos/metricas. Devuelve un resumen (también sirve como salida de log
@@ -190,7 +218,7 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
         admin.table("videos")
         .select(
             "id, ruta_almacenamiento, "
-            "sesiones(encuadre, modo_captura, atletas(mano_dominante))"
+            "sesiones(gesto, encuadre, modo_captura, atletas(mano_dominante))"
         )
         .eq("id", video_id)
         .single()
@@ -200,6 +228,8 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
     mano_dominante = video["sesiones"]["atletas"]["mano_dominante"]
     lado_dominante = _MANO_A_LADO[mano_dominante]
     modo_captura = video["sesiones"]["modo_captura"]
+    gesto = video["sesiones"]["gesto"]
+    encuadre = video["sesiones"]["encuadre"]
 
     # modo_captura_intentado (decisión 022): con qué declaración se intenta, para saber después si el
     # usuario la corrigió antes de reintentar.
@@ -256,6 +286,36 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
             ingesta = ingest.evaluar(
                 md, factor=factor, escala_conocida=escala_conocida, origen_factor=origen_factor
             )
+
+            motivo_convertido = _motivo_archivo_convertido(md, modo_captura, ingesta.fps_efectivos)
+            if motivo_convertido is not None:
+                # La tasa SÍ se midió (marcas en tiempo real): se guarda para que el frontend diga "llegó a N fps". No hay reporte.
+                admin.table("videos").update(
+                    {
+                        "estado": "fallido",
+                        "motivo_fallo": motivo_convertido,
+                        "fps_real": ingesta.fps_efectivos,
+                        "total_fotogramas": md.nb_frames,
+                        "duracion_s": md.duracion_s,
+                        "resolucion": f"{md.ancho}x{md.alto}",
+                        "apto_fase_rapida": False,
+                    }
+                ).eq("id", video_id).execute()
+                print(
+                    f"[procesar_video] {video_id}: {MOTIVO_FALLO_ARCHIVO_CONVERTIDO}: declaró {modo_captura!r} y el archivo llegó "
+                    f"a {ingesta.fps_efectivos:.1f} fps reales (< {_UMBRAL_SECUENCIACION_FPS:.0f})."
+                )
+                return {
+                    "video_id": video_id,
+                    "reporte_id": None,
+                    "estado": "fallido",
+                    "orden_observado": None,
+                    "metricas_insertadas": 0,
+                    "segundos_totales": round(time.monotonic() - t_inicio, 2),
+                    "rss_pico_mb": _rss_pico_mb(),
+                    "motivo_fallo": motivo_convertido,
+                    "fps_real_medio": round(float(md.fps_real_medio), 2) if md.fps_real_medio else None,
+                }
 
             if ingesta.fps_efectivos < _UMBRAL_SECUENCIACION_FPS:
                 # R1: por debajo de 120 fps efectivos solo se habilita la fase de
@@ -330,7 +390,7 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
 
         from app.engine.sequencing import secuenciar
 
-        resultados, _resumen = secuenciar(
+        resultados, resumen = secuenciar(
             filt.secuencia,
             lado_dominante=lado_dominante,
             tramos_excluidos=filt.tramos_excluidos,
@@ -350,6 +410,40 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
             else None
         )
 
+        # Reporte completo del contrato v1.1 (E5.4 mínimo): se ensambla y se VALIDA antes de tocar la base; si no cumple el
+        # contrato, falla acá (queda 'fallido' con error_inesperado) y no se guarda un reporte roto.
+        from app.ensamblar_reporte import ensamblar_reporte, segmento_de_metrica_velocidad
+
+        reporte_id = uuid4()
+        creado_en = datetime.now(timezone.utc)
+        escala_final = ingesta.escala_temporal_conocida and escala_conocida
+        apto_fase_rapida = ingesta.aptitud.value in ("completo", "reducido")
+        datos_reporte = ensamblar_reporte(
+            reporte_id=reporte_id,
+            video_id=video_id,
+            gesto=gesto,
+            encuadre=encuadre,
+            creado_en=creado_en,
+            version_motor=VERSION_MOTOR,
+            backend_pose=BACKEND_POSE,
+            modo_captura=modo_captura,
+            factor_ralentizacion=factor,
+            origen_factor=origen_factor,
+            escala_temporal_conocida=escala_final,
+            apto_fase_rapida=apto_fase_rapida,
+            metadatos=md,
+            fps_real=ingesta.fps_efectivos,
+            secuencia=seq,
+            filtrada=filt,
+            resultados=resultados,
+            resumen=resumen,
+            lado_dominante=lado_dominante,
+            brazo_via="codo",
+            metodo_segmentacion="ancla_torso",
+            regularizacion=regularizacion,
+        )
+        repeticiones_json = datos_reporte["secuenciacion"]["repeticiones"]
+
         # reportes_biomecanicos.video_id es único: un reporte previo (resto de un intento anterior que
         # falló después de insertarlo, o una corrida manual por línea de comandos sobre un video ya
         # analizado) haría fallar el insert y dejaría 'fallido' un video con reporte (decisión 022).
@@ -361,19 +455,23 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
             admin.table("reportes_biomecanicos")
             .insert(
                 {
+                    "id": str(reporte_id),
                     "video_id": video_id,
                     "version_motor_id": version_motor_id,
+                    "creado_en": creado_en.isoformat(),
                     "orden_picos_observado": orden_observado,
-                    "secuencia_correcta": repeticion.correcto if repeticion else None,
+                    # El mismo valor que el JSON: con la decisión 015, en saque y drive no hay veredicto (None).
+                    "secuencia_correcta": repeticiones_json[0]["correcto"] if repeticiones_json else None,
                     "corte_filtro_hz": filt.corte_hz,
-                    "cobertura_auditable_pct": round(seq.cobertura * 100, 2),
+                    "cobertura_auditable_pct": datos_reporte["cobertura"]["auditable_pct"],
                     # Trazabilidad (R4) de la escala temporal, congelada en el reporte: lo que
                     # declaró el usuario (sesiones.modo_captura es editable después), el factor
                     # que resultó de combinarlo con el contenedor, y su origen.
                     "modo_captura": modo_captura,
                     "factor_ralentizacion": factor,
-                    "escala_temporal_conocida": ingesta.escala_temporal_conocida and escala_conocida,
+                    "escala_temporal_conocida": escala_final,
                     "origen_factor": origen_factor,
+                    "reporte": datos_reporte,
                 }
             )
             .execute()
@@ -382,28 +480,28 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
 
         metricas_insertadas = 0
         if repeticion:
-            for segmento, pico in repeticion.picos.items():
-                # Un pico ausente (None) no se estima ni se rellena (R3): sin fila, no con un
-                # valor inventado ni con auditable=False y valor=null. Lo mismo para un pico
-                # presente pero no finito (NaN/infinito): no es un dato, es un artefacto
-                # numérico (p. ej. un tramo con duración casi cero en el cálculo de ω) — ni
-                # json ni la columna numeric de Postgres lo aceptan, y presentarlo igual
-                # violaría R3 ("un dato equivocado es peor que uno faltante").
-                if pico is None:
-                    continue
-                if not math.isfinite(pico.velocidad):
+            # Un pico ausente o no auditable no se estima ni se rellena (R3): sin fila, no con un valor inventado ni con
+            # auditable=False y valor=null. Las filas salen del mismo JSON que se guardó (una sola fuente).
+            for seg, pico in repeticion.picos.items():
+                if pico is not None and pico.auditable and not math.isfinite(pico.velocidad):
+                    # Ni json ni la columna numeric de Postgres aceptan NaN/infinito: es un artefacto numérico (p. ej. un
+                    # tramo con duración casi cero en el cálculo de ω), no un dato.
                     print(
-                        f"  [aviso] pico de {segmento.value} no finito ({pico.velocidad!r}), "
+                        f"  [aviso] pico de {seg.value} no finito ({pico.velocidad!r}), "
                         "se omite la métrica (no es un bug de este script, revisar el pipeline)"
                     )
+            for m in datos_reporte["metricas"]:
+                segmento = segmento_de_metrica_velocidad(m["nombre"])
+                if segmento is None or not m["auditable"] or m["valor"] is None:
                     continue
                 admin.table("metricas").insert(
                     {
                         "reporte_id": reporte["id"],
-                        "segmento": segmento.value,
+                        "segmento": segmento,
                         "tipo": "velocidad_pico",
-                        "valor": pico.velocidad,
-                        "unidad": "grados/s",
+                        "valor": m["valor"],
+                        "unidad": m["unidad"],
+                        "confianza_media": m["confianza"],
                         "auditable": True,
                     }
                 ).execute()
@@ -417,7 +515,7 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
                 "total_fotogramas": md.nb_frames,
                 "duracion_s": md.duracion_s,
                 "resolucion": f"{md.ancho}x{md.alto}",
-                "apto_fase_rapida": ingesta.aptitud.value in ("completo", "reducido"),
+                "apto_fase_rapida": apto_fase_rapida,
             }
         ).eq("id", video_id).execute()
 

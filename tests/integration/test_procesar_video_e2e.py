@@ -198,9 +198,31 @@ def test_procesar_video_produce_reporte_real():
         assert fila_reporte["origen_factor"] == "declaracion_usuario"
         assert fila_reporte["escala_temporal_conocida"] is True
 
+        # El reporte completo (decisión 030, requiere la migración 20261009120000): se guardó validado contra el contrato v1.1 y
+        # coincide con las columnas planas. Una fila anterior a la migración trae `reporte` null: acá no puede ser el caso.
+        from app.schemas.reporte import Reporte
+
+        reporte_json = (
+            admin.table("reportes_biomecanicos")
+            .select("reporte")
+            .eq("id", resultado["reporte_id"])
+            .single()
+            .execute()
+            .data["reporte"]
+        )
+        assert reporte_json is not None, "falta aplicar la migración 20261009120000 (columna reporte)"
+        reporte = Reporte.model_validate(reporte_json)
+        assert reporte.version_contrato == "1.2"
+        assert str(reporte.reporte_id) == resultado["reporte_id"] and str(reporte.video_id) == video["id"]
+        assert reporte.trazabilidad.modo_captura == "camara_lenta_240"
+        assert reporte.trazabilidad.factor_ralentizacion == 8.0
+        assert reporte.trazabilidad.escala_temporal_conocida is True
+        assert reporte.trazabilidad.apto_fase_rapida is True  # 30 fps x 8 = 240 efectivos: completo
+        assert reporte.observaciones, "el reporte tiene que traer al menos una observación"
+
         metricas = (
             admin.table("metricas")
-            .select("segmento, tipo, valor, auditable")
+            .select("segmento, tipo, valor, auditable, confianza_media")
             .eq("reporte_id", resultado["reporte_id"])
             .execute()
             .data
@@ -210,6 +232,7 @@ def test_procesar_video_produce_reporte_real():
             # R3: una métrica auditable siempre trae valor; nunca se estima.
             assert fila_metrica["auditable"] is True
             assert fila_metrica["valor"] is not None
+            assert fila_metrica["confianza_media"] is not None  # R4: ninguna métrica sin confianza
     finally:
         if ruta_storage:
             admin.storage.from_("videos").remove([ruta_storage])

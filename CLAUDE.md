@@ -35,6 +35,8 @@ fotogramas: la información no está "borrosa", está perdida y ningún filtro l
 - Nunca escribir "30 fps recomendado" ni similar en ninguna pantalla.
 - La pantalla de carga debe validar los FPS reales del archivo y advertir de forma visible.
 - Videos por debajo de 120 fps solo habilitan el análisis de la fase de preparación.
+- **Tolerancia de medición (decisión 029, actualización del 9/10/2026):** la tasa que se compara es la real media de las marcas de tiempo, y los pisos llevan
+  un 5 %: **114 fps** para la secuenciación completa y 57 para la preparación. El umbral de 240 no tiene tolerancia.
 
 ### R2 — El sistema documenta, no predice ni diagnostica
 No existe evidencia que permita predecir lesiones a partir del movimiento (Bahr, 2016).

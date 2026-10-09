@@ -11,6 +11,8 @@ Estado actual                         ¿Se encola?
 ====================================  ==========================================================
 ``pendiente``                         Sí (confirmación de carga)
 ``fallido`` + modo incompatible       Solo si la sesión ya no declara el modo con el que falló
+``fallido`` + archivo convertido      Igual que modo incompatible: el mismo archivo falla igual, salvo que cambie la declaración
+                                      (para corregirlo de verdad, el usuario sube otro archivo: es otro video, no un reintento)
 ``fallido`` + error inesperado        Sí, mientras ``intentos`` < tope
 ``fallido`` sin motivo                Igual que error inesperado (filas anteriores a la 022)
 ``encolado`` / ``procesando``         No (el doble clic no encola dos veces)
@@ -29,6 +31,8 @@ CODIGO_INTENTOS_AGOTADOS = "intentos_agotados"
 # Mismos valores que videos.motivo_fallo (migraciones 20261002000000 y 20261007000000).
 MOTIVO_MODO_CAPTURA_INCOMPATIBLE = "modo_captura_incompatible"
 MOTIVO_ERROR_INESPERADO = "error_inesperado"
+# Migración 20261009120000 (decisiones 029 y 030): el teléfono convirtió el video a menos de 120 fps reales.
+MOTIVO_ARCHIVO_CONVERTIDO = "archivo_convertido"
 
 
 @dataclass(frozen=True)
@@ -54,7 +58,7 @@ def decidir_reintento(
     if estado != "fallido":
         return DecisionReintento(False, CODIGO_ESTADO_NO_REINTENTABLE)
 
-    if motivo_fallo == MOTIVO_MODO_CAPTURA_INCOMPATIBLE:
+    if motivo_fallo in (MOTIVO_MODO_CAPTURA_INCOMPATIBLE, MOTIVO_ARCHIVO_CONVERTIDO):
         # modo_intentado en None: el fallo es anterior a la columna (decisión 022), no se sabe con
         # qué modo falló. Se deja reintentar: negarlo dejaría al usuario sin salida, y el peor
         # resultado es volver a fallar con el mismo código.

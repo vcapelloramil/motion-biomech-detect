@@ -32,14 +32,19 @@ from pydantic import BaseModel, ConfigDict, Field
 # --- Vocabularios cerrados -------------------------------------------------------
 
 # v1.1 (decisión 029, aditiva): la tasa puede salir de las marcas de tiempo del archivo y se informa qué regularización temporal se hizo.
-# Un reporte guardado como "1.0" sigue siendo válido: los campos nuevos son opcionales.
-VERSION_CONTRATO = "1.1"
+# v1.2 (decisión 031, aditiva): una observación puede ser "sin_evaluar" (se documenta un dato sin emitir juicio).
+# Un reporte guardado como "1.0" o "1.1" sigue siendo válido: lo nuevo es opcional o un valor más de un vocabulario.
+VERSION_CONTRATO = "1.2"
 
 Gesto = Literal["saque", "drive", "reves"]
 Segmento = Literal["pelvis", "torso", "brazo"]
 # Los CUATRO estados de R3 (CLAUDE.md), los mismos que alertas.severidad en la base (decisión 018).
 # Antes eran tres ("atencion"): "atencion" se reemplazó por "desvio_leve" y se sumó "alerta_de_carga".
 Severidad = Literal["correcto", "desvio_leve", "alerta_de_carga", "no_auditable"]
+# Lo que puede llevar una OBSERVACIÓN. "sin_evaluar" NO es un quinto estado del semáforo (R3 sigue teniendo cuatro y `Severidad` es
+# la que coincide con alertas.severidad): es la etiqueta de un dato que se documenta sin juicio, la misma que el brazo en la decisión
+# 011. No significa "no se pudo medir" (eso es `no_auditable`): se midió y no hay respaldo para evaluarlo (decisión 031).
+SeveridadObservacion = Literal["correcto", "desvio_leve", "alerta_de_carga", "no_auditable", "sin_evaluar"]
 # Mismos vocabularios cerrados que sesiones.modo_captura y reportes_biomecanicos.origen_factor.
 ModoCaptura = Literal["normal", "camara_lenta_120", "camara_lenta_240"]
 OrigenFactor = Literal["declaracion_usuario", "marcas_de_tiempo"]
@@ -135,6 +140,9 @@ class RepeticionSecuenciacion(_Base):
     hasta_s: float = Field(ge=0.0)
     auditable: bool
     # Cuando la repetición no es auditable, estos tres quedan en None.
+    # `orden_observado` es el de la cadena completa (se documenta siempre que se midió). `correcto` es el veredicto del par
+    # cadera -> tronco, el único con referencia en la literatura (decisión 011), y solo existe donde el gesto y el encuadre
+    # tienen referencia del orden esperado y el Criterio 1 cumplido (decisión 031); None = "sin evaluar" o no ordenable.
     orden_observado: list[Segmento] | None = None
     correcto: bool | None = None
     motivo_no_auditable: str | None = None
@@ -178,7 +186,7 @@ class ComparacionPropia(_Base):
 # --- Observaciones de nivel 1 (veredicto) ----------------------------------
 
 class Observacion(_Base):
-    severidad: Severidad
+    severidad: SeveridadObservacion
     texto: str
     # Presentes solo cuando la observación se apoya en un número y una fuente
     # (regla R4: toda alerta responde "qué magnitud" y "qué fuente").
@@ -211,7 +219,7 @@ class Artefactos(_Base):
 # --- Reporte (raíz del contrato) -----------------------------------------
 
 class Reporte(_Base):
-    version_contrato: Literal["1.0", "1.1"]
+    version_contrato: Literal["1.0", "1.1", "1.2"]
     reporte_id: UUID
     video_id: UUID
     gesto: Gesto
