@@ -6,6 +6,21 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-09 (noche, 5) — Publicación del frontend en Cloudflare Workers: build listo, falta el permiso de Wrangler
+
+- **Push de `9488ffc` hecho** (`1b62091..9488ffc`).
+- **Decisión de Valentín: Workers, no Pages** (el build de TanStack Start es un Worker con assets: `dist/server/index.js` + `dist/client`; Pages exigiría convertirlo). Nombre del Worker: **`kinetiq`**
+  (`frontend/wrangler.jsonc`), URL `https://kinetiq.<subdominio-de-la-cuenta>.workers.dev`.
+- **Build verificado:** con `frontend/.env` (valores públicos), `bun run build` OK; el bundle del cliente **no contiene** la `service_role` (buscada por valor y por texto) y sí la URL pública de Supabase.
+- **Bloqueado el deploy:** `wrangler deploy` falla con "No access to the specified resource". El token de Wrangler tiene solo `pages:write` (más `account:read` y `user:read`); desplegar un Worker pide
+  `workers:write` y `workers_scripts:write`. **Corrección mía:** el listado largo que mostré de `wrangler whoami` eran los scopes que *faltan*, no los concedidos.
+  **Acción de Valentín** (abre el consentimiento de Cloudflare en el navegador; el 7/10 el login con todos los scopes dio `request_forbidden`, por eso se piden solo los necesarios):
+  `frontend\node_modules\.bin\wrangler.exe login --scopes account:read user:read workers:write workers_scripts:write`
+- **Pendiente para antes de la demo a los profesores (decisión de Valentín): "Olvidé mi contraseña"** en `/ingreso` (recuperación por correo de Supabase). Se prueba cuando haya dominio y correo propio:
+  con el SMTP por defecto no se puede (solo miembros del equipo, 2 por hora, decisión 027).
+
+---
+
 ## 2026-10-09 (noche, 4) — Producción verificada con JWT; pieza 5 (frontend): sesión, Registro e Ingreso
 
 **Producción:** `1b62091` ya está en `main`; Render sirvió el código nuevo a las 18:53:49 (un Bearer inválido pasó de "Token inválido o ausente." a 401 con `WWW-Authenticate: Bearer`). **`-m requiere_render` con JWT pasó**

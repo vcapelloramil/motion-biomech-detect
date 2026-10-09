@@ -145,6 +145,11 @@ Cambio de alcance del 7/10: **no hay pruebas con otros usuarios; se mide con gra
 
 **Toda pantalla simulada lleva una marca visible "Datos de ejemplo".** Un dato de ejemplo presentado como del usuario es un dato equivocado presentado como bueno (R3/R4).
 
+### Antes de la demo a los profesores (no bloquea el flujo de punta a punta)
+
+- **Validar el veredicto del saque de perfil** con el Paso A y las grabaciones nuevas (decisión 031).
+- **"Olvidé mi contraseña"** en `/ingreso`; se prueba cuando haya dominio y correo propio (decisión 027).
+
 ### Diferido (fuera del MVP de punta a punta; si el tiempo aprieta, se recorta en este orden: primero lo primero de la lista)
 
 1. PDF exportable (E5.6) y video con esqueleto (E5.5) con el reproductor sincronizado (8.7); el Nivel 2 del reporte queda sin el reproductor.
