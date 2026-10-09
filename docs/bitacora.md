@@ -6,6 +6,20 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-09 (más tarde) — Resultado de las pruebas de Archivos / cámara lenta / Opciones; la tasa real varía (decisión 029)
+
+- **Archivos y "Opciones → Formato: Actual" entregan el MISMO archivo** (42 bytes de metadatos de diferencia): **HEVC 1920×1080, 398 fotogramas visibles, 2,005 s, marcas de tiempo reales**, nominal 239,98 fps y **real media 198,9 fps** (17,1 % de fotogramas perdidos, con un patrón casi periódico:
+  cada ~12 fotogramas faltan dos). Coincide con los ~200 fps de Fotos (ⓘ). El camino por defecto de Fotos reexporta a H.264 y **descarta** fotogramas (100 fps en el recorte; 60 nominales y **43 reales** en la cámara lenta de 9,5 s, que además trae **rotación −90°**).
+- **`probe()` lee mal el archivo "Actual":** 169,28 fps y 479 fotogramas (cuentan 81 de pre-roll ocultos); hoy `camara_lenta_240` falla y `normal` lo analiza con 169,28 fps. `uniformidad_temporal.marcas_de_tiempo` ahora lee solo los **fotogramas visibles** y mide tasa nominal, **real media**, intervalos y pre-roll; el inspector los informa.
+- **Diagnóstico del corpus (sin recalcular), decisión 029.** Simulación de sensibilidad con la huella real de pérdidas sobre las 84 repeticiones (1008 corridas, `docs/resultados/tasa-real-sensibilidad.json`; el arnés reproduce 48/48 picos guardados): velocidades **×1,12–1,16** (hasta ×1,38 en el brazo; teórico ×1,21), ms **×0,83**; el pico se corre ~4 ms (1 fotograma);
+  **el orden estimado cambia en ~11–14 %** de las corridas (los picos de pelvis y torso están casi siempre a 0–3 fotogramas: mediana 2); el único grupo que cumple el Criterio 1 (`drive|perfil`) es **frágil** (10/12 y 6/12 mundos) y las conclusiones negativas son robustas (19 de 25 nunca cumplen). Los ángulos no cambian. **Mi lectura inicial ("el orden no cambiaría") valía para el orden real, no para el estimado.**
+- **Catálogo:** `escala_temporal: conocida` en los 97 clips propios no tiene base (la huella de fotogramas únicos no detecta fotogramas perdidos); a reetiquetar como nominal.
+- **No se recalcula** el corpus: lo más útil es la autovalidación de la semana 4 con archivos de marcas reales. Si Valentín re-exporta las 17 grabaciones originales con "Actual", se puede rehacer el eje de tiempo y recalcular Criterios 1 y 3.
+- **Propuesta de producto (a aprobar):** aceptar como auditable completo solo archivos con marcas reales; regularización temporal antes de E3; R1 sobre la tasa real media; horneado (b) solo degradado (orden y ángulos; velocidades y ms no auditables); `modo_captura` como trazabilidad; motivo de fallo propio; contrato v1.1.
+- **Pendiente (Valentín):** subir una **cámara lenta sin recortar con Opciones → Actual**. **Pendiente (técnico, separado):** aplicar la rotación de videos verticales en E0 (tarea ofrecida).
+
+---
+
 ## 2026-10-09 — Página del iPhone: corregido el "Invalid key" del campo Nota
 
 - **Causa (confirmada contra el Storage real):** la clave del objeto llevaba `~` como separador de la nota (`A-video-todos~recortado-...`) y Supabase Storage la rechaza con `InvalidKey` (400). **Error mío**, de la versión que agregó el campo "Nota".

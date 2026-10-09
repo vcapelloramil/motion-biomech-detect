@@ -101,7 +101,7 @@ Nota: Valentín informó "el golpe real dura aproximadamente 10/12 s"; se tomó 
 
 ## Pendiente
 
-1. **Caminos alternativos** (Valentín los prueba con la misma página, usando el campo "nota"):
+1. **Caminos alternativos — RESUELTO el 9/10/2026 (decisión 029): el formato "Actual" (Archivos, u Opciones → Formato: Actual en el selector de Fotos) entrega el HEVC original con las marcas de tiempo reales (~199 fps medios, 240 nominales)**; el camino por defecto reexporta a 100 fps o menos. Queda por probar la cámara lenta *sin recortar* con "Actual". Plan original de pruebas:
    - **El mismo recorte guardado en la app Archivos** (Fotos → Compartir → "Guardar en Archivos") y subido con "Elegir archivos". Es la prueba clave: si el archivo conserva el formato original, Archivos es el camino.
    - **Una cámara lenta sin recortar** (corta, de ≤ ~3 s reales, menos de 50 MB), elegida desde Fotos.
    - Si el selector de Fotos de Safari muestra un botón **"Opciones"**, anotar qué ofrece (formato "Actual" o "Más compatible").
