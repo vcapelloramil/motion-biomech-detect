@@ -101,8 +101,9 @@ def main(argv: list[str] | None = None) -> int:
             "fps_por_marcas_distintos": sorted({round(f["fps_por_marcas"]) for f in filas}),
         },
         "marcados_segun_umbral": barrido,
-        "nota": "Los originales NO tienen rampas de velocidad (toda la grabación es cámara lenta): lo que marca el detector al principio y al final es la persona "
-                "caminando hacia el teléfono y manipulándolo. Se verificó mirando los fotogramas. El corpus no contiene ninguna rampa real.",
+        "nota": "CORREGIDA el 9/10/2026 (decisión 030): los originales horneados SÍ tienen rampas de velocidad en los extremos (6,6-6,7 fotogramas reales por fotograma "
+                "horneado, tiempo real a 30 fps, contra 1,67 en la meseta de 120 fps). Lo que marca este detector al principio y al final mezcla esas rampas con la persona "
+                "caminando hacia el teléfono y manipulándolo. No distingue rampas de movimiento brusco y no marcó las 2 repeticiones que empiezan dentro de una rampa.",
         "archivos_detalle": [{k: v for k, v in f.items() if not k.startswith("_")} for f in filas],
     }
     args.salida.parent.mkdir(parents=True, exist_ok=True)

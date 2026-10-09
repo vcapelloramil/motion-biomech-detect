@@ -31,7 +31,9 @@ from pydantic import BaseModel, ConfigDict, Field
 
 # --- Vocabularios cerrados -------------------------------------------------------
 
-VERSION_CONTRATO = "1.0"
+# v1.1 (decisión 029, aditiva): la tasa puede salir de las marcas de tiempo del archivo y se informa qué regularización temporal se hizo.
+# Un reporte guardado como "1.0" sigue siendo válido: los campos nuevos son opcionales.
+VERSION_CONTRATO = "1.1"
 
 Gesto = Literal["saque", "drive", "reves"]
 Segmento = Literal["pelvis", "torso", "brazo"]
@@ -40,7 +42,7 @@ Segmento = Literal["pelvis", "torso", "brazo"]
 Severidad = Literal["correcto", "desvio_leve", "alerta_de_carga", "no_auditable"]
 # Mismos vocabularios cerrados que sesiones.modo_captura y reportes_biomecanicos.origen_factor.
 ModoCaptura = Literal["normal", "camara_lenta_120", "camara_lenta_240"]
-OrigenFactor = Literal["declaracion_usuario"]
+OrigenFactor = Literal["declaracion_usuario", "marcas_de_tiempo"]
 
 
 class _Base(BaseModel):
@@ -56,6 +58,20 @@ class Filtro(_Base):
     orden: int = Field(ge=1)
     corte_hz: float = Field(gt=0.0)
     fase_cero: bool
+
+
+class Regularizacion(_Base):
+    """Interpolación a grilla uniforme antes de filtrar (R4: cuántos puntos no son una medición sino una interpolación)."""
+
+    fotogramas_fuente: int = Field(ge=0)
+    puntos_de_la_grilla: int = Field(ge=0)
+    puntos_copiados: int = Field(ge=0)
+    puntos_interpolados: int = Field(ge=0)
+    puntos_interpolados_pct: float = Field(ge=0.0, le=100.0)
+    puntos_sin_dato: int = Field(ge=0)
+    fps_grilla: float = Field(gt=0.0)
+    fps_real_medio: float = Field(gt=0.0)
+    hueco_maximo_ms: float = Field(ge=0.0)
 
 
 class Trazabilidad(_Base):
@@ -74,6 +90,12 @@ class Trazabilidad(_Base):
     modo_captura: ModoCaptura
     factor_ralentizacion: float = Field(ge=1.0)
     origen_factor: OrigenFactor
+    # --- v1.1 (decisión 029): la tasa real se LEE del archivo -------------------------------------------------------------------
+    # fps_real (arriba) es la tasa real MEDIA medida; fps_nominal es la de las marcas (240 en un iPhone, con ~17 % de fotogramas
+    # perdidos). Ninguna de las dos se supone: salen de las marcas de tiempo de los fotogramas visibles. None en un horneado.
+    fps_nominal: float | None = Field(default=None, gt=0.0)
+    fotogramas_perdidos_pct: float | None = Field(default=None, ge=0.0, le=100.0)
+    regularizacion: "Regularizacion | None" = None
 
 
 # --- Cobertura auditable -------------------------------------------------------
@@ -189,7 +211,7 @@ class Artefactos(_Base):
 # --- Reporte (raíz del contrato) -----------------------------------------
 
 class Reporte(_Base):
-    version_contrato: Literal["1.0"]
+    version_contrato: Literal["1.0", "1.1"]
     reporte_id: UUID
     video_id: UUID
     gesto: Gesto

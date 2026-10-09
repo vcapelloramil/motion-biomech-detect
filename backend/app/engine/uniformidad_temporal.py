@@ -15,17 +15,22 @@ Un golpe grabado a 240 fps en un iPhone puede llegar al servidor de **tres forma
 (b) de (c)**: las dos son 1/30 constante. Hace falta saber cuánto duró el gesto en la vida real (cuántos fotogramas
 tendría que haber: duración real x 240 en (b), x 30 en (c)). Esa duración la sabe el usuario, no el archivo.
 
-**Velocidad no uniforme (EXPERIMENTAL, no validada contra una rampa real).** Una cámara lenta de iPhone con el tramo lento
+**Velocidad no uniforme (EXPERIMENTAL; no detecta bien las rampas reales).** Una cámara lenta de iPhone con el tramo lento
 editado en Fotos tiene tramos a velocidad normal en los extremos (rampas), horneados descartando fotogramas. Con marcas de
 tiempo constantes (1/30), las rampas no se ven en los tiempos: se verían en el **contenido**, donde el movimiento entre
 fotogramas consecutivos sería ~8 veces mayor. ``detectar_tramos_acelerados`` busca eso con la energía de movimiento
 (diferencia media entre fotogramas consecutivos).
 
 **Límite medido el 7/10/2026 (decisión 028):** esta energía **no distingue una rampa de cualquier movimiento brusco**: en el
-corpus propio marca los extremos de **los 18 originales** (también los dos de velocidad normal, que no tienen rampas), porque
+corpus propio marca los extremos de **los 18 originales** (también los dos de velocidad normal, que no tienen rampas de cámara lenta), porque
 ahí se ve a la persona caminando hacia el teléfono y manipulándolo, y con el umbral por defecto marca el 5 % de los recortes
-de golpe válidos (0 % con 8×, donde una rampa real quedaría en el borde). El corpus no contiene ninguna rampa real con la cual calibrarla. Por eso **solo informa**: no se usa
+de golpe válidos (0 % con 8×, donde una rampa real quedaría en el borde). Por eso **solo informa**: no se usa
 para rechazar nada en producción.
+
+**Corrección (9/10/2026, decisión 030):** las rampas de velocidad **sí existen** en el corpus horneado: en los extremos de cada
+original, a velocidad normal (6,6-6,7 fotogramas reales por fotograma horneado, contra 1,67 en la meseta de 120 fps). Lo que se veía al
+principio y al final mezclaba esas rampas con el manejo de la cámara. Además este detector **no marcó** las 2 repeticiones que empiezan
+dentro de una rampa: es un indicador de movimiento brusco, no de rampas. Lo que sí las ve es alinear contra el original real.
 
 La lógica de decisión es pura (se prueba sin video). Solo ``marcas_de_tiempo``, ``energia_de_movimiento`` y
 ``analizar_archivo`` tocan archivos.
@@ -35,7 +40,7 @@ from __future__ import annotations
 
 import json
 import subprocess
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
 
@@ -80,6 +85,8 @@ class MarcasDeTiempo:
     fps_medio: float | None = None  # (n - 1) / (última marca - primera marca): la tasa real media de los visibles
     # Cada separación expresada en períodos nominales (separación / mediana, redondeada): 1 = fotograma consecutivo, 3 = faltan dos.
     intervalos_en_periodos: tuple[int, ...] = ()
+    # Las marcas mismas (segundos, ordenadas, visibles): hacen falta para regularizar el tiempo. No participa de la comparación.
+    pts: object | None = field(default=None, repr=False, compare=False)
 
     @property
     def fps_por_marcas(self) -> float:
@@ -253,7 +260,7 @@ def marcas_desde_pts(pts: np.ndarray, n_preroll: int = 0) -> MarcasDeTiempo:
     intervalos = tuple(int(x) for x in np.rint(dt / mediana))
     fps_medio = float((pts.size - 1) / (pts[-1] - pts[0]))
     return MarcasDeTiempo(
-        int(pts.size), mediana, float(dt.min()), float(dt.max()), regular, int(n_preroll), fps_medio, intervalos
+        int(pts.size), mediana, float(dt.min()), float(dt.max()), regular, int(n_preroll), fps_medio, intervalos, pts
     )
 
 
@@ -277,6 +284,17 @@ def marcas_de_tiempo(ruta: str | Path) -> MarcasDeTiempo:
     if visibles.size < 2:
         raise RuntimeError(f"{ruta} tiene menos de dos fotogramas visibles con marca de tiempo")
     return marcas_desde_pts(visibles, n_preroll=int(todos.size - visibles.size))
+
+
+def marcas_de_tiempo_visibles(ruta: str | Path) -> MarcasDeTiempo | None:
+    """Como ``marcas_de_tiempo`` pero devuelve ``None`` si ffprobe no está o el archivo no trae marcas legibles.
+
+    La ingesta sigue funcionando sin ellas (solo con lo que da OpenCV): es el caso de ffprobe ausente.
+    """
+    try:
+        return marcas_de_tiempo(ruta)
+    except (RuntimeError, ValueError):
+        return None
 
 
 def energia_de_movimiento(ruta: str | Path, ancho: int = 160) -> np.ndarray:

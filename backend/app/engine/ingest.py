@@ -103,6 +103,26 @@ class MetadatosVideo:
     avg_frame_rate: float | None = None
     nb_frames_ffprobe: int | None = None
     duracion_ffprobe_s: float | None = None
+    # Marcas de tiempo de los fotogramas VISIBLES (decisión 029). El contenedor puede declarar ``nb_frames`` y ``avg_frame_rate``
+    # contando fotogramas de pre-roll que la lista de edición oculta (479 declarados contra 398 visibles en un recorte real de
+    # iPhone): ``nb_frames`` y ``duracion_s`` de esta clase ya están corregidos con los visibles cuando hay marcas.
+    fps_nominal_marcas: float | None = None   # inversa de la separación mediana entre fotogramas visibles
+    fps_real_medio: float | None = None       # (visibles - 1) / (última marca - primera marca): la tasa REAL
+    n_preroll: int = 0                        # fotogramas con marca negativa, no visibles
+    marcas_constantes: bool | None = None
+    # Marcas de los fotogramas visibles, en orden de presentación. Sirve para regularizar el tiempo (engine/regularizacion.py).
+    pts_visibles: object | None = field(default=None, repr=False, compare=False)
+    rotacion_grados: int = 0                  # etiqueta de rotación del archivo (0/90/180/270); ya aplicada al decodificar
+
+    @property
+    def es_tiempo_real(self) -> bool:
+        """Las marcas de tiempo son de captura en tiempo real (>= 45 fps): la tasa sale del archivo y no de una declaración.
+
+        Un archivo horneado de cámara lenta tiene marcas a ~30 fps constantes y queda fuera. Que sea tiempo real NO significa que
+        alcance para la fase rápida: eso lo decide R1 sobre ``fps_real_medio``."""
+        from app.engine.uniformidad_temporal import FPS_MARCAS_TIEMPO_REAL
+
+        return bool(self.fps_nominal_marcas and self.fps_nominal_marcas >= FPS_MARCAS_TIEMPO_REAL and self.fps_real_medio)
 
     @property
     def fps_por_conteo(self) -> float | None:
@@ -215,7 +235,10 @@ def evaluar(
     if factor <= 0:
         raise ValueError(f"El factor de ralentización debe ser > 0 (se recibió {factor}).")
 
-    fps_base = normalizar_fps(md.fps_declarados)
+    # Archivo en tiempo real (decisión 029, RNF-01): la tasa es la MEDIDA de las marcas de tiempo, no la que declara el contenedor
+    # (que con pre-roll o tasa variable es otra cosa: 169,28 contra 198,9 reales en un recorte de iPhone). Se normaliza solo si
+    # cae a menos de 0,5 % de un estándar (59,94 -> 60), como siempre.
+    fps_base = normalizar_fps(md.fps_real_medio if md.es_tiempo_real else md.fps_declarados)
     fps_efectivos = fps_base * factor
     aptitud = clasificar_fps(fps_efectivos)
     inconsistencias = detectar_inconsistencias(md)
@@ -329,17 +352,22 @@ def probe(ruta: str | Path, *, usar_ffprobe: bool = True) -> MetadatosVideo:
         if not cap.isOpened():
             raise IngestaError(f"OpenCV no pudo abrir el archivo: {ruta}")
 
+        # Videos verticales de celular: la rotación viene como etiqueta y OpenCV NO la aplica por defecto (el fotograma sale
+        # acostado y la pose fallaría). Se activa la orientación automática ANTES de leer.
+        cap.set(cv2.CAP_PROP_ORIENTATION_AUTO, 1)
+        rotacion = int(cap.get(cv2.CAP_PROP_ORIENTATION_META) or 0) % 360
+
         fps = cap.get(cv2.CAP_PROP_FPS)
         nb = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-        ancho = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-        alto = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
         # Un archivo que abre pero no entrega ni un fotograma se trata como corrupto.
-        ok, _ = cap.read()
+        ok, primero = cap.read()
         if not ok:
             raise IngestaError(
                 f"El archivo abre pero no se pudo leer ningún fotograma: {ruta}"
             )
+        # Resolución del fotograma YA orientado (la que ve la pose), no la de las propiedades del contenedor.
+        alto, ancho = int(primero.shape[0]), int(primero.shape[1])
     finally:
         cap.release()
 
@@ -347,6 +375,16 @@ def probe(ruta: str | Path, *, usar_ffprobe: bool = True) -> MetadatosVideo:
     duracion = nb / fps if fps > 0 and nb > 0 else 0.0
 
     extra = _leer_ffprobe(ruta) if usar_ffprobe else {}
+
+    # Marcas de tiempo de los fotogramas visibles. Si se leen, corrigen la cantidad de fotogramas y la duración.
+    marcas = None
+    if usar_ffprobe:
+        from app.engine.uniformidad_temporal import marcas_de_tiempo_visibles
+
+        marcas = marcas_de_tiempo_visibles(ruta)
+    if marcas is not None:
+        nb = marcas.n_paquetes
+        duracion = marcas.n_paquetes / marcas.fps_real if marcas.fps_real > 0 else duracion
 
     return MetadatosVideo(
         ruta=ruta,
@@ -359,6 +397,12 @@ def probe(ruta: str | Path, *, usar_ffprobe: bool = True) -> MetadatosVideo:
         avg_frame_rate=extra.get("avg_frame_rate"),
         nb_frames_ffprobe=extra.get("nb_frames_ffprobe"),
         duracion_ffprobe_s=extra.get("duracion_ffprobe_s"),
+        fps_nominal_marcas=marcas.fps_por_marcas if marcas is not None else None,
+        fps_real_medio=marcas.fps_real if marcas is not None else None,
+        n_preroll=marcas.n_preroll if marcas is not None else 0,
+        marcas_constantes=marcas.es_constante if marcas is not None else None,
+        pts_visibles=marcas.pts if marcas is not None else None,
+        rotacion_grados=rotacion,
     )
 
 
@@ -375,6 +419,8 @@ def iterar_fotogramas(ruta: str | Path) -> Iterator["object"]:
     if not cap.isOpened():
         cap.release()
         raise IngestaError(f"OpenCV no pudo abrir el archivo: {ruta}")
+    # Misma orientación automática que probe(): los fotogramas salen derechos aunque el archivo sea vertical.
+    cap.set(cv2.CAP_PROP_ORIENTATION_AUTO, 1)
     try:
         while True:
             ok, frame = cap.read()

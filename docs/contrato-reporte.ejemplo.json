@@ -1,5 +1,5 @@
 {
-  "version_contrato": "1.0",
+  "version_contrato": "1.1",
   "reporte_id": "f2b9c1e0-1111-4a2b-8c3d-000000000001",
   "video_id": "f2b9c1e0-2222-4a2b-8c3d-000000000002",
   "gesto": "saque",
@@ -9,12 +9,25 @@
     "version_motor": "0.5.0",
     "backend_pose": "mediapipe-0.10.14",
     "filtro": { "tipo": "butterworth", "orden": 4, "corte_hz": 8.0, "fase_cero": true },
-    "fps_real": 240.0,
+    "fps_real": 198.87,
     "apto_fase_rapida": true,
     "escala_temporal_conocida": true,
     "modo_captura": "camara_lenta_240",
-    "factor_ralentizacion": 8.0,
-    "origen_factor": "declaracion_usuario"
+    "factor_ralentizacion": 1.0,
+    "origen_factor": "marcas_de_tiempo",
+    "fps_nominal": 239.98,
+    "fotogramas_perdidos_pct": 17.1,
+    "regularizacion": {
+      "fotogramas_fuente": 398,
+      "puntos_de_la_grilla": 480,
+      "puntos_copiados": 398,
+      "puntos_interpolados": 82,
+      "puntos_interpolados_pct": 17.08,
+      "puntos_sin_dato": 0,
+      "fps_grilla": 240.0,
+      "fps_real_medio": 198.87,
+      "hueco_maximo_ms": 12.5
+    }
   },
 
   "cobertura": {

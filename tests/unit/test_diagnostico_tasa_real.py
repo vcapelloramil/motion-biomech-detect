@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import dataclasses
+import numpy as np
 import json
 from pathlib import Path
 
@@ -55,3 +56,24 @@ def test_la_huella_medida_es_coherente_consigo_misma():
     real = len(iv) / (sum(iv) / h["fps_nominal"])
     assert real == pytest.approx(h["fps_real_media"], rel=0.01)
     assert h["fotogramas_perdidos_pct"] == pytest.approx(100 * (1 - h["fps_real_media"] / h["fps_nominal"]), abs=0.2)
+
+
+# --- diagnostico_originales_reales: funciones puras (decisión 030) -----------------------------------------------------------
+
+from app.diagnostico_originales_reales import en_meseta, pendientes_por_ventana
+
+
+def test_la_pendiente_de_la_meseta_es_la_razon_de_fotogramas_reales_por_horneado():
+    # un horneado que avanza 1,67 fotogramas reales por fotograma (muestreo a 120 Hz de una captura de ~200 fps)
+    j = np.round(np.arange(1000) * 1.67).astype(int)
+    pend = pendientes_por_ventana(j, ancho=200)
+    assert all(abs(p - 1.67) < 0.01 for p in pend) and len(pend) == 4
+    assert en_meseta(pend) == pend
+
+
+def test_una_rampa_a_velocidad_normal_queda_fuera_de_la_meseta():
+    # 6,69 reales por horneado = tiempo real a 30 fps de un original de ~200 fps
+    j = np.concatenate([np.arange(200) * 6.69, 1338 + np.arange(1, 801) * 1.67]).astype(int)
+    pend = pendientes_por_ventana(j, ancho=200)
+    assert pend[0] > 6 and all(1.5 < p < 1.85 for p in pend[1:])
+    assert len(en_meseta(pend)) == len(pend) - 1

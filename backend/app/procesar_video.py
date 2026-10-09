@@ -126,6 +126,8 @@ _TOLERANCIA_FACTOR_ENTERO = 1e-6
 # Códigos cerrados de videos.motivo_fallo (migración 20261002000000). El texto en
 # lenguaje llano para el jugador lo resuelve el frontend (R2); acá solo el código.
 MOTIVO_FALLO_MODO_CAPTURA_INCOMPATIBLE = "modo_captura_incompatible"
+# Origen de la escala temporal cuando la tasa sale de las marcas de tiempo del archivo y no de la declaración (decisión 029).
+ORIGEN_FACTOR_MARCAS = "marcas_de_tiempo"
 # Cualquier otra excepción durante el procesamiento (migración 20261007000000, decisión 022).
 MOTIVO_FALLO_ERROR_INESPERADO = "error_inesperado"
 
@@ -161,6 +163,20 @@ def _factor_y_motivo(modo_captura: str, fps_contenedor: float) -> tuple[float, b
         )
         return 1.0, False, "declaracion_usuario", MOTIVO_FALLO_MODO_CAPTURA_INCOMPATIBLE
     return float(round(factor)), True, "declaracion_usuario", None
+
+
+def _tasa_del_archivo(md, modo_captura: str) -> tuple[float, bool, str, str | None]:
+    """(factor, escala_conocida, origen_factor, codigo_motivo_fallo): de dónde sale la tasa de este archivo (decisión 029, RNF-01).
+
+    * **Marcas de tiempo en tiempo real** (>= 45 fps; es lo que entrega "Archivos" u "Opciones -> Formato: Actual" del iPhone): la tasa es
+      la MEDIDA de las marcas, no la declarada. El factor es 1 siempre y la escala es conocida (medida). ``modo_captura`` no define nada:
+      queda como trazabilidad. Un archivo convertido por el teléfono a menos de 120 fps lo atrapa R1 más abajo, sin culpar a la declaración.
+    * **Horneado** (marcas a ~30 fps constantes): la tasa real se desconoce, solo hay una declaración: se mantiene el comportamiento de
+      la decisión 020 (``_factor_y_motivo``).
+    """
+    if md.es_tiempo_real:
+        return 1.0, True, ORIGEN_FACTOR_MARCAS, None
+    return _factor_y_motivo(modo_captura, md.fps_declarados)
 
 
 def procesar_video(admin, video_id: str) -> dict[str, Any]:
@@ -210,9 +226,7 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
             from app.engine.ingest import iterar_fotogramas, probe
 
             md = probe(clip)
-            factor, escala_conocida, origen_factor, codigo_motivo_fallo = _factor_y_motivo(
-                modo_captura, md.fps_declarados
-            )
+            factor, escala_conocida, origen_factor, codigo_motivo_fallo = _tasa_del_archivo(md, modo_captura)
 
             if codigo_motivo_fallo is not None:
                 # No se adivina en silencio (R3): modo_captura declarado no cierra con el
@@ -286,6 +300,30 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
                     fps_efectivos=ingesta.fps_efectivos,
                 )
 
+        # Regularización temporal (decisión 029): con marcas de tiempo reales e irregulares, las poses se interpolan a una grilla uniforme
+        # ANTES del filtrado de E3, que exige muestreo uniforme. Lo que se hizo queda en `regularizacion` (R4).
+        regularizacion = None
+        if md.es_tiempo_real and md.pts_visibles is not None:
+            if len(seq.frames) == len(md.pts_visibles):
+                from app.engine.ingest import normalizar_fps
+                from app.engine.regularizacion import regularizar
+
+                seq, info_reg = regularizar(seq, md.pts_visibles, normalizar_fps(md.fps_nominal_marcas))
+                regularizacion = info_reg.como_dict()
+                print(
+                    f"[procesar_video] {video_id}: regularización a {info_reg.fps_grilla:.0f} Hz: "
+                    f"{info_reg.n_interpolados} de {info_reg.n_grilla} puntos interpolados "
+                    f"({100 * info_reg.fraccion_interpolada:.1f} %), {info_reg.n_sin_dato} sin dato."
+                )
+            else:
+                # No se puede asignar tiempo a cada fotograma: no se adivina (R3). La serie se trata como uniforme a la tasa media y la
+                # escala deja de ser conocida para velocidades absolutas.
+                escala_conocida = False
+                print(
+                    f"[procesar_video] {video_id}: {len(seq.frames)} fotogramas decodificados y {len(md.pts_visibles)} marcas de tiempo "
+                    "visibles; no coinciden, no se regulariza (escala_temporal_conocida = false)."
+                )
+
         from app.engine.pipeline import procesar_e3
 
         filt = procesar_e3(seq)
@@ -334,7 +372,7 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
                     # que resultó de combinarlo con el contenedor, y su origen.
                     "modo_captura": modo_captura,
                     "factor_ralentizacion": factor,
-                    "escala_temporal_conocida": ingesta.escala_temporal_conocida,
+                    "escala_temporal_conocida": ingesta.escala_temporal_conocida and escala_conocida,
                     "origen_factor": origen_factor,
                 }
             )
@@ -400,6 +438,8 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
             "metricas_insertadas": metricas_insertadas,
             "segundos_totales": segundos_totales,
             "rss_pico_mb": rss_pico_mb,
+            "fps_real_medio": round(float(md.fps_real_medio), 2) if md.fps_real_medio else None,
+            "regularizacion": regularizacion,
         }
     except Exception:
         # Con código (decisión 022): sin él, el fallo quedaba indistinguible de "nunca falló" o

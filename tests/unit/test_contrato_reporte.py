@@ -125,7 +125,7 @@ def test_modo_normal_con_factor_uno_es_valido():
 def test_la_version_del_contrato_es_obligatoria_y_conocida():
     from app.schemas.reporte import VERSION_CONTRATO
 
-    assert Reporte.model_validate(_ejemplo_dict()).version_contrato == VERSION_CONTRATO == "1.0"
+    assert Reporte.model_validate(_ejemplo_dict()).version_contrato == VERSION_CONTRATO == "1.1"
     datos = _ejemplo_dict()
     del datos["version_contrato"]
     with pytest.raises(ValidationError):
@@ -184,3 +184,42 @@ def test_el_vocabulario_de_modo_captura_coincide_con_la_base():
     )
     en_la_base = set(re.search(r"modo_captura in \(([^)]*)\)", sql).group(1).replace("'", "").replace(" ", "").split(","))
     assert en_la_base == set(get_args(ModoCaptura))
+
+
+# --- Contrato v1.1 (decisión 029): la tasa se lee del archivo ---------------------------------------
+
+
+def test_un_reporte_v1_0_sigue_siendo_valido():
+    """Los reportes ya guardados con la 1.0 no traen los campos nuevos y siguen validando (v1.1 es aditiva)."""
+    datos = _ejemplo_dict()
+    datos["version_contrato"] = "1.0"
+    for campo in ("fps_nominal", "fotogramas_perdidos_pct", "regularizacion"):
+        del datos["trazabilidad"][campo]
+    datos["trazabilidad"].update(origen_factor="declaracion_usuario", factor_ralentizacion=8.0, fps_real=240.0)
+    r = Reporte.model_validate(datos)
+    assert r.trazabilidad.regularizacion is None and r.trazabilidad.fps_nominal is None
+
+
+def test_la_tasa_leida_del_archivo_y_la_regularizacion_viajan_en_la_trazabilidad():
+    t = Reporte.model_validate(_ejemplo_dict()).trazabilidad
+    assert t.origen_factor == "marcas_de_tiempo" and t.factor_ralentizacion == 1.0
+    assert t.fps_real == pytest.approx(198.87) and t.fps_nominal == pytest.approx(239.98)
+    r = t.regularizacion
+    assert r.puntos_interpolados == 82 and r.puntos_interpolados_pct == pytest.approx(17.08)
+    # R4: lo interpolado no es una medición, y se puede contar desde el reporte
+    assert r.puntos_copiados + r.puntos_interpolados + r.puntos_sin_dato == r.puntos_de_la_grilla
+
+
+def test_la_regularizacion_es_estricta():
+    datos = _ejemplo_dict()
+    datos["trazabilidad"]["regularizacion"]["campo_inventado"] = 1
+    with pytest.raises(ValidationError):
+        Reporte.model_validate(datos)
+    datos = _ejemplo_dict()
+    datos["trazabilidad"]["regularizacion"]["puntos_interpolados_pct"] = 120
+    with pytest.raises(ValidationError):
+        Reporte.model_validate(datos)
+    datos = _ejemplo_dict()
+    datos["trazabilidad"]["fotogramas_perdidos_pct"] = -1
+    with pytest.raises(ValidationError):
+        Reporte.model_validate(datos)
