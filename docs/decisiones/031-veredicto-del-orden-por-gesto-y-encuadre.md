@@ -1,8 +1,8 @@
 # Decisión 031 — El veredicto del orden cadera → tronco solo existe donde hay referencia y Criterio 1 cumplido; el resto se documenta "sin evaluar"
 
 **Fecha:** 9 de octubre de 2026
-**Estado:** vigente. **Se revisa cuando se haga el recálculo del corpus con la tasa real (Paso A de `docs/plan-recalculo-corpus-tasa-real.md`)**: la condición (b) usa cifras que ese
-recálculo puede cambiar.
+**Estado:** **aprobada por Valentín (9/10/2026)**. **Se revisa cuando se haga el recálculo del corpus con la tasa real (Paso A de `docs/plan-recalculo-corpus-tasa-real.md`)**: la condición (b) usa cifras que ese
+recálculo puede cambiar. **Bloqueante para la demo a los profesores** (no para el flujo de punta a punta): ver "Validación pendiente".
 **Afecta a:** `backend/app/ensamblar_reporte.py` (`RESPALDO_POR_GRUPO`) · contrato del reporte (v1.1 → **v1.2**, aditiva) · decisiones 011, 014, 015 y 024 · especificación de frontend §6 · Capítulo 7
 
 ---
@@ -60,11 +60,25 @@ En el saque de perfil el orden modal medido es **tronco antes que cadera** (`tp`
 vista de perfil monocular. **Es la regla que se pidió y se implementó; este es el efecto visible y queda anotado para el Capítulo 7.** Si al recalcular (Paso A) el orden de este
 grupo cambia o deja de cumplir (b), el veredicto desaparece solo al actualizar la tabla.
 
+## Validación pendiente — BLOQUEANTE para la demo a los profesores (decisión de Valentín, 9/10)
+
+Que el único grupo con veredicto (saque de perfil) dé **tronco antes que cadera en 6 de 6** significa que **todo saque de perfil saldría "desvío leve"**. Antes de que lo vean los profesores hay que
+confirmar si ese orden es **real o un artefacto**: (i) de la vista de perfil monocular, o (ii) de la escala ×2 y los fotogramas irregulares del corpus horneado (decisión 030).
+
+- **Cómo:** hacer el **Paso A** del recálculo apenas pase la prueba de punta a punta, y compararlo con las **grabaciones nuevas** de Valentín (archivos "Actual", con tiempos reales y la regularización
+  temporal de E0). Si con tiempos reales el orden deja de ser tronco → cadera, o el grupo deja de cumplir (b), se actualiza `RESPALDO_POR_GRUPO`.
+- **Qué bloquea:** mostrar el reporte del saque de perfil en la demo. **No bloquea** el flujo de punta a punta (registro, carga, procesamiento, reporte), que puede probarse con el veredicto como está.
+- **Mientras tanto** el texto del reporte ya dice qué se observó y cita la fuente; no promete que el desvío sea un hallazgo.
+
 ## Referencias
 
-Verificadas contra el **texto de los capítulos 3 y 4** de la tesis (apartados 3.1.2.3, 3.3.2.8, 3.3.4.3 y 4.3.3, tabla 4.8): Kovacs y Ellenbecker (2011), Fleisig et al. (2003) y
-Martin et al. (2014). **La lista formal de Referencias no está en el repositorio**: falta cotejar autores, título y revista contra ella antes de entregar el reporte. No se citan
-capítulos. **Martin et al. (2014)** (el tronco gira más tarde en los lesionados) **no** respalda "tronco antes que cadera", así que no se cita en estos veredictos; queda para la
+Las dos del saque, **verificadas por Valentín contra la lista de Referencias de la tesis** (9/10/2026):
+
+- Kovacs, M., & Ellenbecker, T. (2011). An 8-stage model for evaluating the tennis serve: Implications for performance enhancement and injury prevention. *Sports Health, 3*(6), 504–513. https://doi.org/10.1177/1941738111414175
+- Fleisig, G., Nicholls, R., Elliott, B., & Escamilla, R. (2003). Kinematics used by world-class tennis players to produce high-velocity serves. *Sports Biomechanics, 2*(1), 51–64. https://doi.org/10.1080/14763140308522807
+
+(Yo no pude cotejar los DOI: no tengo la lista en el repositorio; tomo la verificación de Valentín.) Martin et al. (2014) figura en el texto de los capítulos 3 y 4 (apartado 3.3.4.3), pero
+queda sin ficha completa y sin uso acá. No se citan capítulos en el reporte. **Martin et al. (2014)** (el tronco gira más tarde en los lesionados) **no** respalda "tronco antes que cadera", así que no se cita en estos veredictos; queda para la
 alerta por giro tardío del tronco (E5.1), que necesita un umbral con referencia.
 
 ## Qué cambió en el código

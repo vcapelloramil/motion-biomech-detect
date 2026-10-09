@@ -6,6 +6,17 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-09 (noche, 3) — `usuarios` endurecido y verificado; push de la pieza 4; validación del veredicto como bloqueante de la demo
+
+- **Migración `20261009130000_endurecer_usuarios.sql` aplicada y verificada por Valentín.** El alta de la fila la hace el trigger `al_registrarse` (`AFTER INSERT` sobre `auth.users`, `SECURITY DEFINER`),
+  que no depende de los permisos de `authenticated`. Verificado: registro → confirmación → login, trigger de alta y `test_usuarios_columnas_protegidas.py`: **10 passed**.
+- **Veredicto (decisión 031): aprobado.** Queda **anotado como bloqueante de la demo a los profesores, no del flujo**: confirmar si "tronco antes que cadera en 6/6" en el saque de perfil es real o un artefacto (vista de perfil,
+  escala ×2, fotogramas irregulares) con el **Paso A** (apenas pase la prueba de punta a punta) y las grabaciones nuevas con tiempos reales. Referencias con DOI en la decisión 031.
+- **R1:** la tolerancia en los pisos de 120 y 60 queda como está (confirmado).
+- **Orden del despliegue:** push → Render termina → Valentín borra `KINETIQ_API_TOKEN` del panel (si se borra antes, el código viejo podría fallar al reiniciar) → `-m requiere_render` con JWT.
+
+---
+
 ## 2026-10-09 (noche, 2) — Pieza 4 (tarea 7.4): la API autentica con el JWT de Supabase
 
 **Commit anterior, ya en `main`: `43fc159`** (piezas 1 a 3 + decisión 031 + tolerancia de R1). Esta pieza está **commiteada en local, sin pushear** (espera a que Valentín aplique la migración de `usuarios` para subir todo junto).
