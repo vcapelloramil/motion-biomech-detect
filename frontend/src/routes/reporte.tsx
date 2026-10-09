@@ -20,6 +20,7 @@ import {
   TRAMO_NO_AUDITABLE,
   type Caso,
 } from "@/lib/reporte-mock";
+import { RutaProtegida } from "@/components/ruta-protegida";
 
 /**
  * Parametros de captura de pantalla. Dejan la pantalla en un estado concreto sin
@@ -58,7 +59,12 @@ export const Route = createFileRoute("/reporte")({
       },
     ],
   }),
-  component: ReportePage,
+  // Requiere sesión (especificación §3). La barrera real son RLS y la API; esto evita mostrar datos de ejemplo a un anónimo.
+  component: () => (
+    <RutaProtegida>
+      <ReportePage />
+    </RutaProtegida>
+  ),
 });
 
 /**

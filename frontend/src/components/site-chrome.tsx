@@ -1,8 +1,10 @@
 import { Link } from "@tanstack/react-router";
 import { Activity } from "lucide-react";
 import avatar from "@/assets/profile-avatar.jpg";
+import { useSesion } from "@/lib/sesion";
 
 export function Header() {
+  const { sesion, cargando, nombre, cerrarSesion } = useSesion();
   const links = [
     { to: "/", label: "Inicio" },
     { to: "/upload", label: "Cargar" },
@@ -37,13 +39,33 @@ export function Header() {
           ))}
         </nav>
         <div className="flex items-center gap-3">
-          <Link to="/upload" className="hidden rounded-md bg-gradient-neon px-4 py-2 text-sm font-semibold text-neon-foreground shadow-neon transition-transform hover:scale-105 md:block">
-            Subir video
-          </Link>
-          <Link to="/profile" className="flex items-center gap-2 rounded-full border border-border p-1 pr-3 transition-colors hover:border-neon/50">
-            <img src={avatar} alt="Perfil" className="h-7 w-7 rounded-full object-cover" />
-            <span className="hidden font-mono text-xs text-muted-foreground sm:inline">Marco R.</span>
-          </Link>
+          {cargando ? null : sesion ? (
+            <>
+              <Link to="/upload" className="hidden rounded-md bg-gradient-neon px-4 py-2 text-sm font-semibold text-neon-foreground shadow-neon transition-transform hover:scale-105 md:block">
+                Subir video
+              </Link>
+              <Link to="/profile" className="flex items-center gap-2 rounded-full border border-border p-1 pr-3 transition-colors hover:border-neon/50">
+                <img src={avatar} alt="Perfil" className="h-7 w-7 rounded-full object-cover" />
+                <span className="hidden font-mono text-xs text-muted-foreground sm:inline">{nombre}</span>
+              </Link>
+              <button
+                type="button"
+                onClick={() => void cerrarSesion()}
+                className="rounded-md px-3 py-2 text-sm text-muted-foreground hover:text-foreground"
+              >
+                Salir
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/ingreso" className="rounded-md px-3 py-2 text-sm text-muted-foreground hover:text-foreground">
+                Ingresar
+              </Link>
+              <Link to="/registro" className="rounded-md bg-gradient-neon px-4 py-2 text-sm font-semibold text-neon-foreground shadow-neon transition-transform hover:scale-105">
+                Crear cuenta
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </header>

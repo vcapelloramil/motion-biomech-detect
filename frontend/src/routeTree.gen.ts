@@ -13,8 +13,10 @@ import { Route as VideosRouteImport } from './routes/videos'
 import { Route as UploadRouteImport } from './routes/upload'
 import { Route as TecnologiaRouteImport } from './routes/tecnologia'
 import { Route as ReporteRouteImport } from './routes/reporte'
+import { Route as RegistroRouteImport } from './routes/registro'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PerformanceRouteImport } from './routes/performance'
+import { Route as IngresoRouteImport } from './routes/ingreso'
 import { Route as ClinicaRouteImport } from './routes/clinica'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -38,6 +40,11 @@ const ReporteRoute = ReporteRouteImport.update({
   path: '/reporte',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RegistroRoute = RegistroRouteImport.update({
+  id: '/registro',
+  path: '/registro',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
@@ -46,6 +53,11 @@ const ProfileRoute = ProfileRouteImport.update({
 const PerformanceRoute = PerformanceRouteImport.update({
   id: '/performance',
   path: '/performance',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IngresoRoute = IngresoRouteImport.update({
+  id: '/ingreso',
+  path: '/ingreso',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ClinicaRoute = ClinicaRouteImport.update({
@@ -62,8 +74,10 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/clinica': typeof ClinicaRoute
+  '/ingreso': typeof IngresoRoute
   '/performance': typeof PerformanceRoute
   '/profile': typeof ProfileRoute
+  '/registro': typeof RegistroRoute
   '/reporte': typeof ReporteRoute
   '/tecnologia': typeof TecnologiaRoute
   '/upload': typeof UploadRoute
@@ -72,8 +86,10 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/clinica': typeof ClinicaRoute
+  '/ingreso': typeof IngresoRoute
   '/performance': typeof PerformanceRoute
   '/profile': typeof ProfileRoute
+  '/registro': typeof RegistroRoute
   '/reporte': typeof ReporteRoute
   '/tecnologia': typeof TecnologiaRoute
   '/upload': typeof UploadRoute
@@ -83,8 +99,10 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/clinica': typeof ClinicaRoute
+  '/ingreso': typeof IngresoRoute
   '/performance': typeof PerformanceRoute
   '/profile': typeof ProfileRoute
+  '/registro': typeof RegistroRoute
   '/reporte': typeof ReporteRoute
   '/tecnologia': typeof TecnologiaRoute
   '/upload': typeof UploadRoute
@@ -95,8 +113,10 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/clinica'
+    | '/ingreso'
     | '/performance'
     | '/profile'
+    | '/registro'
     | '/reporte'
     | '/tecnologia'
     | '/upload'
@@ -105,8 +125,10 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/clinica'
+    | '/ingreso'
     | '/performance'
     | '/profile'
+    | '/registro'
     | '/reporte'
     | '/tecnologia'
     | '/upload'
@@ -115,8 +137,10 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/clinica'
+    | '/ingreso'
     | '/performance'
     | '/profile'
+    | '/registro'
     | '/reporte'
     | '/tecnologia'
     | '/upload'
@@ -126,8 +150,10 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ClinicaRoute: typeof ClinicaRoute
+  IngresoRoute: typeof IngresoRoute
   PerformanceRoute: typeof PerformanceRoute
   ProfileRoute: typeof ProfileRoute
+  RegistroRoute: typeof RegistroRoute
   ReporteRoute: typeof ReporteRoute
   TecnologiaRoute: typeof TecnologiaRoute
   UploadRoute: typeof UploadRoute
@@ -164,6 +190,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReporteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/registro': {
+      id: '/registro'
+      path: '/registro'
+      fullPath: '/registro'
+      preLoaderRoute: typeof RegistroRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profile': {
       id: '/profile'
       path: '/profile'
@@ -176,6 +209,13 @@ declare module '@tanstack/react-router' {
       path: '/performance'
       fullPath: '/performance'
       preLoaderRoute: typeof PerformanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ingreso': {
+      id: '/ingreso'
+      path: '/ingreso'
+      fullPath: '/ingreso'
+      preLoaderRoute: typeof IngresoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/clinica': {
@@ -198,8 +238,10 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ClinicaRoute: ClinicaRoute,
+  IngresoRoute: IngresoRoute,
   PerformanceRoute: PerformanceRoute,
   ProfileRoute: ProfileRoute,
+  RegistroRoute: RegistroRoute,
   ReporteRoute: ReporteRoute,
   TecnologiaRoute: TecnologiaRoute,
   UploadRoute: UploadRoute,

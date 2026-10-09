@@ -15,6 +15,7 @@ import { EvolucionAtleta } from "@/components/evolucion-atleta";
 import t1 from "@/assets/video-thumb-1.jpg";
 import t2 from "@/assets/video-thumb-2.jpg";
 import t3 from "@/assets/video-thumb-3.jpg";
+import { RutaProtegida } from "@/components/ruta-protegida";
 
 export const Route = createFileRoute("/videos")({
   head: () => ({
@@ -27,7 +28,12 @@ export const Route = createFileRoute("/videos")({
       },
     ],
   }),
-  component: VideosPage,
+  // Requiere sesión (especificación §3). La barrera real son RLS y la API; esto evita mostrar datos de ejemplo a un anónimo.
+  component: () => (
+    <RutaProtegida>
+      <VideosPage />
+    </RutaProtegida>
+  ),
 });
 
 /**

@@ -1,6 +1,7 @@
 import { createRootRouteWithContext, Outlet, HeadContent, Scripts, Link, useRouter } from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Header, Footer } from "@/components/site-chrome";
+import { SesionProvider } from "@/lib/sesion";
 import appCss from "../styles.css?url";
 
 function NotFoundComponent() {
@@ -61,9 +62,11 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   return (
     <QueryClientProvider client={queryClient}>
-      <Header />
-      <Outlet />
-      <Footer />
+      <SesionProvider>
+        <Header />
+        <Outlet />
+        <Footer />
+      </SesionProvider>
     </QueryClientProvider>
   );
 }

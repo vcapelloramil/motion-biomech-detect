@@ -6,6 +6,39 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-09 (noche, 4) — Producción verificada con JWT; pieza 5 (frontend): sesión, Registro e Ingreso
+
+**Producción:** `1b62091` ya está en `main`; Render sirvió el código nuevo a las 18:53:49 (un Bearer inválido pasó de "Token inválido o ausente." a 401 con `WWW-Authenticate: Bearer`). **`-m requiere_render` con JWT pasó**
+(incluye el 404 del usuario ajeno contra el servicio desplegado). Valentín borra `KINETIQ_API_TOKEN` del panel después del aviso.
+
+### Pieza 5 — qué se hizo (sin commit todavía)
+
+- **`@supabase/supabase-js`** agregado al frontend. Cliente único y solo en el navegador (`src/lib/supabase.ts`): URL y clave **anon** desde `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY`; nunca la `service_role`.
+  Variables en `frontend/.env.example` (el `.env` real está ignorado por git). `VITE_API_URL` queda lista para la pieza 6.
+- **Sesión** (`src/lib/sesion.tsx`): `SesionProvider` y `useSesion()` (lee la sesión guardada y escucha los cambios). Mientras carga, el servidor y el primer render del cliente muestran lo mismo.
+- **`/registro`:** nombre, correo, contraseña (8 caracteres con letras y números), rol sin opción marcada y consentimiento de la Ley 25.326 con fecha en los metadatos de la cuenta. Al enviar muestra
+  "Te enviamos un correo… **Revisá también la carpeta de spam**" con el correo al que se envió y **Reenviar**. El trigger de alta toma `nombre` y `rol` de esos metadatos.
+- **`/ingreso`:** sin confirmar el correo dice **"Confirmá tu correo para entrar"** (con reenvío), no un error genérico; con sesión va a `/videos`. `?confirmado=1` (lo agrega el enlace del correo) muestra el aviso.
+- **Rutas protegidas** (`RutaProtegida`): `/upload`, `/videos`, `/reporte` y `/profile` redirigen a `/ingreso` sin sesión. Es comodidad de la interfaz; la barrera real es RLS y la API.
+- **Encabezado** con sesión real: "Ingresar / Crear cuenta" o nombre + "Salir" (antes mostraba "Marco R." fijo).
+- **Mensajes de error en lenguaje llano** (`src/lib/auth-errores.ts`, función pura): sin texto técnico del proveedor.
+- **Verificado:** `bun test` 10 pasan (`frontend/tests/auth-errores.test.ts`: incluye que los roles coinciden con los de `usuarios.rol`), `tsc --noEmit` sin errores, `bun run build` OK y revisión en el navegador:
+  `/registro` renderiza, valida del lado del cliente y `/upload` sin sesión redirige a `/ingreso`. **No se envió ningún formulario contra Supabase** (no se crean cuentas de prueba desde el navegador): el
+  alta, la confirmación y el login reales los cubren las pruebas de integración del servidor; falta que Valentín los pruebe desde la página.
+- **Datos de ejemplo:** `/videos`, `/reporte`, `/profile` y `/upload` siguen mostrando datos simulados (piezas 6 a 8). Falta ponerles la marca visible "Datos de ejemplo" (regla R3/R4 del plan §5).
+
+### Acciones que son de Valentín
+
+1. **Supabase → Authentication → URL Configuration:** *Site URL* y *Redirect URLs* con el dominio publicado del frontend (el enlace del correo vuelve a `/ingreso?confirmado=1`). Mientras se prueba en local, agregar `http://localhost:8080/**`.
+2. **Probar el alta** desde la página con un correo real (revisar spam) o, si el correo todavía no sale, crear un usuario ya confirmado desde el panel y probar **Ingresar**.
+3. Cargar `KINETIQ_CORS_ORIGINS` en Render cuando haya dominio del frontend (el dev local usa `http://localhost:8080`).
+
+### Siguiente
+
+Pieza 6: **Cargar real** (formulario de la sesión, instrucción "Opciones → Formato: Actual" antes de elegir el archivo, subida directa a Storage, alta de `sesión` y `video`, llamada a la API con el JWT).
+
+---
+
 ## 2026-10-09 (noche, 3) — `usuarios` endurecido y verificado; push de la pieza 4; validación del veredicto como bloqueante de la demo
 
 - **Migración `20261009130000_endurecer_usuarios.sql` aplicada y verificada por Valentín.** El alta de la fila la hace el trigger `al_registrarse` (`AFTER INSERT` sobre `auth.users`, `SECURITY DEFINER`),

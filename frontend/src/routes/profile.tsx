@@ -12,6 +12,7 @@ import {
   Share2,
 } from "lucide-react";
 import avatar from "@/assets/profile-avatar.jpg";
+import { RutaProtegida } from "@/components/ruta-protegida";
 
 export const Route = createFileRoute("/profile")({
   head: () => ({
@@ -20,7 +21,12 @@ export const Route = createFileRoute("/profile")({
       { name: "description", content: "Perfil del jugador, plan y configuración." },
     ],
   }),
-  component: ProfilePage,
+  // Requiere sesión (especificación §3). La barrera real son RLS y la API; esto evita mostrar datos de ejemplo a un anónimo.
+  component: () => (
+    <RutaProtegida>
+      <ProfilePage />
+    </RutaProtegida>
+  ),
 });
 
 function ProfilePage() {

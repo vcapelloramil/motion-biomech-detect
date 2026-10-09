@@ -18,6 +18,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { RutaProtegida } from "@/components/ruta-protegida";
 
 /**
  * Parametros de captura de pantalla. Permiten dejar la pantalla en un estado
@@ -52,7 +53,12 @@ export const Route = createFileRoute("/upload")({
       },
     ],
   }),
-  component: UploadPage,
+  // Requiere sesión (especificación §3). La barrera real son RLS y la API; esto evita mostrar datos de ejemplo a un anónimo.
+  component: () => (
+    <RutaProtegida>
+      <UploadPage />
+    </RutaProtegida>
+  ),
 });
 
 /**
