@@ -1,6 +1,8 @@
 # Decisión 029 — La tasa real de captura no es la nominal y varía por video: el motor la lee del archivo (RNF-01)
 
 **Fecha:** 9 de octubre de 2026
+**Actualización del 9/10 (decisión 030):** la escala de las velocidades del corpus es **×2,0**, no ×1,2: el horneado es un remuestreo a ~120 fps con rampas, no 240 fps. La tabla de "Impacto en lo ya medido" de acá queda superada por la 030 en la magnitud; lo demás (RNF-01, caminos de subida, propuestas de producto, la simulación de la irregularidad) sigue vigente.
+
 **Estado:** vigente en lo **medido**. El diseño de la sección "Propuesta para el producto" es una **propuesta, no implementada**, a aprobar por Valentín. El recálculo del
 corpus **no se hizo** (se pidió primero el diagnóstico).
 **Afecta a:** `backend/app/engine/ingest.py` (`probe`, `evaluar`), `procesar_video._factor_y_motivo` · decisiones 001, 004, 017, 020 y 028 · `catalogo.csv` · contrato del reporte (decisión 024) ·

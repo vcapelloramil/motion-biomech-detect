@@ -15,6 +15,26 @@ todavía: se acumula acá y se redacta de una vez (misma práctica que la lista 
 | 8 | §4.5.4 y tabla de planes (~697) | Servidor de cómputo "0,5 vCPU / 512 MB" para el MVP y "1–2 vCPU / 2 GB" como alternativa. | Free durante el desarrollo y las pruebas; **Standard (1 CPU / 2 GB)** para la defensa y cuando la espera o los cortes de Free molesten. Starter tiene la misma memoria que Free. | 017, 023 |
 | 9 | §4.4.6 — esquema de datos | Siete tablas. | Nueve tablas, `sesiones` agregada, permisos por columna sobre `videos` y `sesiones`. | 018, 022 |
 | 10 | RNF-01 y su plan de pruebas (tabla de requisitos no funcionales) | "Prueba con archivos de 30, 60, 120 y 240 fps y con video grabado en cámara lenta." | Agregar: archivo **convertido por el teléfono** al subirlo (100 fps o menos aunque se haya grabado a 240) y archivo con **fotogramas perdidos** (tasa real media ~199 contra 240 nominales). RNF-01 exige leer la tasa **real**: el corpus la asumió. | 029 |
-| 11 | Todo el capítulo donde figure "240 fps" como tasa de captura | 240 fps. | **240 fps nominales; ~200 reales** en el iPhone 15 Pro Max usado (Fotos ⓘ lo muestra); varía por video (~170 con poca luz). | 029 |
+| 11 | Todo el capítulo donde figure "240 fps" como tasa de captura | 240 fps. | **240 fps nominales; ~200 reales** en el iPhone 15 Pro Max usado (medido en 16 grabaciones: 199,9–201,0; ~170 en una con poca luz, según Fotos ⓘ). | 029, 030 |
+| 12 | RNF-01 y 4.3.4 (Criterio 1, "120–240 fps") | El corpus propio "a 240 fps". | **El corpus propio es un remuestreo a ~120 fps con rampas de velocidad**: el procesamiento asumió 240 y por eso **no cumplía RNF-01** ("lee la tasa real del archivo y nunca la asume"). Muestreo efectivo: **120 fps (aptitud "reducido", en el borde inferior)**. | 030 |
+
+
+## Anotaciones para el Capítulo 7 (resultados) y el Capítulo 6 (riesgos y limitaciones)
+
+Registradas el 9/10/2026 con las decisiones 029 y 030. **No se redacta nada todavía**; se acumula acá.
+
+1. **El corpus no cumplía RNF-01.** El procesamiento asumió 240 fps. La captura nominal fue 240, la **tasa real media del teléfono ~200 fps** (199,9–201,0 en 16 grabaciones; ~170 en otra con poca luz según Fotos),
+   y el **muestreo de los archivos horneados con que se midió todo fue 120 fps** (1,67 fotogramas reales por fotograma horneado, ~7 % de fotogramas repetidos, rampas a velocidad normal en los extremos del archivo).
+2. **Escala de velocidades y de milisegundos.** Las velocidades absolutas medidas con ese corpus están **sobreestimadas ×2,0** y los intervalos en ms **subestimados ×0,5** (cualquier cifra, techo de plausibilidad o Fleisig sobre estos datos).
+   Los **ángulos no cambian** (Criterio 2 vale).
+3. **Fragilidad del Criterio 1.** Pelvis y torso están a **0–3 fotogramas** en el 69 % de las repeticiones (mediana 2): en esas, el orden estimado es sensible a cualquier perturbación del tiempo (en la simulación
+   cambió en el ~11–14 % de las corridas). **El único grupo que cumple** (`drive|perfil`, 1a = 0,83 frente a 0,80) **es frágil**: sigue cumpliendo en 10 de 12 y en 6 de 12 mundos perturbados según la tolerancia. Las conclusiones
+   negativas son robustas (19 de 25 combinaciones no cumplen en ningún mundo). **Decirlo explícitamente.**
+4. **La resolución temporal es un límite declarado:** a 120 fps un fotograma son 8,3 ms; con empates de 0–3 fotogramas el orden pelvis-torso es, en gran parte, **no resoluble** con este material (consistente con las salvedades de la decisión 015).
+5. **La tasa real del iPhone varía por grabación y depende del formato de subida.** "Archivos" u "Opciones → Formato: Actual" conservan las marcas reales (~200 fps medios, 17 % de fotogramas perdidos); el formato por defecto de Fotos convierte a
+   H.264 y baja a 100 fps o menos. **El sistema no puede deducir la tasa de la declaración del usuario:** la lee del archivo (RNF-01).
+6. **Método:** emparejamiento por fecha de creación de los 16 originales con los horneados (16/16), alineamiento por contenido (15 pares, orden monótono 99,1–99,9 %), ubicación de 88 repeticiones (86 en la meseta).
+   Reproducible con los scripts del repositorio y `docs/resultados/tasa-real-*.json`; los videos **no** están en el repositorio.
+7. **Si se recalcula** (plan en `docs/plan-recalculo-corpus-tasa-real.md`): Criterios 1 y 3 con el eje de tiempo real, tolerancia en milisegundos fijada de antemano, informando lado a lado contra la medición original.
 
 Fuera del Capítulo 4, pero para la redacción: las limitaciones que registran las decisiones 020 (modo de captura declarado) y 022 (reintento) van a los Capítulos 6 y 7.

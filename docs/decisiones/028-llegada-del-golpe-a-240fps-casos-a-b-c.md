@@ -44,6 +44,12 @@ servidor de tres formas**, que las marcas de tiempo del contenedor no permiten d
 Una cámara lenta de iPhone con el tramo lento editado puede tener tramos a velocidad normal en los extremos, horneados descartando fotogramas. Con marcas constantes no se ven en los tiempos. Se probó un detector por contenido
 (energía de movimiento entre fotogramas) y se midió contra el corpus.
 
+> **CORRECCIÓN DEL 9/10/2026 (decisión 030): esta sección se equivocó en sentido contrario.** Con los originales reales alineados contra los horneados se comprobó que **los horneados SÍ tienen rampas de velocidad**
+> en los extremos del archivo (6,6–6,7 fotogramas reales por fotograma horneado, o sea tiempo real a 30 fps, contra 1,67 en la meseta). Lo que se veía al final del original (la persona agarrando el teléfono) ocurre
+> **dentro** de ese tramo a velocidad normal: eran las dos cosas a la vez. Por tanto, **"el corpus no tiene ninguna rampa" es falso**. El detector por energía de movimiento tampoco las detectaba bien: no marcó
+> ninguna de las 2 repeticiones que sí empiezan dentro de una rampa. La decisión de que E0 no rechace por esto se sostiene por otras razones (98 % de las repeticiones caen enteras en la meseta; el motor ahora usa
+> las marcas de tiempo reales). Lo que sigue es el texto original, conservado como historia.
+
 **Corrección.** Durante el trabajo se interpretó que los saltos de movimiento al principio y al final de los originales eran rampas de velocidad. **Era un error.** Mirando los fotogramas (el final del original de 190 s
 muestra a la persona acercándose al teléfono, agarrándolo y cortando la grabación) y comprobando que **los dos originales de velocidad normal, que no tienen rampas, dan el mismo patrón**, lo que el detector mide es **manejo de la cámara y movimiento brusco**, no rampas. Los originales del corpus
 **no tienen rampas** (toda la grabación es cámara lenta). **No hay ninguna rampa real en el corpus.**

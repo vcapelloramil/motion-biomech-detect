@@ -6,6 +6,22 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-09 (noche) — Los 16 originales reales: el corpus horneado es 120 fps con rampas (decisión 030)
+
+- **Inventario de `corpus-originales-reales`:** son **16 archivos** (no 18). HEVC 1920×1080, marcas de tiempo reales, tasa real media **199,9–201,0 fps**, ninguno horneado, sin rotación. **`IMG_6391` está incompleto** (2503 fotogramas, ~15 200 esperados): hay que volver a bajarlo.
+- **Emparejamiento:** 16 de 16 por fecha y hora de creación. Los 2 horneados sin par son los controles de velocidad normal (030 y 060): no entran.
+- **Los fotogramas NO corresponden uno a uno.** El horneado trae el 46 % de los fotogramas del real: es un **remuestreo a 120,2 fps en tiempo real** (1,665–1,675 reales por horneado en los 15 pares; ~7 % repetidos) con **rampas a velocidad normal** en los extremos.
+  Hay una asignación monótona horneado→real (99,1–99,9 %). 88 repeticiones ubicadas: 86 en la meseta, 2 empiezan en una rampa (`saque_perfil_240_01_rep01`, `reves_perfil_240_02_rep01`).
+- **Corrección de magnitud:** las velocidades del corpus están **×2,0** sobreestimadas y los ms **×0,5** subestimados (la 029 decía ×1,2). Los ángulos no cambian. **Mi simulación de la 029 suponía fotogramas consecutivos reales: la suposición era falsa.**
+- **Error mío anterior (7–9/10):** había dicho "el corpus no tiene rampas": **sí las tiene** (en los extremos de los originales, a velocidad normal). Lo que vi al final del original era manejo de la cámara *dentro* de un tramo a velocidad normal.
+- **Motor (obligatorio, aprobado):** `probe()` lee fotogramas visibles y tasa real media; `evaluar()` la usa; rotación automática de videos verticales; `_tasa_del_archivo` (factor 1 con marcas reales, `origen_factor = marcas_de_tiempo`);
+  **regularización temporal** con trazabilidad de puntos interpolados; contrato **v1.1**. Humo de punta a punta sobre un recorte real (398 fotogramas, 82 interpolados = 17,1 %). La tarea de la rotación ofrecida queda cumplida.
+- **Plan de recálculo escrito, NO ejecutado:** `docs/plan-recalculo-corpus-tasa-real.md` (Paso A rápido sobre poses cacheadas a 120,2 fps; Paso B definitivo desde los originales reales, ~8 h de pose; pre-registro de la tolerancia en ms).
+- **Calendario:** el 20/10 cae **martes**. Sigue en pie solo con recortes y margen cero (~40–50 %); recomendación: **viernes 23/10** como fecha de la prueba de punta a punta. MVP completo del 2/11 intacto.
+- **Anotaciones para el Capítulo 7** en `docs/tesis/correcciones-pendientes-capitulo-4.md` (RNF-01, fragilidad del Criterio 1, escala, tasa por grabación).
+
+---
+
 ## 2026-10-09 (más tarde) — Resultado de las pruebas de Archivos / cámara lenta / Opciones; la tasa real varía (decisión 029)
 
 - **Archivos y "Opciones → Formato: Actual" entregan el MISMO archivo** (42 bytes de metadatos de diferencia): **HEVC 1920×1080, 398 fotogramas visibles, 2,005 s, marcas de tiempo reales**, nominal 239,98 fps y **real media 198,9 fps** (17,1 % de fotogramas perdidos, con un patrón casi periódico:

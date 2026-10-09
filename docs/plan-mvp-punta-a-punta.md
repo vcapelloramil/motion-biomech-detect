@@ -6,13 +6,45 @@ documento contradice a ese, vale este. Las decisiones que lo requerían están e
 
 ## 1. Objetivo y criterio de aceptación
 
-**Lunes 20/10:** Valentín abre la app desde el celular, **se registra (con confirmación por correo) o inicia sesión, sube un video real, ve el estado del análisis y abre
+**Martes 20/10** (el 20/10 de 2026 cae martes; el plan decía "lunes"): Valentín abre la app desde el celular, **se registra (con confirmación por correo) o inicia sesión, sube un video real, ve el estado del análisis y abre
 un Reporte simple con los datos reales de ese video**, sin intervención manual de nadie.
 
 **Alcance de la validación (cambio del 7/10):** no habrá pruebas con otros usuarios; la validación la hace Valentín grabándose. **El sistema igual tiene que funcionar
 para cualquier usuario nuevo** (registro, confirmación, login, carga y reporte) **como si fuera público.**
 
 No hace falta para el 20/10: PDF, video con esqueleto, evolución, puntaje.
+
+## 1b. Estado al 9/10/2026 y fecha realista (honesto)
+
+**Hecho desde el 7/10** (decisiones 024–030): contrato v1.1; carga directa, estado directo y autenticación diseñadas; hosting y fuente única; correo (A/B documentados); casos a/b/c; **lectura de E0 corregida**
+(fotogramas visibles, tasa real media), **rotación de videos verticales**, **regularización temporal con trazabilidad** (R4), `procesar_video` con la tasa del archivo; diagnóstico del corpus (la escala real es ×2) y plan de recálculo.
+El camino de subida del iPhone existe (**Opciones → Formato: Actual** o Archivos) y los 16 originales reales están emparejados.
+
+**Lo que costó:** tres días (7–9/10) de trabajo no previsto en este plan: la prueba del iPhone y, sobre todo, descubrir que el corpus es 120 fps con rampas. Valioso para la tesis; no avanzó el flujo de punta a punta.
+
+**Lo que falta para el flujo de punta a punta**, en sesiones de trabajo de ~medio día:
+
+| # | Pieza | Sesiones | Depende de |
+| --- | --- | --- | --- |
+| 1 | Ensamblador del reporte (E5.4 mínimo): JSON v1.1, confianza por pico, columna `jsonb`, vocabulario R2 (+ migración) | 2 | aplicar la migración (Valentín) |
+| 2 | Motivo de fallo propio para el archivo convertido (+ migración) | 0,5 | aplicar la migración (Valentín) |
+| 3 | 7.4: JWT por JWKS, propiedad del video, CORS, retiro del token compartido, `usuarios` | 1,5 | — |
+| 4 | Frontend: cliente de Supabase, sesión, Registro/Login | 1,5 | SMTP (o usuario ya confirmado) |
+| 5 | Cargar real: formulario, **instrucción "Opciones → Actual"**, subida directa, alta de sesión y video, llamada a la API | 2 | 3 |
+| 6 | Procesando real + reintento | 1 | 5 |
+| 7 | Reporte simple real | 1,5 | 1 y 6 |
+| 8 | Publicación (Cloudflare), variables, CORS en Render, prueba con el celular | 1 | todo |
+| | **Total** | **~11** | |
+
+Hay 7 días hábiles hasta el martes 20/10 (vie 9, lun 12, mar 13, mié 14, jue 15, vie 16, lun 19). A ~1,5 sesiones por día son ~10–11 sesiones: **entra con margen cero**, sin un solo imprevisto, y
+con tus acciones en paneles (aplicar dos migraciones, confirmar el correo, Student Pack) llegando a tiempo.
+
+**Mi evaluación:** el martes 20/10 **sigue en pie solo con estos recortes**: sin fotogramas clave (ya permitido por el ajuste (a)), sin Biblioteca real, sin prueba de registro con correo real (usuario creado ya confirmado
+desde el panel), Render en Free y **sin el recálculo del corpus compitiendo por el tiempo de trabajo**. Con eso lo veo en torno al **40–50 %**. Lo que **sí recomiendo**: tomar como fecha de la prueba de punta a punta el
+**viernes 23/10** (la del 20/10 queda como adelanto si todo sale), porque cuesta tres días y devuelve margen. **El MVP completo del 2/11 se mantiene** (la semana 3 ya había diferido puntaje y comparación).
+
+**El recálculo del corpus no bloquea el MVP**, pero compite por mi tiempo: el Paso A son ~medio día y el B ~1 día más 8 h de cómputo en tu PC. Mi propuesta de orden: flujo de punta a punta primero (1–8), Paso A en un hueco, y el Paso B de noche
+cuando la PC pueda quedar encendida.
 
 ## 2. Punto de partida (verificado el 6–7/10)
 
@@ -58,7 +90,7 @@ No hace falta para el 20/10: PDF, video con esqueleto, evolución, puntaje.
 | **Procesando real** | Polling del estado, mensajes por estado y por `motivo_fallo`, botón de reintento (decisión 022). |
 | **Reporte simple real** | Observación de secuenciación, tres momentos con los fotogramas reales (si entraron), trazabilidad. "Desde tu 2.ª sesión" donde corresponde. |
 | **Render** | **Primero en Free**, sesiones de **2 o 3 golpes**; se mide espera, RSS pico y cortes. **Pasa a Standard solo si la espera o los cortes molestan** (decisión 023). El cambio lo hace Valentín en el panel y **en el mismo paso** se actualiza `render.yaml`. |
-| **Lunes 20/10: prueba de punta a punta** | Valentín, con el celular, de cero a reporte, **con un usuario nuevo registrado de verdad**. Lo que falle entra a la semana 3. |
+| **Martes 20/10: prueba de punta a punta** | Valentín, con el celular, de cero a reporte, **con un usuario nuevo registrado de verdad**. Lo que falle entra a la semana 3. |
 
 ### Semana 3 · 20/10 – 26/10 — lo que hace falta para medir y para que funcione "como público"
 
