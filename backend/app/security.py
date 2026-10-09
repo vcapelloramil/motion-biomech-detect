@@ -1,26 +1,41 @@
-"""Seguridad de la API — Etapa 6, sembrada en la tarea 4.5.4.
+"""Seguridad de la API — tarea 7.4, decisión 025.
 
-Hoy protege el disparo de análisis con un token compartido simple, mientras no existe la
-verificación de JWT de Supabase Auth (tarea 7.4). El día que la Etapa 7 la implemente,
-``verificar_token`` se REEMPLAZA por la verificación real, no convive con ella — este
-archivo es exactamente donde ese reemplazo tiene que pasar, por eso el nombre.
+La identidad de quien llama es el ``sub`` de su JWT de Supabase Auth, **validado contra las claves
+públicas del proyecto (JWKS)**: firma (ES256), expiración, emisor y audiencia. **Nunca es un parámetro
+que mande el cliente.** El token compartido de la decisión 019 (``X-Kinetiq-Token``) se retiró: no
+puede vivir en un navegador y no identificaba a nadie.
 
-El token esperado (``KINETIQ_API_TOKEN``) vive solo en la variable de entorno del
-servidor, cargada a mano en el panel de Render — nunca en el repo ni en ``render.yaml``
-(ver ese archivo y la tarea 4.5.4 en la bitácora).
+Qué NO hace este módulo: no decide si el video es del usuario. Eso lo hace el router
+(``routers/analisis.py``), porque la API usa ``service_role`` y ``service_role`` **ignora RLS**: sin
+ese chequeo, cualquier usuario autenticado podría procesar el video de otro.
+
+Las claves se leen de ``<SUPABASE_URL>/auth/v1/.well-known/jwks.json`` (público) y se guardan en caché
+(``PyJWKClient``); si llega un ``kid`` que no está en la caché, se vuelve a pedir el conjunto una vez
+(rotación de claves). Verificado el 7/10/2026 contra el proyecto real: publica una clave ES256.
 """
 
 from __future__ import annotations
 
-import os
-import secrets
+from dataclasses import dataclass
+from functools import lru_cache
 
-from fastapi import Header, HTTPException, status
+import jwt
+from fastapi import Depends, Header, HTTPException, status
 from supabase import Client, create_client
 
 from app.config import get_supabase_service_role_key, get_supabase_url
 
-_TOKEN_ENV_VAR = "KINETIQ_API_TOKEN"
+# Supabase firma con ES256 (curva P-256). Se fija la lista: aceptar "el algoritmo que diga el token"
+# habilita el ataque de confusión de algoritmos (HS256 firmado con la clave pública).
+ALGORITMOS_PERMITIDOS = ["ES256"]
+AUDIENCIA = "authenticated"
+
+
+@dataclass(frozen=True)
+class UsuarioAutenticado:
+    """Quien llama. ``id`` es el ``sub`` del JWT = ``auth.users.id`` = ``videos.usuario_id``."""
+
+    id: str
 
 
 def get_admin_client() -> Client:
@@ -30,18 +45,68 @@ def get_admin_client() -> Client:
     return create_client(get_supabase_url(), get_supabase_service_role_key())
 
 
-def verificar_token(x_kinetiq_token: str = Header(default="")) -> None:
-    """Dependency de FastAPI: 401 si falta el header o no coincide con
-    ``KINETIQ_API_TOKEN``. Comparación de tiempo constante (``secrets.compare_digest``)
-    para no filtrar el token por temporización, aunque acá el costo de hacerlo bien es
-    nulo."""
-    esperado = os.environ.get(_TOKEN_ENV_VAR)
-    if not esperado:
-        # Server mal configurado (olvidaron cargar la variable en Render) no es lo mismo
-        # que "token inválido": se informa distinto para no esconder el error real.
+def emisor_esperado() -> str:
+    """``iss`` de los tokens de este proyecto: ``<SUPABASE_URL>/auth/v1``."""
+    return f"{get_supabase_url().rstrip('/')}/auth/v1"
+
+
+@lru_cache(maxsize=1)
+def _cliente_jwks() -> jwt.PyJWKClient:
+    # Un solo cliente por proceso: la caché de claves vive en él. Sin `lifespan` explícito PyJWT usa 300 s.
+    return jwt.PyJWKClient(f"{emisor_esperado()}/.well-known/jwks.json", cache_keys=True, timeout=10)
+
+
+def get_jwks_client() -> jwt.PyJWKClient:
+    """Dependency (reemplazable en las pruebas por un cliente con una clave local)."""
+    return _cliente_jwks()
+
+
+def _no_autenticado(detalle: str) -> HTTPException:
+    return HTTPException(
+        status.HTTP_401_UNAUTHORIZED, detalle, headers={"WWW-Authenticate": "Bearer"}
+    )
+
+
+def usuario_autenticado(
+    authorization: str = Header(default=""),
+    jwks: jwt.PyJWKClient = Depends(get_jwks_client),
+) -> UsuarioAutenticado:
+    """Dependency de FastAPI: 401 si no hay un JWT de Supabase válido en ``Authorization: Bearer``.
+
+    Devuelve la identidad (``sub``). Los mensajes no distinguen *por qué* falló la firma (no se le
+    explica a un atacante qué probar); sí distinguen "vencido", que es accionable para el cliente
+    (renovar la sesión)."""
+    esquema, _, token = authorization.partition(" ")
+    if esquema.lower() != "bearer" or not token.strip():
+        raise _no_autenticado("Falta el token de sesión (Authorization: Bearer ...).")
+    token = token.strip()
+
+    try:
+        clave = jwks.get_signing_key_from_jwt(token)
+    except jwt.PyJWKClientConnectionError:
+        # No es un token malo: no se pudo pedir el JWKS. Que el cliente reintente.
         raise HTTPException(
-            status.HTTP_500_INTERNAL_SERVER_ERROR,
-            f"El servidor no tiene {_TOKEN_ENV_VAR} configurado.",
+            status.HTTP_503_SERVICE_UNAVAILABLE, "No se pudo verificar la sesión. Reintentá en un momento."
+        ) from None
+    except jwt.PyJWTError:
+        # kid desconocido incluso después de refrescar, o token que ni siquiera se puede leer.
+        raise _no_autenticado("Token de sesión inválido.") from None
+
+    try:
+        claims = jwt.decode(
+            token,
+            clave.key,
+            algorithms=ALGORITMOS_PERMITIDOS,
+            audience=AUDIENCIA,
+            issuer=emisor_esperado(),
+            options={"require": ["exp", "sub", "iss", "aud"]},
         )
-    if not x_kinetiq_token or not secrets.compare_digest(x_kinetiq_token, esperado):
-        raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Token inválido o ausente.")
+    except jwt.ExpiredSignatureError:
+        raise _no_autenticado("La sesión venció. Iniciá sesión de nuevo.") from None
+    except jwt.PyJWTError:
+        raise _no_autenticado("Token de sesión inválido.") from None
+
+    sub = claims.get("sub")
+    if not isinstance(sub, str) or not sub:
+        raise _no_autenticado("Token de sesión inválido.")
+    return UsuarioAutenticado(id=sub)

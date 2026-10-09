@@ -32,18 +32,18 @@ import pytest
 
 try:
     from app.config import (
-        get_kinetiq_api_token,
         get_kinetiq_api_url,
+        get_supabase_anon_key,
         get_supabase_service_role_key,
         get_supabase_url,
     )
 
     _API_URL = get_kinetiq_api_url()
-    _API_TOKEN = get_kinetiq_api_token()
+    _ANON_KEY = get_supabase_anon_key()
     _SUPABASE_URL = get_supabase_url()
     _SUPABASE_SERVICE_ROLE_KEY = get_supabase_service_role_key()
 except Exception:  # ConfigError u otra: falta alguna variable
-    _API_URL = _API_TOKEN = _SUPABASE_URL = _SUPABASE_SERVICE_ROLE_KEY = None
+    _API_URL = _ANON_KEY = _SUPABASE_URL = _SUPABASE_SERVICE_ROLE_KEY = None
 
 try:
     from app.config import get_data_dir
@@ -62,8 +62,8 @@ pytestmark = [
     pytest.mark.slow,
     pytest.mark.requiere_render,
     pytest.mark.skipif(
-        not (_API_URL and _API_TOKEN and _SUPABASE_URL and _SUPABASE_SERVICE_ROLE_KEY),
-        reason="Falta KINETIQ_API_URL / KINETIQ_API_TOKEN / credenciales de Supabase (backend/.env)",
+        not (_API_URL and _ANON_KEY and _SUPABASE_URL and _SUPABASE_SERVICE_ROLE_KEY),
+        reason="Falta KINETIQ_API_URL / SUPABASE_ANON_KEY / credenciales de Supabase (backend/.env)",
     ),
     pytest.mark.skipif(
         _CLIP is None, reason="No está fase-a/segmentos/zverev_saque_lateral_01.mp4 en KINETIQ_DATA_DIR"
@@ -99,9 +99,15 @@ def test_render_desplegado_rechaza_modo_captura_incompatible():
 
     admin = create_client(_SUPABASE_URL, _SUPABASE_SERVICE_ROLE_KEY)
 
+    from jwt_de_prueba import encabezado, token_de_usuario
+
     email = f"kinetiq-render-{uuid.uuid4().hex[:12]}@example.invalid"
-    usuario_id = admin.auth.admin.create_user(
-        {"email": email, "password": secrets.token_urlsafe(18), "email_confirm": True}
+    password = secrets.token_urlsafe(18)
+    usuario_id = admin.auth.admin.create_user({"email": email, "password": password, "email_confirm": True}).user.id
+    email_ajeno = f"kinetiq-render-ajeno-{uuid.uuid4().hex[:12]}@example.invalid"
+    password_ajeno = secrets.token_urlsafe(18)
+    ajeno_id = admin.auth.admin.create_user(
+        {"email": email_ajeno, "password": password_ajeno, "email_confirm": True}
     ).user.id
 
     ruta_storage = None
@@ -154,19 +160,20 @@ def test_render_desplegado_rechaza_modo_captura_incompatible():
         )
         url_procesar = f"{_API_URL}/analisis/{video['id']}/procesar"
 
-        # Contrato de seguridad del endpoint REAL: sin token y con token equivocado, 401,
-        # y el video no se toca.
+        token = token_de_usuario(_SUPABASE_URL, _ANON_KEY, email, password)
+        token_ajeno = token_de_usuario(_SUPABASE_URL, _ANON_KEY, email_ajeno, password_ajeno)
+
+        # Contrato de seguridad del endpoint REAL (decisión 025): sin token y con un JWT inválido, 401;
+        # con el JWT de OTRO usuario, 404. El video no se toca.
         assert httpx.post(url_procesar, timeout=60.0).status_code == 401
-        assert (
-            httpx.post(url_procesar, headers={"x-kinetiq-token": "token-equivocado"}, timeout=60.0).status_code
-            == 401
-        )
+        assert httpx.post(url_procesar, headers=encabezado(token + "x"), timeout=60.0).status_code == 401
+        assert httpx.post(url_procesar, headers=encabezado(token_ajeno), timeout=60.0).status_code == 404
         estado_intacto = (
             admin.table("videos").select("estado").eq("id", video["id"]).single().execute().data["estado"]
         )
         assert estado_intacto == "pendiente"
 
-        resp = httpx.post(url_procesar, headers={"x-kinetiq-token": _API_TOKEN}, timeout=60.0)
+        resp = httpx.post(url_procesar, headers=encabezado(token), timeout=60.0)
         assert resp.status_code == 202, f"POST con token válido devolvió HTTP {resp.status_code}"
         assert resp.json() == {"video_id": video["id"], "estado": "encolado"}
 
@@ -198,3 +205,4 @@ def test_render_desplegado_rechaza_modo_captura_incompatible():
         if ruta_storage:
             admin.storage.from_("videos").remove([ruta_storage])
         admin.auth.admin.delete_user(usuario_id)
+        admin.auth.admin.delete_user(ajeno_id)

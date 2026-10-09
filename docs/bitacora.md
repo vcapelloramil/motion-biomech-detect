@@ -6,6 +6,31 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-09 (noche, 2) — Pieza 4 (tarea 7.4): la API autentica con el JWT de Supabase
+
+**Commit anterior, ya en `main`: `43fc159`** (piezas 1 a 3 + decisión 031 + tolerancia de R1). Esta pieza está **commiteada en local, sin pushear** (espera a que Valentín aplique la migración de `usuarios` para subir todo junto).
+
+- **JWT por JWKS** (`backend/app/security.py`, PyJWT): ES256 fijado por el servidor, exige `exp`, `sub`, `iss` y `aud = authenticated`; caché de claves y recarga ante un `kid` desconocido. 401 sin Bearer, inválido o vencido
+  (el vencido lo dice); 503 si no se pudo pedir el JWKS. La identidad es el `sub`: una prueba manda otro `usuario_id` por query, cuerpo y header y no cambia nada.
+- **Propiedad del video:** `POST /analisis/{id}/procesar` compara `videos.usuario_id` con el `sub`; **404** igual que un video inexistente (un id que no es uuid también). La API usa `service_role`, que ignora RLS.
+- **CORS acotado:** `KINETIQ_CORS_ORIGINS` (lista; sin valor = ningún origen; un `*` es `ConfigError`); `allow_credentials=False`.
+- **Token compartido retirado:** `verificar_token`, `KINETIQ_API_TOKEN` y `get_kinetiq_api_token` ya no existen; `render.yaml` y `.env.example` actualizados.
+- **`usuarios` endurecido** (migración `20261009130000_endurecer_usuarios.sql`, **sin aplicar**): INSERT retirado y UPDATE solo de `nombre`, `rol` y `vista_por_defecto`; prueba en rojo hasta aplicarla.
+- **Verificado:** suite rápida **447 passed**; `test_api_analisis_e2e`, `test_reintento_supabase` y `test_registro_confirmacion_login` (18 pruebas, contra el JWKS real y con el usuario ajeno recibiendo 404) en verde.
+  `test_render_modo_captura` (contra el despliegue) quedó migrada pero **no se corrió**: hace falta desplegar.
+
+### Acciones que son de Valentín
+
+1. **Aplicar** `supabase/migrations/20261009130000_endurecer_usuarios.sql` y avisar (después `pytest tests/integration/test_usuarios_columnas_protegidas.py`).
+2. En el panel de Render: **borrar `KINETIQ_API_TOKEN`** y, al publicar el frontend, **cargar `KINETIQ_CORS_ORIGINS`** con su dominio (sin barra final).
+3. Confirmar que se pushea (el push dispara un despliegue en Render si el servicio tiene despliegue automático).
+
+### Siguiente
+
+Pieza 5 (frontend: cliente de Supabase, sesión, Registro con aviso de spam y Login). Lo que necesita el frontend de la API: `Authorization: Bearer <session.access_token>` (especificación §5).
+
+---
+
 ## 2026-10-09 (noche) — Migración aplicada y corridas en verde; decisión 031 (veredicto por gesto y encuadre); tolerancia del 5 % en R1
 
 **Corridas (con la migración `20261009120000` ya aplicada por Valentín): `test_procesar_video_e2e.py` pasó (2 min) y `pytest -m requiere_supabase` completo dio 79 passed, 0 failed (8 min 55 s), sin restos.

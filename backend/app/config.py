@@ -146,16 +146,23 @@ def get_kinetiq_api_url() -> str:
     return value.rstrip("/")
 
 
-def get_kinetiq_api_token() -> str:
-    """Token compartido que protege POST /analisis/... (el mismo que está cargado como
-    KINETIQ_API_TOKEN en el panel de Render). SECRETO: nunca se imprime ni se versiona."""
-    value = _read_env_var("KINETIQ_API_TOKEN")
+_CORS_ORIGINS_VAR = "KINETIQ_CORS_ORIGINS"
+
+
+def get_cors_origins() -> list[str]:
+    """Orígenes del navegador que pueden llamar a la API (decisión 025, tarea 7.4): la lista, separada por
+    comas, de ``KINETIQ_CORS_ORIGINS`` (p. ej. ``https://kinetiq.pages.dev,http://localhost:5173``).
+
+    **Sin valor, ningún origen** (la API no abre CORS por defecto: el servidor no queda accesible desde
+    cualquier página). Un ``*`` se rechaza: con una API que recibe un JWT, "cualquiera" no es una política.
+    Se normaliza quitando la barra final, porque el navegador manda el origen sin ella."""
+    value = _read_env_var(_CORS_ORIGINS_VAR)
     if not value:
-        raise ConfigError(
-            "No se encontró la variable KINETIQ_API_TOKEN.\n"
-            "Configurala en backend/.env (ver backend/.env.example)."
-        )
-    return value
+        return []
+    origenes = [o.strip().rstrip("/") for o in value.split(",") if o.strip()]
+    if any(o == "*" or "*" in o for o in origenes):
+        raise ConfigError(f"{_CORS_ORIGINS_VAR} no admite comodines: listá los orígenes uno por uno.")
+    return origenes
 
 
 _MAX_INTENTOS_VAR = "KINETIQ_MAX_INTENTOS"

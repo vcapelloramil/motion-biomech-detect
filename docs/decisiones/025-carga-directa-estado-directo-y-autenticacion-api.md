@@ -61,3 +61,18 @@ Además la API de hoy se protege con **un token compartido** (decisión 019), qu
 - **El estado del análisis lo escribe el motor y lo lee el cliente:** gracias a los permisos por columna (decisión 022), el cliente no puede falsificarlo.
 - **Nuevas dependencias del servidor:** una librería de JWT con soporte de curvas elípticas (a fijar al implementar); `SUPABASE_URL` ya está en Render.
 - La implementación es parte de la semana 1 del plan de punta a punta; esta decisión fija el diseño, no el código.
+
+## Avance (9/10/2026) — tarea 7.4 implementada
+
+- **`backend/app/security.py`:** `usuario_autenticado` valida el JWT contra el JWKS del proyecto con PyJWT (`PyJWKClient`: caché de claves y recarga ante un `kid` desconocido). Fija `ES256`
+  (la lista de algoritmos la decide el servidor: un HS256 o `alg: none` se rechaza), exige `exp`, `sub`, `iss = <SUPABASE_URL>/auth/v1` y `aud = authenticated`. **401** sin Bearer, inválido o
+  vencido; **503** si no se pudo pedir el JWKS (no es culpa del token).
+- **`routers/analisis.py`:** compara `videos.usuario_id` con el `sub`; **404** igual que un video inexistente (mismo mensaje y código). Un id que no es uuid (22P02 de Postgres) también es 404.
+  La identidad no sale de ningún parámetro: hay una prueba que manda otro `usuario_id` por query, cuerpo y header.
+- **Token compartido retirado:** `verificar_token`, `KINETIQ_API_TOKEN` y `get_kinetiq_api_token` ya no existen; `render.yaml` y `backend/.env.example` lo reflejan. **Acción de Valentín:** borrar
+  `KINETIQ_API_TOKEN` del panel de Render (es inofensivo, pero es un secreto sin uso) y cargar `KINETIQ_CORS_ORIGINS`.
+- **CORS:** `KINETIQ_CORS_ORIGINS` (lista separada por comas, sin comodines: un `*` es `ConfigError`); sin valor, ningún origen. `allow_credentials=False`: la sesión viaja en `Authorization`, no en cookies.
+- **`usuarios`:** migración `20261009130000_endurecer_usuarios.sql` (INSERT retirado; UPDATE solo de `nombre`, `rol` y `vista_por_defecto`) y `tests/integration/test_usuarios_columnas_protegidas.py`.
+  **Pendiente de aplicar por Valentín**; la prueba está en rojo hasta entonces.
+- **Pruebas:** `test_security_jwt.py` (26 casos: claims, firma ajena, alterado, confusión de algoritmos, `kid` desconocido, JWKS caído, CORS), `test_api_analisis.py` (identidad, propiedad, 404 indistinguible,
+  el token viejo ya no abre) y las integraciones (`test_api_analisis_e2e`, `test_reintento_supabase`, `test_render_modo_captura`) migradas a un usuario de prueba real con su JWT, con el control del usuario ajeno.

@@ -221,18 +221,18 @@ def test_el_motor_puede_registrar_error_inesperado(entorno):
 
 
 @pytest.fixture
-def api(monkeypatch):
+def api(monkeypatch, entorno):
     from fastapi.testclient import TestClient
 
-    token = secrets.token_urlsafe(24)
-    monkeypatch.setenv("KINETIQ_API_TOKEN", token)
     monkeypatch.setenv("KINETIQ_MAX_INTENTOS", "3")
     from app.main import app
 
+    # Tarea 7.4: la API autentica con el JWT del usuario (el de la sesión que ya inició la fixture `entorno`).
+    token = entorno["cliente"].auth.get_session().access_token
     cliente = TestClient(app)
 
     def _procesar(video_id: str):
-        return cliente.post(f"/analisis/{video_id}/procesar", headers={"x-kinetiq-token": token})
+        return cliente.post(f"/analisis/{video_id}/procesar", headers={"Authorization": f"Bearer {token}"})
 
     return _procesar
 

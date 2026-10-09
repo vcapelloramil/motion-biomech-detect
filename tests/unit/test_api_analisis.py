@@ -1,6 +1,7 @@
 """POST /analisis/{video_id}/procesar — pruebas rápidas, sin red: cliente de Supabase
-falso y el worker de fondo reemplazado por un espía. Prueban el ruteo, el token, los
-códigos de estado y las transiciones del reintento (decisión 022: 202 / 409); el pipeline real
+falso y el worker de fondo reemplazado por un espía. Prueban el ruteo, la identidad y la propiedad
+del video (decisión 025: 401 / 404), los códigos de estado y las transiciones del reintento
+(decisión 022: 202 / 409). La validación del JWT en sí está en ``test_security_jwt.py``; el pipeline real
 ya lo prueba tests/integration/test_procesar_video_e2e.py (y el disparo end-to-end a través de la
 API, tests/integration/test_api_analisis_e2e.py)."""
 
@@ -13,11 +14,10 @@ from fastapi.testclient import TestClient
 
 import app.routers.analisis as analisis_router
 from app.main import app
-from app.security import get_admin_client
+from app.security import UsuarioAutenticado, get_admin_client, usuario_autenticado
 
-_TOKEN_ENV_VAR = "KINETIQ_API_TOKEN"
-_TOKEN_VALIDO = "token-de-prueba-no-real"
-_HEADERS = {"x-kinetiq-token": _TOKEN_VALIDO}
+_USUARIO = "11111111-1111-4111-8111-111111111111"
+_OTRO_USUARIO = "22222222-2222-4222-8222-222222222222"
 
 
 class _ConsultaFalsa:
@@ -51,6 +51,7 @@ def _video(**cambios) -> dict:
     """Fila de videos tal como la devuelve el select del router (con su sesión embebida)."""
     base = {
         "id": "video-de-prueba",
+        "usuario_id": _USUARIO,
         "estado": "pendiente",
         "motivo_fallo": None,
         "modo_captura_intentado": None,
@@ -87,11 +88,6 @@ class _TablaVideos(_ConsultaFalsa):
 
 
 @pytest.fixture(autouse=True)
-def _token_configurado(monkeypatch):
-    monkeypatch.setenv(_TOKEN_ENV_VAR, _TOKEN_VALIDO)
-
-
-@pytest.fixture(autouse=True)
 def _tope_de_intentos(monkeypatch):
     monkeypatch.setenv("KINETIQ_MAX_INTENTOS", "3")
 
@@ -111,9 +107,12 @@ def espia_worker(monkeypatch):
 def cliente_con(espia_worker):
     """Fábrica: ``cliente, admin = cliente_con(_video(estado="fallido", ...))``."""
 
-    def _armar(video: dict | None, update_afecta: bool = True):
+    def _armar(video: dict | None, update_afecta: bool = True, usuario: str | None = _USUARIO):
         admin = _AdminFalso(video, update_afecta)
         app.dependency_overrides[get_admin_client] = lambda: admin
+        if usuario is not None:
+            # La identidad ya validada: la validación del JWT se prueba aparte (test_security_jwt.py).
+            app.dependency_overrides[usuario_autenticado] = lambda: UsuarioAutenticado(id=usuario)
         return TestClient(app), admin
 
     yield _armar
@@ -131,45 +130,88 @@ def cliente_sin_video(cliente_con):
 
 
 def _post(cliente):
-    return cliente.post("/analisis/video-de-prueba/procesar", headers=_HEADERS)
+    return cliente.post("/analisis/video-de-prueba/procesar")
 
 
-def test_sin_token_responde_401(cliente_con_video, espia_worker):
-    resp = cliente_con_video.post("/analisis/video-de-prueba/procesar")
+def test_sin_sesion_responde_401(cliente_con, espia_worker):
+    cliente, admin = cliente_con(_video(), usuario=None)  # sin override: rige la validación real
+    resp = cliente.post("/analisis/video-de-prueba/procesar")
     assert resp.status_code == 401
-    assert espia_worker == []
+    assert admin.updates == [] and espia_worker == []
 
 
-def test_token_incorrecto_responde_401(cliente_con_video, espia_worker):
-    resp = cliente_con_video.post(
-        "/analisis/video-de-prueba/procesar", headers={"x-kinetiq-token": "token-equivocado"}
-    )
+def test_el_token_compartido_de_la_decision_019_ya_no_abre_nada(cliente_con, espia_worker):
+    cliente, admin = cliente_con(_video(), usuario=None)
+    resp = cliente.post("/analisis/video-de-prueba/procesar", headers={"x-kinetiq-token": "el-token-viejo"})
     assert resp.status_code == 401
-    assert espia_worker == []
+    assert admin.updates == [] and espia_worker == []
 
 
-def test_token_correcto_video_inexistente_responde_404(cliente_sin_video, espia_worker):
-    resp = cliente_sin_video.post("/analisis/no-existe/procesar", headers=_HEADERS)
+def test_video_inexistente_responde_404(cliente_sin_video, espia_worker):
+    resp = cliente_sin_video.post("/analisis/no-existe/procesar")
     assert resp.status_code == 404
     assert espia_worker == []
 
 
-def test_token_correcto_video_existente_responde_202_y_encola(cliente_con_video, espia_worker):
+def test_el_video_de_otro_usuario_responde_404_igual_que_uno_inexistente(cliente_con, espia_worker):
+    """service_role ignora RLS: sin este chequeo cualquier usuario autenticado procesaría el video ajeno.
+    404 y no 403: no se revela qué ids existen (decisión 025)."""
+    cliente, admin = cliente_con(_video(usuario_id=_OTRO_USUARIO))
+    ajeno = _post(cliente)
+    assert ajeno.status_code == 404
+    assert admin.updates == [] and espia_worker == []
+
+    cliente_vacio, _ = cliente_con(None)
+    inexistente = _post(cliente_vacio)
+    assert inexistente.status_code == 404
+    assert ajeno.json() == inexistente.json()
+
+
+def test_la_identidad_sale_del_token_y_no_de_nada_que_mande_el_cliente(cliente_con, espia_worker):
+    """Un cuerpo o una consulta con otro usuario_id no cambia a quién se le comprueba el video."""
+    cliente, admin = cliente_con(_video(usuario_id=_OTRO_USUARIO))
+    resp = cliente.post(
+        "/analisis/video-de-prueba/procesar",
+        params={"usuario_id": _OTRO_USUARIO},
+        json={"usuario_id": _OTRO_USUARIO},
+        headers={"x-usuario-id": _OTRO_USUARIO},
+    )
+    assert resp.status_code == 404
+    assert admin.updates == [] and espia_worker == []
+
+
+def test_un_id_que_no_es_uuid_es_404_y_no_500(cliente_con, espia_worker):
+    """PostgREST responde 22P02 ante un id mal formado: para el cliente es "no existe"."""
+    from postgrest.exceptions import APIError
+
+    class _Tabla:
+        def select(self, *_a, **_kw):
+            return self
+
+        def eq(self, *_a):
+            return self
+
+        def execute(self):
+            raise APIError({"message": "invalid input syntax for type uuid", "code": "22P02", "details": "", "hint": ""})
+
+    class _Admin:
+        def table(self, _n):
+            return _Tabla()
+
+    app.dependency_overrides[get_admin_client] = lambda: _Admin()
+    app.dependency_overrides[usuario_autenticado] = lambda: UsuarioAutenticado(id=_USUARIO)
+    resp = TestClient(app).post("/analisis/esto-no-es-un-uuid/procesar")
+    assert resp.status_code == 404
+    assert espia_worker == []
+
+
+def test_video_propio_responde_202_y_encola(cliente_con_video, espia_worker):
     resp = _post(cliente_con_video)
     assert resp.status_code == 202
     assert resp.json() == {"video_id": "video-de-prueba", "estado": "encolado"}
     # TestClient corre las BackgroundTasks antes de devolver la respuesta: el espía ya
     # tiene que haber sido llamado para acá.
     assert espia_worker == ["video-de-prueba"]
-
-
-def test_sin_KINETIQ_API_TOKEN_en_el_servidor_responde_500(cliente_con_video, espia_worker, monkeypatch):
-    """Servidor mal configurado (variable no cargada en Render) es un error distinto de
-    "token inválido" — no debería poder confundirse con un ataque."""
-    monkeypatch.delenv(_TOKEN_ENV_VAR, raising=False)
-    resp = _post(cliente_con_video)
-    assert resp.status_code == 500
-    assert espia_worker == []
 
 
 # --- Reintento fallido -> encolado (decisión 022) ---------------------------------------------

@@ -1,7 +1,6 @@
 # Blueprint de Render para el contenedor del motor — Etapa 4.5, tarea 4.5.4.
 #
-# NINGÚN secreto vive en este archivo. SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY y
-# KINETIQ_API_TOKEN se cargan A MANO en el panel de Render (Environment del servicio)
+# NINGÚN secreto vive en este archivo. SUPABASE_URL y SUPABASE_SERVICE_ROLE_KEY se cargan A MANO en el panel de Render (Environment del servicio)
 # después de aplicar este blueprint — `sync: false` le dice a Render que el valor existe
 # pero no lo gestiona este archivo ni el repo; Render los pide al aplicar el blueprint, o
 # se cargan después desde el panel.
@@ -23,5 +22,7 @@ services:
         sync: false
       - key: SUPABASE_SERVICE_ROLE_KEY
         sync: false
-      - key: KINETIQ_API_TOKEN
+      # Orígenes del frontend que pueden llamar a la API, separados por comas (p. ej. https://kinetiq.pages.dev).
+      # Sin valor, ninguno. No es un secreto, pero depende del dominio publicado: se carga en el panel.
+      - key: KINETIQ_CORS_ORIGINS
         sync: false
