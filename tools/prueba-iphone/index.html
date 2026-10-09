@@ -105,6 +105,19 @@
         el.scrollTop = el.scrollHeight;
       }
 
+      // Supabase Storage rechaza ("Invalid key") las claves con caracteres fuera de un conjunto seguro (por ejemplo "~"). Solo se dejan
+      // letras ASCII, números, guion (-) y guion bajo (_). Las tildes se pasan a su letra base ("é" -> "e").
+      function limpiarClave(texto) {
+        return String(texto || "")
+          .normalize("NFD").replace(/[̀-ͯ]/g, "")
+          .toLowerCase()
+          .replace(/[^a-z0-9_-]+/g, "-")
+          .replace(/-{2,}/g, "-")
+          .replace(/^[-_]+|[-_]+$/g, "")
+          .slice(0, 40);
+      }
+      const CLAVE_VALIDA = /^[A-Za-z0-9_\/-]+(\.[A-Za-z0-9]+)?$/;
+
       function extension(nombre, tipo) {
         const m = /\.([A-Za-z0-9]+)$/.exec(nombre || "");
         if (m) return m[1].toLowerCase();
@@ -139,9 +152,11 @@
         const meta = await leerEnElNavegador(archivo);
         anotar(`en el navegador: ${JSON.stringify(meta)}`);
 
-        const nota = ($("nota").value || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 40);
-        const ruta = `${usuarioId}/prueba-iphone/${etiqueta}${nota ? "~" + nota : ""}-${Date.now()}.${extension(archivo.name, archivo.type)}`;
+        const nota = limpiarClave($("nota").value);
+        const ext = limpiarClave(extension(archivo.name, archivo.type)) || "mov";
+        const ruta = `${usuarioId}/prueba-iphone/${etiqueta}${nota ? "_" + nota : ""}-${Date.now()}.${ext}`;
         anotar(`nota: ${nota || "(ninguna)"}`);
+        if (!CLAVE_VALIDA.test(ruta)) { anotar(`❌ NO se subió: la clave del objeto tiene caracteres no permitidos: ${ruta}`); return; }
         anotar(`subiendo a: ${ruta} …`);
         const { error } = await sb.storage.from("videos").upload(ruta, archivo, {
           contentType: archivo.type || "video/quicktime",

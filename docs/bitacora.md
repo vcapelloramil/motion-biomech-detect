@@ -6,6 +6,14 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-09 — Página del iPhone: corregido el "Invalid key" del campo Nota
+
+- **Causa (confirmada contra el Storage real):** la clave del objeto llevaba `~` como separador de la nota (`A-video-todos~recortado-...`) y Supabase Storage la rechaza con `InvalidKey` (400). **Error mío**, de la versión que agregó el campo "Nota".
+- **Arreglo:** la nota y el separador ahora solo usan letras ASCII, números, guion y guion bajo (separador `_`); las tildes pasan a su letra base y todo lo demás a guion; la página valida la clave antes de subir y muestra el error si no es válida. Probado con entradas hostiles (tildes, `~`, `/`, emoji, textos largos) y contra el Storage real (la clave con `~` falla, la nueva sube). Republicada.
+- **Dato de Valentín, sin subir todavía:** el mismo recorte guardado en **Archivos** pesa **16,47 MB** (contra 8,21 MB desde Fotos), dura 2,005 s, 1920×1080 y conserva la fecha original (24/09): sugiere que Archivos entrega el original sin convertir. **Falta subirlo y medirlo con el inspector.**
+
+---
+
 ## 2026-10-07 (noche) — Resultado de la prueba del iPhone: el recorte llegó a 100 fps (decisión 028)
 
 - **Valentín subió el mismo recorte (2 s, se reproduce a velocidad normal) con los cuatro selectores.** Los cuatro archivos son **el mismo video** (15 bytes de metadatos distintos): **H.264 a 100 fps, 201 fotogramas, 2,01 s, 8,2 MB, con audio**, sin
