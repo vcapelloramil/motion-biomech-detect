@@ -1,0 +1,557 @@
+{
+ "descripcion": "Sensibilidad del corpus a una tasa real distinta de la supuesta (decisión 029). NO recalcula los criterios.",
+ "huella": {
+  "fps_nominal": 239.981,
+  "fps_real_media": 198.873,
+  "fotogramas_perdidos_pct": 17.13,
+  "intervalos_en_periodos_resumen": {
+   "1": 356,
+   "3": 41
+  }
+ },
+ "repeticiones": 84,
+ "replicas": 12,
+ "corridas": 1008,
+ "tasa_efectiva_simulada_fps": {
+  "p10": 198.0,
+  "p50": 199.0,
+  "p90": 200.0
+ },
+ "orden_de_los_picos": {
+  "pt": {
+   "igual": 821,
+   "de": 925,
+   "fraccion": 0.8876
+  },
+  "ptb": {
+   "igual": 477,
+   "de": 553,
+   "fraccion": 0.8626
+  }
+ },
+ "ordenable_cambia_par_pelvis_torso": {
+  "tau=1": {
+   "cambia": 231,
+   "de": 1008,
+   "fraccion": 0.2292
+  },
+  "tau=2": {
+   "cambia": 184,
+   "de": 1008,
+   "fraccion": 0.1825
+  },
+  "tau=3": {
+   "cambia": 146,
+   "de": 1008,
+   "fraccion": 0.1448
+  }
+ },
+ "separacion_pelvis_torso_de_la_referencia_en_fotogramas": {
+  "p25": 1.0,
+  "p50": 2.0,
+  "p75": 5.0,
+  "fraccion_menor_o_igual_a": {
+   "0": 0.065,
+   "1": 0.385,
+   "2": 0.554,
+   "3": 0.69,
+   "5": 0.794,
+   "8": 0.834
+  }
+ },
+ "orden_cambia_segun_la_separacion_de_la_referencia": {
+  "0-1 fotogramas": {
+   "corridas": 356,
+   "orden_cambia_fraccion": 0.183
+  },
+  "2-3": {
+   "corridas": 282,
+   "orden_cambia_fraccion": 0.078
+  },
+  "4-8": {
+   "corridas": 133,
+   "orden_cambia_fraccion": 0.06
+  },
+  "9-20": {
+   "corridas": 22,
+   "orden_cambia_fraccion": 0.0
+  },
+  ">20": {
+   "corridas": 132,
+   "orden_cambia_fraccion": 0.068
+  }
+ },
+ "picos_que_saltan_a_otro_maximo_mas_de_50_ms": {
+  "p": {
+   "corridas": 925,
+   "salto_a_otro_pico_fraccion": 0.082,
+   "error_ms_sin_saltos_p50": 4.167,
+   "error_ms_sin_saltos_p90": 8.333
+  },
+  "t": {
+   "corridas": 925,
+   "salto_a_otro_pico_fraccion": 0.052,
+   "error_ms_sin_saltos_p50": 4.167,
+   "error_ms_sin_saltos_p90": 8.333
+  },
+  "b": {
+   "corridas": 903,
+   "salto_a_otro_pico_fraccion": 0.173,
+   "error_ms_sin_saltos_p50": 4.167,
+   "error_ms_sin_saltos_p90": 12.5
+  }
+ },
+ "error_instante_pico_ms_en_tiempo_real": {
+  "p": {
+   "p50": 4.167,
+   "p90": 20.833,
+   "max": 441.667,
+   "n": 925
+  },
+  "t": {
+   "p50": 4.167,
+   "p90": 12.5,
+   "max": 329.167,
+   "n": 1008
+  },
+  "b": {
+   "p50": 4.167,
+   "p90": 183.333,
+   "max": 441.667,
+   "n": 970
+  }
+ },
+ "separacion_pelvis_torso_ms": {
+  "real_p50": 0.0,
+  "aparente_p50": 0.0,
+  "razon_aparente_sobre_real_mediana": null
+ },
+ "velocidad_pico_aparente_sobre_real": {
+  "p": {
+   "p10": 1.003,
+   "p50": 1.124,
+   "p90": 1.241
+  },
+  "t": {
+   "p10": 1.013,
+   "p50": 1.137,
+   "p90": 1.237
+  },
+  "b": {
+   "p10": 1.025,
+   "p50": 1.163,
+   "p90": 1.377
+  }
+ },
+ "factor_teorico_de_escala": {
+  "velocidades": 1.207,
+  "intervalos_en_ms": 0.829
+ },
+ "criterio_1_por_grupo": {
+  "drive|perfil|tau=1|par": {
+   "referencia_cumple": true,
+   "mundos_que_cumplen": 10,
+   "mundos": 12,
+   "1a_referencia": 0.833,
+   "1a_mundos_min_max": [
+    0.75,
+    0.917
+   ],
+   "1b_referencia": 1.0,
+   "1b_mundos_min_max": [
+    1.0,
+    1.0
+   ]
+  },
+  "drive|perfil|tau=2|par": {
+   "referencia_cumple": true,
+   "mundos_que_cumplen": 6,
+   "mundos": 12,
+   "1a_referencia": 0.833,
+   "1a_mundos_min_max": [
+    0.667,
+    0.917
+   ],
+   "1b_referencia": 1.0,
+   "1b_mundos_min_max": [
+    1.0,
+    1.0
+   ]
+  },
+  "drive|perfil|tau=3|par": {
+   "referencia_cumple": false,
+   "mundos_que_cumplen": 2,
+   "mundos": 12,
+   "1a_referencia": 0.667,
+   "1a_mundos_min_max": [
+    0.25,
+    0.833
+   ],
+   "1b_referencia": 1.0,
+   "1b_mundos_min_max": [
+    1.0,
+    1.0
+   ]
+  },
+  "drive|trescuartos|tau=1|par": {
+   "referencia_cumple": false,
+   "mundos_que_cumplen": 0,
+   "mundos": 12,
+   "1a_referencia": 0.25,
+   "1a_mundos_min_max": [
+    0.083,
+    0.333
+   ],
+   "1b_referencia": 1.0,
+   "1b_mundos_min_max": [
+    0.5,
+    1.0
+   ]
+  },
+  "drive|trescuartos|tau=1|cadena": {
+   "referencia_cumple": false,
+   "mundos_que_cumplen": 0,
+   "mundos": 12,
+   "1a_referencia": 0.25,
+   "1a_mundos_min_max": [
+    0.083,
+    0.333
+   ],
+   "1b_referencia": 1.0,
+   "1b_mundos_min_max": [
+    0.333,
+    1.0
+   ]
+  },
+  "drive|trescuartos|tau=2|par": {
+   "referencia_cumple": false,
+   "mundos_que_cumplen": 0,
+   "mundos": 12,
+   "1a_referencia": 0.167,
+   "1a_mundos_min_max": [
+    0.083,
+    0.167
+   ],
+   "1b_referencia": 1.0,
+   "1b_mundos_min_max": [
+    0.5,
+    1.0
+   ]
+  },
+  "drive|trescuartos|tau=2|cadena": {
+   "referencia_cumple": false,
+   "mundos_que_cumplen": 0,
+   "mundos": 12,
+   "1a_referencia": 0.167,
+   "1a_mundos_min_max": [
+    0.083,
+    0.167
+   ],
+   "1b_referencia": 1.0,
+   "1b_mundos_min_max": [
+    0.5,
+    1.0
+   ]
+  },
+  "drive|trescuartos|tau=3|par": {
+   "referencia_cumple": false,
+   "mundos_que_cumplen": 0,
+   "mundos": 12,
+   "1a_referencia": 0.083,
+   "1a_mundos_min_max": [
+    0.083,
+    0.167
+   ],
+   "1b_referencia": 1.0,
+   "1b_mundos_min_max": [
+    0.5,
+    1.0
+   ]
+  },
+  "drive|trescuartos|tau=3|cadena": {
+   "referencia_cumple": false,
+   "mundos_que_cumplen": 0,
+   "mundos": 12,
+   "1a_referencia": 0.083,
+   "1a_mundos_min_max": [
+    0.083,
+    0.167
+   ],
+   "1b_referencia": 1.0,
+   "1b_mundos_min_max": [
+    0.5,
+    1.0
+   ]
+  },
+  "reves|perfil|tau=1|par": {
+   "referencia_cumple": false,
+   "mundos_que_cumplen": 2,
+   "mundos": 12,
+   "1a_referencia": 0.583,
+   "1a_mundos_min_max": [
+    0.667,
+    0.917
+   ],
+   "1b_referencia": 0.714,
+   "1b_mundos_min_max": [
+    0.75,
+    1.0
+   ]
+  },
+  "reves|perfil|tau=2|par": {
+   "referencia_cumple": false,
+   "mundos_que_cumplen": 1,
+   "mundos": 12,
+   "1a_referencia": 0.417,
+   "1a_mundos_min_max": [
+    0.5,
+    0.833
+   ],
+   "1b_referencia": 0.8,
+   "1b_mundos_min_max": [
+    0.833,
+    1.0
+   ]
+  },
+  "reves|perfil|tau=3|par": {
+   "referencia_cumple": false,
+   "mundos_que_cumplen": 1,
+   "mundos": 12,
+   "1a_referencia": 0.417,
+   "1a_mundos_min_max": [
+    0.5,
+    0.833
+   ],
+   "1b_referencia": 0.8,
+   "1b_mundos_min_max": [
+    0.833,
+    1.0
+   ]
+  },
+  "reves|trescuartos|tau=1|par": {
+   "referencia_cumple": false,
+   "mundos_que_cumplen": 1,
+   "mundos": 12,
+   "1a_referencia": 0.75,
+   "1a_mundos_min_max": [
+    0.75,
+    1.0
+   ],
+   "1b_referencia": 0.778,
+   "1b_mundos_min_max": [
+    0.6,
+    0.8
+   ]
+  },
+  "reves|trescuartos|tau=1|cadena": {
+   "referencia_cumple": false,
+   "mundos_que_cumplen": 1,
+   "mundos": 12,
+   "1a_referencia": 0.75,
+   "1a_mundos_min_max": [
+    0.75,
+    1.0
+   ],
+   "1b_referencia": 0.778,
+   "1b_mundos_min_max": [
+    0.545,
+    0.8
+   ]
+  },
+  "reves|trescuartos|tau=2|par": {
+   "referencia_cumple": false,
+   "mundos_que_cumplen": 0,
+   "mundos": 12,
+   "1a_referencia": 0.25,
+   "1a_mundos_min_max": [
+    0.417,
+    0.583
+   ],
+   "1b_referencia": 0.667,
+   "1b_mundos_min_max": [
+    0.5,
+    0.667
+   ]
+  },
+  "reves|trescuartos|tau=2|cadena": {
+   "referencia_cumple": false,
+   "mundos_que_cumplen": 0,
+   "mundos": 12,
+   "1a_referencia": 0.25,
+   "1a_mundos_min_max": [
+    0.417,
+    0.583
+   ],
+   "1b_referencia": 0.667,
+   "1b_mundos_min_max": [
+    0.429,
+    0.667
+   ]
+  },
+  "reves|trescuartos|tau=3|par": {
+   "referencia_cumple": false,
+   "mundos_que_cumplen": 0,
+   "mundos": 12,
+   "1a_referencia": 0.25,
+   "1a_mundos_min_max": [
+    0.417,
+    0.583
+   ],
+   "1b_referencia": 0.667,
+   "1b_mundos_min_max": [
+    0.5,
+    0.667
+   ]
+  },
+  "reves|trescuartos|tau=3|cadena": {
+   "referencia_cumple": false,
+   "mundos_que_cumplen": 0,
+   "mundos": 12,
+   "1a_referencia": 0.25,
+   "1a_mundos_min_max": [
+    0.417,
+    0.583
+   ],
+   "1b_referencia": 0.667,
+   "1b_mundos_min_max": [
+    0.5,
+    0.667
+   ]
+  },
+  "saque|perfil|tau=1|par": {
+   "referencia_cumple": false,
+   "mundos_que_cumplen": 0,
+   "mundos": 12,
+   "1a_referencia": 0.667,
+   "1a_mundos_min_max": [
+    0.583,
+    0.667
+   ],
+   "1b_referencia": 1.0,
+   "1b_mundos_min_max": [
+    1.0,
+    1.0
+   ]
+  },
+  "saque|perfil|tau=2|par": {
+   "referencia_cumple": false,
+   "mundos_que_cumplen": 0,
+   "mundos": 12,
+   "1a_referencia": 0.667,
+   "1a_mundos_min_max": [
+    0.5,
+    0.667
+   ],
+   "1b_referencia": 1.0,
+   "1b_mundos_min_max": [
+    1.0,
+    1.0
+   ]
+  },
+  "saque|perfil|tau=3|par": {
+   "referencia_cumple": false,
+   "mundos_que_cumplen": 0,
+   "mundos": 12,
+   "1a_referencia": 0.5,
+   "1a_mundos_min_max": [
+    0.417,
+    0.583
+   ],
+   "1b_referencia": 1.0,
+   "1b_mundos_min_max": [
+    1.0,
+    1.0
+   ]
+  },
+  "saque|trescuartos|tau=1|par": {
+   "referencia_cumple": false,
+   "mundos_que_cumplen": 0,
+   "mundos": 12,
+   "1a_referencia": 0.5,
+   "1a_mundos_min_max": [
+    0.375,
+    0.625
+   ],
+   "1b_referencia": 0.917,
+   "1b_mundos_min_max": [
+    0.818,
+    1.0
+   ]
+  },
+  "saque|trescuartos|tau=1|cadena": {
+   "referencia_cumple": false,
+   "mundos_que_cumplen": 0,
+   "mundos": 12,
+   "1a_referencia": 0.458,
+   "1a_mundos_min_max": [
+    0.333,
+    0.625
+   ],
+   "1b_referencia": 0.909,
+   "1b_mundos_min_max": [
+    0.727,
+    0.929
+   ]
+  },
+  "saque|trescuartos|tau=2|par": {
+   "referencia_cumple": false,
+   "mundos_que_cumplen": 0,
+   "mundos": 12,
+   "1a_referencia": 0.333,
+   "1a_mundos_min_max": [
+    0.167,
+    0.375
+   ],
+   "1b_referencia": 0.875,
+   "1b_mundos_min_max": [
+    0.714,
+    1.0
+   ]
+  },
+  "saque|trescuartos|tau=2|cadena": {
+   "referencia_cumple": false,
+   "mundos_que_cumplen": 0,
+   "mundos": 12,
+   "1a_referencia": 0.208,
+   "1a_mundos_min_max": [
+    0.125,
+    0.292
+   ],
+   "1b_referencia": 1.0,
+   "1b_mundos_min_max": [
+    0.6,
+    1.0
+   ]
+  },
+  "saque|trescuartos|tau=3|par": {
+   "referencia_cumple": false,
+   "mundos_que_cumplen": 0,
+   "mundos": 12,
+   "1a_referencia": 0.083,
+   "1a_mundos_min_max": [
+    0.042,
+    0.167
+   ],
+   "1b_referencia": 1.0,
+   "1b_mundos_min_max": [
+    0.5,
+    1.0
+   ]
+  },
+  "saque|trescuartos|tau=3|cadena": {
+   "referencia_cumple": false,
+   "mundos_que_cumplen": 0,
+   "mundos": 12,
+   "1a_referencia": 0.042,
+   "1a_mundos_min_max": [
+    0,
+    0.125
+   ],
+   "1b_referencia": 1.0,
+   "1b_mundos_min_max": [
+    0,
+    1.0
+   ]
+  }
+ }
+}

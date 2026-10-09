@@ -64,15 +64,37 @@ class CasoArchivo(str, Enum):
 
 @dataclass(frozen=True)
 class MarcasDeTiempo:
-    n_paquetes: int
+    """Marcas de tiempo (``pts``) de los fotogramas **visibles** de un archivo.
+
+    Visibles = los que el reproductor decodifica y muestra. Un archivo recortado puede traer fotogramas con marca negativa
+    (pre-roll anterior al inicio del recorte, que la lista de edición oculta): ``nb_frames`` de ffprobe y el ``avg_frame_rate``
+    los cuentan, OpenCV no los decodifica. Medido el 9/10/2026: un recorte de Archivos con 479 paquetes mostraba 398.
+    """
+
+    n_paquetes: int                 # fotogramas visibles (marca >= 0)
     separacion_mediana_s: float
     separacion_min_s: float
     separacion_max_s: float
-    fraccion_regular: float = 1.0  # fracción de separaciones a menos del 2 % de la mediana
+    fraccion_regular: float = 1.0   # fracción de separaciones a menos del 2 % de la mediana
+    n_preroll: int = 0              # paquetes con marca negativa, no visibles
+    fps_medio: float | None = None  # (n - 1) / (última marca - primera marca): la tasa real media de los visibles
+    # Cada separación expresada en períodos nominales (separación / mediana, redondeada): 1 = fotograma consecutivo, 3 = faltan dos.
+    intervalos_en_periodos: tuple[int, ...] = ()
 
     @property
     def fps_por_marcas(self) -> float:
+        """Tasa **nominal**: la inversa de la separación mediana (240 en un iPhone de cámara lenta, aunque se pierdan fotogramas)."""
         return 1.0 / self.separacion_mediana_s if self.separacion_mediana_s > 0 else 0.0
+
+    @property
+    def fps_real(self) -> float:
+        """Tasa **real media** de los fotogramas visibles; si no se calculó, la nominal."""
+        return self.fps_medio if self.fps_medio else self.fps_por_marcas
+
+    @property
+    def fraccion_perdida(self) -> float:
+        """Parte de los fotogramas nominales que no están (0 = ninguno perdido). Con una captura uniforme es 0."""
+        return max(0.0, 1.0 - self.fps_real / self.fps_por_marcas) if self.fps_por_marcas > 0 else 0.0
 
     @property
     def es_constante(self) -> bool:
@@ -112,11 +134,17 @@ def clasificar_caso(
     if marcas.fps_por_marcas >= FPS_MARCAS_TIEMPO_REAL:
         from app.engine.ingest import clasificar_fps, normalizar_fps
 
-        aptitud = clasificar_fps(normalizar_fps(marcas.fps_por_marcas))
+        aptitud = clasificar_fps(normalizar_fps(marcas.fps_real) if marcas.fraccion_perdida < 0.01 else marcas.fps_real)
+        detalle = (
+            f"nominal {marcas.fps_por_marcas:.0f} fps, real media {marcas.fps_real:.0f} fps "
+            f"({marcas.fraccion_perdida * 100:.0f} % de fotogramas perdidos)"
+            if marcas.fraccion_perdida >= 0.01
+            else f"{marcas.fps_por_marcas:.0f} fps"
+        )
         return ClasificacionCaso(
             CasoArchivo.TIEMPO_REAL,
-            f"las marcas de tiempo están a {marcas.fps_por_marcas:.0f} fps: tiempo real, sin cámara lenta horneada; "
-            f"por la tabla de aptitud (R1) eso es '{aptitud.value}'",
+            f"las marcas de tiempo están a {detalle}: tiempo real, sin cámara lenta horneada; "
+            f"por la tabla de aptitud (R1, con la tasa real media) eso es '{aptitud.value}'",
         )
 
     if duracion_real_s is None or duracion_real_s <= 0:
@@ -212,8 +240,29 @@ def detectar_tramos_acelerados(
 # Entrada/salida: lectura de archivos reales.
 # --------------------------------------------------------------------------------
 
+def marcas_desde_pts(pts: np.ndarray, n_preroll: int = 0) -> MarcasDeTiempo:
+    """Resume una lista de marcas de tiempo ya ordenadas y visibles. Pura (se prueba sin video)."""
+    pts = np.asarray(pts, dtype=float)
+    if pts.size < 2:
+        raise ValueError("hacen falta al menos dos fotogramas visibles")
+    dt = np.diff(pts)
+    mediana = float(np.median(dt))
+    if mediana <= 0:
+        raise ValueError("las marcas de tiempo no son crecientes")
+    regular = float(np.mean(np.abs(dt - mediana) <= TOLERANCIA_SEPARACION_REGULAR * mediana))
+    intervalos = tuple(int(x) for x in np.rint(dt / mediana))
+    fps_medio = float((pts.size - 1) / (pts[-1] - pts[0]))
+    return MarcasDeTiempo(
+        int(pts.size), mediana, float(dt.min()), float(dt.max()), regular, int(n_preroll), fps_medio, intervalos
+    )
+
+
 def marcas_de_tiempo(ruta: str | Path) -> MarcasDeTiempo:
-    """Marcas de tiempo (``pts``) de los paquetes de video, leídas con ffprobe. Lanza RuntimeError si ffprobe falla."""
+    """Marcas de tiempo (``pts``) de los fotogramas visibles, leídas con ffprobe. Lanza RuntimeError si ffprobe falla.
+
+    Visibles = marca >= 0 (los de marca negativa son pre-roll que la lista de edición oculta); verificado contra la cantidad de
+    fotogramas que decodifica OpenCV en un recorte real (398 de 479 paquetes).
+    """
     cmd = [
         "ffprobe", "-v", "error", "-select_streams", "v:0",
         "-show_entries", "packet=pts_time", "-of", "json", str(ruta),
@@ -223,13 +272,11 @@ def marcas_de_tiempo(ruta: str | Path) -> MarcasDeTiempo:
         paquetes = json.loads(salida)["packets"]
     except (FileNotFoundError, subprocess.SubprocessError, json.JSONDecodeError, KeyError) as exc:
         raise RuntimeError(f"no se pudieron leer las marcas de tiempo de {ruta}: {exc}") from exc
-    pts = np.array(sorted(float(p["pts_time"]) for p in paquetes if p.get("pts_time") not in (None, "N/A")))
-    if pts.size < 2:
-        raise RuntimeError(f"{ruta} tiene menos de dos fotogramas con marca de tiempo")
-    dt = np.diff(pts)
-    mediana = float(np.median(dt))
-    regular = float(np.mean(np.abs(dt - mediana) <= TOLERANCIA_SEPARACION_REGULAR * mediana)) if mediana > 0 else 0.0
-    return MarcasDeTiempo(int(pts.size), mediana, float(dt.min()), float(dt.max()), regular)
+    todos = np.array(sorted(float(p["pts_time"]) for p in paquetes if p.get("pts_time") not in (None, "N/A")))
+    visibles = todos[todos >= -1e-9]
+    if visibles.size < 2:
+        raise RuntimeError(f"{ruta} tiene menos de dos fotogramas visibles con marca de tiempo")
+    return marcas_desde_pts(visibles, n_preroll=int(todos.size - visibles.size))
 
 
 def energia_de_movimiento(ruta: str | Path, ancho: int = 160) -> np.ndarray:

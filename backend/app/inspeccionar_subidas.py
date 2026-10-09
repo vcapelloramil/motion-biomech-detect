@@ -97,9 +97,9 @@ def _resumir(nombre: str, tamano: int, ruta: Path, duracion_real: float | None, 
     raw = _ffprobe_completo(ruta)
     stream = (raw.get("streams") or [{}])[0]
     fmt = raw.get("format") or {}
-    fotogramas = md.nb_frames_ffprobe or md.nb_frames
-
     marcas = marcas_de_tiempo(ruta)
+    # Los fotogramas son los VISIBLES (los que decodifica el reproductor). nb_frames del contenedor puede incluir pre-roll oculto.
+    fotogramas = marcas.n_paquetes
     caso = clasificar_caso(marcas, fotogramas, duracion_real, fps_captura=fps_captura)
     tramos = detectar_tramos_acelerados(energia_de_movimiento(ruta), fps_reproduccion=marcas.fps_por_marcas)
 
@@ -111,8 +111,17 @@ def _resumir(nombre: str, tamano: int, ruta: Path, duracion_real: float | None, 
         "codec": stream.get("codec_name"),
         "perfil": stream.get("profile"),
         "resolucion": f"{md.ancho}x{md.alto}",
+        # Lo que E0 lee HOY (OpenCV). Para archivos con marcas variables o con pre-roll NO coincide con la tasa real: ver "tasa_real".
         "fps_contenedor": md.fps_declarados,
         "fotogramas": fotogramas,
+        "fotogramas_segun_el_contenedor": md.nb_frames_ffprobe or md.nb_frames,
+        "fotogramas_de_preroll_ocultos": marcas.n_preroll,
+        "tasa_real": {
+            "nominal_fps": round(marcas.fps_por_marcas, 2),
+            "real_media_fps": round(marcas.fps_real, 2),
+            "fotogramas_perdidos_pct": round(marcas.fraccion_perdida * 100, 1),
+            "intervalos_en_periodos": {str(k): v for k, v in sorted(__import__("collections").Counter(marcas.intervalos_en_periodos).items())},
+        },
         "duracion_reproducida_s": round(md.duracion_ffprobe_s or md.duracion_s, 3),
         "marcas_de_tiempo": {
             "fps_por_marcas": round(marcas.fps_por_marcas, 2),
@@ -146,9 +155,12 @@ def _veredicto(r: dict) -> str:
         else f"TRAMOS CON MUCHO MÁS MOVIMIENTO POR FOTOGRAMA (¿rampa de velocidad o manejo de la cámara?): {r['tramos_de_mucho_movimiento']}"
     )
     prod = " | ".join(f"{m}: {t}" for m, t in r["que_haria_el_sistema"].items())
-    return (f"{r['selector']}: contenedor {r['fps_contenedor']:g} fps · {r['fotogramas']} fotogramas · {r['duracion_reproducida_s']} s · "
-            f"marcas a {r['marcas_de_tiempo']['fps_por_marcas']:g} fps → {caso} · {vel}\n"
-            f"      El sistema, según lo que declares → {prod}")
+    t = r["tasa_real"]
+    return (f"{r['selector']}: {r['codec']} · E0 lee {r['fps_contenedor']:g} fps · {r['fotogramas']} fotogramas visibles "
+            f"(el contenedor dice {r['fotogramas_segun_el_contenedor']}) · {r['duracion_reproducida_s']} s\n"
+            f"      marcas de tiempo: nominal {t['nominal_fps']:g} fps, REAL MEDIA {t['real_media_fps']:g} fps "
+            f"({t['fotogramas_perdidos_pct']:g} % perdidos) → {caso} · {vel}\n"
+            f"      El sistema (con la lectura actual de E0), según lo que declares → {prod}")
 
 
 def main(argv: list[str] | None = None) -> int:

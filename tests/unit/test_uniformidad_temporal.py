@@ -149,3 +149,51 @@ def test_los_umbrales_son_parametros():
     e[200:260] *= 4  # 4x: bajo el umbral por defecto (5x)
     assert detectar_tramos_acelerados(e, _FPS) == []
     assert len(detectar_tramos_acelerados(e, _FPS, razon_minima=3.0)) == 1
+
+
+# --- Tasa real: marcas de tiempo variables (decisión 029) ----------------------------------------
+# Un recorte de Archivos (HEVC original del iPhone) trae las marcas de tiempo REALES de la captura: nominal 240 fps, pero con fotogramas
+# perdidos. Medido el 9/10/2026 sobre los fotogramas visibles: 398 fotogramas en 2,005 s = 198,9 fps medios; 88 % de los intervalos de
+# un período (4,17 ms) y 10 % de tres (12,5 ms). Estas pruebas reproducen esa estructura sin video.
+
+from app.engine.uniformidad_temporal import marcas_desde_pts
+
+
+def _pts_con_perdidos(n_intervalos: int = 397, cada: int = 10, periodo: float = 1 / 240):
+    """Marcas con un intervalo de 3 períodos cada ``cada`` (el resto de 1): el patrón medido en el archivo real."""
+    pasos = [3 if (i + 1) % cada == 0 else 1 for i in range(n_intervalos)]
+    return np.concatenate([[0.0], np.cumsum(pasos) * periodo])
+
+
+def test_la_tasa_nominal_y_la_real_media_son_distintas_si_se_pierden_fotogramas():
+    m = marcas_desde_pts(_pts_con_perdidos())
+    assert m.fps_por_marcas == pytest.approx(240.0, rel=1e-6)           # nominal: la inversa de la mediana
+    assert m.fps_real == pytest.approx(240.0 / 1.2, rel=0.01)            # real media: ~200 fps
+    assert m.fraccion_perdida == pytest.approx(1 - 1 / 1.2, abs=0.01)   # ~17 % de los fotogramas nominales
+    assert set(m.intervalos_en_periodos) == {1, 3}
+    assert not m.es_constante                                            # 10 % de intervalos irregulares
+
+
+def test_una_captura_uniforme_no_pierde_fotogramas():
+    m = marcas_desde_pts(np.arange(0, 480) / 240)
+    assert m.fps_real == pytest.approx(240.0) and m.fraccion_perdida == pytest.approx(0.0, abs=1e-9)
+    assert m.es_constante and set(m.intervalos_en_periodos) == {1}
+
+
+def test_el_preroll_se_informa_aparte_y_no_cuenta():
+    m = marcas_desde_pts(np.arange(0, 100) / 240, n_preroll=81)
+    assert m.n_paquetes == 100 and m.n_preroll == 81
+
+
+def test_la_clasificacion_de_tiempo_real_usa_la_tasa_real_media_para_r1():
+    """Nominal 240 pero 200 reales sigue siendo 'reducido' (120-239), no 'completo': la aptitud sale de lo real."""
+    c = clasificar_caso(marcas_desde_pts(_pts_con_perdidos()), 398, 2.0)
+    assert c.caso is CasoArchivo.TIEMPO_REAL
+    assert "reducido" in c.explicacion and "perdidos" in c.explicacion and "nominal 240" in c.explicacion
+
+
+def test_marcas_no_crecientes_o_insuficientes_se_rechazan():
+    with pytest.raises(ValueError):
+        marcas_desde_pts(np.array([0.0]))
+    with pytest.raises(ValueError):
+        marcas_desde_pts(np.array([0.0, 0.0, 0.0]))
