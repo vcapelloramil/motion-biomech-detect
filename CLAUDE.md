@@ -162,6 +162,9 @@ elegir** dominio propio + Brevo o Gmail dedicado). Control contra historial, dif
 remuestreo a ~120 fps con rampas de velocidad**, no 240: lo medido con él tiene las velocidades ×2 sobreestimadas y los ms ×0,5 subestimados (los ángulos no cambian). El motor **lee la tasa real de las marcas de tiempo** del
 archivo (RNF-01) y regulariza el tiempo antes de filtrar. Plan de recálculo: `docs/plan-recalculo-corpus-tasa-real.md`. Subida desde el iPhone: **Opciones → Formato: Actual** o desde Archivos.
 
+**Reglas de trabajo vigentes (Valentín, 9/10/2026):** prioridad absoluta al **flujo de punta a punta**; todo lo demás va a "Después del MVP" (nota de traspaso de `docs/bitacora.md`); **sin investigaciones nuevas**
+(se anota y se sigue). Objetivo martes 20/10, compromiso viernes 23/10, MVP completo antes del 2/11. Recálculo del corpus: solo el Paso A y después de la prueba de punta a punta.
+
 **Prioridad inmediata:** el plan de punta a punta, `docs/plan-mvp-punta-a-punta.md` (aprobado el 7/10): Etapa 5 mínima (ensamblador del
 reporte), login (7.4) y la interfaz conectada (Cargar, Procesando, Reporte simple) para probarlo desde el celular hacia el 20/10. La
 validación es **autovalidación** (grabaciones propias, sin otros usuarios); el sistema igual tiene que funcionar para cualquier usuario

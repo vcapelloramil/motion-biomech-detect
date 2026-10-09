@@ -14,7 +14,18 @@ para cualquier usuario nuevo** (registro, confirmación, login, carga y reporte)
 
 No hace falta para el 20/10: PDF, video con esqueleto, evolución, puntaje.
 
-## 1b. Estado al 9/10/2026 y fecha realista (honesto)
+## 1a. Decisiones de Valentín del 9/10/2026 (rigen sobre el resto de este documento)
+
+1. **Prioridad absoluta: el flujo de punta a punta** (registro, carga desde el celular, procesamiento en Render, reporte simple). Todo lo demás va a "Después del MVP" (bitácora, nota de traspaso). **Sin investigaciones nuevas:** se anota y se sigue.
+2. **Fechas:** se trabaja cualquier día. **Objetivo: martes 20/10. Compromiso: viernes 23/10.** MVP completo funcionando **antes del 2/11**, para que los profesores lo vean con semanas de anticipación.
+3. Entran al flujo: el **motivo de fallo propio** para archivos convertidos (con migración) y la **integración en el reporte persistido**.
+4. Recálculo del corpus: **solo el Paso A y después de la prueba de punta a punta**; el Paso B, opcional, después del MVP (`docs/plan-recalculo-corpus-tasa-real.md`).
+5. `IMG_6391` queda como está; las 6 repeticiones de la toma 02 quedan fuera.
+
+**Efecto sobre la evaluación de abajo:** con trabajo todos los días son 11 días (vie 9 a lun 19) para ~11 sesiones: el 20/10 deja de ser "margen cero por días hábiles" y pasa a ser **ajustado pero posible** (mi estimación:
+~60 % de llegar el 20/10, ~85 % el 23/10). El compromiso del 23/10 da tres días de colchón.
+
+## 1b. Estado al 9/10/2026 y fecha realista (honesto) — *escrito antes de las decisiones de 1a*
 
 **Hecho desde el 7/10** (decisiones 024–030): contrato v1.1; carga directa, estado directo y autenticación diseñadas; hosting y fuente única; correo (A/B documentados); casos a/b/c; **lectura de E0 corregida**
 (fotogramas visibles, tasa real media), **rotación de videos verticales**, **regularización temporal con trazabilidad** (R4), `procesar_video` con la tasa del archivo; diagnóstico del corpus (la escala real es ×2) y plan de recálculo.

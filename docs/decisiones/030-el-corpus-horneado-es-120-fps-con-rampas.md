@@ -87,8 +87,8 @@ Que una tasa asumida invalida las velocidades absolutas y que RNF-01 ("el sistem
 
 ## Pendiente
 
-1. **Volver a bajar `IMG_6391`** (original completo, "sin modificar"): sin él faltan 6 repeticiones de la sesión 2 (`saque|trescuartos|toma 02`).
-2. **Aprobar el plan de recálculo** (`docs/plan-recalculo-corpus-tasa-real.md`).
+1. ~~Volver a bajar `IMG_6391`~~ **Resuelto por decisión de Valentín (9/10): `IMG_6391` es un video corto en el iPhone, no se vuelve a bajar.** Las 6 repeticiones de `saque|trescuartos|toma 02` **quedan afuera** del recálculo (anotado). Discrepancia no investigada: el horneado de esa toma tiene 7011 fotogramas, que a la razón de los otros 15 pares corresponderían a ~15 200 fotogramas reales; el real trae 2503.
+2. ~~Aprobar el plan de recálculo~~ **Aprobado el 9/10:** pre-registro tal cual; **solo el Paso A y después de la prueba de punta a punta**; el Paso B, opcional, después del MVP.
 3. **Reetiquetar** `escala_temporal` en `catalogo.csv` y marcar el `factor_estimado = 8` como "supuesto; el muestreo real es ~120 fps" (fuera del repositorio).
-4. **Motivo de fallo propio** para el archivo convertido por el teléfono (migración), y la integración de la regularización en el reporte persistido (tarea 5.4): siguen pendientes.
+4. **Motivo de fallo propio** para el archivo convertido por el teléfono (migración) y la integración de la regularización en el reporte persistido (tarea 5.4): **entran al flujo de punta a punta** (decisión de Valentín, 9/10), son las piezas 1–3 del plan.
 5. **Capítulo 7**: lo registrado en `docs/tesis/correcciones-pendientes-capitulo-4.md`.

@@ -1,6 +1,10 @@
-# Plan de recálculo de los Criterios 1 y 3 con la tasa real (para aprobar — **no se recalculó nada todavía**)
+# Plan de recálculo de los Criterios 1 y 3 con la tasa real (**APROBADO el 9/10/2026 — no se recalculó nada todavía**)
 
-**Estado:** propuesta, 9/10/2026. Origen: decisión 030 (el corpus horneado es un remuestreo a ~120 fps con rampas, no 240 fps).
+> **Decisiones de Valentín (9/10):** (1) **pre-registro aprobado tal cual** (§3: umbral 0,8, mismos grupos, tolerancia en ms: primaria 8,3; sensibilidad 4,2; 12,5; 16,7). (2) **Solo el Paso A, y después de la prueba de punta a punta.**
+> (3) **El Paso B es opcional y va después del MVP.** (4) **`IMG_6391` no se vuelve a bajar** (es un video corto en el iPhone): las 6 repeticiones de la toma 02 **quedan afuera**. (5) El Capítulo 7 anota el ×2 y su corrección.
+> Lo que sigue es el plan original; donde dice "Hay que bajarlo de nuevo" o "en el orden propuesto", valen estas decisiones.
+
+**Estado:** aprobado, 9/10/2026. Origen: decisión 030 (el corpus horneado es un remuestreo a ~120 fps con rampas, no 240 fps).
 **Regla de los videos:** los archivos (originales reales, recortes, derivados) **no se suben al repositorio**. Se leen desde
 `C:\Users\valen\Desktop\corpus-originales-reales` y `kinetiq-data`; todo derivado (ventanas cortadas, poses, marcas de tiempo, miniaturas) va a `backend/.cache/`
 (ya ignorada por git) o al directorio temporal. Al repositorio solo van resultados numéricos agregados (`docs/resultados/*.json`) y código.

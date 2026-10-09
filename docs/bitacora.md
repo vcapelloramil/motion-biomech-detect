@@ -6,6 +6,83 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-09 (cierre) — NOTA DE TRASPASO (antes de /clear) · decisiones de Valentín y estado
+
+**Rama:** `main`. **Último commit de código: `18942d5`** (E0 lee fotogramas visibles y tasa real, rotación, regularización, contrato v1.1); `68df5ff` es el de documentación (decisión 030, plan de recálculo). El commit
+de esta nota es el siguiente. Árbol limpio. **Suite rápida: 366 passed.** `pytest -m requiere_supabase` **no se volvió a correr** desde el 6/10 (77 passed): el motor cambió desde entonces (`probe`, `procesar_video`); correrlo antes
+de confiar en el camino real.
+
+### Reglas de trabajo fijadas por Valentín (9/10)
+
+1. **PRIORIDAD ABSOLUTA: el flujo de punta a punta** — registro, carga desde el celular, procesamiento en Render, reporte simple. **Todo lo demás va a la lista "Después del MVP" (abajo). Nada de investigaciones nuevas:
+   si aparece algo, se anota y se sigue.**
+2. **Fechas:** se trabaja cualquier día, no solo hábiles. **Objetivo: martes 20/10. Compromiso: viernes 23/10.** El **MVP completo, funcionando antes del 2/11**, para que los profesores lo vean con semanas de anticipación.
+3. **`IMG_6391` no está incompleto:** es un video corto en el iPhone (2503 fotogramas, 12,5 s). **No se vuelve a bajar.** Las **6 repeticiones de la toma 02** (`saque|trescuartos|toma 02`, sesión 2) **quedan afuera** del recálculo. *(Anotado, no investigado: el
+   horneado de esa toma tiene 7011 fotogramas, que a la razón de los otros 15 pares corresponderían a ~15 200 reales; la fecha de creación coincide. Se deja como está por decisión de Valentín.)*
+4. **Recálculo del corpus:** **pre-registro aprobado tal cual** — umbral 0,8, mismos grupos, tolerancia en ms (**primaria 8,3; sensibilidad 4,2; 12,5; 16,7**). **Solo el Paso A, y después de la prueba de punta a punta.** El **Paso B es opcional y
+   queda después del MVP.** El **Capítulo 7 tiene que anotar el ×2 y su corrección** (ya anotado en `docs/tesis/correcciones-pendientes-capitulo-4.md`).
+5. **Entran al flujo** (no son "después"): el **motivo de fallo propio para archivos convertidos** (con migración) y la **integración en el reporte persistido**.
+
+### Qué está hecho (resumen; detalle en las entradas de abajo y en las decisiones 021–030)
+
+- **Servidor:** keep-alive, reintento y permisos por columna aplicados y verificados (77 passed el 6/10); contrato del reporte **v1.1**; E0 lee la tasa real de las marcas de tiempo y los fotogramas visibles; rotación de videos verticales;
+  regularización temporal con trazabilidad de puntos interpolados; `procesar_video` toma la tasa del archivo (`origen_factor = marcas_de_tiempo`).
+- **Subida desde el iPhone:** el camino que funciona es **Opciones → Formato: Actual** o la app **Archivos** (HEVC con marcas reales, ~200 fps medios). El formato por defecto de Fotos convierte a H.264 y baja a 100 fps o menos.
+  Página de prueba publicada: https://kinetiq-prueba-iphone.pages.dev/ (usuario de prueba ya confirmado en Supabase).
+- **Corpus:** el horneado es un remuestreo a **~120 fps con rampas**, no 240 (decisión 030): velocidades ×2 sobreestimadas, ms ×0,5 subestimados, ángulos sin cambio. Los 16 originales reales están emparejados (15 pares alineados, 88 repeticiones ubicadas).
+- **Frontend:** sigue siendo la maqueta de Lovable con datos simulados; **no hay cliente de Supabase ni de la API todavía.**
+
+### Lo que FALTA para el flujo de punta a punta, en orden (≈ 11 sesiones de ~medio día)
+
+| # | Pieza | Sesiones | Depende de |
+| --- | --- | --- | --- |
+| 1 | **Migración única** (columna `jsonb` del reporte + código de motivo de fallo para archivo convertido) y su aplicación | 0,5 | Valentín aplica la migración |
+| 2 | **Ensamblador del reporte** (E5.4 mínimo): JSON v1.1 validado, confianza por pico, vocabulario R2 (prueba automática), persistencia con la trazabilidad de la regularización | 2 | 1 |
+| 3 | **Motivo de fallo propio** en `procesar_video` y mensaje en la especificación | 0,5 | 1 |
+| 4 | **7.4:** JWT de Supabase por JWKS, chequeo de propiedad del video (404), CORS acotado, retiro del token compartido, endurecer `usuarios` | 1,5 | — |
+| 5 | **Frontend:** cliente de Supabase, sesión, Registro (con aviso de spam) y Login | 1,5 | SMTP o usuario ya confirmado |
+| 6 | **Cargar real:** formulario, **instrucción "Opciones → Actual" / Archivos antes de elegir el archivo**, subida directa, alta de sesión y video, llamada a la API | 2 | 4 |
+| 7 | **Procesando real** + reintento | 1 | 6 |
+| 8 | **Reporte simple real** | 1,5 | 2 y 7 |
+| 9 | Publicación en Cloudflare, variables, CORS en Render, **prueba con el celular** | 1 | todo |
+
+Con trabajo todos los días son **11 días hasta el martes 20/10** (vie 9 a lun 19): ~1 sesión por día, **sin colchón**; el compromiso del vie 23/10 da 3 días de margen.
+
+### Siguiente paso concreto
+
+**Pieza 1+2+3:** escribir **una sola migración** (columna `jsonb` en `reportes_biomecanicos` y el código de `motivo_fallo` para archivo convertido), avisar a Valentín para aplicarla, y construir el ensamblador del reporte y el motivo de fallo.
+Después 7.4, y recién entonces el frontend. **No tocar el corpus ni el recálculo hasta que la prueba de punta a punta pase.**
+
+### Acciones que son de Valentín (paneles y dispositivos)
+
+- Aplicar la migración de la pieza 1 en el SQL Editor y avisar.
+- **Correo:** esperar el Student Pack (opción A: dominio `.me` + Brevo); si no sale antes del 20/10, usar la B (Gmail dedicado) o crear los usuarios de prueba ya confirmados desde el panel. Confirmar el *Site URL* en Supabase al publicar el frontend.
+- Render: Free primero; pasar a Standard si la espera o los cortes molestan (decisión 023), y avisar para actualizar `render.yaml` en el mismo paso.
+- Probar desde el iPhone con **Opciones → Formato: Actual** cuando esté Cargar.
+
+### Después del MVP (no se toca hasta pasar la prueba de punta a punta y tener el MVP)
+
+- **Paso B del recálculo** (pose desde los originales reales, ~8 h) y la **decisión 031** con los resultados.
+- Reetiquetar `escala_temporal` en `catalogo.csv` (fuera del repositorio) y marcar el factor 8 como supuesto.
+- PDF y video con esqueleto (E5.5/E5.6) y el reproductor sincronizado (8.7); fotogramas clave con esqueleto **si no entran** en el flujo.
+- Puntaje de rendimiento, comparación con la sesión anterior y Evolución real; reintento desde `parcial`; control contra historial (decisión 020).
+- Biblioteca real; sesión de varios golpes y estado agregado; **eliminar cuenta y datos** (Ley 25.326) y sus objetos de Storage; recuperación al arranque (6.5); **respaldo manual con restauración probada** (7.7);
+  retención de siete días (7.6).
+- Probar "cámara lenta sin recortar" con Opciones → Actual; la rampa real que no se probó; la prueba manual de entrega del correo.
+- Capítulos 4, 6 y 7 (redacción) con `docs/tesis/correcciones-pendientes-capitulo-4.md`; autovalidación de la semana 4 (Criterios 1 a 4 con grabaciones desde el celular).
+- Los reportes de prueba ya guardados en Supabase tienen `fps_real = 240` (supuesto): sin impacto, no hay datos de usuarios; se borran con las pruebas.
+
+### Para retomar sin perder tiempo
+
+- Python del proyecto: `backend/.venv/Scripts/python.exe`, con `PYTHONPATH=backend:tests` para pytest. `ffmpeg`/`ffprobe` están en el PATH.
+- `wrangler` (Cloudflare) tiene la sesión abierta con permisos mínimos; se publica con `frontend/node_modules/.bin/wrangler.exe pages deploy …`. **`armar.py` hay que correrlo con el Python del proyecto**, o se publica la versión vieja.
+- La caché local `backend/.cache` (818 MB: miniaturas del corpus real, poses, energías) está **ignorada por git**; se puede borrar.
+- **Los videos nunca van al repositorio** (`*.mov`, `*.MOV`, `*.mp4`, `.cache/` están ignorados): antes de cada commit, `git ls-files | grep -i -E "\.(mov|mp4|npy|npz)$"` tiene que dar vacío.
+- Los originales reales están en `C:\Users\valen\Desktop\corpus-originales-reales`; no se copian.
+- Convención: decisiones en `docs/decisiones/` (no se reescriben: las correcciones se marcan con nota visible); resultados en `docs/resultados/`.
+
+---
+
 ## 2026-10-09 (noche) — Los 16 originales reales: el corpus horneado es 120 fps con rampas (decisión 030)
 
 - **Inventario de `corpus-originales-reales`:** son **16 archivos** (no 18). HEVC 1920×1080, marcas de tiempo reales, tasa real media **199,9–201,0 fps**, ninguno horneado, sin rotación. **`IMG_6391` está incompleto** (2503 fotogramas, ~15 200 esperados): hay que volver a bajarlo.
