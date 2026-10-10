@@ -7,6 +7,7 @@ API, tests/integration/test_api_analisis_e2e.py)."""
 
 from __future__ import annotations
 
+from datetime import datetime
 from types import SimpleNamespace
 
 import pytest
@@ -221,12 +222,16 @@ def test_encolar_un_pendiente_limpia_resultados_viejos_y_cuenta_el_intento(clien
     cliente, admin = cliente_con(_video(estado="pendiente", intentos=0))
     assert _post(cliente).status_code == 202
     (u,) = admin.updates
+    encolado_en = u["patch"].pop("encolado_en")  # el instante cambia en cada corrida
+    assert datetime.fromisoformat(encolado_en).tzinfo is not None  # con zona horaria (UTC)
     assert u["patch"] == {
         "estado": "encolado",
         "motivo_fallo": None,
         "fps_real": None,
         "apto_fase_rapida": None,
         "intentos": 1,
+        "inicio_procesamiento_en": None,
+        "fin_procesamiento_en": None,
     }
     # Compare-and-swap: el update solo pega si el video sigue como se leyó.
     assert u["filtros"] == {"id": "video-de-prueba", "estado": "pendiente", "intentos": 0}

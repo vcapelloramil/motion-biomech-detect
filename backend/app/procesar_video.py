@@ -81,6 +81,11 @@ BUCKET = "videos"
 _MANO_A_LADO = {"derecha": "der", "izquierda": "izq"}
 
 
+def _ahora_iso() -> str:
+    """Instante actual en UTC, para las columnas de tiempos de procesamiento (Criterio 4)."""
+    return datetime.now(timezone.utc).isoformat()
+
+
 def _rss_pico_mb() -> float | None:
     """RSS pico del proceso en MB — mismo método que ``medir_contenedor.py`` (decisión
     017), reutilizado acá para que la medición real de la tarea 4.5.4 (tiempo y memoria
@@ -234,7 +239,13 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
     # modo_captura_intentado (decisión 022): con qué declaración se intenta, para saber después si el
     # usuario la corrigió antes de reintentar.
     admin.table("videos").update(
-        {"estado": "procesando", "modo_captura_intentado": modo_captura}
+        {
+            "estado": "procesando",
+            "modo_captura_intentado": modo_captura,
+            # Tiempos (Criterio 4): una corrida nueva borra el fin de la anterior.
+            "inicio_procesamiento_en": _ahora_iso(),
+            "fin_procesamiento_en": None,
+        }
     ).eq("id", video_id).execute()
 
     t_inicio = time.monotonic()
@@ -266,6 +277,7 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
                     {
                         "estado": "fallido",
                         "motivo_fallo": codigo_motivo_fallo,
+                        "fin_procesamiento_en": _ahora_iso(),
                         "total_fotogramas": md.nb_frames,
                         "duracion_s": md.duracion_s,
                         "resolucion": f"{md.ancho}x{md.alto}",
@@ -294,6 +306,7 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
                     {
                         "estado": "fallido",
                         "motivo_fallo": motivo_convertido,
+                        "fin_procesamiento_en": _ahora_iso(),
                         "fps_real": ingesta.fps_efectivos,
                         "total_fotogramas": md.nb_frames,
                         "duracion_s": md.duracion_s,
@@ -326,6 +339,7 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
                 admin.table("videos").update(
                     {
                         "estado": "parcial",
+                        "fin_procesamiento_en": _ahora_iso(),
                         "fps_real": ingesta.fps_efectivos,
                         "total_fotogramas": md.nb_frames,
                         "duracion_s": md.duracion_s,
@@ -360,15 +374,31 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
                     fps_efectivos=ingesta.fps_efectivos,
                 )
 
+            # El conteo de paquetes visibles puede superar al de fotogramas que decodifica OpenCV (IMG_6376.mov, 9/10: 501 contra 499, los
+            # dos últimos). Solo si no coinciden se leen, mientras el archivo existe, las marcas de lo realmente decodificado.
+            pts_decodificados = None
+            if md.es_tiempo_real and md.pts_visibles is not None and len(seq.frames) != len(md.pts_visibles):
+                from app.engine.uniformidad_temporal import marcas_de_fotogramas_decodificados
+
+                pts_decodificados = marcas_de_fotogramas_decodificados(clip)
+
         # Regularización temporal (decisión 029): con marcas de tiempo reales e irregulares, las poses se interpolan a una grilla uniforme
         # ANTES del filtrado de E3, que exige muestreo uniforme. Lo que se hizo queda en `regularizacion` (R4).
         regularizacion = None
         if md.es_tiempo_real and md.pts_visibles is not None:
-            if len(seq.frames) == len(md.pts_visibles):
+            from app.engine.regularizacion import alinear_marcas
+
+            pts_alineadas, motivo_alineacion = alinear_marcas(len(seq.frames), md.pts_visibles, pts_decodificados)
+            if pts_alineadas is not None:
                 from app.engine.ingest import normalizar_fps
                 from app.engine.regularizacion import regularizar
 
-                seq, info_reg = regularizar(seq, md.pts_visibles, normalizar_fps(md.fps_nominal_marcas))
+                if motivo_alineacion != "coinciden":
+                    print(
+                        f"[procesar_video] {video_id}: {len(md.pts_visibles) - len(pts_alineadas)} paquetes visibles sin fotograma "
+                        "decodificado; se usan las marcas de los fotogramas decodificados."
+                    )
+                seq, info_reg = regularizar(seq, pts_alineadas, normalizar_fps(md.fps_nominal_marcas))
                 regularizacion = info_reg.como_dict()
                 print(
                     f"[procesar_video] {video_id}: regularización a {info_reg.fps_grilla:.0f} Hz: "
@@ -381,7 +411,7 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
                 escala_conocida = False
                 print(
                     f"[procesar_video] {video_id}: {len(seq.frames)} fotogramas decodificados y {len(md.pts_visibles)} marcas de tiempo "
-                    "visibles; no coinciden, no se regulariza (escala_temporal_conocida = false)."
+                    f"visibles; {motivo_alineacion}; no se regulariza (escala_temporal_conocida = false)."
                 )
 
         from app.engine.pipeline import procesar_e3
@@ -408,7 +438,7 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
             [s.value for s in repeticion.orden_observado]
             if repeticion and repeticion.orden_observado
             else None
-        )
+        )  # provisorio: se reemplaza por el del reporte validado (más abajo), que aplica la tolerancia de un fotograma
 
         # Reporte completo del contrato v1.1 (E5.4 mínimo): se ensambla y se VALIDA antes de tocar la base; si no cumple el
         # contrato, falla acá (queda 'fallido' con error_inesperado) y no se guarda un reporte roto.
@@ -443,6 +473,10 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
             regularizacion=regularizacion,
         )
         repeticiones_json = datos_reporte["secuenciacion"]["repeticiones"]
+        # Una sola fuente: lo que se guarda en las columnas planas y el estado final salen del reporte validado, no del motor crudo
+        # (que ordena por instantes y no conoce la tolerancia de un fotograma de la decisión 014).
+        orden_observado = repeticiones_json[0]["orden_observado"] if repeticiones_json else None
+        repeticion_auditable = bool(repeticiones_json and repeticiones_json[0]["auditable"])
 
         # reportes_biomecanicos.video_id es único: un reporte previo (resto de un intento anterior que
         # falló después de insertarlo, o una corrida manual por línea de comandos sobre un video ya
@@ -507,10 +541,11 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
                 ).execute()
                 metricas_insertadas += 1
 
-        estado_final = "completado" if (repeticion and repeticion.auditable) else "parcial"
+        estado_final = "completado" if repeticion_auditable else "parcial"
         admin.table("videos").update(
             {
                 "estado": estado_final,
+                "fin_procesamiento_en": _ahora_iso(),
                 "fps_real": ingesta.fps_efectivos,
                 "total_fotogramas": md.nb_frames,
                 "duracion_s": md.duracion_s,
@@ -543,7 +578,11 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
         # Con código (decisión 022): sin él, el fallo quedaba indistinguible de "nunca falló" o
         # arrastraba el motivo de una corrida anterior, y el reintento no sabría qué regla aplicar.
         admin.table("videos").update(
-            {"estado": "fallido", "motivo_fallo": MOTIVO_FALLO_ERROR_INESPERADO}
+            {
+                "estado": "fallido",
+                "motivo_fallo": MOTIVO_FALLO_ERROR_INESPERADO,
+                "fin_procesamiento_en": _ahora_iso(),
+            }
         ).eq("id", video_id).execute()
         raise
 

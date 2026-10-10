@@ -27,6 +27,7 @@ video con esqueleto, PDF): ``comparacion_propia = None`` y ``artefactos`` vacío
 from __future__ import annotations
 
 import math
+from collections import Counter
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Any
@@ -434,6 +435,9 @@ def ensamblar_reporte(
     # --- secuenciación
     repeticiones: list[dict[str, Any]] = []
     for r in resultados:
+        # Decisión 014/015 (corrección del 29/9): con cadera y tronco a un fotograma o menos el orden no se puede establecer, y la
+        # repetición se muestra como no auditable con ese motivo; el motor solo ordena por instantes y no conoce la tolerancia.
+        no_ordenable = _evaluar_par(r).estado == "no_ordenable"
         picos = []
         for seg in ORDEN_ESPERADO:
             p = r.picos.get(seg)
@@ -453,10 +457,16 @@ def ensamblar_reporte(
                 "indice": r.indice,
                 "desde_s": round(r.ventana.desde_s, 4),
                 "hasta_s": round(r.ventana.hasta_s, 4),
-                "auditable": bool(r.auditable),
-                "orden_observado": [s.value for s in r.orden_observado] if r.orden_observado else None,
+                "auditable": bool(r.auditable) and not no_ordenable,
+                "orden_observado": (
+                    [s.value for s in r.orden_observado] if r.orden_observado and not no_ordenable else None
+                ),
                 "correcto": _veredicto(gesto, encuadre, r),
-                "motivo_no_auditable": r.motivo_no_auditable,
+                "motivo_no_auditable": (
+                    "simultaneidad al límite de resolución: la cadera y el tronco quedaron a un fotograma o menos"
+                    if no_ordenable and not r.motivo_no_auditable
+                    else r.motivo_no_auditable
+                ),
                 # Los picos medidos se informan aunque la repetición no sea ordenable: son datos reales
                 # (y están en `metricas`); lo que queda en None es el orden y el veredicto.
                 "picos": picos,
@@ -464,10 +474,14 @@ def ensamblar_reporte(
         )
 
     correctas = sum(1 for r in resultados if _veredicto(gesto, encuadre, r))
+    # Las repeticiones auditables son las del JSON (ya sin las que no se pueden ordenar): el resumen se calcula de ahí.
+    ordenes = [tuple(rp["orden_observado"]) for rp in repeticiones if rp["auditable"] and rp["orden_observado"]]
+    predominante = Counter(ordenes).most_common(1)[0][0] if ordenes else ()
+    n_auditables = sum(1 for rp in repeticiones if rp["auditable"])
     resumen_json = {
         "repeticiones_correctas": correctas,
         "repeticiones_evaluadas": len(resultados),
-        "orden_predominante": [s.value for s in resumen.orden_predominante] if resumen.orden_predominante else [],
+        "orden_predominante": list(predominante),
         "dispersion_instante_pico_torso_ms": (
             round(resumen.dispersion_instante_pico_torso_ms, 2)
             if resumen.dispersion_instante_pico_torso_ms is not None
@@ -511,7 +525,7 @@ def ensamblar_reporte(
         "segmentacion": {
             "metodo": metodo_segmentacion,
             "repeticiones_marcadas": len(resultados),
-            "repeticiones_auditables": resumen.repeticiones_auditables,
+            "repeticiones_auditables": n_auditables,
         },
         "secuenciacion": {
             "orden_esperado": [s.value for s in ORDEN_ESPERADO],

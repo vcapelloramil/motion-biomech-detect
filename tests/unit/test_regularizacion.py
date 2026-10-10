@@ -159,3 +159,64 @@ def test_el_resumen_para_la_trazabilidad_tiene_los_conteos():
     d = info.como_dict()
     assert d["puntos_interpolados"] == 78 and d["puntos_sin_dato"] == 0 and d["fps_grilla"] == _FPS
     assert d["fotogramas_fuente"] == 398 and d["puntos_de_la_grilla"] == info.n_grilla
+
+
+# --- alinear marcas con los fotogramas decodificados (IMG_6376.mov, 9/10: 501 paquetes visibles y 499 fotogramas) -------------
+
+
+def test_alinear_marcas_con_cantidades_iguales_usa_las_de_los_paquetes():
+    from app.engine.regularizacion import alinear_marcas
+
+    pts = np.arange(10) / 240.0
+    marcas, motivo = alinear_marcas(10, pts, None)
+    assert motivo == "coinciden" and np.array_equal(marcas, pts)
+
+
+def test_alinear_marcas_cuando_el_decodificador_no_entrega_los_ultimos_paquetes():
+    """El caso medido: 501 paquetes visibles, 499 fotogramas, y las marcas decodificadas son un subconjunto exacto."""
+    from app.engine.regularizacion import alinear_marcas
+
+    paquetes = np.arange(501) / 240.0
+    decod = paquetes[:499].copy()
+    marcas, motivo = alinear_marcas(499, paquetes, decod)
+    assert motivo == "decodificados" and marcas is not None and marcas.size == 499
+    assert np.array_equal(marcas, decod)
+
+
+def test_alinear_marcas_sin_leer_las_decodificadas_no_adivina():
+    from app.engine.regularizacion import alinear_marcas
+
+    marcas, motivo = alinear_marcas(499, np.arange(501) / 240.0, None)
+    assert marcas is None and "no se pudieron leer" in motivo
+
+
+def test_alinear_marcas_exige_que_la_cantidad_decodificada_coincida():
+    from app.engine.regularizacion import alinear_marcas
+
+    marcas, motivo = alinear_marcas(499, np.arange(501) / 240.0, np.arange(500) / 240.0)
+    assert marcas is None and "no coinciden" in motivo
+
+
+def test_alinear_marcas_rechaza_marcas_que_no_son_de_ningun_paquete():
+    """Subconjunto o nada: una marca decodificada que no existe entre los paquetes impide asignar tiempo (R3)."""
+    from app.engine.regularizacion import alinear_marcas
+
+    paquetes = np.arange(20) / 240.0
+    ajenas = paquetes[:18] + 0.0005
+    marcas, motivo = alinear_marcas(18, paquetes, ajenas)
+    assert marcas is None and "no está entre los paquetes" in motivo
+
+
+def test_la_regularizacion_corre_con_las_marcas_alineadas():
+    """Con 501 paquetes y 499 fotogramas la regularización no corría (escala desconocida); alineadas, corre y cuenta lo interpolado."""
+    from app.engine.regularizacion import alinear_marcas
+
+    paquetes = _pts_con_perdidos()                      # marcas de los paquetes visibles, con fotogramas perdidos
+    decodificadas = paquetes[:-2]                       # el decodificador no entrega los dos últimos
+    seq = _secuencia(decodificadas)
+    marcas, motivo = alinear_marcas(len(seq.frames), paquetes, decodificadas)
+    assert motivo == "decodificados"
+    nueva, info = regularizar(seq, marcas, _FPS)
+    assert info.n_fuente == len(decodificadas)
+    assert info.n_interpolados > 0 and info.n_sin_dato == 0
+    assert nueva.fps_efectivos == _FPS

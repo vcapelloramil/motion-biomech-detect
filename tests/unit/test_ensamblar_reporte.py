@@ -350,3 +350,40 @@ def test_el_contrato_rechaza_un_reporte_incompleto(seq_ordenada):
             resultados=secuenciar(seq_ordenada, lado_dominante="der", ancla="torso")[0],
             resumen=secuenciar(seq_ordenada, lado_dominante="der", ancla="torso")[1], lado_dominante="der",
         )
+
+
+# --- la simultaneidad también se refleja en la repetición (decisión 015, corrección del 29/9) -----------------------
+
+
+def _ensamblar_con(seq, resultados, gesto="saque", encuadre="perfil"):
+    from app.engine.sequencing import agregar
+
+    return ensamblar_reporte(
+        reporte_id=uuid4(), video_id=uuid4(), gesto=gesto, encuadre=encuadre, creado_en=AHORA,
+        version_motor="0.4.1", backend_pose="mediapipe", modo_captura="camara_lenta_240", factor_ralentizacion=1.0,
+        origen_factor="marcas_de_tiempo", escala_temporal_conocida=True, apto_fase_rapida=True, metadatos=_md(),
+        fps_real=198.87, secuencia=seq, filtrada=procesar_e3(seq), resultados=resultados, resumen=agregar(resultados),
+        lado_dominante="der",
+    )
+
+
+def test_cadera_y_tronco_a_un_fotograma_dejan_la_repeticion_no_auditable_sin_orden(seq_ordenada):
+    """El caso del 9/10 (IMG_6376.mov con la regularización): pelvis 4,2 ms después del tronco. Antes el reporte decía
+    `auditable: true` con un orden y, a la vez, una observación de que el orden no se puede establecer."""
+    datos = _ensamblar_con(seq_ordenada, [_rep_con_picos(0.2 + 1 / 240.0, 0.2)])
+    rep = datos["secuenciacion"]["repeticiones"][0]
+    assert rep["auditable"] is False and rep["orden_observado"] is None and rep["correcto"] is None
+    assert "simultaneidad" in rep["motivo_no_auditable"]
+    assert [p["segmento"] for p in rep["picos"]] == ["pelvis", "torso", "brazo"]  # lo medido se informa igual
+    assert datos["segmentacion"]["repeticiones_auditables"] == 0
+    assert datos["secuenciacion"]["resumen"]["orden_predominante"] == []
+    assert datos["observaciones"][0]["severidad"] == "no_auditable"
+    Reporte.model_validate(datos)
+
+
+def test_con_dos_fotogramas_de_separacion_la_repeticion_sigue_siendo_auditable(seq_ordenada):
+    datos = _ensamblar_con(seq_ordenada, [_rep_con_picos(0.2, 0.2 + 2 / 240.0)])
+    rep = datos["secuenciacion"]["repeticiones"][0]
+    assert rep["auditable"] is True and rep["orden_observado"] == ["pelvis", "torso", "brazo"]
+    assert datos["segmentacion"]["repeticiones_auditables"] == 1
+    assert datos["secuenciacion"]["resumen"]["orden_predominante"] == ["pelvis", "torso", "brazo"]

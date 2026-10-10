@@ -155,6 +155,10 @@ def test_procesar_video_deja_fallido_con_el_motivo_propio_y_guarda_la_tasa_medid
     assert final["estado"] == "fallido" and final["motivo_fallo"] == "archivo_convertido"
     assert final["fps_real"] == pytest.approx(100.0) and final["apto_fase_rapida"] is False
     assert admin.inserts == []  # ni reporte ni métricas
+    # Criterio 4: el inicio queda al arrancar y el fin en la misma salida del fallo
+    inicio = [p for t, p in admin.updates if t == "videos"][0]
+    assert inicio["estado"] == "procesando" and inicio["inicio_procesamiento_en"] and inicio["fin_procesamiento_en"] is None
+    assert final["fin_procesamiento_en"] >= inicio["inicio_procesamiento_en"]
 
 
 def test_procesar_video_con_la_declaracion_normal_deja_parcial_sin_motivo(monkeypatch):
@@ -162,3 +166,4 @@ def test_procesar_video_con_la_declaracion_normal_deja_parcial_sin_motivo(monkey
     assert resultado["estado"] == "parcial"
     final = [patch for tabla, patch in admin.updates if tabla == "videos"][-1]
     assert final["estado"] == "parcial" and "motivo_fallo" not in final
+    assert final["fin_procesamiento_en"]  # también el parcial por R1 cierra el tiempo

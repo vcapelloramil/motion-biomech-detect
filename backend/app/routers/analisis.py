@@ -17,6 +17,8 @@ por el estado de origen (``app.reintento``).
 
 from __future__ import annotations
 
+from datetime import datetime, timezone
+
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status
 from postgrest.exceptions import APIError
 from supabase import Client
@@ -101,6 +103,10 @@ def procesar(
                 "fps_real": None,
                 "apto_fase_rapida": None,
                 "intentos": video["intentos"] + 1,
+                # Tiempos del Criterio 4: una corrida nueva empieza de cero.
+                "encolado_en": datetime.now(timezone.utc).isoformat(),
+                "inicio_procesamiento_en": None,
+                "fin_procesamiento_en": None,
             }
         )
         .eq("id", video_id)

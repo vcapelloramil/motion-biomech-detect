@@ -65,6 +65,32 @@ class InfoRegularizacion:
         }
 
 
+def alinear_marcas(n_fotogramas: int, pts_paquetes, pts_decodificados) -> tuple[np.ndarray | None, str]:
+    """Marcas de tiempo, una por fotograma decodificado, o ``(None, motivo)`` si no se puede asignar tiempo sin adivinar (R3).
+
+    * Las cantidades coinciden con los paquetes visibles: se usan esas marcas.
+    * No coinciden: se usan las de los fotogramas decodificados (``pts_decodificados``), pero SOLO si son exactamente
+      ``n_fotogramas`` y cada una es una marca de algún paquete visible (subconjunto). Nada se supone: no se asume que lo que
+      falta esté al final, se comprueba qué marcas existen.
+    """
+    paquetes = None if pts_paquetes is None else np.asarray(pts_paquetes, dtype=float)
+    if paquetes is not None and paquetes.size == n_fotogramas:
+        return paquetes, "coinciden"
+    if pts_decodificados is None:
+        return None, "las cantidades no coinciden y no se pudieron leer las marcas de los fotogramas decodificados"
+    decod = np.asarray(pts_decodificados, dtype=float)
+    if decod.size != n_fotogramas:
+        return None, f"se decodificaron {n_fotogramas} fotogramas y ffprobe lista {decod.size}: no coinciden"
+    if paquetes is not None and paquetes.size:
+        # cada marca decodificada tiene que ser una marca de paquete (tolerancia de 1 µs por el redondeo del texto)
+        idx = np.searchsorted(paquetes, decod)
+        idx = np.clip(idx, 1, paquetes.size - 1)
+        cerca = np.minimum(np.abs(paquetes[idx - 1] - decod), np.abs(paquetes[idx] - decod))
+        if np.any(cerca > 1e-6):
+            return None, "hay fotogramas decodificados cuya marca no está entre los paquetes visibles"
+    return decod, "decodificados"
+
+
 def _serie(frames: list[PoseFrame], espacio: str, art) -> tuple[np.ndarray, np.ndarray]:
     """(valores[n, 4] = x, y, z, confianza; validos[n]) de una articulación en un espacio ('puntos' o 'puntos_mundo')."""
     n = len(frames)

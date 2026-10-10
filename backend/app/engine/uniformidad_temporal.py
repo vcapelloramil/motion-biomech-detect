@@ -297,6 +297,28 @@ def marcas_de_tiempo_visibles(ruta: str | Path) -> MarcasDeTiempo | None:
         return None
 
 
+def marcas_de_fotogramas_decodificados(ruta: str | Path) -> np.ndarray | None:
+    """Marcas de tiempo (segundos) de los fotogramas que el decodificador REALMENTE entrega, en orden de presentación.
+
+    Las de ``marcas_de_tiempo`` salen de los paquetes del contenedor y, en un archivo real del iPhone (``IMG_6376.mov``, 9/10), dos
+    paquetes visibles —los dos últimos— no producen fotograma: 501 contra 499. Acá se decodifica con ffprobe (el mismo FFmpeg que usa
+    OpenCV). Solo se llama cuando las cantidades no coinciden, porque decodifica el archivo entero. ``None`` si ffprobe no está o falla.
+    """
+    cmd = [
+        "ffprobe", "-v", "error", "-select_streams", "v:0",
+        "-show_entries", "frame=pts_time", "-of", "json", str(ruta),
+    ]
+    try:
+        salida = subprocess.run(cmd, capture_output=True, text=True, timeout=300, check=True).stdout
+        cuadros = json.loads(salida)["frames"]
+    except (FileNotFoundError, subprocess.SubprocessError, json.JSONDecodeError, KeyError):
+        return None
+    pts = [float(c["pts_time"]) for c in cuadros if c.get("pts_time") not in (None, "N/A")]
+    if not pts:
+        return None
+    return np.array(sorted(pts))
+
+
 def energia_de_movimiento(ruta: str | Path, ancho: int = 160) -> np.ndarray:
     """Diferencia media absoluta entre fotogramas consecutivos, en gris y reducidos a ``ancho`` px de ancho."""
     import cv2

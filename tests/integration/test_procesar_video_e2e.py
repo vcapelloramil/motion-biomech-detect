@@ -171,6 +171,17 @@ def test_procesar_video_produce_reporte_real():
             .data
         )
         assert fila_video["estado"] == resultado["estado"]
+        # Criterio 4 (migración 20261010000000): el inicio y el fin del procesamiento quedan en la base.
+        tiempos = (
+            admin.table("videos")
+            .select("inicio_procesamiento_en, fin_procesamiento_en")
+            .eq("id", video["id"])
+            .single()
+            .execute()
+            .data
+        )
+        assert tiempos["inicio_procesamiento_en"] and tiempos["fin_procesamiento_en"], "falta aplicar la migración 20261010000000"
+        assert tiempos["fin_procesamiento_en"] >= tiempos["inicio_procesamiento_en"]
         assert fila_video["fps_real"] is not None
         assert fila_video["total_fotogramas"] is not None
         assert fila_video["duracion_s"] is not None
