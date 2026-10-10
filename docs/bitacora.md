@@ -6,6 +6,45 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-09 (noche, 8) — Migración de tiempos aplicada, push y despliegue verificados; pieza 8: Reporte simple real
+
+### Verificado y publicado (decisiones de Valentín, 9/10)
+
+- **Migración `20261010000000` aplicada** por Valentín. `-m requiere_supabase` completo: **84 passed**, sin fallas ni saltadas (incluye `test_procesar_video_e2e.py`, que ahora exige el reporte válido y los tiempos de procesamiento).
+- **Push de `6ab2b18`, `434427c` y `06d10d7`** a `main`. **Render sirvió el código nuevo en menos de un minuto:** un video sintético mínimo (1 s a 30 fps, declarado normal, `parcial` por R1) pasado por la API de producción
+  dejó escritos `encolado_en`, `inicio_procesamiento_en` y `fin_procesamiento_en` (6 s de punta a punta; no es un dato de latencia representativo, solo prueba que el servicio los registra).
+- **Aprobado por Valentín:** la alineación por fotogramas decodificados y el "no auditable" por simultaneidad. El dato de la cadera y el tronco a un fotograma quedó en las notas del Capítulo 7
+  (`docs/tesis/correcciones-pendientes-capitulo-4.md`, ítems 8 a 10), con los cuidados para citarlo (n = 1, límite de resolución, no es evidencia a favor ni en contra del corpus).
+- **Plan de diseño aprobado** (~2,5 días, antes de la demo): Registro e Ingreso, Cargar, Landing y Perfil, en "Antes de la demo a los profesores" del plan.
+- **`corte_hz` en `versiones_motor`:** queda para después de la prueba de punta a punta.
+
+### Pieza 8 — Reporte simple real (`/reporte/$videoId`, con el diseño nuevo; sin push)
+
+- **Nivel 1:** "Lo más importante" con **a lo sumo tres observaciones**, por importancia (alerta de carga, desvío leve, correcto, no auditable, sin evaluar), cada una con su estado en ícono y texto y su fundamento y fuente;
+  las que no entran quedan en el detalle técnico.
+- **Elemento central:** gráfico de secuenciación real (un eje temporal único con los instantes de cadera, tronco y brazo, colores de segmento de la especificación). Dibuja solo lo medido; con la escala sin confirmar no muestra
+  segundos; marca un fotograma de la **grilla del reporte** (4,2 ms a 240 Hz) para que un empate se vea como empate. Debajo, la frase en el vocabulario de R2: el orden observado, o "a N fps no se puede saber cuál fue primero,
+  así que no lo evaluamos", o "no se pudo medir".
+- **Nivel 3 plegado ("Ver detalle técnico"):** otras observaciones, trazabilidad (tasa real y nominal, fotogramas perdidos, puntos interpolados, escala, cobertura auditable, modo declarado, motor, latencia), velocidad máxima
+  por segmento con su confianza (o "no auditable" si la escala no está confirmada) y tramos no auditables.
+- **Lo que NO está y no se inventa:** puntaje de rendimiento, comparación con la sesión anterior, los "tres momentos" con fotogramas del video (todavía no se generan) y el PDF. Diferidos; la pantalla no los simula.
+- **Rutas:** la maqueta vieja pasó a `/reporte/` (índice) para que `/reporte/$videoId` sea ruta hermana; la Biblioteca y Procesando abren el reporte real.
+- **Verificado:** `bun test` 48 pasan (priorización a tres, frases, lectura defensiva del JSON, vocabulario de R2), `tsc` y eslint limpios, build OK; revisión visual en escritorio y celular con datos simulados
+  (reporte regularizado con cadera y tronco simultáneos, y uno con orden establecido). **No verificado:** con tus datos reales desde el navegador (necesita tu sesión).
+
+### Acciones de Valentín
+
+1. **Republicar el frontend** desde tu PowerShell (`bun run build` y `wrangler deploy` en `frontend/`): el sitio en vivo todavía no tiene Procesando, Biblioteca ni este reporte.
+2. **Subir un golpe nuevo** (o de nuevo `IMG_6376.mov`) con el motor nuevo: da el reporte regularizado, la latencia registrada y las pantallas reales.
+3. Con tu OK pusheo la pieza 8.
+
+### Siguiente
+
+Reporte detallado (nivel 2: reproductor y curvas, con el video con esqueleto que todavía no existe) queda para después; lo que sigue según el plan es el registro de tiempos ya hecho, la sesión de varios golpes y la
+Biblioteca con vista de sesión (semana 3), y la adaptación de las pantallas ya hechas al diseño nuevo.
+
+---
+
 ## 2026-10-09 (noche, 7) — Revisión de la prueba de punta a punta; pieza 7: Procesando y Biblioteca reales con el diseño nuevo
 
 ### Revisión de tu prueba (video `06abd72b…`, `IMG_6376.mov`, saque de perfil, `camara_lenta_240`, `completado`)

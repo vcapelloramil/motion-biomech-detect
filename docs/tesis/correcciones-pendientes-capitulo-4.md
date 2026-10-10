@@ -37,4 +37,15 @@ Registradas el 9/10/2026 con las decisiones 029 y 030. **No se redacta nada toda
    Reproducible con los scripts del repositorio y `docs/resultados/tasa-real-*.json`; los videos **no** están en el repositorio.
 7. **Si se recalcula** (plan en `docs/plan-recalculo-corpus-tasa-real.md`): Criterios 1 y 3 con el eje de tiempo real, tolerancia en milisegundos fijada de antemano, informando lado a lado contra la medición original.
 
+8. **Primera grabación propia por el flujo completo (9/10/2026): cadera y tronco a un fotograma.** Saque de perfil grabado a 240 fps nominales con el iPhone, subido con "Opciones → Formato: Actual" (`IMG_6376.mov`,
+   2,5 s, 1920×1080): tasa real media **199,6 fps** (nominal 239,98; **16,8 %** de fotogramas perdidos). Con el tiempo reacomodado a una grilla uniforme de 240 Hz (**98 de 597 puntos interpolados, 16,4 %**), el pico de
+   tronco quedó en 0,300 s y el de cadera en 0,304 s: **una separación de 4,2 ms, es decir, un fotograma de la grilla de 240 Hz (≈ 5 ms a la tasa real media de ~200 fps)**. Está dentro de la tolerancia de la decisión 014
+   (τ = 1 fotograma): el orden **no es establecible** y el reporte lo informa como "simultaneidad al límite de resolución". **Dato para la autovalidación de la semana 4 (Criterio 1)**, con tres cuidados al citarlo:
+   es **n = 1**, está **en el límite de resolución** y **no es evidencia a favor ni en contra** del orden "tronco primero" medido en el corpus. Sí ilustra el punto 3: la misma grabación, con el tiempo sin reacomodar
+   (eje uniforme sobre fotogramas perdidos), daba la cadera 10 ms antes que el tronco (2 fotogramas), un orden aparente producido por el eje irregular.
+9. **El conteo de fotogramas del contenedor puede no coincidir con el del decodificador.** En esa misma grabación, 501 paquetes visibles contra 499 fotogramas decodificados (los dos últimos no se entregan). El sistema
+   no asigna tiempo "adivinando": alinea con las marcas de los fotogramas realmente decodificados y verifica que sean un subconjunto de las del contenedor. Va al plan de pruebas de RNF-01 junto con el archivo convertido.
+10. **Latencia (Criterio 4), primer dato:** ~9 min de punta a punta en Render Free para un golpe de 2,5 s a 1080p (medido a mano); desde la migración `20261010000000` el servidor registra encolado, inicio y fin por video.
+    Detalle y método en `docs/resultados/criterio4-latencia.md`. Se informa el valor medido, sin umbral.
+
 Fuera del Capítulo 4, pero para la redacción: las limitaciones que registran las decisiones 020 (modo de captura declarado) y 022 (reintento) van a los Capítulos 6 y 7.

@@ -230,15 +230,26 @@ function TarjetaSesion({ sesion }: { sesion: SesionConVideos }) {
             <p className="text-sm text-muted-foreground">Este golpe no produjo observaciones.</p>
           )}
 
-          {primero && (
+          {primero && (reporteDe(primero)?.reporte ?? null) && !analizando ? (
             <Link
-              to="/procesando/$videoId"
+              to="/reporte/$videoId"
               params={{ videoId: primero.id }}
               className="mt-4 inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-state-ok hover:underline"
             >
-              {analizando ? "Ver progreso" : estado === "fallida" ? "Ver qué pasó" : "Ver resultado"}
+              Ver reporte
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
+          ) : (
+            primero && (
+              <Link
+                to="/procesando/$videoId"
+                params={{ videoId: primero.id }}
+                className="mt-4 inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-state-ok hover:underline"
+              >
+                {analizando ? "Ver progreso" : estado === "fallida" ? "Ver qué pasó" : "Ver detalle"}
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+            )
           )}
         </div>
       </div>

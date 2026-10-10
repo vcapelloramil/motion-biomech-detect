@@ -34,7 +34,7 @@ interface BusquedaReporte {
   demo?: false;
 }
 
-export const Route = createFileRoute("/reporte")({
+export const Route = createFileRoute("/reporte/")({
   validateSearch: (busqueda: Record<string, unknown>): BusquedaReporte => ({
     caso:
       busqueda.caso === "alterado"

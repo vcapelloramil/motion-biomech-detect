@@ -183,6 +183,16 @@ function Detalle({ video, ahora, alCambiar }: { video: VideoConReporte; ahora: n
 
           {video.estado === "fallido" && <Fallo video={video} fps={fps} alCambiar={alCambiar} />}
 
+          {(video.estado === "completado" || video.estado === "parcial") && rep?.reporte && (
+            <Link
+              to="/reporte/$videoId"
+              params={{ videoId: video.id }}
+              className="mt-6 inline-flex min-h-11 items-center rounded-xl bg-gradient-neon px-5 text-sm font-semibold text-neon-foreground"
+            >
+              Abrir el reporte
+            </Link>
+          )}
+
           {(video.estado === "completado" || video.estado === "parcial") && (
             <Resultado video={video} reporte={rep?.reporte ?? null} fps={fps} />
           )}
