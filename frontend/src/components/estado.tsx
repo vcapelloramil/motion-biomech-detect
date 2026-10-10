@@ -1,4 +1,4 @@
-import { CheckCircle2, AlertTriangle, AlertOctagon, CircleSlash } from "lucide-react";
+import { CheckCircle2, AlertTriangle, AlertOctagon, CircleSlash, CircleDashed } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /**
@@ -17,7 +17,7 @@ export const ESTADOS = {
     Icono: CheckCircle2,
     texto: "text-state-ok",
     borde: "border-state-ok/40",
-    fondo: "bg-state-ok/10",
+    fondo: "bg-state-ok-bg",
     relleno: "bg-state-ok",
   },
   desvio: {
@@ -26,7 +26,7 @@ export const ESTADOS = {
     Icono: AlertTriangle,
     texto: "text-state-warn",
     borde: "border-state-warn/40",
-    fondo: "bg-state-warn/10",
+    fondo: "bg-state-warn-bg",
     relleno: "bg-state-warn",
   },
   alerta: {
@@ -35,7 +35,7 @@ export const ESTADOS = {
     Icono: AlertOctagon,
     texto: "text-state-alert",
     borde: "border-state-alert/40",
-    fondo: "bg-state-alert/10",
+    fondo: "bg-state-alert-bg",
     relleno: "bg-state-alert",
   },
   "no-auditable": {
@@ -44,7 +44,7 @@ export const ESTADOS = {
     Icono: CircleSlash,
     texto: "text-state-none",
     borde: "border-state-none/40",
-    fondo: "bg-state-none/10",
+    fondo: "bg-state-none-bg",
     relleno: "bg-state-none",
   },
 } as const satisfies Record<Estado, unknown>;
@@ -72,6 +72,24 @@ export function EstadoBadge({
     >
       <e.Icono className="h-3 w-3 shrink-0" aria-hidden />
       {children ?? e.label}
+    </span>
+  );
+}
+
+/**
+ * "Sin evaluar" (decisión 011 y 031): un dato que se midió y se informa sin juicio. NO es un quinto estado del semáforo
+ * ni significa "no se pudo medir" (eso es "No auditable", gris). Etiqueta neutra con borde punteado, ícono y texto (R3).
+ */
+export function SinEvaluarBadge({ className }: { className?: string }) {
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center gap-1.5 rounded-full border border-dashed border-muted-foreground/50 px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground",
+        className,
+      )}
+    >
+      <CircleDashed className="h-3 w-3 shrink-0" aria-hidden />
+      Sin evaluar
     </span>
   );
 }

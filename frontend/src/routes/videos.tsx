@@ -1,291 +1,247 @@
+import { useEffect, useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import {
-  Play,
-  Calendar,
-  Repeat2,
-  Filter,
-  Search,
-  CheckCircle2,
-  CircleSlash,
-  Loader2,
-  XCircle,
-  Gauge,
-} from "lucide-react";
-import { EvolucionAtleta } from "@/components/evolucion-atleta";
-import t1 from "@/assets/video-thumb-1.jpg";
-import t2 from "@/assets/video-thumb-2.jpg";
-import t3 from "@/assets/video-thumb-3.jpg";
+import { ArrowRight, Film, Loader2, Search } from "lucide-react";
 import { RutaProtegida } from "@/components/ruta-protegida";
-import { DatosDeEjemplo } from "@/components/datos-de-ejemplo";
+import { EstadoBadge, SinEvaluarBadge } from "@/components/estado";
+import { useSesion } from "@/lib/sesion";
+import {
+  ENCUADRE_ETIQUETA,
+  GESTO_ETIQUETA,
+  contarObservaciones,
+  enCurso,
+  estadoDeSesion,
+  numero,
+  observacionesDe,
+  reporteDe,
+  type EstadoSesion,
+} from "@/lib/estado-video";
+import { listarSesiones, type SesionConVideos } from "@/lib/videos-data";
 
 export const Route = createFileRoute("/videos")({
   head: () => ({
     meta: [
-      { title: "Mis sesiones — KinetiQ" },
-      {
-        name: "description",
-        content:
-          "Sesiones de entrenamiento analizadas y evolución del atleta a lo largo del tiempo.",
-      },
+      { title: "Biblioteca — KinetiQ" },
+      { name: "description", content: "Tus sesiones cargadas, con el estado de cada análisis." },
     ],
   }),
-  // Requiere sesión (especificación §3). La barrera real son RLS y la API; esto evita mostrar datos de ejemplo a un anónimo.
   component: () => (
     <RutaProtegida>
-      <VideosPage />
+      <BibliotecaPage />
     </RutaProtegida>
   ),
 });
 
-/**
- * Estado del ANALISIS, no del jugador. Es una taxonomia distinta del semaforo de
- * auditoria (R3) y por eso vive aparte: aca se responde "en que quedo el
- * procesamiento", no "que tan bien se midio el gesto".
- * Como todo estado del sistema, nunca se comunica solo por color: icono + texto.
- */
-const ESTADOS_ANALISIS = {
-  completado: {
-    label: "Completado",
-    Icono: CheckCircle2,
-    clases: "text-state-ok border-state-ok/40 bg-state-ok/10",
-  },
-  parcial: {
-    label: "Parcial",
-    Icono: CircleSlash,
-    clases: "text-state-none border-state-none/40 bg-state-none/10",
-  },
-  procesando: {
-    label: "Procesando",
-    Icono: Loader2,
-    clases: "text-muted-foreground border-border bg-secondary/50",
-  },
-  fallido: {
-    label: "Fallido",
-    Icono: XCircle,
-    clases: "text-state-alert border-state-alert/40 bg-state-alert/10",
-  },
-} as const;
+const FILTROS = [
+  { valor: "todos", etiqueta: "Todas" },
+  { valor: "saque", etiqueta: "Saque" },
+  { valor: "drive", etiqueta: "Drive" },
+  { valor: "reves", etiqueta: "Revés" },
+] as const;
 
-type EstadoAnalisis = keyof typeof ESTADOS_ANALISIS;
+function BibliotecaPage() {
+  const { cargando: cargandoSesion } = useSesion();
+  const [sesiones, setSesiones] = useState<SesionConVideos[] | null>(null);
+  const [error, setError] = useState(false);
+  const [busqueda, setBusqueda] = useState("");
+  const [filtro, setFiltro] = useState<(typeof FILTROS)[number]["valor"]>("todos");
 
-interface Sesion {
-  thumb: string;
-  gesto: "Saque" | "Drive" | "Revés";
-  titulo: string;
-  fecha: string;
-  duracion: string;
-  repeticiones: number;
-  fps: number;
-  estado: EstadoAnalisis;
-  /** Repeticiones con cobertura auditable completa, sobre el total. */
-  auditables: number | null;
-  nota: string | null;
-}
+  useEffect(() => {
+    if (cargandoSesion) return;
+    let activo = true;
+    const leer = () =>
+      listarSesiones()
+        .then((s) => {
+          if (!activo) return;
+          setSesiones(s);
+          setError(false);
+        })
+        .catch(() => {
+          if (!activo) return;
+          setError(true);
+          setSesiones((previo) => previo ?? []);
+        });
+    void leer();
+    // Mientras haya análisis en curso la lista se actualiza sola.
+    const t = window.setInterval(() => {
+      if (document.visibilityState === "visible") void leer();
+    }, 8000);
+    return () => {
+      activo = false;
+      window.clearInterval(t);
+    };
+  }, [cargandoSesion]);
 
-const SESIONES: Sesion[] = [
-  {
-    thumb: t1,
-    gesto: "Saque",
-    titulo: "Tanda de saques plano",
-    fecha: "12 May 2026",
-    duracion: "4:12",
-    repeticiones: 6,
-    fps: 240,
-    estado: "parcial",
-    auditables: 4,
-    nota: "En 2 repeticiones no se pudo medir el instante de impacto.",
-  },
-  {
-    thumb: t2,
-    gesto: "Drive",
-    titulo: "Drive cruzado con canasto",
-    fecha: "08 May 2026",
-    duracion: "6:48",
-    repeticiones: 24,
-    fps: 240,
-    estado: "completado",
-    auditables: 24,
-    nota: null,
-  },
-  {
-    thumb: t3,
-    gesto: "Revés",
-    titulo: "Revés a una mano · paralelo",
-    fecha: "01 May 2026",
-    duracion: "5:30",
-    repeticiones: 18,
-    fps: 120,
-    estado: "completado",
-    auditables: 18,
-    nota: null,
-  },
-  {
-    thumb: t1,
-    gesto: "Saque",
-    titulo: "Tanda de saques slice",
-    fecha: "26 Abr 2026",
-    duracion: "3:55",
-    repeticiones: 16,
-    fps: 240,
-    estado: "completado",
-    auditables: 16,
-    nota: null,
-  },
-  {
-    thumb: t2,
-    gesto: "Drive",
-    titulo: "Drive paralelo con canasto",
-    fecha: "19 Abr 2026",
-    duracion: "5:02",
-    repeticiones: 22,
-    fps: 60,
-    estado: "fallido",
-    auditables: null,
-    nota: "Video grabado a 60 fps: por debajo del mínimo de 120 fps requerido.",
-  },
-  {
-    thumb: t3,
-    gesto: "Revés",
-    titulo: "Revés cortado",
-    fecha: "12 Abr 2026",
-    duracion: "4:40",
-    repeticiones: 14,
-    fps: 120,
-    estado: "procesando",
-    auditables: null,
-    nota: "Etapa 4 de 6 · Filtrado.",
-  },
-];
+  const visibles = useMemo(() => {
+    const q = busqueda.trim().toLowerCase();
+    return (sesiones ?? []).filter((s) => {
+      if (filtro !== "todos" && s.gesto !== filtro) return false;
+      if (!q) return true;
+      const texto = `${GESTO_ETIQUETA[s.gesto] ?? s.gesto} ${ENCUADRE_ETIQUETA[s.encuadre] ?? s.encuadre} ${s.fecha} ${s.atletas?.nombre ?? ""}`;
+      return texto.toLowerCase().includes(q);
+    });
+  }, [sesiones, busqueda, filtro]);
 
-function VideosPage() {
-  const analizadas = SESIONES.filter((s) => s.estado === "completado" || s.estado === "parcial");
-  const repeticiones = analizadas.reduce((acc, s) => acc + s.repeticiones, 0);
-  const rechazadas = SESIONES.filter((s) => s.estado === "fallido").length;
+  const totalGolpes = (sesiones ?? []).reduce((n, s) => n + s.videos.length, 0);
 
   return (
-    <main className="mx-auto max-w-7xl px-6 py-16">
-      <DatosDeEjemplo detalle="Las tarjetas de sesiones son una maqueta: todavía no se leen tus sesiones reales (pieza 7 del plan)." />
-      <div className="flex flex-wrap items-end justify-between gap-4">
+    <main className="mx-auto max-w-6xl px-5 py-10 md:py-14">
+      <p className="font-mono text-xs uppercase tracking-widest text-acento">/ Biblioteca</p>
+      <div className="mt-4 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
-          <div className="font-mono text-xs uppercase tracking-widest text-neon">/ Sesiones</div>
-          <h1 className="mt-3 font-display text-5xl font-bold md:text-6xl">
+          <h1 className="font-display text-4xl font-extrabold tracking-tight md:text-6xl">
             Tus <span className="text-gradient-neon">sesiones</span>
           </h1>
           <p className="mt-3 text-muted-foreground">
-            {analizadas.length} sesiones analizadas · {repeticiones} repeticiones · {rechazadas}{" "}
-            rechazada por frecuencia de captura insuficiente
+            {sesiones === null
+              ? "Cargando…"
+              : `${sesiones.length} ${sesiones.length === 1 ? "sesión" : "sesiones"} · ${totalGolpes} ${totalGolpes === 1 ? "golpe" : "golpes"}`}
           </p>
         </div>
         <Link
           to="/upload"
-          className="rounded-xl bg-gradient-neon px-5 py-3 font-display font-semibold text-neon-foreground shadow-neon"
+          className="inline-flex min-h-11 items-center justify-center rounded-xl bg-gradient-neon px-5 text-sm font-semibold text-neon-foreground shadow-neon"
         >
           + Nueva sesión
         </Link>
       </div>
 
-      {/* EVOLUCION DEL ATLETA */}
-      <div className="mt-10">
-        <EvolucionAtleta />
-      </div>
-
-      <div className="mt-12 flex flex-wrap items-center gap-3">
-        <div className="flex flex-1 items-center gap-2 rounded-xl border border-border bg-card px-4 py-2.5">
-          <Search className="h-4 w-4 text-muted-foreground" />
+      <div className="mt-8 flex flex-col gap-3 md:flex-row">
+        <label className="relative flex-1">
+          <span className="sr-only">Buscar por fecha, gesto o jugador</span>
+          <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
           <input
-            placeholder="Buscar por gesto, fecha o estado del análisis…"
-            className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+            value={busqueda}
+            onChange={(e) => setBusqueda(e.target.value)}
+            placeholder="Buscar por fecha, gesto o jugador"
+            className="min-h-11 w-full rounded-xl border border-border bg-card pl-10 pr-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
           />
-        </div>
-        <button className="flex items-center gap-2 rounded-xl border border-border bg-card px-4 py-2.5 text-sm">
-          <Filter className="h-4 w-4" /> Filtros
-        </button>
-      </div>
-
-      <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {SESIONES.map((s, i) => {
-          const e = ESTADOS_ANALISIS[s.estado];
-          const navegable = s.estado === "completado" || s.estado === "parcial";
-          const contenido = (
-            <>
-              <div className="relative aspect-video overflow-hidden">
-                <img
-                  src={s.thumb}
-                  alt={s.titulo}
-                  loading="lazy"
-                  className={`h-full w-full object-cover transition-transform group-hover:scale-105 ${
-                    navegable ? "" : "opacity-50 grayscale"
-                  }`}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/10 to-transparent" />
-                <div className="absolute left-3 top-3 rounded-md bg-background/80 px-2 py-1 font-mono text-[10px] uppercase tracking-widest text-neon backdrop-blur">
-                  {s.gesto}
-                </div>
-                <div className="absolute right-3 top-3 flex items-center gap-1 rounded-md bg-background/80 px-2 py-1 font-mono text-[10px] backdrop-blur">
-                  <Gauge className="h-3 w-3" />
-                  {s.fps} fps
-                </div>
-                <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between">
-                  {navegable && (
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-neon shadow-neon transition-transform group-hover:scale-110">
-                      <Play className="h-4 w-4 text-neon-foreground" fill="currentColor" />
-                    </div>
-                  )}
-                  <div className="ml-auto rounded-md bg-background/80 px-2 py-1 font-mono text-[10px] backdrop-blur">
-                    {s.duracion}
-                  </div>
-                </div>
-              </div>
-
-              <div className="p-4">
-                <div className="font-display font-semibold">{s.titulo}</div>
-                <div className="mt-1 flex flex-wrap items-center gap-3 font-mono text-[11px] text-muted-foreground">
-                  <span className="flex items-center gap-1">
-                    <Calendar className="h-3 w-3" />
-                    {s.fecha}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Repeat2 className="h-3 w-3" />
-                    {s.repeticiones} repeticiones
-                  </span>
-                </div>
-
-                <div className="mt-4 flex flex-wrap items-center justify-between gap-2">
-                  <span
-                    className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-widest ${e.clases}`}
-                  >
-                    <e.Icono
-                      className={`h-3 w-3 shrink-0 ${s.estado === "procesando" ? "animate-spin" : ""}`}
-                    />
-                    {e.label}
-                  </span>
-                  {s.auditables !== null && (
-                    <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                      Auditables {s.auditables} de {s.repeticiones}
-                    </span>
-                  )}
-                </div>
-
-                {s.nota && <p className="mt-3 text-xs text-muted-foreground">{s.nota}</p>}
-              </div>
-            </>
-          );
-
-          return navegable ? (
-            <Link
-              key={i}
-              to="/reporte"
-              className="group overflow-hidden rounded-2xl border border-border bg-card transition-all hover:-translate-y-1 hover:border-neon/50 hover:shadow-neon"
+        </label>
+        <div className="flex gap-2 overflow-x-auto" role="group" aria-label="Filtrar por golpe">
+          {FILTROS.map((f) => (
+            <button
+              key={f.valor}
+              type="button"
+              onClick={() => setFiltro(f.valor)}
+              aria-pressed={filtro === f.valor}
+              className={
+                "min-h-11 shrink-0 rounded-xl border px-4 text-sm font-semibold " +
+                (filtro === f.valor ? "border-border bg-secondary" : "border-border text-muted-foreground hover:text-foreground")
+              }
             >
-              {contenido}
-            </Link>
-          ) : (
-            <div key={i} className="group overflow-hidden rounded-2xl border border-border bg-card">
-              {contenido}
-            </div>
-          );
-        })}
+              {f.etiqueta}
+            </button>
+          ))}
+        </div>
       </div>
+
+      {error && (
+        <p role="alert" className="mt-6 rounded-xl border border-state-alert/40 bg-state-alert-bg px-4 py-3 text-sm">
+          No pudimos leer tus sesiones ahora. Revisá tu conexión: se vuelve a intentar solo.
+        </p>
+      )}
+
+      {sesiones === null ? (
+        <p role="status" className="mt-10 flex items-center gap-2 text-sm text-muted-foreground">
+          <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> Cargando tus sesiones…
+        </p>
+      ) : sesiones.length === 0 && !error ? (
+        <div className="mt-10 rounded-2xl border border-dashed border-border p-8 text-center">
+          <Film className="mx-auto h-8 w-8 text-muted-foreground" aria-hidden="true" />
+          <h2 className="mt-4 font-display text-xl font-bold">Todavía no cargaste ningún golpe</h2>
+          <p className="mt-2 text-sm text-muted-foreground">Subí el video de un golpe y acá vas a ver el estado del análisis y su resultado.</p>
+          <Link to="/upload" className="mt-5 inline-flex min-h-11 items-center rounded-xl bg-gradient-neon px-5 text-sm font-semibold text-neon-foreground">
+            Cargar un golpe
+          </Link>
+        </div>
+      ) : (
+        <ul className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {visibles.map((s) => (
+            <TarjetaSesion key={s.id} sesion={s} />
+          ))}
+          {visibles.length === 0 && sesiones.length > 0 && (
+            <li className="text-sm text-muted-foreground md:col-span-2 lg:col-span-3">Ninguna sesión coincide con la búsqueda.</li>
+          )}
+        </ul>
+      )}
     </main>
+  );
+}
+
+const ETIQUETA_SESION: Record<EstadoSesion, string> = {
+  en_curso: "Procesando",
+  completada: "Completado",
+  parcial: "Parcial",
+  fallida: "No se pudo",
+  vacia: "Sin golpes",
+};
+
+function TarjetaSesion({ sesion }: { sesion: SesionConVideos }) {
+  const videos = sesion.videos;
+  const estado = estadoDeSesion(videos.map((v) => v.estado));
+  const primero = videos[0];
+  const fps = numero(primero?.fps_real);
+  const fecha = new Date(sesion.fecha + "T12:00:00").toLocaleDateString("es-AR", { day: "numeric", month: "short", year: "numeric" });
+
+  // Conteo de lo observado, sumando las observaciones de los golpes con reporte.
+  const todas = videos.flatMap((v) => observacionesDe(reporteDe(v)?.reporte ?? null));
+  const c = contarObservaciones(todas);
+  const hayConteo = Object.values(c).some((n) => n > 0);
+  const analizando = videos.some((v) => enCurso(v.estado));
+
+  return (
+    <li className="overflow-hidden rounded-2xl border border-border bg-card">
+      {/* Sin miniatura real todavía: un panel neutro, no una imagen inventada. */}
+      <div className="relative flex h-36 items-center justify-center bg-gradient-to-b from-secondary to-card">
+        <Film className="h-8 w-8 text-muted-foreground/60" aria-hidden="true" />
+        <span className="absolute left-3 top-3 rounded-lg border border-border bg-background/80 px-2.5 py-1 font-mono text-[11px] text-foreground">
+          {analizando && <Loader2 className="mr-1 inline h-3 w-3 animate-spin" aria-hidden="true" />}
+          {ETIQUETA_SESION[estado]}
+        </span>
+        {fps !== null && (
+          <span className="absolute bottom-3 right-3 rounded-lg border border-border bg-background/80 px-2.5 py-1 font-mono text-[11px] uppercase tracking-widest">
+            {Math.round(fps)} fps
+          </span>
+        )}
+      </div>
+
+      <div className="p-5">
+        <h2 className="font-display text-xl font-bold">
+          {GESTO_ETIQUETA[sesion.gesto] ?? sesion.gesto} · {ENCUADRE_ETIQUETA[sesion.encuadre] ?? sesion.encuadre}
+        </h2>
+        <p className="mt-1 font-mono text-xs text-muted-foreground">
+          {fecha} · {videos.length} {videos.length === 1 ? "golpe" : "golpes"}
+          {sesion.atletas?.nombre ? ` · ${sesion.atletas.nombre}` : ""}
+        </p>
+
+        <div className="mt-4 border-t border-border pt-4">
+          {analizando ? (
+            <p className="text-sm text-muted-foreground">Analizando. El resultado aparece acá cuando esté listo.</p>
+          ) : hayConteo ? (
+            <div className="flex flex-wrap gap-2">
+              {c.correcto > 0 && <EstadoBadge estado="correcto">{c.correcto} correcto{c.correcto > 1 ? "s" : ""}</EstadoBadge>}
+              {c.desvio_leve > 0 && <EstadoBadge estado="desvio">{c.desvio_leve} desvío{c.desvio_leve > 1 ? "s" : ""} leve{c.desvio_leve > 1 ? "s" : ""}</EstadoBadge>}
+              {c.alerta_de_carga > 0 && <EstadoBadge estado="alerta">{c.alerta_de_carga} alerta{c.alerta_de_carga > 1 ? "s" : ""} de carga</EstadoBadge>}
+              {c.no_auditable > 0 && <EstadoBadge estado="no-auditable">{c.no_auditable} no auditable{c.no_auditable > 1 ? "s" : ""}</EstadoBadge>}
+              {c.sin_evaluar > 0 && <SinEvaluarBadge />}
+            </div>
+          ) : estado === "fallida" ? (
+            <p className="text-sm text-muted-foreground">No se pudo analizar. Abrí el detalle para ver qué hacer.</p>
+          ) : (
+            <p className="text-sm text-muted-foreground">Este golpe no produjo observaciones.</p>
+          )}
+
+          {primero && (
+            <Link
+              to="/procesando/$videoId"
+              params={{ videoId: primero.id }}
+              className="mt-4 inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-state-ok hover:underline"
+            >
+              {analizando ? "Ver progreso" : estado === "fallida" ? "Ver qué pasó" : "Ver resultado"}
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+          )}
+        </div>
+      </div>
+    </li>
   );
 }

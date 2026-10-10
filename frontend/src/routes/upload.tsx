@@ -138,6 +138,8 @@ function CargarPage() {
     const r = await pedirAnalisis(videoId, token);
     if (r.ok) {
       guardado.current = null;
+      // El análisis ya está en cola: se sigue desde la pantalla Procesando.
+      void navegar({ to: "/procesando/$videoId", params: { videoId } });
       return setFase("listo");
     }
     setFallo({ texto: r.texto, reenviar: r.reintentable });

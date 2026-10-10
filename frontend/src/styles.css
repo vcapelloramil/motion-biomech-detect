@@ -1,7 +1,7 @@
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
-@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap");
 
 @custom-variant dark (&:is(.dark *));
 
@@ -11,8 +11,8 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 6px);
   --radius-2xl: calc(var(--radius) + 12px);
-  --font-display: "Space Grotesk", system-ui, sans-serif;
-  --font-sans: "Inter", system-ui, sans-serif;
+  --font-display: "Sora", system-ui, sans-serif;
+  --font-sans: "DM Sans", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -45,46 +45,52 @@
 }
 
 :root {
-  --radius: 0.875rem;
-  --background: oklch(0.16 0.02 230);
-  --foreground: oklch(0.98 0.005 240);
-  --card: oklch(0.21 0.025 230);
-  --card-foreground: oklch(0.98 0.005 240);
-  --popover: oklch(0.21 0.025 230);
-  --popover-foreground: oklch(0.98 0.005 240);
-  --primary: oklch(0.84 0.22 145);
-  --primary-foreground: oklch(0.16 0.02 230);
-  --secondary: oklch(0.27 0.03 230);
-  --secondary-foreground: oklch(0.98 0.005 240);
-  --muted: oklch(0.24 0.025 230);
-  --muted-foreground: oklch(0.7 0.02 240);
-  --accent: oklch(0.7 0.18 200);
-  --accent-foreground: oklch(0.16 0.02 230);
-  --destructive: oklch(0.65 0.24 25);
-  --destructive-foreground: oklch(0.98 0.005 240);
-  --border: oklch(0.3 0.025 230);
-  --input: oklch(0.27 0.03 230);
-  --ring: oklch(0.84 0.22 145);
-  --neon: oklch(0.88 0.24 142);
-  --neon-foreground: oklch(0.16 0.02 230);
-  --clinic: oklch(0.72 0.16 195);
-  --court: oklch(0.6 0.18 145);
+  /* Especificación del frontend §2 (docs/ux/especificacion-frontend.md). Los nombres de variable no cambian: lo que ya usa
+     bg-card, border-border, text-muted-foreground, bg-gradient-neon, etc. toma los valores nuevos. */
+  --radius: 0.875rem;                 /* rounded-xl = 20 px: el radio de las tarjetas de la maqueta */
+  --background: #081015;
+  --foreground: #eaf1f5;
+  --card: #0d181e;
+  --card-foreground: #eaf1f5;
+  --popover: #0d181e;
+  --popover-foreground: #eaf1f5;
+  --primary: #4ade80;
+  --primary-foreground: #04120a;
+  --secondary: #12212a;
+  --secondary-foreground: #eaf1f5;
+  --muted: #101c23;
+  --muted-foreground: #8ea0ab;
+  --accent: #22d3ee;                  /* turquesa: rendimiento y procesamiento */
+  --accent-foreground: #04161b;
+  --destructive: #f87171;
+  --destructive-foreground: #1a0507;
+  --border: #1c2a32;
+  --input: #1c2a32;
+  --ring: #4ade80;
+  --neon: #4ade80;                    /* verde de marca: nunca comunica un estado */
+  --neon-foreground: #04120a;
+  --clinic: #22d3ee;
+  --court: #10b981;
 
-  /* Semaforo de auditoria — R3: cuatro estados, nunca solo color (siempre icono + texto) */
-  --state-ok: oklch(0.78 0.18 145);        /* Correcto */
-  --state-warn: oklch(0.8 0.15 80);        /* Desvio leve */
-  --state-alert: oklch(0.65 0.24 25);      /* Alerta de carga */
-  --state-none: oklch(0.65 0.012 235);     /* No auditable — gris neutro, ~6.5:1 sobre --card */
-  --state-none-foreground: oklch(0.16 0.02 230);
+  /* Semáforo de auditoría — R3: cuatro estados, nunca solo color (siempre ícono + texto). Cada uno con su fondo propio. */
+  --state-ok: #4ade80;                /* Correcto            sobre #0b2217 */
+  --state-warn: #fbbf24;              /* Desvío leve         sobre #221a08 */
+  --state-alert: #f87171;             /* Alerta de carga     sobre #250e10 */
+  --state-none: #b4c1ca;              /* No auditable        sobre #131e25 */
+  --state-none-foreground: #081015;
+  --state-ok-bg: #0b2217;
+  --state-warn-bg: #221a08;
+  --state-alert-bg: #250e10;
+  --state-none-bg: #131e25;
 
-  --gradient-hero: radial-gradient(ellipse at top right, oklch(0.84 0.22 145 / 0.15), transparent 60%),
-                   radial-gradient(ellipse at bottom left, oklch(0.7 0.18 200 / 0.12), transparent 55%);
-  --gradient-neon: linear-gradient(135deg, oklch(0.88 0.24 142), oklch(0.78 0.2 165));
-  --gradient-clinic: linear-gradient(135deg, oklch(0.72 0.16 195), oklch(0.6 0.2 220));
-  --shadow-neon: 0 10px 40px -10px oklch(0.84 0.22 145 / 0.5);
-  --shadow-clinic: 0 10px 40px -10px oklch(0.72 0.16 195 / 0.45);
-  --shadow-elevated: 0 20px 60px -20px oklch(0 0 0 / 0.5);
-  --grid-line: oklch(0.3 0.025 230 / 0.4);
+  --gradient-hero: radial-gradient(ellipse at top right, rgb(74 222 128 / 0.12), transparent 60%),
+                   radial-gradient(ellipse at bottom left, rgb(34 211 238 / 0.10), transparent 55%);
+  --gradient-neon: linear-gradient(135deg, #4ade80, #10b981);
+  --gradient-clinic: linear-gradient(135deg, #22d3ee, #0891b2);
+  --shadow-neon: 0 10px 40px -10px rgb(74 222 128 / 0.45);
+  --shadow-clinic: 0 10px 40px -10px rgb(34 211 238 / 0.4);
+  --shadow-elevated: 0 20px 60px -20px rgb(0 0 0 / 0.5);
+  --grid-line: rgb(255 255 255 / 0.035);
 }
 
 @layer base {
@@ -101,7 +107,7 @@
     background-image:
       linear-gradient(var(--grid-line) 1px, transparent 1px),
       linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-    background-size: 56px 56px;
+    background-size: 72px 72px;
     background-attachment: fixed;
   }
   h1, h2, h3, h4 {
@@ -112,6 +118,11 @@
 
 @layer utilities {
   .bg-hero-glow { background-image: var(--gradient-hero); }
+  .bg-state-ok-bg { background-color: var(--state-ok-bg); }
+  .bg-state-warn-bg { background-color: var(--state-warn-bg); }
+  .bg-state-alert-bg { background-color: var(--state-alert-bg); }
+  .bg-state-none-bg { background-color: var(--state-none-bg); }
+  .text-acento { color: var(--accent); }
   .bg-gradient-neon { background-image: var(--gradient-neon); }
   .bg-gradient-clinic { background-image: var(--gradient-clinic); }
   .shadow-neon { box-shadow: var(--shadow-neon); }
@@ -129,12 +140,12 @@
     color: transparent;
   }
   .glass {
-    background: oklch(0.21 0.025 230 / 0.6);
+    background: rgb(8 16 21 / 0.78);
     backdrop-filter: blur(14px);
-    border: 1px solid oklch(1 0 0 / 0.06);
+    border-bottom: 1px solid var(--border);
   }
   .neon-ring {
-    box-shadow: 0 0 0 1px oklch(0.84 0.22 145 / 0.4), 0 0 30px -5px oklch(0.84 0.22 145 / 0.5);
+    box-shadow: 0 0 0 1px rgb(74 222 128 / 0.4), 0 0 30px -5px rgb(74 222 128 / 0.5);
   }
   @keyframes pulse-dot {
     0%, 100% { opacity: 1; transform: scale(1); }

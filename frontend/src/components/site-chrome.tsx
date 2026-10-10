@@ -5,27 +5,33 @@ import { useSesion } from "@/lib/sesion";
 
 export function Header() {
   const { sesion, cargando, nombre, cerrarSesion } = useSesion();
-  const links = [
-    { to: "/", label: "Inicio" },
-    { to: "/upload", label: "Cargar" },
-    { to: "/reporte", label: "Reporte" },
-    { to: "/videos", label: "Sesiones" },
-    { to: "/tecnologia", label: "Tecnología" },
-  ] as const;
+  // Especificación §3: sin sesión, Landing y Tecnología; con sesión, Biblioteca · Cargar · Perfil.
+  const links = (
+    sesion
+      ? [
+          { to: "/videos", label: "Biblioteca" },
+          { to: "/upload", label: "Cargar" },
+          { to: "/profile", label: "Perfil" },
+        ]
+      : [
+          { to: "/", label: "Inicio" },
+          { to: "/tecnologia", label: "Tecnología" },
+        ]
+  ) as { to: "/" | "/videos" | "/upload" | "/profile" | "/tecnologia"; label: string }[];
 
   return (
     <header className="sticky top-0 z-50 glass">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-y-2 px-4 py-3 md:px-6 md:py-4">
         <Link to="/" className="flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-neon shadow-neon">
             <Activity className="h-5 w-5 text-neon-foreground" strokeWidth={2.5} />
           </div>
           <div className="leading-tight">
             <div className="font-display text-lg font-bold">KinetiQ</div>
-            <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">tennis · vision · ai</div>
+            <div className="hidden font-mono text-[10px] uppercase tracking-widest text-muted-foreground sm:block">tennis · vision · ai</div>
           </div>
         </Link>
-        <nav className="hidden items-center gap-1 lg:flex">
+        <nav className="order-3 flex w-full items-center justify-center gap-1 md:order-none md:w-auto" aria-label="Principal">
           {links.map((l) => (
             <Link
               key={l.to}
@@ -44,8 +50,8 @@ export function Header() {
               <Link to="/upload" className="hidden rounded-md bg-gradient-neon px-4 py-2 text-sm font-semibold text-neon-foreground shadow-neon transition-transform hover:scale-105 md:block">
                 Subir video
               </Link>
-              <Link to="/profile" className="flex items-center gap-2 rounded-full border border-border p-1 pr-3 transition-colors hover:border-neon/50">
-                <img src={avatar} alt="Perfil" className="h-7 w-7 rounded-full object-cover" />
+              <Link to="/profile" className="flex items-center gap-2 rounded-full border border-border p-1 sm:pr-3 transition-colors hover:border-neon/50" aria-label={`Perfil de ${nombre ?? "tu cuenta"}`}>
+                <img src={avatar} alt="" className="h-7 w-7 rounded-full object-cover" />
                 <span className="hidden font-mono text-xs text-muted-foreground sm:inline">{nombre}</span>
               </Link>
               <button
