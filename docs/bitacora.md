@@ -6,6 +6,60 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-09 (noche, 7) — Revisión de la prueba de punta a punta; pieza 7: Procesando y Biblioteca reales con el diseño nuevo
+
+### Revisión de tu prueba (video `06abd72b…`, `IMG_6376.mov`, saque de perfil, `camara_lenta_240`, `completado`)
+
+**Lo que cerraba:** el reporte guardado **valida contra el contrato v1.2**; la tasa real leída fue **199,63 fps** (nominal 239,98, 16,8 % de fotogramas perdidos, `origen_factor = marcas_de_tiempo`, `factor = 1`);
+el filtro fue Butterworth de fase cero de 4.º orden con corte de 7 Hz; 3 observaciones y el veredicto de la decisión 031 aplicado (saque de perfil tiene veredicto).
+
+**Lo que NO cerraba (y corregí):**
+
+1. **No se regularizó (`regularizacion: null`) y la escala quedó sin confirmar.** Causa exacta: `probe()` contó **501** fotogramas visibles (por paquetes del contenedor) y el decodificador entregó **499**
+   (los dos últimos paquetes no producen fotograma). La comprobación de igualdad falló, y el motor —correctamente— no asignó tiempo "adivinando". Consecuencia: las velocidades salieron `null` y el orden se calculó con un eje de
+   tiempo que tomaba el archivo como uniforme.
+   **Arreglo:** `alinear_marcas` (función pura): si las cantidades no coinciden se leen las marcas de los fotogramas realmente decodificados (`ffprobe -show_frames`) y **solo** se usan si son exactamente N y cada una es una marca
+   de algún paquete visible. Nada se supone. Con el mismo archivo ahora: 499 fuente → 597 puntos de grilla, **98 interpolados (16,4 %)**, 0 sin dato, **escala conocida**, velocidades auditables.
+2. **El orden cadera/tronco dependía del eje de tiempo mal asignado.** Sin regularizar daba cadera 10 ms antes que el tronco (2 fotogramas, "correcto"). **Regularizado, el tronco queda en 0,300 s y la cadera en 0,304 s: 4,2 ms,
+   un fotograma, dentro de la tolerancia** (decisión 014): no ordenable. Es lo que la decisión 015 anticipaba (picos de pelvis y torso "casi siempre a 0–3 fotogramas"). **No confirma ni refuta** el orden `tp` del corpus: n = 1 y
+   justo en el límite de resolución. Coincide en el sentido (tronco ≤ cadera) pero no es evidencia.
+3. **El reporte se contradecía:** marcaba la repetición `auditable: true` con un `orden_observado`, y a la vez la observación decía que el orden no se puede establecer. Ahora, con cadera y tronco a un fotograma o menos,
+   la repetición sale **no auditable, sin orden, con motivo "simultaneidad al límite de resolución"** (decisión 015), conserva los picos medidos y el video queda `parcial`.
+4. **Menor, sin cambiar:** `versiones_motor.parametros_dsp.corte_hz` quedó en 6,0 (de la primera corrida que creó la fila) y esta fue de 7,0. Esa fila es por versión del motor, no por análisis; el valor correcto está en el reporte.
+   Conviene sacar `corte_hz` de ahí (anotado, no urgente).
+
+**Criterio 4 (latencia):** el tiempo **no se guardaba en ningún lado** (solo en el log de Render). Datos que sí hay: ~9 min que mediste vos, y el reporte creado 16 min después del alta del video (incluye el intento fallido por CORS).
+**Migración nueva `20261010000000_tiempos_de_procesamiento.sql`** (`encolado_en`, `inicio_procesamiento_en`, `fin_procesamiento_en`); la API y el procesamiento ya las escriben. Primer dato manual registrado en
+`docs/resultados/criterio4-latencia.md`. **Hay que aplicar la migración ANTES de desplegar este código**: sin ella, la API falla al encolar.
+
+### Diseño
+
+- **Antes de esta entrada:** el frontend publicado era el diseño viejo de Lovable (Space Grotesk / Inter, paleta oklch, grilla de 56 px).
+- **Ahora los tokens globales son los de la especificación §2** (Sora, DM Sans, JetBrains Mono; `#081015`, tarjetas `#0d181e` con borde `#1c2a32` de 20 px, grilla de 72 px, verde `#4ade80 → #10b981`, turquesa `#22d3ee`, los cuatro
+  estados con su fondo propio y "sin evaluar" con borde punteado). Todas las pantallas lo heredan sin tocarlas.
+- **Construidas desde las maquetas:** Procesando y Biblioteca, y el menú por sesión (§3: Biblioteca · Cargar · Perfil). **Con tokens nuevos pero diseño viejo:** Registro, Ingreso, Cargar, Landing, Tecnología, Perfil y el reporte
+  simulado. Estimación para adaptarlas en el plan ("Antes de la demo a los profesores").
+
+### Pieza 7 (sin push: depende de la migración)
+
+- **Procesando** (`/procesando/$videoId`): consulta el estado cada 5 s y se detiene al terminar; pasos Subido · En cola · Analizando · Listo; tiempo transcurrido; descripción de lo que hace el análisis **sin marcar etapas como
+  hechas** (el servidor no informa la etapa: R3); mensajes por `motivo_fallo` (`archivo_convertido` con el camino "Opciones → Formato: Actual" y la tasa medida; `modo_captura_incompatible` con corrección de la declaración;
+  `error_inesperado` con contador y reintento) y resultado con observaciones (cuatro estados + "sin evaluar") y trazabilidad. Aviso de que se puede cerrar la página.
+- **Biblioteca** (`/videos`, real): sesiones del usuario con estado, fps, conteo de observaciones por estado, filtros por golpe y búsqueda; se actualiza sola mientras hay análisis en curso. Sin puntaje de rendimiento ni miniatura
+  (diferidos / no generadas): no se inventan.
+- **Cargar** ahora lleva a Procesando al enviar.
+- **Verificado:** `bun test` 37 pasan, `tsc` y eslint limpios, build OK; suite rápida del servidor **455 passed**. Revisión visual en el navegador con la sesión y las respuestas **simuladas** (con el reporte real de tu prueba):
+  Biblioteca, Procesando (completado, en curso, fallido por archivo convertido) en escritorio y en celular (375 px). El encabezado se apretaba en celular y se corrigió.
+- **No verificado:** el flujo con datos reales desde el navegador (necesita tu sesión), y las pruebas de integración que usan las columnas de tiempo (fallan hasta aplicar la migración).
+
+### Acciones de Valentín
+
+1. **Aplicar `supabase/migrations/20261010000000_tiempos_de_procesamiento.sql`** y avisar. Después corro `test_procesar_video_e2e.py` y `-m requiere_supabase`.
+2. Con tu OK pusheo y Render redespliega; **después** republicás el frontend desde tu PowerShell.
+3. Subir de nuevo `IMG_6376.mov` (o un golpe nuevo) con el código nuevo para ver el resultado regularizado y la latencia registrada.
+
+---
+
 ## 2026-10-09 (noche, 6) — Frontend publicado en Cloudflare Workers; pieza 6: Cargar real y marca "Datos de ejemplo"
 
 ### Publicación (decisión 026, mecanismo definido)

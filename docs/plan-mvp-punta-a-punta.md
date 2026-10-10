@@ -149,6 +149,13 @@ Cambio de alcance del 7/10: **no hay pruebas con otros usuarios; se mide con gra
 
 - **Validar el veredicto del saque de perfil** con el Paso A y las grabaciones nuevas (decisión 031).
 - **"Olvidé mi contraseña"** en `/ingreso`; se prueba cuando haya dominio y correo propio (decisión 027).
+- **Adaptar al diseño nuevo las pantallas ya hechas** (decisión de Valentín, 9/10): Registro, Ingreso y Cargar siguen el diseño de las maquetas de `docs/ux/maquetas/` y de la especificación §2.
+  Hoy tienen los **tokens** nuevos (colores, tipografías Sora / DM Sans / JetBrains Mono, tarjetas de 20 px, grilla de 72 px, etiquetas de estado) pero **no el diseño**:
+  - **Registro e Ingreso** (`Registro`): composición en dos columnas (texto de marca a la izquierda, formulario en tarjeta a la derecha), roles como tarjetas con su descripción en lugar del selector, y el texto de privacidad de la maqueta. ~1 sesión.
+  - **Cargar** (`Cargar`, `CargarMovil`): selectores segmentados, selección de varios videos con una fila por archivo (estado, tamaño, duración, aviso), paneles laterales ("Cómo recortar", "Antes de grabar", "Tu privacidad"),
+    barra de resumen con "Analizar N golpes" y la versión móvil. Incluye el alta de varios golpes en una sesión. ~2 sesiones.
+  - **Landing** (`Main`) y **Perfil** (`Perfil`): ~1 sesión cada una (Perfil se conecta a datos reales en la semana 3).
+  - Las pantallas nuevas (Procesando, Biblioteca, Reporte simple) ya se construyen directamente con el diseño nuevo.
 
 ### Diferido (fuera del MVP de punta a punta; si el tiempo aprieta, se recorta en este orden: primero lo primero de la lista)
 
