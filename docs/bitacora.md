@@ -6,6 +6,23 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-09 (cierre del día) — NOTA DE TRASPASO corta
+
+**Estado:** `main` en `ccdda0f` (pusheado), árbol limpio. Servidor desplegado en Render con el motor nuevo (alineación por fotogramas decodificados, "no auditable" por simultaneidad, tiempos de procesamiento).
+**El frontend publicado** (https://kinetiq.v-capelloramil.workers.dev, republicado por Valentín) **ya tiene Procesando, Biblioteca y Reporte simple**, además de Registro, Ingreso y Cargar.
+
+**Lo que falta al volver (Valentín):** la **prueba completa desde el celular con un golpe nuevo** — registrarse o ingresar, Cargar con "Opciones → Formato: Actual", y verificar el **motor nuevo** (resultado
+**regularizado**, escala conocida, orden cadera/tronco con su motivo) y la **latencia registrada** (`encolado_en`, `inicio_procesamiento_en`, `fin_procesamiento_en` en `videos`; se ve en Procesando y en el detalle del reporte).
+Cualquier falla de esa prueba pasa antes que lo demás.
+
+**Después, en este orden** (todo en la bitácora de hoy y en `docs/plan-mvp-punta-a-punta.md`): adaptar Registro/Ingreso, Cargar, Landing y Perfil al diseño nuevo (~2,5 días, antes de la demo); "Olvidé mi contraseña";
+**validar el veredicto del saque de perfil** con el Paso A y las grabaciones nuevas (bloqueante de la demo, no del flujo); `corte_hz` fuera de `versiones_motor`; semana 3 (sesión de varios golpes, eliminar cuenta y datos, respaldo).
+
+**Ya resuelto, para no repetirlo:** `KINETIQ_API_TOKEN` borrado de Render; `KINETIQ_CORS_ORIGINS` cargado; migraciones aplicadas hasta `20261010000000`; Wrangler se usa desde la PowerShell de Valentín (`bun run build` y
+`wrangler deploy` en `frontend/`; el login visible desde esta sesión no refleja los scopes de Workers).
+
+---
+
 ## 2026-10-09 (noche, 8) — Migración de tiempos aplicada, push y despliegue verificados; pieza 8: Reporte simple real
 
 ### Verificado y publicado (decisiones de Valentín, 9/10)
