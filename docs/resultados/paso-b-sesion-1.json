@@ -1,0 +1,1746 @@
+{
+ "generado_utc": "2026-10-12T22:05:38+00:00",
+ "decision": "032 y 035 / plan de recálculo §2 (Paso B)",
+ "sesion": 1,
+ "rol": "RÉPLICA EXPLORATORIA (no independiente)",
+ "version_motor": "0.5.0",
+ "commit": "f94aa56721ea9bac8d8921e40322716739e83c6a",
+ "arbol_sucio": false,
+ "origen": "originales del iPhone a tasa real, regularizados a 240 Hz",
+ "umbral": 0.8,
+ "tolerancia_primaria_ms": 8.333333333333334,
+ "excluidas": [
+  {
+   "repeticion": "20260924_VCR_saque_perfil_240_01_rep01.mov",
+   "motivo": "empieza en la rampa de velocidad"
+  },
+  {
+   "repeticion": "20260925_VCR_reves_perfil_240_02_rep01.mov",
+   "motivo": "empieza en la rampa de velocidad"
+  }
+ ],
+ "repeticiones_medidas": 11,
+ "repeticiones_previstas": 35,
+ "repeticiones": [
+  {
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 4.354166666666667,
+    "t": 4.3375,
+    "b": 4.529166666666667
+   },
+   "corte_hz": 8.0,
+   "delta_torso_menos_pelvis_ms": -16.666666666666607,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.8886789135301925,
+    "desfase_ms": -12.5,
+    "correlacion_en_el_desfase": 0.9288500594246205
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 4.366666666666666,
+      "t": 4.341666666666667,
+      "b": 4.479166666666667
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 4.354166666666667,
+      "t": 4.341666666666667,
+      "b": 4.529166666666667
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 4.354166666666667,
+      "t": 4.3375,
+      "b": 4.529166666666667
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 4.354166666666667,
+      "t": 4.333333333333333,
+      "b": 4.116666666666666
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 4.354166666666667,
+      "t": 4.333333333333333,
+      "b": 4.120833333333334
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 4.35,
+     "t": 4.341666666666667,
+     "b": null
+    },
+    "valida": true
+   },
+   "clip": "20260924_VCR_saque_perfil_240_01_rep02.mov",
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "toma": "01",
+   "real": "IMG_6374.MOV",
+   "regularizacion": {
+    "fotogramas_fuente": 1096,
+    "puntos_de_la_grilla": 1314,
+    "puntos_copiados": 1096,
+    "puntos_interpolados": 218,
+    "puntos_interpolados_pct": 16.59,
+    "puntos_sin_dato": 0,
+    "fps_grilla": 240.0,
+    "fps_real_medio": 200.137,
+    "hueco_maximo_ms": 12.5
+   }
+  },
+  {
+   "valida": false,
+   "motivo": "sin ancla: pico de torso no auditable (velocidad implausible (2782 °/s > techo 2610): probable error de detección)",
+   "instantes_s": {
+    "p": null,
+    "t": null,
+    "b": null
+   },
+   "corte_hz": 9.0,
+   "delta_torso_menos_pelvis_ms": null,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.9679683305532996,
+    "desfase_ms": 0.0,
+    "correlacion_en_el_desfase": 0.9679683305532996
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 1.4208333333333334,
+      "t": 1.4125,
+      "b": 1.5416666666666667
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": null,
+      "t": 1.4166666666666667,
+      "b": 1.5416666666666667
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": null,
+      "t": 1.4208333333333334,
+      "b": 1.5291666666666666
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": null,
+      "t": null,
+      "b": null
+     },
+     "valida": false
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": null,
+      "t": null,
+      "b": null
+     },
+     "valida": false
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 1.4208333333333334,
+     "t": 1.4208333333333334,
+     "b": null
+    },
+    "valida": true
+   },
+   "clip": "20260924_VCR_saque_perfil_240_01_rep03.mov",
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "toma": "01",
+   "real": "IMG_6374.MOV",
+   "regularizacion": {
+    "fotogramas_fuente": 709,
+    "puntos_de_la_grilla": 848,
+    "puntos_copiados": 708,
+    "puntos_interpolados": 140,
+    "puntos_interpolados_pct": 16.51,
+    "puntos_sin_dato": 0,
+    "fps_grilla": 240.0,
+    "fps_real_medio": 200.377,
+    "hueco_maximo_ms": 12.5
+   }
+  },
+  {
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 1.7791666666666666,
+    "t": 1.7583333333333333,
+    "b": 1.9333333333333333
+   },
+   "corte_hz": 7.0,
+   "delta_torso_menos_pelvis_ms": -20.833333333333258,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.9241775377927136,
+    "desfase_ms": -20.833333333333332,
+    "correlacion_en_el_desfase": 0.9749653124414611
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 1.8,
+      "t": 1.775,
+      "b": 1.9333333333333333
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 1.7916666666666667,
+      "t": 1.7666666666666666,
+      "b": 1.9333333333333333
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 1.7666666666666666,
+      "t": 1.7541666666666667,
+      "b": 1.7
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 1.7583333333333333,
+      "t": 1.75,
+      "b": 1.7083333333333333
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 1.7583333333333333,
+      "t": 1.7541666666666667,
+      "b": 1.7125
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 1.7833333333333334,
+     "t": 1.7583333333333333,
+     "b": null
+    },
+    "valida": true
+   },
+   "clip": "20260924_VCR_saque_perfil_240_01_rep04.mov",
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "toma": "01",
+   "real": "IMG_6374.MOV",
+   "regularizacion": {
+    "fotogramas_fuente": 618,
+    "puntos_de_la_grilla": 738,
+    "puntos_copiados": 618,
+    "puntos_interpolados": 120,
+    "puntos_interpolados_pct": 16.26,
+    "puntos_sin_dato": 0,
+    "fps_grilla": 240.0,
+    "fps_real_medio": 200.895,
+    "hueco_maximo_ms": 12.5
+   }
+  },
+  {
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 2.2083333333333335,
+    "t": 2.175,
+    "b": 2.3666666666666667
+   },
+   "corte_hz": 8.0,
+   "delta_torso_menos_pelvis_ms": -33.333333333333655,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.8534401827321778,
+    "desfase_ms": -25.0,
+    "correlacion_en_el_desfase": 0.940875024442131
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 2.2041666666666666,
+      "t": 2.1791666666666667,
+      "b": 2.308333333333333
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 2.2,
+      "t": 2.175,
+      "b": 2.35
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 2.2083333333333335,
+      "t": 2.175,
+      "b": 2.3666666666666667
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 2.2291666666666665,
+      "t": 2.1666666666666665,
+      "b": 2.375
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 2.2291666666666665,
+      "t": 2.1666666666666665,
+      "b": 2.375
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 2.2041666666666666,
+     "t": 2.1791666666666667,
+     "b": null
+    },
+    "valida": true
+   },
+   "clip": "20260924_VCR_saque_perfil_240_01_rep05.mov",
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "toma": "01",
+   "real": "IMG_6374.MOV",
+   "regularizacion": {
+    "fotogramas_fuente": 740,
+    "puntos_de_la_grilla": 888,
+    "puntos_copiados": 740,
+    "puntos_interpolados": 148,
+    "puntos_interpolados_pct": 16.67,
+    "puntos_sin_dato": 0,
+    "fps_grilla": 240.0,
+    "fps_real_medio": 199.932,
+    "hueco_maximo_ms": 12.5
+   }
+  },
+  {
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 2.504166666666667,
+    "t": 2.5,
+    "b": 2.375
+   },
+   "corte_hz": 6.0,
+   "delta_torso_menos_pelvis_ms": -4.166666666666874,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.9659618055561889,
+    "desfase_ms": -8.333333333333334,
+    "correlacion_en_el_desfase": 0.9741964895009322
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 2.5083333333333333,
+      "t": 2.504166666666667,
+      "b": 2.5791666666666666
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 2.504166666666667,
+      "t": 2.5,
+      "b": 2.375
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 2.504166666666667,
+      "t": 2.495833333333333,
+      "b": 2.3958333333333335
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 2.5,
+      "t": 2.4916666666666667,
+      "b": 2.404166666666667
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 2.495833333333333,
+      "t": 2.4916666666666667,
+      "b": 2.408333333333333
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 2.5,
+     "t": 2.5,
+     "b": null
+    },
+    "valida": true
+   },
+   "clip": "20260924_VCR_saque_perfil_240_01_rep06.mov",
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "toma": "01",
+   "real": "IMG_6374.MOV",
+   "regularizacion": {
+    "fotogramas_fuente": 768,
+    "puntos_de_la_grilla": 922,
+    "puntos_copiados": 768,
+    "puntos_interpolados": 154,
+    "puntos_interpolados_pct": 16.7,
+    "puntos_sin_dato": 0,
+    "fps_grilla": 240.0,
+    "fps_real_medio": 199.848,
+    "hueco_maximo_ms": 12.5
+   }
+  },
+  {
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 2.529166666666667,
+    "t": 2.525,
+    "b": 2.5791666666666666
+   },
+   "corte_hz": 9.0,
+   "delta_torso_menos_pelvis_ms": -4.166666666666874,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.9477012940792102,
+    "desfase_ms": -4.166666666666667,
+    "correlacion_en_el_desfase": 0.9489505185162197
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 2.533333333333333,
+      "t": 2.55,
+      "b": 2.7666666666666666
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 2.529166666666667,
+      "t": 2.533333333333333,
+      "b": 2.754166666666667
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 2.529166666666667,
+      "t": 2.525,
+      "b": 2.5791666666666666
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 2.533333333333333,
+      "t": 2.5125,
+      "b": 2.5791666666666666
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 2.533333333333333,
+      "t": 2.504166666666667,
+      "b": 2.5791666666666666
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 2.529166666666667,
+     "t": 2.5166666666666666,
+     "b": null
+    },
+    "valida": true
+   },
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep01.mov",
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "real": "IMG_6376.MOV",
+   "regularizacion": {
+    "fotogramas_fuente": 747,
+    "puntos_de_la_grilla": 901,
+    "puntos_copiados": 747,
+    "puntos_interpolados": 154,
+    "puntos_interpolados_pct": 17.09,
+    "puntos_sin_dato": 0,
+    "fps_grilla": 240.0,
+    "fps_real_medio": 198.911,
+    "hueco_maximo_ms": 12.5
+   }
+  },
+  {
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 2.9166666666666665,
+    "t": 2.9375,
+    "b": 3.1875
+   },
+   "corte_hz": 8.0,
+   "delta_torso_menos_pelvis_ms": 20.83333333333348,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.8369660526724712,
+    "desfase_ms": 20.833333333333332,
+    "correlacion_en_el_desfase": 0.8839409735144753
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 2.925,
+      "t": 2.9541666666666666,
+      "b": 3.2
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 2.9166666666666665,
+      "t": 2.95,
+      "b": 2.970833333333333
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 2.9166666666666665,
+      "t": 2.9375,
+      "b": 3.1875
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 2.9125,
+      "t": 2.925,
+      "b": 3.004166666666667
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 2.904166666666667,
+      "t": 2.9208333333333334,
+      "b": 3.0083333333333333
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 2.9125,
+     "t": 2.933333333333333,
+     "b": null
+    },
+    "valida": true
+   },
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep02.mov",
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "real": "IMG_6376.MOV",
+   "regularizacion": {
+    "fotogramas_fuente": 806,
+    "puntos_de_la_grilla": 960,
+    "puntos_copiados": 806,
+    "puntos_interpolados": 154,
+    "puntos_interpolados_pct": 16.04,
+    "puntos_sin_dato": 0,
+    "fps_grilla": 240.0,
+    "fps_real_medio": 201.439,
+    "hueco_maximo_ms": 12.5
+   }
+  },
+  {
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 2.5083333333333333,
+    "t": 2.504166666666667,
+    "b": 2.5708333333333333
+   },
+   "corte_hz": 8.0,
+   "delta_torso_menos_pelvis_ms": -4.16666666666643,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.9394004882782638,
+    "desfase_ms": -4.166666666666667,
+    "correlacion_en_el_desfase": 0.9419317585687605
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 2.5208333333333335,
+      "t": 2.529166666666667,
+      "b": 2.7916666666666665
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 2.5166666666666666,
+      "t": 2.5208333333333335,
+      "b": 2.5708333333333333
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 2.5083333333333333,
+      "t": 2.504166666666667,
+      "b": 2.5708333333333333
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 2.5,
+      "t": 2.4916666666666667,
+      "b": 2.566666666666667
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 2.495833333333333,
+      "t": 2.4875,
+      "b": 2.566666666666667
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 2.5083333333333333,
+     "t": 2.5,
+     "b": null
+    },
+    "valida": true
+   },
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep03.mov",
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "real": "IMG_6376.MOV",
+   "regularizacion": {
+    "fotogramas_fuente": 755,
+    "puntos_de_la_grilla": 901,
+    "puntos_copiados": 755,
+    "puntos_interpolados": 146,
+    "puntos_interpolados_pct": 16.2,
+    "puntos_sin_dato": 0,
+    "fps_grilla": 240.0,
+    "fps_real_medio": 201.067,
+    "hueco_maximo_ms": 12.5
+   }
+  },
+  {
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 2.4625,
+    "t": 2.466666666666667,
+    "b": 2.5416666666666665
+   },
+   "corte_hz": 8.0,
+   "delta_torso_menos_pelvis_ms": 4.166666666666874,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.9735538236708161,
+    "desfase_ms": 4.166666666666667,
+    "correlacion_en_el_desfase": 0.9754007046655803
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 2.5125,
+      "t": 2.5208333333333335,
+      "b": 2.7583333333333333
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 2.470833333333333,
+      "t": 2.470833333333333,
+      "b": 2.5416666666666665
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 2.4625,
+      "t": 2.466666666666667,
+      "b": 2.5416666666666665
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 2.4625,
+      "t": 2.466666666666667,
+      "b": 2.5416666666666665
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 2.4625,
+      "t": 2.466666666666667,
+      "b": 2.5416666666666665
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 2.4583333333333335,
+     "t": 2.466666666666667,
+     "b": null
+    },
+    "valida": true
+   },
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep04.mov",
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "real": "IMG_6376.MOV",
+   "regularizacion": {
+    "fotogramas_fuente": 752,
+    "puntos_de_la_grilla": 898,
+    "puntos_copiados": 752,
+    "puntos_interpolados": 146,
+    "puntos_interpolados_pct": 16.26,
+    "puntos_sin_dato": 0,
+    "fps_grilla": 240.0,
+    "fps_real_medio": 200.914,
+    "hueco_maximo_ms": 12.92
+   }
+  },
+  {
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 3.7708333333333335,
+    "t": 3.775,
+    "b": 3.779166666666667
+   },
+   "corte_hz": 9.0,
+   "delta_torso_menos_pelvis_ms": 4.16666666666643,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.9183895605236357,
+    "desfase_ms": -4.166666666666667,
+    "correlacion_en_el_desfase": 0.9196769531332308
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 3.8,
+      "t": 3.7958333333333334,
+      "b": 3.7875
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 3.783333333333333,
+      "t": 3.783333333333333,
+      "b": 3.783333333333333
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 3.7708333333333335,
+      "t": 3.775,
+      "b": 3.779166666666667
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 3.7708333333333335,
+      "t": 3.775,
+      "b": 3.779166666666667
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 3.7708333333333335,
+      "t": 3.775,
+      "b": 3.975
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 3.7666666666666666,
+     "t": 3.783333333333333,
+     "b": null
+    },
+    "valida": true
+   },
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep05.mov",
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "real": "IMG_6376.MOV",
+   "regularizacion": {
+    "fotogramas_fuente": 1007,
+    "puntos_de_la_grilla": 1205,
+    "puntos_copiados": 1007,
+    "puntos_interpolados": 198,
+    "puntos_interpolados_pct": 16.43,
+    "puntos_sin_dato": 0,
+    "fps_grilla": 240.0,
+    "fps_real_medio": 200.515,
+    "hueco_maximo_ms": 12.92
+   }
+  },
+  {
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 2.475,
+    "t": 2.4791666666666665,
+    "b": 2.529166666666667
+   },
+   "corte_hz": 7.0,
+   "delta_torso_menos_pelvis_ms": 4.16666666666643,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.9365423998272243,
+    "desfase_ms": -12.5,
+    "correlacion_en_el_desfase": 0.9484465450094858
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 2.504166666666667,
+      "t": 2.5083333333333333,
+      "b": 2.7333333333333334
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 2.4833333333333334,
+      "t": 2.5,
+      "b": 2.533333333333333
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 2.470833333333333,
+      "t": 2.470833333333333,
+      "b": 2.529166666666667
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 2.466666666666667,
+      "t": 2.4625,
+      "b": 2.529166666666667
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 2.466666666666667,
+      "t": 2.4625,
+      "b": 2.529166666666667
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 2.470833333333333,
+     "t": 2.475,
+     "b": null
+    },
+    "valida": true
+   },
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep06.mov",
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "real": "IMG_6376.MOV",
+   "regularizacion": {
+    "fotogramas_fuente": 699,
+    "puntos_de_la_grilla": 839,
+    "puntos_copiados": 699,
+    "puntos_interpolados": 140,
+    "puntos_interpolados_pct": 16.69,
+    "puntos_sin_dato": 0,
+    "fps_grilla": 240.0,
+    "fps_real_medio": 199.881,
+    "hueco_maximo_ms": 12.5
+   }
+  }
+ ],
+ "resultado_por_tolerancia": {
+  "primaria": {
+   "tolerancia_ms": 8.333333333333334,
+   "grupos": {
+    "saque|perfil": {
+     "par_pelvis_torso": {
+      "n": 5,
+      "validas": 4,
+      "ordenables": 3,
+      "1a_sobre_todas": 0.6,
+      "1a_sobre_todas_ic95": [
+       0.23071993220883708,
+       0.8823817688407467
+      ],
+      "1a_sobre_validas": 0.75,
+      "1b_orden_modal": "tp",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.43849391955098227,
+       1.0
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 0.0,
+      "1c_ic95": [
+       0.0,
+       0.5615060804490177
+      ],
+      "ordenes": {
+       "tp": 3
+      },
+      "criterio_1_cumplido": false
+     }
+    },
+    "saque|trescuartos": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 1,
+      "1a_sobre_todas": 0.16666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.03005258587173032,
+       0.563509436563646
+      ],
+      "1a_sobre_validas": 0.16666666666666666,
+      "1b_orden_modal": "pt",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 1.0,
+      "1c_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "ordenes": {
+       "pt": 1
+      },
+      "criterio_1_cumplido": false
+     },
+     "cadena": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 1,
+      "1a_sobre_todas": 0.16666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.03005258587173032,
+       0.563509436563646
+      ],
+      "1a_sobre_validas": 0.16666666666666666,
+      "1b_orden_modal": "ptb",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "1c_esperado": "ptb",
+      "1c_coincidencia": 1.0,
+      "1c_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "ordenes": {
+       "ptb": 1
+      },
+      "criterio_1_cumplido": false
+     }
+    },
+    "saque|trescuartos|toma 01": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 1,
+      "1a_sobre_todas": 0.16666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.03005258587173032,
+       0.563509436563646
+      ],
+      "1a_sobre_validas": 0.16666666666666666,
+      "1b_orden_modal": "pt",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 1.0,
+      "1c_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "ordenes": {
+       "pt": 1
+      },
+      "criterio_1_cumplido": false
+     },
+     "cadena": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 1,
+      "1a_sobre_todas": 0.16666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.03005258587173032,
+       0.563509436563646
+      ],
+      "1a_sobre_validas": 0.16666666666666666,
+      "1b_orden_modal": "ptb",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "1c_esperado": "ptb",
+      "1c_coincidencia": 1.0,
+      "1c_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "ordenes": {
+       "ptb": 1
+      },
+      "criterio_1_cumplido": false
+     }
+    }
+   }
+  },
+  "sens_4.2ms": {
+   "tolerancia_ms": 4.166666666666667,
+   "grupos": {
+    "saque|perfil": {
+     "par_pelvis_torso": {
+      "n": 5,
+      "validas": 4,
+      "ordenables": 3,
+      "1a_sobre_todas": 0.6,
+      "1a_sobre_todas_ic95": [
+       0.23071993220883708,
+       0.8823817688407467
+      ],
+      "1a_sobre_validas": 0.75,
+      "1b_orden_modal": "tp",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.43849391955098227,
+       1.0
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 0.0,
+      "1c_ic95": [
+       0.0,
+       0.5615060804490177
+      ],
+      "ordenes": {
+       "tp": 3
+      },
+      "criterio_1_cumplido": false
+     }
+    },
+    "saque|trescuartos": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 1,
+      "1a_sobre_todas": 0.16666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.03005258587173032,
+       0.563509436563646
+      ],
+      "1a_sobre_validas": 0.16666666666666666,
+      "1b_orden_modal": "pt",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 1.0,
+      "1c_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "ordenes": {
+       "pt": 1
+      },
+      "criterio_1_cumplido": false
+     },
+     "cadena": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 1,
+      "1a_sobre_todas": 0.16666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.03005258587173032,
+       0.563509436563646
+      ],
+      "1a_sobre_validas": 0.16666666666666666,
+      "1b_orden_modal": "ptb",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "1c_esperado": "ptb",
+      "1c_coincidencia": 1.0,
+      "1c_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "ordenes": {
+       "ptb": 1
+      },
+      "criterio_1_cumplido": false
+     }
+    },
+    "saque|trescuartos|toma 01": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 1,
+      "1a_sobre_todas": 0.16666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.03005258587173032,
+       0.563509436563646
+      ],
+      "1a_sobre_validas": 0.16666666666666666,
+      "1b_orden_modal": "pt",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 1.0,
+      "1c_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "ordenes": {
+       "pt": 1
+      },
+      "criterio_1_cumplido": false
+     },
+     "cadena": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 1,
+      "1a_sobre_todas": 0.16666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.03005258587173032,
+       0.563509436563646
+      ],
+      "1a_sobre_validas": 0.16666666666666666,
+      "1b_orden_modal": "ptb",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "1c_esperado": "ptb",
+      "1c_coincidencia": 1.0,
+      "1c_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "ordenes": {
+       "ptb": 1
+      },
+      "criterio_1_cumplido": false
+     }
+    }
+   }
+  },
+  "sens_12.5ms": {
+   "tolerancia_ms": 12.5,
+   "grupos": {
+    "saque|perfil": {
+     "par_pelvis_torso": {
+      "n": 5,
+      "validas": 4,
+      "ordenables": 3,
+      "1a_sobre_todas": 0.6,
+      "1a_sobre_todas_ic95": [
+       0.23071993220883708,
+       0.8823817688407467
+      ],
+      "1a_sobre_validas": 0.75,
+      "1b_orden_modal": "tp",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.43849391955098227,
+       1.0
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 0.0,
+      "1c_ic95": [
+       0.0,
+       0.5615060804490177
+      ],
+      "ordenes": {
+       "tp": 3
+      },
+      "criterio_1_cumplido": false
+     }
+    },
+    "saque|trescuartos": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 1,
+      "1a_sobre_todas": 0.16666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.03005258587173032,
+       0.563509436563646
+      ],
+      "1a_sobre_validas": 0.16666666666666666,
+      "1b_orden_modal": "pt",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 1.0,
+      "1c_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "ordenes": {
+       "pt": 1
+      },
+      "criterio_1_cumplido": false
+     },
+     "cadena": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 1,
+      "1a_sobre_todas": 0.16666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.03005258587173032,
+       0.563509436563646
+      ],
+      "1a_sobre_validas": 0.16666666666666666,
+      "1b_orden_modal": "ptb",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "1c_esperado": "ptb",
+      "1c_coincidencia": 1.0,
+      "1c_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "ordenes": {
+       "ptb": 1
+      },
+      "criterio_1_cumplido": false
+     }
+    },
+    "saque|trescuartos|toma 01": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 1,
+      "1a_sobre_todas": 0.16666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.03005258587173032,
+       0.563509436563646
+      ],
+      "1a_sobre_validas": 0.16666666666666666,
+      "1b_orden_modal": "pt",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 1.0,
+      "1c_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "ordenes": {
+       "pt": 1
+      },
+      "criterio_1_cumplido": false
+     },
+     "cadena": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 1,
+      "1a_sobre_todas": 0.16666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.03005258587173032,
+       0.563509436563646
+      ],
+      "1a_sobre_validas": 0.16666666666666666,
+      "1b_orden_modal": "ptb",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "1c_esperado": "ptb",
+      "1c_coincidencia": 1.0,
+      "1c_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "ordenes": {
+       "ptb": 1
+      },
+      "criterio_1_cumplido": false
+     }
+    }
+   }
+  },
+  "sens_16.7ms": {
+   "tolerancia_ms": 16.666666666666668,
+   "grupos": {
+    "saque|perfil": {
+     "par_pelvis_torso": {
+      "n": 5,
+      "validas": 4,
+      "ordenables": 2,
+      "1a_sobre_todas": 0.4,
+      "1a_sobre_todas_ic95": [
+       0.1176182311592533,
+       0.769280067791163
+      ],
+      "1a_sobre_validas": 0.5,
+      "1b_orden_modal": "tp",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.34237195288961925,
+       1.0
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 0.0,
+      "1c_ic95": [
+       0.0,
+       0.6576280471103807
+      ],
+      "ordenes": {
+       "tp": 2
+      },
+      "criterio_1_cumplido": false
+     }
+    },
+    "saque|trescuartos": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 1,
+      "1a_sobre_todas": 0.16666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.03005258587173032,
+       0.563509436563646
+      ],
+      "1a_sobre_validas": 0.16666666666666666,
+      "1b_orden_modal": "pt",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 1.0,
+      "1c_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "ordenes": {
+       "pt": 1
+      },
+      "criterio_1_cumplido": false
+     },
+     "cadena": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 1,
+      "1a_sobre_todas": 0.16666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.03005258587173032,
+       0.563509436563646
+      ],
+      "1a_sobre_validas": 0.16666666666666666,
+      "1b_orden_modal": "ptb",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "1c_esperado": "ptb",
+      "1c_coincidencia": 1.0,
+      "1c_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "ordenes": {
+       "ptb": 1
+      },
+      "criterio_1_cumplido": false
+     }
+    },
+    "saque|trescuartos|toma 01": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 1,
+      "1a_sobre_todas": 0.16666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.03005258587173032,
+       0.563509436563646
+      ],
+      "1a_sobre_validas": 0.16666666666666666,
+      "1b_orden_modal": "pt",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 1.0,
+      "1c_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "ordenes": {
+       "pt": 1
+      },
+      "criterio_1_cumplido": false
+     },
+     "cadena": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 1,
+      "1a_sobre_todas": 0.16666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.03005258587173032,
+       0.563509436563646
+      ],
+      "1a_sobre_validas": 0.16666666666666666,
+      "1b_orden_modal": "ptb",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "1c_esperado": "ptb",
+      "1c_coincidencia": 1.0,
+      "1c_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "ordenes": {
+       "ptb": 1
+      },
+      "criterio_1_cumplido": false
+     }
+    }
+   }
+  }
+ },
+ "delta_torso_menos_pelvis_ms": {
+  "saque|perfil": {
+   "n": 4,
+   "mediana_ms": -18.749999999999932,
+   "q1_ms": -23.958333333333357,
+   "q3_ms": -13.541666666666675,
+   "media_ms": -18.750000000000096,
+   "min_ms": -33.333333333333655,
+   "max_ms": -4.166666666666874,
+   "cadera_primero": 0,
+   "tronco_primero": 3,
+   "dentro_de_la_tolerancia": 1
+  },
+  "saque|trescuartos": {
+   "n": 6,
+   "mediana_ms": 4.16666666666643,
+   "q1_ms": -2.083333333333215,
+   "q3_ms": 4.166666666666763,
+   "media_ms": 4.166666666666652,
+   "min_ms": -4.166666666666874,
+   "max_ms": 20.83333333333348,
+   "cadera_primero": 1,
+   "tronco_primero": 0,
+   "dentro_de_la_tolerancia": 5
+  },
+  "saque|trescuartos|toma 01": {
+   "n": 6,
+   "mediana_ms": 4.16666666666643,
+   "q1_ms": -2.083333333333215,
+   "q3_ms": 4.166666666666763,
+   "media_ms": 4.166666666666652,
+   "min_ms": -4.166666666666874,
+   "max_ms": 20.83333333333348,
+   "cadera_primero": 1,
+   "tronco_primero": 0,
+   "dentro_de_la_tolerancia": 5
+  }
+ },
+ "controles": {
+  "saque|perfil": {
+   "acople_omega": {
+    "correlacion_mediana": 0.9241775377927136,
+    "desfase_mediano_ms": -12.5
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "n": 5,
+     "ordenables": 3,
+     "orden_modal": "tp",
+     "1b": 1.0,
+     "1c_cadera_primero": 0.0,
+     "delta_mediana_ms": -24.999999999999467
+    },
+    "6.0": {
+     "n": 5,
+     "ordenables": 3,
+     "orden_modal": "tp",
+     "1b": 1.0,
+     "1c_cadera_primero": 0.0,
+     "delta_mediana_ms": -18.750000000000156
+    },
+    "8.0": {
+     "n": 5,
+     "ordenables": 3,
+     "orden_modal": "tp",
+     "1b": 1.0,
+     "1c_cadera_primero": 0.0,
+     "delta_mediana_ms": -14.583333333333282
+    },
+    "10.0": {
+     "n": 5,
+     "ordenables": 2,
+     "orden_modal": "tp",
+     "1b": 1.0,
+     "1c_cadera_primero": 0.0,
+     "delta_mediana_ms": -14.583333333333615
+    },
+    "12.0": {
+     "n": 5,
+     "ordenables": 2,
+     "orden_modal": "tp",
+     "1b": 1.0,
+     "1c_cadera_primero": 0.0,
+     "delta_mediana_ms": -12.500000000000288
+    }
+   },
+   "giro_axial": {
+    "n": 5,
+    "ordenables": 2,
+    "orden_modal": "tp",
+    "1b": 1.0,
+    "1c_cadera_primero": 0.0,
+    "delta_mediana_ms": -8.33333333333286
+   },
+   "winter_3d": {
+    "n": 5,
+    "ordenables": 3,
+    "orden_modal": "tp",
+    "1b": 1.0,
+    "1c_cadera_primero": 0.0,
+    "delta_mediana_ms": -18.749999999999932
+   }
+  },
+  "saque|trescuartos": {
+   "acople_omega": {
+    "correlacion_mediana": 0.937971444052744,
+    "desfase_mediano_ms": -4.166666666666667
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "n": 6,
+     "ordenables": 2,
+     "orden_modal": "pt",
+     "1b": 1.0,
+     "1c_cadera_primero": 1.0,
+     "delta_mediana_ms": 8.333333333333304
+    },
+    "6.0": {
+     "n": 6,
+     "ordenables": 2,
+     "orden_modal": "pt",
+     "1b": 1.0,
+     "1c_cadera_primero": 1.0,
+     "delta_mediana_ms": 4.166666666666652
+    },
+    "8.0": {
+     "n": 6,
+     "ordenables": 1,
+     "orden_modal": "pt",
+     "1b": 1.0,
+     "1c_cadera_primero": 1.0,
+     "delta_mediana_ms": 2.083333333333215
+    },
+    "10.0": {
+     "n": 6,
+     "ordenables": 2,
+     "orden_modal": "tp",
+     "1b": 0.5,
+     "1c_cadera_primero": 0.5,
+     "delta_mediana_ms": -2.220446049250313e-13
+    },
+    "12.0": {
+     "n": 6,
+     "ordenables": 2,
+     "orden_modal": "tp",
+     "1b": 0.5,
+     "1c_cadera_primero": 0.5,
+     "delta_mediana_ms": -2.220446049250313e-13
+    }
+   },
+   "giro_axial": {
+    "n": 6,
+    "ordenables": 3,
+    "orden_modal": "pt",
+    "1b": 0.6666666666666666,
+    "1c_cadera_primero": 0.6666666666666666,
+    "delta_mediana_ms": 6.250000000000089
+   },
+   "winter_3d": {
+    "n": 6,
+    "ordenables": 1,
+    "orden_modal": "pt",
+    "1b": 1.0,
+    "1c_cadera_primero": 1.0,
+    "delta_mediana_ms": 4.16666666666643
+   }
+  },
+  "saque|trescuartos|toma 01": {
+   "acople_omega": {
+    "correlacion_mediana": 0.937971444052744,
+    "desfase_mediano_ms": -4.166666666666667
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "n": 6,
+     "ordenables": 2,
+     "orden_modal": "pt",
+     "1b": 1.0,
+     "1c_cadera_primero": 1.0,
+     "delta_mediana_ms": 8.333333333333304
+    },
+    "6.0": {
+     "n": 6,
+     "ordenables": 2,
+     "orden_modal": "pt",
+     "1b": 1.0,
+     "1c_cadera_primero": 1.0,
+     "delta_mediana_ms": 4.166666666666652
+    },
+    "8.0": {
+     "n": 6,
+     "ordenables": 1,
+     "orden_modal": "pt",
+     "1b": 1.0,
+     "1c_cadera_primero": 1.0,
+     "delta_mediana_ms": 2.083333333333215
+    },
+    "10.0": {
+     "n": 6,
+     "ordenables": 2,
+     "orden_modal": "tp",
+     "1b": 0.5,
+     "1c_cadera_primero": 0.5,
+     "delta_mediana_ms": -2.220446049250313e-13
+    },
+    "12.0": {
+     "n": 6,
+     "ordenables": 2,
+     "orden_modal": "tp",
+     "1b": 0.5,
+     "1c_cadera_primero": 0.5,
+     "delta_mediana_ms": -2.220446049250313e-13
+    }
+   },
+   "giro_axial": {
+    "n": 6,
+    "ordenables": 3,
+    "orden_modal": "pt",
+    "1b": 0.6666666666666666,
+    "1c_cadera_primero": 0.6666666666666666,
+    "delta_mediana_ms": 6.250000000000089
+   },
+   "winter_3d": {
+    "n": 6,
+    "ordenables": 1,
+    "orden_modal": "pt",
+    "1b": 1.0,
+    "1c_cadera_primero": 1.0,
+    "delta_mediana_ms": 4.16666666666643
+   }
+  }
+ }
+}

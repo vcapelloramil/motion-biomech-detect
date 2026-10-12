@@ -6,6 +6,90 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-12, 19:10 — PARADA ORDENADA (se apaga la PC) · qué quedó a medias y cómo retomar
+
+**No se empezó nada nuevo.** El Paso B estaba corriendo y se detuvo a mano (pid 10196) antes de apagar; lo que ya estaba guardado queda guardado. **Nada de esta entrada está pusheado.**
+
+### Estado del repositorio
+
+- **Rama `main` = rama `ajustes-13-10`**, árbol limpio, con todo lo terminado y probado commiteado.
+- **Origin está en `01e8ad4`** (lo publicado y en Render: motor 0.5.1). **Quedan commits locales sin pushear:** la bitácora del 13/10 y este commit (resultados parciales del Paso B + esta entrada). Pushear
+  reinicia Render; hacerlo cuando no haya un análisis en curso.
+- Pruebas al momento de parar: suite rápida del servidor **486 passed** (en el directorio principal; `test_api_analisis` necesita `backend/.env`), `bun test` **59 passed**, `tsc` y build limpios.
+- Limpieza opcional (no hecha, no importa): `backend/.cache/corpus-real-pose/` tiene 3 archivos de una prueba de humo del Paso B **sin la validación de alineación**; no se usan (el Paso B usa `corpus-real-pose-b`).
+
+### Los 7 puntos del último mensaje de Valentín (13/10)
+
+| # | Punto | Estado |
+| --- | --- | --- |
+| 1 | Registrar la prueba del celular en `criterio4-latencia.md` | **Hecho** (fila 4: 146,7 s, RSS pico 748,4 MB, artefactos 10,2 s) |
+| 2a | Video con esqueleto: más resolución y calidad, medir | **Hecho y publicado**: 720 px, CRF 20, ~1,6 MB para 12 s; verificado en producción (1,2 MB, 120 s) |
+| 2b | Etiqueta única "Solo registrado" | **Hecho y publicado** |
+| 2c | Confianza y ubicación del pico del brazo | **Hecho y publicado**: la confianza estaba bien, eran dos referencias de tiempo distintas sin rotular; y había un máximo censurado (57 % de la ventana sin datos) → regla de cobertura del 75 % (motor 0.5.1) |
+| 2d | Fotogramas perdidos = interpolados | **Explicado y con una línea en la trazabilidad (publicado).** **No hecho:** marcar por pico si es medido o reconstruido (propuesta, 0,5 sesión, contrato 1.4) |
+| 2e | Coma decimal en todo el reporte | **Hecho y publicado** |
+| 3 | Pushear | **Hecho hasta `01e8ad4`**; los commits de bitácora y resultados quedan **sin pushear** |
+| 4 | Guía del dominio y decisión 034 | **Guía y decisión hechas** (verificado: DNS ya en Cloudflare, zona vacía; NC.me creó el repositorio `vcapelloramil.github.io`, se puede eliminar). **No hecho (mío):** `wrangler.jsonc` con el dominio, `KINETIQ_CORS_ORIGINS`, prueba de registro real. **No hecho (de Valentín):** borrar el repositorio, registros de Brevo, SMTP en Supabase, URLs permitidas |
+| 5 | Paso B y decisión 035 | **Arnés hecho y corrida PARCIAL (abajo). Decisión 035 SIN tomar.** |
+| 6 | Reestimar el plan; registrar la grabación doble como trabajo futuro; protocolo opcional | **Hecho** (plan §8 reestimado; `docs/protocolo-saques-tres-cuartos.md`) |
+| 7 | Seguir con el punto 3 del plan | **Hecho** (separación cadera-hombro y ángulos de rodilla y codo, `engine/magnitudes.py`; publicado) |
+
+### Paso B: qué se procesó y qué no
+
+Corrida iniciada a las 17:30 sobre el commit `f94aa56` (motor 0.5.0), de 13 originales y 76 repeticiones. **Se paró a los 99 min con 4 originales completos (23 de 76 repeticiones) guardados.**
+
+| Original | Contenido | Estado |
+| --- | --- | --- |
+| IMG_6374 | sesión 1, saque de perfil (5 rep.) | **hecho** |
+| IMG_6396 | sesión 2, saque de perfil (6 rep.) | **hecho** |
+| IMG_6376 | sesión 1, saque de tres cuartos (6 rep.) | **hecho** |
+| IMG_6392 | sesión 2, saque de tres cuartos toma 02b (6 rep.) | **hecho** |
+| IMG_6393 | sesión 2, saque de tres cuartos toma 02c (6 rep.) | **interrumpido sin guardar** (había empezado a las 19:05; se pierde ese original entero, ~27 min) |
+| IMG_6377 · IMG_6397 | drive de perfil, sesión 1 · 2 | pendiente |
+| IMG_6379 · IMG_6398 | revés de perfil, sesión 1 · 2 (5 rep.) | pendiente |
+| IMG_6378 · IMG_6394 | drive de tres cuartos, sesión 1 · 2 | pendiente |
+| IMG_6380 · IMG_6395 | revés de tres cuartos, sesión 1 · 2 | pendiente |
+
+**Qué quedó guardado:** las poses de las 23 repeticiones en `backend/.cache/corpus-real-pose-b` (3 archivos por repetición; no versionado) y los resultados en `docs/resultados/paso-b-sesion-1.json` y `paso-b-sesion-2.json`
+(commiteados, con `commit: f94aa56`, `version_motor: 0.5.0`, `repeticiones_medidas` 11/35 y 12/41). **Faltan ~35.700 fotogramas ≈ 2 h 40 min** de cómputo.
+
+**Excluidas por diseño:** `saque_perfil_240_01_rep01` y `reves_perfil_240_02_rep01` (empiezan en la rampa) y las 6 repeticiones de `IMG_6391` (original incompleto).
+
+**Resultado parcial** (originales a tasa real, regularizados a 240 Hz; Δ = t_tronco − t_cadera en ms, negativo = el tronco llegó primero; tolerancia 8,33 ms):
+
+| Grupo | Δ por repetición (ms) | Cadera primero · tronco primero · dentro de la tolerancia |
+| --- | --- | --- |
+| Saque · perfil · sesión 1 | −16,7 · −20,8 · −33,3 · −4,2 (una repetición no válida) | 0 · 3 · 1 |
+| Saque · perfil · sesión 2 | −170,8 · −25,0 · −237,5 · −154,2 · −4,2 · −250,0 | 0 · 5 · 1 |
+| Saque · tres cuartos · sesión 1 | −4,2 · +20,8 · −4,2 · +4,2 · +4,2 · +4,2 | 1 · 0 · 5 |
+| Saque · tres cuartos · 02b (sesión 2) | +16,7 · +8,3 · +41,7 · +4,2 · +12,5 · +8,3 | 3 · 0 · 3 |
+
+**Lectura provisoria:** el "tronco primero" del saque de perfil **se reproduce con los originales** (8 de 8 ordenables, ninguna con la cadera primero): **no viene del corpus convertido**. En tres cuartos, con los originales,
+**nunca** sale el tronco primero entre las ordenables (4 de 4 con la cadera primero) y la mayoría queda dentro de la tolerancia. **La dependencia del encuadre del saque se sostiene.** Falta la toma 02c para cerrar el
+saque de tres cuartos. Es **un jugador**; el golpe nuevo del celular (cadera 13 ms antes) es una repetición. Esto es lo que respalda la propuesta de la decisión 035, pero **la 035 sigue sin decidirse**.
+
+### Cómo retomar
+
+1. **Encender, abrir el repositorio** (`C:\Users\valen\motion-biomech-detect`, rama `main`) y comprobar el árbol limpio con `git status`.
+2. **Reanudar el Paso B** (salta lo que ya está en la caché; **vuelve a medir las 23 ya hechas** con el motor actual, ~5 min, y reescribe los dos JSON; desde acá el `version_motor` de los JSON será 0.5.1):
+
+   ```bash
+   cd backend
+   PYTHONPATH=. .venv/Scripts/python.exe -u -m app.medicion_paso_b --reales "C:/Users/valen/Desktop/corpus-originales-reales" --salida ../docs/resultados/paso-b
+   ```
+
+   Se niega a correr con el árbol sucio (decisión 014). Puede pararse y reanudarse de nuevo: guarda al terminar **cada original**. Para el saque solamente: agregar `--grupos "saque|perfil,saque|trescuartos"`
+   (termina en ~35 min).
+3. **Con el saque de tres cuartos completo (toma 02c), decidir la 035** (`docs/decisiones/035-suspender-el-veredicto-del-saque-de-perfil.md`): el resultado parcial la respalda. Aplicarla es una línea en
+   `RESPALDO_POR_GRUPO` (`("saque", "perfil")` → `criterio1_cumplido=False`).
+4. **Pushear** los commits locales cuando no haya un análisis en curso (reinicia Render). **Republicar el frontend:** los cambios de hoy (etiqueta única, comas, tiempos del video y de la ventana, magnitudes, nota de
+   interpolación; commit `8a83a30`) **ya están en origin pero NO en Cloudflare** hasta que se corra `bun run build` y `.
+ode_modules\.bin\wrangler.exe deploy` en `frontend/` desde la PowerShell.
+5. **Valentín:** guía del dominio (partes B a D) y eliminar `vcapelloramil.github.io`; después me pasa un "listo" para hacer el punto 1 del plan (mi parte).
+6. Cuando el Paso B termine: `docs/resultados/paso-b-resumen.md` (como `paso-a-resumen.md`) y revisar `RESPALDO_POR_GRUPO` otra vez con las cifras de los originales.
+
+---
+
 ## 2026-10-13 (madrugada) — Correcciones del reporte tras la prueba del celular, datos en el reporte y Paso B en curso
 
 Pedido de Valentín tras probar el saque de perfil desde el celular (2 min 28 s; tres fotogramas y video bien de posición; "Olvidé mi contraseña" visible). Suite rápida del servidor **486 passed**; `bun test` **59 passed**;
