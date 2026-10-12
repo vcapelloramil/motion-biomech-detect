@@ -15,9 +15,12 @@ necesita literatura.
 
 | Fuente | Dónde aparece | Qué dice ahí | ¿Respalda el orden en golpes de fondo? |
 | --- | --- | --- | --- |
-| **Elliott (2006)** | **No aparece en los capítulos 3 ni 4.** Solo en la maqueta de Lovable (`frontend/src/lib/reporte-mock.ts`, `REFERENCIAS`, líneas ~205–210), con el comentario "confirmar cada entrada contra la bibliografía del Capítulo 2 antes de la entrega" | La maqueta le asigna "orden proximal-distal de los picos; flexión de rodilla en la carga" | **No verificable.** Es texto generado por la herramienta de la maqueta, no un pasaje de la tesis |
+| **Elliott (2006)** | **Está en la lista de Referencias de la tesis** (documento de Word, que no está en el repo; confirmado por Valentín el 12/10): Elliott, B. (2006). *Biomechanics and tennis*. British Journal of Sports Medicine, 40(5), 392–396. **No aparece en los capítulos 3 ni 4** que sí están en el repo. La maqueta de Lovable (`frontend/src/lib/reporte-mock.ts`, `REFERENCIAS`) la usa para "orden proximal-distal de los picos; flexión de rodilla en la carga" | Sin pasaje citado en el texto de la tesis | **Sin pasaje verificado.** Existe como referencia, pero falta la página y la frase donde describe la secuencia en golpes de fondo |
 | **Kibler** | Capítulo 3, apartado 3.3.3.1 ("Definición"): *"Kibler: piernas y tronco generan 51–55 % de la energía que llega a la mano."* **Sin año** | Una fracción de energía en la cadena cinética del tenis en general | **No.** No habla del orden temporal ni de drive/revés. (La maqueta lo cita como "Kibler (1995)", otro año del que aparece en tu mensaje: hay que fijar cuál es) |
 | Kovacs y Ellenbecker (2011); Fleisig et al. (2003) | Capítulo 4, apartado 4.3.3, tabla de alcance: "saque... con mayor respaldo bibliográfico"; Capítulo 3, 3.4.2.2 (velocidades) | Saque | Solo el saque. Para drive y revés la propia tabla dice "un conjunto reducido de reglas", sin cita |
+
+**Decisión de Valentín (12/10): `RESPALDO_POR_GRUPO` no se toca hasta después del Paso A.** Que el orden modal medido sea "tronco primero" en todos los grupos sugiere un artefacto de
+medición; el Paso A tiene que ayudar a distinguirlo, y recién ahí tiene sentido agregar una referencia.
 
 **Para cerrarlo** necesito de vos el pasaje: abrir el artículo, buscar dónde describe la secuencia cadera → tronco → brazo en el **drive/revés** y pasarme **página y frase**. Con eso
 es una línea en `RESPALDO_POR_GRUPO`. Sin eso, el reporte dice "todavía no tenemos un patrón de referencia" y es verdad.

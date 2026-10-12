@@ -240,7 +240,7 @@ function Reporte({ video, reporte }: { video: VideoConReporte; reporte: Record<s
                   const clave = BADGE[o.severidad];
                   return (
                     <li key={i} className="rounded-xl border border-border p-4 text-sm">
-                      {clave === "sin_evaluar" ? <SinEvaluarBadge /> : clave ? <EstadoBadge estado={clave} /> : null}
+                      {clave === "sin_evaluar" ? <SinEvaluarBadge tecnico /> : clave ? <EstadoBadge estado={clave} /> : null}
                       <p className="mt-2">{o.texto}</p>
                       {o.fundamento && <p className="mt-1 font-mono text-xs text-muted-foreground">{o.fundamento}</p>}
                       {o.referencia && <p className="mt-1 text-xs text-muted-foreground">Fuente: {o.referencia}</p>}

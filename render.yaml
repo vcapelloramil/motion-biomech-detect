@@ -5,17 +5,17 @@
 # pero no lo gestiona este archivo ni el repo; Render los pide al aplicar el blueprint, o
 # se cargan después desde el panel.
 #
-# plan: free para la medición de la tarea 4.5.4 (decisión 018: se mide una sola vez contra
-# el plan gratis; si no entra —más de 10 minutos por golpe, o la suspensión por
-# inactividad corta un análisis en curso—, se pasa a starter y se actualiza este archivo
-# junto con la decisión 017).
+# plan: standard (1 CPU, 2 GB, USD 25/mes) desde el 12/10/2026 (decisión 023, actualización del 12/10): en Free un golpe
+# de 3 s tardaba 11 min 18 s y el margen de memoria era de 32 MB, y los fotogramas clave con esqueleto (decisión 033)
+# suman un proceso de ffmpeg de ~56 MB. Cambió Valentín en el panel; este archivo lo sigue. Después de la defensa se
+# puede volver a free (en el mismo paso: panel, este archivo y la bitácora).
 services:
   - type: web
     name: kinetiq-motor
     runtime: docker
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
-    plan: free
+    plan: standard
     healthCheckPath: /health
     envVars:
       - key: SUPABASE_URL

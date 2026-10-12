@@ -18,6 +18,20 @@ apartado 4.5.4 de la tesis (pendiente de redacción)
 4. **Precios verificados por Valentín el 7/10/2026 en render.com/pricing:** Starter USD 7 (0,5 CPU / 512 MB), Standard USD 25 (1 CPU / 2 GB), Pro USD 85 (2 CPU / 4 GB). Ya no figuran como "sin verificar".
 5. **Qué se mide al probar en Free (para decidir con datos, no de memoria):** tiempo de espera de una sesión de 2 y de 3 golpes, RSS pico, y si algún análisis queda `procesando` (corte por suspensión).
 
+## Actualización del 12/10/2026 — pasó a Standard
+
+**Cambio hecho por Valentín en el panel de Render el 12/10/2026; `render.yaml` ya dice `plan: standard`.** El criterio de la actualización del 7/10 ("pasar a Standard si la espera o los cortes
+molestan") se cumplió con los datos de la prueba del 12/10:
+
+- **Espera medida en Render Free:** 11 min 18 s (677,8 s de punta a punta; 676,6 s de cómputo) para un golpe de 3,0 s, 599 fotogramas, 1080p (`docs/resultados/criterio4-latencia.md`, fila 2). Una sesión
+  de 6 golpes serían ~68 min.
+- **Margen de memoria de Free:** 32 MB (480 MB de RSS pico sobre 512). Los fotogramas clave y el video con esqueleto (decisión 033) agregan un proceso de `ffmpeg` de ~56 MB que en Free no
+  entra con seguridad.
+- **Lo que viene:** la demo a los profesores es el 28–30/10 y la decisión 3 de arriba ("Standard siempre para la defensa") pide Standard de todos modos.
+
+Quedan **sin medir en Render**: tiempo por golpe en Standard (estimado ~2,6 min por 626 fotogramas) y RSS pico en Linux con los artefactos; se registran en `criterio4-latencia.md` apenas haya un golpe real.
+Lo anterior (punto 4: "después de la defensa se vuelve a Free") sigue vigente.
+
 ## El problema
 
 La decisión 017 dejó Render Free "durante el desarrollo" y Starter "antes de las pruebas de usabilidad", con

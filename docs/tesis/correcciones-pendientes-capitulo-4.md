@@ -64,4 +64,5 @@ Fuera del Capítulo 4, pero para la redacción: las limitaciones que registran l
 14. **Esqueleto en el reporte (tabla 4.7, apartado 4.5.3):** hay tres fotogramas clave y un video corto en cámara lenta fija con el esqueleto, en un bucket aparte (decisión 033), generados por el motor con falla suave.
     Todavía **no hay reproductor sincronizado**: el apartado 4.3.3 debe decir "video con esqueleto" y no "reproductor sincronizado" para el MVP. Costo medido: +7 % de tiempo, memoria sin cambio en el proceso principal.
 15. **Referencias de las maquetas.** `frontend/src/lib/reporte-mock.ts` (maqueta de Lovable, ruta `/reporte/` no enlazada) trae una lista de referencias (Elliott 2006, Kibler 1995, etc.) y valores (42°, 118°, 27°)
-    **que no salen de la tesis**. Ninguno se debe citar en el Capítulo 7 ni mostrar en la demo como medición.
+    **que no salen de la tesis** (las referencias sí pueden estar en la lista del documento de Word: Elliott 2006 lo está; hay que cotejar el resto y el año de Kibler). Ninguno de los **valores** se debe citar
+en el Capítulo 7 ni mostrar en la demo como medición.
