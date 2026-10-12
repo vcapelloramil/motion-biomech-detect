@@ -4,7 +4,9 @@ import {
   contrasenaValida,
   esRol,
   mensajeDeIngreso,
+  mensajeDeRecuperacion,
   mensajeDeRegistro,
+  mensajeDeRestablecer,
   ROLES,
 } from "../src/lib/auth-errores";
 
@@ -67,5 +69,22 @@ describe("contraseña y rol", () => {
     expect(ROLES.map((r) => r.valor)).toEqual(["jugador", "entrenador", "profesional_salud"]);
     expect(esRol("jugador")).toBe(true);
     expect(esRol("admin")).toBe(false);
+  });
+});
+
+
+describe("recuperar contraseña", () => {
+  test("pedir el enlace no revela si el correo existe: solo se distingue la espera y la red", () => {
+    expect(mensajeDeRecuperacion({ code: "over_email_send_rate_limit", status: 429 }).tipo).toBe("espera");
+    expect(mensajeDeRecuperacion({ message: "Failed to fetch" }).tipo).toBe("red");
+    // cualquier otro error cae en "otro": la pantalla lo muestra como enviado, no como "no existe"
+    expect(mensajeDeRecuperacion({ code: "user_not_found" }).tipo).toBe("otro");
+  });
+
+  test("elegir la contraseña nueva: mensajes en lenguaje llano", () => {
+    expect(mensajeDeRestablecer({ code: "same_password" }).texto).toContain("distinta de la anterior");
+    expect(mensajeDeRestablecer({ code: "weak_password" }).texto).toContain("8 caracteres");
+    expect(mensajeDeRestablecer({ message: "Auth session missing!" }).texto).toContain("Pedí uno nuevo");
+    expect(mensajeDeRestablecer({ status: 429 }).tipo).toBe("espera");
   });
 });

@@ -1,0 +1,4176 @@
+{
+ "generado_utc": "2026-10-12T19:07:43+00:00",
+ "decision": "032 / plan de recálculo §2 (Paso A)",
+ "sesion": 1,
+ "rol": "RÉPLICA EXPLORATORIA (no independiente)",
+ "etiqueta": "replica-exploratoria",
+ "version_motor": "0.5.0",
+ "commit": "3d88f896b563ecff348af8e86a17350099cdc683",
+ "arbol_sucio": false,
+ "fps_muestreo_real": 120.2,
+ "umbral": 0.8,
+ "tolerancia_primaria_ms": 8.333333333333334,
+ "margen_ancla_s": 0.3,
+ "brazo_via": "codo",
+ "excluidas_por_rampa": [
+  "20260924_VCR_saque_perfil_240_01_rep01.mov"
+ ],
+ "repeticiones": [
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep01.mov",
+   "gesto": "drive",
+   "encuadre": "perfil",
+   "toma": "01",
+   "valida": true,
+   "motivo": "sin pico auditable para: brazo",
+   "instantes_s": {
+    "p": 2.703826955074875,
+    "t": 2.7703826955074873,
+    "b": null
+   },
+   "corte_hz": 9.0,
+   "delta_torso_menos_pelvis_ms": 66.55574043261225,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.6813205037959489,
+    "desfase_ms": 0.0,
+    "correlacion_en_el_desfase": 0.6813205037959489
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 2.3211314475873546,
+      "t": 2.2628951747088184,
+      "b": 2.146422628951747
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 2.346089850249584,
+      "t": 2.237936772046589,
+      "b": 2.179700499168053
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 2.3544093178036607,
+      "t": 2.2296173044925123,
+      "b": 2.196339434276206
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 2.703826955074875,
+      "t": 2.7703826955074873,
+      "b": null
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 2.8951747088186357,
+      "t": 2.7703826955074873,
+      "b": null
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 2.7703826955074873,
+     "t": 2.7703826955074873,
+     "b": null
+    },
+    "valida": true
+   }
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep02.mov",
+   "gesto": "drive",
+   "encuadre": "perfil",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 1.8635607321131447,
+    "t": 1.6638935108153077,
+    "b": 1.5474209650582362
+   },
+   "corte_hz": 7.0,
+   "delta_torso_menos_pelvis_ms": -199.667221297837,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.882882474230367,
+    "desfase_ms": 0.0,
+    "correlacion_en_el_desfase": 0.882882474230367
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 1.680532445923461,
+      "t": 1.638935108153078,
+      "b": 1.497504159733777
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 1.8552412645590681,
+      "t": 1.6638935108153077,
+      "b": 1.5391014975041597
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 1.8635607321131447,
+      "t": 1.6638935108153077,
+      "b": 1.9301164725457571
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 1.8635607321131447,
+      "t": 1.6638935108153077,
+      "b": 1.9301164725457571
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 1.8635607321131447,
+      "t": 1.6638935108153077,
+      "b": 1.9384359400998337
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 1.8552412645590681,
+     "t": 1.6638935108153077,
+     "b": null
+    },
+    "valida": true
+   }
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep03.mov",
+   "gesto": "drive",
+   "encuadre": "perfil",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 1.1148086522462561,
+    "t": 1.1064891846921796,
+    "b": 1.0232945091514143
+   },
+   "corte_hz": 7.0,
+   "delta_torso_menos_pelvis_ms": -8.319467554076532,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.9547276627318483,
+    "desfase_ms": 8.319467554076539,
+    "correlacion_en_el_desfase": 0.9547838644645034
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 1.1148086522462561,
+      "t": 1.1064891846921796,
+      "b": 0.9733777038269551
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 1.1064891846921796,
+      "t": 1.098169717138103,
+      "b": 1.0149750415973378
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 1.1148086522462561,
+      "t": 1.1231281198003327,
+      "b": 1.0149750415973378
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 1.464226289517471,
+      "t": 1.464226289517471,
+      "b": null
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 1.4725457570715474,
+      "t": 1.4725457570715474,
+      "b": null
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 1.1064891846921796,
+     "t": 1.098169717138103,
+     "b": null
+    },
+    "valida": true
+   }
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep04.mov",
+   "gesto": "drive",
+   "encuadre": "perfil",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 0.8069883527454242,
+    "t": 0.7986688851913477,
+    "b": 0.6655574043261231
+   },
+   "corte_hz": 8.0,
+   "delta_torso_menos_pelvis_ms": -8.319467554076532,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.6906129512241758,
+    "desfase_ms": -8.319467554076539,
+    "correlacion_en_el_desfase": 0.7119082614594577
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 0.8069883527454242,
+      "t": 0.7820299500831946,
+      "b": 0.6405990016638935
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 0.7986688851913477,
+      "t": 0.7903494176372712,
+      "b": 0.6821963394342762
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 0.8069883527454242,
+      "t": 0.7986688851913477,
+      "b": 0.6655574043261231
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 0.7820299500831946,
+      "t": 0.7986688851913477,
+      "b": 0.64891846921797
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 1.5391014975041597,
+      "t": 1.5391014975041597,
+      "b": null
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 0.7903494176372712,
+     "t": 0.7903494176372712,
+     "b": null
+    },
+    "valida": true
+   }
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep05.mov",
+   "gesto": "drive",
+   "encuadre": "perfil",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 1.8552412645590681,
+    "t": 1.8469217970049916,
+    "b": 1.6638935108153077
+   },
+   "corte_hz": 7.0,
+   "delta_torso_menos_pelvis_ms": -8.319467554076532,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.790435869645998,
+    "desfase_ms": -8.319467554076539,
+    "correlacion_en_el_desfase": 0.804035011953173
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 1.8469217970049916,
+      "t": 1.838602329450915,
+      "b": 1.6555740432612311
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 1.8552412645590681,
+      "t": 1.8469217970049916,
+      "b": 1.6888519134775375
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 1.8552412645590681,
+      "t": 1.8469217970049916,
+      "b": 1.6555740432612311
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 1.8552412645590681,
+      "t": 1.8552412645590681,
+      "b": 1.6472545757071546
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 1.8635607321131447,
+      "t": 1.8552412645590681,
+      "b": 1.6472545757071546
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 1.8469217970049916,
+     "t": 1.838602329450915,
+     "b": null
+    },
+    "valida": true
+   }
+  },
+  {
+   "clip": "20260924_VCR_drive_perfil_240_01_rep06.mov",
+   "gesto": "drive",
+   "encuadre": "perfil",
+   "toma": "01",
+   "valida": true,
+   "motivo": "sin pico auditable para: brazo",
+   "instantes_s": {
+    "p": 1.838602329450915,
+    "t": 1.8469217970049916,
+    "b": null
+   },
+   "corte_hz": 7.0,
+   "delta_torso_menos_pelvis_ms": 8.319467554076532,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.9656119857105208,
+    "desfase_ms": 0.0,
+    "correlacion_en_el_desfase": 0.9656119857105208
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 1.8552412645590681,
+      "t": 1.7054908485856906,
+      "b": null
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 1.838602329450915,
+      "t": 1.8469217970049916,
+      "b": null
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 1.838602329450915,
+      "t": 1.8469217970049916,
+      "b": null
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 1.7470881863560732,
+      "t": 1.7470881863560732,
+      "b": null
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": null,
+      "t": 1.7470881863560732,
+      "b": null
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 1.8302828618968385,
+     "t": 1.8469217970049916,
+     "b": null
+    },
+    "valida": true
+   }
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep01.mov",
+   "gesto": "drive",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "valida": true,
+   "motivo": "sin pico auditable para: brazo",
+   "instantes_s": {
+    "p": 2.612312811980033,
+    "t": 2.6039933444259566,
+    "b": null
+   },
+   "corte_hz": 8.0,
+   "delta_torso_menos_pelvis_ms": -8.319467554076532,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.9205860095355751,
+    "desfase_ms": -8.319467554076539,
+    "correlacion_en_el_desfase": 0.9322116075937991
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 2.6455906821963393,
+      "t": 2.6372712146422628,
+      "b": null
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 2.6289517470881862,
+      "t": 2.612312811980033,
+      "b": null
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 2.612312811980033,
+      "t": 2.6039933444259566,
+      "b": null
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 2.6039933444259566,
+      "t": 2.6039933444259566,
+      "b": 2.3377703826955076
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 2.6039933444259566,
+      "t": 2.6039933444259566,
+      "b": 2.3377703826955076
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 2.612312811980033,
+     "t": 2.6039933444259566,
+     "b": null
+    },
+    "valida": true
+   }
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep02.mov",
+   "gesto": "drive",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 1.1314475873544092,
+    "t": 1.1397670549084857,
+    "b": 1.3643926788685523
+   },
+   "corte_hz": 8.0,
+   "delta_torso_menos_pelvis_ms": 8.319467554076532,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.8388531324007119,
+    "desfase_ms": 0.0,
+    "correlacion_en_el_desfase": 0.8388531324007119
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 1.1064891846921796,
+      "t": 1.1148086522462561,
+      "b": 1.3810316139767054
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 1.1148086522462561,
+      "t": 1.1397670549084857,
+      "b": 1.3643926788685523
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 1.1314475873544092,
+      "t": 1.1397670549084857,
+      "b": 1.3643926788685523
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 1.1314475873544092,
+      "t": 1.1397670549084857,
+      "b": 1.3643926788685523
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 1.1314475873544092,
+      "t": 1.1397670549084857,
+      "b": 1.3643926788685523
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 1.1231281198003327,
+     "t": 1.1397670549084857,
+     "b": null
+    },
+    "valida": true
+   }
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep03.mov",
+   "gesto": "drive",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 1.51414309484193,
+    "t": 1.5224625623960066,
+    "b": 1.7803660565723793
+   },
+   "corte_hz": 7.0,
+   "delta_torso_menos_pelvis_ms": 8.319467554076532,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.9192367952674995,
+    "desfase_ms": 8.319467554076539,
+    "correlacion_en_el_desfase": 0.9402937575465964
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 1.4725457570715474,
+      "t": 1.480865224625624,
+      "b": 1.7470881863560732
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 1.5058236272878536,
+      "t": 1.5224625623960066,
+      "b": 1.7720465890183028
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 1.51414309484193,
+      "t": 1.5224625623960066,
+      "b": 1.7803660565723793
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 1.51414309484193,
+      "t": 1.5224625623960066,
+      "b": 1.7803660565723793
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 1.51414309484193,
+      "t": 1.5224625623960066,
+      "b": 1.7803660565723793
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 1.51414309484193,
+     "t": 1.5224625623960066,
+     "b": null
+    },
+    "valida": true
+   }
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep04.mov",
+   "gesto": "drive",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 1.1896838602329451,
+    "t": 1.1813643926788686,
+    "b": 1.064891846921797
+   },
+   "corte_hz": 7.0,
+   "delta_torso_menos_pelvis_ms": -8.319467554076532,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.9440084319575693,
+    "desfase_ms": 0.0,
+    "correlacion_en_el_desfase": 0.9440084319575693
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 1.1813643926788686,
+      "t": 1.173044925124792,
+      "b": null
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 1.1896838602329451,
+      "t": 1.1813643926788686,
+      "b": 1.0482529118136439
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 1.1896838602329451,
+      "t": 1.1896838602329451,
+      "b": 1.064891846921797
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 1.1813643926788686,
+      "t": 1.1813643926788686,
+      "b": 1.064891846921797
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 1.1813643926788686,
+      "t": 1.1813643926788686,
+      "b": 1.064891846921797
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 1.1813643926788686,
+     "t": 1.1813643926788686,
+     "b": null
+    },
+    "valida": true
+   }
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep05.mov",
+   "gesto": "drive",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 1.4309484193011648,
+    "t": 1.4392678868552413,
+    "b": 1.6139767054908485
+   },
+   "corte_hz": 7.0,
+   "delta_torso_menos_pelvis_ms": 8.319467554076532,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.9177461207656473,
+    "desfase_ms": 8.319467554076539,
+    "correlacion_en_el_desfase": 0.9197217215972258
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 1.4392678868552413,
+      "t": 1.4309484193011648,
+      "b": 1.622296173044925
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 1.4309484193011648,
+      "t": 1.4392678868552413,
+      "b": 1.6306156405990015
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 1.4309484193011648,
+      "t": 1.4392678868552413,
+      "b": 1.6139767054908485
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 1.4309484193011648,
+      "t": 1.4475873544093179,
+      "b": 1.6139767054908485
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 1.4309484193011648,
+      "t": 1.4475873544093179,
+      "b": 1.6139767054908485
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 1.4226289517470883,
+     "t": 1.4309484193011648,
+     "b": null
+    },
+    "valida": true
+   }
+  },
+  {
+   "clip": "20260924_VCR_drive_trescuartos_240_01_rep06.mov",
+   "gesto": "drive",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 1.405990016638935,
+    "t": 1.4143094841930117,
+    "b": 1.605657237936772
+   },
+   "corte_hz": 8.0,
+   "delta_torso_menos_pelvis_ms": 8.319467554076754,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.8623752686344655,
+    "desfase_ms": 0.0,
+    "correlacion_en_el_desfase": 0.8623752686344655
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 1.3643926788685523,
+      "t": 1.3810316139767054,
+      "b": 1.6306156405990015
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 1.29783693843594,
+      "t": 1.4226289517470883,
+      "b": 1.6139767054908485
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 1.405990016638935,
+      "t": 1.4143094841930117,
+      "b": 1.605657237936772
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 1.405990016638935,
+      "t": 1.4143094841930117,
+      "b": 1.589018302828619
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 1.4143094841930117,
+      "t": 1.4143094841930117,
+      "b": 1.589018302828619
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 1.405990016638935,
+     "t": 1.4143094841930117,
+     "b": null
+    },
+    "valida": true
+   }
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep01.mov",
+   "gesto": "reves",
+   "encuadre": "perfil",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 1.3394342762063227,
+    "t": 1.3477537437603992,
+    "b": 1.3144758735440931
+   },
+   "corte_hz": 8.0,
+   "delta_torso_menos_pelvis_ms": 8.319467554076532,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.9429080502621908,
+    "desfase_ms": 8.319467554076539,
+    "correlacion_en_el_desfase": 0.9561081939625112
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 1.3227953410981697,
+      "t": 1.3394342762063227,
+      "b": 1.29783693843594
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 1.3394342762063227,
+      "t": 1.3477537437603992,
+      "b": 1.3144758735440931
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 1.3394342762063227,
+      "t": 1.3477537437603992,
+      "b": 1.3144758735440931
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 1.3394342762063227,
+      "t": 1.3477537437603992,
+      "b": 1.3061564059900166
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 1.3394342762063227,
+      "t": 1.3477537437603992,
+      "b": 1.3061564059900166
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 1.3394342762063227,
+     "t": 1.3477537437603992,
+     "b": null
+    },
+    "valida": true
+   }
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep02.mov",
+   "gesto": "reves",
+   "encuadre": "perfil",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 0.9983361064891847,
+    "t": 1.0066555740432612,
+    "b": 1.0316139767054908
+   },
+   "corte_hz": 6.0,
+   "delta_torso_menos_pelvis_ms": 8.319467554076532,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.8089521200312405,
+    "desfase_ms": 8.319467554076539,
+    "correlacion_en_el_desfase": 0.8095823843875849
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 1.0066555740432612,
+      "t": 1.0066555740432612,
+      "b": 1.0399334442595674
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 0.9983361064891847,
+      "t": 1.0066555740432612,
+      "b": 1.0316139767054908
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 0.9983361064891847,
+      "t": 0.9983361064891847,
+      "b": 1.0149750415973378
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 0.9983361064891847,
+      "t": 0.9983361064891847,
+      "b": 0.9983361064891847
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 0.9983361064891847,
+      "t": 0.9983361064891847,
+      "b": 0.9983361064891847
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 0.9900166389351082,
+     "t": 0.9983361064891847,
+     "b": null
+    },
+    "valida": true
+   }
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep03.mov",
+   "gesto": "reves",
+   "encuadre": "perfil",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 0.5324459234608985,
+    "t": 0.5324459234608985,
+    "b": 0.49916805324459235
+   },
+   "corte_hz": 7.0,
+   "delta_torso_menos_pelvis_ms": 0.0,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.8505083332445441,
+    "desfase_ms": -8.319467554076539,
+    "correlacion_en_el_desfase": 0.8797581486610002
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 0.5241264559068219,
+      "t": 0.5158069883527454,
+      "b": 0.4908485856905158
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 0.5324459234608985,
+      "t": 0.5241264559068219,
+      "b": 0.4908485856905158
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 0.5324459234608985,
+      "t": 0.540765391014975,
+      "b": 0.49916805324459235
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 0.540765391014975,
+      "t": 0.540765391014975,
+      "b": 0.5241264559068219
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 0.540765391014975,
+      "t": 0.540765391014975,
+      "b": 0.5241264559068219
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 0.5241264559068219,
+     "t": 0.5241264559068219,
+     "b": null
+    },
+    "valida": true
+   }
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep04.mov",
+   "gesto": "reves",
+   "encuadre": "perfil",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 1.08153078202995,
+    "t": 1.0732113144758735,
+    "b": 1.29783693843594
+   },
+   "corte_hz": 9.0,
+   "delta_torso_menos_pelvis_ms": -8.319467554076532,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.7952505105389048,
+    "desfase_ms": 0.0,
+    "correlacion_en_el_desfase": 0.7952505105389048
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 1.1064891846921796,
+      "t": 1.0898502495840265,
+      "b": 1.281198003327787
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 1.0898502495840265,
+      "t": 1.0732113144758735,
+      "b": 0.9900166389351082
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 1.08153078202995,
+      "t": 1.0732113144758735,
+      "b": 1.29783693843594
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 1.08153078202995,
+      "t": 1.064891846921797,
+      "b": 1.2895174708818635
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 0.8735440931780366,
+      "t": 1.0565723793677204,
+      "b": 1.2895174708818635
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 1.0732113144758735,
+     "t": 1.064891846921797,
+     "b": null
+    },
+    "valida": true
+   }
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep05.mov",
+   "gesto": "reves",
+   "encuadre": "perfil",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 1.1064891846921796,
+    "t": 1.1064891846921796,
+    "b": 1.3643926788685523
+   },
+   "corte_hz": 8.0,
+   "delta_torso_menos_pelvis_ms": 0.0,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.6152549426662266,
+    "desfase_ms": 0.0,
+    "correlacion_en_el_desfase": 0.6152549426662266
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 0.5740432612312811,
+      "t": 0.5906821963394343,
+      "b": 0.5574043261231281
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 1.098169717138103,
+      "t": 1.1064891846921796,
+      "b": 0.9567387687188019
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 1.1064891846921796,
+      "t": 1.1064891846921796,
+      "b": 1.3643926788685523
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 1.264559068219634,
+      "t": 1.1148086522462561,
+      "b": 1.3643926788685523
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 1.264559068219634,
+      "t": 1.2562396006655574,
+      "b": 1.3643926788685523
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 1.098169717138103,
+     "t": 1.1064891846921796,
+     "b": null
+    },
+    "valida": true
+   }
+  },
+  {
+   "clip": "20260924_VCR_reves_perfil_240_01_rep06.mov",
+   "gesto": "reves",
+   "encuadre": "perfil",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 0.757071547420965,
+    "t": 0.7487520798668885,
+    "b": 0.6572379367720466
+   },
+   "corte_hz": 8.0,
+   "delta_torso_menos_pelvis_ms": -8.319467554076532,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.6772246746215435,
+    "desfase_ms": 0.0,
+    "correlacion_en_el_desfase": 0.6772246746215435
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 0.7487520798668885,
+      "t": 0.7487520798668885,
+      "b": null
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 0.7487520798668885,
+      "t": 0.7487520798668885,
+      "b": 0.6738768718801996
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 0.757071547420965,
+      "t": 0.7487520798668885,
+      "b": 0.6572379367720466
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 0.757071547420965,
+      "t": 0.7487520798668885,
+      "b": 1.0232945091514143
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 0.757071547420965,
+      "t": 0.7487520798668885,
+      "b": 1.0149750415973378
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 0.757071547420965,
+     "t": 0.7487520798668885,
+     "b": null
+    },
+    "valida": true
+   }
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep01.mov",
+   "gesto": "reves",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "valida": true,
+   "motivo": "sin pico auditable para: brazo",
+   "instantes_s": {
+    "p": 1.838602329450915,
+    "t": 1.6888519134775375,
+    "b": null
+   },
+   "corte_hz": 8.0,
+   "delta_torso_menos_pelvis_ms": -149.75041597337759,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.8314607761328431,
+    "desfase_ms": 0.0,
+    "correlacion_en_el_desfase": 0.8314607761328431
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 1.7970049916805324,
+      "t": 1.7387687188019967,
+      "b": null
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 1.8302828618968385,
+      "t": 1.8136439267886855,
+      "b": 1.9966722129783694
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 1.838602329450915,
+      "t": 1.6888519134775375,
+      "b": null
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 1.838602329450915,
+      "t": 1.838602329450915,
+      "b": 1.9966722129783694
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 1.838602329450915,
+      "t": 1.838602329450915,
+      "b": 1.9966722129783694
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 1.8302828618968385,
+     "t": 1.821963394342762,
+     "b": null
+    },
+    "valida": true
+   }
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep02.mov",
+   "gesto": "reves",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 1.2728785357737105,
+    "t": 1.0316139767054908,
+    "b": 1.098169717138103
+   },
+   "corte_hz": 8.0,
+   "delta_torso_menos_pelvis_ms": -241.26455906821965,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.9149328959669558,
+    "desfase_ms": 0.0,
+    "correlacion_en_el_desfase": 0.9149328959669558
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 1.2063227953410982,
+      "t": 1.2063227953410982,
+      "b": 1.3976705490848584
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 1.0149750415973378,
+      "t": 1.0232945091514143,
+      "b": 1.0898502495840265
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 1.2728785357737105,
+      "t": 1.0316139767054908,
+      "b": 1.098169717138103
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 1.2728785357737105,
+      "t": 1.0399334442595674,
+      "b": 0.8569051580698835
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 1.0399334442595674,
+      "t": 1.0399334442595674,
+      "b": 0.8652246256239601
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 1.2728785357737105,
+     "t": 1.0316139767054908,
+     "b": null
+    },
+    "valida": true
+   }
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep03.mov",
+   "gesto": "reves",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 1.3061564059900166,
+    "t": 1.3061564059900166,
+    "b": 1.3810316139767054
+   },
+   "corte_hz": 8.0,
+   "delta_torso_menos_pelvis_ms": 0.0,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.6915702105311919,
+    "desfase_ms": 8.319467554076539,
+    "correlacion_en_el_desfase": 0.700965888727721
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 1.2562396006655574,
+      "t": 1.2728785357737105,
+      "b": 1.405990016638935
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 1.29783693843594,
+      "t": 1.29783693843594,
+      "b": 1.3810316139767054
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 1.3061564059900166,
+      "t": 1.3061564059900166,
+      "b": 1.3810316139767054
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 1.3061564059900166,
+      "t": 1.3061564059900166,
+      "b": 1.3727121464226288
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 1.29783693843594,
+      "t": 1.3061564059900166,
+      "b": 1.3643926788685523
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 1.29783693843594,
+     "t": 1.29783693843594,
+     "b": null
+    },
+    "valida": true
+   }
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep04.mov",
+   "gesto": "reves",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 1.7387687188019967,
+    "t": 1.7304492512479202,
+    "b": 1.8552412645590681
+   },
+   "corte_hz": 7.0,
+   "delta_torso_menos_pelvis_ms": -8.319467554076532,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.6654092995198654,
+    "desfase_ms": -8.319467554076539,
+    "correlacion_en_el_desfase": 0.6742244704834555
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": null,
+      "t": 1.713810316139767,
+      "b": 1.8885191347753743
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 1.7387687188019967,
+      "t": 1.7221297836938436,
+      "b": 1.8718801996672212
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 1.7387687188019967,
+      "t": 1.7221297836938436,
+      "b": 1.8552412645590681
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 1.7304492512479202,
+      "t": 1.7221297836938436,
+      "b": 1.8885191347753743
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 1.7304492512479202,
+      "t": 1.7221297836938436,
+      "b": 1.8968386023294508
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 1.7387687188019967,
+     "t": 1.7221297836938436,
+     "b": null
+    },
+    "valida": true
+   }
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep05.mov",
+   "gesto": "reves",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 1.1314475873544092,
+    "t": 1.1231281198003327,
+    "b": 1.281198003327787
+   },
+   "corte_hz": 8.0,
+   "delta_torso_menos_pelvis_ms": -8.319467554076532,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.7220233557279465,
+    "desfase_ms": 8.319467554076539,
+    "correlacion_en_el_desfase": 0.7550410897321324
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 1.1064891846921796,
+      "t": 1.1148086522462561,
+      "b": 1.2728785357737105
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 1.1314475873544092,
+      "t": 1.1231281198003327,
+      "b": 1.264559068219634
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 1.1314475873544092,
+      "t": 1.1231281198003327,
+      "b": 1.281198003327787
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 1.1314475873544092,
+      "t": 1.1148086522462561,
+      "b": 1.3144758735440931
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 1.1314475873544092,
+      "t": 1.1148086522462561,
+      "b": 1.3227953410981697
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 1.1314475873544092,
+     "t": 1.1231281198003327,
+     "b": null
+    },
+    "valida": true
+   }
+  },
+  {
+   "clip": "20260924_VCR_reves_trescuartos_240_01_rep06.mov",
+   "gesto": "reves",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 1.3976705490848584,
+    "t": 1.389351081530782,
+    "b": 1.5307820299500832
+   },
+   "corte_hz": 8.0,
+   "delta_torso_menos_pelvis_ms": -8.319467554076532,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.8081448398632636,
+    "desfase_ms": 0.0,
+    "correlacion_en_el_desfase": 0.8081448398632636
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 1.405990016638935,
+      "t": 1.3976705490848584,
+      "b": 1.5557404326123128
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 1.3976705490848584,
+      "t": 1.3976705490848584,
+      "b": 1.5391014975041597
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 1.3976705490848584,
+      "t": 1.389351081530782,
+      "b": 1.5307820299500832
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 1.405990016638935,
+      "t": 1.389351081530782,
+      "b": 1.5224625623960066
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 1.4226289517470883,
+      "t": 1.3810316139767054,
+      "b": 1.5224625623960066
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 1.3976705490848584,
+     "t": 1.389351081530782,
+     "b": null
+    },
+    "valida": true
+   }
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep02.mov",
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 4.342762063227953,
+    "t": 4.3261231281198,
+    "b": 4.209650582362729
+   },
+   "corte_hz": 8.0,
+   "delta_torso_menos_pelvis_ms": -16.638935108153063,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.8603920599503388,
+    "desfase_ms": -16.638935108153078,
+    "correlacion_en_el_desfase": 0.8980249565485856
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 4.359400998336106,
+      "t": 4.3261231281198,
+      "b": 4.1763727121464225
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 4.342762063227953,
+      "t": 4.3261231281198,
+      "b": 4.201331114808652
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 4.342762063227953,
+      "t": 4.3261231281198,
+      "b": 4.209650582362729
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 4.342762063227953,
+      "t": 4.3261231281198,
+      "b": 4.209650582362729
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 4.342762063227953,
+      "t": 4.3261231281198,
+      "b": 4.168053244592346
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 4.334442595673877,
+     "t": 4.3261231281198,
+     "b": null
+    },
+    "valida": true
+   }
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep03.mov",
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "toma": "01",
+   "valida": false,
+   "motivo": "sin ancla: pico de torso no auditable (velocidad implausible (2621 °/s > techo 2610): probable error de detección)",
+   "instantes_s": {
+    "p": null,
+    "t": null,
+    "b": null
+   },
+   "corte_hz": 8.0,
+   "delta_torso_menos_pelvis_ms": null,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.9654508780966118,
+    "desfase_ms": 0.0,
+    "correlacion_en_el_desfase": 0.9654508780966118
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 1.405990016638935,
+      "t": 1.3976705490848584,
+      "b": null
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": null,
+      "t": 1.4143094841930117,
+      "b": null
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": null,
+      "t": null,
+      "b": null
+     },
+     "valida": false
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": null,
+      "t": null,
+      "b": null
+     },
+     "valida": false
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": null,
+      "t": null,
+      "b": null
+     },
+     "valida": false
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 1.405990016638935,
+     "t": 1.4143094841930117,
+     "b": null
+    },
+    "valida": true
+   }
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep04.mov",
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 1.7803660565723793,
+    "t": 1.7470881863560732,
+    "b": 1.697171381031614
+   },
+   "corte_hz": 7.0,
+   "delta_torso_menos_pelvis_ms": -33.27787021630613,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.9162889068814722,
+    "desfase_ms": -16.638935108153078,
+    "correlacion_en_el_desfase": 0.9593962961067783
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 1.7886855241264559,
+      "t": 1.7637271214642263,
+      "b": 1.9217970049916804
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 1.7886855241264559,
+      "t": 1.7554076539101497,
+      "b": 1.6888519134775375
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 1.7637271214642263,
+      "t": 1.7470881863560732,
+      "b": 1.697171381031614
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 1.7554076539101497,
+      "t": 1.7387687188019967,
+      "b": 1.7054908485856906
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 1.7470881863560732,
+      "t": 1.7387687188019967,
+      "b": 1.713810316139767
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 1.7803660565723793,
+     "t": 1.7470881863560732,
+     "b": null
+    },
+    "valida": true
+   }
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep05.mov",
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 2.196339434276206,
+    "t": 2.1713810316139766,
+    "b": 2.3710482529118138
+   },
+   "corte_hz": 8.0,
+   "delta_torso_menos_pelvis_ms": -24.958402662229595,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.8644070268005545,
+    "desfase_ms": -24.958402662229616,
+    "correlacion_en_el_desfase": 0.9437920985473026
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 2.196339434276206,
+      "t": 2.1713810316139766,
+      "b": 2.304492512479201
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 2.1880199667221296,
+      "t": 2.1713810316139766,
+      "b": 2.3627287853577372
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 2.196339434276206,
+      "t": 2.1713810316139766,
+      "b": 2.3710482529118138
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 2.1713810316139766,
+      "t": 2.1630615640599,
+      "b": 2.3710482529118138
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 2.1713810316139766,
+      "t": 2.1630615640599,
+      "b": 2.3710482529118138
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 2.1880199667221296,
+     "t": 2.1713810316139766,
+     "b": null
+    },
+    "valida": true
+   }
+  },
+  {
+   "clip": "20260924_VCR_saque_perfil_240_01_rep06.mov",
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 2.5041597337770383,
+    "t": 2.487520798668885,
+    "b": 2.3960066555740434
+   },
+   "corte_hz": 7.0,
+   "delta_torso_menos_pelvis_ms": -16.638935108153063,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.9631935103440213,
+    "desfase_ms": -8.319467554076539,
+    "correlacion_en_el_desfase": 0.9808302324412416
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 2.5041597337770383,
+      "t": 2.5041597337770383,
+      "b": 2.346089850249584
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 2.5041597337770383,
+      "t": 2.4958402662229617,
+      "b": 2.3793677204658903
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 2.5041597337770383,
+      "t": 2.487520798668885,
+      "b": 2.3960066555740434
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 2.4958402662229617,
+      "t": 2.4792013311148087,
+      "b": 2.3960066555740434
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 2.4958402662229617,
+      "t": 2.4792013311148087,
+      "b": 2.346089850249584
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 2.4958402662229617,
+     "t": 2.487520798668885,
+     "b": null
+    },
+    "valida": true
+   }
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep01.mov",
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 2.5207986688851913,
+    "t": 2.5207986688851913,
+    "b": 2.7287853577371046
+   },
+   "corte_hz": 9.0,
+   "delta_torso_menos_pelvis_ms": 0.0,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.956421246335678,
+    "desfase_ms": 0.0,
+    "correlacion_en_el_desfase": 0.956421246335678
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 2.5207986688851913,
+      "t": 2.5374376039933444,
+      "b": 2.753743760399334
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 2.5207986688851913,
+      "t": 2.5207986688851913,
+      "b": 2.7454242928452577
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 2.5207986688851913,
+      "t": 2.5207986688851913,
+      "b": 2.737104825291181
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 2.5207986688851913,
+      "t": 2.5207986688851913,
+      "b": 2.7287853577371046
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 2.5207986688851913,
+      "t": 2.529118136439268,
+      "b": 2.720465890183028
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 2.512479201331115,
+     "t": 2.512479201331115,
+     "b": null
+    },
+    "valida": true
+   }
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep02.mov",
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 2.928452579034942,
+    "t": 2.945091514143095,
+    "b": 2.978369384359401
+   },
+   "corte_hz": 8.0,
+   "delta_torso_menos_pelvis_ms": 16.638935108153063,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.8337562497857682,
+    "desfase_ms": 8.319467554076539,
+    "correlacion_en_el_desfase": 0.8682625630383213
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 2.928452579034942,
+      "t": 2.9534109816971714,
+      "b": 2.9700499168053245
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 2.928452579034942,
+      "t": 2.945091514143095,
+      "b": 2.9700499168053245
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 2.928452579034942,
+      "t": 2.945091514143095,
+      "b": 2.978369384359401
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 2.928452579034942,
+      "t": 2.9367720465890184,
+      "b": 2.978369384359401
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 2.9367720465890184,
+      "t": 2.9367720465890184,
+      "b": 2.978369384359401
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 2.9201331114808653,
+     "t": 2.9367720465890184,
+     "b": null
+    },
+    "valida": true
+   }
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep03.mov",
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 2.5041597337770383,
+    "t": 2.512479201331115,
+    "b": 2.5707154742096505
+   },
+   "corte_hz": 7.0,
+   "delta_torso_menos_pelvis_ms": 8.319467554076532,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.9264347980205837,
+    "desfase_ms": 0.0,
+    "correlacion_en_el_desfase": 0.9264347980205837
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 2.512479201331115,
+      "t": 2.5207986688851913,
+      "b": null
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 2.512479201331115,
+      "t": 2.512479201331115,
+      "b": 2.579034941763727
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 2.5041597337770383,
+      "t": 2.5041597337770383,
+      "b": 2.5707154742096505
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 2.5041597337770383,
+      "t": 2.4958402662229617,
+      "b": 2.5707154742096505
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 2.4958402662229617,
+      "t": 2.4958402662229617,
+      "b": 2.5707154742096505
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 2.5041597337770383,
+     "t": 2.512479201331115,
+     "b": null
+    },
+    "valida": true
+   }
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep04.mov",
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 2.4625623960066556,
+    "t": 2.470881863560732,
+    "b": 2.545757071547421
+   },
+   "corte_hz": 9.0,
+   "delta_torso_menos_pelvis_ms": 8.319467554076532,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.9569298310806167,
+    "desfase_ms": 0.0,
+    "correlacion_en_el_desfase": 0.9569298310806167
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 2.5041597337770383,
+      "t": 2.512479201331115,
+      "b": 2.753743760399334
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 2.470881863560732,
+      "t": 2.4792013311148087,
+      "b": 2.545757071547421
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 2.4625623960066556,
+      "t": 2.470881863560732,
+      "b": 2.545757071547421
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 2.4625623960066556,
+      "t": 2.470881863560732,
+      "b": 2.545757071547421
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 2.4625623960066556,
+      "t": 2.470881863560732,
+      "b": 2.545757071547421
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 2.4625623960066556,
+     "t": 2.4625623960066556,
+     "b": null
+    },
+    "valida": true
+   }
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep05.mov",
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 3.7437603993344424,
+    "t": 3.7437603993344424,
+    "b": 3.7603993344425954
+   },
+   "corte_hz": 8.0,
+   "delta_torso_menos_pelvis_ms": 0.0,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.917217494515784,
+    "desfase_ms": -16.638935108153078,
+    "correlacion_en_el_desfase": 0.9351823904609433
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 3.768718801996672,
+      "t": 3.7603993344425954,
+      "b": 3.768718801996672
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 3.768718801996672,
+      "t": 3.752079866888519,
+      "b": 3.7603993344425954
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 3.7437603993344424,
+      "t": 3.7437603993344424,
+      "b": 3.7603993344425954
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 3.7437603993344424,
+      "t": 3.7437603993344424,
+      "b": 3.7603993344425954
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 3.752079866888519,
+      "t": 3.7437603993344424,
+      "b": 3.7603993344425954
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 3.7437603993344424,
+     "t": 3.752079866888519,
+     "b": null
+    },
+    "valida": true
+   }
+  },
+  {
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep06.mov",
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "valida": true,
+   "motivo": null,
+   "instantes_s": {
+    "p": 2.4792013311148087,
+    "t": 2.487520798668885,
+    "b": 2.7121464226289516
+   },
+   "corte_hz": 7.0,
+   "delta_torso_menos_pelvis_ms": 8.319467554076532,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.956385642593675,
+    "desfase_ms": -8.319467554076539,
+    "correlacion_en_el_desfase": 0.9618038246184957
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 2.5041597337770383,
+      "t": 2.512479201331115,
+      "b": 2.7287853577371046
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 2.487520798668885,
+      "t": 2.5041597337770383,
+      "b": 2.720465890183028
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 2.4792013311148087,
+      "t": 2.4792013311148087,
+      "b": 2.7121464226289516
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 2.470881863560732,
+      "t": 2.4625623960066556,
+      "b": 2.703826955074875
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 2.470881863560732,
+      "t": 2.4625623960066556,
+      "b": 2.703826955074875
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 2.470881863560732,
+     "t": 2.4792013311148087,
+     "b": null
+    },
+    "valida": true
+   }
+  }
+ ],
+ "resultado_por_tolerancia": {
+  "primaria": {
+   "tolerancia_ms": 8.333333333333334,
+   "grupos": {
+    "drive|perfil": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 2,
+      "1a_sobre_todas": 0.3333333333333333,
+      "1a_sobre_todas_ic95": [
+       0.09676933255921683,
+       0.7000116786584712
+      ],
+      "1a_sobre_validas": 0.3333333333333333,
+      "1b_orden_modal": "pt",
+      "1b_repetibilidad": 0.5,
+      "1b_ic95": [
+       0.09452865480086614,
+       0.9054713451991339
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 0.5,
+      "1c_ic95": [
+       0.09452865480086614,
+       0.9054713451991339
+      ],
+      "ordenes": {
+       "pt": 1,
+       "tp": 1
+      },
+      "criterio_1_cumplido": false
+     }
+    },
+    "drive|trescuartos": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 0,
+      "1a_sobre_todas": 0.0,
+      "1a_sobre_todas_ic95": [
+       0.0,
+       0.3903430336530645
+      ],
+      "1a_sobre_validas": 0.0,
+      "1b_orden_modal": null,
+      "1b_repetibilidad": null,
+      "1b_ic95": null,
+      "1c_esperado": "pt",
+      "1c_coincidencia": null,
+      "1c_ic95": null,
+      "ordenes": {},
+      "criterio_1_cumplido": false
+     },
+     "cadena": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 0,
+      "1a_sobre_todas": 0.0,
+      "1a_sobre_todas_ic95": [
+       0.0,
+       0.3903430336530645
+      ],
+      "1a_sobre_validas": 0.0,
+      "1b_orden_modal": null,
+      "1b_repetibilidad": null,
+      "1b_ic95": null,
+      "1c_esperado": "ptb",
+      "1c_coincidencia": null,
+      "1c_ic95": null,
+      "ordenes": {},
+      "criterio_1_cumplido": false
+     }
+    },
+    "reves|perfil": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 0,
+      "1a_sobre_todas": 0.0,
+      "1a_sobre_todas_ic95": [
+       0.0,
+       0.3903430336530645
+      ],
+      "1a_sobre_validas": 0.0,
+      "1b_orden_modal": null,
+      "1b_repetibilidad": null,
+      "1b_ic95": null,
+      "1c_esperado": "pt",
+      "1c_coincidencia": null,
+      "1c_ic95": null,
+      "ordenes": {},
+      "criterio_1_cumplido": false
+     }
+    },
+    "reves|trescuartos": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 2,
+      "1a_sobre_todas": 0.3333333333333333,
+      "1a_sobre_todas_ic95": [
+       0.09676933255921683,
+       0.7000116786584712
+      ],
+      "1a_sobre_validas": 0.3333333333333333,
+      "1b_orden_modal": "tp",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.34237195288961925,
+       1.0
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 0.0,
+      "1c_ic95": [
+       0.0,
+       0.6576280471103807
+      ],
+      "ordenes": {
+       "tp": 2
+      },
+      "criterio_1_cumplido": false
+     },
+     "cadena": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 1,
+      "1a_sobre_todas": 0.16666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.03005258587173032,
+       0.563509436563646
+      ],
+      "1a_sobre_validas": 0.16666666666666666,
+      "1b_orden_modal": "tbp",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "1c_esperado": "ptb",
+      "1c_coincidencia": 0.0,
+      "1c_ic95": [
+       0.0,
+       0.7934567085261071
+      ],
+      "ordenes": {
+       "tbp": 1
+      },
+      "criterio_1_cumplido": false
+     }
+    },
+    "saque|perfil": {
+     "par_pelvis_torso": {
+      "n": 5,
+      "validas": 4,
+      "ordenables": 4,
+      "1a_sobre_todas": 0.8,
+      "1a_sobre_todas_ic95": [
+       0.3755282641185388,
+       0.9637768390302125
+      ],
+      "1a_sobre_validas": 1.0,
+      "1b_orden_modal": "tp",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.5100999795960008,
+       1.0
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 0.0,
+      "1c_ic95": [
+       0.0,
+       0.48990002040399916
+      ],
+      "ordenes": {
+       "tp": 4
+      },
+      "criterio_1_cumplido": true
+     }
+    },
+    "saque|trescuartos": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 1,
+      "1a_sobre_todas": 0.16666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.03005258587173032,
+       0.563509436563646
+      ],
+      "1a_sobre_validas": 0.16666666666666666,
+      "1b_orden_modal": "pt",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 1.0,
+      "1c_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "ordenes": {
+       "pt": 1
+      },
+      "criterio_1_cumplido": false
+     },
+     "cadena": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 1,
+      "1a_sobre_todas": 0.16666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.03005258587173032,
+       0.563509436563646
+      ],
+      "1a_sobre_validas": 0.16666666666666666,
+      "1b_orden_modal": "ptb",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "1c_esperado": "ptb",
+      "1c_coincidencia": 1.0,
+      "1c_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "ordenes": {
+       "ptb": 1
+      },
+      "criterio_1_cumplido": false
+     }
+    },
+    "saque|trescuartos|toma 01": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 1,
+      "1a_sobre_todas": 0.16666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.03005258587173032,
+       0.563509436563646
+      ],
+      "1a_sobre_validas": 0.16666666666666666,
+      "1b_orden_modal": "pt",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 1.0,
+      "1c_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "ordenes": {
+       "pt": 1
+      },
+      "criterio_1_cumplido": false
+     },
+     "cadena": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 1,
+      "1a_sobre_todas": 0.16666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.03005258587173032,
+       0.563509436563646
+      ],
+      "1a_sobre_validas": 0.16666666666666666,
+      "1b_orden_modal": "ptb",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "1c_esperado": "ptb",
+      "1c_coincidencia": 1.0,
+      "1c_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "ordenes": {
+       "ptb": 1
+      },
+      "criterio_1_cumplido": false
+     }
+    }
+   }
+  },
+  "sens_4.2ms": {
+   "tolerancia_ms": 4.166666666666667,
+   "grupos": {
+    "drive|perfil": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 6,
+      "1a_sobre_todas": 1.0,
+      "1a_sobre_todas_ic95": [
+       0.6096569663469354,
+       0.9999999999999999
+      ],
+      "1a_sobre_validas": 1.0,
+      "1b_orden_modal": "tp",
+      "1b_repetibilidad": 0.6666666666666666,
+      "1b_ic95": [
+       0.29998832134152864,
+       0.9032306674407831
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 0.3333333333333333,
+      "1c_ic95": [
+       0.09676933255921683,
+       0.7000116786584712
+      ],
+      "ordenes": {
+       "pt": 2,
+       "tp": 4
+      },
+      "criterio_1_cumplido": false
+     }
+    },
+    "drive|trescuartos": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 6,
+      "1a_sobre_todas": 1.0,
+      "1a_sobre_todas_ic95": [
+       0.6096569663469354,
+       0.9999999999999999
+      ],
+      "1a_sobre_validas": 1.0,
+      "1b_orden_modal": "pt",
+      "1b_repetibilidad": 0.6666666666666666,
+      "1b_ic95": [
+       0.29998832134152864,
+       0.9032306674407831
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 0.6666666666666666,
+      "1c_ic95": [
+       0.29998832134152864,
+       0.9032306674407831
+      ],
+      "ordenes": {
+       "tp": 2,
+       "pt": 4
+      },
+      "criterio_1_cumplido": false
+     },
+     "cadena": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 5,
+      "1a_sobre_todas": 0.8333333333333334,
+      "1a_sobre_todas_ic95": [
+       0.43649056343635395,
+       0.9699474141282697
+      ],
+      "1a_sobre_validas": 0.8333333333333334,
+      "1b_orden_modal": "ptb",
+      "1b_repetibilidad": 0.8,
+      "1b_ic95": [
+       0.3755282641185388,
+       0.9637768390302125
+      ],
+      "1c_esperado": "ptb",
+      "1c_coincidencia": 0.8,
+      "1c_ic95": [
+       0.3755282641185388,
+       0.9637768390302125
+      ],
+      "ordenes": {
+       "ptb": 4,
+       "btp": 1
+      },
+      "criterio_1_cumplido": true
+     }
+    },
+    "reves|perfil": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 4,
+      "1a_sobre_todas": 0.6666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.29998832134152864,
+       0.9032306674407831
+      ],
+      "1a_sobre_validas": 0.6666666666666666,
+      "1b_orden_modal": "pt",
+      "1b_repetibilidad": 0.5,
+      "1b_ic95": [
+       0.15003570882017148,
+       0.8499642911798285
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 0.5,
+      "1c_ic95": [
+       0.15003570882017148,
+       0.8499642911798285
+      ],
+      "ordenes": {
+       "pt": 2,
+       "tp": 2
+      },
+      "criterio_1_cumplido": false
+     }
+    },
+    "reves|trescuartos": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 5,
+      "1a_sobre_todas": 0.8333333333333334,
+      "1a_sobre_todas_ic95": [
+       0.43649056343635395,
+       0.9699474141282697
+      ],
+      "1a_sobre_validas": 0.8333333333333334,
+      "1b_orden_modal": "tp",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.5655085052479191,
+       1.0
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 0.0,
+      "1c_ic95": [
+       0.0,
+       0.43449149475208104
+      ],
+      "ordenes": {
+       "tp": 5
+      },
+      "criterio_1_cumplido": true
+     },
+     "cadena": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 4,
+      "1a_sobre_todas": 0.6666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.29998832134152864,
+       0.9032306674407831
+      ],
+      "1a_sobre_validas": 0.6666666666666666,
+      "1b_orden_modal": "tpb",
+      "1b_repetibilidad": 0.75,
+      "1b_ic95": [
+       0.3006360524426366,
+       0.9544139373553637
+      ],
+      "1c_esperado": "ptb",
+      "1c_coincidencia": 0.0,
+      "1c_ic95": [
+       0.0,
+       0.48990002040399916
+      ],
+      "ordenes": {
+       "tbp": 1,
+       "tpb": 3
+      },
+      "criterio_1_cumplido": false
+     }
+    },
+    "saque|perfil": {
+     "par_pelvis_torso": {
+      "n": 5,
+      "validas": 4,
+      "ordenables": 4,
+      "1a_sobre_todas": 0.8,
+      "1a_sobre_todas_ic95": [
+       0.3755282641185388,
+       0.9637768390302125
+      ],
+      "1a_sobre_validas": 1.0,
+      "1b_orden_modal": "tp",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.5100999795960008,
+       1.0
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 0.0,
+      "1c_ic95": [
+       0.0,
+       0.48990002040399916
+      ],
+      "ordenes": {
+       "tp": 4
+      },
+      "criterio_1_cumplido": true
+     }
+    },
+    "saque|trescuartos": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 4,
+      "1a_sobre_todas": 0.6666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.29998832134152864,
+       0.9032306674407831
+      ],
+      "1a_sobre_validas": 0.6666666666666666,
+      "1b_orden_modal": "pt",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.5100999795960008,
+       1.0
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 1.0,
+      "1c_ic95": [
+       0.5100999795960008,
+       1.0
+      ],
+      "ordenes": {
+       "pt": 4
+      },
+      "criterio_1_cumplido": false
+     },
+     "cadena": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 4,
+      "1a_sobre_todas": 0.6666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.29998832134152864,
+       0.9032306674407831
+      ],
+      "1a_sobre_validas": 0.6666666666666666,
+      "1b_orden_modal": "ptb",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.5100999795960008,
+       1.0
+      ],
+      "1c_esperado": "ptb",
+      "1c_coincidencia": 1.0,
+      "1c_ic95": [
+       0.5100999795960008,
+       1.0
+      ],
+      "ordenes": {
+       "ptb": 4
+      },
+      "criterio_1_cumplido": false
+     }
+    },
+    "saque|trescuartos|toma 01": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 4,
+      "1a_sobre_todas": 0.6666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.29998832134152864,
+       0.9032306674407831
+      ],
+      "1a_sobre_validas": 0.6666666666666666,
+      "1b_orden_modal": "pt",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.5100999795960008,
+       1.0
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 1.0,
+      "1c_ic95": [
+       0.5100999795960008,
+       1.0
+      ],
+      "ordenes": {
+       "pt": 4
+      },
+      "criterio_1_cumplido": false
+     },
+     "cadena": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 4,
+      "1a_sobre_todas": 0.6666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.29998832134152864,
+       0.9032306674407831
+      ],
+      "1a_sobre_validas": 0.6666666666666666,
+      "1b_orden_modal": "ptb",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.5100999795960008,
+       1.0
+      ],
+      "1c_esperado": "ptb",
+      "1c_coincidencia": 1.0,
+      "1c_ic95": [
+       0.5100999795960008,
+       1.0
+      ],
+      "ordenes": {
+       "ptb": 4
+      },
+      "criterio_1_cumplido": false
+     }
+    }
+   }
+  },
+  "sens_12.5ms": {
+   "tolerancia_ms": 12.5,
+   "grupos": {
+    "drive|perfil": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 2,
+      "1a_sobre_todas": 0.3333333333333333,
+      "1a_sobre_todas_ic95": [
+       0.09676933255921683,
+       0.7000116786584712
+      ],
+      "1a_sobre_validas": 0.3333333333333333,
+      "1b_orden_modal": "pt",
+      "1b_repetibilidad": 0.5,
+      "1b_ic95": [
+       0.09452865480086614,
+       0.9054713451991339
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 0.5,
+      "1c_ic95": [
+       0.09452865480086614,
+       0.9054713451991339
+      ],
+      "ordenes": {
+       "pt": 1,
+       "tp": 1
+      },
+      "criterio_1_cumplido": false
+     }
+    },
+    "drive|trescuartos": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 0,
+      "1a_sobre_todas": 0.0,
+      "1a_sobre_todas_ic95": [
+       0.0,
+       0.3903430336530645
+      ],
+      "1a_sobre_validas": 0.0,
+      "1b_orden_modal": null,
+      "1b_repetibilidad": null,
+      "1b_ic95": null,
+      "1c_esperado": "pt",
+      "1c_coincidencia": null,
+      "1c_ic95": null,
+      "ordenes": {},
+      "criterio_1_cumplido": false
+     },
+     "cadena": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 0,
+      "1a_sobre_todas": 0.0,
+      "1a_sobre_todas_ic95": [
+       0.0,
+       0.3903430336530645
+      ],
+      "1a_sobre_validas": 0.0,
+      "1b_orden_modal": null,
+      "1b_repetibilidad": null,
+      "1b_ic95": null,
+      "1c_esperado": "ptb",
+      "1c_coincidencia": null,
+      "1c_ic95": null,
+      "ordenes": {},
+      "criterio_1_cumplido": false
+     }
+    },
+    "reves|perfil": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 0,
+      "1a_sobre_todas": 0.0,
+      "1a_sobre_todas_ic95": [
+       0.0,
+       0.3903430336530645
+      ],
+      "1a_sobre_validas": 0.0,
+      "1b_orden_modal": null,
+      "1b_repetibilidad": null,
+      "1b_ic95": null,
+      "1c_esperado": "pt",
+      "1c_coincidencia": null,
+      "1c_ic95": null,
+      "ordenes": {},
+      "criterio_1_cumplido": false
+     }
+    },
+    "reves|trescuartos": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 2,
+      "1a_sobre_todas": 0.3333333333333333,
+      "1a_sobre_todas_ic95": [
+       0.09676933255921683,
+       0.7000116786584712
+      ],
+      "1a_sobre_validas": 0.3333333333333333,
+      "1b_orden_modal": "tp",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.34237195288961925,
+       1.0
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 0.0,
+      "1c_ic95": [
+       0.0,
+       0.6576280471103807
+      ],
+      "ordenes": {
+       "tp": 2
+      },
+      "criterio_1_cumplido": false
+     },
+     "cadena": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 1,
+      "1a_sobre_todas": 0.16666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.03005258587173032,
+       0.563509436563646
+      ],
+      "1a_sobre_validas": 0.16666666666666666,
+      "1b_orden_modal": "tbp",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "1c_esperado": "ptb",
+      "1c_coincidencia": 0.0,
+      "1c_ic95": [
+       0.0,
+       0.7934567085261071
+      ],
+      "ordenes": {
+       "tbp": 1
+      },
+      "criterio_1_cumplido": false
+     }
+    },
+    "saque|perfil": {
+     "par_pelvis_torso": {
+      "n": 5,
+      "validas": 4,
+      "ordenables": 4,
+      "1a_sobre_todas": 0.8,
+      "1a_sobre_todas_ic95": [
+       0.3755282641185388,
+       0.9637768390302125
+      ],
+      "1a_sobre_validas": 1.0,
+      "1b_orden_modal": "tp",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.5100999795960008,
+       1.0
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 0.0,
+      "1c_ic95": [
+       0.0,
+       0.48990002040399916
+      ],
+      "ordenes": {
+       "tp": 4
+      },
+      "criterio_1_cumplido": true
+     }
+    },
+    "saque|trescuartos": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 1,
+      "1a_sobre_todas": 0.16666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.03005258587173032,
+       0.563509436563646
+      ],
+      "1a_sobre_validas": 0.16666666666666666,
+      "1b_orden_modal": "pt",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 1.0,
+      "1c_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "ordenes": {
+       "pt": 1
+      },
+      "criterio_1_cumplido": false
+     },
+     "cadena": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 1,
+      "1a_sobre_todas": 0.16666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.03005258587173032,
+       0.563509436563646
+      ],
+      "1a_sobre_validas": 0.16666666666666666,
+      "1b_orden_modal": "ptb",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "1c_esperado": "ptb",
+      "1c_coincidencia": 1.0,
+      "1c_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "ordenes": {
+       "ptb": 1
+      },
+      "criterio_1_cumplido": false
+     }
+    },
+    "saque|trescuartos|toma 01": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 1,
+      "1a_sobre_todas": 0.16666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.03005258587173032,
+       0.563509436563646
+      ],
+      "1a_sobre_validas": 0.16666666666666666,
+      "1b_orden_modal": "pt",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 1.0,
+      "1c_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "ordenes": {
+       "pt": 1
+      },
+      "criterio_1_cumplido": false
+     },
+     "cadena": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 1,
+      "1a_sobre_todas": 0.16666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.03005258587173032,
+       0.563509436563646
+      ],
+      "1a_sobre_validas": 0.16666666666666666,
+      "1b_orden_modal": "ptb",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "1c_esperado": "ptb",
+      "1c_coincidencia": 1.0,
+      "1c_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "ordenes": {
+       "ptb": 1
+      },
+      "criterio_1_cumplido": false
+     }
+    }
+   }
+  },
+  "sens_16.7ms": {
+   "tolerancia_ms": 16.666666666666668,
+   "grupos": {
+    "drive|perfil": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 2,
+      "1a_sobre_todas": 0.3333333333333333,
+      "1a_sobre_todas_ic95": [
+       0.09676933255921683,
+       0.7000116786584712
+      ],
+      "1a_sobre_validas": 0.3333333333333333,
+      "1b_orden_modal": "pt",
+      "1b_repetibilidad": 0.5,
+      "1b_ic95": [
+       0.09452865480086614,
+       0.9054713451991339
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 0.5,
+      "1c_ic95": [
+       0.09452865480086614,
+       0.9054713451991339
+      ],
+      "ordenes": {
+       "pt": 1,
+       "tp": 1
+      },
+      "criterio_1_cumplido": false
+     }
+    },
+    "drive|trescuartos": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 0,
+      "1a_sobre_todas": 0.0,
+      "1a_sobre_todas_ic95": [
+       0.0,
+       0.3903430336530645
+      ],
+      "1a_sobre_validas": 0.0,
+      "1b_orden_modal": null,
+      "1b_repetibilidad": null,
+      "1b_ic95": null,
+      "1c_esperado": "pt",
+      "1c_coincidencia": null,
+      "1c_ic95": null,
+      "ordenes": {},
+      "criterio_1_cumplido": false
+     },
+     "cadena": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 0,
+      "1a_sobre_todas": 0.0,
+      "1a_sobre_todas_ic95": [
+       0.0,
+       0.3903430336530645
+      ],
+      "1a_sobre_validas": 0.0,
+      "1b_orden_modal": null,
+      "1b_repetibilidad": null,
+      "1b_ic95": null,
+      "1c_esperado": "ptb",
+      "1c_coincidencia": null,
+      "1c_ic95": null,
+      "ordenes": {},
+      "criterio_1_cumplido": false
+     }
+    },
+    "reves|perfil": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 0,
+      "1a_sobre_todas": 0.0,
+      "1a_sobre_todas_ic95": [
+       0.0,
+       0.3903430336530645
+      ],
+      "1a_sobre_validas": 0.0,
+      "1b_orden_modal": null,
+      "1b_repetibilidad": null,
+      "1b_ic95": null,
+      "1c_esperado": "pt",
+      "1c_coincidencia": null,
+      "1c_ic95": null,
+      "ordenes": {},
+      "criterio_1_cumplido": false
+     }
+    },
+    "reves|trescuartos": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 2,
+      "1a_sobre_todas": 0.3333333333333333,
+      "1a_sobre_todas_ic95": [
+       0.09676933255921683,
+       0.7000116786584712
+      ],
+      "1a_sobre_validas": 0.3333333333333333,
+      "1b_orden_modal": "tp",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.34237195288961925,
+       1.0
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 0.0,
+      "1c_ic95": [
+       0.0,
+       0.6576280471103807
+      ],
+      "ordenes": {
+       "tp": 2
+      },
+      "criterio_1_cumplido": false
+     },
+     "cadena": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 1,
+      "1a_sobre_todas": 0.16666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.03005258587173032,
+       0.563509436563646
+      ],
+      "1a_sobre_validas": 0.16666666666666666,
+      "1b_orden_modal": "tbp",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "1c_esperado": "ptb",
+      "1c_coincidencia": 0.0,
+      "1c_ic95": [
+       0.0,
+       0.7934567085261071
+      ],
+      "ordenes": {
+       "tbp": 1
+      },
+      "criterio_1_cumplido": false
+     }
+    },
+    "saque|perfil": {
+     "par_pelvis_torso": {
+      "n": 5,
+      "validas": 4,
+      "ordenables": 2,
+      "1a_sobre_todas": 0.4,
+      "1a_sobre_todas_ic95": [
+       0.1176182311592533,
+       0.769280067791163
+      ],
+      "1a_sobre_validas": 0.5,
+      "1b_orden_modal": "tp",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.34237195288961925,
+       1.0
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 0.0,
+      "1c_ic95": [
+       0.0,
+       0.6576280471103807
+      ],
+      "ordenes": {
+       "tp": 2
+      },
+      "criterio_1_cumplido": false
+     }
+    },
+    "saque|trescuartos": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 0,
+      "1a_sobre_todas": 0.0,
+      "1a_sobre_todas_ic95": [
+       0.0,
+       0.3903430336530645
+      ],
+      "1a_sobre_validas": 0.0,
+      "1b_orden_modal": null,
+      "1b_repetibilidad": null,
+      "1b_ic95": null,
+      "1c_esperado": "pt",
+      "1c_coincidencia": null,
+      "1c_ic95": null,
+      "ordenes": {},
+      "criterio_1_cumplido": false
+     },
+     "cadena": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 0,
+      "1a_sobre_todas": 0.0,
+      "1a_sobre_todas_ic95": [
+       0.0,
+       0.3903430336530645
+      ],
+      "1a_sobre_validas": 0.0,
+      "1b_orden_modal": null,
+      "1b_repetibilidad": null,
+      "1b_ic95": null,
+      "1c_esperado": "ptb",
+      "1c_coincidencia": null,
+      "1c_ic95": null,
+      "ordenes": {},
+      "criterio_1_cumplido": false
+     }
+    },
+    "saque|trescuartos|toma 01": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 0,
+      "1a_sobre_todas": 0.0,
+      "1a_sobre_todas_ic95": [
+       0.0,
+       0.3903430336530645
+      ],
+      "1a_sobre_validas": 0.0,
+      "1b_orden_modal": null,
+      "1b_repetibilidad": null,
+      "1b_ic95": null,
+      "1c_esperado": "pt",
+      "1c_coincidencia": null,
+      "1c_ic95": null,
+      "ordenes": {},
+      "criterio_1_cumplido": false
+     },
+     "cadena": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 0,
+      "1a_sobre_todas": 0.0,
+      "1a_sobre_todas_ic95": [
+       0.0,
+       0.3903430336530645
+      ],
+      "1a_sobre_validas": 0.0,
+      "1b_orden_modal": null,
+      "1b_repetibilidad": null,
+      "1b_ic95": null,
+      "1c_esperado": "ptb",
+      "1c_coincidencia": null,
+      "1c_ic95": null,
+      "ordenes": {},
+      "criterio_1_cumplido": false
+     }
+    }
+   }
+  }
+ },
+ "delta_torso_menos_pelvis_ms": {
+  "drive|perfil": {
+   "n": 6,
+   "mediana_ms": -8.319467554076532,
+   "q1_ms": -8.319467554076532,
+   "q3_ms": 4.159733777038266,
+   "media_ms": -24.958402662229634,
+   "min_ms": -199.667221297837,
+   "max_ms": 66.55574043261225,
+   "cadera_primero": 1,
+   "tronco_primero": 1,
+   "dentro_de_la_tolerancia": 4
+  },
+  "drive|trescuartos": {
+   "n": 6,
+   "mediana_ms": 8.319467554076532,
+   "q1_ms": -4.159733777038266,
+   "q3_ms": 8.319467554076532,
+   "media_ms": 2.7731558513588808,
+   "min_ms": -8.319467554076532,
+   "max_ms": 8.319467554076754,
+   "cadera_primero": 0,
+   "tronco_primero": 0,
+   "dentro_de_la_tolerancia": 6
+  },
+  "reves|perfil": {
+   "n": 6,
+   "mediana_ms": 0.0,
+   "q1_ms": -6.239600665557399,
+   "q3_ms": 6.239600665557399,
+   "media_ms": 0.0,
+   "min_ms": -8.319467554076532,
+   "max_ms": 8.319467554076532,
+   "cadera_primero": 0,
+   "tronco_primero": 0,
+   "dentro_de_la_tolerancia": 6
+  },
+  "reves|trescuartos": {
+   "n": 6,
+   "mediana_ms": -8.319467554076532,
+   "q1_ms": -114.39267886855232,
+   "q3_ms": -8.319467554076532,
+   "media_ms": -69.32889628397115,
+   "min_ms": -241.26455906821965,
+   "max_ms": 0.0,
+   "cadera_primero": 0,
+   "tronco_primero": 2,
+   "dentro_de_la_tolerancia": 4
+  },
+  "saque|perfil": {
+   "n": 4,
+   "mediana_ms": -20.79866888519133,
+   "q1_ms": -27.03826955074873,
+   "q3_ms": -16.638935108153063,
+   "media_ms": -22.878535773710464,
+   "min_ms": -33.27787021630613,
+   "max_ms": -16.638935108153063,
+   "cadera_primero": 0,
+   "tronco_primero": 4,
+   "dentro_de_la_tolerancia": 0
+  },
+  "saque|trescuartos": {
+   "n": 6,
+   "mediana_ms": 8.319467554076532,
+   "q1_ms": 2.079866888519133,
+   "q3_ms": 8.319467554076532,
+   "media_ms": 6.93288962839711,
+   "min_ms": 0.0,
+   "max_ms": 16.638935108153063,
+   "cadera_primero": 1,
+   "tronco_primero": 0,
+   "dentro_de_la_tolerancia": 5
+  },
+  "saque|trescuartos|toma 01": {
+   "n": 6,
+   "mediana_ms": 8.319467554076532,
+   "q1_ms": 2.079866888519133,
+   "q3_ms": 8.319467554076532,
+   "media_ms": 6.93288962839711,
+   "min_ms": 0.0,
+   "max_ms": 16.638935108153063,
+   "cadera_primero": 1,
+   "tronco_primero": 0,
+   "dentro_de_la_tolerancia": 5
+  }
+ },
+ "controles": {
+  "drive|perfil": {
+   "acople_omega": {
+    "correlacion_mediana": 0.8366591719381825,
+    "desfase_mediano_ms": 0.0
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "n": 6,
+     "ordenables": 4,
+     "orden_modal": "tp",
+     "1b": 1.0,
+     "1c_cadera_primero": 0.0,
+     "delta_mediana_ms": -33.27787021630624
+    },
+    "6.0": {
+     "n": 6,
+     "ordenables": 2,
+     "orden_modal": "tp",
+     "1b": 1.0,
+     "1c_cadera_primero": 0.0,
+     "delta_mediana_ms": -8.319467554076532
+    },
+    "8.0": {
+     "n": 6,
+     "ordenables": 2,
+     "orden_modal": "tp",
+     "1b": 1.0,
+     "1c_cadera_primero": 0.0,
+     "delta_mediana_ms": -8.319467554076532
+    },
+    "10.0": {
+     "n": 6,
+     "ordenables": 3,
+     "orden_modal": "pt",
+     "1b": 0.6666666666666666,
+     "1c_cadera_primero": 0.6666666666666666,
+     "delta_mediana_ms": 0.0
+    },
+    "12.0": {
+     "n": 6,
+     "ordenables": 2,
+     "orden_modal": "tp",
+     "1b": 1.0,
+     "1c_cadera_primero": 0.0,
+     "delta_mediana_ms": -8.319467554076532
+    }
+   },
+   "giro_axial": {
+    "n": 6,
+    "ordenables": 2,
+    "orden_modal": "tp",
+    "1b": 0.5,
+    "1c_cadera_primero": 0.5,
+    "delta_mediana_ms": -4.159733777038266
+   },
+   "winter_3d": {
+    "n": 6,
+    "ordenables": 2,
+    "orden_modal": "pt",
+    "1b": 0.5,
+    "1c_cadera_primero": 0.5,
+    "delta_mediana_ms": -8.319467554076532
+   }
+  },
+  "drive|trescuartos": {
+   "acople_omega": {
+    "correlacion_mediana": 0.9184914580165734,
+    "desfase_mediano_ms": 0.0
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "n": 6,
+     "ordenables": 1,
+     "orden_modal": "pt",
+     "1b": 1.0,
+     "1c_cadera_primero": 1.0,
+     "delta_mediana_ms": 0.0
+    },
+    "6.0": {
+     "n": 6,
+     "ordenables": 4,
+     "orden_modal": "pt",
+     "1b": 0.75,
+     "1c_cadera_primero": 0.75,
+     "delta_mediana_ms": 12.479201331114798
+    },
+    "8.0": {
+     "n": 6,
+     "ordenables": 0,
+     "orden_modal": null,
+     "1b": null,
+     "1c_cadera_primero": null,
+     "delta_mediana_ms": 8.319467554076532
+    },
+    "10.0": {
+     "n": 6,
+     "ordenables": 1,
+     "orden_modal": "pt",
+     "1b": 1.0,
+     "1c_cadera_primero": 1.0,
+     "delta_mediana_ms": 8.319467554076532
+    },
+    "12.0": {
+     "n": 6,
+     "ordenables": 1,
+     "orden_modal": "pt",
+     "1b": 1.0,
+     "1c_cadera_primero": 1.0,
+     "delta_mediana_ms": 4.159733777038266
+    }
+   },
+   "giro_axial": {
+    "n": 6,
+    "ordenables": 1,
+    "orden_modal": "pt",
+    "1b": 1.0,
+    "1c_cadera_primero": 1.0,
+    "delta_mediana_ms": 8.319467554076532
+   },
+   "winter_3d": {
+    "n": 6,
+    "ordenables": 0,
+    "orden_modal": null,
+    "1b": null,
+    "1c_cadera_primero": null,
+    "delta_mediana_ms": 8.319467554076532
+   }
+  },
+  "reves|perfil": {
+   "acople_omega": {
+    "correlacion_mediana": 0.8021013152850727,
+    "desfase_mediano_ms": 0.0
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "n": 6,
+     "ordenables": 3,
+     "orden_modal": "pt",
+     "1b": 0.6666666666666666,
+     "1c_cadera_primero": 0.6666666666666666,
+     "delta_mediana_ms": 0.0
+    },
+    "6.0": {
+     "n": 6,
+     "ordenables": 1,
+     "orden_modal": "tp",
+     "1b": 1.0,
+     "1c_cadera_primero": 0.0,
+     "delta_mediana_ms": 4.159733777038266
+    },
+    "8.0": {
+     "n": 6,
+     "ordenables": 0,
+     "orden_modal": null,
+     "1b": null,
+     "1c_cadera_primero": null,
+     "delta_mediana_ms": 0.0
+    },
+    "10.0": {
+     "n": 6,
+     "ordenables": 2,
+     "orden_modal": "tp",
+     "1b": 1.0,
+     "1c_cadera_primero": 0.0,
+     "delta_mediana_ms": -4.159733777038266
+    },
+    "12.0": {
+     "n": 6,
+     "ordenables": 1,
+     "orden_modal": "pt",
+     "1b": 1.0,
+     "1c_cadera_primero": 1.0,
+     "delta_mediana_ms": 0.0
+    }
+   },
+   "giro_axial": {
+    "n": 6,
+    "ordenables": 0,
+    "orden_modal": null,
+    "1b": null,
+    "1c_cadera_primero": null,
+    "delta_mediana_ms": 4.159733777038266
+   },
+   "winter_3d": {
+    "n": 6,
+    "ordenables": 0,
+    "orden_modal": null,
+    "1b": null,
+    "1c_cadera_primero": null,
+    "delta_mediana_ms": 0.0
+   }
+  },
+  "reves|trescuartos": {
+   "acople_omega": {
+    "correlacion_mediana": 0.765084097795605,
+    "desfase_mediano_ms": 0.0
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "n": 6,
+     "ordenables": 2,
+     "orden_modal": "tp",
+     "1b": 0.5,
+     "1c_cadera_primero": 0.5,
+     "delta_mediana_ms": 0.0
+    },
+    "6.0": {
+     "n": 6,
+     "ordenables": 2,
+     "orden_modal": "tp",
+     "1b": 1.0,
+     "1c_cadera_primero": 0.0,
+     "delta_mediana_ms": -4.159733777038266
+    },
+    "8.0": {
+     "n": 6,
+     "ordenables": 3,
+     "orden_modal": "tp",
+     "1b": 1.0,
+     "1c_cadera_primero": 0.0,
+     "delta_mediana_ms": -12.479201331114798
+    },
+    "10.0": {
+     "n": 6,
+     "ordenables": 3,
+     "orden_modal": "tp",
+     "1b": 1.0,
+     "1c_cadera_primero": 0.0,
+     "delta_mediana_ms": -12.479201331114798
+    },
+    "12.0": {
+     "n": 6,
+     "ordenables": 2,
+     "orden_modal": "tp",
+     "1b": 1.0,
+     "1c_cadera_primero": 0.0,
+     "delta_mediana_ms": -4.159733777038266
+    }
+   },
+   "giro_axial": {
+    "n": 6,
+    "ordenables": 2,
+    "orden_modal": "tp",
+    "1b": 1.0,
+    "1c_cadera_primero": 0.0,
+    "delta_mediana_ms": -8.319467554076532
+   },
+   "winter_3d": {
+    "n": 6,
+    "ordenables": 2,
+    "orden_modal": "tp",
+    "1b": 1.0,
+    "1c_cadera_primero": 0.0,
+    "delta_mediana_ms": -8.319467554076532
+   }
+  },
+  "saque|perfil": {
+   "acople_omega": {
+    "correlacion_mediana": 0.9162889068814722,
+    "desfase_mediano_ms": -16.638935108153078
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "n": 5,
+     "ordenables": 3,
+     "orden_modal": "tp",
+     "1b": 1.0,
+     "1c_cadera_primero": 0.0,
+     "delta_mediana_ms": -24.958402662229595
+    },
+    "6.0": {
+     "n": 5,
+     "ordenables": 3,
+     "orden_modal": "tp",
+     "1b": 1.0,
+     "1c_cadera_primero": 0.0,
+     "delta_mediana_ms": -16.638935108153063
+    },
+    "8.0": {
+     "n": 5,
+     "ordenables": 4,
+     "orden_modal": "tp",
+     "1b": 1.0,
+     "1c_cadera_primero": 0.0,
+     "delta_mediana_ms": -16.638935108153063
+    },
+    "10.0": {
+     "n": 5,
+     "ordenables": 3,
+     "orden_modal": "tp",
+     "1b": 1.0,
+     "1c_cadera_primero": 0.0,
+     "delta_mediana_ms": -16.638935108153063
+    },
+    "12.0": {
+     "n": 5,
+     "ordenables": 2,
+     "orden_modal": "tp",
+     "1b": 1.0,
+     "1c_cadera_primero": 0.0,
+     "delta_mediana_ms": -12.479201331114798
+    }
+   },
+   "giro_axial": {
+    "n": 5,
+    "ordenables": 2,
+    "orden_modal": "tp",
+    "1b": 1.0,
+    "1c_cadera_primero": 0.0,
+    "delta_mediana_ms": -8.319467554076532
+   },
+   "winter_3d": {
+    "n": 5,
+    "ordenables": 4,
+    "orden_modal": "tp",
+    "1b": 1.0,
+    "1c_cadera_primero": 0.0,
+    "delta_mediana_ms": -20.79866888519133
+   }
+  },
+  "saque|trescuartos": {
+   "acople_omega": {
+    "correlacion_mediana": 0.9414102203071293,
+    "desfase_mediano_ms": 0.0
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "n": 6,
+     "ordenables": 2,
+     "orden_modal": "pt",
+     "1b": 1.0,
+     "1c_cadera_primero": 1.0,
+     "delta_mediana_ms": 8.319467554076532
+    },
+    "6.0": {
+     "n": 6,
+     "ordenables": 3,
+     "orden_modal": "pt",
+     "1b": 0.6666666666666666,
+     "1c_cadera_primero": 0.6666666666666666,
+     "delta_mediana_ms": 4.159733777038266
+    },
+    "8.0": {
+     "n": 6,
+     "ordenables": 1,
+     "orden_modal": "pt",
+     "1b": 1.0,
+     "1c_cadera_primero": 1.0,
+     "delta_mediana_ms": 0.0
+    },
+    "10.0": {
+     "n": 6,
+     "ordenables": 0,
+     "orden_modal": null,
+     "1b": null,
+     "1c_cadera_primero": null,
+     "delta_mediana_ms": 0.0
+    },
+    "12.0": {
+     "n": 6,
+     "ordenables": 0,
+     "orden_modal": null,
+     "1b": null,
+     "1c_cadera_primero": null,
+     "delta_mediana_ms": 0.0
+    }
+   },
+   "giro_axial": {
+    "n": 6,
+    "ordenables": 1,
+    "orden_modal": "pt",
+    "1b": 1.0,
+    "1c_cadera_primero": 1.0,
+    "delta_mediana_ms": 8.319467554076532
+   },
+   "winter_3d": {
+    "n": 6,
+    "ordenables": 1,
+    "orden_modal": "pt",
+    "1b": 1.0,
+    "1c_cadera_primero": 1.0,
+    "delta_mediana_ms": 8.319467554076532
+   }
+  },
+  "saque|trescuartos|toma 01": {
+   "acople_omega": {
+    "correlacion_mediana": 0.9414102203071293,
+    "desfase_mediano_ms": 0.0
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "n": 6,
+     "ordenables": 2,
+     "orden_modal": "pt",
+     "1b": 1.0,
+     "1c_cadera_primero": 1.0,
+     "delta_mediana_ms": 8.319467554076532
+    },
+    "6.0": {
+     "n": 6,
+     "ordenables": 3,
+     "orden_modal": "pt",
+     "1b": 0.6666666666666666,
+     "1c_cadera_primero": 0.6666666666666666,
+     "delta_mediana_ms": 4.159733777038266
+    },
+    "8.0": {
+     "n": 6,
+     "ordenables": 1,
+     "orden_modal": "pt",
+     "1b": 1.0,
+     "1c_cadera_primero": 1.0,
+     "delta_mediana_ms": 0.0
+    },
+    "10.0": {
+     "n": 6,
+     "ordenables": 0,
+     "orden_modal": null,
+     "1b": null,
+     "1c_cadera_primero": null,
+     "delta_mediana_ms": 0.0
+    },
+    "12.0": {
+     "n": 6,
+     "ordenables": 0,
+     "orden_modal": null,
+     "1b": null,
+     "1c_cadera_primero": null,
+     "delta_mediana_ms": 0.0
+    }
+   },
+   "giro_axial": {
+    "n": 6,
+    "ordenables": 1,
+    "orden_modal": "pt",
+    "1b": 1.0,
+    "1c_cadera_primero": 1.0,
+    "delta_mediana_ms": 8.319467554076532
+   },
+   "winter_3d": {
+    "n": 6,
+    "ordenables": 1,
+    "orden_modal": "pt",
+    "1b": 1.0,
+    "1c_cadera_primero": 1.0,
+    "delta_mediana_ms": 8.319467554076532
+   }
+  }
+ }
+}

@@ -116,14 +116,12 @@ def _obs(datos, severidad):
 
 
 def test_la_tabla_de_respaldo_es_la_de_la_decision_031():
-    """(a) referencia del orden: solo el saque (tesis, tabla 4.8). (b) Criterio 1, par pelvis-torso, tau = 1, sesión 2
-    (docs/resultados/criterio1-resumen.md): saque perfil, drive perfil y revés tres cuartos. Veredicto = (a) y (b)."""
+    """(a) referencia del orden: solo el saque (tesis, tabla 4.8). (b) Criterio 1, par pelvis-torso, con el tiempo real y la
+    tolerancia de 8,33 ms, sesión 2 (Paso A, docs/resultados/paso-a-resumen.md): solo el saque de perfil. Veredicto = (a) y (b)."""
     con_veredicto = {g for g, r in RESPALDO_POR_GRUPO.items() if r.con_veredicto}
     assert con_veredicto == {("saque", "perfil")}
     assert {g for g, r in RESPALDO_POR_GRUPO.items() if r.referencia_orden} == {("saque", "perfil"), ("saque", "tres_cuartos")}
-    assert {g for g, r in RESPALDO_POR_GRUPO.items() if r.criterio1_cumplido} == {
-        ("saque", "perfil"), ("drive", "perfil"), ("reves", "tres_cuartos")
-    }
+    assert {g for g, r in RESPALDO_POR_GRUPO.items() if r.criterio1_cumplido} == {("saque", "perfil")}
     assert len(RESPALDO_POR_GRUPO) == 6
 
 
@@ -150,8 +148,8 @@ def test_saque_de_perfil_con_el_tronco_primero_es_desvio_leve_y_nunca_alerta_de_
     ("gesto", "encuadre", "porque"),
     [
         ("saque", "tres_cuartos", "criterio de repetibilidad"),  # tiene referencia, no cumple el Criterio 1
-        ("drive", "perfil", "referencia del orden esperado en la literatura"),  # cumple el Criterio 1, sin referencia
-        ("reves", "tres_cuartos", "referencia del orden esperado en la literatura"),
+        ("drive", "perfil", "ni una validación propia"),  # sin referencia y (tras el Paso A) sin Criterio 1
+        ("reves", "tres_cuartos", "ni una validación propia"),
         ("drive", "tres_cuartos", "ni una validación propia"),  # ninguna de las dos
         ("reves", "perfil", "ni una validación propia"),
     ],

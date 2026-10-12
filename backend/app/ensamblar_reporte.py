@@ -50,8 +50,8 @@ PREFIJO_METRICA_VELOCIDAD = "velocidad_pico_"
 
 # Decisión 031: el veredicto (correcto / desvío leve) del par cadera -> tronco solo se emite en un gesto y encuadre donde se cumplen
 # las DOS condiciones. (a) hay referencia bibliográfica del orden esperado; (b) el Criterio 1 se cumplió para ese grupo (decisión 014,
-# par pelvis-torso, tolerancia de 1 fotograma, sesión 2: ``docs/resultados/criterio1-resumen.md``). La tabla se REVISA cuando se haga
-# el recálculo del corpus con la tasa real (Paso A de ``docs/plan-recalculo-corpus-tasa-real.md``): ahí cambian las cifras de (b).
+# par pelvis-torso, tolerancia de 1 fotograma, sesión 2: ``docs/resultados/criterio1-resumen.md``). La tabla se revisó con el
+# Paso A del recálculo con la tasa real (``docs/resultados/paso-a-resumen.md``): ahí cambiaron las cifras de (b).
 #
 # (a) La tesis (apartado 4.3.3, tabla 4.8) sustenta el saque con Kovacs y Ellenbecker (2011) y Fleisig et al. (2003); para drive y
 # revés declara "un conjunto reducido de reglas", sin citar una referencia del orden esperado. Si aparece una, se agrega acá y el
@@ -70,13 +70,16 @@ class RespaldoGrupo:
         return self.referencia_orden is not None and self.criterio1_cumplido
 
 
+# Las cifras de (b) son las del PASO A del recálculo (12/10/2026, ``docs/resultados/paso-a-resumen.md``): tiempo real a 120,2 fps y
+# tolerancia de 8,33 ms (la misma constante de ``engine/tolerancia_orden.py``), sesión 2. Reemplazan a las de la medición original
+# (decisión 014), que usaba el reloj y la ventana equivocados. Ver la decisión 031 (revisión) y la 035 (propuesta sobre el saque de perfil).
 RESPALDO_POR_GRUPO: dict[tuple[str, str], RespaldoGrupo] = {
-    ("saque", "perfil"): RespaldoGrupo(REFERENCIA_ORDEN_SAQUE, True),         # 1a 1,00 · 1b 1,00 (orden modal tp)
-    ("saque", "tres_cuartos"): RespaldoGrupo(REFERENCIA_ORDEN_SAQUE, False),  # 1a 0,50: ordenable en 9 de 18
-    ("drive", "perfil"): RespaldoGrupo(None, True),                           # 1a 1,00 · 1b 1,00 (orden modal tp)
-    ("drive", "tres_cuartos"): RespaldoGrupo(None, False),                    # 1a 0,00: ninguna ordenable
-    ("reves", "perfil"): RespaldoGrupo(None, False),                          # 1a 0,67
-    ("reves", "tres_cuartos"): RespaldoGrupo(None, True),                     # 1a 1,00 · 1b 0,83 (orden modal tp)
+    ("saque", "perfil"): RespaldoGrupo(REFERENCIA_ORDEN_SAQUE, True),         # Paso A: 1a 0,83 · 1b 1,00 (orden modal tp); réplica 0,80 · 1,00
+    ("saque", "tres_cuartos"): RespaldoGrupo(REFERENCIA_ORDEN_SAQUE, False),  # Paso A: 1a 0,44 · 1b 0,62 (ordenable en 8 de 18)
+    ("drive", "perfil"): RespaldoGrupo(None, False),                          # Paso A: 1a 0,50 (antes 1,00); 1b 1,00 (tp)
+    ("drive", "tres_cuartos"): RespaldoGrupo(None, False),                    # Paso A: 1a 0,00: ninguna ordenable
+    ("reves", "perfil"): RespaldoGrupo(None, False),                          # Paso A: 1a 0,60 · 1b 0,67
+    ("reves", "tres_cuartos"): RespaldoGrupo(None, False),                    # Paso A: 1a 0,50 (antes 1,00); 1b 1,00 (tp)
 }
 _SIN_RESPALDO = RespaldoGrupo(None, False)
 

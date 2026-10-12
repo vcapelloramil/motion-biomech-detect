@@ -4,6 +4,8 @@
 > (3) **El Paso B es opcional y va después del MVP.** (4) **`IMG_6391` no se vuelve a bajar** (es un video corto en el iPhone): las 6 repeticiones de la toma 02 **quedan afuera**. (5) El Capítulo 7 anota el ×2 y su corrección.
 > Lo que sigue es el plan original; donde dice "Hay que bajarlo de nuevo" o "en el orden propuesto", valen estas decisiones.
 
+**Paso A: HECHO el 12/10/2026** (`docs/resultados/paso-a-resumen.md`, arnés `backend/app/medicion_paso_a.py`, commit `3d88f89`).
+
 **Estado:** aprobado, 9/10/2026. Origen: decisión 030 (el corpus horneado es un remuestreo a ~120 fps con rampas, no 240 fps).
 **Regla de los videos:** los archivos (originales reales, recortes, derivados) **no se suben al repositorio**. Se leen desde
 `C:\Users\valen\Desktop\corpus-originales-reales` y `kinetiq-data`; todo derivado (ventanas cortadas, poses, marcas de tiempo, miniaturas) va a `backend/.cache/`

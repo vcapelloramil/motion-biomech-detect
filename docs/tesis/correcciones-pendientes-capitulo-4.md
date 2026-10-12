@@ -66,3 +66,14 @@ Fuera del Capítulo 4, pero para la redacción: las limitaciones que registran l
 15. **Referencias de las maquetas.** `frontend/src/lib/reporte-mock.ts` (maqueta de Lovable, ruta `/reporte/` no enlazada) trae una lista de referencias (Elliott 2006, Kibler 1995, etc.) y valores (42°, 118°, 27°)
     **que no salen de la tesis** (las referencias sí pueden estar en la lista del documento de Word: Elliott 2006 lo está; hay que cotejar el resto y el año de Kibler). Ninguno de los **valores** se debe citar
 en el Capítulo 7 ni mostrar en la demo como medición.
+
+16. **Paso A del recálculo (12/10/2026): el Criterio 1 con tiempo real y la tolerancia unificada.** Con el tiempo corregido (120,2 fps) y la tolerancia de 8,33 ms, **solo el saque de perfil cumple el Criterio 1**
+    (1a 0,83 en la sesión de medición y 0,80 en la réplica; 1b 1,00; orden `tp`). **Drive de perfil y revés de tres cuartos pasan de cumplir (1a 1,00) a no cumplir (1a 0,50)**: lo que parecía repetible dependía de
+    la ventana y de la escala de tiempo equivocadas. Se informa lado a lado con la medición original, como se fijó antes de mirar (plan de recálculo §3). **Aclaración metodológica:** el Paso A no es "la misma
+    medición con otro reloj": al corregir los fps cambian también la ventana (± 36 fotogramas en vez de ± 72), la separación mínima entre picos y los umbrales en °/s.
+17. **El orden depende del encuadre (Paso A).** En el saque, 0 de 9 repeticiones ordenables en perfil tienen la cadera primero contra 6 de 9 en tres cuartos (Fisher exacto p = 0,009, exploratorio: un jugador,
+    repeticiones de una misma toma). Un movimiento físico no depende de la cámara: **al menos un encuadre mide mal**; el sospechoso es el perfil (cadera lejana tapada, decisión 013). Se descartaron como causa el
+    reloj, el filtro (cortes de 4 a 12 Hz) y la definición de la velocidad (giro axial). **Es un resultado, no un fallo del Paso A:** va al Capítulo 7 y a las limitaciones (Capítulo 6). Propuesta asociada:
+    decisión 035.
+18. **En tres cuartos el instrumento está en el límite de su resolución con este material:** en 34 de 48 repeticiones la cadera y el tronco quedan a 8,33 ms o menos (un fotograma a 120 fps). El Paso B
+    (originales a ~200 fps, regularizados a 240 Hz) es el que puede resolverlo.

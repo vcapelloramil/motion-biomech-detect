@@ -6,6 +6,44 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-12 (madrugada del 13) — Standard y artefactos en producción, guía del dominio, "Olvidé mi contraseña" y Paso A
+
+Continuación del punto anterior, con las decisiones de Valentín (migración aplicada, Standard, OK de push, orden del §8 aprobado, demo 28–30/10, etiqueta, Elliott confirmada en la lista de Referencias del Word).
+Suite rápida del servidor **467 passed**; `bun test` **55 passed**; `tsc` y build limpios.
+
+### Hecho
+
+1. **Render en Standard y publicado** (`e35fc6f`, push a `main`): `render.yaml` y decisión 023 actualizados; `/health` devolvió `0.5.0` ~3 min después del push.
+2. **Prueba en producción** (usuario de prueba, luego borrado; recorte real de 3,1 s, 626 fotogramas): **117,4 s de punta a punta (116,0 s de cómputo)**, 5,8 veces más rápido que Free; `completado`; reporte 1.3 con
+   `tolerancia_orden_ms = 8,333`, tres fotogramas clave y video con esqueleto en el bucket `artefactos`; columnas `ruta_fotograma_*` y `ruta_overlay` escritas; **firmado y descargado con la sesión del propio
+   usuario** (115 KB por fotograma, 127 KB el video); **otro usuario no puede firmar esas rutas** (aislamiento por carpeta verificado). `criterio4-latencia.md`, fila 3. Falta el RSS pico en Linux (solo está en
+   el log de Render).
+3. **Etiqueta de la vista simple:** "Solo registrado / Para seguimiento" en las tarjetas, Procesando y Biblioteca; "Sin evaluar" queda en el detalle técnico. (Una constante en `components/estado.tsx`.)
+4. **Dominio y correo** (decisión 034 y `docs/guia-dominio-correo-y-hosting.md`): guía paso a paso (Namecheap → Cloudflare → Brevo → Supabase → la aplicación en el dominio), con el criterio de por qué **el DNS va a
+   Cloudflare** (un Worker solo acepta un dominio propio si la zona está activa ahí). Verificado contra la documentación de Cloudflare, Supabase y Brevo; los datos del SMTP de Brevo vienen de la decisión 027
+   y hay que confirmarlos en pantalla (el sitio de ayuda de Brevo bloquea las lecturas automáticas).
+5. **"Olvidé mi contraseña"** (adelantado, no depende del dominio): `/recuperar` pide el enlace sin revelar si el correo existe; `/restablecer` elige la contraseña nueva; enlace desde Ingreso; plantilla
+   `supabase/templates/restablecer-contrasena.html`. Falta probarlo con el correo propio (parte D de la guía).
+6. **Plan §8 reordenado** con las pantallas que faltaban: reporte detallado con interruptor y vista por rol, PDF barato (impresión), Perfil real con "descargar mis datos" y eliminar, Evolución con la marca.
+   **La demo del 28–30/10 no se mueve**, pero el margen es corto si el ritmo cae a 1 sesión por día.
+7. **Paso A del recálculo** (`docs/resultados/paso-a-resumen.md`, `backend/app/medicion_paso_a.py`, commit `3d88f89`, árbol limpio, 84 repeticiones, ambas sesiones):
+   - **Solo el saque de perfil cumple el Criterio 1** con el tiempo real y la tolerancia unificada (1a 0,83; réplica 0,80; 1b 1,00; `tp`). **Drive de perfil y revés de tres cuartos dejan de cumplir** (1a 1,00 → 0,50).
+   - **El "tronco primero" no es el reloj, ni el filtro (cortes de 4 a 12 Hz), ni la definición de la velocidad (giro axial)**. **Sí depende del encuadre**: en el saque, 0 de 9 repeticiones ordenables
+     con la cadera primero en perfil contra 6 de 9 en tres cuartos (Fisher p = 0,009, exploratorio). Al menos un encuadre mide mal; el sospechoso es el perfil (cadera lejana tapada).
+   - En tres cuartos el material está en su límite: 34 de 48 repeticiones a 8,33 ms o menos de diferencia.
+   - `RESPALDO_POR_GRUPO` actualizado con estas cifras (ningún veredicto cambia). **Decisión 035 (propuesta): suspender el veredicto del saque de perfil.** No se aplicó.
+   - Un control quedó descartado (2D en el espacio de la imagen: E3 lo excluye porque sus umbrales están en metros) y se reemplazó por el giro axial.
+
+### Pendiente
+
+1. **Valentín:** partes A a D de la guía (dominio, DNS en Cloudflare, Brevo, Supabase) y pasarme el nombre del dominio; **republicar el frontend** (trae Recuperar/Restablecer y los cambios del reporte);
+   **decidir la 035**.
+2. **Push:** quedan commits **locales** (`3d88f89` y siguientes). Cada push reinicia Render: se hace cuando no haya un análisis en curso.
+3. **Punto 1 del plan** (parte mía): `wrangler.jsonc`, `KINETIQ_CORS_ORIGINS` y prueba de registro real, cuando llegue el nombre.
+4. **Punto 3 (datos en el reporte)**, luego Cargar con varios golpes (4) y la consistencia entre golpes (5).
+
+---
+
 ## 2026-10-12 (noche) — Ajustes del primer reporte real: tolerancia única, esqueleto en el reporte, motor 0.5.0 y el reporte que evalúa más
 
 Pedido de Valentín tras la prueba del 12/10 (puntos 1 a 8). **Nada pusheado ni desplegado**; tres commits en `main` local (`875b2cf` motor, `3624418` frontend, `e6839ce` docs). Suite rápida del servidor **454 passed** (431 antes), `bun test` **53 passed**, `tsc` y eslint

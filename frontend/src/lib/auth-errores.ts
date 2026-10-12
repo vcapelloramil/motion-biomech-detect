@@ -40,6 +40,29 @@ export function mensajeDeRegistro(error: ErrorAuth): Mensaje {
   return mensajeGeneral(code, message, error?.status ?? null);
 }
 
+export function mensajeDeRecuperacion(error: ErrorAuth): Mensaje {
+  // "Pedir el enlace" nunca dice si el correo existe (privacidad): solo distingue espera y red; el resto se trata como enviado.
+  const code = (error?.code ?? "").toLowerCase();
+  const message = (error?.message ?? "").toLowerCase();
+  return mensajeGeneral(code, message, error?.status ?? null);
+}
+
+export function mensajeDeRestablecer(error: ErrorAuth): Mensaje {
+  const code = (error?.code ?? "").toLowerCase();
+  const message = (error?.message ?? "").toLowerCase();
+
+  if (code === "same_password" || message.includes("different from the old password")) {
+    return { tipo: "otro", texto: "Elegí una contraseña distinta de la anterior." };
+  }
+  if (code === "weak_password" || message.includes("password should be")) {
+    return { tipo: "otro", texto: "La contraseña es demasiado débil. Usá al menos 8 caracteres, con letras y números." };
+  }
+  if (code === "session_not_found" || code === "no_authorization" || message.includes("session missing") || message.includes("jwt")) {
+    return { tipo: "otro", texto: "El enlace venció o ya se usó. Pedí uno nuevo." };
+  }
+  return mensajeGeneral(code, message, error?.status ?? null);
+}
+
 function mensajeGeneral(code: string, message: string, status: number | null): Mensaje {
   if (code.includes("rate_limit") || message.includes("rate limit") || status === 429) {
     return { tipo: "espera", texto: "Hubo demasiados intentos. Esperá unos minutos y volvé a probar." };

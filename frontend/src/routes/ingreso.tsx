@@ -121,6 +121,9 @@ function IngresoPage() {
       </form>
 
       <p className="mt-6 text-sm text-muted-foreground">
+        <Link to="/recuperar" className="text-foreground underline underline-offset-4">¿Olvidaste tu contraseña?</Link>
+      </p>
+      <p className="mt-2 text-sm text-muted-foreground">
         ¿Todavía no tenés cuenta?{" "}
         <Link to="/registro" className="text-foreground underline underline-offset-4">Crear cuenta</Link>
       </p>

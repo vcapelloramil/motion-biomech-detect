@@ -30,6 +30,14 @@ El veredicto es **del par cadera → tronco**, el único comparable con la liter
 Si la cadera y el tronco quedan a **1 fotograma o menos** (decisión 014), no se ordenan y la observación es `no_auditable` con el motivo "simultaneidad al límite de resolución"
 (decisión 015, corrección del 29/9): ahí sí es "no se pudo establecer".
 
+## Revisión del 12/10/2026 (Paso A del recálculo)
+
+El Paso A (`docs/resultados/paso-a-resumen.md`) revisó la condición (b) con el tiempo real (120,2 fps) y la tolerancia unificada de 8,33 ms (decisión 032). **`drive|perfil` y `reves|tres_cuartos` dejan de
+cumplir el Criterio 1** (1a pasa de 1,00 a 0,50); **el saque de perfil sigue cumpliéndolo** (1a 0,83; réplica 0,80; 1b 1,00; orden `tp`). La tabla de `RESPALDO_POR_GRUPO` quedó actualizada y **ningún veredicto
+cambia**. Pero el mismo Paso A muestra que el orden del saque **depende del encuadre** (perfil 0 de 9 cadera primero; tres cuartos 6 de 9): la **decisión 035** propone suspender ese veredicto.
+**La validación pendiente de esta decisión queda respondida en lo que se podía responder con estos datos:** el "tronco primero" no es un efecto del reloj, del filtro ni de la definición de la velocidad;
+sí es dependiente del encuadre, así que no es una medición confiable del movimiento. Lo que no se puede decidir sin una medición independiente es si el sesgo es del estimador en perfil.
+
 ## Qué grupos quedan con veredicto
 
 Cifras: `docs/resultados/criterio1-resumen.md`, sesión 2, τ = 1 fotograma (primaria), par pelvis-torso.

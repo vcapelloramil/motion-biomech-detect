@@ -199,13 +199,13 @@ especificación que todavía no existen, (3) que el sistema funcione "como públ
 **Supuestos:** sesiones de ~medio día. Ritmo **observado**: el flujo de punta a punta estaba previsto para el 20/10 (11 sesiones a ~1 por día) y se cerró el 12/10, es decir ~1,5 por día. Se calcula con **1,5
 por día** (esperado) y **1 por día** (pesimista, sin imprevistos de paneles ni de DNS).
 
-### Núcleo: lo que tiene que estar para la demo (14,75 sesiones restantes)
+### Núcleo: lo que tiene que estar para la demo (13,5 sesiones restantes)
 
 | # | Qué | Ses. | Valor | Depende de |
 | --- | --- | --- | --- | --- |
 | ~~0~~ | ~~Acciones de Valentín y prueba en producción~~ **HECHO 12/10** | — | Standard (117 s por golpe), artefactos en producción | — |
-| 1 | **Dominio `.me`, correo propio y la aplicación en el dominio** (guía `docs/guia-dominio-correo-y-hosting.md`; mi parte: `wrangler.jsonc`, CORS, pantalla y plantilla de "Olvidé mi contraseña", prueba de registro real) | 0,75 | Destraba **registro abierto** y recuperar la contraseña; es la dirección que ven los profesores | **Valentín:** partes A–D de la guía (~1,5 h) |
-| 2 | **Paso A del recálculo** + revisar `RESPALDO_POR_GRUPO` con la tolerancia unificada (decisiones 031 y 032) | 1 | **Bloqueante de la demo**; decide si el "tronco primero" es real o artefacto (Valentín: "sugiere un artefacto de medición") | — |
+| 1 | **Dominio `.me`, correo propio y la aplicación en el dominio** (guía `docs/guia-dominio-correo-y-hosting.md`; mi parte: `wrangler.jsonc`, CORS y la prueba de registro real; **la pantalla y la plantilla de "Olvidé mi contraseña" ya están hechas, 12/10**) | 0,5 | Destraba **registro abierto** y recuperar la contraseña; es la dirección que ven los profesores | **Valentín:** partes A–D de la guía (~1,5 h) |
+| ~~2~~ | ~~**Paso A del recálculo** + revisar `RESPALDO_POR_GRUPO`~~ **HECHO 12/10** (`docs/resultados/paso-a-resumen.md`): el "tronco primero" **no** es el reloj, el filtro ni la definición, y **depende del encuadre**; `RESPALDO_POR_GRUPO` actualizado; **decisión 035 a resolver** (suspender el veredicto del saque de perfil) | — | **Bloqueante de la demo: resuelto en lo medible, falta tu decisión sobre la 035** | — |
 | 3 | **(b) Datos en el reporte:** separación cadera-hombro máxima, flexión de rodilla mínima, ángulo de codo, con confianza y error esperable, como dato | 1 | El reporte deja de ser solo "orden y velocidades"; alimenta el detallado y el PDF | — |
 | 4 | **Cargar con varios golpes** (diseño nuevo + alta de varios golpes en una sesión + cola) | 2 | Prerrequisito de (c); lo que pide la tesis (≥ 10 repeticiones) | — |
 | 5 | **(c) Consistencia entre golpes + vista de sesión** (agregador, `reportes_sesion`, tarjetas "Tus golpes entre sí") | 1,5 | El mayor valor por esfuerzo: evalúa de verdad, sin literatura | 4 |
@@ -218,7 +218,7 @@ por día** (esperado) y **1 por día** (pesimista, sin imprevistos de paneles ni
 | 12 | **Respaldo con restauración probada** y **recuperación al arranque (6.5)** | 1,25 | Un análisis no queda `procesando` para siempre; Supabase Free no respalda | — |
 | 13 | **Evolución con la marca "Datos de ejemplo"** (revisar que la marca esté y que no se confunda con datos propios) | 0,25 | Honestidad (R3/R4); real solo si hay ≥ 2 sesiones comparables | — |
 | 14 | **Ensayo de la demo** (guion, un golpe por gesto subido, congelar) | 0,5 | Evita sorpresas | todo |
-| | **Total** | **14,75** | | |
+| | **Total restante** (14,5 con el Paso A, ya hecho) | **13,5** | | |
 
 ### ¿Se mueve la demo del 28–30/10? **No, pero el margen es corto si el ritmo cae a 1 por día.**
 

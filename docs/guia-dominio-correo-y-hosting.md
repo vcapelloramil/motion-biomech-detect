@@ -75,9 +75,11 @@ del dominio lo hago yo cuando me lo pases (parte E).
 4. **Authentication → URL Configuration:**
    - **Site URL:** `https://<nombre>.me` (cuando la parte E esté hecha; hasta entonces dejá el `workers.dev`).
    - **Redirect URLs (lista permitida):** agregá `https://<nombre>.me/**` y dejá `https://kinetiq.v-capelloramil.workers.dev/**` mientras convivan. El frontend arma el enlace con `window.location.origin`, así que **no hay que tocar código** para esto.
-5. Contraseña olvidada: el correo "Reset Password" usa el mismo SMTP; la plantilla en español la dejo preparada yo con la pantalla (punto 11 del plan).
+5. **Contraseña olvidada** (ya está hecha la pantalla: `/recuperar` pide el enlace y `/restablecer` elige la contraseña nueva): en **Authentication → Emails → "Reset Password"** pegá
+   [`supabase/templates/restablecer-contrasena.html`](../supabase/templates/restablecer-contrasena.html), con el asunto "Elegí una contraseña nueva en KinetiQ". Usa el mismo SMTP. El enlace del correo vuelve a
+   `https://<nombre>.me/restablecer`, que tiene que estar en las **Redirect URLs** del punto anterior (`https://<nombre>.me/**` ya lo cubre).
 
-**Salió bien si:** registrás una cuenta nueva con **tu Gmail real** y el correo llega (fijate si cae en spam), con remitente `KinetiQ <no-reply@<nombre>.me>`, y el enlace te lleva a la aplicación. En Gmail: *Mostrar original* → **SPF: PASS, DKIM: PASS, DMARC: PASS**.
+**Salió bien si:** (1) registrás una cuenta nueva con **tu Gmail real** y el correo llega (fijate si cae en spam), con remitente `KinetiQ <no-reply@<nombre>.me>`, y el enlace te lleva a la aplicación. En Gmail: *Mostrar original* → **SPF: PASS, DKIM: PASS, DMARC: PASS**. (2) En `/ingreso` tocás "¿Olvidaste tu contraseña?", pedís el enlace con ese correo, llega, y el enlace te deja elegir una contraseña nueva.
 
 ## E. La aplicación en `https://<nombre>.me` (en lugar de `workers.dev`)
 

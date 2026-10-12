@@ -12,7 +12,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as VideosRouteImport } from './routes/videos'
 import { Route as UploadRouteImport } from './routes/upload'
 import { Route as TecnologiaRouteImport } from './routes/tecnologia'
+import { Route as RestablecerRouteImport } from './routes/restablecer'
 import { Route as RegistroRouteImport } from './routes/registro'
+import { Route as RecuperarRouteImport } from './routes/recuperar'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PerformanceRouteImport } from './routes/performance'
 import { Route as IngresoRouteImport } from './routes/ingreso'
@@ -37,9 +39,19 @@ const TecnologiaRoute = TecnologiaRouteImport.update({
   path: '/tecnologia',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RestablecerRoute = RestablecerRouteImport.update({
+  id: '/restablecer',
+  path: '/restablecer',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RegistroRoute = RegistroRouteImport.update({
   id: '/registro',
   path: '/registro',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RecuperarRoute = RecuperarRouteImport.update({
+  id: '/recuperar',
+  path: '/recuperar',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfileRoute = ProfileRouteImport.update({
@@ -89,7 +101,9 @@ export interface FileRoutesByFullPath {
   '/ingreso': typeof IngresoRoute
   '/performance': typeof PerformanceRoute
   '/profile': typeof ProfileRoute
+  '/recuperar': typeof RecuperarRoute
   '/registro': typeof RegistroRoute
+  '/restablecer': typeof RestablecerRoute
   '/tecnologia': typeof TecnologiaRoute
   '/upload': typeof UploadRoute
   '/videos': typeof VideosRoute
@@ -103,7 +117,9 @@ export interface FileRoutesByTo {
   '/ingreso': typeof IngresoRoute
   '/performance': typeof PerformanceRoute
   '/profile': typeof ProfileRoute
+  '/recuperar': typeof RecuperarRoute
   '/registro': typeof RegistroRoute
+  '/restablecer': typeof RestablecerRoute
   '/tecnologia': typeof TecnologiaRoute
   '/upload': typeof UploadRoute
   '/videos': typeof VideosRoute
@@ -118,7 +134,9 @@ export interface FileRoutesById {
   '/ingreso': typeof IngresoRoute
   '/performance': typeof PerformanceRoute
   '/profile': typeof ProfileRoute
+  '/recuperar': typeof RecuperarRoute
   '/registro': typeof RegistroRoute
+  '/restablecer': typeof RestablecerRoute
   '/tecnologia': typeof TecnologiaRoute
   '/upload': typeof UploadRoute
   '/videos': typeof VideosRoute
@@ -134,7 +152,9 @@ export interface FileRouteTypes {
     | '/ingreso'
     | '/performance'
     | '/profile'
+    | '/recuperar'
     | '/registro'
+    | '/restablecer'
     | '/tecnologia'
     | '/upload'
     | '/videos'
@@ -148,7 +168,9 @@ export interface FileRouteTypes {
     | '/ingreso'
     | '/performance'
     | '/profile'
+    | '/recuperar'
     | '/registro'
+    | '/restablecer'
     | '/tecnologia'
     | '/upload'
     | '/videos'
@@ -162,7 +184,9 @@ export interface FileRouteTypes {
     | '/ingreso'
     | '/performance'
     | '/profile'
+    | '/recuperar'
     | '/registro'
+    | '/restablecer'
     | '/tecnologia'
     | '/upload'
     | '/videos'
@@ -177,7 +201,9 @@ export interface RootRouteChildren {
   IngresoRoute: typeof IngresoRoute
   PerformanceRoute: typeof PerformanceRoute
   ProfileRoute: typeof ProfileRoute
+  RecuperarRoute: typeof RecuperarRoute
   RegistroRoute: typeof RegistroRoute
+  RestablecerRoute: typeof RestablecerRoute
   TecnologiaRoute: typeof TecnologiaRoute
   UploadRoute: typeof UploadRoute
   VideosRoute: typeof VideosRoute
@@ -209,11 +235,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TecnologiaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/restablecer': {
+      id: '/restablecer'
+      path: '/restablecer'
+      fullPath: '/restablecer'
+      preLoaderRoute: typeof RestablecerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/registro': {
       id: '/registro'
       path: '/registro'
       fullPath: '/registro'
       preLoaderRoute: typeof RegistroRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/recuperar': {
+      id: '/recuperar'
+      path: '/recuperar'
+      fullPath: '/recuperar'
+      preLoaderRoute: typeof RecuperarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/profile': {
@@ -281,7 +321,9 @@ const rootRouteChildren: RootRouteChildren = {
   IngresoRoute: IngresoRoute,
   PerformanceRoute: PerformanceRoute,
   ProfileRoute: ProfileRoute,
+  RecuperarRoute: RecuperarRoute,
   RegistroRoute: RegistroRoute,
+  RestablecerRoute: RestablecerRoute,
   TecnologiaRoute: TecnologiaRoute,
   UploadRoute: UploadRoute,
   VideosRoute: VideosRoute,
