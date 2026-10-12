@@ -6,6 +6,51 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-13 (madrugada) — Correcciones del reporte tras la prueba del celular, datos en el reporte y Paso B en curso
+
+Pedido de Valentín tras probar el saque de perfil desde el celular (2 min 28 s; tres fotogramas y video bien de posición; "Olvidé mi contraseña" visible). Suite rápida del servidor **486 passed**; `bun test` **59 passed**;
+`tsc` y build limpios. **Publicado** (`01e8ad4`, Render Live con motor 0.5.1) y **verificado en producción** con un usuario de prueba (borrado): 120,3 s de punta a punta, video de 1,2 MB, magnitudes en el reporte.
+
+### Hecho
+
+1. **Criterio 4, fila 4** (`criterio4-latencia.md`): 146,7 s, **RSS pico 748,4 MB** en Standard, artefactos en 10,2 s. En Free ese golpe no habría entrado (512 MB).
+2. **Video con esqueleto a 720 px y CRF 20** (antes 360 px / CRF 30 = 160 KB, "se veía muy mal"): ~1,6 MB para 12 s; `ffmpeg` de un hilo, 76 MB; +~7 s por golpe. Medido de nuevo (decisión 033, actualizada).
+3. **Etiqueta única "Solo registrado"** en la vista simple, el detalle técnico y el PDF.
+4. **Pico del brazo (0,521 s) y confianza 0,99:** revisado sobre el reporte real (`cbaf328d`).
+   - **La confianza estaba bien y el pico no cae en el tramo no auditable**: `instante_s` se cuenta desde el inicio de la ventana (que empieza en 1,371 s del video) y los tramos desde el inicio del video; el pico está en
+     1,892 s, 180 ms **después** de que termina el tramo del codo (0,333–1,712 s). Eran dos referencias distintas sin rotular. **Ahora la tabla muestra las dos columnas** y los tramos dicen "desde el inicio del video".
+   - **Pero había un problema real, distinto:** el codo derecho no tenía datos en el **57 % de la ventana** (1,371–1,712 s), así que el "pico del brazo" era el máximo del último 43 % (la deceleración), no el de la
+     ventana. Un máximo censurado presentado como dato (R3). **Regla nueva (motor 0.5.1): si se midió menos del 75 % de la ventana, el pico del segmento no se reporta.** Con el brazo sin medir y la cadera y el tronco
+     ordenables, la repetición se informa con esos dos ("el brazo no se pudo medir"), en lugar de perder todo el orden.
+   - **El pico, cuando se reporta, está donde corresponde por definición**: es el máximo de la velocidad angular del vector hombro→codo, que no es la velocidad de la raqueta y suele ser más tardío (decisión 011).
+5. **"Fotogramas perdidos" e "interpolados" iguales (16,3 %): es lo esperado y no un error.** El iPhone graba sobre un reloj de 240 Hz y entrega ~200,8 fotogramas por segundo: los 240 − 200,8 que faltan son los puntos de la grilla
+   que se interpolan, así que las dos cifras coinciden **por construcción** (156 de 959 puntos, huecos de hasta 12,5 ms). Se regulariza a la grilla **nominal** (la del reloj de la cámara) y no a 200,8: los fotogramas que sí
+   llegaron quedan en su instante real y solo se rellenan los que faltan; regularizar a la tasa media movería **todos** los puntos. Impacto: un instante que cae en un punto interpolado es una reconstrucción (error acotado por
+   el hueco, ≤ 6 ms), comparable a la tolerancia de 8,33 ms. **Corrección hecha:** una línea de explicación en la trazabilidad. **Propuesta (0,5 sesión):** marcar por pico si su instante es medido o reconstruido y
+   sumar la incertidumbre del hueco a la decisión de "ordenable".
+6. **Coma decimal en todo el reporte** (un solo helper, `frontend/src/lib/formato.ts`), incluidas la tabla de velocidades y la trazabilidad.
+7. **Punto 3 del plan (datos en el reporte):** separación cadera-hombro máxima y ángulos de rodilla y codo en el pico del tronco, con su confianza y el error medido contra goniometría (8,5° y 12,5° de media). Mismas
+   definiciones que se validaron (Criterios 2 y 3). Sin estado de juicio. `engine/magnitudes.py`.
+8. **Dominio** (`kinetiqtennis.me`): **verificado desde afuera** que los servidores de nombres ya apuntan a Cloudflare y que la zona está vacía (ni `A`, `AAAA`, `CNAME`, `TXT` ni `MX`). NC.me creó el repositorio
+   **`vcapelloramil.github.io`** (con un `CNAME`); **se puede eliminar** y conviene, después de borrar los registros de GitHub Pages si aparecieran (la guía los lista). Guía y decisión 034 actualizadas.
+9. **Paso B** (`backend/app/medicion_paso_b.py`, commit `f94aa56`): originales a tasa real, regularizados a 240 Hz, con las poses reanudables y la alineación validada (la duración de cada ventana contra el decodificador).
+   **En curso** (~3–4 h de cómputo; el saque primero).
+10. **Plan reestimado** (§8) y **protocolo opcional** de saques con un solo teléfono (`docs/protocolo-saques-tres-cuartos.md`). La grabación simultánea desde dos ángulos queda como trabajo futuro.
+
+### Paso B — primer resultado (saque de perfil, originales a tasa real)
+
+11 repeticiones medidas (sesión 1: 5 de las 6, la sexta empieza en la rampa y se excluyó; sesión 2: 6), regularizadas a 240 Hz con el 16,2 a 16,7 % de puntos interpolados. Diez son válidas: **tronco primero en 8, ninguna con la
+cadera primero** y 2 dentro de la tolerancia (4,2 ms). **El "tronco primero" del saque de perfil no es un efecto del corpus convertido**: se reproduce con los originales. El golpe nuevo del celular (cadera 13 ms antes) es
+una excepción de una repetición. Detalle y las otras agrupaciones, cuando termine la corrida.
+
+### Pendiente
+
+1. **Decisión 035** con el resultado del saque de tres cuartos del Paso B (en curso).
+2. **Push** de la bitácora y de los resultados del Paso B cuando terminen.
+3. Valentín: partes B (registros), C (Brevo) y D (Supabase) de la guía; eliminar el repositorio `vcapelloramil.github.io`; republicar el frontend.
+
+---
+
 ## 2026-10-12 (madrugada del 13) — Standard y artefactos en producción, guía del dominio, "Olvidé mi contraseña" y Paso A
 
 Continuación del punto anterior, con las decisiones de Valentín (migración aplicada, Standard, OK de push, orden del §8 aprobado, demo 28–30/10, etiqueta, Elliott confirmada en la lista de Referencias del Word).
