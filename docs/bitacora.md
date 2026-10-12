@@ -6,20 +6,43 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
-## 2026-10-09 (cierre del día) — NOTA DE TRASPASO corta
+## 2026-10-12 — NOTA DE TRASPASO (antes de /clear) · estado, pruebas del día y pendientes
 
-**Estado:** `main` en `ccdda0f` (pusheado), árbol limpio. Servidor desplegado en Render con el motor nuevo (alineación por fotogramas decodificados, "no auditable" por simultaneidad, tiempos de procesamiento).
-**El frontend publicado** (https://kinetiq.v-capelloramil.workers.dev, republicado por Valentín) **ya tiene Procesando, Biblioteca y Reporte simple**, además de Registro, Ingreso y Cargar.
+**Rama:** `main`; el commit de esta nota es el último y queda pusheado. Árbol limpio. Suite rápida del servidor **455 passed**, `-m requiere_supabase` **84 passed**, `-m requiere_render` en verde (9/10), frontend `bun test` **48 passed**.
 
-**Lo que falta al volver (Valentín):** la **prueba completa desde el celular con un golpe nuevo** — registrarse o ingresar, Cargar con "Opciones → Formato: Actual", y verificar el **motor nuevo** (resultado
-**regularizado**, escala conocida, orden cadera/tronco con su motivo) y la **latencia registrada** (`encolado_en`, `inicio_procesamiento_en`, `fin_procesamiento_en` en `videos`; se ve en Procesando y en el detalle del reporte).
-Cualquier falla de esa prueba pasa antes que lo demás.
+### Qué está publicado
 
-**Después, en este orden** (todo en la bitácora de hoy y en `docs/plan-mvp-punta-a-punta.md`): adaptar Registro/Ingreso, Cargar, Landing y Perfil al diseño nuevo (~2,5 días, antes de la demo); "Olvidé mi contraseña";
-**validar el veredicto del saque de perfil** con el Paso A y las grabaciones nuevas (bloqueante de la demo, no del flujo); `corte_hz` fuera de `versiones_motor`; semana 3 (sesión de varios golpes, eliminar cuenta y datos, respaldo).
+- **Servidor (Render, plan Free):** motor con la regularización por fotogramas decodificados, "no auditable" por simultaneidad y tiempos de procesamiento; API con JWT por JWKS y chequeo de propiedad (404);
+  `KINETIQ_API_TOKEN` borrado y `KINETIQ_CORS_ORIGINS` cargado. **Migraciones aplicadas hasta `20261010000000`.**
+- **Frontend (Cloudflare Workers): https://kinetiq.v-capelloramil.workers.dev**, republicado por Valentín el 9/10: Registro, Ingreso, Cargar, **Procesando, Biblioteca y Reporte simple reales**, con el diseño nuevo
+  en los tokens y en las pantallas nuevas. Sigue simulado, con la marca "Datos de ejemplo": Perfil. Landing y Tecnología son estáticas. La maqueta vieja del reporte vive en `/reporte/` y no está enlazada.
+- Para republicar: desde la PowerShell de Valentín, `cd frontend; bun run build; .\node_modules\.bin\wrangler.exe deploy` (necesita `frontend/.env`, no versionado).
 
-**Ya resuelto, para no repetirlo:** `KINETIQ_API_TOKEN` borrado de Render; `KINETIQ_CORS_ORIGINS` cargado; migraciones aplicadas hasta `20261010000000`; Wrangler se usa desde la PowerShell de Valentín (`bun run build` y
-`wrangler deploy` en `frontend/`; el login visible desde esta sesión no refleja los scopes de Workers).
+### Resultado de las pruebas de hoy (12/10, desde el celular, `IMG_6395.mov`, revés de tres cuartos, las tres declaradas `camara_lenta_240`)
+
+1. **El recorte con cámara lenta llegó convertido y se rechazó bien.** Dos envíos (15:54 y 16:00 UTC): 12,0 s, 604 fotogramas = **50 fps** → `fallido` con `archivo_convertido` en **15 y 18 s**, `fps_real = 50`.
+   El motor midió la tasa del archivo y no culpó a la declaración; Procesando muestra el camino "Opciones → Formato: Actual / Archivos".
+2. **El recorte sin cámara lenta dio análisis completo a 199,9 fps.** 3,0 s, 599 fotogramas, 1920×1080 → `completado`. **Latencia de punta a punta: 11 min 18 s** (677,8 s; cómputo 676,6 s) en Render Free:
+   **primer dato de latencia medido por la base** (`docs/resultados/criterio4-latencia.md`). Regularizado: 16,7 % de fotogramas perdidos y 16,7 % de puntos interpolados (hueco máximo 12,5 ms), escala conocida,
+   cobertura auditable 100 %, repetición auditable, `version_contrato` 1.2.
+   **Orden:** tronco 0,300 s, cadera 0,308 s (8,3 ms = **2 fotogramas**, ordenable), brazo 0,488 s → tronco, cadera, brazo. **Coincide con el orden modal del corpus para revés de tres cuartos (`tp`).**
+   Sin veredicto, por la decisión 031 (no hay referencia del orden para el revés): dos observaciones "sin evaluar". n = 1; va a las notas del Capítulo 7 (ítem 11).
+
+### Pendiente, en este orden
+
+1. **Latencia:** 11 min por un golpe de 3 s es lo que más pesa. Decisión de Valentín (023): pasar a Standard (USD 25/mes, 1 CPU, 2 GB) y medir de nuevo; el cambio se hace en el panel y en el mismo paso se actualiza `render.yaml`.
+2. **Adaptar al diseño nuevo** Registro e Ingreso, Cargar (con varios golpes por sesión), Landing y Perfil: ~2,5 días, antes de la demo a los profesores.
+3. **"Olvidé mi contraseña"** (se prueba con dominio y correo propio, decisión 027; hoy solo sale el SMTP de Supabase a miembros del equipo, 2 por hora).
+4. **Validar el veredicto del saque de perfil** con el Paso A del recálculo y las grabaciones nuevas (decisión 031): **bloqueante de la demo, no del flujo**. El Paso A va ahora que la prueba de punta a punta pasó.
+5. `corte_hz` fuera de `versiones_motor` (anotado el 9/10, para después de la prueba de punta a punta); semana 3 (sesión de varios golpes, eliminar cuenta y datos, respaldo con restauración probada, recuperación al arranque).
+6. Todavía sin generar: miniaturas, los tres fotogramas clave con esqueleto, video con esqueleto, PDF, puntaje y comparación con la sesión anterior.
+
+### Para retomar sin perder tiempo
+
+- Python del proyecto: `backend/.venv/Scripts/python.exe`, con `PYTHONPATH=backend:tests`. `ffmpeg` y `ffprobe` en el PATH. Frontend: `bun` (`bun test` en `frontend/`).
+- Los videos nunca van al repositorio; antes de cada commit, `git ls-files | grep -i -E "\.(mov|mp4|npy|npz)$"` debe dar vacío.
+- Pruebas contra Supabase: `pytest -m requiere_supabase` (~9 min); contra producción: `pytest -m requiere_render`.
+- Las decisiones están en `docs/decisiones/` (hasta la 031); el resumen de lo hecho el 9/10 está en las entradas de abajo.
 
 ---
 

@@ -48,4 +48,9 @@ Registradas el 9/10/2026 con las decisiones 029 y 030. **No se redacta nada toda
 10. **Latencia (Criterio 4), primer dato:** ~9 min de punta a punta en Render Free para un golpe de 2,5 s a 1080p (medido a mano); desde la migración `20261010000000` el servidor registra encolado, inicio y fin por video.
     Detalle y método en `docs/resultados/criterio4-latencia.md`. Se informa el valor medido, sin umbral.
 
+11. **Segunda grabación propia por el flujo completo (12/10/2026): revés de tres cuartos, orden tronco → cadera → brazo, ordenable.** Recorte sin cámara lenta de 3,0 s, capturado a 240 fps nominales (`IMG_6395.mov`, "Formato: Actual"):
+    tasa real media **199,9 fps** (16,7 % de fotogramas perdidos; 16,7 % de puntos interpolados al regularizar a 240 Hz). Pico de tronco en 0,300 s y de cadera en 0,308 s: **8,3 ms = 2 fotogramas**, por encima de la
+    tolerancia de la decisión 014, de modo que el orden **sí es establecible** y coincide con el orden modal del corpus para ese grupo (`tp`, 1b = 0,83). **n = 1**: se cita como dato de la autovalidación, no como
+    confirmación. El otro recorte del mismo video, con cámara lenta (12 s), llegó a **50 fps** y fue rechazado por el sistema (`archivo_convertido`) en 15 a 18 s, dos veces: es el caso del RNF-01 "archivo convertido por el teléfono".
+
 Fuera del Capítulo 4, pero para la redacción: las limitaciones que registran las decisiones 020 (modo de captura declarado) y 022 (reintento) van a los Capítulos 6 y 7.
