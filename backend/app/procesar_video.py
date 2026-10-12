@@ -77,6 +77,9 @@ _UMBRAL_SECUENCIACION_FPS = UMBRAL_R1_FPS
 # Valentín. El hallazgo de que 1 corta tiempo/memoria a la mitad sigue sin aplicarse.
 MODEL_COMPLEXITY = 2
 BUCKET = "videos"
+# Bucket aparte para lo que el sistema genera (fotogramas clave, video con esqueleto): el usuario solo lo LEE; el original vive en
+# "videos" y se borra a los 7 días (apartado 4.5.3) sin arrastrar la evidencia visual. Migración 20261012000000.
+BUCKET_ARTEFACTOS = "artefactos"
 
 _MANO_A_LADO = {"derecha": "der", "izquierda": "izq"}
 
@@ -212,6 +215,52 @@ def _motivo_archivo_convertido(md, modo_captura: str, fps_efectivos: float) -> s
     return None
 
 
+def _generar_y_subir_artefactos(
+    admin, clip: Path, usuario_id: str, video_id: str, seq_fuente, pts_render, fps_grilla: float, repeticion,
+    lado_dominante: str, directorio_tmp: str,
+) -> dict[str, Any]:
+    """Genera los tres fotogramas clave y el video corto con esqueleto, los sube a Storage y devuelve el bloque ``artefactos`` del
+    contrato (rutas, no URLs). **Nunca levanta:** son un complemento del reporte, y un fallo acá deja ``{}`` ("no generado") y un
+    aviso en el log, no un análisis perdido. Ver ``engine/render.py`` para qué se dibuja y qué no (R3)."""
+    if repeticion is None or not usuario_id:
+        return {}
+    t0 = time.monotonic()
+    try:
+        from app.engine.render import generar_artefactos
+
+        locales = generar_artefactos(
+            clip, seq_fuente, pts_render, fps_grilla, repeticion, lado_dominante, Path(directorio_tmp) / "artefactos"
+        )
+        prefijo = f"{usuario_id}/{video_id}"
+        almacen = admin.storage.from_(BUCKET_ARTEFACTOS)
+        resultado: dict[str, Any] = {"fotogramas_clave": []}
+        for f in locales.fotogramas_clave:
+            ruta = f"{prefijo}/clave_{f.segmento.value}.jpg"
+            almacen.upload(ruta, f.archivo.read_bytes(), file_options={"content-type": "image/jpeg", "upsert": "true"})
+            resultado["fotogramas_clave"].append(
+                {"segmento": f.segmento.value, "instante_s": round(f.instante_s, 4), "ruta": ruta}
+            )
+        if locales.video is not None:
+            ruta = f"{prefijo}/esqueleto.mp4"
+            almacen.upload(ruta, locales.video.archivo.read_bytes(), file_options={"content-type": "video/mp4", "upsert": "true"})
+            resultado["overlay_ruta"] = ruta
+            resultado["overlay_info"] = {
+                "desde_s": round(locales.video.desde_s, 4),
+                "hasta_s": round(locales.video.hasta_s, 4),
+                "fps_reproduccion": locales.video.fps_reproduccion,
+                "factor_lento": locales.video.factor_lento,
+            }
+        video_kb = round(locales.video.bytes / 1024) if locales.video else 0
+        print(
+            f"[procesar_video] {video_id}: artefactos en {time.monotonic() - t0:.1f} s "
+            f"({len(locales.fotogramas_clave)} fotogramas clave, video {video_kb} KB)."
+        )
+        return resultado
+    except Exception as exc:  # noqa: BLE001 - opcional por diseño: cualquier fallo se registra y el reporte sigue
+        print(f"[procesar_video] {video_id}: artefactos no generados ({type(exc).__name__}: {exc}); el reporte sigue sin ellos.")
+        return {}
+
+
 def procesar_video(admin, video_id: str) -> dict[str, Any]:
     """Corre el pipeline completo sobre un video ya registrado y escribe el resultado en
     reportes_biomecanicos/metricas. Devuelve un resumen (también sirve como salida de log
@@ -222,7 +271,7 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
     video = (
         admin.table("videos")
         .select(
-            "id, ruta_almacenamiento, "
+            "id, usuario_id, ruta_almacenamiento, "
             "sesiones(gesto, encuadre, modo_captura, atletas(mano_dominante))"
         )
         .eq("id", video_id)
@@ -230,6 +279,7 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
         .execute()
         .data
     )
+    usuario_id = video.get("usuario_id")  # la carpeta de los artefactos en Storage; sin él no se generan
     mano_dominante = video["sesiones"]["atletas"]["mano_dominante"]
     lado_dominante = _MANO_A_LADO[mano_dominante]
     modo_captura = video["sesiones"]["modo_captura"]
@@ -382,198 +432,213 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
 
                 pts_decodificados = marcas_de_fotogramas_decodificados(clip)
 
-        # Regularización temporal (decisión 029): con marcas de tiempo reales e irregulares, las poses se interpolan a una grilla uniforme
-        # ANTES del filtrado de E3, que exige muestreo uniforme. Lo que se hizo queda en `regularizacion` (R4).
-        regularizacion = None
-        if md.es_tiempo_real and md.pts_visibles is not None:
-            from app.engine.regularizacion import alinear_marcas
+            # Regularización temporal (decisión 029): con marcas de tiempo reales e irregulares, las poses se interpolan a una grilla uniforme
+            # ANTES del filtrado de E3, que exige muestreo uniforme. Lo que se hizo queda en `regularizacion` (R4).
+            regularizacion = None
+            seq_fuente = seq          # las poses de los fotogramas reales: de ahí salen los fotogramas clave y el video (E5)
+            pts_render = None         # None = el archivo es uniforme a seq.fps_efectivos (un horneado o sin marcas asignables)
+            if md.es_tiempo_real and md.pts_visibles is not None:
+                from app.engine.regularizacion import alinear_marcas
 
-            pts_alineadas, motivo_alineacion = alinear_marcas(len(seq.frames), md.pts_visibles, pts_decodificados)
-            if pts_alineadas is not None:
-                from app.engine.ingest import normalizar_fps
-                from app.engine.regularizacion import regularizar
+                pts_alineadas, motivo_alineacion = alinear_marcas(len(seq.frames), md.pts_visibles, pts_decodificados)
+                if pts_alineadas is not None:
+                    from app.engine.ingest import normalizar_fps
+                    from app.engine.regularizacion import regularizar
 
-                if motivo_alineacion != "coinciden":
+                    if motivo_alineacion != "coinciden":
+                        print(
+                            f"[procesar_video] {video_id}: {len(md.pts_visibles) - len(pts_alineadas)} paquetes visibles sin fotograma "
+                            "decodificado; se usan las marcas de los fotogramas decodificados."
+                        )
+                    seq, info_reg = regularizar(seq, pts_alineadas, normalizar_fps(md.fps_nominal_marcas))
+                    pts_render = pts_alineadas
+                    regularizacion = info_reg.como_dict()
                     print(
-                        f"[procesar_video] {video_id}: {len(md.pts_visibles) - len(pts_alineadas)} paquetes visibles sin fotograma "
-                        "decodificado; se usan las marcas de los fotogramas decodificados."
+                        f"[procesar_video] {video_id}: regularización a {info_reg.fps_grilla:.0f} Hz: "
+                        f"{info_reg.n_interpolados} de {info_reg.n_grilla} puntos interpolados "
+                        f"({100 * info_reg.fraccion_interpolada:.1f} %), {info_reg.n_sin_dato} sin dato."
                     )
-                seq, info_reg = regularizar(seq, pts_alineadas, normalizar_fps(md.fps_nominal_marcas))
-                regularizacion = info_reg.como_dict()
-                print(
-                    f"[procesar_video] {video_id}: regularización a {info_reg.fps_grilla:.0f} Hz: "
-                    f"{info_reg.n_interpolados} de {info_reg.n_grilla} puntos interpolados "
-                    f"({100 * info_reg.fraccion_interpolada:.1f} %), {info_reg.n_sin_dato} sin dato."
-                )
-            else:
-                # No se puede asignar tiempo a cada fotograma: no se adivina (R3). La serie se trata como uniforme a la tasa media y la
-                # escala deja de ser conocida para velocidades absolutas.
-                escala_conocida = False
-                print(
-                    f"[procesar_video] {video_id}: {len(seq.frames)} fotogramas decodificados y {len(md.pts_visibles)} marcas de tiempo "
-                    f"visibles; {motivo_alineacion}; no se regulariza (escala_temporal_conocida = false)."
-                )
+                else:
+                    # No se puede asignar tiempo a cada fotograma: no se adivina (R3). La serie se trata como uniforme a la tasa media y la
+                    # escala deja de ser conocida para velocidades absolutas.
+                    escala_conocida = False
+                    print(
+                        f"[procesar_video] {video_id}: {len(seq.frames)} fotogramas decodificados y {len(md.pts_visibles)} marcas de tiempo "
+                        f"visibles; {motivo_alineacion}; no se regulariza (escala_temporal_conocida = false)."
+                    )
 
-        from app.engine.pipeline import procesar_e3
+            from app.engine.pipeline import procesar_e3
 
-        filt = procesar_e3(seq)
+            filt = procesar_e3(seq)
 
-        from app.engine.sequencing import secuenciar
+            from app.engine.sequencing import secuenciar
 
-        resultados, resumen = secuenciar(
-            filt.secuencia,
-            lado_dominante=lado_dominante,
-            tramos_excluidos=filt.tramos_excluidos,
-            brazo_via="codo",
-            ancla="torso",
-        )
-        repeticion = resultados[0] if resultados else None
-
-        version_motor_id = _version_motor_id(
-            admin,
-            {"filtro": "butterworth_fase_cero", "orden": 4, "corte_hz": filt.corte_hz},
-        )
-
-        orden_observado = (
-            [s.value for s in repeticion.orden_observado]
-            if repeticion and repeticion.orden_observado
-            else None
-        )  # provisorio: se reemplaza por el del reporte validado (más abajo), que aplica la tolerancia de un fotograma
-
-        # Reporte completo del contrato v1.1 (E5.4 mínimo): se ensambla y se VALIDA antes de tocar la base; si no cumple el
-        # contrato, falla acá (queda 'fallido' con error_inesperado) y no se guarda un reporte roto.
-        from app.ensamblar_reporte import ensamblar_reporte, segmento_de_metrica_velocidad
-
-        reporte_id = uuid4()
-        creado_en = datetime.now(timezone.utc)
-        escala_final = ingesta.escala_temporal_conocida and escala_conocida
-        apto_fase_rapida = ingesta.aptitud.value in ("completo", "reducido")
-        datos_reporte = ensamblar_reporte(
-            reporte_id=reporte_id,
-            video_id=video_id,
-            gesto=gesto,
-            encuadre=encuadre,
-            creado_en=creado_en,
-            version_motor=VERSION_MOTOR,
-            backend_pose=BACKEND_POSE,
-            modo_captura=modo_captura,
-            factor_ralentizacion=factor,
-            origen_factor=origen_factor,
-            escala_temporal_conocida=escala_final,
-            apto_fase_rapida=apto_fase_rapida,
-            metadatos=md,
-            fps_real=ingesta.fps_efectivos,
-            secuencia=seq,
-            filtrada=filt,
-            resultados=resultados,
-            resumen=resumen,
-            lado_dominante=lado_dominante,
-            brazo_via="codo",
-            metodo_segmentacion="ancla_torso",
-            regularizacion=regularizacion,
-        )
-        repeticiones_json = datos_reporte["secuenciacion"]["repeticiones"]
-        # Una sola fuente: lo que se guarda en las columnas planas y el estado final salen del reporte validado, no del motor crudo
-        # (que ordena por instantes y no conoce la tolerancia de un fotograma de la decisión 014).
-        orden_observado = repeticiones_json[0]["orden_observado"] if repeticiones_json else None
-        repeticion_auditable = bool(repeticiones_json and repeticiones_json[0]["auditable"])
-
-        # reportes_biomecanicos.video_id es único: un reporte previo (resto de un intento anterior que
-        # falló después de insertarlo, o una corrida manual por línea de comandos sobre un video ya
-        # analizado) haría fallar el insert y dejaría 'fallido' un video con reporte (decisión 022).
-        # Se borra recién ahora, con el resultado nuevo ya calculado: si algo falla antes, el previo
-        # no se pierde. La cascada se lleva sus métricas y alertas.
-        admin.table("reportes_biomecanicos").delete().eq("video_id", video_id).execute()
-
-        reporte = (
-            admin.table("reportes_biomecanicos")
-            .insert(
-                {
-                    "id": str(reporte_id),
-                    "video_id": video_id,
-                    "version_motor_id": version_motor_id,
-                    "creado_en": creado_en.isoformat(),
-                    "orden_picos_observado": orden_observado,
-                    # El mismo valor que el JSON: con la decisión 015, en saque y drive no hay veredicto (None).
-                    "secuencia_correcta": repeticiones_json[0]["correcto"] if repeticiones_json else None,
-                    "corte_filtro_hz": filt.corte_hz,
-                    "cobertura_auditable_pct": datos_reporte["cobertura"]["auditable_pct"],
-                    # Trazabilidad (R4) de la escala temporal, congelada en el reporte: lo que
-                    # declaró el usuario (sesiones.modo_captura es editable después), el factor
-                    # que resultó de combinarlo con el contenedor, y su origen.
-                    "modo_captura": modo_captura,
-                    "factor_ralentizacion": factor,
-                    "escala_temporal_conocida": escala_final,
-                    "origen_factor": origen_factor,
-                    "reporte": datos_reporte,
-                }
+            resultados, resumen = secuenciar(
+                filt.secuencia,
+                lado_dominante=lado_dominante,
+                tramos_excluidos=filt.tramos_excluidos,
+                brazo_via="codo",
+                ancla="torso",
             )
-            .execute()
-            .data[0]
-        )
+            repeticion = resultados[0] if resultados else None
 
-        metricas_insertadas = 0
-        if repeticion:
-            # Un pico ausente o no auditable no se estima ni se rellena (R3): sin fila, no con un valor inventado ni con
-            # auditable=False y valor=null. Las filas salen del mismo JSON que se guardó (una sola fuente).
-            for seg, pico in repeticion.picos.items():
-                if pico is not None and pico.auditable and not math.isfinite(pico.velocidad):
-                    # Ni json ni la columna numeric de Postgres aceptan NaN/infinito: es un artefacto numérico (p. ej. un
-                    # tramo con duración casi cero en el cálculo de ω), no un dato.
-                    print(
-                        f"  [aviso] pico de {seg.value} no finito ({pico.velocidad!r}), "
-                        "se omite la métrica (no es un bug de este script, revisar el pipeline)"
-                    )
-            for m in datos_reporte["metricas"]:
-                segmento = segmento_de_metrica_velocidad(m["nombre"])
-                if segmento is None or not m["auditable"] or m["valor"] is None:
-                    continue
-                admin.table("metricas").insert(
+            # Fotogramas clave y video con esqueleto (E5): mientras el clip siga en disco. Son opcionales: si algo falla, el reporte sale
+            # igual con `artefactos` vacío ("no generado"), nunca con un dato inventado ni con el análisis caído.
+            artefactos = _generar_y_subir_artefactos(
+                admin, clip, usuario_id, video_id, seq_fuente, pts_render, seq.fps_efectivos, repeticion, lado_dominante, directorio_tmp
+            )
+
+            version_motor_id = _version_motor_id(
+                admin,
+                {"filtro": "butterworth_fase_cero", "orden": 4, "corte_hz": filt.corte_hz},
+            )
+
+            orden_observado = (
+                [s.value for s in repeticion.orden_observado]
+                if repeticion and repeticion.orden_observado
+                else None
+            )  # provisorio: se reemplaza por el del reporte validado (más abajo), que aplica la tolerancia de un fotograma
+
+            # Reporte completo del contrato v1.1 (E5.4 mínimo): se ensambla y se VALIDA antes de tocar la base; si no cumple el
+            # contrato, falla acá (queda 'fallido' con error_inesperado) y no se guarda un reporte roto.
+            from app.ensamblar_reporte import ensamblar_reporte, segmento_de_metrica_velocidad
+
+            reporte_id = uuid4()
+            creado_en = datetime.now(timezone.utc)
+            escala_final = ingesta.escala_temporal_conocida and escala_conocida
+            apto_fase_rapida = ingesta.aptitud.value in ("completo", "reducido")
+            datos_reporte = ensamblar_reporte(
+                reporte_id=reporte_id,
+                video_id=video_id,
+                gesto=gesto,
+                encuadre=encuadre,
+                creado_en=creado_en,
+                version_motor=VERSION_MOTOR,
+                backend_pose=BACKEND_POSE,
+                modo_captura=modo_captura,
+                factor_ralentizacion=factor,
+                origen_factor=origen_factor,
+                escala_temporal_conocida=escala_final,
+                apto_fase_rapida=apto_fase_rapida,
+                metadatos=md,
+                fps_real=ingesta.fps_efectivos,
+                secuencia=seq,
+                filtrada=filt,
+                resultados=resultados,
+                resumen=resumen,
+                lado_dominante=lado_dominante,
+                brazo_via="codo",
+                metodo_segmentacion="ancla_torso",
+                regularizacion=regularizacion,
+                artefactos=artefactos,
+            )
+            repeticiones_json = datos_reporte["secuenciacion"]["repeticiones"]
+            # Una sola fuente: lo que se guarda en las columnas planas y el estado final salen del reporte validado, no del motor crudo
+            # (que ordena por instantes y no conoce la tolerancia de un fotograma de la decisión 014).
+            orden_observado = repeticiones_json[0]["orden_observado"] if repeticiones_json else None
+            repeticion_auditable = bool(repeticiones_json and repeticiones_json[0]["auditable"])
+
+            # reportes_biomecanicos.video_id es único: un reporte previo (resto de un intento anterior que
+            # falló después de insertarlo, o una corrida manual por línea de comandos sobre un video ya
+            # analizado) haría fallar el insert y dejaría 'fallido' un video con reporte (decisión 022).
+            # Se borra recién ahora, con el resultado nuevo ya calculado: si algo falla antes, el previo
+            # no se pierde. La cascada se lleva sus métricas y alertas.
+            admin.table("reportes_biomecanicos").delete().eq("video_id", video_id).execute()
+
+            reporte = (
+                admin.table("reportes_biomecanicos")
+                .insert(
                     {
-                        "reporte_id": reporte["id"],
-                        "segmento": segmento,
-                        "tipo": "velocidad_pico",
-                        "valor": m["valor"],
-                        "unidad": m["unidad"],
-                        "confianza_media": m["confianza"],
-                        "auditable": True,
+                        "id": str(reporte_id),
+                        "video_id": video_id,
+                        "version_motor_id": version_motor_id,
+                        "creado_en": creado_en.isoformat(),
+                        "orden_picos_observado": orden_observado,
+                        # El mismo valor que el JSON: con la decisión 015, en saque y drive no hay veredicto (None).
+                        "secuencia_correcta": repeticiones_json[0]["correcto"] if repeticiones_json else None,
+                        "corte_filtro_hz": filt.corte_hz,
+                        "cobertura_auditable_pct": datos_reporte["cobertura"]["auditable_pct"],
+                        # Trazabilidad (R4) de la escala temporal, congelada en el reporte: lo que
+                        # declaró el usuario (sesiones.modo_captura es editable después), el factor
+                        # que resultó de combinarlo con el contenedor, y su origen.
+                        "modo_captura": modo_captura,
+                        "factor_ralentizacion": factor,
+                        "escala_temporal_conocida": escala_final,
+                        "origen_factor": origen_factor,
+                        "reporte": datos_reporte,
+                        "ruta_overlay": datos_reporte["artefactos"].get("overlay_ruta"),
                     }
-                ).execute()
-                metricas_insertadas += 1
+                )
+                .execute()
+                .data[0]
+            )
 
-        estado_final = "completado" if repeticion_auditable else "parcial"
-        admin.table("videos").update(
-            {
+            metricas_insertadas = 0
+            if repeticion:
+                # Un pico ausente o no auditable no se estima ni se rellena (R3): sin fila, no con un valor inventado ni con
+                # auditable=False y valor=null. Las filas salen del mismo JSON que se guardó (una sola fuente).
+                for seg, pico in repeticion.picos.items():
+                    if pico is not None and pico.auditable and not math.isfinite(pico.velocidad):
+                        # Ni json ni la columna numeric de Postgres aceptan NaN/infinito: es un artefacto numérico (p. ej. un
+                        # tramo con duración casi cero en el cálculo de ω), no un dato.
+                        print(
+                            f"  [aviso] pico de {seg.value} no finito ({pico.velocidad!r}), "
+                            "se omite la métrica (no es un bug de este script, revisar el pipeline)"
+                        )
+                for m in datos_reporte["metricas"]:
+                    segmento = segmento_de_metrica_velocidad(m["nombre"])
+                    if segmento is None or not m["auditable"] or m["valor"] is None:
+                        continue
+                    admin.table("metricas").insert(
+                        {
+                            "reporte_id": reporte["id"],
+                            "segmento": segmento,
+                            "tipo": "velocidad_pico",
+                            "valor": m["valor"],
+                            "unidad": m["unidad"],
+                            "confianza_media": m["confianza"],
+                            "auditable": True,
+                        }
+                    ).execute()
+                    metricas_insertadas += 1
+
+            estado_final = "completado" if repeticion_auditable else "parcial"
+            rutas_clave = {f["segmento"]: f["ruta"] for f in datos_reporte["artefactos"].get("fotogramas_clave", [])}
+            admin.table("videos").update(
+                {
+                    "ruta_fotograma_pelvis": rutas_clave.get("pelvis"),
+                    "ruta_fotograma_torso": rutas_clave.get("torso"),
+                    "ruta_fotograma_brazo": rutas_clave.get("brazo"),
+                    "estado": estado_final,
+                    "fin_procesamiento_en": _ahora_iso(),
+                    "fps_real": ingesta.fps_efectivos,
+                    "total_fotogramas": md.nb_frames,
+                    "duracion_s": md.duracion_s,
+                    "resolucion": f"{md.ancho}x{md.alto}",
+                    "apto_fase_rapida": apto_fase_rapida,
+                }
+            ).eq("id", video_id).execute()
+
+            segundos_totales = round(time.monotonic() - t_inicio, 2)
+            rss_pico_mb = _rss_pico_mb()
+            print(
+                f"[procesar_video] {video_id}: {segundos_totales} s, "
+                f"RSS pico {rss_pico_mb if rss_pico_mb is not None else 'no disponible'} MB "
+                f"(tarea 4.5.4: esto es lo que hay que leer del log de Render para decidir "
+                f"Free vs Starter)"
+            )
+
+            return {
+                "video_id": video_id,
+                "reporte_id": reporte["id"],
                 "estado": estado_final,
-                "fin_procesamiento_en": _ahora_iso(),
-                "fps_real": ingesta.fps_efectivos,
-                "total_fotogramas": md.nb_frames,
-                "duracion_s": md.duracion_s,
-                "resolucion": f"{md.ancho}x{md.alto}",
-                "apto_fase_rapida": apto_fase_rapida,
+                "orden_observado": orden_observado,
+                "metricas_insertadas": metricas_insertadas,
+                "segundos_totales": segundos_totales,
+                "rss_pico_mb": rss_pico_mb,
+                "fps_real_medio": round(float(md.fps_real_medio), 2) if md.fps_real_medio else None,
+                "regularizacion": regularizacion,
             }
-        ).eq("id", video_id).execute()
-
-        segundos_totales = round(time.monotonic() - t_inicio, 2)
-        rss_pico_mb = _rss_pico_mb()
-        print(
-            f"[procesar_video] {video_id}: {segundos_totales} s, "
-            f"RSS pico {rss_pico_mb if rss_pico_mb is not None else 'no disponible'} MB "
-            f"(tarea 4.5.4: esto es lo que hay que leer del log de Render para decidir "
-            f"Free vs Starter)"
-        )
-
-        return {
-            "video_id": video_id,
-            "reporte_id": reporte["id"],
-            "estado": estado_final,
-            "orden_observado": orden_observado,
-            "metricas_insertadas": metricas_insertadas,
-            "segundos_totales": segundos_totales,
-            "rss_pico_mb": rss_pico_mb,
-            "fps_real_medio": round(float(md.fps_real_medio), 2) if md.fps_real_medio else None,
-            "regularizacion": regularizacion,
-        }
     except Exception:
         # Con código (decisión 022): sin él, el fallo quedaba indistinguible de "nunca falló" o
         # arrastraba el motivo de una corrida anterior, y el reintento no sabría qué regla aplicar.

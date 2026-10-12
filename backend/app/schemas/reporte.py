@@ -33,8 +33,10 @@ from pydantic import BaseModel, ConfigDict, Field
 
 # v1.1 (decisión 029, aditiva): la tasa puede salir de las marcas de tiempo del archivo y se informa qué regularización temporal se hizo.
 # v1.2 (decisión 031, aditiva): una observación puede ser "sin_evaluar" (se documenta un dato sin emitir juicio).
-# Un reporte guardado como "1.0" o "1.1" sigue siendo válido: lo nuevo es opcional o un valor más de un vocabulario.
-VERSION_CONTRATO = "1.2"
+# v1.3 (decisión 032, aditiva): la trazabilidad lleva la tolerancia con que se decidió "ordenable" (`tolerancia_orden_ms`) y los
+# artefactos describen el video con esqueleto (`overlay_info`).
+# Un reporte guardado como "1.0", "1.1" o "1.2" sigue siendo válido: lo nuevo es opcional o un valor más de un vocabulario.
+VERSION_CONTRATO = "1.3"
 
 Gesto = Literal["saque", "drive", "reves"]
 Segmento = Literal["pelvis", "torso", "brazo"]
@@ -101,6 +103,9 @@ class Trazabilidad(_Base):
     fps_nominal: float | None = Field(default=None, gt=0.0)
     fotogramas_perdidos_pct: float | None = Field(default=None, ge=0.0, le=100.0)
     regularizacion: "Regularizacion | None" = None
+    # --- v1.3 (decisión 032): la regla con que se decidió "ordenable" (1/120 s = 8,33 ms). Dos picos a esta distancia o menos no se
+    # ordenan. None en un reporte anterior, que usaba "1 fotograma de la grilla" (4,2 ms a 240 Hz).
+    tolerancia_orden_ms: float | None = Field(default=None, gt=0.0)
 
 
 # --- Cobertura auditable -------------------------------------------------------
@@ -208,10 +213,21 @@ class FotogramaClave(_Base):
     ruta: str = Field(min_length=1)
 
 
+class OverlayInfo(_Base):
+    """Cómo se reproduce el video con esqueleto (v1.3): es un tramo del clip, en cámara lenta fija, y el reproductor tiene que
+    poder volver al eje temporal del análisis."""
+
+    desde_s: float = Field(ge=0.0)   # en el eje del clip (segundos desde el primer fotograma)
+    hasta_s: float = Field(ge=0.0)
+    fps_reproduccion: int = Field(gt=0)
+    factor_lento: float = Field(gt=0.0)  # cuántas veces más lento que la realidad
+
+
 class Artefactos(_Base):
     # Rutas en Storage (no URLs, ver FotogramaClave.ruta). Opcionales: el video con esqueleto y el
     # PDF no existen en la primera entrega (decisión 024); None = no generado, no "vacío".
     overlay_ruta: str | None = None
+    overlay_info: OverlayInfo | None = None
     pdf_ruta: str | None = None
     fotogramas_clave: list[FotogramaClave] = Field(default_factory=list)
 
@@ -219,7 +235,7 @@ class Artefactos(_Base):
 # --- Reporte (raíz del contrato) -----------------------------------------
 
 class Reporte(_Base):
-    version_contrato: Literal["1.0", "1.1", "1.2"]
+    version_contrato: Literal["1.0", "1.1", "1.2", "1.3"]
     reporte_id: UUID
     video_id: UUID
     gesto: Gesto

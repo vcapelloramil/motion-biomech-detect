@@ -21,6 +21,11 @@ Lo que sí incrementa __version__ es si CAMBIÓ algo en engine/ desde el último
 tiempo pase entre etapas (ver el historial de commits de este archivo con
 ``git log --follow -- backend/app/engine/version.py``).
 
+**Qué sello llevan los reportes (RNF-02)** — la regla se rompió entre el 9 y el 12/10/2026: el motor cambió en cuatro
+commits con el sello 0.4.1 puesto, y recién se subió el número al ajustar la tolerancia del orden (decisión 032). Para
+distinguir un reporte viejo de uno nuevo, la tabla de commits está en ``docs/bitacora.md`` (entrada del 12/10, "Versiones
+del motor"); el discriminador práctico es la ``version_contrato`` del propio reporte (1.0 · 1.1 · 1.2 · 1.3).
+
 - 0.1.0 — Etapa 1: ingesta y validación de FPS.
 - 0.2.0 — Etapa 2: estimación de pose (interfaz intercambiable + MediaPipe).
 - 0.3.0 — Etapa 3: filtrado de fase cero (Butterworth + Winter).
@@ -30,7 +35,13 @@ tiempo pase entre etapas (ver el historial de commits de este archivo con
 - 0.4.1 — Fix E3: las series con huecos se filtran por segmentos continuos (antes se dejaban
   enteras sin filtrar; decisión 010). Cambia toda velocidad calculada con articulaciones con
   huecos (en la práctica, el brazo). Sigue vigente al cerrar la Etapa 4 (decisión 015, tag
-  v0.5.0-etapa4): ningún commit posterior a este tocó engine/ (ver más arriba).
+  v0.5.0-etapa4).
+- 0.5.0 — Etapas 4.5 y 5 mínima: el motor **lee la tasa real de las marcas de tiempo** del archivo y no la supone (decisiones
+  029 y 030, RNF-01), corrige la orientación automática, **regulariza el tiempo** a una grilla uniforme antes de filtrar
+  (con los puntos interpolados contados, R4), alinea con las marcas de los fotogramas realmente decodificados, marca
+  "no auditable" la cadera y el tronco simultáneos, aplica la tolerancia del 5 % del piso de R1 (114 fps) y, desde la
+  decisión 032, decide "ordenable" con **una sola tolerancia de 8,33 ms** (``engine/tolerancia_orden.py``) y genera los
+  fotogramas clave y el video con esqueleto (``engine/render.py``). Los reportes del contrato 1.3 son de esta versión.
 """
 
-__version__ = "0.4.1"
+__version__ = "0.5.0"

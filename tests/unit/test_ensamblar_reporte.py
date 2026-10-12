@@ -71,10 +71,11 @@ def seq_invertida():
 # --- el reporte valida contra el contrato -----------------------------------------------------------------
 
 
-def test_el_reporte_ensamblado_valida_contra_el_contrato_v1_2(seq_ordenada):
+def test_el_reporte_ensamblado_valida_contra_el_contrato_v1_3(seq_ordenada):
     datos = _ensamblar(seq_ordenada)
     r = Reporte.model_validate(datos)
-    assert r.version_contrato == "1.2"
+    assert r.version_contrato == "1.3"
+    assert r.trazabilidad.tolerancia_orden_ms == pytest.approx(8.333, abs=0.001)
     assert r.segmentacion.repeticiones_marcadas == 1
     assert r.secuenciacion.orden_esperado == ["pelvis", "torso", "brazo"]
 
@@ -163,7 +164,9 @@ def test_sin_las_dos_condiciones_el_orden_se_documenta_sin_evaluar(seq_ordenada,
     assert rep["correcto"] is None
     assert datos["secuenciacion"]["resumen"]["repeticiones_correctas"] == 0
     par = datos["observaciones"][0]
-    assert par["severidad"] == "sin_evaluar" and porque in par["texto"] and par["referencia"] is None
+    # La razón técnica (con la literatura y la validación propia) va en el detalle, no en el texto que lee el jugador.
+    assert par["severidad"] == "sin_evaluar" and porque in par["fundamento"] and par["referencia"] is None
+    assert "Todavía no" in par["texto"] and "puedas compararte en tus próximas sesiones" in par["texto"]
     assert "no_auditable" not in {o["severidad"] for o in datos["observaciones"]}
     assert not _obs(datos, "correcto") and not _obs(datos, "desvio_leve")
 
@@ -200,12 +203,14 @@ def _rep_con_picos(t_pelvis: float, t_torso: float, t_brazo: float = 0.4):
 @pytest.mark.parametrize(
     ("t_torso", "estado", "veredicto"),
     [
-        (0.2 + 1 / 240.0, "no_ordenable", None),       # exactamente 1 fotograma: dentro de la tolerancia (decisión 014)
-        (0.2 + 2 / 240.0, "cadera_primero", True),     # 2 fotogramas (8,3 ms): ordenable
-        (0.2 - 2 / 240.0, "tronco_primero", False),
+        (0.2 + 1 / 240.0, "no_ordenable", None),       # 4,2 ms: dentro de la tolerancia
+        (0.2 + 2 / 240.0, "no_ordenable", None),       # 8,33 ms = 1/120 s: IGUAL a la tolerancia, no es "más que" (decisión 032)
+        (0.2 - 2 / 240.0, "no_ordenable", None),
+        (0.2 + 3 / 240.0, "cadera_primero", True),     # 12,5 ms: ordenable
+        (0.2 - 3 / 240.0, "tronco_primero", False),
     ],
 )
-def test_el_par_cadera_tronco_respeta_la_tolerancia_de_un_fotograma(t_torso, estado, veredicto):
+def test_el_par_cadera_tronco_respeta_la_tolerancia_de_8_3_ms(t_torso, estado, veredicto):
     from app.ensamblar_reporte import _evaluar_par, _veredicto
 
     rep = _rep_con_picos(0.2, t_torso)
@@ -219,7 +224,16 @@ def test_una_simultaneidad_se_informa_como_no_auditable_y_no_como_sin_evaluar():
 
     obs = _obs_par("saque", "perfil", [_rep_con_picos(0.2, 0.2 + 1 / 240.0)], True)
     assert obs["severidad"] == "no_auditable" and "casi al mismo tiempo" in obs["texto"]
-    assert "4.2 ms" in obs["fundamento"]
+    assert "no se puede saber cuál fue primero" in obs["texto"]
+    # la resolución que se informa es la del archivo real (5 ms a ~200 fps), no la de la grilla de 240 Hz
+    assert "4 ms" in obs["fundamento"] and "8,3 ms" in obs["fundamento"]
+
+
+def test_la_resolucion_se_informa_con_la_tasa_real_y_no_con_la_de_la_grilla():
+    from app.ensamblar_reporte import _obs_par
+
+    obs = _obs_par("saque", "perfil", [_rep_con_picos(0.2, 0.2 + 1 / 240.0)], True, fps_real=199.9)
+    assert "1 fotograma ≈ 5 ms a 200 fps reales" in obs["fundamento"]
 
 
 def test_con_escala_desconocida_el_orden_no_lleva_milisegundos(seq_ordenada):
@@ -381,9 +395,33 @@ def test_cadera_y_tronco_a_un_fotograma_dejan_la_repeticion_no_auditable_sin_ord
     Reporte.model_validate(datos)
 
 
-def test_con_dos_fotogramas_de_separacion_la_repeticion_sigue_siendo_auditable(seq_ordenada):
-    datos = _ensamblar_con(seq_ordenada, [_rep_con_picos(0.2, 0.2 + 2 / 240.0)])
+def test_con_tres_fotogramas_de_separacion_la_repeticion_sigue_siendo_auditable(seq_ordenada):
+    datos = _ensamblar_con(seq_ordenada, [_rep_con_picos(0.2, 0.2 + 3 / 240.0)])
     rep = datos["secuenciacion"]["repeticiones"][0]
     assert rep["auditable"] is True and rep["orden_observado"] == ["pelvis", "torso", "brazo"]
     assert datos["segmentacion"]["repeticiones_auditables"] == 1
     assert datos["secuenciacion"]["resumen"]["orden_predominante"] == ["pelvis", "torso", "brazo"]
+
+
+# --- el texto principal no cita la literatura (ajuste del 12/10, decisión 032) -----------------------------------------
+
+
+@pytest.mark.parametrize(
+    ("gesto", "encuadre", "fixture"),
+    [
+        ("saque", "perfil", "seq_ordenada"), ("saque", "perfil", "seq_invertida"),
+        ("drive", "perfil", "seq_ordenada"), ("reves", "tres_cuartos", "seq_ordenada"),
+    ],
+)
+def test_el_texto_de_cada_observacion_no_menciona_la_literatura(request, gesto, encuadre, fixture):
+    """La cita y la razón técnica viajan en `fundamento` y `referencia` (nivel 3 y PDF); el texto es para el jugador."""
+    datos = _ensamblar(request.getfixturevalue(fixture), gesto=gesto, encuadre=encuadre)
+    for o in datos["observaciones"]:
+        assert not re.search(r"literatura|Kovacs|Fleisig|Martin|et al\.|\(20\d\d\)|Criterio|validaci", o["texto"]), o["texto"]
+
+
+def test_con_veredicto_la_fuente_sigue_disponible_en_el_detalle(seq_ordenada):
+    datos = _ensamblar(seq_ordenada, gesto="saque", encuadre="perfil")
+    (obs,) = _obs(datos, "correcto")
+    assert "orden esperado" in obs["texto"] and "Kovacs" not in obs["texto"]
+    assert "Kovacs y Ellenbecker (2011)" in obs["referencia"]

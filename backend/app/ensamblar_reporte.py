@@ -20,8 +20,9 @@ Qué agrega este módulo sobre lo que el motor ya devolvía:
 * **Tramos no auditables** en segundos, unidos por superposición, solo de las articulaciones de la cadena.
 
 Lo que **no** hay todavía y por lo tanto no se inventa: alertas con umbral (E5.1: sin referencia bibliográfica
-no hay alerta), puntaje de rendimiento, comparación con la sesión anterior y artefactos (fotogramas clave,
-video con esqueleto, PDF): ``comparacion_propia = None`` y ``artefactos`` vacío son "no generado", no "cero".
+no hay alerta), puntaje de rendimiento, comparación con la sesión anterior y el PDF: ``comparacion_propia = None`` y
+``artefactos`` vacío son "no generado", no "cero". Los fotogramas clave y el video con esqueleto (``engine/render.py``)
+entran por el parámetro ``artefactos``, ya subidos a Storage: este módulo sigue sin tocar archivos.
 """
 
 from __future__ import annotations
@@ -38,6 +39,7 @@ from app.engine.pose.base import SecuenciaPose
 from app.engine.preparacion import TramoExcluido
 from app.engine.segmentos_corporales import ORDEN_ESPERADO, SegmentoCadena, articulaciones_de_segmento
 from app.engine.sequencing import ResultadoRepeticion, ResumenSecuenciacion
+from app.engine.tolerancia_orden import TOLERANCIA_ORDEN_MS, es_ordenable
 from app.schemas.reporte import VERSION_CONTRATO, Reporte
 
 # Los metadatos y los resultados llegan como objetos del motor; se anotan como Any para que este módulo no
@@ -78,9 +80,9 @@ RESPALDO_POR_GRUPO: dict[tuple[str, str], RespaldoGrupo] = {
 }
 _SIN_RESPALDO = RespaldoGrupo(None, False)
 
-# Decisión 014: dos picos son "ordenables" si su diferencia supera la tolerancia de 1 fotograma. Dentro de ella el orden no se puede
-# establecer (decisión 015, corrección del 29/9: es un motivo de "no auditable", no un estado nuevo).
-TOLERANCIA_ORDEN_FOTOGRAMAS = 1
+# Decisiones 014, 015 y 032: dos picos son "ordenables" si su diferencia supera la tolerancia de ``engine.tolerancia_orden`` (1/120 s,
+# 8,3 ms, la misma constante del recálculo del corpus). Dentro de ella el orden no se puede establecer (decisión 015, corrección del
+# 29/9: es un motivo de "no auditable", no un estado nuevo).
 
 _NOMBRE_SEGMENTO = {
     SegmentoCadena.PELVIS: "la cadera",
@@ -194,7 +196,7 @@ def _evaluar_par(rep: ResultadoRepeticion) -> _Par:
     if pelvis is None or torso is None:
         return _Par("sin_dato", None)
     delta_s = torso.instante_s - pelvis.instante_s
-    if abs(delta_s) * rep.ventana.fps <= TOLERANCIA_ORDEN_FOTOGRAMAS + 1e-9:
+    if not es_ordenable(delta_s):
         return _Par("no_ordenable", delta_s * 1000.0)
     return _Par("cadera_primero" if delta_s > 0 else "tronco_primero", delta_s * 1000.0)
 
@@ -214,7 +216,7 @@ def _veredicto(gesto: str, encuadre: str, rep: ResultadoRepeticion) -> bool | No
 
 def _fundamento_instantes(rep: ResultadoRepeticion) -> str:
     partes = [
-        f"{_NOMBRE_CORTO[s]} {_pico_medido(rep, s).instante_s:.3f} s"
+        f"{_NOMBRE_CORTO[s]} {_pico_medido(rep, s).instante_s:.3f}".replace(".", ",") + " s"
         for s in ORDEN_ESPERADO
         if _pico_medido(rep, s) is not None
     ]
@@ -225,15 +227,45 @@ def _ms(x: float) -> str:
     return f"{abs(x):.0f} ms"
 
 
+def _ms_coma(x: float) -> str:
+    """Milisegundos con una decimal y coma, sin el ',0' (5 ms, 8,3 ms)."""
+    return f"{x:.1f}".removesuffix(".0").replace(".", ",")
+
+
+def _resolucion_texto(fps: float | None) -> str:
+    """'1 fotograma ≈ 5 ms a 200 fps reales': la resolución del archivo real, no la de la grilla de 240 Hz (ajuste del 12/10)."""
+    if not fps or fps <= 0:
+        return ""
+    return f"1 fotograma ≈ {_ms_coma(1000.0 / fps)} ms a {fps:.0f} fps reales"
+
+
+# Texto para el jugador cuando el orden se midió pero no hay con qué evaluarlo (decisión 031). Sin citas en el texto principal: la
+# literatura y la razón técnica van en `fundamento` y `referencia`, que la interfaz muestra en el detalle (especificación §6).
+_SIN_PATRON = (
+    "Todavía no tenemos un patrón de referencia para este golpe; lo registramos para que puedas compararte en tus próximas sesiones."
+)
+_SIN_VALIDACION = (
+    "Todavía no podemos evaluar este orden con suficiente confianza en este encuadre; lo registramos para que puedas compararte "
+    "en tus próximas sesiones."
+)
+
+
+def _cierre_sin_evaluar(respaldo: RespaldoGrupo) -> str:
+    return _SIN_PATRON if respaldo.referencia_orden is None else _SIN_VALIDACION
+
+
 def _porque_sin_evaluar(respaldo: RespaldoGrupo) -> str:
+    """La razón técnica, para el detalle (nivel 3): ahí sí van la literatura y la validación propia."""
     if respaldo.referencia_orden is None and not respaldo.criterio1_cumplido:
-        return "para este gesto y encuadre todavía no hay una referencia del orden esperado ni una validación propia suficiente"
+        return "Para este gesto y encuadre todavía no hay una referencia del orden esperado ni una validación propia suficiente."
     if respaldo.referencia_orden is None:
-        return "para este gesto todavía no hay una referencia del orden esperado en la literatura que usa el sistema"
-    return "la validación propia del orden en este encuadre todavía no alcanzó el criterio de repetibilidad"
+        return "Para este gesto todavía no hay una referencia del orden esperado en la literatura que usa el sistema."
+    return "La validación propia del orden en este encuadre todavía no alcanzó el criterio de repetibilidad."
 
 
-def _obs_par(gesto: str, encuadre: str, resultados: list[ResultadoRepeticion], escala: bool) -> dict[str, Any]:
+def _obs_par(
+    gesto: str, encuadre: str, resultados: list[ResultadoRepeticion], escala: bool, fps_real: float | None = None
+) -> dict[str, Any]:
     respaldo = respaldo_del_grupo(gesto, encuadre)
     pares = [(r, _evaluar_par(r)) for r in resultados]
     ordenables = [(r, p) for r, p in pares if p.estado in ("cadera_primero", "tronco_primero")]
@@ -249,14 +281,20 @@ def _obs_par(gesto: str, encuadre: str, resultados: list[ResultadoRepeticion], e
                 "referencia": None,
             }
         r0, p0 = pares[0]
-        ms = f" Diferencia: {_ms(p0.delta_ms)}; un fotograma dura {1000.0 / r0.ventana.fps:.1f} ms." if escala else ""
+        resolucion = _resolucion_texto(fps_real or r0.ventana.fps)
+        ms = (
+            f" Diferencia: {_ms(p0.delta_ms)}; la tolerancia es de {_ms_coma(TOLERANCIA_ORDEN_MS)} ms"
+            + (f" y {resolucion}." if resolucion else ".")
+            if escala
+            else ""
+        )
         return {
             "severidad": "no_auditable",
             "texto": (
-                "La cadera y el tronco alcanzaron su velocidad máxima casi al mismo tiempo, dentro de la resolución del video: "
-                "no se puede establecer cuál fue primero."
+                "La cadera y el tronco alcanzaron su velocidad máxima casi al mismo tiempo: "
+                "a esta resolución del video no se puede saber cuál fue primero."
             ),
-            "fundamento": "simultaneidad al límite de resolución." + ms,
+            "fundamento": "Simultaneidad al límite de resolución." + ms,
             "referencia": None,
         }
 
@@ -265,25 +303,25 @@ def _obs_par(gesto: str, encuadre: str, resultados: list[ResultadoRepeticion], e
         primero, segundo = ("la cadera", "el tronco") if p.estado == "cadera_primero" else ("el tronco", "la cadera")
         cuanto = f" {_ms(p.delta_ms)}" if escala and p.delta_ms is not None else ""
         hecho = f"Se observa que {primero} alcanzó su velocidad máxima{cuanto} antes que {segundo}"
-        fundamento = _fundamento_instantes(r)
+        instantes = _fundamento_instantes(r)
         if not respaldo.con_veredicto:
             return {
                 "severidad": "sin_evaluar",
-                "texto": f"{hecho}. Se documenta sin evaluarlo: {_porque_sin_evaluar(respaldo)}.",
-                "fundamento": fundamento,
+                "texto": f"{hecho}. {_cierre_sin_evaluar(respaldo)}",
+                "fundamento": f"{instantes} {_porque_sin_evaluar(respaldo)}",
                 "referencia": None,
             }
         if p.estado == "cadera_primero":
             return {
                 "severidad": "correcto",
-                "texto": f"{hecho}, el orden descrito en la literatura.",
-                "fundamento": fundamento,
+                "texto": f"{hecho}: es el orden esperado para este golpe.",
+                "fundamento": instantes,
                 "referencia": respaldo.referencia_orden,
             }
         return {
             "severidad": "desvio_leve",
-            "texto": f"{hecho}, un orden distinto del descrito en la literatura (la cadera primero).",
-            "fundamento": fundamento,
+            "texto": f"{hecho}: es distinto del orden esperado para este golpe (la cadera primero).",
+            "fundamento": instantes,
             "referencia": respaldo.referencia_orden,
         }
 
@@ -296,16 +334,20 @@ def _obs_par(gesto: str, encuadre: str, resultados: list[ResultadoRepeticion], e
     if not respaldo.con_veredicto:
         return {
             "severidad": "sin_evaluar",
-            "texto": f"{hecho}. Se documenta sin evaluarlo: {_porque_sin_evaluar(respaldo)}.",
-            "fundamento": None,
+            "texto": f"{hecho}. {_cierre_sin_evaluar(respaldo)}",
+            "fundamento": _porque_sin_evaluar(respaldo),
             "referencia": None,
         }
     return {
         "severidad": "correcto" if k == len(ordenables) else "desvio_leve",
-        "texto": f"{hecho}, el orden descrito en la literatura.",
+        "texto": f"{hecho}: el orden esperado para este golpe es la cadera primero.",
         "fundamento": None,
         "referencia": respaldo.referencia_orden,
     }
+
+
+_SIN_PATRON_BRAZO = "Es un dato de tu golpe: todavía no tenemos un patrón de referencia para el brazo."
+_POR_QUE_BRAZO = "El balanceo del brazo no tiene una referencia equivalente en la literatura: se informa como dato, sin evaluarlo."
 
 
 def _obs_brazo(resultados: list[ResultadoRepeticion], escala: bool) -> dict[str, Any]:
@@ -318,7 +360,6 @@ def _obs_brazo(resultados: list[ResultadoRepeticion], escala: bool) -> dict[str,
             "fundamento": None,
             "referencia": None,
         }
-    cierre = "Se informa como dato: el balanceo del brazo no tiene una referencia equivalente en la literatura."
     if len(resultados) == 1:
         r = medidos[0]
         delta = _pico_medido(r, SegmentoCadena.BRAZO).instante_s - _pico_medido(r, SegmentoCadena.TORSO).instante_s
@@ -326,20 +367,27 @@ def _obs_brazo(resultados: list[ResultadoRepeticion], escala: bool) -> dict[str,
         cuanto = f"{abs(delta) * 1000:.0f} ms " if escala else ""
         return {
             "severidad": "sin_evaluar",
-            "texto": f"El brazo alcanzó su velocidad máxima {cuanto}{cuando} del tronco. {cierre}",
-            "fundamento": _fundamento_instantes(r),
+            "texto": f"El brazo alcanzó su velocidad máxima {cuanto}{cuando} del tronco. {_SIN_PATRON_BRAZO}",
+            "fundamento": f"{_fundamento_instantes(r)} {_POR_QUE_BRAZO}",
             "referencia": None,
         }
     return {
         "severidad": "sin_evaluar",
-        "texto": f"Se midió el instante del brazo respecto del tronco en {len(medidos)} de {len(resultados)} repeticiones. {cierre}",
-        "fundamento": None,
+        "texto": (
+            f"Se midió el instante del brazo respecto del tronco en {len(medidos)} de {len(resultados)} repeticiones. "
+            f"{_SIN_PATRON_BRAZO}"
+        ),
+        "fundamento": _POR_QUE_BRAZO,
         "referencia": None,
     }
 
 
 def _observaciones(
-    gesto: str, encuadre: str, resultados: list[ResultadoRepeticion], escala_temporal_conocida: bool
+    gesto: str,
+    encuadre: str,
+    resultados: list[ResultadoRepeticion],
+    escala_temporal_conocida: bool,
+    fps_real: float | None = None,
 ) -> list[dict[str, Any]]:
     if not resultados:
         return [
@@ -351,7 +399,7 @@ def _observaciones(
             }
         ]
     obs = [
-        _obs_par(gesto, encuadre, resultados, escala_temporal_conocida),
+        _obs_par(gesto, encuadre, resultados, escala_temporal_conocida, fps_real),
         _obs_brazo(resultados, escala_temporal_conocida),
     ]
     if not escala_temporal_conocida:
@@ -396,6 +444,7 @@ def ensamblar_reporte(
     brazo_via: str = "codo",
     metodo_segmentacion: str = "ancla_torso",
     regularizacion: dict | None = None,
+    artefactos: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Devuelve el reporte como ``dict`` JSON-compatible, ya validado contra el contrato.
 
@@ -430,6 +479,8 @@ def ensamblar_reporte(
         "fps_nominal": round(fps_nominal, 3) if fps_nominal else None,
         "fotogramas_perdidos_pct": perdidos,
         "regularizacion": regularizacion,
+        # v1.3 (decisión 032): la tolerancia con que se decidió "ordenable", para que un reporte se pueda releer con su regla.
+        "tolerancia_orden_ms": round(TOLERANCIA_ORDEN_MS, 3),
     }
 
     # --- secuenciación
@@ -534,8 +585,9 @@ def ensamblar_reporte(
         },
         "metricas": metricas,
         "comparacion_propia": None,
-        "observaciones": _observaciones(gesto, encuadre, resultados, escala_temporal_conocida),
-        "artefactos": {},
+        "observaciones": _observaciones(gesto, encuadre, resultados, escala_temporal_conocida, fps_real),
+        # Rutas en Storage (no URLs) de lo que generó engine/render.py; {} = no generado (nunca "cero").
+        "artefactos": artefactos or {},
     }
     # Valida contra el contrato (extra="forbid", rangos). model_dump(mode="json") deja UUID y fecha como texto.
     return Reporte.model_validate(datos).model_dump(mode="json")

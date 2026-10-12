@@ -125,7 +125,7 @@ def test_modo_normal_con_factor_uno_es_valido():
 def test_la_version_del_contrato_es_obligatoria_y_conocida():
     from app.schemas.reporte import VERSION_CONTRATO
 
-    assert Reporte.model_validate(_ejemplo_dict()).version_contrato == VERSION_CONTRATO == "1.2"
+    assert Reporte.model_validate(_ejemplo_dict()).version_contrato == VERSION_CONTRATO == "1.3"
     datos = _ejemplo_dict()
     del datos["version_contrato"]
     with pytest.raises(ValidationError):
@@ -221,5 +221,35 @@ def test_la_regularizacion_es_estricta():
         Reporte.model_validate(datos)
     datos = _ejemplo_dict()
     datos["trazabilidad"]["fotogramas_perdidos_pct"] = -1
+    with pytest.raises(ValidationError):
+        Reporte.model_validate(datos)
+
+
+# --- Contrato v1.3 (decisión 032): la tolerancia del orden y la descripción del video con esqueleto ----------------
+
+
+def test_un_reporte_v1_2_sigue_siendo_valido_sin_los_campos_de_la_v1_3():
+    datos = _ejemplo_dict()
+    datos["version_contrato"] = "1.2"
+    del datos["trazabilidad"]["tolerancia_orden_ms"]
+    datos["artefactos"].pop("overlay_info", None)
+    r = Reporte.model_validate(datos)
+    assert r.trazabilidad.tolerancia_orden_ms is None and r.artefactos.overlay_info is None
+
+
+def test_la_tolerancia_del_orden_y_el_video_con_esqueleto_viajan_en_el_reporte():
+    r = Reporte.model_validate(_ejemplo_dict())
+    assert r.trazabilidad.tolerancia_orden_ms == pytest.approx(8.333)
+    o = r.artefactos.overlay_info
+    assert o is not None and o.factor_lento == 8.0 and o.fps_reproduccion == 30 and o.hasta_s > o.desde_s
+
+
+def test_la_tolerancia_y_el_overlay_son_estrictos():
+    datos = _ejemplo_dict()
+    datos["trazabilidad"]["tolerancia_orden_ms"] = 0
+    with pytest.raises(ValidationError):
+        Reporte.model_validate(datos)
+    datos = _ejemplo_dict()
+    datos["artefactos"]["overlay_info"]["campo_inventado"] = 1
     with pytest.raises(ValidationError):
         Reporte.model_validate(datos)
