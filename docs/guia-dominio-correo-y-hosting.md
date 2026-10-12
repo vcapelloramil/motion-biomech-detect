@@ -17,6 +17,43 @@ del dominio lo hago yo cuando me lo pases (parte E).
 
 ---
 
+## Estado verificado el 12/10 (kinetiqtennis.me)
+
+Lo que se pudo comprobar **desde afuera, sin entrar a ningún panel** (consulta de DNS pública y API pública de GitHub):
+
+| Qué | Resultado |
+| --- | --- |
+| Servidores de nombres | **Ya apuntan a Cloudflare** (`owen.ns.cloudflare.com` y `sue.ns.cloudflare.com`): la parte B.3 está hecha |
+| Registros publicados en la raíz y en `www` | **Ninguno** (ni `A`, `AAAA`, `CNAME`, `TXT` ni `MX`): la zona está vacía. No queda nada apuntando a GitHub |
+| Repositorio que creó NC.me | **`vcapelloramil.github.io`** (creado el 12/10 a las 18:48 UTC): solo tiene `CNAME` (con `kinetiqtennis.me`) y `README.md`; un único commit "Added CNAME file for custom domain" |
+
+## Qué dejó NC.me (GitHub Pages) y qué borrar
+
+NC.me, al elegir "GitHub Pages", **creó el repositorio `vcapelloramil.github.io`** —el repositorio especial del *sitio de usuario*— con un archivo `CNAME` que declara tu dominio. Además
+suele cargar en Namecheap los registros de GitHub Pages. **Nada de eso sirve para KinetiQ** y una parte lo estorba:
+
+**1. Registros DNS — borrar, si aparecen en Cloudflare (DNS → Records), todos estos:**
+
+| Tipo | Nombre | Valor | Por qué sobra |
+| --- | --- | --- | --- |
+| `A` (cuatro) | `@` (la raíz) | `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153` | Apuntan la raíz a GitHub; el Worker necesita la raíz libre para su *Custom Domain* |
+| `AAAA` (cuatro) | `@` | `2606:50c0:8000::153`, `2606:50c0:8001::153`, `2606:50c0:8002::153`, `2606:50c0:8003::153` | Lo mismo, por IPv6 |
+| `CNAME` | `www` | `vcapelloramil.github.io` | Manda `www` a GitHub; si querés `www`, se redirige a la raíz desde Cloudflare |
+| `TXT` | `_github-pages-challenge-vcapelloramil` | (un código) | Es la verificación de dominio de GitHub Pages; solo existe si la pediste |
+
+Hoy **ya no hay ninguno publicado** (se verificó por DNS). Si al importar la zona Cloudflare los ofrece, **no los importes**; si ya están cargados, borralos. **Dejá los registros `NS` y `SOA`:** los maneja Cloudflare.
+
+**2. El repositorio `vcapelloramil.github.io` — se puede eliminar, y conviene.** No contiene nada tuyo (dos archivos que generó NC.me). Y **no es inocuo mientras exista**: es el *sitio de usuario*, y con un
+`CNAME` los sitios de proyecto de tu cuenta (`ProyectoFinal_CapelloRamil`, `PreEntrega2_CapelloRamil`, `EntregaFinalCapelloRamil`, que tienen Pages) **pasan a servirse desde `kinetiqtennis.me/<proyecto>/`**,
+dominio que ahora es de KinetiQ y donde esos sitios no van a existir: los enlaces de esos trabajos se rompen. Para dejarlo limpio, **en este orden**:
+
+1. Primero los registros (punto 1): sin eso, borrar el repositorio deja el dominio apuntando a GitHub, y **otra cuenta podría reclamarlo** como dominio personalizado de su propio Pages.
+2. En GitHub: `vcapelloramil.github.io` → **Settings → Pages → Custom domain → Remove** (quita el dominio del sitio).
+3. Después: **Settings → General → Danger Zone → Delete this repository** (te pide escribir el nombre).
+4. Si en **Settings → Pages → Verified domains** de tu cuenta figura `kinetiqtennis.me`, quitalo.
+
+Si preferís **no borrar** el repositorio: alcanza con borrar el archivo `CNAME` (y con eso los proyectos vuelven a `vcapelloramil.github.io/<proyecto>/`). No toca `motion-biomech-detect`, que es otro repositorio.
+
 ## A. Conseguir el dominio (Namecheap, por el Student Pack)
 
 1. Entrá a tu página del [GitHub Student Developer Pack](https://education.github.com/pack) y buscá la oferta de **Namecheap** (1 año de un `.me`, con SSL). Activala **desde esa página** (no desde Namecheap directo), porque ahí se aplica el descuento.
@@ -24,7 +61,7 @@ del dominio lo hago yo cuando me lo pases (parte E).
 3. En el carrito, el total tiene que dar **0** por el dominio. **Dejá activada la privacidad del registro** (WHOIS/"Withheld for Privacy"): oculta tu dirección y teléfono. Si te ofrece cosas pagas (hosting, correo, SSL), **no las agregues**.
 4. Confirmá tu correo en Namecheap.
 
-**Salió bien si:** en *Domain List* aparece `<nombre>.me` como "Active", con vencimiento a un año.
+**Salió bien si:** en *Domain List* aparece `<nombre>.me` como "Active", con vencimiento a un año. *(Hecho: `kinetiqtennis.me`, con la renovación automática apagada. **Anotá la fecha de vencimiento**: sin renovación, el dominio —y el correo de confirmación— dejan de funcionar al año.)*
 **Anotá** también cuánto cuesta la renovación (aparece en la lista): la oferta es de 1 año.
 
 ## B. Pasar el DNS a Cloudflare

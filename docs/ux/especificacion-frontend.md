@@ -115,8 +115,7 @@ Solo un golpe en estado `fallido` se puede reintentar, y lo que se ofrece depend
 
 **Lenguaje de la vista simple (12/10/2026):** el texto principal **no cita la literatura** ni nombra criterios de validación: la cita (`referencia`) y la razón técnica (`fundamento`) van en el nivel 3 ("Ver detalle
 técnico → Observaciones y su fundamento") y en el PDF. Las tarjetas de "Lo más importante" muestran el estado y el texto llano; el fundamento no se repite entre tarjetas. Para un dato medido sin patrón:
-*"Todavía no tenemos un patrón de referencia para este golpe; lo registramos para que puedas compararte en tus próximas sesiones."* Etiqueta del estado "sin evaluar" para el jugador: propuesta en
-`docs/reporte-mas-valor.md` (d), a decidir.
+*"Todavía no tenemos un patrón de referencia para este golpe; lo registramos para que puedas compararte en tus próximas sesiones."* Etiqueta del estado "sin evaluar": **"Solo registrado"** (decisión de Valentín, 12/10), **la misma en la vista simple, el detalle técnico y el PDF**.
 
 ### Vista detallada
 - Nivel 1: las mismas observaciones, compactas.

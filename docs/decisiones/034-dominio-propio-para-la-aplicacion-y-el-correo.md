@@ -23,6 +23,19 @@ frontend". El Pack ya está: hay que decidir **dónde vive el DNS**, porque de e
 4. **Sin cambios de código en el frontend para el enlace de confirmación**: usa `window.location.origin`; solo exige que el dominio esté en las direcciones permitidas de Supabase.
 5. **El camino B de la 027 (Gmail con contraseña de aplicación) sigue siendo el respaldo**: el cambio es solo de los datos de SMTP en el panel.
 
+## Hecho al 12/10/2026 (verificado desde afuera)
+
+- **Dominio:** `kinetiqtennis.me` (Namecheap, Student Pack, renovación automática apagada). **Los servidores de nombres ya apuntan a Cloudflare** (`owen.ns.cloudflare.com`, `sue.ns.cloudflare.com`).
+- **La zona está vacía:** ningún registro `A`, `AAAA`, `CNAME`, `TXT` ni `MX` publicado en la raíz ni en `www`. Faltan los de Brevo (código, DKIM, DMARC) y el *Custom Domain* del Worker.
+- **NC.me configuró GitHub Pages** (el flujo que ofrece el Student Pack): creó el repositorio **`vcapelloramil.github.io`** en la cuenta de Valentín, con un `CNAME` (`kinetiqtennis.me`) y un `README.md`.
+  Ese repositorio es el *sitio de usuario* de GitHub: con un `CNAME`, hace que los sitios de proyecto de la cuenta se redirijan a `kinetiqtennis.me/<proyecto>/`.
+
+## Regla de limpieza (decisión)
+
+1. **Ningún registro del dominio apunta a GitHub.** Los de GitHub Pages (`A` y `AAAA` de `185.199.108–111.153` y `2606:50c0:8000–8003::153`, `CNAME www`, `TXT _github-pages-challenge-*`) se borran o no se importan.
+2. **El repositorio `vcapelloramil.github.io` se elimina** (o, como mínimo, se le quita el `CNAME`) **después** de borrar esos registros, para no dejar un dominio apuntando a GitHub sin dueño en la zona.
+3. Detalle y pasos en `docs/guia-dominio-correo-y-hosting.md` ("Qué dejó NC.me y qué borrar").
+
 ## Consecuencias
 
 - Se habilita el **registro abierto** (correos de confirmación a cualquier proveedor) y **"Olvidé mi contraseña"** (pantalla y plantilla preparadas con el punto 1 del plan §8).

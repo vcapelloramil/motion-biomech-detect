@@ -199,14 +199,15 @@ especificación que todavía no existen, (3) que el sistema funcione "como públ
 **Supuestos:** sesiones de ~medio día. Ritmo **observado**: el flujo de punta a punta estaba previsto para el 20/10 (11 sesiones a ~1 por día) y se cerró el 12/10, es decir ~1,5 por día. Se calcula con **1,5
 por día** (esperado) y **1 por día** (pesimista, sin imprevistos de paneles ni de DNS).
 
-### Núcleo: lo que tiene que estar para la demo (13,5 sesiones restantes)
+### Núcleo: lo que tiene que estar para la demo (13,25 sesiones restantes; se hicieron el punto 3 y el Paso A)
 
 | # | Qué | Ses. | Valor | Depende de |
 | --- | --- | --- | --- | --- |
 | ~~0~~ | ~~Acciones de Valentín y prueba en producción~~ **HECHO 12/10** | — | Standard (117 s por golpe), artefactos en producción | — |
 | 1 | **Dominio `.me`, correo propio y la aplicación en el dominio** (guía `docs/guia-dominio-correo-y-hosting.md`; mi parte: `wrangler.jsonc`, CORS y la prueba de registro real; **la pantalla y la plantilla de "Olvidé mi contraseña" ya están hechas, 12/10**) | 0,5 | Destraba **registro abierto** y recuperar la contraseña; es la dirección que ven los profesores | **Valentín:** partes A–D de la guía (~1,5 h) |
 | ~~2~~ | ~~**Paso A del recálculo** + revisar `RESPALDO_POR_GRUPO`~~ **HECHO 12/10** (`docs/resultados/paso-a-resumen.md`): el "tronco primero" **no** es el reloj, el filtro ni la definición, y **depende del encuadre**; `RESPALDO_POR_GRUPO` actualizado; **decisión 035 a resolver** (suspender el veredicto del saque de perfil) | — | **Bloqueante de la demo: resuelto en lo medible, falta tu decisión sobre la 035** | — |
-| 3 | **(b) Datos en el reporte:** separación cadera-hombro máxima, flexión de rodilla mínima, ángulo de codo, con confianza y error esperable, como dato | 1 | El reporte deja de ser solo "orden y velocidades"; alimenta el detallado y el PDF | — |
+| 2b | **Paso B del recálculo** (originales a tasa real, `backend/app/medicion_paso_b.py`; **en curso**, el saque primero) + **decidir la 035** con ese resultado | 0,5 (análisis; el cómputo corre solo, ~3–4 h) | Decide si el "tronco primero" del saque de perfil viene del corpus convertido o del encuadre; **bloqueante de la demo** | cómputo en la PC de Valentín (encendida) |
+| ~~3~~ | ~~**(b) Datos en el reporte**~~ **HECHO 12/10 (noche)**: separación cadera-hombro máxima y ángulos de rodilla y codo en el pico del tronco, con su confianza y el error medido contra goniometría (`engine/magnitudes.py`, nivel 3). Sin estado de juicio | — | El reporte deja de ser solo "orden y velocidades"; alimenta el detallado y el PDF | — |
 | 4 | **Cargar con varios golpes** (diseño nuevo + alta de varios golpes en una sesión + cola) | 2 | Prerrequisito de (c); lo que pide la tesis (≥ 10 repeticiones) | — |
 | 5 | **(c) Consistencia entre golpes + vista de sesión** (agregador, `reportes_sesion`, tarjetas "Tus golpes entre sí") | 1,5 | El mayor valor por esfuerzo: evalúa de verdad, sin literatura | 4 |
 | 6 | **Reporte detallado + interruptor Simple/Detallado + vista por defecto según el rol** (§4 de la especificación): nivel 1 compacto, secuenciación, tabla de magnitudes con confianza, trazabilidad, fundamentos y fuentes, tres momentos y video | 1 | Entrenador y profesional entran directo a lo suyo; es la base del PDF | 3 |
@@ -217,15 +218,18 @@ por día** (esperado) y **1 por día** (pesimista, sin imprevistos de paneles ni
 | 11 | **Eliminar cuenta y datos, funcional** (incluye los objetos de **ambos** buckets) | 1 | Derecho de supresión; sin esto la demo "como público" no es defendible | 10 |
 | 12 | **Respaldo con restauración probada** y **recuperación al arranque (6.5)** | 1,25 | Un análisis no queda `procesando` para siempre; Supabase Free no respalda | — |
 | 13 | **Evolución con la marca "Datos de ejemplo"** (revisar que la marca esté y que no se confunda con datos propios) | 0,25 | Honestidad (R3/R4); real solo si hay ≥ 2 sesiones comparables | — |
+| 13b | **Verificar en producción** las correcciones del 12/10 noche (video a 720 px, magnitudes, regla de cobertura del brazo, comas) con un golpe del celular y medir la latencia en Standard con el video más grande | 0,25 | Cierra el ciclo de la prueba de hoy | push |
 | 14 | **Ensayo de la demo** (guion, un golpe por gesto subido, congelar) | 0,5 | Evita sorpresas | todo |
-| | **Total restante** (14,5 con el Paso A, ya hecho) | **13,5** | | |
+| | **Total restante** | **13,25** | | |
 
 ### ¿Se mueve la demo del 28–30/10? **No, pero el margen es corto si el ritmo cae a 1 por día.**
 
 | Escenario | Ritmo | Núcleo terminado | Con 25 % de colchón | Margen contra el 28/10 |
 | --- | --- | --- | --- | --- |
-| Esperado (ritmo observado) | 1,5 sesiones/día | **~22–23/10** | ~25/10 | **3 días** |
-| Pesimista | 1 sesión/día | ~27–28/10 | ~31/10 | **ninguno: la demo se corre al 30/10 o se recorta** |
+| Esperado (ritmo observado) | 1,5 sesiones/día | **~21–22/10** | ~24/10 | **4 días** |
+| Pesimista | 1 sesión/día | ~26/10 | ~29/10 | **ninguno: la demo cae al final de la ventana (29–30/10)** |
+
+(Reestimado el 13/10 con lo hecho: el punto 3 y el Paso A salieron en el mismo ritmo que el plan; el Paso B agrega cómputo, no trabajo tuyo.)
 
 Lo que **no** garantiza esto: (1) la parte tuya de la guía del dominio (propagación de DNS, validación de la cuenta de Brevo); (2) que el Paso A no abra una investigación nueva; (3) que haya golpes propios de
 los 3 gestos para el ensayo. **Regla de recorte si el 24/10 el núcleo no está al 80 %**, en este orden (lo primero se cae primero): 13 (queda como hoy), el interruptor del 6 (queda solo el detallado como
@@ -249,6 +253,12 @@ sección plegable), el diseño nuevo de Registro/Ingreso del 8 (quedan los token
 | 17 | Ángulos dibujados sobre el esqueleto | 0,5 | Solo con el punto 3 hecho |
 | 18 | **Paso B del recálculo** (medición definitiva, 8 h de pose de noche) | 1 + noche | Es "el resultado" de la tesis (plan de recálculo §3); no bloquea la demo |
 | 19 | Autovalidación de los Criterios 1 a 4 con grabaciones propias por el camino real | — | Semana 4 del plan; el Criterio 2 es goniometría manual tuya (horas) |
+
+### Trabajo futuro registrado (decisión de Valentín, 13/10)
+
+- **Grabación simultánea del mismo golpe desde perfil y desde tres cuartos** (la prueba más limpia de la dependencia del encuadre): **descartada por ahora, no hay un segundo teléfono.** Queda como trabajo
+  futuro del Capítulo 7. Alternativa con un solo teléfono (opcional): `docs/protocolo-saques-tres-cuartos.md`.
+- **Marca del instante reconstruido por pico** (si el instante de cada pico cae en un fotograma medido o en uno interpolado, con la incertidumbre del hueco): propuesta del punto 2d de hoy; 0,5 sesión.
 
 ### Riesgos de este orden
 

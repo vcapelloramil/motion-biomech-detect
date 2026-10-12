@@ -18,7 +18,7 @@ y una estimación de costo en tiempo y memoria en Render.
 
 1. **Qué se genera** (`engine/render.py`, una sola pasada por el clip, después de secuenciar y mientras el clip sigue en disco):
    - **Tres JPEG** (≤ 720 px de alto, calidad 80, ~115 KB c/u) en el fotograma **real** más cercano al pico de cada segmento (nunca uno interpolado), con el esqueleto de ESE fotograma.
-   - **Un MP4 H.264** (360 px de alto, CRF 30, ~130 KB para 1,6 s) con la ventana del golpe ± 0,5 s, **en cámara lenta fija** (30 cuadros/s sobre la grilla uniforme: ×8 a 240 Hz). El
+   - **Un MP4 H.264** (**720 px de alto, CRF 20** desde el 12/10 noche; antes 360 px y CRF 30, que pesaba 160 KB para 12 s y se veía mal; ahora ~1,6 MB para 12 s) con la ventana del golpe ± 0,5 s, **en cámara lenta fija** (30 cuadros/s sobre la grilla uniforme: ×8 a 240 Hz). El
      factor viaja en el reporte (`overlay_info.factor_lento`): la cámara lenta no se disfraza.
    - Ambos **acercados al jugador** (recuadro de su pose en la ventana + 30 %): en una toma abierta ocupa ~15 % del cuadro y a 360 px no se ve el gesto.
 2. **Qué se dibuja (R3/R4):** solo puntos con confianza ≥ 0,5; un punto dudoso no se dibuja ni se completa. Cadera, hombros y brazo dominante con los colores de segmento de la
@@ -61,3 +61,12 @@ al arranque, 6.5, todavía no existe), así que la medida de prudencia es hacer 
 - **No hay reproductor sincronizado** (video + curvas en un eje): el `<video>` es el nativo, con la nota de la cámara lenta. El reproductor es la tarea 8.7, diferida.
 - **No dibuja ángulos** sobre el esqueleto (la tabla 4.7 los nombra): no hay todavía una magnitud angular en el reporte que mostrar (ver `docs/reporte-mas-valor.md`).
 - **No borra el original a los 7 días** (política 7.6, diferida): el bucket aparte la deja lista.
+
+## Actualización del 12/10/2026 (noche): medido en producción y video a 720 px
+
+- **Medido en Render Standard con un golpe real del celular** (805 fotogramas): artefactos en **10,2 s** (3 fotogramas, video de 160 KB), total **146,7 s**, **RSS pico 748,4 MB**
+  (`docs/resultados/criterio4-latencia.md`, fila 4). El pico es de MediaPipe, no de los artefactos. En Free (512 MB) ese golpe no habría entrado.
+- **El video a 360 px / CRF 30 se veía mal** (observación de Valentín). Se subió a **720 px y CRF 20** (`preset veryfast`, un hilo). Medido en la PC de desarrollo sobre un recorte real
+  (`20260925_VCR_saque_perfil_240_02_rep02`, 6,4 s de video): 360 px / CRF 30 = 0,09 MB y 7,4 s; **720 px / CRF 20 = 0,83 MB y 8,8 s**; 720 px / CRF 23 = 0,58 MB y 7,7 s; 720 px / CRF 26 = 0,40 MB.
+  Para 12 s de video: **~1,6 MB**. Memoria de `ffmpeg` (un hilo): **76 MB** a 720 px contra 56 MB a 360 px. En Standard: +~7 s por golpe y +~20 MB; el margen es de ~1,3 GB.
+- Los fotogramas clave no cambian (720 px de alto, JPEG calidad 80, ~115 KB).
