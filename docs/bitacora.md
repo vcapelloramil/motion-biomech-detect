@@ -8,7 +8,7 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ## 2026-10-12 (noche) — Ajustes del primer reporte real: tolerancia única, esqueleto en el reporte, motor 0.5.0 y el reporte que evalúa más
 
-Pedido de Valentín tras la prueba del 12/10 (puntos 1 a 8). **Nada pusheado ni desplegado**; todo en `main` local. Suite rápida del servidor **454 passed** (431 antes), `bun test` **53 passed**, `tsc` y eslint
+Pedido de Valentín tras la prueba del 12/10 (puntos 1 a 8). **Nada pusheado ni desplegado**; tres commits en `main` local (`875b2cf` motor, `3624418` frontend, `e6839ce` docs). Suite rápida del servidor **454 passed** (431 antes), `bun test` **53 passed**, `tsc` y eslint
 (sin la regla de formato, que ya fallaba en el resto del repositorio) limpios.
 
 ### Hecho
@@ -42,7 +42,7 @@ El motor cambió entre el 9 y el 12/10 con el sello `0.4.1` puesto. Discriminado
 | 0.4.1 | + fotogramas visibles, rotación automática y regularización (decisión 030) | `18942d5` (9/10) | contrato 1.1 · `regularizacion` presente |
 | 0.4.1 | + reporte persistido, motivo `archivo_convertido`, veredicto por grupo (031), piso de R1 con 5 % | `43fc159` (9/10) | contrato 1.2 |
 | 0.4.1 | + alineación por fotogramas decodificados, "no ordenable a un fotograma de la grilla" | `6ab2b18` (9/10) | contrato 1.2 · tolerancia de 4,17 ms (sin `tolerancia_orden_ms`) |
-| **0.5.0** | + tolerancia única de 8,33 ms, artefactos, textos sin literatura en el nivel 1 | **el commit de esta entrada** (`git log -- backend/app/engine/version.py`) | contrato 1.3 · `tolerancia_orden_ms` presente |
+| **0.5.0** | + tolerancia única de 8,33 ms, artefactos, textos sin literatura en el nivel 1 | **`875b2cf`** (12/10) | contrato 1.3 · `tolerancia_orden_ms` presente |
 
 Los reportes anteriores **no se recalculan**: conservan su sello y su contrato.
 
