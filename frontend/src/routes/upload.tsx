@@ -28,6 +28,7 @@ import {
   subirVideo,
   type Atleta,
 } from "@/lib/cargar-video";
+import { fmt } from "@/lib/formato";
 
 export const Route = createFileRoute("/upload")({
   head: () => ({
@@ -401,7 +402,7 @@ function CargarPage() {
             <span className="text-sm font-medium">{archivo ? archivo.name : "Elegir el video (MP4 o MOV, hasta 50 MB)"}</span>
             {archivo && (
               <span className="text-xs text-muted-foreground">
-                {(archivo.size / (1024 * 1024)).toFixed(1)} MB{duracion !== null ? ` · ${duracion.toFixed(1)} s` : ""}
+                {(archivo.size / (1024 * 1024)).toFixed(1)} MB{duracion !== null ? ` · ${fmt(duracion, 1)} s` : ""}
               </span>
             )}
           </label>
@@ -421,7 +422,7 @@ function CargarPage() {
           {duracion !== null && duracion > DURACION_AVISO_S && (
             <p role="note" className="flex items-start gap-2 text-sm text-muted-foreground">
               <Info className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
-              Este video dura {duracion.toFixed(0)} s: probablemente tenga varios golpes. El sistema analiza un golpe por video;
+              Este video dura {fmt(duracion, 0)} s: probablemente tenga varios golpes. El sistema analiza un golpe por video;
               conviene recortarlo para dejar solo uno.
             </p>
           )}

@@ -6,6 +6,7 @@ import {
   coberturaDe,
   fraseDeSecuencia,
   fundamentosSinRepetir,
+  magnitudesDe,
   masImportantes,
   picosOrdenados,
   repeticionesDe,
@@ -182,5 +183,53 @@ describe("artefactos y fundamentos", () => {
     ]);
     expect(r.map((x) => x.fundamento)).toEqual([linea, null, "otra"]);
     expect(r[2].referencia).toBe("Fuente (2011)");
+  });
+});
+
+describe("brazo sin medir (12/10)", () => {
+  test("con cadera y tronco ordenables se informa lo medido y se dice qué no se pudo medir", () => {
+    const f = fraseDeSecuencia(rep({ orden_observado: ["pelvis", "torso"] }), 200.8);
+    expect(f.tipo).toBe("orden");
+    expect(f.texto).toContain("primero alcanzó su velocidad máxima tu cadera y después tu tronco");
+    expect(f.texto).toContain("El brazo no se pudo medir");
+  });
+
+  test("el inicio de la ventana y la reconstrucción por interpolación llegan a la trazabilidad", () => {
+    const t = trazabilidadDe({
+      trazabilidad: { regularizacion: { puntos_interpolados: 156, puntos_de_la_grilla: 959, hueco_maximo_ms: 12.5, puntos_interpolados_pct: 16.3 } },
+    });
+    expect(t).toMatchObject({ puntos_interpolados: 156, puntos_de_la_grilla: 959, hueco_maximo_ms: 12.5 });
+    expect(trazabilidadDe(null).hueco_maximo_ms).toBeNull();
+  });
+});
+
+describe("magnitudes articulares", () => {
+  const reporte = {
+    metricas: [
+      { nombre: "velocidad_pico_torso", valor: 450, unidad: "grados/s", confianza: 1, auditable: true },
+      { nombre: "separacion_cadera_hombro_max", valor: 41.5, unidad: "grados", confianza: 0.93, auditable: true },
+      { nombre: "angulo_rodilla_izq_en_pico_tronco", valor: 142.3, unidad: "grados", confianza: 0.88, auditable: true },
+      { nombre: "angulo_codo_der_en_pico_tronco", valor: null, unidad: "grados", confianza: 0.41, auditable: false },
+    ],
+  };
+
+  test("solo las magnitudes articulares, con su etiqueta y el error medido contra goniometría", () => {
+    const m = magnitudesDe(reporte);
+    expect(m.map((x) => x.nombre)).toEqual([
+      "separacion_cadera_hombro_max",
+      "angulo_rodilla_izq_en_pico_tronco",
+      "angulo_codo_der_en_pico_tronco",
+    ]);
+    expect(m[0].etiqueta).toBe("Separación cadera-hombro máxima");
+    expect(m[1].etiqueta).toBe("Ángulo de la rodilla izquierda en el pico del tronco");
+    expect(m[1].nota).toContain("8,5° de media y hasta 19,2°");
+    expect(m[2].etiqueta).toBe("Ángulo del codo derecho en el pico del tronco");
+    expect(m[2].auditable).toBe(false);
+    expect(m[2].nota).toContain("No se informa");
+  });
+
+  test("sin métricas no rompe", () => {
+    expect(magnitudesDe(null)).toEqual([]);
+    expect(magnitudesDe({ metricas: "x" })).toEqual([]);
   });
 });

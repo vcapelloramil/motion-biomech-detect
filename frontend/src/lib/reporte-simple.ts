@@ -18,6 +18,8 @@ export type PicoLeido = { segmento: Segmento; instante_s: number; velocidad: num
 
 export type RepeticionLeida = {
   indice: number;
+  /** Inicio de la ventana analizada, en segundos desde el inicio del VIDEO. Los instantes de los picos se cuentan desde acá. */
+  desde_s?: number | null;
   auditable: boolean;
   orden_observado: Segmento[] | null;
   correcto: boolean | null;
@@ -77,6 +79,14 @@ export function fraseDeSecuencia(rep: RepeticionLeida | null, fps: number | null
       texto: `Se observa que primero alcanzó su velocidad máxima tu ${a}, después tu ${b} y por último tu ${c}.`,
     };
   }
+  // Cadera y tronco medidos y ordenables, brazo sin medir (le faltó parte del movimiento): se informa lo que se midió.
+  if (rep.auditable && rep.orden_observado && rep.orden_observado.length === 2) {
+    const [a, b] = rep.orden_observado.map((s) => NOMBRE_SEGMENTO[s]);
+    return {
+      tipo: "orden",
+      texto: `Se observa que primero alcanzó su velocidad máxima tu ${a} y después tu ${b}. El brazo no se pudo medir en este golpe.`,
+    };
+  }
   if (rep.motivo_no_auditable && SIMULTANEIDAD.test(rep.motivo_no_auditable)) {
     const resolucion = resolucionTexto(fps);
     const tolerancia = toleranciaMs !== null ? ` (a menos de ${coma(toleranciaMs)} ms uno del otro)` : "";
@@ -119,6 +129,9 @@ export type DatosTrazabilidad = {
   modo_captura: string | null;
   /** Con qué tolerancia el motor decidió "ordenable" (contrato 1.3; null en un reporte anterior). */
   tolerancia_orden_ms: number | null;
+  puntos_interpolados: number | null;
+  puntos_de_la_grilla: number | null;
+  hueco_maximo_ms: number | null;
 };
 
 function num(v: unknown): number | null {
@@ -139,7 +152,75 @@ export function trazabilidadDe(reporte: Json | null): DatosTrazabilidad {
     backend_pose: typeof t.backend_pose === "string" ? t.backend_pose : null,
     modo_captura: typeof t.modo_captura === "string" ? t.modo_captura : null,
     tolerancia_orden_ms: num(t.tolerancia_orden_ms),
+    puntos_interpolados: reg ? num(reg.puntos_interpolados) : null,
+    puntos_de_la_grilla: reg ? num(reg.puntos_de_la_grilla) : null,
+    hueco_maximo_ms: reg ? num(reg.hueco_maximo_ms) : null,
   };
+}
+
+// --- magnitudes articulares como dato (plan §8, punto 3) ----------------------------------------------------------------
+
+/** Error medido contra goniometría manual ciega (decisión 015, Criterio 2). Es lo que se muestra junto al valor (R4). */
+export const ERROR_VALIDADO = {
+  rodilla: { media: 8.5, p95: 19.2 },
+  codo: { media: 12.5, p95: 36.4 },
+} as const;
+
+export type MagnitudLeida = {
+  nombre: string;
+  etiqueta: string;
+  valor: number | null;
+  unidad: string;
+  confianza: number;
+  auditable: boolean;
+  /** Qué tan confiable es este valor y por qué, en una línea (sin literatura: es la validación propia del proyecto). */
+  nota: string;
+};
+
+const LADO_FEM: Record<string, string> = { izq: "izquierda", der: "derecha" };
+const LADO_MASC: Record<string, string> = { izq: "izquierdo", der: "derecho" };
+
+/** Las magnitudes que NO son velocidades pico: separación cadera-hombro y ángulos de rodilla y codo. Ninguna lleva estado de juicio. */
+export function magnitudesDe(reporte: Json | null): MagnitudLeida[] {
+  const m = reporte?.metricas;
+  if (!Array.isArray(m)) return [];
+  const salida: MagnitudLeida[] = [];
+  for (const x of m as Json[]) {
+    const nombre = typeof x.nombre === "string" ? x.nombre : "";
+    const base = {
+      nombre,
+      valor: num(x.valor),
+      unidad: typeof x.unidad === "string" ? x.unidad : "grados",
+      confianza: num(x.confianza) ?? 0,
+      auditable: x.auditable === true,
+    };
+    if (nombre === "separacion_cadera_hombro_max") {
+      salida.push({
+        ...base,
+        etiqueta: "Separación cadera-hombro máxima",
+        nota: base.auditable
+          ? "Ángulo entre el eje de las caderas y el de los hombros, el máximo del golpe. Medido en 3D; su repetibilidad entre sesiones se midió, sin goniometría."
+          : "No se midió en una parte suficiente de la ventana del golpe.",
+      });
+      continue;
+    }
+    const a = /^angulo_(rodilla|codo)(?:_(izq|der))?_en_pico_tronco$/.exec(nombre);
+    if (a) {
+      const parte = a[1] as "rodilla" | "codo";
+      const lado = a[2] ? ` ${(parte === "rodilla" ? LADO_FEM : LADO_MASC)[a[2]]}` : "";
+      const e = ERROR_VALIDADO[parte];
+      salida.push({
+        ...base,
+        etiqueta: `Ángulo ${parte === "rodilla" ? "de la rodilla" : "del codo"}${lado} en el pico del tronco`,
+        nota: base.auditable
+          ? `En el plano de la imagen. Error medido contra goniometría manual: ${String(e.media).replace(".", ",")}° de media y hasta ` +
+            `${String(e.p95).replace(".", ",")}° en el 95 % de los casos.` +
+            (parte === "codo" ? " El codo del brazo dominante suele tener poca cobertura." : "")
+          : "No se informa: alguna de las tres articulaciones no se detectó con confianza suficiente (0,6) en ese fotograma.",
+      });
+    }
+  }
+  return salida;
 }
 
 // --- artefactos (contrato 1.3): rutas en Storage, nunca URLs ------------------------------------------------------------

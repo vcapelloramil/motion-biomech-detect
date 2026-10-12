@@ -22,6 +22,7 @@ import {
   type ObservacionLeida,
 } from "@/lib/estado-video";
 import { corregirModo, leerVideo, reintentar, type VideoConReporte } from "@/lib/videos-data";
+import { fmt } from "@/lib/formato";
 
 export const Route = createFileRoute("/procesando/$videoId")({
   head: () => ({ meta: [{ title: "Procesando — KinetiQ" }, { name: "robots", content: "noindex" }] }),
@@ -428,10 +429,10 @@ function Resultado({ video, reporte, fps }: { video: VideoConReporte; reporte: R
 
       <h3 className="mt-8 font-mono text-xs uppercase tracking-widest text-muted-foreground">Trazabilidad</h3>
       <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
-        <Dato k="Frecuencia real medida" v={fps !== null ? `${fps.toFixed(1)} fps` : "—"} />
-        <Dato k="Frecuencia nominal" v={numero(t?.fps_nominal as number | null) !== null ? `${Number(t?.fps_nominal).toFixed(0)} fps` : "—"} />
-        <Dato k="Fotogramas perdidos" v={numero(t?.fotogramas_perdidos_pct as number | null) !== null ? `${Number(t?.fotogramas_perdidos_pct).toFixed(1)} %` : "—"} />
-        <Dato k="Puntos interpolados" v={reg ? `${Number(reg.puntos_interpolados_pct).toFixed(1)} %` : "no se regularizó"} />
+        <Dato k="Frecuencia real medida" v={fps !== null ? `${fmt(fps, 1)} fps` : "—"} />
+        <Dato k="Frecuencia nominal" v={numero(t?.fps_nominal as number | null) !== null ? `${fmt(Number(t?.fps_nominal), 0)} fps` : "—"} />
+        <Dato k="Fotogramas perdidos" v={numero(t?.fotogramas_perdidos_pct as number | null) !== null ? `${fmt(Number(t?.fotogramas_perdidos_pct), 1)} %` : "—"} />
+        <Dato k="Puntos interpolados" v={reg ? `${fmt(Number(reg.puntos_interpolados_pct), 1)} %` : "no se regularizó"} />
         <Dato k="Escala temporal" v={t?.escala_temporal_conocida === true ? "conocida" : "no confirmada"} />
         <Dato k="Versión del motor" v={`${String(t?.version_motor ?? "—")} · ${String(t?.backend_pose ?? "—")}`} />
         {latencia !== null && <Dato k="Tardó en procesarse" v={formatearDuracion(latencia)} />}

@@ -80,11 +80,10 @@ export function EstadoBadge({
  * "Sin evaluar" (decisión 011 y 031): un dato que se midió y se informa sin juicio. NO es un quinto estado del semáforo
  * ni significa "no se pudo medir" (eso es "No auditable", gris). Etiqueta neutra con borde punteado, ícono y texto (R3).
  */
-/** Etiqueta de la vista simple (Valentín, 12/10/2026). El término técnico "Sin evaluar" (decisión 011) queda en el detalle y el PDF. */
-export const ETIQUETA_SIN_EVALUAR_SIMPLE = "Solo registrado / Para seguimiento";
-export const ETIQUETA_SIN_EVALUAR_TECNICA = "Sin evaluar";
+/** Etiqueta única de "se midió y se informa sin juicio" (Valentín, 12/10/2026): la misma en la vista simple, el detalle y el PDF. */
+export const ETIQUETA_SIN_EVALUAR = "Solo registrado";
 
-export function SinEvaluarBadge({ className, tecnico = false }: { className?: string; tecnico?: boolean }) {
+export function SinEvaluarBadge({ className }: { className?: string }) {
   return (
     <span
       className={cn(
@@ -93,7 +92,7 @@ export function SinEvaluarBadge({ className, tecnico = false }: { className?: st
       )}
     >
       <CircleDashed className="h-3 w-3 shrink-0" aria-hidden />
-      {tecnico ? ETIQUETA_SIN_EVALUAR_TECNICA : ETIQUETA_SIN_EVALUAR_SIMPLE}
+      {ETIQUETA_SIN_EVALUAR}
     </span>
   );
 }

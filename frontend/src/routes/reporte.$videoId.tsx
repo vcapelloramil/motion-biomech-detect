@@ -21,6 +21,7 @@ import {
   coberturaDe,
   fraseDeSecuencia,
   fundamentosSinRepetir,
+  magnitudesDe,
   masImportantes,
   picosOrdenados,
   repeticionesDe,
@@ -29,6 +30,7 @@ import {
   trazabilidadDe,
 } from "@/lib/reporte-simple";
 import { leerVideo, urlsDeArtefactos, type VideoConReporte } from "@/lib/videos-data";
+import { fmt } from "@/lib/formato";
 
 export const Route = createFileRoute("/reporte/$videoId")({
   head: () => ({ meta: [{ title: "Reporte — KinetiQ" }, { name: "robots", content: "noindex" }] }),
@@ -148,8 +150,10 @@ function Reporte({ video, reporte }: { video: VideoConReporte; reporte: Record<s
   const fundamentos = fundamentosSinRepetir(observaciones);
   const frase = fraseDeSecuencia(r0, fps, t.tolerancia_orden_ms);
   const artefactos = artefactosDe(reporte);
+  const magnitudes = magnitudesDe(reporte);
   const picos = picosOrdenados(r0);
   const tramos = tramosNoAuditablesDe(reporte);
+  const inicioVentana = r0?.desde_s ?? null;
   const cobertura = coberturaDe(reporte);
   const latencia = latenciaDe(video);
   const fecha = sesion ? new Date(sesion.fecha + "T12:00:00").toLocaleDateString("es-AR", { day: "numeric", month: "long", year: "numeric" }) : null;
@@ -240,7 +244,7 @@ function Reporte({ video, reporte }: { video: VideoConReporte; reporte: Record<s
                   const clave = BADGE[o.severidad];
                   return (
                     <li key={i} className="rounded-xl border border-border p-4 text-sm">
-                      {clave === "sin_evaluar" ? <SinEvaluarBadge tecnico /> : clave ? <EstadoBadge estado={clave} /> : null}
+                      {clave === "sin_evaluar" ? <SinEvaluarBadge /> : clave ? <EstadoBadge estado={clave} /> : null}
                       <p className="mt-2">{o.texto}</p>
                       {o.fundamento && <p className="mt-1 font-mono text-xs text-muted-foreground">{o.fundamento}</p>}
                       {o.referencia && <p className="mt-1 text-xs text-muted-foreground">Fuente: {o.referencia}</p>}
@@ -254,21 +258,30 @@ function Reporte({ video, reporte }: { video: VideoConReporte; reporte: Record<s
           <div>
             <h3 className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Trazabilidad</h3>
             <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-3 text-sm md:grid-cols-3">
-              <Dato k="Frecuencia real medida" v={t.fps_real !== null ? `${t.fps_real.toFixed(1).replace(".", ",")} fps` : "—"} />
-              <Dato k="Frecuencia nominal" v={t.fps_nominal !== null ? `${t.fps_nominal.toFixed(0)} fps` : "—"} />
-              <Dato k="Fotogramas perdidos" v={t.fotogramas_perdidos_pct !== null ? `${t.fotogramas_perdidos_pct.toFixed(1).replace(".", ",")} %` : "—"} />
-              <Dato k="Puntos interpolados" v={t.puntos_interpolados_pct !== null ? `${t.puntos_interpolados_pct.toFixed(1).replace(".", ",")} %` : "no se regularizó"} />
+              <Dato k="Frecuencia real medida" v={t.fps_real !== null ? `${fmt(t.fps_real, 1)} fps` : "—"} />
+              <Dato k="Frecuencia nominal" v={t.fps_nominal !== null ? `${fmt(t.fps_nominal, 0)} fps` : "—"} />
+              <Dato k="Fotogramas perdidos" v={t.fotogramas_perdidos_pct !== null ? `${fmt(t.fotogramas_perdidos_pct, 1)} %` : "—"} />
+              <Dato k="Puntos interpolados" v={t.puntos_interpolados_pct !== null ? `${fmt(t.puntos_interpolados_pct, 1)} %` : "no se regularizó"} />
               <Dato k="Escala temporal" v={t.escala_conocida ? "conocida" : "no confirmada"} />
               <Dato k="Resolución" v={resolucionTexto(t.fps_real ?? fps) ?? "—"} />
               <Dato
                 k="Tolerancia del orden"
-                v={t.tolerancia_orden_ms !== null ? `${t.tolerancia_orden_ms.toFixed(1).replace(".", ",")} ms` : "no registrada (reporte anterior)"}
+                v={t.tolerancia_orden_ms !== null ? `${fmt(t.tolerancia_orden_ms, 1)} ms` : "no registrada (reporte anterior)"}
               />
-              <Dato k="Cobertura auditable" v={cobertura !== null ? `${cobertura.toFixed(1).replace(".", ",")} %` : "—"} />
+              <Dato k="Cobertura auditable" v={cobertura !== null ? `${fmt(cobertura, 1)} %` : "—"} />
               <Dato k="Modo de captura declarado" v={t.modo_captura ?? "—"} />
               <Dato k="Motor" v={`${t.version_motor ?? "—"} · ${t.backend_pose ?? "—"}`} />
               {latencia !== null && <Dato k="Tardó en procesarse" v={formatearDuracion(latencia)} />}
             </dl>
+            {t.puntos_interpolados !== null && t.puntos_de_la_grilla !== null && t.fps_real !== null && (
+              <p className="mt-3 text-xs text-muted-foreground">
+                El teléfono graba sobre un reloj de 240 fotogramas por segundo y entregó {fmt(t.fps_real, 1)} en promedio: los fotogramas que faltaron
+                (los mismos {fmt(t.fotogramas_perdidos_pct ?? 0, 1)} %) se reconstruyen por interpolación para tener un muestreo parejo. Fueron{" "}
+                {t.puntos_interpolados} de {t.puntos_de_la_grilla} puntos
+                {t.hueco_maximo_ms !== null ? `, con huecos de hasta ${fmt(t.hueco_maximo_ms, 1)} ms` : ""}. Un instante que cae en uno de esos
+                puntos es una reconstrucción, no una medición.
+              </p>
+            )}
           </div>
 
           {picos.length > 0 && (
@@ -277,15 +290,24 @@ function Reporte({ video, reporte }: { video: VideoConReporte; reporte: Record<s
               <div className="mt-3 overflow-x-auto">
                 <table className="w-full text-left text-sm">
                   <thead className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                    <tr><th className="py-2 pr-4">Segmento</th><th className="py-2 pr-4">Instante</th><th className="py-2 pr-4">Velocidad</th><th className="py-2">Confianza</th></tr>
+                    <tr>
+                      <th className="py-2 pr-4">Segmento</th>
+                      <th className="py-2 pr-4">Desde el inicio de la ventana</th>
+                      {inicioVentana !== null && <th className="py-2 pr-4">En el video</th>}
+                      <th className="py-2 pr-4">Velocidad</th>
+                      <th className="py-2">Confianza</th>
+                    </tr>
                   </thead>
                   <tbody>
                     {picos.map((p) => (
                       <tr key={p.segmento} className="border-t border-border">
                         <td className="py-2 pr-4 font-semibold">{{ pelvis: "Cadera", torso: "Tronco", brazo: "Brazo" }[p.segmento]}</td>
-                        <td className="py-2 pr-4 font-mono">{t.escala_conocida ? `${p.instante_s.toFixed(3)} s` : "no auditable"}</td>
-                        <td className="py-2 pr-4 font-mono">{t.escala_conocida ? `${p.velocidad.toFixed(0)} ${p.unidad}` : "no auditable"}</td>
-                        <td className="py-2 font-mono">{p.confianza.toFixed(2)}</td>
+                        <td className="py-2 pr-4 font-mono">{t.escala_conocida ? `${fmt(p.instante_s, 3)} s` : "no auditable"}</td>
+                        {inicioVentana !== null && (
+                          <td className="py-2 pr-4 font-mono">{t.escala_conocida ? `${fmt(inicioVentana + p.instante_s, 3)} s` : "no auditable"}</td>
+                        )}
+                        <td className="py-2 pr-4 font-mono">{t.escala_conocida ? `${fmt(p.velocidad, 0)} ${p.unidad}` : "no auditable"}</td>
+                        <td className="py-2 font-mono">{fmt(p.confianza, 2)}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -297,13 +319,44 @@ function Reporte({ video, reporte }: { video: VideoConReporte; reporte: Record<s
             </div>
           )}
 
+          {magnitudes.length > 0 && (
+            <div>
+              <h3 className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Magnitudes articulares</h3>
+              <div className="mt-3 overflow-x-auto">
+                <table className="w-full text-left text-sm">
+                  <thead className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                    <tr><th className="py-2 pr-4">Magnitud</th><th className="py-2 pr-4">Valor</th><th className="py-2 pr-4">Confianza</th><th className="py-2">Qué tan confiable es</th></tr>
+                  </thead>
+                  <tbody>
+                    {magnitudes.map((m) => (
+                      <tr key={m.nombre} className="border-t border-border align-top">
+                        <td className="py-2 pr-4 font-semibold">{m.etiqueta}</td>
+                        <td className="py-2 pr-4 font-mono">{m.auditable && m.valor !== null ? `${fmt(m.valor, 1)} °` : "no auditable"}</td>
+                        <td className="py-2 pr-4 font-mono">{fmt(m.confianza, 2)}</td>
+                        <td className="py-2 text-xs text-muted-foreground">{m.nota}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p className="mt-2 text-xs text-muted-foreground">
+                Son datos de tu golpe: el sistema no los juzga porque no hay un rango de referencia propio para compararlos todavía.
+              </p>
+            </div>
+          )}
+
           {tramos.length > 0 && (
             <div>
               <h3 className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Tramos no auditables</h3>
+              <p className="mt-2 text-xs text-muted-foreground">
+                Tiempos desde el inicio del <strong>video</strong>
+                {inicioVentana !== null ? ` (la ventana analizada empieza en ${fmt(inicioVentana, 2)} s)` : ""}. Un tramo sin datos de una
+                articulación solo afecta al segmento que la usa.
+              </p>
               <ul className="mt-3 space-y-2 text-sm">
                 {tramos.map((tr, i) => (
                   <li key={i} className="rounded-xl border border-border px-4 py-2">
-                    <span className="font-mono">{tr.desde_s.toFixed(2)} s – {tr.hasta_s.toFixed(2)} s</span> · {tr.motivo.replace("sin_datos_confiables: ", "sin datos confiables en ")}
+                    <span className="font-mono">{fmt(tr.desde_s, 2)} s – {fmt(tr.hasta_s, 2)} s</span> · {tr.motivo.replace("sin_datos_confiables: ", "sin datos confiables en ")}
                   </li>
                 ))}
               </ul>
@@ -369,7 +422,7 @@ function TresMomentos({ artefactos }: { artefactos: ReturnType<typeof artefactos
                   )}
                   <p className="px-4 py-3 text-sm">
                     <span className="font-semibold">Pico de tu {NOMBRE_SEGMENTO[f.segmento]}</span>
-                    <span className="font-mono text-xs text-muted-foreground"> · {f.instante_s.toFixed(3).replace(".", ",")} s</span>
+                    <span className="font-mono text-xs text-muted-foreground"> · {fmt(f.instante_s, 3)} s</span>
                   </p>
                 </li>
               ))}
@@ -386,7 +439,7 @@ function TresMomentos({ artefactos }: { artefactos: ReturnType<typeof artefactos
                 aria-label="Video corto del golpe con el esqueleto dibujado"
               />
               <p className="mt-2 text-xs text-muted-foreground">
-                Solo el tramo del golpe{lento ? `, en cámara lenta (${lento.toFixed(0)} veces más lento que la realidad)` : ""}. El esqueleto se
+                Solo el tramo del golpe{lento ? `, en cámara lenta (${fmt(lento, 0)} veces más lento que la realidad)` : ""}. El esqueleto se
                 dibuja únicamente donde el sistema detectó cada articulación con confianza suficiente.
               </p>
             </div>
