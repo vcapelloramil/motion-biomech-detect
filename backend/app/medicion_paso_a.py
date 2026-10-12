@@ -186,11 +186,24 @@ def _picos(seq, lado: str, corte_hz: float | None = None):
 
 
 def medir_clip_paso_a(seq, lado: str) -> dict:
-    """Medición principal (3D métrico, Winter automático, ventana anclada al torso) más los controles, en tiempo real."""
-    seq_t = dataclasses.replace(seq, fps_efectivos=FPS_MUESTREO_REAL)
+    """Paso A: la secuencia horneada con el tiempo real del muestreo (120,2 fps uniformes)."""
+    return medir_secuencia(dataclasses.replace(seq, fps_efectivos=FPS_MUESTREO_REAL), lado)
+
+
+def medir_secuencia(seq_t, lado: str) -> dict:
+    """Medición principal (3D métrico, Winter automático, ventana anclada al torso) más los controles, con la tasa de ``seq_t``.
+
+    Sirve para el Paso A (poses del horneado con 120,2 fps) y para el Paso B (poses de los originales regularizadas a la grilla
+    de 240 Hz): ``seq_t.fps_efectivos`` es la tasa de la grilla uniforme en cada caso."""
+    fps = seq_t.fps_efectivos
     base, error = _picos(seq_t, lado)
     if base is None:
-        return {"valida": False, "motivo": error, "instantes_s": {"p": None, "t": None, "b": None}}
+        return {
+            "valida": False, "motivo": error, "instantes_s": {"p": None, "t": None, "b": None},
+            "delta_torso_menos_pelvis_ms": None,
+            "omega_cadera_vs_tronco": {"correlacion": None, "desfase_ms": None, "correlacion_en_el_desfase": None},
+            "por_corte_fijo_hz": {}, "giro_axial": {"instantes_s": {"p": None, "t": None, "b": None}, "valida": False},
+        }
     fila: dict = {
         "valida": base["valida"], "motivo": base["motivo"],
         "instantes_s": base["instantes"], "corte_hz": round(float(base["filt"].corte_hz), 2),
@@ -201,7 +214,7 @@ def medir_clip_paso_a(seq, lado: str) -> dict:
     sec = base["filt"].secuencia
     om_p = velocidad_angular_segmento(sec, S.PELVIS, lado)[v.desde_frame : v.hasta_frame + 1]
     om_t = velocidad_angular_segmento(sec, S.TORSO, lado)[v.desde_frame : v.hasta_frame + 1]
-    fila["omega_cadera_vs_tronco"] = correlacion_y_desfase(om_p, om_t, FPS_MUESTREO_REAL)
+    fila["omega_cadera_vs_tronco"] = correlacion_y_desfase(om_p, om_t, fps)
     # Control 3a: sensibilidad al corte del filtro (el orden no debería depender de un corte fijo razonable).
     por_corte = {}
     for c in CORTES_FIJOS_HZ:
@@ -219,10 +232,10 @@ def medir_clip_paso_a(seq, lado: str) -> dict:
 
     from app.engine.pose.articulaciones import ArticulacionCanonica as A
 
-    w_p = omega_giro_axial(serie(A.CADERA_IZQ), serie(A.CADERA_DER), FPS_MUESTREO_REAL)
-    w_t = omega_giro_axial(serie(A.HOMBRO_IZQ), serie(A.HOMBRO_DER), FPS_MUESTREO_REAL)
-    t_p = pico_en_ventana(w_p, v.desde_frame, v.hasta_frame, FPS_MUESTREO_REAL)
-    t_t = pico_en_ventana(w_t, v.desde_frame, v.hasta_frame, FPS_MUESTREO_REAL)
+    w_p = omega_giro_axial(serie(A.CADERA_IZQ), serie(A.CADERA_DER), fps)
+    w_t = omega_giro_axial(serie(A.HOMBRO_IZQ), serie(A.HOMBRO_DER), fps)
+    t_p = pico_en_ventana(w_p, v.desde_frame, v.hasta_frame, fps)
+    t_t = pico_en_ventana(w_t, v.desde_frame, v.hasta_frame, fps)
     fila["giro_axial"] = {"instantes_s": {"p": t_p, "t": t_t, "b": None}, "valida": t_p is not None and t_t is not None}
     return fila
 
@@ -246,6 +259,44 @@ def _resumen_control(filas: list[dict], extractor, tolerancia_s: float) -> dict:
     r = resumir(clas, ESPERADO_PAR)
     return {"n": r["n"], "ordenables": r["ordenables"], "orden_modal": r["1b_orden_modal"], "1b": r["1b_repetibilidad"],
             "1c_cadera_primero": r["1c_coincidencia"], "delta_mediana_ms": (statistics.median(deltas) if deltas else None)}
+
+
+def construir_resultado(filas: list[dict]) -> dict:
+    """Agrega las repeticiones medidas: Criterio 1 por tolerancia, distribución de Δ y controles, por grupo y toma."""
+    grupos: dict[str, list[dict]] = defaultdict(list)
+    for f in filas:
+        grupos[f"{f['gesto']}|{f['encuadre']}"].append(f)
+        if f["gesto"] == "saque" and f["encuadre"] == "trescuartos":
+            grupos[f"saque|trescuartos|toma {f['toma']}"].append(f)
+
+    tolerancias = {"primaria": TOLERANCIA_ORDEN_S, **{f"sens_{round(t * 1000, 1)}ms": t for t in TOLERANCIAS_SENSIBILIDAD_S}}
+    resultado: dict = {}
+    for nombre, tol in tolerancias.items():
+        resultado[nombre] = {"tolerancia_ms": tol * 1000.0, "grupos": {}}
+        for g, L in sorted(grupos.items()):
+            entrada = {"par_pelvis_torso": _clasificar_grupo(L, "pt", ESPERADO_PAR, tol)}
+            if g.split("|")[1] == "trescuartos":
+                entrada["cadena"] = _clasificar_grupo(L, "ptb", ESPERADO_CADENA, tol)
+            resultado[nombre]["grupos"][g] = entrada
+
+    deltas = {g: resumen_deltas([f["delta_torso_menos_pelvis_ms"] for f in L if f["valida"] and f["delta_torso_menos_pelvis_ms"] is not None])
+              for g, L in sorted(grupos.items())}
+    controles = {
+        g: {
+            "acople_omega": {
+                "correlacion_mediana": statistics.median([f["omega_cadera_vs_tronco"]["correlacion"] for f in L
+                                                         if f["omega_cadera_vs_tronco"]["correlacion"] is not None] or [float("nan")]),
+                "desfase_mediano_ms": statistics.median([f["omega_cadera_vs_tronco"]["desfase_ms"] for f in L
+                                                         if f["omega_cadera_vs_tronco"]["desfase_ms"] is not None] or [float("nan")]),
+            },
+            "por_corte_fijo_hz": {c: _resumen_control(L, lambda f, c=c: f["por_corte_fijo_hz"].get(c), TOLERANCIA_ORDEN_S)
+                                  for c in map(str, CORTES_FIJOS_HZ)},
+            "giro_axial": _resumen_control(L, lambda f: f["giro_axial"], TOLERANCIA_ORDEN_S),
+            "winter_3d": _resumen_control(L, lambda f: {"instantes_s": f["instantes_s"], "valida": f["valida"]}, TOLERANCIA_ORDEN_S),
+        }
+        for g, L in sorted(grupos.items())
+    }
+    return {"resultado_por_tolerancia": resultado, "delta_torso_menos_pelvis_ms": deltas, "controles": controles}
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -294,39 +345,7 @@ def main(argv: list[str] | None = None) -> int:
         filas.append({"clip": n, "gesto": r["gesto"], "encuadre": r["angulo"], "toma": parse_toma(n), **m})
     print(f"Medidas: {len(filas)}")
 
-    grupos: dict[str, list[dict]] = defaultdict(list)
-    for f in filas:
-        grupos[f"{f['gesto']}|{f['encuadre']}"].append(f)
-        if f["gesto"] == "saque" and f["encuadre"] == "trescuartos":
-            grupos[f"saque|trescuartos|toma {f['toma']}"].append(f)
-
-    tolerancias = {"primaria": TOLERANCIA_ORDEN_S, **{f"sens_{round(t * 1000, 1)}ms": t for t in TOLERANCIAS_SENSIBILIDAD_S}}
-    resultado: dict = {}
-    for nombre, tol in tolerancias.items():
-        resultado[nombre] = {"tolerancia_ms": tol * 1000.0, "grupos": {}}
-        for g, L in sorted(grupos.items()):
-            entrada = {"par_pelvis_torso": _clasificar_grupo(L, "pt", ESPERADO_PAR, tol)}
-            if g.split("|")[1] == "trescuartos":
-                entrada["cadena"] = _clasificar_grupo(L, "ptb", ESPERADO_CADENA, tol)
-            resultado[nombre]["grupos"][g] = entrada
-
-    deltas = {g: resumen_deltas([f["delta_torso_menos_pelvis_ms"] for f in L if f["valida"] and f["delta_torso_menos_pelvis_ms"] is not None])
-              for g, L in sorted(grupos.items())}
-    controles = {
-        g: {
-            "acople_omega": {
-                "correlacion_mediana": statistics.median([f["omega_cadera_vs_tronco"]["correlacion"] for f in L
-                                                         if f["omega_cadera_vs_tronco"]["correlacion"] is not None] or [float("nan")]),
-                "desfase_mediano_ms": statistics.median([f["omega_cadera_vs_tronco"]["desfase_ms"] for f in L
-                                                         if f["omega_cadera_vs_tronco"]["desfase_ms"] is not None] or [float("nan")]),
-            },
-            "por_corte_fijo_hz": {c: _resumen_control(L, lambda f, c=c: f["por_corte_fijo_hz"].get(c), TOLERANCIA_ORDEN_S)
-                                  for c in map(str, CORTES_FIJOS_HZ)},
-            "giro_axial": _resumen_control(L, lambda f: f["giro_axial"], TOLERANCIA_ORDEN_S),
-            "winter_3d": _resumen_control(L, lambda f: {"instantes_s": f["instantes_s"], "valida": f["valida"]}, TOLERANCIA_ORDEN_S),
-        }
-        for g, L in sorted(grupos.items())
-    }
+    agregado = construir_resultado(filas)
 
     args.salida.parent.mkdir(parents=True, exist_ok=True)
     args.salida.write_text(json.dumps({
@@ -336,8 +355,7 @@ def main(argv: list[str] | None = None) -> int:
         "etiqueta": args.etiqueta, "version_motor": version_motor, "commit": _git(["rev-parse", "HEAD"], repo),
         "arbol_sucio": bool(sucio), "fps_muestreo_real": FPS_MUESTREO_REAL, "umbral": UMBRAL,
         "tolerancia_primaria_ms": TOLERANCIA_ORDEN_S * 1000.0, "margen_ancla_s": MARGEN_ANCLA_S, "brazo_via": "codo",
-        "excluidas_por_rampa": excluidas, "repeticiones": filas, "resultado_por_tolerancia": resultado,
-        "delta_torso_menos_pelvis_ms": deltas, "controles": controles,
+        "excluidas_por_rampa": excluidas, "repeticiones": filas, **agregado,
     }, ensure_ascii=False, indent=1, default=list), encoding="utf-8")
     print(f"Escrito: {args.salida}")
     return 0
