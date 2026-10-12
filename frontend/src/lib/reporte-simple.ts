@@ -58,8 +58,17 @@ export type FraseSecuencia = {
 
 const SIMULTANEIDAD = /simultaneidad/i;
 
-/** La frase bajo el gráfico de secuenciación: qué se observó, en el vocabulario de R2 (se observa, no se pudo medir). */
-export function fraseDeSecuencia(rep: RepeticionLeida | null, fps: number | null): FraseSecuencia {
+const coma = (x: number, dec = 1) => x.toFixed(dec).replace(/\.0+$/, "").replace(".", ",");
+
+/** "1 fotograma ≈ 5 ms a 200 fps reales": la resolución del ARCHIVO, no la de la grilla de 240 Hz a la que se regulariza (12/10). */
+export function resolucionTexto(fpsReal: number | null): string | null {
+  if (fpsReal === null || !(fpsReal > 0)) return null;
+  return `1 fotograma ≈ ${coma(1000 / fpsReal)} ms a ${Math.round(fpsReal)} fps reales`;
+}
+
+/** La frase bajo el gráfico de secuenciación: qué se observó, en el vocabulario de R2 (se observa, no se pudo medir).
+ *  `fps` es la tasa REAL media del archivo; `toleranciaMs`, la tolerancia con que el motor decidió "ordenable" (reporte v1.3). */
+export function fraseDeSecuencia(rep: RepeticionLeida | null, fps: number | null, toleranciaMs: number | null = null): FraseSecuencia {
   if (!rep) return { tipo: "sin_dato", texto: "No se pudo medir el orden de este golpe." };
   if (rep.auditable && rep.orden_observado && rep.orden_observado.length === 3) {
     const [a, b, c] = rep.orden_observado.map((s) => NOMBRE_SEGMENTO[s]);
@@ -69,12 +78,13 @@ export function fraseDeSecuencia(rep: RepeticionLeida | null, fps: number | null
     };
   }
   if (rep.motivo_no_auditable && SIMULTANEIDAD.test(rep.motivo_no_auditable)) {
-    const tasa = fps !== null ? `A ${Math.round(fps)} fps ` : "A esta frecuencia ";
+    const resolucion = resolucionTexto(fps);
+    const tolerancia = toleranciaMs !== null ? ` (a menos de ${coma(toleranciaMs)} ms uno del otro)` : "";
     return {
       tipo: "simultaneo",
       texto:
-        "Tu cadera y tu tronco alcanzaron su velocidad máxima casi al mismo tiempo. " +
-        `${tasa}no se puede saber cuál fue primero, así que no lo evaluamos.`,
+        `Tu cadera y tu tronco alcanzaron su velocidad máxima casi al mismo tiempo${tolerancia}. ` +
+        `A esta resolución${resolucion ? ` (${resolucion})` : ""} no se puede saber cuál fue primero, así que no lo evaluamos.`,
     };
   }
   return { tipo: "sin_dato", texto: "No se pudo medir el orden de este golpe con confianza suficiente." };
@@ -107,6 +117,8 @@ export type DatosTrazabilidad = {
   version_motor: string | null;
   backend_pose: string | null;
   modo_captura: string | null;
+  /** Con qué tolerancia el motor decidió "ordenable" (contrato 1.3; null en un reporte anterior). */
+  tolerancia_orden_ms: number | null;
 };
 
 function num(v: unknown): number | null {
@@ -126,7 +138,58 @@ export function trazabilidadDe(reporte: Json | null): DatosTrazabilidad {
     version_motor: typeof t.version_motor === "string" ? t.version_motor : null,
     backend_pose: typeof t.backend_pose === "string" ? t.backend_pose : null,
     modo_captura: typeof t.modo_captura === "string" ? t.modo_captura : null,
+    tolerancia_orden_ms: num(t.tolerancia_orden_ms),
   };
+}
+
+// --- artefactos (contrato 1.3): rutas en Storage, nunca URLs ------------------------------------------------------------
+
+export type FotogramaClaveLeido = { segmento: Segmento; instante_s: number; ruta: string };
+export type OverlayLeido = { ruta: string; desde_s: number; hasta_s: number; factor_lento: number | null };
+export type ArtefactosLeidos = { fotogramas: FotogramaClaveLeido[]; overlay: OverlayLeido | null };
+
+/** Lo que el motor generó. Ausente = "no generado" (no "cero"): la pantalla no muestra la sección, sin inventar nada. */
+export function artefactosDe(reporte: Json | null): ArtefactosLeidos {
+  const a = (reporte?.artefactos ?? {}) as Json;
+  const orden: Segmento[] = ["pelvis", "torso", "brazo"];
+  const crudos = Array.isArray(a.fotogramas_clave) ? (a.fotogramas_clave as Json[]) : [];
+  const fotogramas = orden.flatMap((s) =>
+    crudos
+      .filter((f) => f.segmento === s && typeof f.ruta === "string" && f.ruta.length > 0 && num(f.instante_s) !== null)
+      .map((f) => ({ segmento: s, instante_s: f.instante_s as number, ruta: f.ruta as string })),
+  );
+  const info = (a.overlay_info ?? null) as Json | null;
+  const overlay =
+    typeof a.overlay_ruta === "string" && a.overlay_ruta.length > 0
+      ? {
+          ruta: a.overlay_ruta,
+          desde_s: num(info?.desde_s) ?? 0,
+          hasta_s: num(info?.hasta_s) ?? 0,
+          factor_lento: num(info?.factor_lento),
+        }
+      : null;
+  return { fotogramas, overlay };
+}
+
+// --- detalle: fundamentos sin repetir ------------------------------------------------------------------------------------
+
+export type FundamentoObservacion = {
+  severidad: string;
+  texto: string;
+  /** null si ya se mostró idéntico en una observación anterior (la línea de instantes se repetía en las tarjetas). */
+  fundamento: string | null;
+  referencia: string | null;
+};
+
+/** Para el nivel 3: cada observación con su fundamento y su fuente, y cada línea de fundamento una sola vez. */
+export function fundamentosSinRepetir(observaciones: readonly ObservacionLeida[]): FundamentoObservacion[] {
+  const vistos = new Set<string>();
+  return observaciones.map((o) => {
+    const f = o.fundamento ?? null;
+    const dup = f !== null && vistos.has(f);
+    if (f !== null) vistos.add(f);
+    return { severidad: o.severidad, texto: o.texto, fundamento: dup ? null : f, referencia: o.referencia ?? null };
+  });
 }
 
 export type TramoNoAuditable = { desde_s: number; hasta_s: number; motivo: string };

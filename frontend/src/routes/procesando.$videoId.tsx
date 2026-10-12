@@ -461,9 +461,8 @@ function Observacion({ o }: { o: ObservacionLeida }) {
       ) : clave ? (
         <EstadoBadge estado={clave} />
       ) : null}
+      {/* Texto llano: el fundamento y la fuente están en "Ver detalle técnico" del reporte (ajuste del 12/10). */}
       <p className="mt-3 text-sm leading-relaxed">{o.texto}</p>
-      {o.fundamento && <p className="mt-2 font-mono text-xs text-muted-foreground">{o.fundamento}</p>}
-      {o.referencia && <p className="mt-1 text-xs text-muted-foreground">Fuente: {o.referencia}</p>}
     </li>
   );
 }

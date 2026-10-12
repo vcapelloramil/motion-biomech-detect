@@ -265,16 +265,21 @@ function CargarPage() {
         </h2>
         <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm">
           <li>
-            En el selector de Fotos tocá <strong>Opciones</strong> (abajo a la izquierda) y activá <strong>Formato: Actual</strong>.
+            En <strong>Fotos</strong>, abrí el video y tocá <strong>Editar</strong>. <strong>Recortá</strong> el golpe: dejá solo el
+            golpe (unos 2 a 5 segundos).
           </li>
           <li>
-            O guardá el video en la app <strong>Archivos</strong> y elegilo desde ahí.
+            Sacale la cámara lenta: en la <strong>barra de rayitas</strong> de abajo, dejá <strong>todo el tramo a velocidad normal</strong>.
+          </li>
+          <li>
+            Al subirlo, en el selector tocá <strong>Opciones</strong> (abajo a la izquierda) y elegí <strong>Formato: Actual</strong>.
           </li>
         </ol>
         <p className="mt-3 text-sm text-muted-foreground">
-          Con el formato por defecto el teléfono convierte el video al subirlo y descarta fotogramas: queda por debajo de los
-          120 fps que hacen falta y no se puede analizar. Un video sin recortar de más de 50 MB tampoco entra: dejá solo el golpe
-          (unos 2 a 5 segundos).
+          Lo que grabaste a 240 fps se conserva aunque se vea a velocidad normal. Si el recorte mantiene parte en cámara lenta, el
+          teléfono lo convierte al subirlo (llega a unos 50 fps) aunque elijas «Actual», y no se puede analizar. Con el formato por
+          defecto también convierte el video y descarta fotogramas: queda por debajo de los 120 fps que hacen falta. Otra opción:
+          guardalo en la app <strong>Archivos</strong> y elegilo desde ahí. Un video sin recortar de más de 50 MB tampoco entra.
         </p>
       </section>
 

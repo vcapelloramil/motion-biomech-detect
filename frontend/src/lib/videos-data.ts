@@ -71,3 +71,20 @@ export async function reintentar(videoId: string) {
   if (!token) return { ok: false as const, reintentable: false, texto: "Tu sesión venció. Ingresá de nuevo.", renovarSesion: true };
   return pedirAnalisis(videoId, token);
 }
+
+/**
+ * URLs firmadas de vida corta (1 h) de los artefactos del reporte (fotogramas clave y video con esqueleto). El reporte guarda
+ * RUTAS, no URLs (decisión 025): una URL vence y el reporte no. El bucket es privado y la política deja leer solo la carpeta propia.
+ * Si no se pueden firmar, el mapa viene vacío y la pantalla no muestra imágenes (nunca una imagen de relleno).
+ */
+export async function urlsDeArtefactos(rutas: readonly string[]): Promise<Record<string, string>> {
+  const unicas = [...new Set(rutas.filter((r) => r.length > 0))];
+  if (unicas.length === 0) return {};
+  const { data, error } = await cliente().storage.from("artefactos").createSignedUrls(unicas, 3600);
+  if (error || !data) return {};
+  const salida: Record<string, string> = {};
+  for (const d of data) {
+    if (d.path && d.signedUrl && !d.error) salida[d.path] = d.signedUrl;
+  }
+  return salida;
+}

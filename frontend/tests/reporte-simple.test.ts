@@ -2,11 +2,14 @@
 import { describe, expect, test } from "bun:test";
 import {
   MAX_OBSERVACIONES,
+  artefactosDe,
   coberturaDe,
   fraseDeSecuencia,
+  fundamentosSinRepetir,
   masImportantes,
   picosOrdenados,
   repeticionesDe,
+  resolucionTexto,
   trazabilidadDe,
   tramosNoAuditablesDe,
   type RepeticionLeida,
@@ -55,14 +58,29 @@ describe("frase de la secuencia", () => {
     expect(f.texto.startsWith("Se observa")).toBe(true);
   });
 
-  test("simultaneidad: dice a cuántos fps no se puede saber y que no se evalúa", () => {
+  test("simultaneidad: dice la resolución REAL del archivo, la tolerancia y que no se evalúa", () => {
     const f = fraseDeSecuencia(
       rep({ auditable: false, orden_observado: null, motivo_no_auditable: "simultaneidad al límite de resolución: la cadera y el tronco quedaron a un fotograma o menos" }),
-      199.63,
+      199.9,
+      8.333,
     );
     expect(f.tipo).toBe("simultaneo");
-    expect(f.texto).toContain("A 200 fps no se puede saber cuál fue primero");
+    expect(f.texto).toContain("a menos de 8,3 ms uno del otro");
+    expect(f.texto).toContain("A esta resolución (1 fotograma ≈ 5 ms a 200 fps reales) no se puede saber cuál fue primero");
     expect(f.texto).toContain("no lo evaluamos");
+  });
+
+  test("sin tolerancia en el reporte (versión anterior) la frase sigue siendo verdadera", () => {
+    const f = fraseDeSecuencia(rep({ auditable: false, orden_observado: null, motivo_no_auditable: "simultaneidad" }), 199.9);
+    expect(f.texto).not.toContain("a menos de");
+    expect(f.texto).toContain("no se puede saber cuál fue primero");
+  });
+
+  test("la resolución se expresa con la tasa real y sin decimales de más", () => {
+    expect(resolucionTexto(199.9)).toBe("1 fotograma ≈ 5 ms a 200 fps reales");
+    expect(resolucionTexto(120)).toBe("1 fotograma ≈ 8,3 ms a 120 fps reales");
+    expect(resolucionTexto(null)).toBeNull();
+    expect(resolucionTexto(0)).toBeNull();
   });
 
   test("sin repetición o sin dato: 'no se pudo medir', nunca un orden inventado", () => {
@@ -127,5 +145,42 @@ describe("lectura del JSON", () => {
     expect(coberturaDe({})).toBeNull();
     expect(tramosNoAuditablesDe({})).toEqual([]);
     expect(picosOrdenados(null)).toEqual([]);
+  });
+});
+
+
+describe("artefactos y fundamentos", () => {
+  const reporte = {
+    artefactos: {
+      overlay_ruta: "u/v/esqueleto.mp4",
+      overlay_info: { desde_s: 1.4, hasta_s: 3.0, fps_reproduccion: 30, factor_lento: 8 },
+      fotogramas_clave: [
+        { segmento: "brazo", instante_s: 0.496, ruta: "u/v/clave_brazo.jpg" },
+        { segmento: "pelvis", instante_s: 0.317, ruta: "u/v/clave_pelvis.jpg" },
+        { segmento: "torso", instante_s: 0.3, ruta: "" },
+      ],
+    },
+  };
+
+  test("los fotogramas salen en el orden cadera, tronco, brazo y sin rutas vacías", () => {
+    const a = artefactosDe(reporte);
+    expect(a.fotogramas.map((f) => f.segmento)).toEqual(["pelvis", "brazo"]);
+    expect(a.overlay).toEqual({ ruta: "u/v/esqueleto.mp4", desde_s: 1.4, hasta_s: 3.0, factor_lento: 8 });
+  });
+
+  test("sin artefactos es 'no generado': nada que mostrar, nada inventado", () => {
+    expect(artefactosDe({ artefactos: {} })).toEqual({ fotogramas: [], overlay: null });
+    expect(artefactosDe(null)).toEqual({ fotogramas: [], overlay: null });
+  });
+
+  test("la línea de instantes no se repite entre observaciones", () => {
+    const linea = "Instantes de la velocidad máxima: tronco 0,300 s.";
+    const r = fundamentosSinRepetir([
+      { severidad: "sin_evaluar", texto: "a", fundamento: linea, referencia: null },
+      { severidad: "sin_evaluar", texto: "b", fundamento: linea, referencia: null },
+      { severidad: "correcto", texto: "c", fundamento: "otra", referencia: "Fuente (2011)" },
+    ]);
+    expect(r.map((x) => x.fundamento)).toEqual([linea, null, "otra"]);
+    expect(r[2].referencia).toBe("Fuente (2011)");
   });
 });

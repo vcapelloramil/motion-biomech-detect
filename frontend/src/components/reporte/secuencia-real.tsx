@@ -1,9 +1,9 @@
-import { COLOR_SEGMENTO, NOMBRE_SEGMENTO, type PicoLeido, type Segmento } from "@/lib/reporte-simple";
+import { COLOR_SEGMENTO, NOMBRE_SEGMENTO, resolucionTexto, type PicoLeido, type Segmento } from "@/lib/reporte-simple";
 
 /**
  * El elemento central del producto (CLAUDE.md §3): un eje temporal único con los instantes en que la cadera, el tronco
  * y el brazo alcanzan su velocidad máxima. Escalera ordenada de arriba a abajo y de izquierda a derecha = el orden
- * descrito en la literatura; si se cruzan, el cruce se ve solo.
+ * esperado; si se cruzan, el cruce se ve solo.
  *
  * Dibuja SOLO lo que el motor midió (los picos del reporte). Si falta un segmento, esa fila queda vacía con su motivo:
  * no se completa con una estimación (R3). Con la escala temporal sin confirmar no se muestran segundos (R3/R4).
@@ -27,7 +27,7 @@ export function SecuenciaReal({
 }: {
   picos: PicoLeido[];
   mostrarTiempos: boolean;
-  /** Tasa de la grilla de tiempo del reporte (o la real media si no se regularizó): un fotograma = 1 / fps. */
+  /** Tasa REAL media del archivo (no la de la grilla de 240 Hz a la que se regulariza): un fotograma = 1 / fps. */
   fps: number | null;
 }) {
   const porSegmento = new Map(picos.map((p) => [p.segmento, p]));
@@ -65,7 +65,7 @@ export function SecuenciaReal({
             return `${NOMBRE_SEGMENTO[s]} ${p ? (mostrarTiempos ? seg3(p.instante_s) + " s" : "medido") : "no medido"}`;
           }).join(", ")
         }
-        className="w-full"
+        className="w-full min-w-[34rem]"
       >
         {/* filas */}
         {FILAS.map((s, i) => (
@@ -93,7 +93,7 @@ export function SecuenciaReal({
           <g>
             <line x1={x(t0 + margen * 0.35)} x2={x(t0 + margen * 0.35 + fotograma)} y1={H - PAD_B + 14} y2={H - PAD_B + 14} stroke="var(--muted-foreground)" strokeWidth="3" />
             <text x={x(t0 + margen * 0.35)} y={H - PAD_B + 32} fontSize="11" fill="var(--muted-foreground)">
-              1 fotograma ≈ {(fotograma * 1000).toFixed(1).replace(".", ",")} ms
+              {resolucionTexto(fps)}
             </text>
           </g>
         )}

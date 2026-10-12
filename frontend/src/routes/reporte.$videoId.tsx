@@ -16,15 +16,19 @@ import {
   reporteDe,
 } from "@/lib/estado-video";
 import {
+  NOMBRE_SEGMENTO,
+  artefactosDe,
   coberturaDe,
   fraseDeSecuencia,
+  fundamentosSinRepetir,
   masImportantes,
   picosOrdenados,
   repeticionesDe,
+  resolucionTexto,
   tramosNoAuditablesDe,
   trazabilidadDe,
 } from "@/lib/reporte-simple";
-import { leerVideo, type VideoConReporte } from "@/lib/videos-data";
+import { leerVideo, urlsDeArtefactos, type VideoConReporte } from "@/lib/videos-data";
 
 export const Route = createFileRoute("/reporte/$videoId")({
   head: () => ({ meta: [{ title: "Reporte — KinetiQ" }, { name: "robots", content: "noindex" }] }),
@@ -139,8 +143,11 @@ function Reporte({ video, reporte }: { video: VideoConReporte; reporte: Record<s
   const fps = t.fps_real ?? numero(video.fps_real);
   const reps = repeticionesDe(reporte);
   const r0 = reps[0] ?? null;
-  const { visibles, ocultas } = masImportantes(observacionesDe(reporte));
-  const frase = fraseDeSecuencia(r0, fps);
+  const observaciones = observacionesDe(reporte);
+  const { visibles, ocultas } = masImportantes(observaciones);
+  const fundamentos = fundamentosSinRepetir(observaciones);
+  const frase = fraseDeSecuencia(r0, fps, t.tolerancia_orden_ms);
+  const artefactos = artefactosDe(reporte);
   const picos = picosOrdenados(r0);
   const tramos = tramosNoAuditablesDe(reporte);
   const cobertura = coberturaDe(reporte);
@@ -179,9 +186,8 @@ function Reporte({ video, reporte }: { video: VideoConReporte; reporte: Record<s
             return (
               <li key={i} className={"flex flex-col rounded-2xl border bg-card p-5 " + (BORDE[o.severidad] ?? "border-border")}>
                 {clave === "sin_evaluar" ? <SinEvaluarBadge className="self-start" /> : clave ? <EstadoBadge estado={clave} className="self-start" /> : null}
+                {/* Nivel 1: lenguaje llano. El fundamento y la fuente de cada observación están en "Ver detalle técnico". */}
                 <p className="mt-4 text-base font-semibold leading-snug">{o.texto}</p>
-                {o.fundamento && <p className="mt-3 text-sm text-muted-foreground">{o.fundamento}</p>}
-                {o.referencia && <p className="mt-2 text-xs text-muted-foreground">Fuente: {o.referencia}</p>}
               </li>
             );
           })}
@@ -202,8 +208,8 @@ function Reporte({ video, reporte }: { video: VideoConReporte; reporte: Record<s
       <section aria-labelledby="secuencia" className="mt-12">
         <h2 id="secuencia" className="font-mono text-xs uppercase tracking-widest text-state-ok">Tu golpe en el tiempo</h2>
         <p className="mt-2 font-display text-2xl font-bold md:text-3xl">Cuándo alcanzó su velocidad máxima cada parte</p>
-        <div className="mt-5 rounded-2xl border border-border bg-card p-4 md:p-6">
-          <SecuenciaReal picos={picos} mostrarTiempos={t.escala_conocida} fps={t.fps_grilla ?? fps} />
+        <div className="mt-5 overflow-x-auto rounded-2xl border border-border bg-card p-4 md:p-6">
+          <SecuenciaReal picos={picos} mostrarTiempos={t.escala_conocida} fps={fps} />
         </div>
         <p
           className={
@@ -216,6 +222,9 @@ function Reporte({ video, reporte }: { video: VideoConReporte; reporte: Record<s
         </p>
       </section>
 
+      {/* Tres momentos del golpe y video con esqueleto (artefactos del motor; ausentes = no generados). */}
+      {(artefactos.fotogramas.length > 0 || artefactos.overlay) && <TresMomentos artefactos={artefactos} />}
+
       {/* Nivel 3, plegado: dato y fundamento. */}
       <details className="group mt-12 rounded-2xl border border-border bg-card">
         <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between px-5 font-display text-lg font-bold">
@@ -223,17 +232,18 @@ function Reporte({ video, reporte }: { video: VideoConReporte; reporte: Record<s
           <ChevronDown className="h-5 w-5 transition-transform group-open:rotate-180" aria-hidden="true" />
         </summary>
         <div className="space-y-8 border-t border-border p-5">
-          {ocultas.length > 0 && (
+          {fundamentos.length > 0 && (
             <div>
-              <h3 className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Otras observaciones</h3>
+              <h3 className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Observaciones y su fundamento</h3>
               <ul className="mt-3 space-y-3">
-                {ocultas.map((o, i) => {
+                {fundamentos.map((o, i) => {
                   const clave = BADGE[o.severidad];
                   return (
                     <li key={i} className="rounded-xl border border-border p-4 text-sm">
                       {clave === "sin_evaluar" ? <SinEvaluarBadge /> : clave ? <EstadoBadge estado={clave} /> : null}
                       <p className="mt-2">{o.texto}</p>
                       {o.fundamento && <p className="mt-1 font-mono text-xs text-muted-foreground">{o.fundamento}</p>}
+                      {o.referencia && <p className="mt-1 text-xs text-muted-foreground">Fuente: {o.referencia}</p>}
                     </li>
                   );
                 })}
@@ -244,12 +254,17 @@ function Reporte({ video, reporte }: { video: VideoConReporte; reporte: Record<s
           <div>
             <h3 className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Trazabilidad</h3>
             <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-3 text-sm md:grid-cols-3">
-              <Dato k="Frecuencia real medida" v={t.fps_real !== null ? `${t.fps_real.toFixed(1)} fps` : "—"} />
+              <Dato k="Frecuencia real medida" v={t.fps_real !== null ? `${t.fps_real.toFixed(1).replace(".", ",")} fps` : "—"} />
               <Dato k="Frecuencia nominal" v={t.fps_nominal !== null ? `${t.fps_nominal.toFixed(0)} fps` : "—"} />
-              <Dato k="Fotogramas perdidos" v={t.fotogramas_perdidos_pct !== null ? `${t.fotogramas_perdidos_pct.toFixed(1)} %` : "—"} />
-              <Dato k="Puntos interpolados" v={t.puntos_interpolados_pct !== null ? `${t.puntos_interpolados_pct.toFixed(1)} %` : "no se regularizó"} />
+              <Dato k="Fotogramas perdidos" v={t.fotogramas_perdidos_pct !== null ? `${t.fotogramas_perdidos_pct.toFixed(1).replace(".", ",")} %` : "—"} />
+              <Dato k="Puntos interpolados" v={t.puntos_interpolados_pct !== null ? `${t.puntos_interpolados_pct.toFixed(1).replace(".", ",")} %` : "no se regularizó"} />
               <Dato k="Escala temporal" v={t.escala_conocida ? "conocida" : "no confirmada"} />
-              <Dato k="Cobertura auditable" v={cobertura !== null ? `${cobertura.toFixed(1)} %` : "—"} />
+              <Dato k="Resolución" v={resolucionTexto(t.fps_real ?? fps) ?? "—"} />
+              <Dato
+                k="Tolerancia del orden"
+                v={t.tolerancia_orden_ms !== null ? `${t.tolerancia_orden_ms.toFixed(1).replace(".", ",")} ms` : "no registrada (reporte anterior)"}
+              />
+              <Dato k="Cobertura auditable" v={cobertura !== null ? `${cobertura.toFixed(1).replace(".", ",")} %` : "—"} />
               <Dato k="Modo de captura declarado" v={t.modo_captura ?? "—"} />
               <Dato k="Motor" v={`${t.version_motor ?? "—"} · ${t.backend_pose ?? "—"}`} />
               {latencia !== null && <Dato k="Tardó en procesarse" v={formatearDuracion(latencia)} />}
@@ -301,6 +316,84 @@ function Reporte({ video, reporte }: { video: VideoConReporte; reporte: Record<s
         KinetiQ documenta el movimiento. No diagnostica ni reemplaza la evaluación de un profesional.
       </p>
     </main>
+  );
+}
+
+/** Los tres fotogramas reales con el esqueleto en el pico de cadera, tronco y brazo, y el video corto con el esqueleto. */
+function TresMomentos({ artefactos }: { artefactos: ReturnType<typeof artefactosDe> }) {
+  const [urls, setUrls] = useState<Record<string, string> | null>(null);
+  const rutas = [...artefactos.fotogramas.map((f) => f.ruta), ...(artefactos.overlay ? [artefactos.overlay.ruta] : [])];
+  const clave = rutas.join("|");
+
+  useEffect(() => {
+    let activo = true;
+    urlsDeArtefactos(rutas)
+      .then((u) => activo && setUrls(u))
+      .catch(() => activo && setUrls({}));
+    return () => {
+      activo = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [clave]);
+
+  const sinImagenes = urls !== null && Object.keys(urls).length === 0;
+  const lento = artefactos.overlay?.factor_lento ?? null;
+  return (
+    <section aria-labelledby="momentos" className="mt-12">
+      <h2 id="momentos" className="font-mono text-xs uppercase tracking-widest text-state-ok">Tres momentos de tu golpe</h2>
+      <p className="mt-2 font-display text-2xl font-bold md:text-3xl">Así se veía tu cuerpo en cada pico</p>
+
+      {urls === null ? (
+        <p role="status" className="mt-5 flex items-center gap-2 text-sm text-muted-foreground">
+          <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> Cargando las imágenes…
+        </p>
+      ) : sinImagenes ? (
+        <p className="mt-5 rounded-2xl border border-dashed border-border p-5 text-sm text-muted-foreground">
+          No pudimos cargar las imágenes ahora. El análisis no cambia: probá recargar la página en un momento.
+        </p>
+      ) : (
+        <>
+          {artefactos.fotogramas.length > 0 && (
+            <ul className="mt-5 flex snap-x gap-4 overflow-x-auto pb-2 md:grid md:grid-cols-3 md:overflow-visible">
+              {artefactos.fotogramas.map((f) => (
+                <li key={f.segmento} className="min-w-[78%] snap-center overflow-hidden rounded-2xl border border-border bg-card md:min-w-0">
+                  {urls[f.ruta] ? (
+                    <img
+                      src={urls[f.ruta]}
+                      alt={`Fotograma del golpe en el pico de velocidad de tu ${NOMBRE_SEGMENTO[f.segmento]}, con el esqueleto dibujado`}
+                      loading="lazy"
+                      className="aspect-[3/4] w-full object-cover"
+                    />
+                  ) : (
+                    <div className="flex aspect-[3/4] items-center justify-center text-sm text-muted-foreground">Sin imagen</div>
+                  )}
+                  <p className="px-4 py-3 text-sm">
+                    <span className="font-semibold">Pico de tu {NOMBRE_SEGMENTO[f.segmento]}</span>
+                    <span className="font-mono text-xs text-muted-foreground"> · {f.instante_s.toFixed(3).replace(".", ",")} s</span>
+                  </p>
+                </li>
+              ))}
+            </ul>
+          )}
+          {artefactos.overlay && urls[artefactos.overlay.ruta] && (
+            <div className="mt-6">
+              <video
+                src={urls[artefactos.overlay.ruta]}
+                controls
+                playsInline
+                preload="metadata"
+                className="w-full max-w-xs rounded-2xl border border-border bg-black md:max-w-sm"
+                aria-label="Video corto del golpe con el esqueleto dibujado"
+              />
+              <p className="mt-2 text-xs text-muted-foreground">
+                Solo el tramo del golpe{lento ? `, en cámara lenta (${lento.toFixed(0)} veces más lento que la realidad)` : ""}. El esqueleto se
+                dibuja únicamente donde el sistema detectó cada articulación con confianza suficiente.
+              </p>
+            </div>
+          )}
+        </>
+      )}
+    </section>
   );
 }
 
