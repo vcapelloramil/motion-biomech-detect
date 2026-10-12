@@ -1,6 +1,6 @@
 # Plan del MVP de punta a punta — 6/10 → 2/11/2026 (colchón hasta el 6/11)
 
-> **12/10/2026:** el flujo de punta a punta **pasó**. Lo que queda hasta la demo a los profesores está ordenado en **§8** (propuesto, a aprobar).
+> **12/10/2026:** el flujo de punta a punta **pasó**. Lo que queda hasta la demo a los profesores (28–30/10) está ordenado en **§8** (aprobado y reordenado el 12/10).
 
 **Estado:** **aprobado por Valentín el 7/10/2026, con ajustes** (incorporados abajo). No reemplaza a `docs/plan-desarrollo.md`: lo recomprime. Donde este
 documento contradice a ese, vale este. Las decisiones que lo requerían están en `docs/decisiones/` (024 a 027) y las correcciones que quedan para la tesis, en
@@ -188,56 +188,75 @@ Cambio de alcance del 7/10: **no hay pruebas con otros usuarios; se mide con gra
 4. Hechos el 7/10: usuario de prueba creado y confirmado en Supabase; Lovable desconectado de GitHub; tarea de eliminar cuenta y datos aprobada para la semana 3.
 
 
-## 8. Orden hasta la demo a los profesores (propuesto el 12/10/2026, a aprobar)
+## 8. Orden hasta la demo a los profesores (aprobado el 12/10/2026; reordenado el 12/10 noche con las pantallas que faltaban)
 
-**Qué cambió desde el 9/10:** el flujo de punta a punta **pasó** (12/10: golpe real → reporte con datos reales, 11 min 18 s en Free). Lo que falta ya no es el flujo: es (1) que el reporte diga más sin
-inventar, (2) que el sistema se vea y funcione "como público" y (3) validar el veredicto del saque de perfil, que es **bloqueante de la demo** (decisión 031).
+**Qué cambió desde el 9/10:** el flujo de punta a punta **pasó** (12/10) y **la prueba en producción del 12/10 noche cerró lo de Standard y los artefactos** (117 s de punta a punta, reporte 1.3 con los tres
+fotogramas y el video, lectura con la sesión del propio usuario y aislamiento entre usuarios verificados). Lo que falta ya no es el flujo: es (1) que el reporte diga más sin inventar, (2) las pantallas de la
+especificación que todavía no existen, (3) que el sistema funcione "como público" (correo propio, borrado de datos) y (4) validar el veredicto del saque de perfil, **bloqueante de la demo** (decisión 031).
 
-**Supuestos:** sesiones de ~medio día, **~1 por día, todos los días** (conservador: el 9/10 se hicieron ocho piezas en un día, pero ese no es un ritmo sostenido; a 1,5 por día todo
-se adelanta ~3 días). Estimación honesta: **12,5 sesiones ≈ 12 días** para lo imprescindible (**~24/10**); con un 25 % de colchón, **listo para mostrar el ~27/10**. Quedan 6 días hasta
-el 2/11: **entra, pero sin lugar para frentes nuevos**; la demo a los profesores se puede agendar para el **28–30/10**.
+**Demo a los profesores: 28–30/10 (decisión de Valentín, 12/10).**
 
-### Núcleo: lo que tiene que estar para la demo
+**Supuestos:** sesiones de ~medio día. Ritmo **observado**: el flujo de punta a punta estaba previsto para el 20/10 (11 sesiones a ~1 por día) y se cerró el 12/10, es decir ~1,5 por día. Se calcula con **1,5
+por día** (esperado) y **1 por día** (pesimista, sin imprevistos de paneles ni de DNS).
 
-| # | Qué | Ses. | Valor para el reporte / la demo | Depende de | Fecha estimada |
-| --- | --- | --- | --- | --- | --- |
-| 0 | **Acciones de Valentín** (bitácora 12/10): migración del bucket, Standard, OK de push, republicar, subir un golpe | 0,25 | Los tres momentos y el video llegan al reporte real; latencia ~2,5 min | — | 12–13/10 |
-| 1 | **Verificar en producción** lo del 12/10: artefactos, log de memoria en Linux, **latencia en Standard** (Criterio 4, fila 3) | 0,5 | Cierra la medición que falta; confirma que `ffmpeg` entra | 0 | 13/10 |
-| 2 | **Paso A del recálculo** + revisar `RESPALDO_POR_GRUPO` con la tolerancia ya unificada (decisiones 031 y 032) y comparar con las grabaciones nuevas | 1 | **Bloqueante de la demo**; decide si el "desvío leve" del saque de perfil es real o artefacto; destraba (a) | — | 13–14/10 |
-| 3 | **(b) Datos en el reporte:** separación cadera-hombro máxima, flexión de rodilla mínima, ángulo de codo, con confianza y error esperable, como dato (sin estado de juicio) | 1 | El reporte deja de ser solo "orden y velocidades"; prepara (c) | — | 14–15/10 |
-| 4 | **Cargar con varios golpes** (diseño nuevo + alta de varios golpes en una sesión + cola) | 2 | Prerrequisito de (c); es lo que pide la tesis (≥ 10 repeticiones) | — | 15–17/10 |
-| 5 | **(c) Consistencia entre golpes + vista de sesión** (agregador, `reportes_sesion`, tarjetas "Tus golpes entre sí") | 1,5 | **El mayor valor por esfuerzo:** evalúa de verdad, sin literatura | 4 | 17–18/10 |
-| 6 | Registro e Ingreso con el diseño nuevo | 1 | Primera impresión; "como público" | — | 18–19/10 |
-| 7 | Landing y Perfil con el diseño nuevo (Perfil: el botón de eliminar cuenta, ya real) | 2 | Lo primero y lo último que ven los profesores | — | 19–21/10 |
-| 8 | **Eliminar cuenta y datos, funcional** (incluye los objetos de **ambos** buckets) | 1 | Derecho de supresión (Ley 25.326); sin esto la demo "como público" no es defendible | 7 | 21–22/10 |
-| 9 | **Respaldo con restauración probada** y **recuperación al arranque (6.5)** | 1,25 | Un análisis no queda `procesando` para siempre; respaldo en Free (Supabase no lo incluye) | — | 22–23/10 |
-| 10 | **"Olvidé mi contraseña"** + correo propio (decisión 027) | 0,5 | Necesario "como público" | **Valentín:** dominio y Brevo/Gmail dedicado | 23/10 |
-| 11 | **Ensayo de la demo** (guion, datos de ejemplo marcados, un golpe por gesto subido) y congelar | 0,5 | Evita sorpresas | todo | 24/10 |
-| | **Total del núcleo** | **12,5** | | | **listo ~24/10; con colchón, ~27/10** |
+### Núcleo: lo que tiene que estar para la demo (14,75 sesiones restantes)
 
-**Por qué este orden:** primero lo que **desbloquea** (0, 1, 2: sin el Paso A ni siquiera se sabe qué grupos tienen veredicto); después lo que **más valor le da al reporte con menos esfuerzo**
-(3 y 5); después lo que hace falta para que se vea y sea defendible como producto público (6 a 10); al final, el ensayo. La **etiqueta** de la vista simple (decisión tuya) y el **pasaje de
-Elliott/Kibler** (a) no consumen sesión: entran cuando los decidas (a, después del 2).
+| # | Qué | Ses. | Valor | Depende de |
+| --- | --- | --- | --- | --- |
+| ~~0~~ | ~~Acciones de Valentín y prueba en producción~~ **HECHO 12/10** | — | Standard (117 s por golpe), artefactos en producción | — |
+| 1 | **Dominio `.me`, correo propio y la aplicación en el dominio** (guía `docs/guia-dominio-correo-y-hosting.md`; mi parte: `wrangler.jsonc`, CORS, pantalla y plantilla de "Olvidé mi contraseña", prueba de registro real) | 0,75 | Destraba **registro abierto** y recuperar la contraseña; es la dirección que ven los profesores | **Valentín:** partes A–D de la guía (~1,5 h) |
+| 2 | **Paso A del recálculo** + revisar `RESPALDO_POR_GRUPO` con la tolerancia unificada (decisiones 031 y 032) | 1 | **Bloqueante de la demo**; decide si el "tronco primero" es real o artefacto (Valentín: "sugiere un artefacto de medición") | — |
+| 3 | **(b) Datos en el reporte:** separación cadera-hombro máxima, flexión de rodilla mínima, ángulo de codo, con confianza y error esperable, como dato | 1 | El reporte deja de ser solo "orden y velocidades"; alimenta el detallado y el PDF | — |
+| 4 | **Cargar con varios golpes** (diseño nuevo + alta de varios golpes en una sesión + cola) | 2 | Prerrequisito de (c); lo que pide la tesis (≥ 10 repeticiones) | — |
+| 5 | **(c) Consistencia entre golpes + vista de sesión** (agregador, `reportes_sesion`, tarjetas "Tus golpes entre sí") | 1,5 | El mayor valor por esfuerzo: evalúa de verdad, sin literatura | 4 |
+| 6 | **Reporte detallado + interruptor Simple/Detallado + vista por defecto según el rol** (§4 de la especificación): nivel 1 compacto, secuenciación, tabla de magnitudes con confianza, trazabilidad, fundamentos y fuentes, tres momentos y video | 1 | Entrenador y profesional entran directo a lo suyo; es la base del PDF | 3 |
+| 7 | **PDF — versión barata** (ver abajo): el reporte detallado con estilo de impresión y "Guardar como PDF", con las páginas, el sello de versión y los bloques de limitaciones | 1 | La tabla 4.7 lo pone en el núcleo: **no se recorta** | 6 |
+| 8 | **Registro e Ingreso** con el diseño nuevo | 1 | Primera impresión; "como público" | 1 |
+| 9 | **Landing** con el diseño nuevo | 1 | Lo primero que ven los profesores | — |
+| 10 | **Perfil real:** rol, vista por defecto, nombre y datos del jugador (mano dominante, nivel), **descargar mis datos** (JSON, derecho de acceso) y botón de eliminar. **Se retiran los planes y precios de la maqueta** (la especificación §11 los deja fuera del MVP) | 1,5 | Ley 25.326: acceso y supresión; es lo que cierra "como público" | 6 (la vista por defecto) |
+| 11 | **Eliminar cuenta y datos, funcional** (incluye los objetos de **ambos** buckets) | 1 | Derecho de supresión; sin esto la demo "como público" no es defendible | 10 |
+| 12 | **Respaldo con restauración probada** y **recuperación al arranque (6.5)** | 1,25 | Un análisis no queda `procesando` para siempre; Supabase Free no respalda | — |
+| 13 | **Evolución con la marca "Datos de ejemplo"** (revisar que la marca esté y que no se confunda con datos propios) | 0,25 | Honestidad (R3/R4); real solo si hay ≥ 2 sesiones comparables | — |
+| 14 | **Ensayo de la demo** (guion, un golpe por gesto subido, congelar) | 0,5 | Evita sorpresas | todo |
+| | **Total** | **14,75** | | |
+
+### ¿Se mueve la demo del 28–30/10? **No, pero el margen es corto si el ritmo cae a 1 por día.**
+
+| Escenario | Ritmo | Núcleo terminado | Con 25 % de colchón | Margen contra el 28/10 |
+| --- | --- | --- | --- | --- |
+| Esperado (ritmo observado) | 1,5 sesiones/día | **~22–23/10** | ~25/10 | **3 días** |
+| Pesimista | 1 sesión/día | ~27–28/10 | ~31/10 | **ninguno: la demo se corre al 30/10 o se recorta** |
+
+Lo que **no** garantiza esto: (1) la parte tuya de la guía del dominio (propagación de DNS, validación de la cuenta de Brevo); (2) que el Paso A no abra una investigación nueva; (3) que haya golpes propios de
+los 3 gestos para el ensayo. **Regla de recorte si el 24/10 el núcleo no está al 80 %**, en este orden (lo primero se cae primero): 13 (queda como hoy), el interruptor del 6 (queda solo el detallado como
+sección plegable), el diseño nuevo de Registro/Ingreso del 8 (quedan los tokens), el "descargar mis datos" del 10 (queda eliminar). **No se recortan:** 1, 2, 7, 11.
+
+### El PDF barato (punto 7): qué es y qué no es
+
+| | |
+| --- | --- |
+| **Qué** | El reporte detallado con una hoja de estilos de impresión (`@media print`) y un botón **"Descargar PDF"** que abre el diálogo del navegador ("Guardar como PDF"). Página 1: datos de la sesión, resumen y secuenciación; página 2: magnitudes con confianza y fundamento, "cómo leer los estados", trazabilidad (motor, pose, filtro, fps, tolerancia) y limitaciones (R5). Las tres imágenes y los gráficos SVG salen bien en impresión. |
+| **Costo** | 1 sesión (con el detallado hecho, es CSS de impresión y los dos bloques de texto). |
+| **Qué no es** | No se genera en el servidor, **no se guarda** (`pdf_ruta` queda en `null`) y el aspecto depende del navegador. Para el MVP es una exportación verdadera del reporte que se ve, con el sello de versión del motor. |
+| **Después (si hay margen)** | Un PDF generado en el servidor (WeasyPrint o similar) y guardado en Storage: ~1,5 sesiones. No es necesario para la tesis: la tabla 4.7 pide "generación de PDF con sello de versión del motor", y esto lo cumple. |
 
 ### Si queda margen (en este orden de recorte: lo de abajo se cae primero)
 
 | # | Qué | Ses. | Nota |
 | --- | --- | --- | --- |
-| 12 | Puntaje de rendimiento + comparación con la sesión anterior (E5.2) | 2 | Sin número hasta la 2.ª sesión ("Desde tu 2.ª sesión"); Evolución real recién con ≥ 2 sesiones comparables |
-| 13 | PDF exportable (E5.6) | 1,5 | Está en el núcleo de la tabla 4.7; la vista de sesión ya tiene los datos |
-| 14 | Reproductor sincronizado (video + curvas + picos) | 2 | El video con esqueleto ya existe (decisión 033) y trae `overlay_info` para volver al eje del análisis |
-| 15 | Ángulos dibujados sobre el esqueleto | 0,5 | Solo con (3) hecho |
-| 16 | **Paso B del recálculo** (medición definitiva, 8 h de pose de noche) | 1 + noche | Es "el resultado" de la tesis (plan de recálculo §3); no bloquea la demo |
-| 17 | Autovalidación de los Criterios 1 a 4 con grabaciones propias por el camino real | — | Semana 4 del plan; el Criterio 2 es goniometría manual tuya (horas) |
+| 15 | Puntaje de rendimiento + comparación con la sesión anterior (E5.2) y, con ellos, **Evolución real** | 2 | Sin número hasta la 2.ª sesión ("Desde tu 2.ª sesión"); Evolución real con ≥ 2 sesiones comparables |
+| 16 | Reproductor sincronizado (video + curvas + picos) | 2 | El video con esqueleto ya existe y trae `overlay_info` para volver al eje del análisis |
+| 17 | Ángulos dibujados sobre el esqueleto | 0,5 | Solo con el punto 3 hecho |
+| 18 | **Paso B del recálculo** (medición definitiva, 8 h de pose de noche) | 1 + noche | Es "el resultado" de la tesis (plan de recálculo §3); no bloquea la demo |
+| 19 | Autovalidación de los Criterios 1 a 4 con grabaciones propias por el camino real | — | Semana 4 del plan; el Criterio 2 es goniometría manual tuya (horas) |
 
 ### Riesgos de este orden
 
 | Riesgo | Efecto | Respuesta |
 | --- | --- | --- |
-| **El Paso A deja al saque de perfil sin veredicto** (o invierte el orden) | El reporte del único gesto con referencia queda "solo registrado" | Es información, no un fallo: se documenta (Capítulo 7). El valor del reporte pasa a (3) y (5), que no dependen de esto |
-| Standard no se activa a tiempo | 11 min por golpe en la demo; sesiones de varios golpes de ~40 min | Pasarlo es **acción tuya de 5 minutos**; es el punto 0 por eso |
-| Dominio/correo (decisión 027) sin resolver | El 10 no sale | La demo no lo necesita para el flujo; queda como límite declarado |
+| **El Paso A deja al saque de perfil sin veredicto** (o invierte el orden) | El reporte del único gesto con referencia queda "solo registrado" | Es información, no un fallo: se documenta (Capítulo 7). El valor del reporte pasa a 3 y 5, que no dependen de esto |
+| Dominio o Brevo se demoran (DNS, validación de la cuenta) | El 1 no cierra; sin "Olvidé mi contraseña" ni registro abierto | Tu parte son ~1,5 h y esperas; el camino B (Gmail dedicado, decisión 027) es el puente. La demo no necesita el dominio para el flujo |
 | Cargar con varios golpes más largo de lo estimado (4) | Corre todo lo demás | Recortar a "una sesión = hasta 3 golpes" y dejar el resto |
-| Un frente nuevo (ver las "investigaciones nuevas" de la regla del 9/10) | Se come el colchón | Se anota y se sigue |
+| Un frente nuevo (las "investigaciones nuevas" de la regla del 9/10) | Se come el colchón | Se anota y se sigue |
 
-**Qué decidir hoy:** (1) aprobar el orden o cambiarlo; (2) pasar a Standard (punto 0); (3) la etiqueta "Solo registrado" u otra. Con eso arranco por el punto 1 y el Paso A.
+**Qué necesito de vos para arrancar el punto 1:** que hagas las partes A a D de la guía y me pases el **nombre del dominio** y un "listo" (o el síntoma). Mientras tanto avanzo con el Paso A.

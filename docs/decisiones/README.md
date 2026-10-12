@@ -71,3 +71,4 @@ Qué habilita, qué cierra, qué hay que recordar más adelante.
 | [031](031-veredicto-del-orden-por-gesto-y-encuadre.md) | El veredicto del orden cadera → tronco solo existe con referencia y Criterio 1 cumplido; el resto se documenta "sin evaluar" (contrato v1.2) | vigente; se revisa con el recálculo (Paso A) |
 | [032](032-tolerancia-unica-del-orden-y-version-del-motor.md) | Una sola tolerancia para "ordenable" (1/120 s = 8,33 ms) compartida por el producto y el recálculo; motor 0.5.0; contrato 1.3 | vigente |
 | [033](033-fotogramas-clave-y-video-con-esqueleto.md) | Fotogramas clave y video corto con esqueleto en el reporte: bucket aparte, falla suave y costo medido | vigente (falta aplicar la migración y publicar) |
+| [034](034-dominio-propio-para-la-aplicacion-y-el-correo.md) | Dominio `.me` propio para la aplicación y el correo, con el DNS en Cloudflare (guía paso a paso en `docs/guia-dominio-correo-y-hosting.md`) | vigente (pendiente del nombre del dominio) |
