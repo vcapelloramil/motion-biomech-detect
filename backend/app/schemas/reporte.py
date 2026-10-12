@@ -145,7 +145,9 @@ class RepeticionSecuenciacion(_Base):
     hasta_s: float = Field(ge=0.0)
     auditable: bool
     # Cuando la repetición no es auditable, estos tres quedan en None.
-    # `orden_observado` es el de la cadena completa (se documenta siempre que se midió). `correcto` es el veredicto del par
+    # `orden_observado` es el de la cadena completa (se documenta siempre que se midió); si el brazo no se pudo medir pero la cadera
+    # y el tronco sí y son ordenables, es el de esos dos y la repetición es auditable (el brazo no tiene pico en `picos`).
+    # `correcto` es el veredicto del par
     # cadera -> tronco, el único con referencia en la literatura (decisión 011), y solo existe donde el gesto y el encuadre
     # tienen referencia del orden esperado y el Criterio 1 cumplido (decisión 031); None = "sin evaluar" o no ordenable.
     orden_observado: list[Segmento] | None = None

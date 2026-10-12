@@ -5,7 +5,7 @@ Dos productos, ambos opcionales (si fallan, el reporte sale igual con ``artefact
 * **Tres fotogramas clave** (decisión 024, especificación §6 "Tres momentos del golpe"): el fotograma real del video, con el esqueleto,
   en el pico de velocidad de la cadera, del tronco y del brazo. JPEG de a lo sumo 720 px de alto.
 * **Un video corto con el esqueleto** (§4.5.3: se conserva como evidencia visual aunque el original se borre a los 7 días): la ventana
-  del golpe más un margen, acercado al jugador, en 360 px de alto, H.264 liviano, **en cámara lenta fija** (``FPS_REPRODUCCION`` cuadros por segundo sobre
+  del golpe más un margen, acercado al jugador, en 720 px de alto, H.264 liviano, **en cámara lenta fija** (``FPS_REPRODUCCION`` cuadros por segundo sobre
   la grilla uniforme del análisis), para que se pueda mirar cuadro a cuadro. El factor se informa: nunca se disfraza.
 
 Qué se dibuja (R3/R4): solo puntos detectados con confianza >= ``UMBRAL_DIBUJO``. Un punto dudoso **no se dibuja** (no se completa ni se
@@ -30,10 +30,10 @@ from app.engine.segmentos_corporales import ORDEN_ESPERADO, SegmentoCadena
 
 UMBRAL_DIBUJO = 0.5          # confianza mínima para dibujar un punto (visibility de MediaPipe)
 ALTO_FOTOGRAMA_CLAVE = 720   # px
-ALTO_VIDEO = 360             # px
+ALTO_VIDEO = 720             # px (12/10: a 360 px / CRF 30 el video de 12 s pesaba 160 KB y se veía mal)
 FPS_REPRODUCCION = 30        # cuadros por segundo del video de salida
 MARGEN_VIDEO_S = 0.5         # antes y después de la ventana del golpe
-CRF_VIDEO = 30               # H.264: calidad baja, archivo chico
+CRF_VIDEO = 20               # H.264: ~1,5 MB para 12 s a 720 px; ffmpeg de 1 hilo, ~76 MB de memoria
 CALIDAD_JPEG = 80
 
 # Colores BGR (OpenCV). Los de segmento son los de la especificación §2: cadera violeta, tronco turquesa, brazo blanco.

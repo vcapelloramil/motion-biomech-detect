@@ -531,6 +531,8 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
                 metodo_segmentacion="ancla_torso",
                 regularizacion=regularizacion,
                 artefactos=artefactos,
+                seq_fuente=seq_fuente,
+                pts_fuente=pts_render,
             )
             repeticiones_json = datos_reporte["secuenciacion"]["repeticiones"]
             # Una sola fuente: lo que se guarda en las columnas planas y el estado final salen del reporte validado, no del motor crudo

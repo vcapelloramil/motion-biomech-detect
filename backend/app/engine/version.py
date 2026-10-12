@@ -42,6 +42,10 @@ del motor"); el discriminador práctico es la ``version_contrato`` del propio re
   "no auditable" la cadera y el tronco simultáneos, aplica la tolerancia del 5 % del piso de R1 (114 fps) y, desde la
   decisión 032, decide "ordenable" con **una sola tolerancia de 8,33 ms** (``engine/tolerancia_orden.py``) y genera los
   fotogramas clave y el video con esqueleto (``engine/render.py``). Los reportes del contrato 1.3 son de esta versión.
+- 0.5.1 — Regla de cobertura de la ventana (12/10/2026): el pico de un segmento no se reporta si se midió menos del 75 % de la
+  ventana (un máximo censurado no es el máximo); con el brazo sin medir y la cadera y el tronco ordenables, la repetición se informa
+  con esos dos. Video con esqueleto a 720 px y CRF 20. Magnitudes articulares como dato (``engine/magnitudes.py``: separación
+  cadera-hombro máxima y ángulos de rodilla y codo en el pico del tronco). Sin cambio de contrato.
 """
 
-__version__ = "0.5.0"
+__version__ = "0.5.1"

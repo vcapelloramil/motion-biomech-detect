@@ -30,6 +30,10 @@ from app.engine.segmentos_corporales import (
 PROMINENCIA_MIN_ABS = 40.0          # °/s
 PROMINENCIA_MIN_REL = 0.15          # fracción del pico máximo de la ventana
 SEPARACION_MIN_S = 0.05            # s entre picos
+# Un pico buscado en una ventana a medio medir es el máximo de lo que se vio, no el de la ventana: puede haber un pico más alto en el
+# tramo sin datos (un máximo CENSURADO). Si se midió menos de esta fracción de la ventana, el pico del segmento no se reporta (R3).
+# Caso real (12/10/2026): codo dominante con el 57 % de la ventana sin datos; el "pico del brazo" era el de la deceleración.
+COBERTURA_MIN_VENTANA = 0.75
 # Segmentación automática: "quietud" = velocidad total por debajo de esta fracción
 # del máximo del clip, sostenida.
 QUIETUD_REL = 0.10
@@ -135,11 +139,20 @@ def detectar_pico(
     offset_frame: int,
     frames_excluidos: set[int],
     techo: float,
+    cobertura_min: float | None = None,
 ) -> tuple[int, float] | tuple[None, str]:
-    """Devuelve (frame_absoluto, velocidad) del pico dominante, o (None, motivo)."""
+    """Devuelve (frame_absoluto, velocidad) del pico dominante, o (None, motivo).
+
+    ``cobertura_min``: fracción mínima de la serie que tiene que estar medida (``None`` = sin exigencia; el ancla de todo el clip
+    no la usa). Debajo de ese piso el pico no se reporta: sería el máximo de una parte de la ventana."""
     valido = omega[~np.isnan(omega)]
     if valido.size < 5:
         return None, "serie demasiado corta o incompleta"
+    if cobertura_min is not None and omega.size and valido.size / omega.size < cobertura_min:
+        return None, (
+            f"ventana incompleta: se midió el {100.0 * valido.size / omega.size:.0f} % de la ventana "
+            f"(mínimo {100.0 * cobertura_min:.0f} %)"
+        )
     tope = float(np.nanmax(omega))
     prominencia = max(PROMINENCIA_MIN_ABS, PROMINENCIA_MIN_REL * tope)
     distancia = max(1, int(SEPARACION_MIN_S * fps))
@@ -319,7 +332,7 @@ def evaluar_repeticion(
         )
         resultado = detectar_pico(
             omega, fps=fps, offset_frame=d, frames_excluidos=excluidos,
-            techo=techo_velocidad(seg),
+            techo=techo_velocidad(seg), cobertura_min=COBERTURA_MIN_VENTANA,
         )
         if resultado[0] is None:
             picos[seg] = PicoSegmento(

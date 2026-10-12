@@ -208,3 +208,40 @@ def test_ancla_invalida_o_combinada_con_otro_modo_se_rechaza():
         secuenciar(seq, lado_dominante="der", ancla="torso", clip_completo=True)
     with pytest.raises(ValueError, match="excluyente"):
         secuenciar(seq, lado_dominante="der", ancla="torso", manual=[(0.0, 0.3)])
+
+
+# --- cobertura de la ventana (12/10/2026): un pico en una ventana a medio medir es un máximo censurado -----------
+
+
+def _sin_codo(seq, desde, hasta):
+    """La misma secuencia sin el codo derecho en los fotogramas [desde, hasta): el brazo queda sin datos ahí."""
+    from dataclasses import replace
+
+    frames = []
+    for f in seq.frames:
+        if desde <= f.indice < hasta:
+            mundo = {a: p for a, p in f.puntos_mundo.items() if a != A.CODO_DER}
+            f = PoseFrame(f.indice, f.detectado, puntos=f.puntos, puntos_mundo=mundo)
+        frames.append(f)
+    return replace(seq, frames=frames)
+
+
+def test_con_la_ventana_a_medio_medir_el_pico_del_brazo_no_se_reporta():
+    from app.engine.sequencing import COBERTURA_MIN_VENTANA, Ventana
+
+    seq = _sin_codo(_seq_con_picos(0.25, 0.42, 0.60), 0, 110)       # el codo falta en los primeros 110 de 180 fotogramas
+    r = evaluar_repeticion(seq, Ventana(0, 179, FPS), 1, lado_dominante="der", tramos_excluidos=[])
+    brazo = r.picos[S.BRAZO]
+    assert brazo is not None and not brazo.auditable and "ventana incompleta" in brazo.motivo
+    assert "mínimo 75 %" in brazo.motivo and COBERTURA_MIN_VENTANA == 0.75
+    # cadera y tronco se miden igual: el faltante es del brazo
+    assert r.picos[S.PELVIS].auditable and r.picos[S.TORSO].auditable
+    assert r.orden_observado is None and not r.auditable
+
+
+def test_con_poca_falta_el_pico_del_brazo_se_reporta():
+    from app.engine.sequencing import Ventana
+
+    seq = _sin_codo(_seq_con_picos(0.25, 0.42, 0.60), 0, 20)        # 20 de 180 fotogramas: se midió el ~89 %
+    r = evaluar_repeticion(seq, Ventana(0, 179, FPS), 1, lado_dominante="der", tramos_excluidos=[])
+    assert r.picos[S.BRAZO].auditable and r.auditable

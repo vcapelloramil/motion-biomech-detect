@@ -34,9 +34,11 @@ from datetime import datetime
 from typing import Any
 from uuid import UUID
 
+from app.engine import magnitudes
 from app.engine.pose.articulaciones import ArticulacionCanonica
 from app.engine.pose.base import SecuenciaPose
 from app.engine.preparacion import TramoExcluido
+from app.engine.render import indice_fuente_mas_cercano
 from app.engine.segmentos_corporales import ORDEN_ESPERADO, SegmentoCadena, articulaciones_de_segmento
 from app.engine.sequencing import ResultadoRepeticion, ResumenSecuenciacion
 from app.engine.tolerancia_orden import TOLERANCIA_ORDEN_MS, es_ordenable
@@ -420,6 +422,74 @@ def _observaciones(
     return obs
 
 
+# --- magnitudes articulares ------------------------------------------------------------------------------
+
+
+def _magnitudes_articulares(
+    primera: ResultadoRepeticion,
+    conf_seq: SecuenciaPose,
+    secuencia: SecuenciaPose,
+    seq_fuente: SecuenciaPose | None,
+    pts_fuente: Any,
+    fps_grilla: float,
+    tramos_excluidos: list[TramoExcluido],
+) -> list[dict[str, Any]]:
+    """Separación cadera-hombro máxima y los ángulos de rodilla y codo en el pico del tronco, con la definición con que se validaron
+    (``engine/magnitudes``). Un valor que no cumple su regla (cobertura de la ventana, confianza >= 0,6 en los tres puntos) sale con
+    ``valor = None`` y ``auditable = False``: nunca se estima (R3)."""
+    v = primera.ventana
+    salida: list[dict[str, Any]] = []
+
+    # Los fotogramas con alguna de las cuatro articulaciones en un tramo no auditable no cuentan (como en la velocidad).
+    excluidos = {
+        i
+        for t in tramos_excluidos
+        if t.articulacion in magnitudes.ARTICULACIONES_SEPARACION
+        for i in range(max(0, t.desde_frame), t.hasta_frame + 1)
+    }
+    mundo = [({} if i in excluidos else f.puntos_mundo) for i, f in enumerate(conf_seq.frames)]
+    sep = magnitudes.separacion_cadera_hombro_max(mundo, v.desde_frame, v.hasta_frame)
+    if sep["auditable"]:
+        conf = _confianza_en_frame(conf_seq, sep["frame"], magnitudes.ARTICULACIONES_SEPARACION)
+    else:
+        conf = _confianza_en_ventana(conf_seq, v.desde_frame, v.hasta_frame, magnitudes.ARTICULACIONES_SEPARACION)
+    salida.append(
+        {
+            "nombre": "separacion_cadera_hombro_max",
+            "valor": round(sep["valor"], 1) if sep["auditable"] else None,
+            "unidad": "grados",
+            "confianza": conf,
+            "auditable": bool(sep["auditable"]),
+        }
+    )
+
+    # Rodilla y codo en el instante del pico del tronco, sobre el fotograma REAL más cercano (no uno interpolado).
+    pico = primera.picos.get(SegmentoCadena.TORSO)
+    if pico is None or not pico.auditable:
+        return salida
+    if seq_fuente is not None:
+        idx = indice_fuente_mas_cercano(pico.frame / fps_grilla, pts_fuente, fps_grilla, seq_fuente.n_frames)
+        origen = seq_fuente
+    else:
+        idx, origen = pico.frame, secuencia
+    if not 0 <= idx < origen.n_frames:
+        return salida
+    puntos = origen.frames[idx].puntos
+    for angulo in ("rodilla", "codo"):
+        r = magnitudes.angulo_en_el_frame(puntos, angulo, origen.ancho, origen.alto)
+        nombre = f"angulo_{angulo}_{r['lado']}_en_pico_tronco" if r["lado"] else f"angulo_{angulo}_en_pico_tronco"
+        salida.append(
+            {
+                "nombre": nombre,
+                "valor": round(r["valor"], 1) if r["auditable"] else None,
+                "unidad": "grados",
+                "confianza": _acotar(r["confianza"]),
+                "auditable": bool(r["auditable"]),
+            }
+        )
+    return salida
+
+
 # --- ensamblado ------------------------------------------------------------------------------------------
 
 
@@ -448,6 +518,8 @@ def ensamblar_reporte(
     metodo_segmentacion: str = "ancla_torso",
     regularizacion: dict | None = None,
     artefactos: dict[str, Any] | None = None,
+    seq_fuente: SecuenciaPose | None = None,
+    pts_fuente: Any = None,
 ) -> dict[str, Any]:
     """Devuelve el reporte como ``dict`` JSON-compatible, ya validado contra el contrato.
 
@@ -491,7 +563,12 @@ def ensamblar_reporte(
     for r in resultados:
         # Decisión 014/015 (corrección del 29/9): con cadera y tronco a un fotograma o menos el orden no se puede establecer, y la
         # repetición se muestra como no auditable con ese motivo; el motor solo ordena por instantes y no conoce la tolerancia.
-        no_ordenable = _evaluar_par(r).estado == "no_ordenable"
+        par = _evaluar_par(r)
+        no_ordenable = par.estado == "no_ordenable"
+        # Cadera y tronco ordenables aunque el brazo no se haya podido medir (p. ej. codo dominante sin datos en media ventana, 12/10):
+        # la repetición es auditable en lo que se midió, con el orden de los segmentos medidos (2 en lugar de 3). El brazo queda
+        # como "no se pudo medir" en las observaciones. Con los tres medidos nada cambia: es el orden del motor.
+        solo_el_par = par.estado in ("cadera_primero", "tronco_primero") and not r.auditable
         picos = []
         for seg in ORDEN_ESPERADO:
             p = r.picos.get(seg)
@@ -511,13 +588,16 @@ def ensamblar_reporte(
                 "indice": r.indice,
                 "desde_s": round(r.ventana.desde_s, 4),
                 "hasta_s": round(r.ventana.hasta_s, 4),
-                "auditable": bool(r.auditable) and not no_ordenable,
+                "auditable": (bool(r.auditable) and not no_ordenable) or solo_el_par,
                 "orden_observado": (
-                    [s.value for s in r.orden_observado] if r.orden_observado and not no_ordenable else None
+                    [s.value for s in r.orden_observado] if r.orden_observado and not no_ordenable
+                    else [d["segmento"] for d in sorted(picos, key=lambda d: d["instante_s"])] if solo_el_par
+                    else None
                 ),
                 "correcto": _veredicto(gesto, encuadre, r),
                 "motivo_no_auditable": (
-                    "simultaneidad al límite de resolución: la cadera y el tronco quedaron a un fotograma o menos"
+                    None if solo_el_par
+                    else "simultaneidad al límite de resolución: la cadera y el tronco quedaron a un fotograma o menos"
                     if no_ordenable and not r.motivo_no_auditable
                     else r.motivo_no_auditable
                 ),
@@ -564,6 +644,11 @@ def ensamblar_reporte(
                     "auditable": bool(medible),
                 }
             )
+
+    if primera is not None:
+        metricas.extend(
+            _magnitudes_articulares(primera, conf_seq, secuencia, seq_fuente, pts_fuente, fps_grilla, filtrada.tramos_excluidos)
+        )
 
     datos = {
         "version_contrato": VERSION_CONTRATO,

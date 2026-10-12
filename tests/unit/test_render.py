@@ -136,7 +136,7 @@ def test_genera_tres_fotogramas_clave_y_un_video_con_el_factor_lento_declarado(t
          "-of", "csv=p=0", str(v.archivo)],
         capture_output=True, text=True, check=True,
     ).stdout.strip().split(",")
-    assert int(cuadros[0]) <= 360 and int(cuadros[0]) % 2 == 0 and int(cuadros[1]) == 120
+    assert int(cuadros[0]) <= 720 and int(cuadros[0]) % 2 == 0 and int(cuadros[1]) == 120
 
 
 @requiere_ffmpeg

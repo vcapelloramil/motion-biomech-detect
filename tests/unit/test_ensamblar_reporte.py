@@ -259,7 +259,10 @@ def test_con_escala_desconocida_las_velocidades_no_son_auditables(seq_ordenada):
     """R3: velocidades y ms con una escala sin confirmar son un dato equivocado presentado como bueno."""
     datos = _ensamblar(seq_ordenada, escala=False)
     assert datos["trazabilidad"]["escala_temporal_conocida"] is False
-    assert all(m["valor"] is None and m["auditable"] is False for m in datos["metricas"])
+    velocidades = [m for m in datos["metricas"] if m["nombre"].startswith(PREFIJO_METRICA_VELOCIDAD)]
+    assert velocidades and all(m["valor"] is None and m["auditable"] is False for m in velocidades)
+    # un ángulo no depende de la escala de tiempo: la separación cadera-hombro sigue siendo un dato auditable
+    assert next(m for m in datos["metricas"] if m["nombre"] == "separacion_cadera_hombro_max")["auditable"] is True
     assert any("escala temporal" in o["texto"] and o["severidad"] == "no_auditable" for o in datos["observaciones"])
     # el orden sí se documenta
     assert datos["secuenciacion"]["repeticiones"][0]["orden_observado"] == ["pelvis", "torso", "brazo"]
@@ -267,8 +270,9 @@ def test_con_escala_desconocida_las_velocidades_no_son_auditables(seq_ordenada):
 
 def test_las_metricas_de_velocidad_se_nombran_y_se_leen_de_vuelta(seq_ordenada):
     datos = _ensamblar(seq_ordenada)
-    assert [m["nombre"] for m in datos["metricas"]] == [f"{PREFIJO_METRICA_VELOCIDAD}{s}" for s in ("pelvis", "torso", "brazo")]
-    assert all(m["auditable"] and m["valor"] > 0 and m["unidad"] == "grados/s" for m in datos["metricas"])
+    velocidades = [m for m in datos["metricas"] if m["nombre"].startswith(PREFIJO_METRICA_VELOCIDAD)]
+    assert [m["nombre"] for m in velocidades] == [f"{PREFIJO_METRICA_VELOCIDAD}{s}" for s in ("pelvis", "torso", "brazo")]
+    assert all(m["auditable"] and m["valor"] > 0 and m["unidad"] == "grados/s" for m in velocidades)
     assert segmento_de_metrica_velocidad(nombre_metrica_velocidad("torso")) == "torso"
     assert segmento_de_metrica_velocidad("angulo_max_rodilla") is None
 
@@ -423,3 +427,62 @@ def test_con_veredicto_la_fuente_sigue_disponible_en_el_detalle(seq_ordenada):
     (obs,) = _obs(datos, "correcto")
     assert "orden esperado" in obs["texto"] and "Kovacs" not in obs["texto"]
     assert "Kovacs y Ellenbecker (2011)" in obs["referencia"]
+
+
+# --- el brazo sin medir no tira abajo el par cadera-tronco (ajuste del 12/10) ----------------------------------------
+
+
+def _rep_sin_brazo(t_pelvis: float, t_torso: float):
+    from app.engine.segmentos_corporales import SegmentoCadena as S
+    from app.engine.sequencing import PicoSegmento, ResultadoRepeticion, Ventana
+
+    fps = 240.0
+    picos = {
+        S.PELVIS: PicoSegmento(S.PELVIS, round(t_pelvis * fps), t_pelvis, 500.0),
+        S.TORSO: PicoSegmento(S.TORSO, round(t_torso * fps), t_torso, 700.0),
+        S.BRAZO: PicoSegmento(S.BRAZO, -1, float("nan"), float("nan"), auditable=False,
+                              motivo="ventana incompleta: se midió el 43 % de la ventana (mínimo 75 %)"),
+    }
+    return ResultadoRepeticion(1, Ventana(0, 120, fps), picos, None, None, False, "sin pico auditable para: brazo")
+
+
+def test_con_el_brazo_sin_medir_la_cadera_y_el_tronco_se_informan_y_la_repeticion_es_auditable(seq_ordenada):
+    datos = _ensamblar_con(seq_ordenada, [_rep_sin_brazo(0.2, 0.2 + 5 / 240.0)])
+    rep = datos["secuenciacion"]["repeticiones"][0]
+    assert rep["auditable"] is True and rep["orden_observado"] == ["pelvis", "torso"] and rep["motivo_no_auditable"] is None
+    assert [p["segmento"] for p in rep["picos"]] == ["pelvis", "torso"]          # el brazo no tiene pico: no se inventa
+    assert datos["segmentacion"]["repeticiones_auditables"] == 1
+    assert datos["secuenciacion"]["resumen"]["orden_predominante"] == ["pelvis", "torso"]
+    obs = {o["severidad"] for o in datos["observaciones"]}
+    assert "no_auditable" in obs                                                # "no se pudo medir el brazo"
+    Reporte.model_validate(datos)
+
+
+def test_con_el_brazo_sin_medir_y_la_cadera_pegada_al_tronco_sigue_sin_orden(seq_ordenada):
+    datos = _ensamblar_con(seq_ordenada, [_rep_sin_brazo(0.2, 0.2 + 1 / 240.0)])
+    rep = datos["secuenciacion"]["repeticiones"][0]
+    assert rep["auditable"] is False and rep["orden_observado"] is None and rep["correcto"] is None
+    assert [p["segmento"] for p in rep["picos"]] == ["pelvis", "torso"]
+
+
+# --- magnitudes articulares como dato (plan §8, punto 3) ------------------------------------------------------------
+
+
+def test_el_reporte_trae_la_separacion_cadera_hombro_con_su_confianza(seq_ordenada):
+    datos = _ensamblar(seq_ordenada)
+    por_nombre = {m["nombre"]: m for m in datos["metricas"]}
+    sep = por_nombre["separacion_cadera_hombro_max"]
+    assert sep["auditable"] and sep["unidad"] == "grados" and 0 < sep["valor"] <= 180
+    assert sep["confianza"] == pytest.approx(0.9)
+    # la secuencia sintética no tiene puntos de imagen (solo métricos): los ángulos de rodilla y codo NO se inventan
+    angulos = [m for m in datos["metricas"] if m["nombre"].startswith("angulo_")]
+    assert {m["nombre"] for m in angulos} <= {"angulo_rodilla_en_pico_tronco", "angulo_codo_en_pico_tronco"}
+    assert all(m["valor"] is None and m["auditable"] is False for m in angulos)
+    Reporte.model_validate(datos)
+
+
+def test_las_metricas_nuevas_no_son_velocidades_ni_entran_a_la_tabla_de_metricas_del_servidor(seq_ordenada):
+    datos = _ensamblar(seq_ordenada)
+    nuevas = [m["nombre"] for m in datos["metricas"] if not m["nombre"].startswith(PREFIJO_METRICA_VELOCIDAD)]
+    assert "separacion_cadera_hombro_max" in nuevas
+    assert all(segmento_de_metrica_velocidad(n) is None for n in nuevas)
