@@ -183,6 +183,9 @@ def main(argv: list[str] | None = None) -> int:
         print("El árbol de git tiene cambios sin commitear en backend/app, tests o docs/decisiones:\n" + sucio)
         return 2
 
+    # El commit se fija al ARRANCAR: una corrida larga puede cruzarse con commits nuevos y el resultado tiene que quedar atado al
+    # código que realmente se ejecutó (el proceso ya lo cargó), no al HEAD del momento de escribir.
+    commit_inicio = _git(["rev-parse", "HEAD"], repo)
     alineacion = json.loads((repo / "docs" / "resultados" / "corpus-real-alineacion.json").read_text(encoding="utf-8"))
     cat = _catalogo(get_data_dir())
     fechas = fechas_propias(cat)
@@ -213,7 +216,7 @@ def main(argv: list[str] | None = None) -> int:
                 "generado_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
                 "decision": "032 y 035 / plan de recálculo §2 (Paso B)", "sesion": sesion,
                 "rol": "MEDICIÓN (conjunto de medición)" if sesion == 2 else "RÉPLICA EXPLORATORIA (no independiente)",
-                "version_motor": version_motor, "commit": _git(["rev-parse", "HEAD"], repo), "arbol_sucio": bool(sucio),
+                "version_motor": version_motor, "commit": commit_inicio, "arbol_sucio": bool(sucio),
                 "origen": "originales del iPhone a tasa real, regularizados a 240 Hz", "umbral": UMBRAL,
                 "tolerancia_primaria_ms": TOLERANCIA_ORDEN_S * 1000.0,
                 "excluidas": excluidas, "repeticiones_medidas": len(sub), "repeticiones_previstas": sum(
