@@ -25,6 +25,12 @@ La pantalla Procesando ya muestra "Tardó X" cuando hay datos.
 
 Para comparar: en la máquina de desarrollo el mismo archivo tarda 130 s de cómputo (corrida local del 9/10, sin cola ni arranque en frío).
 
+## Costo estimado de los artefactos (decisión 033, 12/10/2026)
+
+Medido en la PC de desarrollo sobre un recorte real de 3,1 s (626 fotogramas fuente): pose 134 s; **fotogramas clave + video con esqueleto 9,1 s (+6,8 %)**; el pico de memoria del proceso no cambia (460 MB,
+lo fija MediaPipe) y `ffmpeg` suma 56 MB como proceso aparte. Escalado con el factor medido en Render Free (×5,2): **+47 s** (11 min 18 s → ~12 min); en Standard, ~+11 s. **Falta medirlo en Render**: el log de
+`procesar_video` imprime "artefactos en X s" y el RSS pico.
+
 ## Pendiente
 
 - Registrar al menos una corrida por entorno (Free y, si se pasa a Standard, Standard) con las columnas nuevas.

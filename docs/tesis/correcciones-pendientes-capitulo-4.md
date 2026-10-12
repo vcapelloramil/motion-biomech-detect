@@ -49,8 +49,19 @@ Registradas el 9/10/2026 con las decisiones 029 y 030. **No se redacta nada toda
     Detalle y método en `docs/resultados/criterio4-latencia.md`. Se informa el valor medido, sin umbral.
 
 11. **Segunda grabación propia por el flujo completo (12/10/2026): revés de tres cuartos, orden tronco → cadera → brazo, ordenable.** Recorte sin cámara lenta de 3,0 s, capturado a 240 fps nominales (`IMG_6395.mov`, "Formato: Actual"):
-    tasa real media **199,9 fps** (16,7 % de fotogramas perdidos; 16,7 % de puntos interpolados al regularizar a 240 Hz). Pico de tronco en 0,300 s y de cadera en 0,308 s: **8,3 ms = 2 fotogramas**, por encima de la
-    tolerancia de la decisión 014, de modo que el orden **sí es establecible** y coincide con el orden modal del corpus para ese grupo (`tp`, 1b = 0,83). **n = 1**: se cita como dato de la autovalidación, no como
-    confirmación. El otro recorte del mismo video, con cámara lenta (12 s), llegó a **50 fps** y fue rechazado por el sistema (`archivo_convertido`) en 15 a 18 s, dos veces: es el caso del RNF-01 "archivo convertido por el teléfono".
+    tasa real media **199,9 fps** (16,7 % de fotogramas perdidos; 16,7 % de puntos interpolados al regularizar a 240 Hz). Pico de tronco en 0,300 s y de cadera en 0,308 s: **8,3 ms = 2 fotogramas de la grilla,
+    que es EXACTAMENTE la tolerancia unificada de la decisión 032 (1/120 s)**, así que el orden **no es establecible** (Δ ≤ 8,33 ms). *(Corrección del 12/10 noche: esta nota decía "por encima de la tolerancia,
+    sí es establecible", con la regla anterior de 1 fotograma de la grilla = 4,17 ms.)* El sentido (tronco antes que cadera) coincide con el orden modal del corpus para ese grupo (`tp`, 1b = 0,83), pero a esta resolución
+    no se puede afirmar. **n = 1**: se cita como dato de la autovalidación, no como confirmación. El otro recorte del mismo video, con cámara lenta (12 s), llegó a **50 fps** y fue rechazado por el sistema (`archivo_convertido`) en 15 a 18 s, dos veces: es el caso del RNF-01 "archivo convertido por el teléfono".
 
 Fuera del Capítulo 4, pero para la redacción: las limitaciones que registran las decisiones 020 (modo de captura declarado) y 022 (reintento) van a los Capítulos 6 y 7.
+
+12. **La tolerancia de "ordenable" es una sola, en milisegundos (decisión 032, 12/10/2026).** La medición original llamaba "1 fotograma" a 4,17 ms (240 fps nominales) pero el corpus era de 120 fps efectivos:
+    la tolerancia física con que se midieron los Criterios 1 y 3 es **8,33 ms**. El producto contaba fotogramas de la grilla de 240 Hz (4,17 ms) y mostró "tronco antes que cadera" con 8,3 ms; ahora usa la misma
+    regla del pre-registro del recálculo (Δ > 1/120 s). **Decirlo en el Capítulo 7**: la regla del producto y la de la medición son la misma y está en `engine/tolerancia_orden.py`.
+13. **Versiones del motor (RNF-02):** el motor cambió entre el 9 y el 12/10 con el sello 0.4.1; los reportes de esos días se distinguen por la versión del contrato (1.0 a 1.2) y no por el sello. Tabla en la bitácora
+    (12/10, "Versiones del motor"). Va a la trazabilidad (apartado 4.4.6 / RNF-02).
+14. **Esqueleto en el reporte (tabla 4.7, apartado 4.5.3):** hay tres fotogramas clave y un video corto en cámara lenta fija con el esqueleto, en un bucket aparte (decisión 033), generados por el motor con falla suave.
+    Todavía **no hay reproductor sincronizado**: el apartado 4.3.3 debe decir "video con esqueleto" y no "reproductor sincronizado" para el MVP. Costo medido: +7 % de tiempo, memoria sin cambio en el proceso principal.
+15. **Referencias de las maquetas.** `frontend/src/lib/reporte-mock.ts` (maqueta de Lovable, ruta `/reporte/` no enlazada) trae una lista de referencias (Elliott 2006, Kibler 1995, etc.) y valores (42°, 118°, 27°)
+    **que no salen de la tesis**. Ninguno se debe citar en el Capítulo 7 ni mostrar en la demo como medición.

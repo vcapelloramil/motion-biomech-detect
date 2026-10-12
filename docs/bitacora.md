@@ -6,6 +6,62 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-12 (noche) — Ajustes del primer reporte real: tolerancia única, esqueleto en el reporte, motor 0.5.0 y el reporte que evalúa más
+
+Pedido de Valentín tras la prueba del 12/10 (puntos 1 a 8). **Nada pusheado ni desplegado**; todo en `main` local. Suite rápida del servidor **454 passed** (431 antes), `bun test` **53 passed**, `tsc` y eslint
+(sin la regla de formato, que ya fallaba en el resto del repositorio) limpios.
+
+### Hecho
+
+1. **Tolerancia única de "ordenable": 1/120 s = 8,33 ms, estricta** (decisión 032). `engine/tolerancia_orden.py` es la constante compartida; el ensamblador la usa y el arnés del recálculo debe importarla. Con Δ ≤ 8,33 ms
+   el reporte dice "a esta resolución no se puede saber cuál fue primero". **El golpe del 12/10 (8,3 ms) pasa a no ordenable**: la nota 11 del Capítulo 7 está corregida. Es la regla del pre-registro del recálculo
+   (plan §3); lo que cambia respecto de la regla anterior es que se contaban fotogramas de la grilla de 240 Hz (4,17 ms) y no milisegundos.
+2. **Resolución real, no la de la grilla:** el gráfico dice "1 fotograma ≈ 5 ms a 200 fps reales"; la frase de simultaneidad y el detalle técnico también, con la tolerancia ("a menos de 8,3 ms uno del otro").
+3. **Motor 0.5.0** y **contrato 1.3** (aditivo: `trazabilidad.tolerancia_orden_ms`, `artefactos.overlay_info`). Tabla de versiones más abajo.
+4. **Cargar:** la instrucción completa va antes de elegir el archivo: recortar en Fotos → Editar → barra de rayitas, todo el tramo a velocidad normal → Opciones → Formato: Actual, y por qué (un recorte que
+   mantiene la cámara lenta llega a ~50 fps aunque se elija "Actual").
+5. **Esqueleto en el reporte** (decisión 033): tres fotogramas clave (picos de cadera, tronco y brazo) y un video corto con el esqueleto, acercados al jugador, en un bucket nuevo `artefactos`, y mostrados en el reporte
+   ("Tres momentos de tu golpe" + `<video>`). Generación opcional: si falla, el reporte sale igual. **Costo medido localmente: +9 s sobre 134 s (+7 %), el pico de memoria no sube; `ffmpeg` +56 MB aparte.**
+   Estimación Render: +47 s en Free (11 min 18 s → ~12 min), +11 s en Standard. **Recomendación: pasar a Standard antes de publicar esto** (margen de memoria de 32 MB en Free; ver 033).
+6. **Menores:** el encabezado ya no es "pegajoso" en el celular (ocupaba el 28 % de la pantalla y tapaba el comienzo de las secciones al hacer scroll); las dos tarjetas ya no repiten la línea de instantes
+   (las tarjetas muestran solo texto; el fundamento y la fuente están en el detalle, sin repetirse).
+7. **Criterio 4:** el dato de 11 min 18 s (677,8 s; cómputo 676,6 s) ya estaba en `criterio4-latencia.md` (fila 2, medido por la base); se agregó la estimación del costo de los artefactos.
+8. **El reporte que evalúa más — análisis en `docs/reporte-mas-valor.md`:** (a) **ni Elliott (2006) ni Kibler respaldan el orden en drive y revés en los textos del repositorio** (Elliott solo está en la maqueta
+   de Lovable; Kibler aparece sin año y habla de energía): no se agregó nada a `RESPALDO_POR_GRUPO`; hace falta página y pasaje de tu lectura; (b) tabla de qué calcula el motor / qué tiene rango citable / qué se
+   puede mostrar como dato (ninguna magnitud tiene rango en grados en la tesis); (c) consistencia entre golpes: costo 1,5–2 sesiones sobre la carga de varios golpes; (d) lenguaje simple hecho, etiqueta propuesta.
+   El orden de todo hasta la demo está en `docs/plan-mvp-punta-a-punta.md` §8.
+
+### Versiones del motor (RNF-02): desde qué commit rige cada sello
+
+El motor cambió entre el 9 y el 12/10 con el sello `0.4.1` puesto. Discriminadores prácticos: `version_contrato` del reporte y la fecha.
+
+| Sello | Estado del motor | Desde el commit | Qué lo distingue en un reporte |
+| --- | --- | --- | --- |
+| 0.4.1 | Original: E3 por segmentos, ingesta con la tasa del contenedor y la declaración del usuario | `661cb5e` (25/9) | contrato 1.0 · sin `fps_nominal` ni `regularizacion` |
+| 0.4.1 | + lectura de la tasa real por marcas de tiempo (decisión 029) | `c80a4a1` (9/10) | — (no se persistían reportes JSON todavía) |
+| 0.4.1 | + fotogramas visibles, rotación automática y regularización (decisión 030) | `18942d5` (9/10) | contrato 1.1 · `regularizacion` presente |
+| 0.4.1 | + reporte persistido, motivo `archivo_convertido`, veredicto por grupo (031), piso de R1 con 5 % | `43fc159` (9/10) | contrato 1.2 |
+| 0.4.1 | + alineación por fotogramas decodificados, "no ordenable a un fotograma de la grilla" | `6ab2b18` (9/10) | contrato 1.2 · tolerancia de 4,17 ms (sin `tolerancia_orden_ms`) |
+| **0.5.0** | + tolerancia única de 8,33 ms, artefactos, textos sin literatura en el nivel 1 | **el commit de esta entrada** (`git log -- backend/app/engine/version.py`) | contrato 1.3 · `tolerancia_orden_ms` presente |
+
+Los reportes anteriores **no se recalculan**: conservan su sello y su contrato.
+
+### Acciones de Valentín (en este orden)
+
+1. **Aplicar** `supabase/migrations/20261012000000_bucket_artefactos.sql` (panel de Supabase → SQL). Sin ella la subida de artefactos falla y el reporte sale sin ellos (falla suave).
+2. **Pasar Render a Standard** (decisión 023) y avisarme en el mismo paso para actualizar `render.yaml` (`plan: standard`). Recomendado antes del push (decisión 033).
+3. **Dar el OK para pushear** (Render redespliega) y **republicar el frontend** desde tu PowerShell (`bun run build` y `wrangler deploy` en `frontend/`).
+4. **Subir un golpe** (el recorte sin cámara lenta): tiene que aparecer "Tres momentos de tu golpe". Del log de Render: "artefactos en X s" y el RSS pico (es la medición que falta en Linux).
+5. **Decidir:** la etiqueta de la vista simple ("Solo registrado", propuesta); si seguís con el pasaje de Elliott/Kibler (pasame página y frase; yo recomiendo después del Paso A); el orden de §8 del plan.
+
+### Qué no se hizo y por qué
+
+- **Reproductor sincronizado, PDF, puntaje, comparación con la sesión anterior:** diferidos (plan §5). Los tres momentos y el video no los reemplazan.
+- **Ángulos dibujados sobre el esqueleto y ángulos en el reporte:** son el punto (b); necesitan una sesión propia (plan §8).
+- **Medición real de memoria en el contenedor Linux:** Docker no estaba en marcha; se mide con el primer golpe real en Render.
+
+---
+
 ## 2026-10-12 — NOTA DE TRASPASO (antes de /clear) · estado, pruebas del día y pendientes
 
 **Rama:** `main`; el commit de esta nota es el último y queda pusheado. Árbol limpio. Suite rápida del servidor **455 passed**, `-m requiere_supabase` **84 passed**, `-m requiere_render` en verde (9/10), frontend `bun test` **48 passed**.

@@ -126,7 +126,7 @@ E5 Auditoría y alertas
 
 ## 5. Estado actual
 
-**Fecha de referencia: 7/10/2026.**
+**Fecha de referencia: 7/10/2026** (motor, reporte y plan actualizados el 12/10: decisiones 032 y 033, `docs/plan-mvp-punta-a-punta.md` §8).
 
 - Capítulos 1, 2 y 3 de la tesis entregados. Capítulo 4: fecha objetivo 25/8/2026 (ya pasada); el texto
   vigente quedó escrito antes de que existiera motor funcional ("no existe código productivo" en su propia
@@ -135,8 +135,8 @@ E5 Auditoría y alertas
   modo de captura declarado a incluir en los Capítulos 6 y 7). Repasar esa lista
   antes de dar el capítulo por actualizado (incluye el esquema de datos del apartado 4.4.6, que pasó de
   siete a nueve tablas).
-- **Motor: Etapas 0 a 4 del plan cerradas** (`v0.5.0-etapa4`, en `main`). Versión `0.4.1` (no desactualizada:
-  ningún cambio en `engine/` desde ese bump, ver el propio `engine/version.py`). Pipeline completo de punta a
+- **Motor: Etapas 0 a 4 del plan cerradas** (`v0.5.0-etapa4`, en `main`). Versión **`0.5.0`** (desde el 12/10/2026,
+  decisión 032: antes de eso el motor cambió cuatro veces con el sello `0.4.1`; tabla de commits en la bitácora). Pipeline completo de punta a
   punta (ingesta → pose → filtrado de fase cero → cinemática → secuenciación) sobre corpus público y sobre la
   Fase B propia (dos sesiones, 110 clips, un jugador). Criterios 1, 2 y 3 del apartado 4.3.4 medidos
   formalmente; decisión 015 (sin repliegue de arquitectura, cinco salvedades documentadas sobre el orden por

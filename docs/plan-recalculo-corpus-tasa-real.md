@@ -52,7 +52,7 @@ La medición original (decisión 014) se congeló antes de medir. Esta también,
 | --- | --- | --- |
 | Umbral del Criterio 1 | **0,8**, sin cambios (1a y 1b ≥ 0,8 por grupo) | Es el del apartado 4.3.4. No se mueve para que cierre. |
 | Grupos | Los mismos (gesto × encuadre, par y cadena) | Comparabilidad. |
-| **Tolerancia de "ordenable"** | **Primaria: 8,3 ms** (equivale a la tolerancia "1 fotograma" de la medición a 120 Hz = 2 fotogramas a 240 Hz). **Sensibilidad: 4,2; 12,5; 16,7 ms** | La tolerancia en fotogramas no es comparable entre 120 y 240 Hz; en milisegundos sí. |
+| **Tolerancia de "ordenable"** | **Primaria: 8,3 ms** (equivale a la tolerancia "1 fotograma" de la medición a 120 Hz = 2 fotogramas a 240 Hz; **estricta: ordenable solo si Δ > 1/120 s**). **Sensibilidad: 4,2; 12,5; 16,7 ms**. **Una sola constante con el producto: `backend/app/engine/tolerancia_orden.py` (decisión 032); el arnés la importa, no la redefine** | La tolerancia en fotogramas no es comparable entre 120 y 240 Hz; en milisegundos sí. |
 | Qué es "el resultado" de la tesis | **B** (tasa real medida). **A** se informa como control. | B es el camino del producto y mide RNF-01. |
 | Qué se reporta si el resultado empeora | Se reporta igual, con la comparación contra la medición original lado a lado | Es un resultado para el Capítulo 7, no una corrección a ocultar. |
 | Criterio 3 | `separacion_cadera_hombro_max` (grados, sin cambios) e `instante_pico_torso_desde_max_sep_ms` (ms, **corregido**) | Solo la segunda depende del tiempo. |

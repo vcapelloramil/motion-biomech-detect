@@ -1,5 +1,7 @@
 # Plan del MVP de punta a punta — 6/10 → 2/11/2026 (colchón hasta el 6/11)
 
+> **12/10/2026:** el flujo de punta a punta **pasó**. Lo que queda hasta la demo a los profesores está ordenado en **§8** (propuesto, a aprobar).
+
 **Estado:** **aprobado por Valentín el 7/10/2026, con ajustes** (incorporados abajo). No reemplaza a `docs/plan-desarrollo.md`: lo recomprime. Donde este
 documento contradice a ese, vale este. Las decisiones que lo requerían están en `docs/decisiones/` (024 a 027) y las correcciones que quedan para la tesis, en
 `docs/tesis/correcciones-pendientes-capitulo-4.md`.
@@ -159,7 +161,7 @@ Cambio de alcance del 7/10: **no hay pruebas con otros usuarios; se mide con gra
 
 ### Diferido (fuera del MVP de punta a punta; si el tiempo aprieta, se recorta en este orden: primero lo primero de la lista)
 
-1. PDF exportable (E5.6) y video con esqueleto (E5.5) con el reproductor sincronizado (8.7); el Nivel 2 del reporte queda sin el reproductor.
+1. PDF exportable (E5.6) y el reproductor sincronizado (8.7). **El video con esqueleto y los tres fotogramas clave ya están (12/10, decisión 033)**; el Nivel 2 del reporte queda sin reproductor.
 2. **Puntaje de rendimiento y comparación con la sesión anterior** (E5.2), y con ellos la **Evolución real** (8.8).
 3. Reintento desde `parcial` (anotado en la decisión 022; mitigado con el aviso de "¿cámara lenta?" antes de subir).
 4. Control contra historial (decisión 020, requiere datos del Criterio 3).
@@ -184,3 +186,58 @@ Cambio de alcance del 7/10: **no hay pruebas con otros usuarios; se mide con gra
 2. **Correo (decisión 027):** esperar la verificación del Student Pack (A); si no sale, B. Es lo único que bloquea el registro de usuarios nuevos.
 3. **Render:** el cambio a Standard lo hacés vos cuando decidas, y en el mismo paso me avisás para actualizar `render.yaml`.
 4. Hechos el 7/10: usuario de prueba creado y confirmado en Supabase; Lovable desconectado de GitHub; tarea de eliminar cuenta y datos aprobada para la semana 3.
+
+
+## 8. Orden hasta la demo a los profesores (propuesto el 12/10/2026, a aprobar)
+
+**Qué cambió desde el 9/10:** el flujo de punta a punta **pasó** (12/10: golpe real → reporte con datos reales, 11 min 18 s en Free). Lo que falta ya no es el flujo: es (1) que el reporte diga más sin
+inventar, (2) que el sistema se vea y funcione "como público" y (3) validar el veredicto del saque de perfil, que es **bloqueante de la demo** (decisión 031).
+
+**Supuestos:** sesiones de ~medio día, **~1 por día, todos los días** (conservador: el 9/10 se hicieron ocho piezas en un día, pero ese no es un ritmo sostenido; a 1,5 por día todo
+se adelanta ~3 días). Estimación honesta: **12,5 sesiones ≈ 12 días** para lo imprescindible (**~24/10**); con un 25 % de colchón, **listo para mostrar el ~27/10**. Quedan 6 días hasta
+el 2/11: **entra, pero sin lugar para frentes nuevos**; la demo a los profesores se puede agendar para el **28–30/10**.
+
+### Núcleo: lo que tiene que estar para la demo
+
+| # | Qué | Ses. | Valor para el reporte / la demo | Depende de | Fecha estimada |
+| --- | --- | --- | --- | --- | --- |
+| 0 | **Acciones de Valentín** (bitácora 12/10): migración del bucket, Standard, OK de push, republicar, subir un golpe | 0,25 | Los tres momentos y el video llegan al reporte real; latencia ~2,5 min | — | 12–13/10 |
+| 1 | **Verificar en producción** lo del 12/10: artefactos, log de memoria en Linux, **latencia en Standard** (Criterio 4, fila 3) | 0,5 | Cierra la medición que falta; confirma que `ffmpeg` entra | 0 | 13/10 |
+| 2 | **Paso A del recálculo** + revisar `RESPALDO_POR_GRUPO` con la tolerancia ya unificada (decisiones 031 y 032) y comparar con las grabaciones nuevas | 1 | **Bloqueante de la demo**; decide si el "desvío leve" del saque de perfil es real o artefacto; destraba (a) | — | 13–14/10 |
+| 3 | **(b) Datos en el reporte:** separación cadera-hombro máxima, flexión de rodilla mínima, ángulo de codo, con confianza y error esperable, como dato (sin estado de juicio) | 1 | El reporte deja de ser solo "orden y velocidades"; prepara (c) | — | 14–15/10 |
+| 4 | **Cargar con varios golpes** (diseño nuevo + alta de varios golpes en una sesión + cola) | 2 | Prerrequisito de (c); es lo que pide la tesis (≥ 10 repeticiones) | — | 15–17/10 |
+| 5 | **(c) Consistencia entre golpes + vista de sesión** (agregador, `reportes_sesion`, tarjetas "Tus golpes entre sí") | 1,5 | **El mayor valor por esfuerzo:** evalúa de verdad, sin literatura | 4 | 17–18/10 |
+| 6 | Registro e Ingreso con el diseño nuevo | 1 | Primera impresión; "como público" | — | 18–19/10 |
+| 7 | Landing y Perfil con el diseño nuevo (Perfil: el botón de eliminar cuenta, ya real) | 2 | Lo primero y lo último que ven los profesores | — | 19–21/10 |
+| 8 | **Eliminar cuenta y datos, funcional** (incluye los objetos de **ambos** buckets) | 1 | Derecho de supresión (Ley 25.326); sin esto la demo "como público" no es defendible | 7 | 21–22/10 |
+| 9 | **Respaldo con restauración probada** y **recuperación al arranque (6.5)** | 1,25 | Un análisis no queda `procesando` para siempre; respaldo en Free (Supabase no lo incluye) | — | 22–23/10 |
+| 10 | **"Olvidé mi contraseña"** + correo propio (decisión 027) | 0,5 | Necesario "como público" | **Valentín:** dominio y Brevo/Gmail dedicado | 23/10 |
+| 11 | **Ensayo de la demo** (guion, datos de ejemplo marcados, un golpe por gesto subido) y congelar | 0,5 | Evita sorpresas | todo | 24/10 |
+| | **Total del núcleo** | **12,5** | | | **listo ~24/10; con colchón, ~27/10** |
+
+**Por qué este orden:** primero lo que **desbloquea** (0, 1, 2: sin el Paso A ni siquiera se sabe qué grupos tienen veredicto); después lo que **más valor le da al reporte con menos esfuerzo**
+(3 y 5); después lo que hace falta para que se vea y sea defendible como producto público (6 a 10); al final, el ensayo. La **etiqueta** de la vista simple (decisión tuya) y el **pasaje de
+Elliott/Kibler** (a) no consumen sesión: entran cuando los decidas (a, después del 2).
+
+### Si queda margen (en este orden de recorte: lo de abajo se cae primero)
+
+| # | Qué | Ses. | Nota |
+| --- | --- | --- | --- |
+| 12 | Puntaje de rendimiento + comparación con la sesión anterior (E5.2) | 2 | Sin número hasta la 2.ª sesión ("Desde tu 2.ª sesión"); Evolución real recién con ≥ 2 sesiones comparables |
+| 13 | PDF exportable (E5.6) | 1,5 | Está en el núcleo de la tabla 4.7; la vista de sesión ya tiene los datos |
+| 14 | Reproductor sincronizado (video + curvas + picos) | 2 | El video con esqueleto ya existe (decisión 033) y trae `overlay_info` para volver al eje del análisis |
+| 15 | Ángulos dibujados sobre el esqueleto | 0,5 | Solo con (3) hecho |
+| 16 | **Paso B del recálculo** (medición definitiva, 8 h de pose de noche) | 1 + noche | Es "el resultado" de la tesis (plan de recálculo §3); no bloquea la demo |
+| 17 | Autovalidación de los Criterios 1 a 4 con grabaciones propias por el camino real | — | Semana 4 del plan; el Criterio 2 es goniometría manual tuya (horas) |
+
+### Riesgos de este orden
+
+| Riesgo | Efecto | Respuesta |
+| --- | --- | --- |
+| **El Paso A deja al saque de perfil sin veredicto** (o invierte el orden) | El reporte del único gesto con referencia queda "solo registrado" | Es información, no un fallo: se documenta (Capítulo 7). El valor del reporte pasa a (3) y (5), que no dependen de esto |
+| Standard no se activa a tiempo | 11 min por golpe en la demo; sesiones de varios golpes de ~40 min | Pasarlo es **acción tuya de 5 minutos**; es el punto 0 por eso |
+| Dominio/correo (decisión 027) sin resolver | El 10 no sale | La demo no lo necesita para el flujo; queda como límite declarado |
+| Cargar con varios golpes más largo de lo estimado (4) | Corre todo lo demás | Recortar a "una sesión = hasta 3 golpes" y dejar el resto |
+| Un frente nuevo (ver las "investigaciones nuevas" de la regla del 9/10) | Se come el colchón | Se anota y se sigue |
+
+**Qué decidir hoy:** (1) aprobar el orden o cambiarlo; (2) pasar a Standard (punto 0); (3) la etiqueta "Solo registrado" u otra. Con eso arranco por el punto 1 y el Paso A.

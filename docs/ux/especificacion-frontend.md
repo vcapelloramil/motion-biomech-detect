@@ -77,7 +77,9 @@ Con sesión: **Biblioteca** · **Cargar** · **Perfil**. El reporte, el procesam
     - El navegador muestra, **antes de subir** y cuando puede leerlos, los fps que declara el archivo elegido ("este archivo llega a 100 fps") y, si son menos de 120, **avisa que el teléfono lo convirtió** y que no alcanza para el análisis completo, sin esperar a que falle en el servidor.
     - **El camino que conserva la captura (decisión 029, medido el 9/10/2026):** en el selector de Fotos de Safari, tocar **Opciones → Formato: Actual** (o subir el video desde la app **Archivos**). Con eso el archivo llega como el original del iPhone (HEVC, con las marcas de tiempo reales de cada fotograma, ~200 fps medios para una captura nominal de 240). Con el formato por defecto, iOS lo convierte a H.264 y descarta fotogramas (100 fps en un recorte de 2 s; 43 fps medios en una cámara lenta de 9 s): **no alcanza para el análisis completo**.
     - El formulario tiene que **decirlo antes de que el usuario elija el archivo**, con una imagen del botón "Opciones" y del selector "Formato: Actual". El texto del error cuando el archivo llega convertido (`motivo_fallo = archivo_convertido`, decisión 030) debe indicar ese camino y **no** pedir que revise el modo de captura. Texto: *"Tu teléfono convirtió el video al subirlo y llegó a N fps, por debajo de los 120 que hacen falta. En el selector tocá **Opciones → Formato: Actual**, o subilo desde la app Archivos."* (N sale de `videos.fps_real`, que en este caso se guarda porque se midió.) Solo se emite si el usuario declaró cámara lenta; con "Grabación normal" un video de menos de 120 fps queda en `parcial` por R1, sin culpar al teléfono.
-    - **Pendiente de probar:** que "Actual" también conserve las marcas reales en una **cámara lenta sin recortar** (la prueba usó el formato por defecto). Hasta entonces no se promete.
+    - **Probado el 12/10/2026:** un recorte que **mantiene la cámara lenta** llega convertido (50 fps) aunque se elija "Actual" y se rechaza (`archivo_convertido`); un recorte con **todo el tramo a velocidad normal**
+      (Editar → barra de rayitas) y "Actual" conserva los ~200 fps reales y se analiza completo. **La instrucción completa va antes de elegir el archivo:** recortar en Fotos, sacar la cámara lenta
+      (todo el tramo a velocidad normal) y, al subir, Opciones → Formato: Actual.
     - *(Una versión anterior de esta sección afirmaba que el recorte conservaba los 240 fps; la prueba del 7/10 lo refutó por el camino por defecto, y la del 9/10 mostró que sí se conserva con "Actual", con ~200 fps reales y no 240.)*
     - Un video que perdió fotogramas por el camino **no se puede recuperar** con ninguna de las tres opciones.
 - Selección múltiple de archivos (MP4, MOV). Validación previa en el navegador, por archivo:
@@ -110,6 +112,11 @@ Solo un golpe en estado `fallido` se puede reintentar, y lo que se ofrece depend
 3. **Tres momentos del golpe:** tres fotogramas reales del video, con el esqueleto, en el pico de cadera, de tronco y de brazo, y una frase ("Primero giró tu cadera, casi enseguida tu tronco…"). Selector de golpe; los golpes no ordenables llevan una marca y una explicación.
 4. **Comparado con vos mismo:** tarjetas con dirección (mayor, igual, menor) frente a la sesión anterior comparable, con el número chico debajo.
 5. Llamada a descargar el PDF o ver el detalle técnico.
+
+**Lenguaje de la vista simple (12/10/2026):** el texto principal **no cita la literatura** ni nombra criterios de validación: la cita (`referencia`) y la razón técnica (`fundamento`) van en el nivel 3 ("Ver detalle
+técnico → Observaciones y su fundamento") y en el PDF. Las tarjetas de "Lo más importante" muestran el estado y el texto llano; el fundamento no se repite entre tarjetas. Para un dato medido sin patrón:
+*"Todavía no tenemos un patrón de referencia para este golpe; lo registramos para que puedas compararte en tus próximas sesiones."* Etiqueta del estado "sin evaluar" para el jugador: propuesta en
+`docs/reporte-mas-valor.md` (d), a decidir.
 
 ### Vista detallada
 - Nivel 1: las mismas observaciones, compactas.
