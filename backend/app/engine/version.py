@@ -46,6 +46,8 @@ del motor"); el discriminador práctico es la ``version_contrato`` del propio re
   ventana (un máximo censurado no es el máximo); con el brazo sin medir y la cadera y el tronco ordenables, la repetición se informa
   con esos dos. Video con esqueleto a 720 px y CRF 20. Magnitudes articulares como dato (``engine/magnitudes.py``: separación
   cadera-hombro máxima y ángulos de rodilla y codo en el pico del tronco). Sin cambio de contrato.
+- 0.5.2 — Decisión 035 (13/10/2026, con el OK de Valentín): el saque no emite veredicto del orden (depende del encuadre) y el reporte contrasta
+  el encuadre declarado con el que se ve (``engine/encuadre.py``); si discrepa, avisa y no emite veredicto. Sin cambio de contrato.
 """
 
-__version__ = "0.5.1"
+__version__ = "0.5.2"

@@ -58,6 +58,16 @@ def _ensamblar(seq, *, gesto="saque", encuadre="perfil", escala=True, tramos=Non
     )
 
 
+@pytest.fixture
+def saque_perfil_con_veredicto(monkeypatch):
+    """La tabla real suspende el veredicto del saque (decisión 035); estas pruebas ejercitan la maquinaria del veredicto."""
+    from app import ensamblar_reporte as e
+
+    tabla = dict(e.RESPALDO_POR_GRUPO)
+    tabla[("saque", "perfil")] = e.RespaldoGrupo(e.REFERENCIA_ORDEN_SAQUE, True)
+    monkeypatch.setattr(e, "RESPALDO_POR_GRUPO", tabla)
+
+
 @pytest.fixture(scope="module")
 def seq_ordenada():
     return _seq_con_picos(0.25, 0.42, 0.60, semilla=1)
@@ -115,17 +125,18 @@ def _obs(datos, severidad):
     return [o for o in datos["observaciones"] if o["severidad"] == severidad]
 
 
-def test_la_tabla_de_respaldo_es_la_de_la_decision_031():
+def test_la_tabla_de_respaldo_es_la_de_la_decision_031_tras_la_035():
     """(a) referencia del orden: solo el saque (tesis, tabla 4.8). (b) Criterio 1, par pelvis-torso, con el tiempo real y la
     tolerancia de 8,33 ms, sesión 2 (Paso A, docs/resultados/paso-a-resumen.md): solo el saque de perfil. Veredicto = (a) y (b)."""
     con_veredicto = {g for g, r in RESPALDO_POR_GRUPO.items() if r.con_veredicto}
-    assert con_veredicto == {("saque", "perfil")}
+    assert con_veredicto == set()          # decisión 035: el orden del saque depende del encuadre, ningún grupo emite veredicto
+    assert {g for g, r in RESPALDO_POR_GRUPO.items() if r.depende_del_encuadre} == {("saque", "perfil"), ("saque", "tres_cuartos")}
     assert {g for g, r in RESPALDO_POR_GRUPO.items() if r.referencia_orden} == {("saque", "perfil"), ("saque", "tres_cuartos")}
     assert {g for g, r in RESPALDO_POR_GRUPO.items() if r.criterio1_cumplido} == {("saque", "perfil")}
     assert len(RESPALDO_POR_GRUPO) == 6
 
 
-def test_saque_de_perfil_con_la_cadera_primero_es_correcto_y_cita_la_tesis(seq_ordenada):
+def test_saque_de_perfil_con_la_cadera_primero_es_correcto_y_cita_la_tesis(seq_ordenada, saque_perfil_con_veredicto):
     datos = _ensamblar(seq_ordenada, gesto="saque", encuadre="perfil")
     rep = datos["secuenciacion"]["repeticiones"][0]
     assert rep["orden_observado"] == ["pelvis", "torso", "brazo"] and rep["correcto"] is True
@@ -135,7 +146,7 @@ def test_saque_de_perfil_con_la_cadera_primero_es_correcto_y_cita_la_tesis(seq_o
     assert obs["fundamento"]
 
 
-def test_saque_de_perfil_con_el_tronco_primero_es_desvio_leve_y_nunca_alerta_de_carga(seq_invertida):
+def test_saque_de_perfil_con_el_tronco_primero_es_desvio_leve_y_nunca_alerta_de_carga(seq_invertida, saque_perfil_con_veredicto):
     """Sin umbral con referencia no hay alerta (E5.1): el desvío del orden nunca llega a `alerta_de_carga`."""
     datos = _ensamblar(seq_invertida, gesto="saque", encuadre="perfil")
     rep = datos["secuenciacion"]["repeticiones"][0]
@@ -147,7 +158,7 @@ def test_saque_de_perfil_con_el_tronco_primero_es_desvio_leve_y_nunca_alerta_de_
 @pytest.mark.parametrize(
     ("gesto", "encuadre", "porque"),
     [
-        ("saque", "tres_cuartos", "criterio de repetibilidad"),  # tiene referencia, no cumple el Criterio 1
+        ("saque", "tres_cuartos", "depende del encuadre"),  # decisión 035: tiene referencia, pero el orden cambia con el encuadre
         ("drive", "perfil", "ni una validación propia"),  # sin referencia y (tras el Paso A) sin Criterio 1
         ("reves", "tres_cuartos", "ni una validación propia"),
         ("drive", "tres_cuartos", "ni una validación propia"),  # ninguna de las dos
@@ -164,7 +175,7 @@ def test_sin_las_dos_condiciones_el_orden_se_documenta_sin_evaluar(seq_ordenada,
     par = datos["observaciones"][0]
     # La razón técnica (con la literatura y la validación propia) va en el detalle, no en el texto que lee el jugador.
     assert par["severidad"] == "sin_evaluar" and porque in par["fundamento"] and par["referencia"] is None
-    assert "Todavía no" in par["texto"] and "puedas compararte en tus próximas sesiones" in par["texto"]
+    assert ("Todavía no" in par["texto"] and "puedas compararte en tus próximas sesiones" in par["texto"]) or         "cambia según desde dónde se grabó el golpe" in par["texto"]
     assert "no_auditable" not in {o["severidad"] for o in datos["observaciones"]}
     assert not _obs(datos, "correcto") and not _obs(datos, "desvio_leve")
 
@@ -208,7 +219,7 @@ def _rep_con_picos(t_pelvis: float, t_torso: float, t_brazo: float = 0.4):
         (0.2 - 3 / 240.0, "tronco_primero", False),
     ],
 )
-def test_el_par_cadera_tronco_respeta_la_tolerancia_de_8_3_ms(t_torso, estado, veredicto):
+def test_el_par_cadera_tronco_respeta_la_tolerancia_de_8_3_ms(t_torso, estado, veredicto, saque_perfil_con_veredicto):
     from app.ensamblar_reporte import _evaluar_par, _veredicto
 
     rep = _rep_con_picos(0.2, t_torso)
@@ -422,7 +433,7 @@ def test_el_texto_de_cada_observacion_no_menciona_la_literatura(request, gesto, 
         assert not re.search(r"literatura|Kovacs|Fleisig|Martin|et al\.|\(20\d\d\)|Criterio|validaci", o["texto"]), o["texto"]
 
 
-def test_con_veredicto_la_fuente_sigue_disponible_en_el_detalle(seq_ordenada):
+def test_con_veredicto_la_fuente_sigue_disponible_en_el_detalle(seq_ordenada, saque_perfil_con_veredicto):
     datos = _ensamblar(seq_ordenada, gesto="saque", encuadre="perfil")
     (obs,) = _obs(datos, "correcto")
     assert "orden esperado" in obs["texto"] and "Kovacs" not in obs["texto"]
@@ -486,3 +497,59 @@ def test_las_metricas_nuevas_no_son_velocidades_ni_entran_a_la_tabla_de_metricas
     nuevas = [m["nombre"] for m in datos["metricas"] if not m["nombre"].startswith(PREFIJO_METRICA_VELOCIDAD)]
     assert "separacion_cadera_hombro_max" in nuevas
     assert all(segmento_de_metrica_velocidad(n) is None for n in nuevas)
+
+
+# --- decisión 035: B (el saque no emite veredicto) y D (el encuadre declarado contra el visto) ------------------------
+
+
+@pytest.mark.parametrize("encuadre", ["perfil", "tres_cuartos"])
+def test_el_saque_no_emite_veredicto_en_ningun_encuadre_y_explica_por_que(seq_ordenada, encuadre):
+    datos = _ensamblar(seq_ordenada, gesto="saque", encuadre=encuadre)
+    rep = datos["secuenciacion"]["repeticiones"][0]
+    assert rep["correcto"] is None and datos["secuenciacion"]["resumen"]["repeticiones_correctas"] == 0
+    par = datos["observaciones"][0]
+    assert par["severidad"] == "sin_evaluar" and par["referencia"] is None
+    assert "cambia según desde dónde se grabó el golpe" in par["texto"]
+    assert "depende del encuadre" in par["fundamento"]
+    assert not any(o["severidad"] in ("correcto", "desvio_leve") for o in datos["observaciones"])
+
+
+def test_la_explicacion_de_la_suspension_no_cita_literatura_ni_estadistica(seq_ordenada):
+    texto = _ensamblar(seq_ordenada, gesto="saque", encuadre="perfil")["observaciones"][0]["texto"]
+    assert not re.search(r"literatura|Kovacs|Fleisig|et al\.|Fisher|p = |Criterio|validaci", texto)
+
+
+@pytest.fixture(scope="module")
+def seq_larga():
+    """Preparación larga (picos tarde): hombros paralelos al plano de la imagen (giro ~0°) antes del pico del tronco."""
+    return _seq_con_picos(1.2, 1.4, 1.6, n=480, semilla=3)
+
+
+def test_encuadre_declarado_distinto_del_visto_avisa_sin_tecnicismos_y_no_emite_veredicto(seq_larga, saque_perfil_con_veredicto):
+    # el video "se ve" de perfil (giro ~0° <= 42°) y el usuario eligió tres cuartos
+    datos = _ensamblar(seq_larga, gesto="saque", encuadre="tres_cuartos")
+    primera = datos["observaciones"][0]
+    assert primera["severidad"] == "no_auditable"
+    assert primera["texto"] == "El video parece grabado de perfil, pero elegiste tres cuartos. Revisá el encuadre antes de comparar tus resultados."
+    assert "Giro de la línea de hombros" in primera["fundamento"] and "no se emite veredicto" in primera["fundamento"]
+    assert datos["secuenciacion"]["repeticiones"][0]["correcto"] is None
+    Reporte.model_validate(datos)
+
+
+def test_el_aviso_no_bloquea_el_reporte_y_el_encuadre_coincidente_no_avisa(seq_larga):
+    datos = _ensamblar(seq_larga, gesto="saque", encuadre="perfil")
+    assert not any("parece grabado" in o["texto"] for o in datos["observaciones"])
+    assert datos["secuenciacion"]["repeticiones"][0]["orden_observado"] is not None   # el análisis sigue
+
+
+def test_con_discrepancia_ni_siquiera_un_grupo_con_veredicto_lo_emite(seq_larga, saque_perfil_con_veredicto):
+    """Si el video no es del encuadre declarado, el veredicto de ese grupo no corresponde (el caso del 12/10)."""
+    con = _ensamblar(seq_larga, gesto="saque", encuadre="perfil")["secuenciacion"]["repeticiones"][0]["correcto"]
+    sin = _ensamblar(seq_larga, gesto="saque", encuadre="tres_cuartos")["secuenciacion"]["repeticiones"][0]["correcto"]
+    assert con is not None and sin is None
+
+
+def test_drive_y_reves_no_se_contrastan_hasta_calibrarlos(seq_larga):
+    for gesto in ("drive", "reves"):
+        datos = _ensamblar(seq_larga, gesto=gesto, encuadre="tres_cuartos")
+        assert not any("parece grabado" in o["texto"] for o in datos["observaciones"])

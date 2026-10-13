@@ -29,11 +29,13 @@ from __future__ import annotations
 
 import math
 from collections import Counter
+import dataclasses
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Any
 from uuid import UUID
 
+from app.engine import encuadre as encuadre_mod
 from app.engine import magnitudes
 from app.engine.pose.articulaciones import ArticulacionCanonica
 from app.engine.pose.base import SecuenciaPose
@@ -66,18 +68,23 @@ REFERENCIA_ORDEN_SAQUE = "Kovacs y Ellenbecker (2011); Fleisig et al. (2003)"
 class RespaldoGrupo:
     referencia_orden: str | None   # (a) cita del orden esperado; None = sin referencia
     criterio1_cumplido: bool       # (b) Criterio 1 del par pelvis-torso, tolerancia de 1 fotograma, sesión 2 (decisión 014)
+    # (c) Decisión 035: el orden medido del gesto cambia según el encuadre (saque: perfil tronco primero, tres cuartos cadera primero,
+    # Paso B con los originales). Mientras no haya una medición independiente, no se emite veredicto en ningún encuadre de ese gesto.
+    depende_del_encuadre: bool = False
 
     @property
     def con_veredicto(self) -> bool:
-        return self.referencia_orden is not None and self.criterio1_cumplido
+        return self.referencia_orden is not None and self.criterio1_cumplido and not self.depende_del_encuadre
 
 
 # Las cifras de (b) son las del PASO A del recálculo (12/10/2026, ``docs/resultados/paso-a-resumen.md``): tiempo real a 120,2 fps y
 # tolerancia de 8,33 ms (la misma constante de ``engine/tolerancia_orden.py``), sesión 2. Reemplazan a las de la medición original
 # (decisión 014), que usaba el reloj y la ventana equivocados. Ver la decisión 031 (revisión) y la 035 (propuesta sobre el saque de perfil).
 RESPALDO_POR_GRUPO: dict[tuple[str, str], RespaldoGrupo] = {
-    ("saque", "perfil"): RespaldoGrupo(REFERENCIA_ORDEN_SAQUE, True),         # Paso A: 1a 0,83 · 1b 1,00 (orden modal tp); réplica 0,80 · 1,00
-    ("saque", "tres_cuartos"): RespaldoGrupo(REFERENCIA_ORDEN_SAQUE, False),  # Paso A: 1a 0,44 · 1b 0,62 (ordenable en 8 de 18)
+    # Decisión 035 (aplicada el 13/10 con el OK de Valentín): el saque no emite veredicto. Perfil cumple el Criterio 1 (1a 0,83 · 1b 1,00,
+    # tronco primero 8 de 8 con los originales) pero tres cuartos da cadera primero 7 de 7: el orden depende del encuadre.
+    ("saque", "perfil"): RespaldoGrupo(REFERENCIA_ORDEN_SAQUE, True, depende_del_encuadre=True),
+    ("saque", "tres_cuartos"): RespaldoGrupo(REFERENCIA_ORDEN_SAQUE, False, depende_del_encuadre=True),  # 1a 0,17 y 0,50
     ("drive", "perfil"): RespaldoGrupo(None, False),                          # Paso A: 1a 0,50 (antes 1,00); 1b 1,00 (tp)
     ("drive", "tres_cuartos"): RespaldoGrupo(None, False),                    # Paso A: 1a 0,00: ninguna ordenable
     ("reves", "perfil"): RespaldoGrupo(None, False),                          # Paso A: 1a 0,60 · 1b 0,67
@@ -206,10 +213,10 @@ def _evaluar_par(rep: ResultadoRepeticion) -> _Par:
     return _Par("cadera_primero" if delta_s > 0 else "tronco_primero", delta_s * 1000.0)
 
 
-def _veredicto(gesto: str, encuadre: str, rep: ResultadoRepeticion) -> bool | None:
+def _veredicto(gesto: str, encuadre: str, rep: ResultadoRepeticion, discrepa: bool = False) -> bool | None:
     """``correcto`` que se publica para una repetición: del par cadera -> tronco, y solo con respaldo (decisión 031). ``None`` =
     sin evaluar, no ordenable o no medido. Nunca fuerza un ``True``/``False`` sin fundamento (R4)."""
-    if not respaldo_del_grupo(gesto, encuadre).con_veredicto:
+    if discrepa or not respaldo_del_grupo(gesto, encuadre).con_veredicto:
         return None
     par = _evaluar_par(rep)
     if par.estado == "cadera_primero":
@@ -255,12 +262,25 @@ _SIN_VALIDACION = (
 )
 
 
+_SIN_ENCUADRE = (
+    "El orden entre tu cadera y tu tronco cambia según desde dónde se grabó el golpe, y todavía no podemos asegurar cuál es el correcto. "
+    "Por eso lo registramos sin evaluarlo."
+)
+
+
 def _cierre_sin_evaluar(respaldo: RespaldoGrupo) -> str:
+    if respaldo.depende_del_encuadre:
+        return _SIN_ENCUADRE
     return _SIN_PATRON if respaldo.referencia_orden is None else _SIN_VALIDACION
 
 
 def _porque_sin_evaluar(respaldo: RespaldoGrupo) -> str:
     """La razón técnica, para el detalle (nivel 3): ahí sí van la literatura y la validación propia."""
+    if respaldo.depende_del_encuadre:
+        return (
+            "En este gesto el orden medido depende del encuadre: con los originales a tasa real, el saque da la cadera primero en tres cuartos "
+            "(7 de 7 ordenables) y el tronco primero en perfil (8 de 8). Mientras no haya una medición independiente de la pelvis no se emite veredicto."
+        )
     if respaldo.referencia_orden is None and not respaldo.criterio1_cumplido:
         return "Para este gesto y encuadre todavía no hay una referencia del orden esperado ni una validación propia suficiente."
     if respaldo.referencia_orden is None:
@@ -269,9 +289,12 @@ def _porque_sin_evaluar(respaldo: RespaldoGrupo) -> str:
 
 
 def _obs_par(
-    gesto: str, encuadre: str, resultados: list[ResultadoRepeticion], escala: bool, fps_real: float | None = None
+    gesto: str, encuadre: str, resultados: list[ResultadoRepeticion], escala: bool, fps_real: float | None = None,
+    discrepa: bool = False,
 ) -> dict[str, Any]:
     respaldo = respaldo_del_grupo(gesto, encuadre)
+    if discrepa:  # el video no parece del encuadre declarado: el veredicto de ese grupo no corresponde (decisión 035, D)
+        respaldo = dataclasses.replace(respaldo, referencia_orden=None)
     pares = [(r, _evaluar_par(r)) for r in resultados]
     ordenables = [(r, p) for r, p in pares if p.estado in ("cadera_primero", "tronco_primero")]
 
@@ -393,6 +416,7 @@ def _observaciones(
     resultados: list[ResultadoRepeticion],
     escala_temporal_conocida: bool,
     fps_real: float | None = None,
+    aviso_encuadre: dict[str, Any] | None = None,
 ) -> list[dict[str, Any]]:
     if not resultados:
         return [
@@ -404,9 +428,11 @@ def _observaciones(
             }
         ]
     obs = [
-        _obs_par(gesto, encuadre, resultados, escala_temporal_conocida, fps_real),
+        _obs_par(gesto, encuadre, resultados, escala_temporal_conocida, fps_real, discrepa=aviso_encuadre is not None),
         _obs_brazo(resultados, escala_temporal_conocida),
     ]
+    if aviso_encuadre is not None:
+        obs.insert(0, aviso_encuadre)
     if not escala_temporal_conocida:
         obs.append(
             {
@@ -558,6 +584,24 @@ def ensamblar_reporte(
         "tolerancia_orden_ms": round(TOLERANCIA_ORDEN_MS, 3),
     }
 
+    # --- encuadre declarado contra encuadre visto (decisión 035, D): no bloquea nada, solo quita el veredicto y avisa
+    aviso_encuadre: dict[str, Any] | None = None
+    primero = resultados[0] if resultados else None
+    pico_torso = primero.picos.get(SegmentoCadena.TORSO) if primero is not None else None
+    if pico_torso is not None and pico_torso.auditable and gesto in encuadre_mod.GESTOS_CALIBRADOS:
+        visto = encuadre_mod.encuadre_visto([f.puntos_mundo for f in secuencia.frames], pico_torso.frame, fps_grilla)
+        if encuadre_mod.discrepa(gesto, encuadre, visto["visto"]):
+            aviso_encuadre = {
+                "severidad": "no_auditable",
+                "texto": encuadre_mod.aviso(encuadre, visto["visto"]),
+                "fundamento": (
+                    f"Giro de la línea de hombros en la preparación: {str(round(visto['giro_grados']))}° "
+                    f"(en el corpus propio: perfil 26–42°, tres cuartos 50–83°). Detecta una diferencia gruesa; no mide el ángulo de la cámara. "
+                    "Con esta discrepancia no se emite veredicto."
+                ),
+                "referencia": None,
+            }
+
     # --- secuenciación
     repeticiones: list[dict[str, Any]] = []
     for r in resultados:
@@ -594,7 +638,7 @@ def ensamblar_reporte(
                     else [d["segmento"] for d in sorted(picos, key=lambda d: d["instante_s"])] if solo_el_par
                     else None
                 ),
-                "correcto": _veredicto(gesto, encuadre, r),
+                "correcto": _veredicto(gesto, encuadre, r, aviso_encuadre is not None),
                 "motivo_no_auditable": (
                     None if solo_el_par
                     else "simultaneidad al límite de resolución: la cadera y el tronco quedaron a un fotograma o menos"
@@ -607,7 +651,7 @@ def ensamblar_reporte(
             }
         )
 
-    correctas = sum(1 for r in resultados if _veredicto(gesto, encuadre, r))
+    correctas = sum(1 for r in resultados if _veredicto(gesto, encuadre, r, aviso_encuadre is not None))
     # Las repeticiones auditables son las del JSON (ya sin las que no se pueden ordenar): el resumen se calcula de ahí.
     ordenes = [tuple(rp["orden_observado"]) for rp in repeticiones if rp["auditable"] and rp["orden_observado"]]
     predominante = Counter(ordenes).most_common(1)[0][0] if ordenes else ()
@@ -673,7 +717,7 @@ def ensamblar_reporte(
         },
         "metricas": metricas,
         "comparacion_propia": None,
-        "observaciones": _observaciones(gesto, encuadre, resultados, escala_temporal_conocida, fps_real),
+        "observaciones": _observaciones(gesto, encuadre, resultados, escala_temporal_conocida, fps_real, aviso_encuadre),
         # Rutas en Storage (no URLs) de lo que generó engine/render.py; {} = no generado (nunca "cero").
         "artefactos": artefactos or {},
     }

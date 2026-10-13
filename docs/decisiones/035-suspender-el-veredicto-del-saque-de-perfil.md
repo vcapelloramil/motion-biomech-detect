@@ -1,7 +1,7 @@
-# Decisión 035 — PROPUESTA: el saque no emite veredicto del orden mientras el orden dependa del encuadre; y se contrasta el encuadre declarado con el que se ve
+# Decisión 035 — El saque no emite veredicto del orden mientras el orden dependa del encuadre; y se contrasta el encuadre declarado con el que se ve
 
 **Fecha:** 12–13 de octubre de 2026 (reescrita con el Paso B del saque completo)
-**Estado:** **PROPUESTA, SIN APLICAR** (Valentín: "no la apliques sin mi OK"). Es el bloqueante de la decisión 031 para la demo del 28–30/10.
+**Estado:** **APLICADA el 13/10/2026 con el OK de Valentín: B y D** (motor 0.5.2). **C queda como trabajo futuro** (tres cuartos como encuadre evaluado, tras una validación independiente).
 **Afecta a:** `backend/app/ensamblar_reporte.py` (`RESPALDO_POR_GRUPO` y el aviso de encuadre) · decisión 031 · `docs/resultados/paso-b-saque.md` · Capítulo 7
 
 ---
@@ -53,3 +53,14 @@ había que confirmar si ese orden es real o un artefacto (del corpus convertido,
 - **Ningún grupo queda con veredicto** hasta nueva medición: el valor del reporte descansa en los datos articulares (ya en el reporte), la consistencia entre golpes y la comparación consigo mismo (plan §8).
 - **El Capítulo 7 gana dos resultados:** la dependencia del encuadre del orden (con el contraste contra el corpus convertido y contra los originales) y el criterio de coherencia entre encuadres que el propio sistema usa.
 - Si se prefiere **A**, la demo debe llevar la aclaración de que el "desvío leve" del saque de perfil está **sin validar** y el reporte del golpe del celular debería leerse como un saque de tres cuartos.
+
+## Aplicación (13/10/2026)
+
+- **B:** `RespaldoGrupo.depende_del_encuadre` (condición (c) de la 031): el saque, en perfil y en tres cuartos, **no emite veredicto**; la tarjeta dice *"El orden entre tu cadera y tu tronco cambia según desde dónde se grabó
+  el golpe, y todavía no podemos asegurar cuál es el correcto. Por eso lo registramos sin evaluarlo."* y el detalle técnico lleva el fundamento (7 de 7 contra 8 de 8).
+- **D:** `engine/encuadre.py` (giro de la línea de hombros en la preparación, de 0,8 a 0,3 s antes del pico del tronco; perfil ≤ 42°, tres cuartos ≥ 50°, entre los dos no se afirma nada) y, en el reporte, una
+  observación gris *"El video parece grabado de tres cuartos, pero elegiste perfil. Revisá el encuadre antes de comparar tus resultados."* (o la inversa). **No bloquea la carga**: el análisis y el reporte salen
+  completos; solo se retira el veredicto y se avisa. **Solo para el saque** (calibrado con 22 repeticiones); drive y revés se agregan con las cifras del Paso B.
+- **Pruebas:** 505 pasan en el servidor (las de B y D y las del módulo puro). **Contra el corpus:** las 28 repeticiones válidas del saque se clasifican en el encuadre con que se grabaron (**0 avisos falsos, 0 sin
+  afirmar**; la calibración es de la misma muestra, así que es una verificación de consistencia y no una validación independiente) y el caso real del 12/10 (59°) cae en tres cuartos.
+- **Sin cambio de contrato** (1.3): el aviso es una observación `no_auditable` más.

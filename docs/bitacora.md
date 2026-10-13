@@ -6,6 +6,17 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-12, 23:45 — Decisión 035 APLICADA (B y D, motor 0.5.2) · lista para publicar
+
+- **B:** el saque no emite veredicto del orden en ningún encuadre (`depende_del_encuadre` en `RESPALDO_POR_GRUPO`); la tarjeta lo explica sin literatura ni estadística y el detalle lleva el fundamento.
+- **D:** `engine/encuadre.py`: giro de la línea de hombros en la preparación; si el encuadre declarado discrepa con claridad del visto (perfil ≤ 42°, tres cuartos ≥ 50°), el reporte agrega *"El video parece grabado de tres
+  cuartos, pero elegiste perfil. Revisá el encuadre antes de comparar tus resultados."* y no emite veredicto. **No bloquea la carga.** Solo saque (calibrado con 28 repeticiones: 0 avisos falsos).
+- **Pruebas:** servidor **505 passed**, `bun test` **59 passed**. Sin cambio de contrato ni de frontend.
+- **Falta (de Valentín):** republicar el frontend (cambios del 12/10 y `wrangler.jsonc` con el dominio) y los pasos de la guía (E.1 a E.4). **Paso B de drive y revés sigue corriendo** (`paso_b_resto.log`).
+- **Trabajo futuro registrado:** C (tres cuartos como encuadre evaluado) y D para drive y revés (hace falta calibrar con el Paso B).
+
+---
+
 ## 2026-10-12, 23:00 — OK de Valentín a la decisión 035 (B y D); C queda como trabajo futuro
 
 - **OK de Valentín:** aplicar **B** (suspender el veredicto del saque de perfil) y **D** (contrastar el encuadre declarado con el visto). **C (tres cuartos como encuadre evaluado) queda como trabajo futuro.**
