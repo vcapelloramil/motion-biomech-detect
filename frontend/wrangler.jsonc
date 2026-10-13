@@ -4,4 +4,9 @@
   "compatibility_date": "2025-09-24",
   "compatibility_flags": ["nodejs_compat"],
   "main": "src/server.ts",
+  // Dominio propio (decisión 034): el Worker se asocia al dominio desde acá, no a mano en el panel (decisión 026: el repositorio es la
+  // única fuente). La zona kinetiqtennis.me tiene que estar ACTIVA en la misma cuenta de Cloudflare; el deploy crea el registro DNS y
+  // el certificado. El `workers.dev` sigue funcionando en paralelo (el origen viejo, también en KINETIQ_CORS_ORIGINS).
+  "workers_dev": true,
+  "routes": [{ "pattern": "kinetiqtennis.me", "custom_domain": true }],
 }

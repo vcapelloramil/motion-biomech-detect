@@ -30,6 +30,14 @@ frontend". El Pack ya está: hay que decidir **dónde vive el DNS**, porque de e
 - **NC.me configuró GitHub Pages** (el flujo que ofrece el Student Pack): creó el repositorio **`vcapelloramil.github.io`** en la cuenta de Valentín, con un `CNAME` (`kinetiqtennis.me`) y un `README.md`.
   Ese repositorio es el *sitio de usuario* de GitHub: con un `CNAME`, hace que los sitios de proyecto de la cuenta se redirijan a `kinetiqtennis.me/<proyecto>/`.
 
+## Hecho el 13/10/2026
+
+- **`frontend/wrangler.jsonc`:** `routes: [{ "pattern": "kinetiqtennis.me", "custom_domain": true }]` y `workers_dev: true` (el `kinetiq.v-capelloramil.workers.dev` sigue funcionando). Verificado en el
+  build (`dist/server/wrangler.json`). Falta que Valentín haga `wrangler deploy`.
+- **`KINETIQ_CORS_ORIGINS`** (a cargar en el panel de Render): `https://kinetiqtennis.me,https://kinetiq.v-capelloramil.workers.dev,http://localhost:8080`.
+- **Brevo:** el dominio figura **autenticado**; **no se pudo generar la clave SMTP** (a reintentar por Valentín). Si no se resuelve, el respaldo es B de la decisión 027 (Gmail) o un proveedor alternativo con
+  el mismo DNS en Cloudflare; el cambio es solo de los datos de SMTP en Supabase.
+
 ## Regla de limpieza (decisión)
 
 1. **Ningún registro del dominio apunta a GitHub.** Los de GitHub Pages (`A` y `AAAA` de `185.199.108–111.153` y `2606:50c0:8000–8003::153`, `CNAME www`, `TXT _github-pages-challenge-*`) se borran o no se importan.

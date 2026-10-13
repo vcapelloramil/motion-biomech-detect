@@ -118,18 +118,64 @@ Si preferís **no borrar** el repositorio: alcanza con borrar el archivo `CNAME`
 
 **Salió bien si:** (1) registrás una cuenta nueva con **tu Gmail real** y el correo llega (fijate si cae en spam), con remitente `KinetiQ <no-reply@<nombre>.me>`, y el enlace te lleva a la aplicación. En Gmail: *Mostrar original* → **SPF: PASS, DKIM: PASS, DMARC: PASS**. (2) En `/ingreso` tocás "¿Olvidaste tu contraseña?", pedís el enlace con ese correo, llega, y el enlace te deja elegir una contraseña nueva.
 
-## E. La aplicación en `https://<nombre>.me` (en lugar de `workers.dev`)
+## E. La aplicación en `https://kinetiqtennis.me` (con `workers.dev` funcionando en paralelo)
 
-Yo hago el cambio de código; vos los clics del panel. Cuando me pases el nombre:
+**Mi parte — hecha el 13/10 (commit del `wrangler.jsonc`):** el Worker `kinetiq` declara el dominio en `frontend/wrangler.jsonc` (`routes` con `custom_domain: true`) y mantiene `workers_dev: true`: **el
+`kinetiq.v-capelloramil.workers.dev` sigue funcionando.** El build ya incluye la ruta (verificado en `dist/server/wrangler.json`). Nada del código del frontend depende del dominio: el enlace de confirmación y el de
+"Olvidé mi contraseña" usan el origen desde el que abrís la aplicación.
 
-1. **Yo:** agrego a `frontend/wrangler.jsonc` `"routes": [{ "pattern": "<nombre>.me", "custom_domain": true }]` (el repositorio es la única fuente: no se configura a mano en el panel), actualizo las decisiones 026 y 027 y la guía de despliegue.
-2. **Vos:** `cd frontend; bun run build; .\node_modules\.bin\wrangler.exe deploy`. Cloudflare crea solo el registro DNS y el certificado.
-   *Un solo requisito: el nombre `<nombre>.me` no puede tener ya un `CNAME` propio en la zona.*
-3. **Vos — Render → kinetiq-motor → Environment:** `KINETIQ_CORS_ORIGINS` = `https://<nombre>.me,https://kinetiq.v-capelloramil.workers.dev,http://localhost:8080` (separados por comas). **Cambiar una variable reinicia el servicio:** hacelo cuando no haya un análisis en curso.
-4. **Vos — Supabase:** el *Site URL* del punto D.4.
-5. **Prueba:** abrí `https://<nombre>.me`, registrate con un correo nuevo, confirmá, ingresá, subí un golpe. Si el navegador dice "CORS" al disparar el análisis, la variable del punto 3 no tiene el dominio exacto (con `https://`, sin barra final).
+**Tu parte, en este orden** (el orden importa: primero se publica, después se permite el origen):
 
-**Salió bien si:** `https://<nombre>.me` abre KinetiQ con candado, y el flujo de registro → confirmación → ingreso → carga funciona desde ahí.
+### E.1 Publicar el Worker con el dominio (PowerShell, 3 minutos)
+
+```powershell
+cd C:\Users\valen\motion-biomech-detect\frontend
+bun run build
+.\node_modules\.bin\wrangler.exe deploy
+```
+
+- La salida tiene que mencionar `kinetiqtennis.me (custom domain)` además de `kinetiq.v-capelloramil.workers.dev`.
+- **Si `wrangler` dice que no tiene permisos** sobre la zona (o que ya existe un registro): en el panel de Cloudflare → **Workers & Pages → kinetiq → Settings → Domains & Routes → Add → Custom domain** →
+  `kinetiqtennis.me`. Si dice que **ya hay un registro DNS** en `kinetiqtennis.me`, borralo antes en **DNS → Records** (los de GitHub Pages que figura la sección "Qué dejó NC.me", si aparecen) y repetí.
+- **Cómo saber que salió bien:** en **Cloudflare → kinetiqtennis.me → DNS → Records** aparece un registro `A`/`AAAA` (o `Worker`) con la raíz, **proxied (nube naranja)**, creado por el Worker; y
+  `https://kinetiqtennis.me` abre KinetiQ (el certificado puede tardar unos minutos: si el navegador marca error de certificado, esperá 5–10 minutos).
+
+### E.2 Supabase: dónde vuelve el usuario (2 minutos)
+
+**Authentication → URL Configuration** (en el panel del proyecto):
+
+| Campo | Valor |
+| --- | --- |
+| **Site URL** | `https://kinetiqtennis.me` |
+| **Redirect URLs** (agregar, sin quitar las que ya hay) | `https://kinetiqtennis.me/**` y dejá `https://kinetiq.v-capelloramil.workers.dev/**` |
+
+Guardar. **Qué cambia:** los enlaces de los correos de confirmación y de recuperación llevan a `kinetiqtennis.me`. Si dejás el *Site URL* en `workers.dev`, funcionan igual pero llevan al origen viejo.
+
+### E.3 Render: permitir el origen nuevo (2 minutos; reinicia el servicio)
+
+**Render → `kinetiq-motor` → Environment → `KINETIQ_CORS_ORIGINS`** → editar y pegar **exactamente** (una sola línea, sin espacios, sin barra final):
+
+```text
+https://kinetiqtennis.me,https://kinetiq.v-capelloramil.workers.dev,http://localhost:8080
+```
+
+Guardar. Render reinicia el servicio (~1 minuto): **hacelo cuando no haya un análisis en curso.** Sin este paso la aplicación abre bien en el dominio nuevo, pero el navegador bloquea (CORS) la orden de
+analizar el video.
+
+### E.4 Prueba (5 minutos)
+
+1. Abrí `https://kinetiqtennis.me` (ventana privada), **Crear cuenta** con un correo nuevo. El correo de confirmación depende de Brevo/SMTP (parte D); mientras no esté, ingresá con tu usuario de siempre.
+2. Subí un golpe corto. Si en la consola del navegador aparece un error de **CORS**, el valor de E.3 no es exactamente ese.
+3. Verificá también que `https://kinetiq.v-capelloramil.workers.dev` sigue abriendo.
+
+**Salió bien si:** el dominio abre con candado, y registro → ingreso → carga → reporte funciona desde `kinetiqtennis.me`.
+
+### Si el registro de la cuenta no manda el correo (SMTP)
+
+- **Brevo no te deja generar la clave SMTP** (13/10): suele ser que la cuenta nueva todavía no tiene el envío activado; mirá si en *SMTP & API* hay un aviso para activarlo o escribir a soporte. Mientras tanto
+  el camino de respaldo es **Gmail con contraseña de aplicación** (decisión 027, B): Supabase → Authentication → Emails → SMTP con `smtp.gmail.com` puerto `465`, usuario y contraseña de aplicación de una cuenta
+  de Gmail **dedicada**; solo cambia el remitente (sin dominio propio la entrega pierde alineación). Otra opción que no depende de Brevo: **Resend** (plan gratuito, SMTP, y la verificación del dominio se hace
+  con registros DNS en Cloudflare); es un cambio de datos de SMTP en Supabase, igual que Gmail.
 
 ## Qué queda después
 

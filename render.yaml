@@ -22,7 +22,7 @@ services:
         sync: false
       - key: SUPABASE_SERVICE_ROLE_KEY
         sync: false
-      # Orígenes del frontend que pueden llamar a la API, separados por comas (p. ej. https://kinetiq.pages.dev).
+      # Orígenes del frontend que pueden llamar a la API, separados por comas: hoy https://kinetiqtennis.me, https://kinetiq.v-capelloramil.workers.dev y http://localhost:8080.
       # Sin valor, ninguno. No es un secreto, pero depende del dominio publicado: se carga en el panel.
       - key: KINETIQ_CORS_ORIGINS
         sync: false
