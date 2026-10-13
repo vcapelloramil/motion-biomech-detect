@@ -27,7 +27,7 @@ from app.config import get_max_intentos
 from app.reintento import CODIGO_ESTADO_NO_REINTENTABLE, decidir_reintento
 from app.schemas.api import RespuestaAnalisisEncolado
 from app.security import UsuarioAutenticado, get_admin_client, usuario_autenticado
-from app.workers.procesamiento import procesar_en_segundo_plano
+from app.workers.procesamiento import procesar_en_segundo_plano, registrar_en_este_proceso
 
 router = APIRouter(prefix="/analisis", tags=["analisis"])
 
@@ -118,5 +118,6 @@ def procesar(
     if not actualizadas:
         raise _conflicto(CODIGO_ESTADO_NO_REINTENTABLE, video["estado"])
 
+    registrar_en_este_proceso(video_id)  # antes de que arranque la tarea: la recuperación al arrancar no lo ve como huérfano
     tareas.add_task(procesar_en_segundo_plano, admin, video_id)
     return RespuestaAnalisisEncolado(video_id=video_id, estado="encolado")

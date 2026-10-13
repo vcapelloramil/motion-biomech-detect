@@ -43,6 +43,33 @@ export async function leerVideo(videoId: string): Promise<VideoConReporte | null
   return (data as VideoConReporte | null) ?? null;
 }
 
+/** Una sesión con sus golpes (en el orden en que se cargaron) y sus reportes. `null` si no existe o no es del usuario (la RLS lo oculta). */
+export async function leerSesion(sesionId: string): Promise<SesionConVideos | null> {
+  const { data, error } = await cliente()
+    .from("sesiones")
+    .select(
+      "id, gesto, encuadre, lado_camara, modo_captura, fecha, creado_en, atletas(nombre), videos(*, reportes_biomecanicos(reporte))",
+    )
+    .eq("id", sesionId)
+    .order("creado_en", { referencedTable: "videos", ascending: true })
+    .maybeSingle();
+  if (error) throw error;
+  return (data as unknown as SesionConVideos | null) ?? null;
+}
+
+export type GolpeDeSesion = { id: string; estado: FilaVideo["estado"] };
+
+/** Los golpes de una sesión en orden de carga: para "golpe 2 de 6" en Procesando. */
+export async function golpesDeSesion(sesionId: string): Promise<GolpeDeSesion[]> {
+  const { data, error } = await cliente()
+    .from("videos")
+    .select("id, estado")
+    .eq("sesion_id", sesionId)
+    .order("creado_en", { ascending: true });
+  if (error) throw error;
+  return (data ?? []) as GolpeDeSesion[];
+}
+
 export async function listarSesiones(): Promise<SesionConVideos[]> {
   const { data, error } = await cliente()
     .from("sesiones")
@@ -87,4 +114,53 @@ export async function urlsDeArtefactos(rutas: readonly string[]): Promise<Record
     if (d.path && d.signedUrl && !d.error) salida[d.path] = d.signedUrl;
   }
   return salida;
+}
+
+// --- eliminar --------------------------------------------------------------------------------------------------------------------
+// El derecho de supresión (Ley 25.326) cubre los archivos, no solo las filas: el video original y los artefactos (fotogramas y video con
+// esqueleto) están en dos buckets privados y las políticas dejan borrar solo la carpeta propia. Mejor esfuerzo con los archivos: un
+// resto huérfano no rompe nada, y que la fila quede viva por un error de Storage sí sería un borrado a medias.
+
+type FilaConReporte = { ruta_almacenamiento?: string; reportes_biomecanicos?: unknown };
+
+function rutasDeArtefactos(v: FilaConReporte): string[] {
+  const r = v.reportes_biomecanicos;
+  const fila = Array.isArray(r) ? r[0] : r;
+  const rep = (fila as { reporte?: { artefactos?: { overlay_ruta?: unknown; fotogramas_clave?: { ruta?: unknown }[] } } } | null)?.reporte;
+  const a = rep?.artefactos;
+  const rutas: unknown[] = [a?.overlay_ruta, ...(Array.isArray(a?.fotogramas_clave) ? a.fotogramas_clave.map((f) => f?.ruta) : [])];
+  return rutas.filter((x): x is string => typeof x === "string" && x.length > 0);
+}
+
+async function borrarArchivos(videos: FilaConReporte[]) {
+  const c = cliente();
+  const originales = videos.map((v) => v.ruta_almacenamiento).filter((x): x is string => !!x);
+  const artefactos = videos.flatMap(rutasDeArtefactos);
+  try {
+    if (originales.length > 0) await c.storage.from("videos").remove(originales);
+    if (artefactos.length > 0) await c.storage.from("artefactos").remove(artefactos);
+  } catch {
+    /* mejor esfuerzo: ver el comentario de arriba */
+  }
+}
+
+/** Elimina un golpe: sus archivos y su fila (el reporte se va en cascada). Si era el último de la sesión, elimina también la sesión vacía. */
+export async function eliminarGolpe(video: FilaConReporte & { id: string; sesion_id: string }): Promise<{ sesionEliminada: boolean }> {
+  await borrarArchivos([video]);
+  const c = cliente();
+  const { error } = await c.from("videos").delete().eq("id", video.id);
+  if (error) throw error;
+  const { count } = await c.from("videos").select("id", { count: "exact", head: true }).eq("sesion_id", video.sesion_id);
+  if ((count ?? 1) === 0) {
+    await c.from("sesiones").delete().eq("id", video.sesion_id);
+    return { sesionEliminada: true };
+  }
+  return { sesionEliminada: false };
+}
+
+/** Elimina una sesión con todos sus golpes y sus archivos. */
+export async function eliminarSesion(sesion: { id: string; videos: FilaConReporte[] }): Promise<void> {
+  await borrarArchivos(sesion.videos);
+  const { error } = await cliente().from("sesiones").delete().eq("id", sesion.id);
+  if (error) throw error;
 }

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Film, Loader2, Search } from "lucide-react";
+import { ArrowRight, Film, Loader2, Search, Trash2 } from "lucide-react";
 import { RutaProtegida } from "@/components/ruta-protegida";
 import { EstadoBadge } from "@/components/estado";
 import { useSesion } from "@/lib/sesion";
@@ -15,7 +15,8 @@ import {
   reporteDeVersionAnterior,
   type EstadoSesion,
 } from "@/lib/estado-video";
-import { listarSesiones, type SesionConVideos } from "@/lib/videos-data";
+import { artefactosDe } from "@/lib/reporte-simple";
+import { eliminarSesion, listarSesiones, urlsDeArtefactos, type SesionConVideos } from "@/lib/videos-data";
 
 export const Route = createFileRoute("/videos")({
   head: () => ({
@@ -44,6 +45,7 @@ function BibliotecaPage() {
   const [error, setError] = useState(false);
   const [busqueda, setBusqueda] = useState("");
   const [filtro, setFiltro] = useState<(typeof FILTROS)[number]["valor"]>("todos");
+  const [miniaturas, setMiniaturas] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (cargandoSesion) return;
@@ -70,6 +72,25 @@ function BibliotecaPage() {
       window.clearInterval(t);
     };
   }, [cargandoSesion]);
+
+  // Miniatura de cada sesión: el primer fotograma clave real de sus golpes (nunca una imagen de relleno). Se firman las rutas nuevas.
+  useEffect(() => {
+    const rutas = (sesiones ?? []).map(rutaDeMiniatura).filter((r): r is string => r !== null && !(r in miniaturas));
+    if (rutas.length === 0) return;
+    let activo = true;
+    urlsDeArtefactos(rutas)
+      .then((u) => activo && setMiniaturas((previo) => ({ ...previo, ...u })))
+      .catch(() => undefined);
+    return () => {
+      activo = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sesiones]);
+
+  async function borrar(sesion: SesionConVideos) {
+    await eliminarSesion({ id: sesion.id, videos: sesion.videos });
+    setSesiones((previo) => (previo ?? []).filter((s) => s.id !== sesion.id));
+  }
 
   const visibles = useMemo(() => {
     const q = busqueda.trim().toLowerCase();
@@ -156,7 +177,7 @@ function BibliotecaPage() {
       ) : (
         <ul className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {visibles.map((s) => (
-            <TarjetaSesion key={s.id} sesion={s} />
+            <TarjetaSesion key={s.id} sesion={s} miniatura={miniaturas[rutaDeMiniatura(s) ?? ""] ?? null} alEliminar={() => borrar(s)} />
           ))}
           {visibles.length === 0 && sesiones.length > 0 && (
             <li className="text-sm text-muted-foreground md:col-span-2 lg:col-span-3">Ninguna sesión coincide con la búsqueda.</li>
@@ -175,7 +196,28 @@ const ETIQUETA_SESION: Record<EstadoSesion, string> = {
   vacia: "Sin golpes",
 };
 
-function TarjetaSesion({ sesion }: { sesion: SesionConVideos }) {
+/** La ruta del primer fotograma clave (el del pico del tronco si está) del primer golpe que lo tenga. */
+function rutaDeMiniatura(sesion: SesionConVideos): string | null {
+  for (const v of sesion.videos) {
+    const fotos = artefactosDe(reporteDe(v)?.reporte ?? null).fotogramas;
+    const f = fotos.find((x) => x.segmento === "torso") ?? fotos[0];
+    if (f) return f.ruta;
+  }
+  return null;
+}
+
+function TarjetaSesion({
+  sesion,
+  miniatura,
+  alEliminar,
+}: {
+  sesion: SesionConVideos;
+  miniatura: string | null;
+  alEliminar: () => Promise<void>;
+}) {
+  const [confirmando, setConfirmando] = useState(false);
+  const [borrando, setBorrando] = useState(false);
+  const [falloAlBorrar, setFalloAlBorrar] = useState(false);
   const videos = sesion.videos;
   const estado = estadoDeSesion(videos.map((v) => v.estado));
   const primero = videos[0];
@@ -190,9 +232,18 @@ function TarjetaSesion({ sesion }: { sesion: SesionConVideos }) {
 
   return (
     <li className="overflow-hidden rounded-2xl border border-border bg-card">
-      {/* Sin miniatura real todavía: un panel neutro, no una imagen inventada. */}
-      <div className="relative flex h-36 items-center justify-center bg-gradient-to-b from-secondary to-card">
-        <Film className="h-8 w-8 text-muted-foreground/60" aria-hidden="true" />
+      {/* Miniatura real (un fotograma del golpe con el esqueleto) o, si todavía no hay, un panel neutro: nunca una imagen inventada. */}
+      <div className="relative flex h-36 items-center justify-center overflow-hidden bg-gradient-to-b from-secondary to-card">
+        {miniatura ? (
+          <img
+            src={miniatura}
+            alt={`Un fotograma del golpe de la sesión de ${GESTO_ETIQUETA[sesion.gesto] ?? sesion.gesto}, con el esqueleto dibujado`}
+            loading="lazy"
+            className="h-full w-full object-cover"
+          />
+        ) : (
+          <Film className="h-8 w-8 text-muted-foreground/60" aria-hidden="true" />
+        )}
         <span className="absolute left-3 top-3 rounded-lg border border-border bg-background/80 px-2.5 py-1 font-mono text-[11px] text-foreground">
           {analizando && <Loader2 className="mr-1 inline h-3 w-3 animate-spin" aria-hidden="true" />}
           {ETIQUETA_SESION[estado]}
@@ -237,26 +288,52 @@ function TarjetaSesion({ sesion }: { sesion: SesionConVideos }) {
             <p className="mt-3 text-xs text-muted-foreground">Incluye reportes calculados con una versión anterior del motor.</p>
           )}
 
-          {primero && (reporteDe(primero)?.reporte ?? null) && !analizando ? (
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
             <Link
-              to="/reporte/$videoId"
-              params={{ videoId: primero.id }}
-              className="mt-4 inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-state-ok hover:underline"
+              to="/sesion/$sesionId"
+              params={{ sesionId: sesion.id }}
+              className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-state-ok hover:underline"
             >
-              Ver reporte
+              {videos.length > 1 ? "Ver la sesión" : analizando ? "Ver progreso" : estado === "fallida" ? "Ver qué pasó" : "Ver reporte"}
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
-          ) : (
-            primero && (
-              <Link
-                to="/procesando/$videoId"
-                params={{ videoId: primero.id }}
-                className="mt-4 inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-state-ok hover:underline"
-              >
-                {analizando ? "Ver progreso" : estado === "fallida" ? "Ver qué pasó" : "Ver detalle"}
-                <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </Link>
-            )
+            <button
+              type="button"
+              onClick={() => setConfirmando(true)}
+              className="flex min-h-11 items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
+              aria-label={`Eliminar la sesión de ${GESTO_ETIQUETA[sesion.gesto] ?? sesion.gesto}`}
+            >
+              <Trash2 className="h-3.5 w-3.5" aria-hidden="true" /> Eliminar
+            </button>
+          </div>
+          {confirmando && (
+            <div role="alert" className="mt-2 rounded-lg border border-destructive/50 px-3 py-2 text-sm">
+              ¿Eliminar esta sesión con {videos.length === 1 ? "su golpe" : `sus ${videos.length} golpes`}? Se borran los videos y los reportes. No
+              se puede deshacer.
+              {falloAlBorrar && <span className="mt-1 block text-destructive">No pudimos eliminarla ahora. Probá de nuevo.</span>}
+              <span className="mt-2 flex gap-4">
+                <button
+                  type="button"
+                  disabled={borrando}
+                  onClick={async () => {
+                    setBorrando(true);
+                    setFalloAlBorrar(false);
+                    try {
+                      await alEliminar();
+                    } catch {
+                      setFalloAlBorrar(true);
+                      setBorrando(false);
+                    }
+                  }}
+                  className="font-semibold text-destructive underline underline-offset-4"
+                >
+                  {borrando ? "Eliminando…" : "Sí, eliminar"}
+                </button>
+                <button type="button" disabled={borrando} onClick={() => setConfirmando(false)} className="underline underline-offset-4">
+                  Cancelar
+                </button>
+              </span>
+            </div>
           )}
         </div>
       </div>

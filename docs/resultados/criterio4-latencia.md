@@ -13,8 +13,17 @@ Desde la migración `20261010000000_tiempos_de_procesamiento.sql`, cada video gu
 | `inicio_procesamiento_en` | El contenedor empezó a procesarlo | `procesar_video` |
 | `fin_procesamiento_en` | Terminó, con éxito o con fallo | `procesar_video` |
 
-**Latencia de punta a punta = fin − encolado** (incluye la espera en cola y el arranque en frío de Render); **cómputo = fin − inicio**.
-La pantalla Procesando ya muestra "Tardó X" cuando hay datos.
+**Desde el 13/10/2026 (carga de varios golpes) se registran y se muestran por separado**, porque con varios golpes la espera deja de ser cero:
+
+| Tiempo | Cuenta | Qué es | Dónde se ve |
+| --- | --- | --- | --- |
+| **Espera en la cola** | `inicio_procesamiento_en − encolado_en` | Esperar turno: el servidor analiza de a uno (`KINETIQ_MAX_ANALISIS_SIMULTANEOS`), y un golpe de una sesión de 6 puede esperar 10 min. **No es procesamiento.** | detalle técnico del reporte y Procesando ("Esperó en la cola"); lista de golpes de la sesión |
+| **Procesamiento** | `fin_procesamiento_en − inicio_procesamiento_en` | Lo que tarda el motor sobre ese golpe, de punta a punta (descarga, pose, filtrado, medición, reporte, artefactos). **Es lo que mide el Criterio 4.** | ídem ("Procesamiento") |
+| Total | `fin_procesamiento_en − encolado_en` | Lo que espera quien carga. Se conserva en la base; la pantalla muestra los dos de arriba. | — |
+
+**Cómo leer las filas anteriores:** las filas 1 a 4 (9 y 12/10) son de **un golpe a la vez**, sin cola: ahí `fin − encolado` y `fin − inicio` coinciden salvo la espera de unos segundos para que arranque la
+tarea. Se conservan como están (la columna "Latencia de punta a punta" de esas filas es, en la práctica, el procesamiento). **De la fila 5 en adelante** (sesiones de varios golpes) se registran los dos
+tiempos. Un golpe recuperado al arrancar el servicio (`app/recuperacion.py`) conserva su `encolado_en`: su espera incluye el tiempo que el servicio estuvo caído.
 
 ## Datos
 

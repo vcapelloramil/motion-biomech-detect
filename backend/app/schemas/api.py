@@ -8,6 +8,8 @@ de evolucionar junto con la API sin romper el contrato del motor.
 
 from __future__ import annotations
 
+from typing import Any
+
 from pydantic import BaseModel
 
 
@@ -25,3 +27,21 @@ class RespuestaAnalisisEncolado(BaseModel):
 
     video_id: str
     estado: str
+
+
+class RespuestaConsistencia(BaseModel):
+    """GET /sesiones/{sesion_id}/consistencia — cuánto se parecen entre sí los golpes de una sesión (``app.consistencia``)."""
+
+    sesion_id: str
+    gesto: str
+    encuadre: str
+    fecha: str
+    version_regla: str
+    golpes: dict[str, int]
+    separacion_cadera_hombro: dict[str, Any]
+    orden: dict[str, Any]
+    golpe_tipico: str | None
+    golpes_que_se_apartan: list[str]
+    versiones_motor: list[str]
+    mezcla_de_versiones: bool
+    minimos: dict[str, int]

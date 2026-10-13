@@ -6,6 +6,47 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-13 (madrugada del 14) — Paso 3: vista de sesión, consistencia entre golpes, eliminar, miniatura, tiempos de cola y recuperación al arrancar
+
+**Sin pushear** (orden de Valentín: un reinicio de Render deja golpes "encolado" para siempre hasta que termine de subir las sesiones del corpus). Esta entrada es del trabajo local.
+Pruebas: backend suite rápida **558 passed**, frontend `bun test` 79, `tsc` y build limpios.
+
+### Recuperación al arrancar (tarea 6.5 adelantada; costó ~0,4 sesión)
+
+- `backend/app/recuperacion.py` + arranque en `main.py`: al iniciar el servicio, tras una pausa de 60 s (`KINETIQ_RECUPERACION_PAUSA_S`, para no pisar al proceso anterior en un despliegue), reencola los videos
+  `encolado` y `procesando`. **Regla:** el `encolado` nunca empezó (no suma intento); el `procesando` era el que corría cuando murió el proceso (sospechoso de haber agotado la memoria): **suma un intento** y,
+  con el tope agotado, pasa a `fallido` (`error_inesperado`) en vez de reanudarse en bucle. Compare-and-swap sobre el estado leído; los que ya están en este proceso no se tocan.
+- **Qué no cubre:** un servicio con **dos** instancias a la vez (no es el caso, Standard es una) ni un golpe "procesando" que el proceso anterior sigue completando durante un despliegue más largo que la pausa
+  (el segundo resultado pisaría al primero con el mismo contenido). Pruebas: `test_recuperacion.py` (4).
+- Con esto, **los golpes que hoy están "encolado" para siempre en producción se recuperan solos en el próximo arranque** (el del push de este paso).
+
+### Tiempos: cola y procesamiento por separado (Criterio 4)
+
+- `tiemposDe` en el frontend: **espera en la cola** (`inicio − encolado`) y **procesamiento** (`fin − inicio`); el detalle técnico del reporte, Procesando y la lista de golpes de la sesión muestran los dos. El
+  Criterio 4 mide solo el procesamiento. Registro y lectura de las filas anteriores: `docs/resultados/criterio4-latencia.md` ("Cómo se registra").
+
+### Vista de sesión y consistencia
+
+- **`GET /sesiones/{id}/consistencia`** (`routers/sesiones.py`, `app/consistencia.py`): se **calcula al leer, no se guarda** (nunca queda desactualizada si se elimina o termina un golpe; el frontend no calcula
+  nada biomecánico). Devuelve golpes medidos / no medibles / en análisis, separación cadera-hombro (mediana y dispersión robusta desde 4 golpes), repetibilidad del orden (**si fue el mismo, no cuál es el
+  correcto**; desde 5 ordenables), golpe típico (el más cercano a la mediana) y golpes que se apartan (> 3 desviaciones robustas, desde 5 golpes, con piso de 1°), y declara la mezcla de versiones del motor.
+  Pruebas: `test_consistencia.py` (11), `test_api_sesiones.py` (4: 401, 404 ajena e inexistente).
+- **Pantalla `/sesion/{id}`:** "Tus golpes entre sí" (tres tarjetas que dicen por qué falta lo que falta), golpe típico con **selector de golpe** y "Tres momentos", lista de golpes con estado, separación y
+  tiempos, y aviso "se pareció menos a los demás" (sin decir que esté mal). Se actualiza sola mientras haya golpes en análisis. La tarjeta de la Biblioteca lleva ahí.
+- **Miniatura real** en la Biblioteca (el fotograma del pico del tronco del primer golpe medido; si no hay, un panel neutro). **Procesando** dice "Golpe 2 de 6" y cuántos van listos.
+
+### Eliminar (derecho de supresión, Ley 25.326)
+
+- **Un golpe** (en la vista de sesión) o **una sesión** (en la Biblioteca y en la vista de sesión), con confirmación. Borra los **archivos de los dos buckets** (original y artefactos) y después las filas (el
+  reporte se va en cascada); el último golpe de una sesión se lleva también la sesión vacía. Se puede eliminar un golpe `encolado` que quedó trabado.
+
+### Limitaciones
+
+- El borrado de archivos es de mejor esfuerzo: si Storage falla, la fila igual se borra y puede quedar un archivo huérfano (no se ve ni se puede leer desde la interfaz).
+- La vista de sesión y el borrado no se probaron contra producción (no inicié sesión): solo contra el tipo de dato real, con pruebas unitarias y build.
+
+---
+
 ## 2026-10-13 (noche) — Higiene 2, paso 2 (cargar con varios golpes) y recortes del corpus para Evolución
 
 Pedido de Valentín tras revisar producción con capturas de cada pantalla. Servidor: **sin cambio de motor** (0.5.3); cambia la API (cupo de análisis simultáneos).

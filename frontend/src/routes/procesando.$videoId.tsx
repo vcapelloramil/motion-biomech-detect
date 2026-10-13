@@ -10,9 +10,10 @@ import {
   ETAPAS,
   GESTO_ETIQUETA,
   PASOS,
+  TEXTO_VERSION_ANTERIOR,
   enCurso,
   formatearDuracion,
-  latenciaDe,
+  tiemposDe,
   numero,
   observacionesDe,
   pasoActual,
@@ -21,7 +22,7 @@ import {
   textoDeFallo,
   type ObservacionLeida,
 } from "@/lib/estado-video";
-import { corregirModo, leerVideo, reintentar, type VideoConReporte } from "@/lib/videos-data";
+import { corregirModo, golpesDeSesion, leerVideo, reintentar, type GolpeDeSesion, type VideoConReporte } from "@/lib/videos-data";
 import { fmt } from "@/lib/formato";
 
 export const Route = createFileRoute("/procesando/$videoId")({
@@ -117,6 +118,27 @@ function Detalle({ video, ahora, alCambiar }: { video: VideoConReporte; ahora: n
   const rep = reporteDe(video);
   const nombreArchivo = video.ruta_almacenamiento?.split("/").pop() ?? "video";
 
+  // La sesión puede tener varios golpes: "golpe 2 de 6" y cuántos van listos. Se actualiza con el resto de la pantalla.
+  const [golpes, setGolpes] = useState<GolpeDeSesion[]>([]);
+  const sesionId = video.sesion_id;
+  const estadoVideo = video.estado;
+  useEffect(() => {
+    let activo = true;
+    const leer = () =>
+      golpesDeSesion(sesionId)
+        .then((g) => activo && setGolpes(g))
+        .catch(() => undefined);
+    void leer();
+    // Mientras este golpe siga en curso, se vuelve a mirar cómo van los demás (no en cada segundo del reloj de la pantalla).
+    const t = enCurso(estadoVideo) ? window.setInterval(() => void leer(), 8000) : null;
+    return () => {
+      activo = false;
+      if (t !== null) window.clearInterval(t);
+    };
+  }, [sesionId, estadoVideo]);
+  const posicion = golpes.findIndex((g) => g.id === video.id) + 1;
+  const listosEnSesion = golpes.filter((g) => !enCurso(g.estado)).length;
+
   const titulo =
     video.estado === "completado" ? (
       <>Tu golpe <span className="text-acento">está listo</span></>
@@ -200,7 +222,17 @@ function Detalle({ video, ahora, alCambiar }: { video: VideoConReporte; ahora: n
         </section>
 
         <aside aria-labelledby="golpes-titulo" className="h-fit rounded-2xl border border-border bg-card p-5 md:p-7">
-          <h2 id="golpes-titulo" className="font-display text-xl font-bold">Golpe de esta sesión</h2>
+          <h2 id="golpes-titulo" className="font-display text-xl font-bold">
+            {golpes.length > 1 && posicion > 0 ? `Golpe ${posicion} de ${golpes.length}` : "Golpe de esta sesión"}
+          </h2>
+          {golpes.length > 1 && (
+            <p className="mt-2 text-sm text-muted-foreground">
+              {listosEnSesion} de {golpes.length} golpes de la sesión ya están listos. Se analizan de a uno.{" "}
+              <Link to="/sesion/$sesionId" params={{ sesionId }} className="font-semibold text-state-ok underline underline-offset-4">
+                Ver la sesión completa
+              </Link>
+            </p>
+          )}
           <div className="mt-4 rounded-xl border border-border px-4 py-3">
             <p className="font-display text-sm font-bold">{nombreArchivo}</p>
             <p className="mt-1 font-mono text-xs text-muted-foreground">
@@ -400,7 +432,7 @@ function Resultado({ video, reporte, fps }: { video: VideoConReporte; reporte: R
   const obs = observacionesDe(reporte);
   const t = (reporte?.trazabilidad ?? null) as Record<string, unknown> | null;
   const reg = (t?.regularizacion ?? null) as Record<string, unknown> | null;
-  const latencia = latenciaDe(video);
+  const tiempos = tiemposDe(video);
 
   // Parcial sin reporte: R1 (menos de 120 fps efectivos). El motor no analiza la secuencia y lo dice.
   if (!reporte) {
@@ -435,7 +467,8 @@ function Resultado({ video, reporte, fps }: { video: VideoConReporte; reporte: R
         <Dato k="Puntos interpolados" v={reg ? `${fmt(Number(reg.puntos_interpolados_pct), 1)} %` : "no se regularizó"} />
         <Dato k="Escala temporal" v={t?.escala_temporal_conocida === true ? "conocida" : "no confirmada"} />
         <Dato k="Versión del motor" v={`${String(t?.version_motor ?? "—")} · ${String(t?.backend_pose ?? "—")}`} />
-        {latencia !== null && <Dato k="Tardó en procesarse" v={formatearDuracion(latencia)} />}
+        {tiempos.espera_cola_s !== null && <Dato k="Esperó en la cola" v={formatearDuracion(tiempos.espera_cola_s)} />}
+        {tiempos.procesamiento_s !== null && <Dato k="Procesamiento" v={formatearDuracion(tiempos.procesamiento_s)} />}
       </dl>
       <p className="mt-6 text-xs text-muted-foreground">
         El sistema documenta lo que se observa; la conclusión es del profesional.
@@ -464,6 +497,7 @@ function Observacion({ o }: { o: ObservacionLeida }) {
       ) : null}
       {/* Texto llano: el fundamento y la fuente están en "Ver detalle técnico" del reporte (ajuste del 12/10). */}
       <p className="mt-3 text-sm leading-relaxed">{o.texto}</p>
+      {o.anterior && <p className="mt-2 text-xs text-muted-foreground">{TEXTO_VERSION_ANTERIOR}.</p>}
     </li>
   );
 }

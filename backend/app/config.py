@@ -169,6 +169,24 @@ _MAX_INTENTOS_VAR = "KINETIQ_MAX_INTENTOS"
 _MAX_INTENTOS_POR_DEFECTO = 3
 
 
+_RECUPERACION_PAUSA_VAR = "KINETIQ_RECUPERACION_PAUSA_S"
+_RECUPERACION_PAUSA_POR_DEFECTO = 60.0
+
+
+def get_pausa_recuperacion_s() -> float | None:
+    """Segundos de espera antes de la recuperación al arrancar (``app.recuperacion``); 60 si no está configurado. ``-1`` la desactiva.
+
+    La pausa existe para no pisar al proceso anterior si todavía está terminando durante un despliegue."""
+    value = _read_env_var(_RECUPERACION_PAUSA_VAR)
+    if not value:
+        return _RECUPERACION_PAUSA_POR_DEFECTO
+    try:
+        s = float(value)
+    except ValueError:
+        raise ConfigError(f"{_RECUPERACION_PAUSA_VAR} tiene que ser un número, y es {value!r}.") from None
+    return None if s < 0 else s
+
+
 _MAX_SIMULTANEOS_VAR = "KINETIQ_MAX_ANALISIS_SIMULTANEOS"
 _MAX_SIMULTANEOS_POR_DEFECTO = 1
 

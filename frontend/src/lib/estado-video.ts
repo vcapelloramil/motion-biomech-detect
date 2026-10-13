@@ -99,6 +99,26 @@ export function segundosEntre(desde: string | null | undefined, hasta: string | 
   return (b - a) / 1000;
 }
 
+export type TiemposDeVideo = {
+  /** Del encolado al inicio del procesamiento: esperar turno (otros golpes de la sesión, un reinicio). NO es procesamiento. */
+  espera_cola_s: number | null;
+  /** Del inicio al fin del procesamiento: lo que mide el Criterio 4. */
+  procesamiento_s: number | null;
+  /** Del encolado al fin: lo que ve el usuario esperando. */
+  total_s: number | null;
+};
+
+/** Separa la espera en la cola del procesamiento. Un tiempo que no se puede calcular es `null` (no se estima). */
+export function tiemposDe(
+  v: Pick<FilaVideo, "encolado_en" | "inicio_procesamiento_en" | "fin_procesamiento_en">,
+): TiemposDeVideo {
+  return {
+    espera_cola_s: segundosEntre(v.encolado_en, v.inicio_procesamiento_en),
+    procesamiento_s: segundosEntre(v.inicio_procesamiento_en, v.fin_procesamiento_en),
+    total_s: segundosEntre(v.encolado_en, v.fin_procesamiento_en),
+  };
+}
+
 /**
  * Latencia de punta a punta (Criterio 4): del encolado al fin del procesamiento. Si el video es anterior a la migración de
  * tiempos no hay `encolado_en` y se devuelve `null` (no se estima).

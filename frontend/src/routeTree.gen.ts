@@ -22,6 +22,7 @@ import { Route as IngresoRouteImport } from './routes/ingreso'
 import { Route as ClinicaRouteImport } from './routes/clinica'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ReporteIndexRouteImport } from './routes/reporte.index'
+import { Route as SesionSesionIdRouteImport } from './routes/sesion.$sesionId'
 import { Route as ReporteVideoIdRouteImport } from './routes/reporte.$videoId'
 import { Route as ProcesandoVideoIdRouteImport } from './routes/procesando.$videoId'
 
@@ -90,6 +91,11 @@ const ReporteIndexRoute = ReporteIndexRouteImport.update({
   path: '/reporte/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SesionSesionIdRoute = SesionSesionIdRouteImport.update({
+  id: '/sesion/$sesionId',
+  path: '/sesion/$sesionId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ReporteVideoIdRoute = ReporteVideoIdRouteImport.update({
   id: '/reporte/$videoId',
   path: '/reporte/$videoId',
@@ -116,6 +122,7 @@ export interface FileRoutesByFullPath {
   '/videos': typeof VideosRoute
   '/procesando/$videoId': typeof ProcesandoVideoIdRoute
   '/reporte/$videoId': typeof ReporteVideoIdRoute
+  '/sesion/$sesionId': typeof SesionSesionIdRoute
   '/reporte/': typeof ReporteIndexRoute
 }
 export interface FileRoutesByTo {
@@ -133,6 +140,7 @@ export interface FileRoutesByTo {
   '/videos': typeof VideosRoute
   '/procesando/$videoId': typeof ProcesandoVideoIdRoute
   '/reporte/$videoId': typeof ReporteVideoIdRoute
+  '/sesion/$sesionId': typeof SesionSesionIdRoute
   '/reporte': typeof ReporteIndexRoute
 }
 export interface FileRoutesById {
@@ -151,6 +159,7 @@ export interface FileRoutesById {
   '/videos': typeof VideosRoute
   '/procesando/$videoId': typeof ProcesandoVideoIdRoute
   '/reporte/$videoId': typeof ReporteVideoIdRoute
+  '/sesion/$sesionId': typeof SesionSesionIdRoute
   '/reporte/': typeof ReporteIndexRoute
 }
 export interface FileRouteTypes {
@@ -170,6 +179,7 @@ export interface FileRouteTypes {
     | '/videos'
     | '/procesando/$videoId'
     | '/reporte/$videoId'
+    | '/sesion/$sesionId'
     | '/reporte/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -187,6 +197,7 @@ export interface FileRouteTypes {
     | '/videos'
     | '/procesando/$videoId'
     | '/reporte/$videoId'
+    | '/sesion/$sesionId'
     | '/reporte'
   id:
     | '__root__'
@@ -204,6 +215,7 @@ export interface FileRouteTypes {
     | '/videos'
     | '/procesando/$videoId'
     | '/reporte/$videoId'
+    | '/sesion/$sesionId'
     | '/reporte/'
   fileRoutesById: FileRoutesById
 }
@@ -222,6 +234,7 @@ export interface RootRouteChildren {
   VideosRoute: typeof VideosRoute
   ProcesandoVideoIdRoute: typeof ProcesandoVideoIdRoute
   ReporteVideoIdRoute: typeof ReporteVideoIdRoute
+  SesionSesionIdRoute: typeof SesionSesionIdRoute
   ReporteIndexRoute: typeof ReporteIndexRoute
 }
 
@@ -318,6 +331,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReporteIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sesion/$sesionId': {
+      id: '/sesion/$sesionId'
+      path: '/sesion/$sesionId'
+      fullPath: '/sesion/$sesionId'
+      preLoaderRoute: typeof SesionSesionIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/reporte/$videoId': {
       id: '/reporte/$videoId'
       path: '/reporte/$videoId'
@@ -350,6 +370,7 @@ const rootRouteChildren: RootRouteChildren = {
   VideosRoute: VideosRoute,
   ProcesandoVideoIdRoute: ProcesandoVideoIdRoute,
   ReporteVideoIdRoute: ReporteVideoIdRoute,
+  SesionSesionIdRoute: SesionSesionIdRoute,
   ReporteIndexRoute: ReporteIndexRoute,
 }
 export const routeTree = rootRouteImport
