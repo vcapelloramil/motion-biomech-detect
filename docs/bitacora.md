@@ -6,6 +6,18 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-12, 23:00 — OK de Valentín a la decisión 035 (B y D); C queda como trabajo futuro
+
+- **OK de Valentín:** aplicar **B** (suspender el veredicto del saque de perfil) y **D** (contrastar el encuadre declarado con el visto). **C (tres cuartos como encuadre evaluado) queda como trabajo futuro.**
+- **D, requisitos de Valentín:** el aviso se entiende sin tecnicismos (*"El video parece grabado de tres cuartos, pero elegiste perfil. Revisá el encuadre antes de comparar tus resultados."*); **no bloquea la carga**: solo
+  no se emite veredicto y se avisa.
+- **Registro del origen del golpe de prueba (por pedido de Valentín):** el video de la prueba de producción del 12/10 era **`IMG_6391` (saque de TRES CUARTOS, toma 02)** y se **declaró como perfil por error de Valentín**,
+  no del sistema. El reporte aplicó el veredicto del grupo declarado. Es el caso que motiva D.
+- **Estado:** Paso B de drive y revés **corriendo** (`backend/.cache/paso_b_resto.log`, ~2 h, commit `7c9535c`). Antes de esto: push a `7c9535c` hecho; falta republicar el frontend (cambios de hoy).
+- **Siguiente:** implementar B y D con pruebas (motor 0.5.2), commit, push y avisar a Valentín para republicar.
+
+---
+
 ## 2026-10-12, 22:30 — SAQUE DEL PASO B TERMINADO · decisión 035 propuesta · drive y revés en cola
 
 - **Paso B del saque completo** (29 repeticiones, commit `33dd7d9`, motor 0.5.1): perfil **0 cadera primero / 8 tronco primero / 2 dentro**; tres cuartos **7 / 0 / 11**. Fisher p = 0,0002 (exploratorio). Detalle en

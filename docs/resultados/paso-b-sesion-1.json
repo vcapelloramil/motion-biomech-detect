@@ -1,10 +1,10 @@
 {
- "generado_utc": "2026-10-13T00:37:35+00:00",
+ "generado_utc": "2026-10-13T00:49:37+00:00",
  "decision": "032 y 035 / plan de recálculo §2 (Paso B)",
  "sesion": 1,
  "rol": "RÉPLICA EXPLORATORIA (no independiente)",
  "version_motor": "0.5.1",
- "commit": "33dd7d977be962844852e13ab6aa204a6c373c02",
+ "commit": "7c9535c1560b2655cf8ca39508ed8d2b6f645a11",
  "arbol_sucio": false,
  "origen": "originales del iPhone a tasa real, regularizados a 240 Hz",
  "umbral": 0.8,
@@ -20,7 +20,7 @@
   }
  ],
  "repeticiones_medidas": 11,
- "repeticiones_previstas": 11,
+ "repeticiones_previstas": 35,
  "repeticiones": [
   {
    "valida": true,
