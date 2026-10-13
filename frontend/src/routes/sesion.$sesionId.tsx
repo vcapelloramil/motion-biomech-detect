@@ -4,7 +4,8 @@ import { ArrowRight, CircleDashed, Info, Loader2, Trash2 } from "lucide-react";
 import { RutaProtegida } from "@/components/ruta-protegida";
 import { EstadoBadge, SinDiferenciaBadge } from "@/components/estado";
 import { TresMomentos } from "@/components/reporte/tres-momentos";
-import { BotonDescargarPdf, LimitacionesDelPdf, SelloDelPdf, useAbrirDetallesAlImprimir } from "@/components/reporte/pdf";
+import { BotonDescargarPdf } from "@/components/reporte/pdf";
+import { DocumentoDeSesion } from "@/components/reporte/documento-sesion";
 import { useSesion } from "@/lib/sesion";
 import {
   ENCUADRE_ETIQUETA,
@@ -54,7 +55,6 @@ function SesionPage() {
   const [elegido, setElegido] = useState<string | null>(null);
   const [confirmar, setConfirmar] = useState<string | null>(null); // id del golpe, o "sesion"
   const [borrando, setBorrando] = useState(false);
-  useAbrirDetallesAlImprimir();
 
   const cargar = useCallback(async () => {
     try {
@@ -167,11 +167,8 @@ function SesionPage() {
   }
 
   return (
-    <main className="mx-auto max-w-5xl px-5 py-10 md:py-14 print:py-0">
-      <SelloDelPdf
-        titulo={`${gesto} · cámara de ${encuadre} · ${fecha} · ${videos.length} ${videos.length === 1 ? "golpe" : "golpes"}${datos.atletas?.nombre ? ` · ${datos.atletas.nombre}` : ""}`}
-        versiones={consistencia?.versiones_motor ?? []}
-      />
+    <>
+    <main className="mx-auto max-w-5xl px-5 py-10 md:py-14 print:hidden">
       <nav aria-label="Ruta" className="font-mono text-xs text-muted-foreground print:hidden">
         <Link to="/videos" className="hover:text-foreground">Biblioteca</Link>
         {" / "}
@@ -376,11 +373,12 @@ function SesionPage() {
         )}
       </section>
 
-      <LimitacionesDelPdf />
-
       <p className="mt-10 text-center text-xs text-muted-foreground">
         KinetiQ documenta el movimiento. No diagnostica ni reemplaza la evaluación de un profesional.
       </p>
     </main>
+    {/* El PDF es un documento aparte (A4 vertical), no esta pantalla impresa: ver documento-sesion.tsx. */}
+    <DocumentoDeSesion datos={datos} consistencia={consistencia} idTipico={idMostrado} />
+    </>
   );
 }

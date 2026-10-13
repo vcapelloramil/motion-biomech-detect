@@ -55,3 +55,19 @@ class PedidoEliminarCuenta(BaseModel):
 
 class RespuestaCuentaEliminada(BaseModel):
     archivos_eliminados: int
+
+
+class RespuestaEvolucion(BaseModel):
+    """GET /evolucion — la serie de sesiones de un jugador, golpe y encuadre (``app.consistencia.serie_de_evolucion``)."""
+
+    atleta_id: str
+    gesto: str
+    encuadre: str
+    version_regla: str
+    sesiones: list[dict[str, Any]]
+    variacion_habitual: float | None
+    centro_habitual: float | None
+    cambio_separacion: dict[str, Any] | None
+    lados_de_camara: list[str]
+    versiones_motor: list[str]
+    mezcla_de_versiones: bool

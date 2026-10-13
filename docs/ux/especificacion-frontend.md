@@ -50,9 +50,9 @@ Con sesión: **Biblioteca** · **Cargar** · **Perfil**. El reporte, el procesam
 | Biblioteca | `Biblioteca` | Tarjetas por sesión con miniatura real del video, estado de procesamiento, puntaje de rendimiento y conteo de observaciones por estado. |
 | Cargar | `Cargar`, `CargarMovil` | Ver §5. |
 | Procesando | `Procesando` | Estados de la máquina de estados del Capítulo 4 §4.2.4, progreso por etapa con texto llano y la etiqueta técnica (E0–E5) en chico. Aclara que se puede cerrar la página. |
-| Reporte simple | `ReporteSimple`, `ReporteMovil` | Vista por defecto del jugador. |
+| Reporte simple | `ReporteSimple`, `ReporteMovil` | **La web es el reporte simple, con "Ver detalle técnico" plegado** (decisión de Valentín, 14/10/2026): no hay vista detallada aparte ni interruptor. Es lo que ve cualquier usuario. |
 | Reporte detallado | `ReporteDetallado` | Vista por defecto del entrenador y del profesional. Los tres niveles de la tesis. |
-| PDF | `ReportePDF1`, `ReportePDF2` | Siempre el reporte técnico completo, A4. |
+| PDF | `ReportePDF1`, `ReportePDF2` | **El PDF es la versión completa para compartir con un entrenador o un kinesiólogo** (14/10/2026): un documento A4 vertical de 1 o 2 páginas, con una vista de impresión propia (no la pantalla impresa). Ver §6, "PDF". |
 | Evolución | `Evolucion` | Comparación con el propio jugador, solo entre sesiones del mismo gesto y encuadre. Las sesiones sin dato se muestran como hueco, nunca interpoladas. |
 | Perfil | `Perfil` | Rol, vista por defecto, mano dominante, privacidad, descargar y eliminar datos. |
 
@@ -125,7 +125,27 @@ técnico → Observaciones y su fundamento") y en el PDF. Las tarjetas de "Lo m�
 - Nivel 3: tabla de magnitudes (valor, confianza, estado, fundamento) y bloque de trazabilidad (motor, pose, filtro, frecuencia de corte, fps efectivos y, desde la decisión 020, cómo se obtuvieron: modo de captura declarado, factor de ralentización y origen).
 
 ### PDF
-Página 1: datos de la sesión, resumen (puntaje + observaciones), secuenciación de un golpe y tabla por golpe. Página 2: métricas con confianza y fundamento, cómo leer los estados, trazabilidad y limitaciones.
+
+**Qué es cada cosa (decisión de Valentín, 14/10/2026):** la **web** es el **reporte simple**, con "Ver detalle técnico" para quien quiera el fundamento; el **PDF** es la **versión completa para compartir** con un
+entrenador o un kinesiólogo. No son la misma página: el PDF **no es una copia de la pantalla**, es un documento con su propia vista de impresión.
+
+**Formato.** A4 vertical, **1 a 2 páginas**, impresión del navegador ("Guardar como PDF"; no se genera nada en el servidor). Implementación: `frontend/src/components/reporte/documento*.tsx`; la pantalla se oculta
+al imprimir (`print:hidden`) y el documento solo existe en el papel.
+
+**Reporte de un golpe** (`documento-golpe.tsx`):
+1. **Cabecera:** KinetiQ, jugador, fecha de la grabación, golpe, encuadre, fps reales y versión del motor.
+2. **Resumen en lenguaje llano:** la frase de la secuencia y las observaciones, con su etiqueta en texto ("Solo registrado", "Sin diferencia medible a esta resolución", "No auditable"); nunca solo color.
+3. **Tres momentos:** los tres fotogramas chicos en una fila; donde no hay pico, una caja "no medido" con el motivo.
+4. **Tabla de mediciones con confianza:** velocidad máxima por segmento (valor, instante, confianza), separación cadera-hombro y ángulos de rodilla y codo; lo que no se midió, "no medido" y por qué.
+5. **Trazabilidad:** frecuencias, fotogramas perdidos, puntos interpolados, resolución, tolerancia del orden, cobertura, filtro, modo de captura declarado, tiempos de cola y de procesamiento y tramos no auditables.
+6. **Limitaciones** (R2 y R5) y, al pie, la versión del motor y la fecha de generación.
+
+**Reporte de una sesión** (`documento-sesion.tsx`): la misma cabecera (con la cantidad de golpes), el resumen con las **tarjetas de consistencia** ("tus golpes entre sí") en texto, los tres momentos del golpe
+típico, una **tabla de golpes** (estado, separación cadera-hombro, qué llegó primero y la diferencia en ms como dato observado, fps reales, procesamiento), trazabilidad y limitaciones.
+
+**Evolución** imprime la pantalla con la hoja de estilos de impresión (papel blanco, sin navegación), con el sello y las limitaciones.
+
+**Sin puntaje.** El puntaje de rendimiento salió del producto (decisiones 035 y 036): no está en el PDF.
 
 ## 7. Puntaje de rendimiento (propuesta, fórmula v1)
 

@@ -6,6 +6,43 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-14 (tarde) — Paso 6 (Evolución mínima real) y el PDF como documento, en local
+
+**Sin push** (orden de Valentín; suite del servidor 589 passed, `bun test` 106). Las sesiones del corpus (24/9 y 25/9, saque en tres cuartos) ya están subidas y procesadas con 0.5.3.
+
+### Paso 6 — Evolución
+
+- **`GET /evolucion?atleta_id&gesto&encuadre`** (`routers/evolucion.py`, `serie_de_evolucion` en `app/consistencia.py`): la serie de sesiones del mismo jugador, golpe y encuadre, cada una resumida con la **misma**
+  función que la vista de sesión (una sola definición de "medido" y de "mismo orden"). Calculada al leer. Devuelve por sesión: golpes medidos, separación cadera-hombro (mediana y dispersión robusta), repetibilidad
+  del orden, lado de cámara y versiones del motor; y para la serie: la **variación habitual** (media de las dispersiones por sesión; desde 4 golpes), el **centro habitual** (con ≥ 3 sesiones) y el **cambio** entre
+  las dos últimas sesiones con dato, con "dentro de lo habitual" (Δ ≤ variación, la lógica del Criterio 3).
+- **Pantalla `/evolucion`** (desde "Ver mi evolución" en la Biblioteca): elegir jugador × golpe × encuadre; cuatro tarjetas (separación, mismo orden, golpes medidos, sesiones); panel de la separación por sesión
+  (mediana, línea vertical = variación, banda de "tu variación habitual" desde 3 sesiones, **huecos "SIN DATO" sin interpolar**) y panel de "mismo orden" (k de m, con "SIN ORDEN"/"POCOS" cuando no alcanza).
+  Vocabulario neutro (aumentó / disminuyó / se mantuvo; "no es mejor ni peor"), sin color de estado. Avisa lado de cámara distinto entre sesiones y mezcla de versiones.
+- **Pruebas:** `test_evolucion.py` (12) y `evolucion.test.ts` (13). Salió el componente y los datos de ejemplo de abril/mayo (`evolucion-atleta`, `evolucion-mock`).
+- **No lo vi con datos reales** (no inicié sesión): los gráficos sí los miré con una serie sintética en el navegador; falta verlo con las dos sesiones del corpus.
+
+### El PDF como documento (decisión de Valentín: "no una copia de la pantalla")
+
+- **Vista de impresión propia**, A4 vertical, 1 a 2 páginas, solo en el papel (la pantalla lleva `print:hidden`): `documento.tsx` (primitivas), `documento-golpe.tsx`, `documento-sesion.tsx`.
+  **Golpe:** cabecera (KinetiQ, jugador, fecha, golpe, encuadre, fps reales, motor) · resumen en lenguaje llano · tres fotogramas chicos en una fila (o "no medido" con el motivo) · tabla de mediciones con
+  confianza · trazabilidad · limitaciones. **Sesión:** lo mismo con las tarjetas de consistencia en texto, el golpe típico y la **tabla de golpes** (estado, separación, qué llegó primero y cuánto como dato observado,
+  fps, procesamiento). Evolución imprime la pantalla con la hoja de estilos de impresión.
+- **Por qué se cortaban las imágenes:** era la pantalla impresa (tres columnas de `aspect-[3/4]`, `max-height` y `object-fit`); en vertical el ancho no alcanzaba. Ahora cada fotograma es una caja de 44 mm de alto.
+- **Lo miré** renderizando el documento con datos sintéticos a 210 mm de ancho (no la impresión real del navegador): se lee como documento y el reporte de un golpe cabe en poco más de una página.
+  **Falta:** Archivo → Imprimir → Guardar como PDF con un reporte real (para ver el salto de página y las imágenes cargadas). Las imágenes se piden al abrir la pantalla (`loading="eager"`), así que ya
+  están cuando se imprime.
+- **Especificación:** §3 y §6 registran que **la web es el reporte simple con "Ver detalle técnico" y el PDF es la versión completa para compartir con un entrenador o un kinesiólogo**.
+- **Costo:** ~0,7 sesión (dentro del tope de 1).
+
+### Pendiente
+
+- Valentín: avisar para el push (servidor: `/evolucion`, `/sesiones/.../consistencia` ya publicado; `/cuenta` y `/evolucion` nuevos) y republicar el frontend; probar eliminar la cuenta con una cuenta descartable cuando
+  funcione el correo propio.
+- Paso 7: respaldo con restauración probada. Paso 8: ensayo de la demo.
+
+---
+
 ## 2026-10-14 (mañana) — Push (motor 0.5.4 en producción), hallazgo del brazo registrado y paso 5 (Perfil real + eliminar cuenta) en local
 
 ### Push

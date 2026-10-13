@@ -239,3 +239,22 @@
     object-fit: contain;
   }
 }
+
+/* El documento de impresión (`.documento`): A4 vertical, tipografía sin la de pantalla, sin imágenes cortadas. */
+@media print {
+  .documento {
+    font-family: var(--font-sans), system-ui, sans-serif;
+    color: #000;
+    background: #fff;
+  }
+  .documento h1,
+  .documento h2 {
+    letter-spacing: 0;
+  }
+  .documento img {
+    max-height: none;
+  }
+  .documento table {
+    page-break-inside: auto;
+  }
+}

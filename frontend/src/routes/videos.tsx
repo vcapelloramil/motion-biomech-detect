@@ -118,12 +118,20 @@ function BibliotecaPage() {
               : `${sesiones.length} ${sesiones.length === 1 ? "sesión" : "sesiones"} · ${totalGolpes} ${totalGolpes === 1 ? "golpe" : "golpes"}`}
           </p>
         </div>
-        <Link
-          to="/upload"
-          className="inline-flex min-h-11 items-center justify-center rounded-xl bg-gradient-neon px-5 text-sm font-semibold text-neon-foreground shadow-neon"
-        >
-          + Nueva sesión
-        </Link>
+        <div className="flex flex-wrap gap-3">
+          <Link
+            to="/evolucion"
+            className="inline-flex min-h-11 items-center justify-center rounded-xl border border-border px-5 text-sm font-semibold hover:border-neon/50"
+          >
+            Ver mi evolución
+          </Link>
+          <Link
+            to="/upload"
+            className="inline-flex min-h-11 items-center justify-center rounded-xl bg-gradient-neon px-5 text-sm font-semibold text-neon-foreground shadow-neon"
+          >
+            + Nueva sesión
+          </Link>
+        </div>
       </div>
 
       <div className="mt-8 flex flex-col gap-3 md:flex-row">

@@ -19,6 +19,7 @@ import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PrivacidadRouteImport } from './routes/privacidad'
 import { Route as PerformanceRouteImport } from './routes/performance'
 import { Route as IngresoRouteImport } from './routes/ingreso'
+import { Route as EvolucionRouteImport } from './routes/evolucion'
 import { Route as ClinicaRouteImport } from './routes/clinica'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ReporteIndexRouteImport } from './routes/reporte.index'
@@ -76,6 +77,11 @@ const IngresoRoute = IngresoRouteImport.update({
   path: '/ingreso',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EvolucionRoute = EvolucionRouteImport.update({
+  id: '/evolucion',
+  path: '/evolucion',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ClinicaRoute = ClinicaRouteImport.update({
   id: '/clinica',
   path: '/clinica',
@@ -110,6 +116,7 @@ const ProcesandoVideoIdRoute = ProcesandoVideoIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/clinica': typeof ClinicaRoute
+  '/evolucion': typeof EvolucionRoute
   '/ingreso': typeof IngresoRoute
   '/performance': typeof PerformanceRoute
   '/privacidad': typeof PrivacidadRoute
@@ -128,6 +135,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/clinica': typeof ClinicaRoute
+  '/evolucion': typeof EvolucionRoute
   '/ingreso': typeof IngresoRoute
   '/performance': typeof PerformanceRoute
   '/privacidad': typeof PrivacidadRoute
@@ -147,6 +155,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/clinica': typeof ClinicaRoute
+  '/evolucion': typeof EvolucionRoute
   '/ingreso': typeof IngresoRoute
   '/performance': typeof PerformanceRoute
   '/privacidad': typeof PrivacidadRoute
@@ -167,6 +176,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/clinica'
+    | '/evolucion'
     | '/ingreso'
     | '/performance'
     | '/privacidad'
@@ -185,6 +195,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/clinica'
+    | '/evolucion'
     | '/ingreso'
     | '/performance'
     | '/privacidad'
@@ -203,6 +214,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/clinica'
+    | '/evolucion'
     | '/ingreso'
     | '/performance'
     | '/privacidad'
@@ -222,6 +234,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ClinicaRoute: typeof ClinicaRoute
+  EvolucionRoute: typeof EvolucionRoute
   IngresoRoute: typeof IngresoRoute
   PerformanceRoute: typeof PerformanceRoute
   PrivacidadRoute: typeof PrivacidadRoute
@@ -310,6 +323,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IngresoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/evolucion': {
+      id: '/evolucion'
+      path: '/evolucion'
+      fullPath: '/evolucion'
+      preLoaderRoute: typeof EvolucionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/clinica': {
       id: '/clinica'
       path: '/clinica'
@@ -358,6 +378,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ClinicaRoute: ClinicaRoute,
+  EvolucionRoute: EvolucionRoute,
   IngresoRoute: IngresoRoute,
   PerformanceRoute: PerformanceRoute,
   PrivacidadRoute: PrivacidadRoute,

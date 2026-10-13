@@ -169,3 +169,61 @@ def resumen_de_sesion(golpes: list[dict[str, Any]]) -> dict[str, Any]:
             "se_apartan": MIN_GOLPES_APARTA,
         },
     }
+
+
+# --- Evolución: la misma consistencia, sesión por sesión ---------------------------------------------------------------------------------
+
+
+def serie_de_evolucion(sesiones: list[dict[str, Any]]) -> dict[str, Any]:
+    """La serie de sesiones de un mismo jugador, golpe y encuadre (paso 6 del plan §8, ``docs/ux/valor-sin-veredictos.md`` §3.3).
+
+    ``sesiones``: en orden cronológico, cada una con ``sesion_id``, ``fecha``, ``lado_camara`` y ``golpes`` (como ``resumen_de_sesion``).
+    Cada sesión se resume con la MISMA función que la vista de sesión: no hay una segunda definición de "medido" ni de "mismo orden".
+
+    No juzga: informa el cambio entre las dos últimas sesiones y lo compara con la variación habitual del propio jugador (la media de las
+    dispersiones robustas de sus sesiones), en la misma lógica del Criterio 3 (Δ ≤ σ_w = "dentro de lo habitual"). No dice si el cambio es
+    para bien o para mal: no hay referencia para eso."""
+    filas = []
+    for s in sesiones:
+        r = resumen_de_sesion(s["golpes"])
+        filas.append(
+            {
+                "sesion_id": s["sesion_id"],
+                "fecha": str(s["fecha"]),
+                "lado_camara": s.get("lado_camara"),
+                "golpes": r["golpes"],
+                "separacion_cadera_hombro": r["separacion_cadera_hombro"],
+                "orden": r["orden"],
+                "versiones_motor": r["versiones_motor"],
+                "golpes_que_se_apartan": len(r["golpes_que_se_apartan"]),
+            }
+        )
+
+    dispersiones = [f["separacion_cadera_hombro"]["dispersion"] for f in filas if f["separacion_cadera_hombro"]["dispersion"] is not None]
+    variacion = round(sum(dispersiones) / len(dispersiones), 2) if dispersiones else None
+
+    con_dato = [f for f in filas if f["separacion_cadera_hombro"]["mediana"] is not None]
+    cambio = None
+    if len(con_dato) >= 2:
+        antes, ahora = con_dato[-2], con_dato[-1]
+        delta = round(ahora["separacion_cadera_hombro"]["mediana"] - antes["separacion_cadera_hombro"]["mediana"], 2)
+        cambio = {
+            "anterior": antes["separacion_cadera_hombro"]["mediana"],
+            "actual": ahora["separacion_cadera_hombro"]["mediana"],
+            "delta": delta,
+            "dentro_de_lo_habitual": (abs(delta) <= variacion) if variacion is not None else None,
+        }
+
+    medianas = [f["separacion_cadera_hombro"]["mediana"] for f in con_dato]
+    versiones = sorted({v for f in filas for v in f["versiones_motor"]})
+    lados = sorted({f["lado_camara"] for f in filas if f["lado_camara"]})
+    return {
+        "version_regla": VERSION_REGLA,
+        "sesiones": filas,
+        "variacion_habitual": variacion,
+        "centro_habitual": round(_mediana(medianas), 2) if len(medianas) >= 3 else None,
+        "cambio_separacion": cambio,
+        "lados_de_camara": lados,
+        "versiones_motor": versiones,
+        "mezcla_de_versiones": len(versiones) > 1,
+    }

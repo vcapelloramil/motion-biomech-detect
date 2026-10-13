@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { Download } from "lucide-react";
 
 /**
@@ -6,25 +5,12 @@ import { Download } from "lucide-react";
  * ni se guarda en el servidor; es una exportación fiel de lo que se ve, con el sello de versión y las limitaciones (R4 y R5).
  */
 
-/** Abre todos los `<details>` (el detalle técnico va siempre abierto en el papel) y después imprime. */
+/**
+ * Imprime con el diálogo del navegador ("Guardar como PDF"). El reporte de un golpe y la sesión tienen una vista de impresión PROPIA
+ * (`documento-golpe.tsx`, `documento-sesion.tsx`: un documento A4 vertical); Evolución imprime la pantalla con la hoja de estilos de impresión.
+ */
 export function imprimirReporte() {
-  document.querySelectorAll("details").forEach((d) => {
-    d.open = true;
-  });
-  // Un instante para que el navegador pinte lo recién abierto antes de armar la página.
-  window.setTimeout(() => window.print(), 80);
-}
-
-/** También con Ctrl+P: el detalle técnico se abre solo antes de imprimir. */
-export function useAbrirDetallesAlImprimir() {
-  useEffect(() => {
-    const abrir = () =>
-      document.querySelectorAll("details").forEach((d) => {
-        d.open = true;
-      });
-    window.addEventListener("beforeprint", abrir);
-    return () => window.removeEventListener("beforeprint", abrir);
-  }, []);
+  window.print();
 }
 
 export function BotonDescargarPdf({ className }: { className?: string }) {

@@ -164,3 +164,27 @@ export async function eliminarSesion(sesion: { id: string; videos: FilaConReport
   const { error } = await cliente().from("sesiones").delete().eq("id", sesion.id);
   if (error) throw error;
 }
+
+// --- Evolución -------------------------------------------------------------------------------------------------------------------------
+
+export type GrupoDeEvolucion = {
+  atleta_id: string;
+  atleta: string;
+  gesto: string;
+  encuadre: string;
+  sesiones: number;
+};
+
+/** Los jugadores × golpe × encuadre con al menos una sesión, para elegir qué comparar. Liviano: sin videos ni reportes. */
+export async function gruposDeEvolucion(): Promise<GrupoDeEvolucion[]> {
+  const { data, error } = await cliente().from("sesiones").select("atleta_id, gesto, encuadre, atletas(nombre)");
+  if (error) throw error;
+  const mapa = new Map<string, GrupoDeEvolucion>();
+  for (const s of (data ?? []) as unknown as { atleta_id: string; gesto: string; encuadre: string; atletas: { nombre: string } | null }[]) {
+    const clave = `${s.atleta_id}|${s.gesto}|${s.encuadre}`;
+    const previo = mapa.get(clave);
+    if (previo) previo.sesiones += 1;
+    else mapa.set(clave, { atleta_id: s.atleta_id, atleta: s.atletas?.nombre ?? "Jugador", gesto: s.gesto, encuadre: s.encuadre, sesiones: 1 });
+  }
+  return [...mapa.values()].sort((a, b) => b.sesiones - a.sesiones);
+}

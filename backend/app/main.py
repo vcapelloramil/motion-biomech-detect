@@ -20,7 +20,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import get_cors_origins, get_max_intentos, get_pausa_recuperacion_s
-from app.routers import analisis, cuenta, salud, sesiones
+from app.routers import analisis, cuenta, evolucion, salud, sesiones
 
 def _recuperar_tras_pausa() -> None:
     """Al arrancar: reencola los golpes que quedaron ``encolado``/``procesando`` por un reinicio (``app.recuperacion``). Nunca tumba la API."""
@@ -68,3 +68,4 @@ app.include_router(salud.router)
 app.include_router(analisis.router)
 app.include_router(sesiones.router)
 app.include_router(cuenta.router)
+app.include_router(evolucion.router)

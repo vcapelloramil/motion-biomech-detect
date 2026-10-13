@@ -5,7 +5,8 @@ import { RutaProtegida } from "@/components/ruta-protegida";
 import { BadgePorClave, type Estado } from "@/components/estado";
 import { SecuenciaReal } from "@/components/reporte/secuencia-real";
 import { TresMomentos } from "@/components/reporte/tres-momentos";
-import { BotonDescargarPdf, LimitacionesDelPdf, SelloDelPdf, useAbrirDetallesAlImprimir } from "@/components/reporte/pdf";
+import { BotonDescargarPdf } from "@/components/reporte/pdf";
+import { DocumentoDeGolpe } from "@/components/reporte/documento-golpe";
 import { useSesion } from "@/lib/sesion";
 import {
   ENCUADRE_ETIQUETA,
@@ -164,14 +165,10 @@ function Reporte({ video, reporte }: { video: VideoConReporte; reporte: Record<s
   const cobertura = coberturaDe(reporte);
   const tiempos = tiemposDe(video);
   const fecha = sesion ? new Date(sesion.fecha + "T12:00:00").toLocaleDateString("es-AR", { day: "numeric", month: "long", year: "numeric" }) : null;
-  useAbrirDetallesAlImprimir();
 
   return (
-    <main className="mx-auto max-w-5xl px-5 py-10 md:py-14 print:py-0">
-      <SelloDelPdf
-        titulo={`${sesion ? (GESTO_ETIQUETA[sesion.gesto] ?? sesion.gesto) : "Golpe"}${sesion ? ` · cámara de ${ENCUADRE_ETIQUETA[sesion.encuadre] ?? sesion.encuadre}` : ""}${fecha ? ` · ${fecha}` : ""}${sesion?.atletas?.nombre ? ` · ${sesion.atletas.nombre}` : ""}`}
-        versiones={t.version_motor ? [t.version_motor] : []}
-      />
+    <>
+    <main className="mx-auto max-w-5xl px-5 py-10 md:py-14 print:hidden">
       <nav aria-label="Ruta" className="font-mono text-xs text-muted-foreground print:hidden">
         <Link to="/videos" className="hover:text-foreground">Biblioteca</Link>
         {sesion && (
@@ -392,12 +389,13 @@ function Reporte({ video, reporte }: { video: VideoConReporte; reporte: Record<s
         </div>
       </details>
 
-      <LimitacionesDelPdf />
-
       <p className="mt-10 text-center text-xs text-muted-foreground">
         KinetiQ documenta el movimiento. No diagnostica ni reemplaza la evaluación de un profesional.
       </p>
     </main>
+    {/* El PDF es un documento aparte (A4 vertical), no esta pantalla impresa: ver documento-golpe.tsx. */}
+    <DocumentoDeGolpe video={video} reporte={reporte} />
+    </>
   );
 }
 
