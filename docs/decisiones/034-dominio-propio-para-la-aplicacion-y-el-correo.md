@@ -30,7 +30,10 @@ frontend". El Pack ya está: hay que decidir **dónde vive el DNS**, porque de e
 - **NC.me configuró GitHub Pages** (el flujo que ofrece el Student Pack): creó el repositorio **`vcapelloramil.github.io`** en la cuenta de Valentín, con un `CNAME` (`kinetiqtennis.me`) y un `README.md`.
   Ese repositorio es el *sitio de usuario* de GitHub: con un `CNAME`, hace que los sitios de proyecto de la cuenta se redirijan a `kinetiqtennis.me/<proyecto>/`.
 
-## Hecho el 13/10/2026
+## Hecho el 13/10/2026 (actualizado: dominio en producción)
+
+- **Valentín completó la guía (pasos 1 a 5):** deploy con `kinetiqtennis.me`, Supabase (Site URL y Redirect URLs), `KINETIQ_CORS_ORIGINS` en Render, prueba en incógnito OK y repositorio `vcapelloramil.github.io` eliminado.
+- **Brevo:** sin clave SMTP todavía; ticket abierto a soporte. **Plan B: Resend** si no hay respuesta.
 
 - **`frontend/wrangler.jsonc`:** `routes: [{ "pattern": "kinetiqtennis.me", "custom_domain": true }]` y `workers_dev: true` (el `kinetiq.v-capelloramil.workers.dev` sigue funcionando). Verificado en el
   build (`dist/server/wrangler.json`). Falta que Valentín haga `wrangler deploy`.

@@ -6,6 +6,17 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-13 (madrugada) — Novedades de Valentín (solo registro): dominio en producción y Brevo
+
+- **Dominio hecho (Valentín):** pasos 1 a 5 de la guía. Deploy con **`kinetiqtennis.me` como dominio personalizado** (el `workers.dev` sigue activo); Supabase **Site URL y Redirect URLs** actualizadas;
+  `KINETIQ_CORS_ORIGINS` en Render con los tres orígenes; **prueba en ventana de incógnito OK**; repositorio **`vcapelloramil.github.io` eliminado**. Pendiente de verificar en una próxima prueba: registro con correo real
+  (depende de SMTP) y "Olvidé mi contraseña".
+- **Brevo:** **sigue sin generar la clave SMTP**; Valentín **abrió un ticket a soporte**. **Si no hay respuesta, se pasa a Resend** (plan B de la decisión 034); el cambio es solo de los datos de SMTP en Supabase y el
+  DNS del dominio en Cloudflare (los registros que pida Resend, como "solo DNS").
+- **Orden de Valentín:** cuando termine el Paso B de drive y revés, resumir en `docs/resultados`, bitácora al día, commit y push. **No empezar nada más**; sigue mañana en una sesión nueva.
+
+---
+
 ## 2026-10-12, 23:45 — Decisión 035 APLICADA (B y D, motor 0.5.2) · lista para publicar
 
 - **B:** el saque no emite veredicto del orden en ningún encuadre (`depende_del_encuadre` en `RESPALDO_POR_GRUPO`); la tarjeta lo explica sin literatura ni estadística y el detalle lleva el fundamento.
