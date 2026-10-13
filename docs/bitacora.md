@@ -6,6 +6,57 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-14 (cierre del día) — Estado, qué está solo en la rama de respaldo y cómo retomar
+
+**Lo que no se hizo hoy a propósito:** nada nuevo después de esta entrada. El árbol de trabajo está limpio y todo lo terminado está commiteado.
+
+### Dónde está cada cosa
+
+| Qué | Dónde | Commit | En producción |
+| --- | --- | --- | --- |
+| Motor 0.5.4, contrato 1.4, decisión 037 (empate = golpe medido, "sin diferencia medible", picos no medidos con motivo), hallazgos a–e, PDF barato, `GET /sesiones/{id}/consistencia`, recuperación al arrancar, cupo de análisis, eliminar golpe/sesión, Privacidad | `main` | hasta `56a13c1` | **Sí** (servidor: `/health` = 0.5.4; el frontend lo republicó Valentín) |
+| **Paso 5:** Perfil real mínimo, descargar mis datos, eliminar cuenta (`DELETE /cuenta`, archivos de ambos buckets primero) | **solo en la rama `respaldo-13-10`** | `5b1dc01` | **No** |
+| **Paso 6:** Evolución mínima real (`GET /evolucion`, pantalla `/evolucion`, "Ver mi evolución" en la Biblioteca) y **PDF como documento A4** (golpe y sesión), especificación al día | **solo en la rama `respaldo-13-10`** | `0bbc1df` | **No** |
+| Esta entrada | `respaldo-13-10` | el commit siguiente | No |
+
+`main` y `origin/main` quedan en `56a13c1`: **Render no tiene nada nuevo que desplegar** (la rama de respaldo no se despliega). Lo de producción de hoy sigue funcionando sin los pasos 5 y 6.
+
+### Pruebas al cierre (sobre la rama de respaldo)
+
+- Servidor: suite rápida **589 passed** (`PYTHONPATH=. .venv/Scripts/python.exe -m pytest ../tests -m "not slow" -q`, desde `backend/`).
+- Frontend: `bun test` **106 pass**, `tsc --noEmit` limpio, `eslint` sin errores (los avisos de `prettier` son anteriores y de todo el árbol), `bun run build` limpio.
+
+### Qué falta probar (no se pudo hoy; nada de esto está verificado en pantalla real)
+
+1. **Eliminar cuenta** (`DELETE /cuenta`): con una **cuenta descartable**, cuando funcione el correo propio (el registro pide confirmar por correo). Cargar un golpe, "Eliminar mi cuenta" y comprobar que Storage
+   queda sin la carpeta del usuario en los dos buckets (`videos` y `artefactos`) y que la cuenta ya no entra. La cascada de claves foráneas y `auth.admin.delete_user` están razonadas del esquema, no ejecutadas.
+2. **Evolución** en pantalla real con las dos sesiones del corpus (24/9 y 25/9, saque en tres cuartos, ya subidas y procesadas con 0.5.3): ver los dos puntos, la línea de variación, "se mantuvo" o "aumentó/disminuyó"
+   y que el aviso de versiones del motor aparezca si mezcla 0.5.3 y 0.5.4. Los gráficos solo se miraron con una serie sintética.
+3. **PDF** impreso de verdad (Archivo → Imprimir → Guardar como PDF) del reporte de un golpe y de una sesión: salto de página, imágenes cargadas y A4 vertical. Solo se miró el documento renderizado a 210 mm con
+   datos sintéticos.
+4. **Perfil** con una cuenta real (guardar nombre y rol, editar un jugador, "Descargar mis datos").
+5. **Procesando en escritorio** (título, botón y etiqueta; arreglado el 14/10 pero sin ver con sesión real).
+6. Antes de la demo: el **correo de contacto** `contacto@kinetiqtennis.me` (Valentín configuró el reenvío) y revisar el texto de `/privacidad` (declaración suya).
+
+### Cómo retomar
+
+```bash
+cd C:\Users\valen\motion-biomech-detect
+git fetch origin
+git checkout main && git merge --ff-only origin/respaldo-13-10   # lleva 5b1dc01, 0bbc1df y esta entrada a main
+# probar antes de publicar:
+cd backend && PYTHONPATH=. .venv/Scripts/python.exe -m pytest ../tests -m "not slow" -q
+cd ../frontend && bun test && node_modules/.bin/tsc --noEmit && bun run build
+```
+
+- **Publicar:** `git push origin main` (Render redeploya el servidor; sin análisis en curso, y de todos modos la recuperación al arrancar reencola lo que quede colgado) y después **republicar el frontend**
+  (`bun run build` y `wrangler deploy` desde `frontend/`): hacen falta las dos cosas, porque la pantalla de Evolución y el Perfil llaman a `/evolucion` y `/cuenta`.
+- **Sigue en el plan (§8):** paso 7 (respaldo con restauración probada, 0,75) y paso 8 (ensayo de la demo, 0,5). Núcleo restante ≈ 1,25 sesiones más las pruebas de arriba. Demo: 28–30/10.
+- **Después de la demo (§9):** calibrar D para drive y revés, Criterio 3 con el tiempo real, `RESPALDO_POR_GRUPO` (columna (b)) y, solo si hay tiempo, cintas de color.
+- **Decisiones vigentes que no hay que revertir sin avisar:** 035 y 036 (ningún grupo emite veredicto del orden), 037 (empate = medido; brazo "no medido" con su motivo, sin máximo parcial).
+
+---
+
 ## 2026-10-14 (tarde) — Paso 6 (Evolución mínima real) y el PDF como documento, en local
 
 **Sin push** (orden de Valentín; suite del servidor 589 passed, `bun test` 106). Las sesiones del corpus (24/9 y 25/9, saque en tres cuartos) ya están subidas y procesadas con 0.5.3.
