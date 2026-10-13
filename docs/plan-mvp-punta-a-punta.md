@@ -214,13 +214,13 @@ interruptor Simple/Detallado sale del núcleo ("PDF sin interruptor").
 | 3 | **Vista de sesión y consistencia entre golpes** (agregador, `reportes_sesion`, tarjetas "Tus golpes entre sí", selector de golpe) | 1,5 | `docs/ux/valor-sin-veredictos.md` §3.2 |
 | 4 | **PDF barato, sin interruptor**: el reporte con el detalle técnico siempre abierto y estilo de impresión (`@media print`), con sello de versión, trazabilidad y limitaciones | 1 | Ya no depende de la vista detallada; la tabla 4.7 lo pone en el núcleo |
 | 5 | **Perfil real mínimo + eliminar cuenta y datos** (ambos buckets) | 2,5 | Rol, mano dominante, descargar mis datos (recortable), eliminar (no recortable) |
-| 6 | **Evolución mínima real** | 1 | Necesita **2 sesiones reales** del mismo gesto y encuadre en días distintos (las graba Valentín tras el 2) |
+| 6 | **Evolución mínima real** | 1 | Necesita **2 sesiones reales** del mismo gesto y encuadre en días distintos (las graba Valentín; protocolo: `docs/protocolo-sesiones-evolucion.md`; grabar no depende de la app, solo la carga) |
 | 7 | **Respaldo con restauración probada** y recuperación al arranque (6.5) | 1,25 | |
 | 8 | **Ensayo de la demo** | 0,5 | Un golpe por gesto subido, congelar |
 | | **Núcleo** | **10,75** | |
 
 **Recortes, en este orden (lo primero cae primero):** (a) diseño nuevo de Landing, Registro e Ingreso, miniatura real en Biblioteca y reproductor sincronizado; (b) "descargar mis datos" del paso 5 (queda eliminar);
-(c) de "varios golpes" a "hasta 3 golpes por sesión" (−0,75) en el paso 2. **Fuera del núcleo por decisión del 13/10:** el interruptor Simple/Detallado y la vista por defecto según el rol (0,5, si queda margen).
+(c) de "varios golpes" a "hasta 3 golpes por sesión" (−0,75) en el paso 2 — **ojo: con 3 golpes no hay dispersión ni repetibilidad (hacen falta ≥ 4) y Evolución queda sin banda propia; si se aplica, el mínimo es 6**. **Fuera del núcleo por decisión del 13/10:** el interruptor Simple/Detallado y la vista por defecto según el rol (0,5, si queda margen).
 **No se recortan:** 1, 2, 3, 4, eliminar cuenta y el ensayo.
 
 ### Núcleo: lo que tiene que estar para la demo (13,25 sesiones restantes; se hicieron el punto 3 y el Paso A)
