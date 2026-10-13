@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import heroPose from "@/assets/player-hero.jpg";
-import kineticChain from "@/assets/clinic-session.jpg";
+import kineticChain from "@/assets/player-serve.jpg";
+import { useSesion } from "@/lib/sesion";
 import {
   Activity,
   Gauge,
@@ -36,6 +37,9 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
+  // Un visitante no puede cargar: el botón lo lleva a crear la cuenta (la carga pide sesión).
+  const { sesion } = useSesion();
+  const destinoCarga = sesion ? ("/upload" as const) : ("/registro" as const);
   return (
     <main>
       {/* HERO */}
@@ -61,10 +65,10 @@ function Home() {
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
-                to="/upload"
+                to={destinoCarga}
                 className="group inline-flex items-center gap-2 rounded-xl bg-gradient-neon px-6 py-3 font-semibold text-neon-foreground shadow-neon transition-transform hover:scale-105"
               >
-                <Upload className="h-4 w-4" /> Cargar un video
+                <Upload className="h-4 w-4" /> {sesion ? "Cargar un video" : "Crear cuenta"}
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
               <Link
@@ -130,7 +134,7 @@ function Home() {
       </section>
 
       {/* ALCANCE DECLARADO */}
-      <section className="mx-auto max-w-7xl px-6 py-20">
+      <section id="alcance" className="mx-auto max-w-7xl px-6 py-20">
         <div className="mb-12 max-w-2xl">
           <div className="font-mono text-xs uppercase tracking-widest text-neon">
             Alcance declarado
@@ -152,8 +156,8 @@ function Home() {
             desc="Sobre videos de entrenamiento de un solo jugador, grabados a 120 fps o más, en saque, drive y revés."
             features={[
               "Orden de los picos de velocidad: pelvis, torso, brazo",
-              "Separación cadera-hombro y ángulos articulares",
-              "Comparación del jugador consigo mismo entre sesiones",
+              "Separación cadera-hombro y ángulos de rodilla y codo",
+              "Comparación del jugador consigo mismo entre sesiones (en preparación)",
               "Confianza por articulación y estado no auditable explícito",
             ]}
             cta="Cómo se calcula cada número"
@@ -172,8 +176,8 @@ function Home() {
               "Decirte si tu orden de cadera y tronco es el correcto: con una sola cámara depende de desde dónde grabes",
               "Exportación a formatos médicos y conclusiones clínicas",
             ]}
-            cta="Cómo grabar correctamente"
-            to="/upload"
+            cta={sesion ? "Cómo grabar correctamente" : "Crear cuenta y ver cómo grabar"}
+            to={destinoCarga}
           />
         </div>
       </section>
@@ -227,7 +231,7 @@ function Home() {
           ))}
         </div>
         <p className="mt-6 text-center text-sm text-muted-foreground">
-          El procesamiento es asincrónico: se avisa cuando el reporte está listo.
+          El procesamiento es asincrónico: podés cerrar la página y volver; el resultado queda en tu biblioteca.
         </p>
       </section>
 
@@ -237,9 +241,9 @@ function Home() {
           <div className="relative overflow-hidden rounded-3xl border border-clinic/30 bg-card shadow-clinic">
             <img
               src={kineticChain}
-              alt="Visualización de la cadena cinética"
-              width={1280}
-              height={1280}
+              alt="Jugadora de tenis en el momento del saque"
+              width={1024}
+              height={1024}
               loading="lazy"
               className="w-full"
             />
@@ -256,7 +260,7 @@ function Home() {
               El dato que el ojo <span className="text-gradient-clinic">no alcanza a ver</span>.
             </h2>
             <p className="mt-5 text-lg text-muted-foreground">
-              Entre el pico de velocidad de la pelvis y el del brazo pasan unos 160 milisegundos. A
+              Entre el pico de velocidad de la pelvis y el del brazo pasa una fracción de segundo. A
               esa escala, el orden en que se encadenan los segmentos no se juzga a ojo: se mide, o
               no se mide.
             </p>
@@ -270,7 +274,7 @@ function Home() {
                 {
                   i: <Ruler />,
                   t: "Magnitudes con unidad",
-                  d: "Separación cadera-hombro, flexión de rodilla y ángulo de tronco, cada una con su confianza.",
+                  d: "Separación cadera-hombro, flexión de rodilla y ángulo del codo, cada una con su confianza.",
                 },
                 {
                   i: <CircleSlash />,
@@ -346,10 +350,10 @@ function Home() {
           necesaria.
         </p>
         <Link
-          to="/upload"
+          to={destinoCarga}
           className="mt-8 inline-flex items-center gap-2 rounded-xl bg-gradient-neon px-8 py-4 font-display text-lg font-semibold text-neon-foreground shadow-neon"
         >
-          Cargar mi primer video <ArrowRight className="h-5 w-5" />
+          {sesion ? "Cargar mi primer video" : "Crear cuenta"} <ArrowRight className="h-5 w-5" />
         </Link>
       </section>
     </main>

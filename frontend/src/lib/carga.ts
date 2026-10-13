@@ -96,6 +96,42 @@ export function problemaDelArchivo(archivo: { name: string; size: number; type: 
   return null;
 }
 
+// --- varios golpes por sesión (paso 2 del plan §8, 13/10/2026) -----------------------------------------
+
+/** Cuántos golpes entran en una sesión. 12 permite subir las dos tomas de una misma sesión; el mínimo útil para la consistencia es 6. */
+export const MAX_GOLPES = 12;
+
+/** Identidad de un archivo elegido: el mismo archivo elegido dos veces no se agrega dos veces. */
+export function claveDeArchivo(a: { name: string; size: number; lastModified?: number }): string {
+  return `${a.name}|${a.size}|${a.lastModified ?? 0}`;
+}
+
+/** Cuántos de `nuevos` caben en la lista (`actuales` ya elegidos) sin pasar de `MAX_GOLPES`. */
+export function cuantosCaben(actuales: number, nuevos: number, tope: number = MAX_GOLPES): { aceptados: number; descartados: number } {
+  const libres = Math.max(0, tope - actuales);
+  const aceptados = Math.min(libres, Math.max(0, nuevos));
+  return { aceptados, descartados: Math.max(0, nuevos) - aceptados };
+}
+
+export type EstadoArchivoCarga = "pendiente" | "subiendo" | "enviando" | "enviado" | "error";
+
+export type ResumenCarga = { total: number; enviados: number; con_error: number; sin_enviar: number; terminado: boolean; completo: boolean };
+
+/** El estado de la carga de varios golpes a partir de los de cada archivo (los que no se van a subir no cuentan). */
+export function resumenDeCarga(estados: readonly EstadoArchivoCarga[]): ResumenCarga {
+  const enviados = estados.filter((e) => e === "enviado").length;
+  const con_error = estados.filter((e) => e === "error").length;
+  const sin_enviar = estados.length - enviados - con_error;
+  return {
+    total: estados.length,
+    enviados,
+    con_error,
+    sin_enviar,
+    terminado: estados.length > 0 && sin_enviar === 0,
+    completo: estados.length > 0 && enviados === estados.length,
+  };
+}
+
 /**
  * Nombre seguro para la clave del objeto en Storage: solo letras ASCII, números, guion, guion bajo y punto.
  * Storage rechaza otros caracteres con `InvalidKey` (lo medido con la página de prueba del iPhone, 9/10).

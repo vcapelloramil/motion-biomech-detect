@@ -1,20 +1,26 @@
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type DragEvent, type FormEvent } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { AlertTriangle, CheckCircle2, Info, Loader2, UploadCloud } from "lucide-react";
+import { AlertTriangle, CheckCircle2, CircleDashed, Film, Info, Loader2, UploadCloud, X } from "lucide-react";
 import { RutaProtegida } from "@/components/ruta-protegida";
+import { EsquemaEncuadre } from "@/components/esquema-encuadre";
 import { useSesion } from "@/lib/sesion";
 import {
   ENCUADRES,
   GESTOS,
   LADOS_CAMARA,
   MANOS,
+  MAX_GOLPES,
   MODOS_CAPTURA,
   NIVELES,
   DURACION_AVISO_S,
+  type EstadoArchivoCarga,
   type Mano,
   type Nivel,
+  claveDeArchivo,
+  cuantosCaben,
   esValor,
   problemaDelArchivo,
+  resumenDeCarga,
   rutaDelVideo,
   tipoDeContenido,
 } from "@/lib/carga";
@@ -33,10 +39,10 @@ import { fmt } from "@/lib/formato";
 export const Route = createFileRoute("/upload")({
   head: () => ({
     meta: [
-      { title: "Cargar video — KinetiQ" },
+      { title: "Cargar golpes — KinetiQ" },
       {
         name: "description",
-        content: "Subí el video de un golpe y obtené el orden en que la cadera, el tronco y el brazo alcanzan su velocidad máxima.",
+        content: "Subí los videos de tus golpes y obtené el orden en que la cadera, el tronco y el brazo alcanzan su velocidad máxima.",
       },
     ],
   }),
@@ -58,7 +64,40 @@ function hoy(): string {
 }
 
 type Fase = "formulario" | "enviando" | "listo";
-type Fallo = { texto: string; reenviar: boolean } | null;
+
+/** Un video elegido. Cada video es un golpe de la misma sesión. */
+type Item = {
+  clave: string;
+  archivo: File;
+  duracion: number | null;
+  /** Por qué no se va a subir (formato, tamaño); `null` si se sube. */
+  problema: string | null;
+  estado: EstadoArchivoCarga;
+  progreso: number;
+  /** Ya guardado en Storage y en la base: si falla el envío a analizar, se reintenta solo eso. */
+  videoId: string | null;
+  error: string | null;
+};
+
+const ETIQUETA_ESTADO: Record<EstadoArchivoCarga, string> = {
+  pendiente: "Listo para subir",
+  subiendo: "Subiendo",
+  enviando: "Enviando a analizar",
+  enviado: "En análisis",
+  error: "No se pudo",
+};
+
+const DESCRIPCION_ENCUADRE: Record<string, string> = {
+  perfil: "La cámara está a un costado del jugador, a 90° de la dirección del golpe: se ve su lado completo.",
+  tres_cuartos: "La cámara está en diagonal, por detrás de un costado del jugador, a unos 45° de la dirección del golpe.",
+};
+
+function textoDeError(err: unknown): string {
+  const estado = (err as { estado?: number }).estado;
+  if (estado === 413) return "El archivo es demasiado grande (máximo 50 MB). Recortalo y volvé a elegirlo.";
+  if (estado === 401 || estado === 403) return "Tu sesión venció. Ingresá de nuevo y volvé a intentar.";
+  return "No pudimos guardar el video. Revisá tu conexión y volvé a probar.";
+}
 
 function CargarPage() {
   const { sesion } = useSesion();
@@ -78,17 +117,15 @@ function CargarPage() {
   const [modo, setModo] = useState("");
   const [fecha, setFecha] = useState(hoy());
 
-  const [archivo, setArchivo] = useState<File | null>(null);
-  const [problema, setProblema] = useState<string | null>(null);
-  const [duracion, setDuracion] = useState<number | null>(null);
+  const [items, setItems] = useState<Item[]>([]);
+  const [aviso, setAviso] = useState<string | null>(null);
 
   const [fase, setFase] = useState<Fase>("formulario");
   const [paso, setPaso] = useState("");
-  const [progreso, setProgreso] = useState(0);
   const [error, setError] = useState<string | null>(null);
-  const [fallo, setFallo] = useState<Fallo>(null);
-  // Lo ya hecho cuando falla solo el envío: el video está guardado y se reintenta únicamente la orden de analizar.
-  const guardado = useRef<{ videoId: string } | null>(null);
+  // La sesión ya creada: un reintento agrega los golpes que faltaron a la MISMA sesión y los datos quedan fijos.
+  const sesionRef = useRef<string | null>(null);
+  const [sesionCreada, setSesionCreada] = useState(false);
 
   useEffect(() => {
     let activo = true;
@@ -109,138 +146,217 @@ function CargarPage() {
     };
   }, []);
 
-  function elegirArchivo(f: File | null) {
-    setArchivo(null);
-    setProblema(null);
-    setDuracion(null);
-    if (!f) return;
-    const p = problemaDelArchivo(f);
-    if (p) return setProblema(p.texto);
-    setArchivo(f);
-    // La duración solo avisa (un golpe dura pocos segundos). Si el navegador no puede leerla, se omite.
-    const url = URL.createObjectURL(f);
+  function cambiar(clave: string, parche: Partial<Item>) {
+    setItems((prev) => prev.map((it) => (it.clave === clave ? { ...it, ...parche } : it)));
+  }
+
+  function agregarArchivos(lista: FileList | File[] | null) {
+    if (!lista) return;
+    setAviso(null);
+    setError(null);
+    const existentes = new Set(items.map((p) => p.clave));
+    const distintos = Array.from(lista).filter((f) => !existentes.has(claveDeArchivo(f)));
+    const { aceptados, descartados } = cuantosCaben(items.length, distintos.length);
+    if (descartados > 0) setAviso(`Una sesión admite hasta ${MAX_GOLPES} golpes: quedaron afuera ${descartados}.`);
+    const agregados: Item[] = distintos.slice(0, aceptados).map((f) => ({
+      clave: claveDeArchivo(f),
+      archivo: f,
+      duracion: null,
+      problema: problemaDelArchivo(f)?.texto ?? null,
+      estado: "pendiente",
+      progreso: 0,
+      videoId: null,
+      error: null,
+    }));
+    setItems((prev) => [...prev, ...agregados]);
+    for (const it of agregados) if (!it.problema) leerDuracion(it);
+  }
+
+  /** La duración solo avisa (un golpe dura pocos segundos). Si el navegador no puede leerla, se omite. */
+  function leerDuracion(it: Item) {
+    const url = URL.createObjectURL(it.archivo);
     const v = document.createElement("video");
     v.preload = "metadata";
     v.onloadedmetadata = () => {
-      if (Number.isFinite(v.duration)) setDuracion(v.duration);
+      if (Number.isFinite(v.duration)) cambiar(it.clave, { duracion: v.duration });
       URL.revokeObjectURL(url);
     };
     v.onerror = () => URL.revokeObjectURL(url);
     v.src = url;
   }
 
-  async function enviarAnalisis(videoId: string) {
-    setPaso("Enviando a analizar…");
-    const token = sesion?.access_token;
-    if (!token) {
-      setFallo({ texto: "Tu sesión venció. Ingresá de nuevo y volvé a intentar.", reenviar: false });
-      return setFase("formulario");
-    }
-    const r = await pedirAnalisis(videoId, token);
-    if (r.ok) {
-      guardado.current = null;
-      // El análisis ya está en cola: se sigue desde la pantalla Procesando.
-      void navegar({ to: "/procesando/$videoId", params: { videoId } });
-      return setFase("listo");
-    }
-    setFallo({ texto: r.texto, reenviar: r.reintentable });
-    setFase("formulario");
+  function quitar(clave: string) {
+    setItems((prev) => prev.filter((it) => it.clave !== clave));
+  }
+
+  function alSoltar(e: DragEvent<HTMLLabelElement>) {
+    e.preventDefault();
+    agregarArchivos(e.dataTransfer.files);
   }
 
   async function enviar(e: FormEvent) {
     e.preventDefault();
     setError(null);
-    setFallo(null);
+    setAviso(null);
 
     if (!usuarioId || !sesion) return setError("Tu sesión venció. Ingresá de nuevo.");
     const creaAtleta = atletaId === "nuevo";
-    if (creaAtleta) {
-      if (!nombreAtleta.trim()) return setError("Escribí el nombre del jugador.");
-      if (!esValor(MANOS, mano)) return setError("Elegí la mano dominante del jugador.");
-      if (!esValor(NIVELES, nivel)) return setError("Elegí el nivel del jugador.");
+    if (!sesionRef.current) {
+      if (creaAtleta) {
+        if (!nombreAtleta.trim()) return setError("Escribí el nombre del jugador.");
+        if (!esValor(MANOS, mano)) return setError("Elegí la mano dominante del jugador.");
+        if (!esValor(NIVELES, nivel)) return setError("Elegí el nivel del jugador.");
+      }
+      if (!esValor(GESTOS, gesto)) return setError("Elegí el golpe.");
+      if (!esValor(ENCUADRES, encuadre)) return setError("Elegí el encuadre de la cámara.");
+      if (!esValor(LADOS_CAMARA, lado)) return setError("Elegí de qué lado del jugador estaba la cámara.");
+      if (!esValor(MODOS_CAPTURA, modo)) return setError("Elegí cómo grabaste los videos.");
+      if (!fecha) return setError("Elegí la fecha de la grabación.");
     }
-    if (!esValor(GESTOS, gesto)) return setError("Elegí el golpe.");
-    if (!esValor(ENCUADRES, encuadre)) return setError("Elegí el encuadre de la cámara.");
-    if (!esValor(LADOS_CAMARA, lado)) return setError("Elegí de qué lado del jugador estaba la cámara.");
-    if (!esValor(MODOS_CAPTURA, modo)) return setError("Elegí cómo grabaste el video.");
-    if (!fecha) return setError("Elegí la fecha de la grabación.");
-    if (!archivo) return setError("Elegí el video del golpe.");
-    const tipo = tipoDeContenido(archivo.name, archivo.type);
-    if (!tipo) return setError("Subí un video MP4 o MOV.");
+    const aSubir = items.filter((it) => !it.problema && it.estado !== "enviado");
+    if (aSubir.length === 0) return setError("Elegí al menos un video de un golpe.");
+    for (const it of aSubir) {
+      if (!tipoDeContenido(it.archivo.name, it.archivo.type)) return setError("Subí videos MP4 o MOV.");
+    }
 
     setFase("enviando");
-    setProgreso(0);
-    let sesionId: string | null = null;
-    let ruta: string | null = null;
+    let sesionNueva: string | null = null;
+    let guardados = 0;
     try {
-      let idAtleta = atletaId;
-      if (creaAtleta) {
-        setPaso("Guardando al jugador…");
-        const nuevo = await crearAtleta(usuarioId, { nombre: nombreAtleta.trim(), mano_dominante: mano as Mano, nivel: nivel as Nivel });
-        idAtleta = nuevo.id;
-        setAtletas((prev) => [...(prev ?? []), nuevo]);
-        setAtletaId(nuevo.id);
+      if (!sesionRef.current) {
+        let idAtleta = atletaId;
+        if (creaAtleta) {
+          setPaso("Guardando al jugador…");
+          const nuevo = await crearAtleta(usuarioId, { nombre: nombreAtleta.trim(), mano_dominante: mano as Mano, nivel: nivel as Nivel });
+          idAtleta = nuevo.id;
+          setAtletas((prev) => [...(prev ?? []), nuevo]);
+          setAtletaId(nuevo.id);
+        }
+        setPaso("Creando la sesión…");
+        sesionNueva = await crearSesion(usuarioId, {
+          atleta_id: idAtleta,
+          gesto,
+          encuadre,
+          lado_camara: lado,
+          modo_captura: modo,
+          fecha,
+        } as Parameters<typeof crearSesion>[1]);
+        sesionRef.current = sesionNueva;
+        setSesionCreada(true);
       }
-      setPaso("Creando la sesión…");
-      sesionId = await crearSesion(usuarioId, {
-        atleta_id: idAtleta,
-        gesto,
-        encuadre,
-        lado_camara: lado,
-        modo_captura: modo,
-        fecha,
-      });
-
-      const videoId = crypto.randomUUID();
-      ruta = rutaDelVideo(usuarioId, videoId, archivo.name);
-      setPaso("Subiendo el video…");
-      await subirVideo({ ruta, archivo, tipo, accessToken: sesion.access_token, alProgresar: setProgreso });
-
-      setPaso("Registrando el video…");
-      await crearVideo({ id: videoId, sesion_id: sesionId, usuario_id: usuarioId, ruta_almacenamiento: ruta });
-      guardado.current = { videoId };
-    } catch (err) {
-      await descartarCarga(sesionId, ruta);
-      const estado = (err as { estado?: number }).estado;
-      setFallo({
-        texto:
-          estado === 413
-            ? "El archivo es demasiado grande (máximo 50 MB). Recortalo y volvé a elegirlo."
-            : estado === 401 || estado === 403
-              ? "Tu sesión venció. Ingresá de nuevo y volvé a intentar."
-              : "No pudimos guardar el video. Revisá tu conexión y volvé a probar.",
-        reenviar: false,
-      });
-      return setFase("formulario");
+    } catch {
+      setFase("formulario");
+      return setError("No pudimos crear la sesión. Revisá tu conexión y volvé a probar.");
     }
-    await enviarAnalisis(guardado.current!.videoId);
+    const sesionId = sesionRef.current as string;
+
+    // Un golpe por vez: se sube, se registra y se manda a analizar. El servidor los procesa de a uno, en cola.
+    const resultado = new Map<string, EstadoArchivoCarga>();
+    const idsEnviados: string[] = [];
+    for (const [i, it] of aSubir.entries()) {
+      setPaso(`Golpe ${i + 1} de ${aSubir.length}`);
+      let videoId = it.videoId;
+      if (!videoId) {
+        const nuevoId = crypto.randomUUID();
+        const ruta = rutaDelVideo(usuarioId, nuevoId, it.archivo.name);
+        const tipo = tipoDeContenido(it.archivo.name, it.archivo.type) as string;
+        cambiar(it.clave, { estado: "subiendo", progreso: 0, error: null });
+        try {
+          await subirVideo({
+            ruta,
+            archivo: it.archivo,
+            tipo,
+            accessToken: sesion.access_token,
+            alProgresar: (f) => cambiar(it.clave, { progreso: f }),
+          });
+          await crearVideo({ id: nuevoId, sesion_id: sesionId, usuario_id: usuarioId, ruta_almacenamiento: ruta });
+        } catch (err) {
+          await descartarCarga(null, ruta);
+          cambiar(it.clave, { estado: "error", error: textoDeError(err) });
+          resultado.set(it.clave, "error");
+          continue;
+        }
+        videoId = nuevoId;
+        guardados += 1;
+        cambiar(it.clave, { videoId });
+      }
+      cambiar(it.clave, { estado: "enviando", progreso: 1 });
+      const r = await pedirAnalisis(videoId, sesion.access_token);
+      if (r.ok) {
+        cambiar(it.clave, { estado: "enviado" });
+        resultado.set(it.clave, "enviado");
+        idsEnviados.push(videoId);
+      } else {
+        cambiar(it.clave, { estado: "error", error: r.texto });
+        resultado.set(it.clave, "error");
+      }
+    }
+
+    // Si no se guardó ningún golpe, la sesión recién creada no tiene nada: se descarta para no dejarla vacía.
+    if (sesionNueva && guardados === 0) {
+      await descartarCarga(sesionNueva, null);
+      sesionRef.current = null;
+      setSesionCreada(false);
+    }
+
+    const estados = [...resultado.values()];
+    const resumen = resumenDeCarga(estados);
+    if (resumen.completo) {
+      // Un solo golpe en toda la sesión: se sigue directo desde su pantalla de progreso (como antes de cargar varios).
+      const yaEnviados = items.filter((it) => it.estado === "enviado").length;
+      if (yaEnviados + idsEnviados.length === 1 && idsEnviados.length === 1) {
+        void navegar({ to: "/procesando/$videoId", params: { videoId: idsEnviados[0] } });
+      }
+      return setFase("listo");
+    }
+    setFase("formulario");
+    setError(
+      resumen.con_error > 0
+        ? `${resumen.con_error === 1 ? "1 golpe no se pudo" : `${resumen.con_error} golpes no se pudieron`} enviar. Los demás ya están en análisis: podés reintentar solo los que fallaron.`
+        : null,
+    );
   }
 
-  function otraCarga() {
+  function otraSesion() {
+    sesionRef.current = null;
+    setSesionCreada(false);
+    setItems([]);
+    setError(null);
+    setAviso(null);
+    setPaso("");
     setFase("formulario");
-    setArchivo(null);
-    setDuracion(null);
-    setProgreso(0);
-    setFallo(null);
-    guardado.current = null;
   }
+
+  const enCurso = fase === "enviando";
+  const bloqueado = enCurso || sesionCreada;
+  const listaAtletas = atletas ?? [];
+  const validos = items.filter((it) => !it.problema);
+  const pendientes = validos.filter((it) => it.estado !== "enviado");
+  const resumen = resumenDeCarga(validos.map((it) => it.estado));
 
   if (fase === "listo") {
     return (
       <main className="mx-auto max-w-xl px-6 py-16">
         <div className="rounded-xl border border-border bg-card p-6">
           <CheckCircle2 className="h-8 w-8 text-neon" aria-hidden="true" />
-          <h1 className="mt-4 font-display text-2xl font-bold">Tu video se está analizando</h1>
+          <h1 className="mt-4 font-display text-2xl font-bold">
+            {resumen.enviados === 1 ? "Tu golpe se está analizando" : `Tus ${resumen.enviados} golpes se están analizando`}
+          </h1>
           <p className="mt-3 text-sm text-muted-foreground">
-            Puede tardar varios minutos. <strong className="text-foreground">Podés cerrar esta página:</strong> el análisis sigue
-            en el servidor y el resultado va a estar en tus sesiones.
+            Cada golpe tarda unos minutos y se analizan de a uno.{" "}
+            <strong className="text-foreground">Podés cerrar esta página:</strong> el análisis sigue en el servidor y los resultados van a
+            estar en tus sesiones.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
-            <button type="button" onClick={otraCarga} className="rounded-md border border-border px-4 py-2 text-sm font-medium hover:border-neon/50">
-              Cargar otro video
-            </button>
-            <button type="button" onClick={() => navegar({ to: "/videos" })} className="rounded-md px-4 py-2 text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground">
+            <button
+              type="button"
+              onClick={() => navegar({ to: "/videos" })}
+              className="rounded-md bg-gradient-neon px-4 py-2 text-sm font-semibold text-neon-foreground shadow-neon"
+            >
               Ver mis sesiones
+            </button>
+            <button type="button" onClick={otraSesion} className="rounded-md border border-border px-4 py-2 text-sm font-medium hover:border-neon/50">
+              Cargar otra sesión
             </button>
           </div>
         </div>
@@ -248,44 +364,49 @@ function CargarPage() {
     );
   }
 
-  const enCurso = fase === "enviando";
-  const listaAtletas = atletas ?? [];
-
   return (
     <main className="mx-auto max-w-2xl px-6 py-12">
-      <h1 className="font-display text-3xl font-bold">Cargar un golpe</h1>
+      <h1 className="font-display text-3xl font-bold">Cargar tus golpes</h1>
       <p className="mt-2 text-sm text-muted-foreground">
-        Un video es un golpe. El sistema documenta el orden en que la cadera, el tronco y el brazo alcanzan su velocidad máxima.
+        Un video es un golpe. Podés elegir varios videos a la vez: forman una sesión (hasta {MAX_GOLPES}). Para ver cuánto variás entre
+        golpes conviene cargar al menos 6.
       </p>
 
       {/* La instrucción va ANTES de elegir el archivo (decisiones 029 y 030): si el teléfono convierte el video, no hay arreglo posterior. */}
       <section aria-labelledby="como-subir" className="mt-8 rounded-xl border border-neon/40 bg-neon/5 p-5">
         <h2 id="como-subir" className="flex items-center gap-2 font-display text-base font-semibold">
           <Info className="h-4 w-4 text-neon" aria-hidden="true" />
-          Antes de elegir el archivo (iPhone)
+          Antes de elegir los archivos (iPhone)
         </h2>
         <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm">
           <li>
-            En <strong>Fotos</strong>, abrí el video y tocá <strong>Editar</strong>. <strong>Recortá</strong> el golpe: dejá solo el
-            golpe (unos 2 a 5 segundos).
+            En <strong>Fotos</strong>, abrí el video y tocá <strong>Editar</strong>. <strong>Recortá</strong> cada golpe: dejá solo el
+            golpe (unos 2 a 5 segundos) y guardalo como un clip aparte.
           </li>
           <li>
             Sacale la cámara lenta: en la <strong>barra de rayitas</strong> de abajo, dejá <strong>todo el tramo a velocidad normal</strong>.
           </li>
           <li>
-            Al subirlo, en el selector tocá <strong>Opciones</strong> (abajo a la izquierda) y elegí <strong>Formato: Actual</strong>.
+            Al subirlos, en el selector tocá <strong>Opciones</strong> (abajo a la izquierda) y elegí <strong>Formato: Actual</strong>.
           </li>
         </ol>
         <p className="mt-3 text-sm text-muted-foreground">
           Lo que grabaste a 240 fps se conserva aunque se vea a velocidad normal. Si el recorte mantiene parte en cámara lenta, el
           teléfono lo convierte al subirlo (llega a unos 50 fps) aunque elijas «Actual», y no se puede analizar. Con el formato por
           defecto también convierte el video y descarta fotogramas: queda por debajo de los 120 fps que hacen falta. Otra opción:
-          guardalo en la app <strong>Archivos</strong> y elegilo desde ahí. Un video sin recortar de más de 50 MB tampoco entra.
+          guardalos en la app <strong>Archivos</strong> y elegilos desde ahí. Un video sin recortar de más de 50 MB tampoco entra.
         </p>
       </section>
 
       <form onSubmit={enviar} className="mt-8 space-y-8" noValidate>
-        <fieldset disabled={enCurso} className="space-y-5">
+        {sesionCreada && (
+          <p role="note" className="flex items-start gap-2 rounded-md border border-border px-3 py-2 text-sm text-muted-foreground">
+            <Info className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+            La sesión ya se creó: sus datos no se pueden cambiar. Si querés otros datos, cargá una sesión nueva.
+          </p>
+        )}
+
+        <fieldset disabled={bloqueado} className="space-y-5">
           <legend className="font-display text-lg font-semibold">Jugador</legend>
           {atletas === null ? (
             <p className="flex items-center gap-2 text-sm text-muted-foreground" role="status">
@@ -335,8 +456,8 @@ function CargarPage() {
           )}
         </fieldset>
 
-        <fieldset disabled={enCurso} className="space-y-5">
-          <legend className="font-display text-lg font-semibold">El golpe</legend>
+        <fieldset disabled={bloqueado} className="space-y-5">
+          <legend className="font-display text-lg font-semibold">La sesión</legend>
           <div className="grid gap-5 sm:grid-cols-2">
             <div>
               <label htmlFor="gesto" className="text-sm font-medium">Golpe</label>
@@ -349,20 +470,55 @@ function CargarPage() {
               <label htmlFor="fecha" className="text-sm font-medium">Fecha de la grabación</label>
               <input id="fecha" type="date" className={CAMPO} value={fecha} max={hoy()} onChange={(e) => setFecha(e.target.value)} />
             </div>
-            <div>
-              <label htmlFor="encuadre" className="text-sm font-medium">Encuadre de la cámara</label>
-              <select id="encuadre" className={CAMPO} value={encuadre} onChange={(e) => setEncuadre(e.target.value)}>
-                <option value="" disabled>Elegí una opción</option>
-                {ENCUADRES.map((x) => <option key={x.valor} value={x.valor}>{x.etiqueta}</option>)}
-              </select>
+          </div>
+
+          {/* El encuadre se elige mirando dónde estaba la cámara: un esquema por opción (el sesgo de la medición es fijo por encuadre). */}
+          <div role="radiogroup" aria-labelledby="titulo-encuadre" aria-describedby="ayuda-encuadre">
+            <div id="titulo-encuadre" className="text-sm font-medium">Encuadre de la cámara</div>
+            <div className="mt-2 grid gap-3 sm:grid-cols-2">
+              {ENCUADRES.map((x) => {
+                const activo = encuadre === x.valor;
+                return (
+                  <label
+                    key={x.valor}
+                    className={
+                      "flex cursor-pointer flex-col gap-2 rounded-xl border p-3 transition-colors " +
+                      (activo ? "border-neon bg-neon/5" : "border-border hover:border-neon/50")
+                    }
+                  >
+                    <input
+                      type="radio"
+                      name="encuadre"
+                      value={x.valor}
+                      checked={activo}
+                      onChange={() => setEncuadre(x.valor)}
+                      className="sr-only"
+                    />
+                    <EsquemaEncuadre encuadre={x.valor} className="h-24 w-full" />
+                    <span className="flex items-center gap-2 text-sm font-semibold">
+                      {activo ? <CheckCircle2 className="h-4 w-4 text-neon" aria-hidden="true" /> : <CircleDashed className="h-4 w-4 text-muted-foreground" aria-hidden="true" />}
+                      {x.etiqueta}
+                    </span>
+                    <span className="text-xs text-muted-foreground">{DESCRIPCION_ENCUADRE[x.valor]}</span>
+                  </label>
+                );
+              })}
             </div>
-            <div>
-              <label htmlFor="lado" className="text-sm font-medium">Lado de la cámara</label>
-              <select id="lado" className={CAMPO} value={lado} onChange={(e) => setLado(e.target.value)}>
-                <option value="" disabled>Elegí una opción</option>
-                {LADOS_CAMARA.map((x) => <option key={x.valor} value={x.valor}>{x.etiqueta}</option>)}
-              </select>
-            </div>
+            <p id="ayuda-encuadre" className="mt-2 text-xs text-muted-foreground">
+              Elegí el que corresponde a donde estaba la cámara, y mantenelo en todas tus sesiones: tus resultados solo se pueden comparar
+              entre sesiones grabadas desde el mismo lugar.
+            </p>
+          </div>
+
+          <div>
+            <label htmlFor="lado" className="text-sm font-medium">Lado de la cámara</label>
+            <select id="lado" className={CAMPO} value={lado} onChange={(e) => setLado(e.target.value)} aria-describedby="ayuda-lado">
+              <option value="" disabled>Elegí una opción</option>
+              {LADOS_CAMARA.map((x) => <option key={x.valor} value={x.valor}>{x.etiqueta}</option>)}
+            </select>
+            <p id="ayuda-lado" className="mt-1 text-xs text-muted-foreground">
+              Es el lado del jugador, no el tuyo: «a la derecha del jugador» es del lado de su mano derecha.
+            </p>
           </div>
 
           <div>
@@ -393,37 +549,122 @@ function CargarPage() {
         </fieldset>
 
         <fieldset disabled={enCurso} className="space-y-3">
-          <legend className="font-display text-lg font-semibold">El video</legend>
+          <legend className="font-display text-lg font-semibold">Tus golpes</legend>
           <label
-            htmlFor="archivo"
+            htmlFor="archivos"
+            onDragOver={(e) => e.preventDefault()}
+            onDrop={alSoltar}
             className="flex cursor-pointer flex-col items-center gap-2 rounded-xl border border-dashed border-border px-4 py-8 text-center hover:border-neon/50"
           >
             <UploadCloud className="h-7 w-7 text-neon" aria-hidden="true" />
-            <span className="text-sm font-medium">{archivo ? archivo.name : "Elegir el video (MP4 o MOV, hasta 50 MB)"}</span>
-            {archivo && (
-              <span className="text-xs text-muted-foreground">
-                {(archivo.size / (1024 * 1024)).toFixed(1)} MB{duracion !== null ? ` · ${fmt(duracion, 1)} s` : ""}
-              </span>
-            )}
+            <span className="text-sm font-medium">
+              {items.length === 0 ? "Elegí los videos (MP4 o MOV, hasta 50 MB cada uno)" : "Agregar más videos"}
+            </span>
+            <span className="text-xs text-muted-foreground">Cada video es un golpe. Podés elegir varios a la vez o arrastrarlos acá.</span>
           </label>
           <input
-            id="archivo"
+            id="archivos"
             type="file"
+            multiple
             accept="video/mp4,video/quicktime,.mp4,.mov"
             className="sr-only"
-            onChange={(e) => elegirArchivo(e.target.files?.[0] ?? null)}
+            onChange={(e) => {
+              agregarArchivos(e.target.files);
+              e.target.value = "";
+            }}
           />
-          {problema && (
-            <p role="alert" className="flex items-start gap-2 text-sm text-destructive">
-              <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
-              {problema}
-            </p>
-          )}
-          {duracion !== null && duracion > DURACION_AVISO_S && (
+
+          {aviso && (
             <p role="note" className="flex items-start gap-2 text-sm text-muted-foreground">
               <Info className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
-              Este video dura {fmt(duracion, 0)} s: probablemente tenga varios golpes. El sistema analiza un golpe por video;
-              conviene recortarlo para dejar solo uno.
+              {aviso}
+            </p>
+          )}
+
+          {items.length > 0 && (
+            <ul className="space-y-2" aria-label="Videos elegidos">
+              {items.map((it, i) => (
+                <li
+                  key={it.clave}
+                  className={
+                    "rounded-xl border px-4 py-3 text-sm " +
+                    (it.problema || it.estado === "error" ? "border-destructive/50" : "border-border")
+                  }
+                >
+                  <div className="flex items-center gap-3">
+                    <Film className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+                    <div className="min-w-0 flex-1">
+                      <div className="truncate font-medium">
+                        <span className="font-mono text-xs text-muted-foreground">Golpe {i + 1} · </span>
+                        {it.archivo.name}
+                      </div>
+                      <div className="font-mono text-xs text-muted-foreground">
+                        {(it.archivo.size / (1024 * 1024)).toFixed(1)} MB{it.duracion !== null ? ` · ${fmt(it.duracion, 1)} s` : ""}
+                      </div>
+                    </div>
+                    <span
+                      className={
+                        "flex shrink-0 items-center gap-1.5 font-mono text-[11px] uppercase tracking-widest " +
+                        (it.problema || it.estado === "error"
+                          ? "text-destructive"
+                          : it.estado === "enviado"
+                            ? "text-state-ok"
+                            : "text-muted-foreground")
+                      }
+                    >
+                      {it.problema ? (
+                        <>
+                          <AlertTriangle className="h-3.5 w-3.5" aria-hidden="true" /> No se va a subir
+                        </>
+                      ) : it.estado === "subiendo" || it.estado === "enviando" ? (
+                        <>
+                          <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden="true" />
+                          {ETIQUETA_ESTADO[it.estado]}
+                          {it.estado === "subiendo" ? ` ${Math.round(it.progreso * 100)} %` : ""}
+                        </>
+                      ) : it.estado === "enviado" ? (
+                        <>
+                          <CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" /> {ETIQUETA_ESTADO.enviado}
+                        </>
+                      ) : it.estado === "error" ? (
+                        <>
+                          <AlertTriangle className="h-3.5 w-3.5" aria-hidden="true" /> {ETIQUETA_ESTADO.error}
+                        </>
+                      ) : (
+                        ETIQUETA_ESTADO.pendiente
+                      )}
+                    </span>
+                    {!enCurso && it.estado !== "enviado" && (
+                      <button
+                        type="button"
+                        onClick={() => quitar(it.clave)}
+                        aria-label={`Quitar ${it.archivo.name}`}
+                        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border text-muted-foreground hover:text-foreground"
+                      >
+                        <X className="h-4 w-4" aria-hidden="true" />
+                      </button>
+                    )}
+                  </div>
+                  {it.estado === "subiendo" && (
+                    <progress className="mt-2 h-1.5 w-full" value={it.progreso} max={1} aria-label={`Progreso de ${it.archivo.name}`} />
+                  )}
+                  {it.problema && <p className="mt-2 text-sm text-destructive">{it.problema}</p>}
+                  {it.error && <p className="mt-2 text-sm text-destructive">{it.error}</p>}
+                  {!it.problema && it.duracion !== null && it.duracion > DURACION_AVISO_S && (
+                    <p className="mt-2 text-xs text-muted-foreground">
+                      Dura {fmt(it.duracion, 0)} s: probablemente tenga varios golpes. El sistema analiza un golpe por video; conviene
+                      recortarlo para dejar solo uno.
+                    </p>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {validos.length > 0 && validos.length < 6 && !enCurso && (
+            <p role="note" className="flex items-start gap-2 text-xs text-muted-foreground">
+              <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+              Con menos de 6 golpes el reporte de la sesión no puede decir cuánto variás entre golpes. Se puede cargar igual.
             </p>
           )}
         </fieldset>
@@ -435,49 +676,28 @@ function CargarPage() {
           </p>
         )}
 
-        {fallo && (
-          <div role="alert" className="rounded-md border border-destructive/50 px-3 py-2 text-sm text-destructive">
-            <p className="flex items-start gap-2">
-              <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
-              {fallo.texto}
-            </p>
-            {fallo.reenviar && guardado.current && (
-              <button
-                type="button"
-                onClick={() => {
-                  setFallo(null);
-                  setFase("enviando");
-                  void enviarAnalisis(guardado.current!.videoId);
-                }}
-                className="mt-2 text-foreground underline underline-offset-4"
-              >
-                Enviar a analizar de nuevo
-              </button>
-            )}
-            {!sesion && (
-              <Link to="/ingreso" className="mt-2 inline-block text-foreground underline underline-offset-4">Ingresar</Link>
-            )}
-          </div>
-        )}
-
         {enCurso ? (
           <div role="status" aria-live="polite" className="rounded-xl border border-border bg-card p-4">
             <p className="flex items-center gap-2 text-sm font-medium">
               <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-              {paso}
-              {paso.startsWith("Subiendo") && <span className="font-mono text-muted-foreground">{Math.round(progreso * 100)} %</span>}
+              {paso || "Preparando…"}
             </p>
-            {paso.startsWith("Subiendo") && (
-              <progress className="mt-3 h-2 w-full" value={progreso} max={1} aria-label="Progreso de la subida" />
-            )}
+            <p className="mt-2 text-xs text-muted-foreground">
+              Se suben de a uno. No cierres esta página hasta que termine de subir: después el análisis sigue solo.
+            </p>
           </div>
         ) : (
-          <button
-            type="submit"
-            className="flex w-full items-center justify-center gap-2 rounded-md bg-gradient-neon px-4 py-2.5 text-sm font-semibold text-neon-foreground shadow-neon"
-          >
-            Subir y analizar
-          </button>
+          <div className="sticky bottom-0 -mx-2 border-t border-border bg-background/95 px-2 py-3 backdrop-blur">
+            <button
+              type="submit"
+              className="flex w-full items-center justify-center gap-2 rounded-md bg-gradient-neon px-4 py-2.5 text-sm font-semibold text-neon-foreground shadow-neon"
+            >
+              {pendientes.length <= 1 ? "Subir y analizar" : `Subir y analizar ${pendientes.length} golpes`}
+            </button>
+            {!sesion && (
+              <Link to="/ingreso" className="mt-2 block text-center text-sm text-foreground underline underline-offset-4">Ingresar</Link>
+            )}
+          </div>
         )}
       </form>
     </main>

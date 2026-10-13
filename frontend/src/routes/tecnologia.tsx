@@ -37,7 +37,7 @@ function TechPage() {
           {
             i: <Eye />,
             t: "Estimación de pose",
-            d: "MediaPipe Pose por defecto, con YOLOv8-Pose como alternativa detrás de la misma interfaz. La etapa es intercambiable sin tocar el resto del pipeline.",
+            d: "MediaPipe Pose. La etapa está detrás de una interfaz que prevé usar YOLOv8-Pose como alternativa (todavía no está implementada), sin tocar el resto del pipeline.",
           },
           {
             i: <Shield />,
@@ -52,7 +52,7 @@ function TechPage() {
           {
             i: <Layers />,
             t: "Capa cinemática",
-            d: "Ángulos articulares, velocidades por segmento y orden de los picos. Sin rastreo de pelota, de raqueta ni de cancha.",
+            d: "Separación cadera-hombro, ángulos de rodilla y codo, velocidades por segmento y orden de los picos. Sin rastreo de pelota, de raqueta ni de cancha.",
           },
           {
             i: <Cpu />,
@@ -76,7 +76,7 @@ function TechPage() {
       <div className="mt-12 rounded-3xl border border-border bg-card p-8">
         <h2 className="font-display text-2xl font-bold">Pipeline del motor</h2>
         <p className="mt-1 text-sm text-muted-foreground">
-          El filtrado va después de la elevación y antes de calcular velocidades. El orden importa.
+          El filtrado va antes de calcular las velocidades. El orden importa.
         </p>
         <div className="mt-6 grid gap-3 md:grid-cols-3 lg:grid-cols-6">
           {[
@@ -85,7 +85,7 @@ function TechPage() {
             { id: "E1b", s: "Validación", d: "Confianza" },
             { id: "E3", s: "Filtrado", d: "Fase cero" },
             { id: "E4", s: "Cinemática", d: "Ángulos y picos" },
-            { id: "E5", s: "Auditoría", d: "Estados y alertas" },
+            { id: "E5", s: "Reporte", d: "Observaciones y trazabilidad" },
           ].map((e) => (
             <div key={e.id} className="rounded-xl border border-border bg-background p-4">
               <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
@@ -99,8 +99,8 @@ function TechPage() {
           ))}
         </div>
         <p className="mt-6 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-          Sello de versión del reporte · v0.1.0 · MediaPipe Pose · Butterworth 4º orden fase cero ·
-          corte 8 Hz
+          Cada reporte lleva su sello: versión del motor, backend de pose y parámetros del filtro (Butterworth de 4º orden, fase
+          cero; la frecuencia de corte se elige por clip). Se ve en el detalle técnico del reporte.
         </p>
       </div>
     </main>

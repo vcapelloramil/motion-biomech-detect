@@ -1,4 +1,50 @@
-# Protocolo: dos sesiones reales para la pantalla Evolución (13/10/2026)
+# Evolución de la demo: dos sesiones reales del corpus (13/10/2026) y, como opcional, sesiones nuevas
+
+**Decisión de Valentín (13/10):** no depender de grabar. **La Evolución de la demo se arma con los originales del iPhone del corpus** (sesiones del 24/9 y del 25/9, saque en tres cuartos), recortados
+sin recodificar. Las sesiones nuevas (con o sin cintas de color) quedan como **opcionales**; su protocolo está más abajo.
+
+## A. Los recortes del corpus (hechos y verificados)
+
+**Qué hay:** 18 recortes de golpes del **saque en tres cuartos**, en `C:\Users\valen\Desktop\corpus-originales-reales\recortes-evolucion\` (fuera del repositorio; los videos no se versionan). El detalle por
+archivo está en `recortes.json` de esa carpeta. Reproducible: `python -m app.recortar_evolucion` (`backend/app/recortar_evolucion.py`).
+
+**Cómo se hicieron:** `ffmpeg -c copy` desde el original, con las mismas ventanas del Paso B (`docs/resultados/corpus-real-alineacion.json`) y 0,3 s de margen; el corte arranca en el fotograma clave anterior
+(~1 s). Se quitó el audio.
+
+**Qué se verificó, por cada uno de los 18 (aritmética entera sobre las marcas de tiempo):**
+
+| Comprobación | Resultado |
+| --- | --- |
+| Cada fotograma del recorte existe en el original **con la misma marca de tiempo** (salvo una constante) | 18 de 18 |
+| **Ningún fotograma de la ventana falta**, y la ventana del Paso B queda completa | 18 de 18 |
+| Tasa real medida del recorte | **199,3 a 201,1 fps** (la del original: ~200 fps) |
+| Decodifica sin errores | 18 de 18 |
+| Pesa menos de 50 MiB (el tope de Cargar) | 18 de 18 (el más grande, 49,2 MB) |
+| El motor lo lee como captura real (`escala_temporal_conocida`, origen "marcas de tiempo", no "archivo convertido") | probado con 2 recortes (el motor completo no se corrió: ~5 min de pose por golpe en esta PC) |
+
+**Sesiones y qué subir:**
+
+| Sesión | Fecha a poner en Cargar | Archivos | Golpes |
+| --- | --- | --- | --- |
+| **1** | **24/09/2026** | `20260924_saque_trescuartos_toma01_golpe1.mov` … `golpe6.mov` | 6 |
+| **2** | **25/09/2026** | `20260925_saque_trescuartos_toma02b_golpe1.mov` … `golpe6.mov` | 6 |
+| 2 (opcional, +6) | 25/09/2026 | `20260925_saque_trescuartos_toma02c_golpe1.mov` … `golpe6.mov` | 6 |
+
+**Cómo cargarlas** (cuando esté el paso 2, ya hecho): en Cargar, **una sesión por día**, *Golpe* = saque, *Encuadre* = **tres cuartos**, *Lado de la cámara* = el del protocolo (a la derecha del jugador,
+del lado de la raqueta: **confirmalo mirando un golpe**), *¿Cómo lo grabaste?* = **cámara lenta 240**, y **la fecha real** (24 y 25 de septiembre). Los archivos se eligen **desde la computadora**: no
+hace falta "Formato: Actual" ni tocar nada en Fotos, porque el navegador sube el archivo tal cual.
+
+**Qué esperar:** los mismos golpes que midió el Paso B (el mismo motor sobre la misma señal): sirve de control cruzado "producción contra Paso B". En el Paso B estas tomas dieron cadera primero o dentro de la
+tolerancia; **el orden no se evalúa** (decisiones 035 y 036). Lo que Evolución muestra es la **separación cadera-hombro** por sesión y la variación entre golpes.
+
+**Límites a declarar:** son las mismas dos sesiones con las que se validó el Criterio 3 (no una validación independiente) y un solo jugador. Para la demo alcanza: lo que se muestra es el sistema funcionando
+sobre datos reales con trazabilidad, no una prueba nueva.
+
+---
+
+## B. Sesiones nuevas (opcional)
+
+### Protocolo
 
 **Para qué:** que Evolución muestre, en la demo (28–30/10), **datos reales de un mismo jugador en dos días distintos**, sin inventar nada (`docs/ux/valor-sin-veredictos.md` §3.3). Es el paso 6 del
 orden vigente (`docs/plan-mvp-punta-a-punta.md` §8). Complementa a `docs/protocolo-grabacion.md` (lo que dice de la "comparación en el tiempo" rige acá) y no lo reemplaza.

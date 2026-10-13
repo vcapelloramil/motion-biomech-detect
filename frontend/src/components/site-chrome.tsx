@@ -81,7 +81,7 @@ export function Header() {
 export function Footer() {
   return (
     <footer className="mt-32 border-t border-border">
-      <div className="mx-auto grid max-w-7xl gap-8 px-6 py-12 md:grid-cols-4">
+      <div className="mx-auto grid max-w-7xl gap-8 px-6 py-12 md:grid-cols-3">
         <div>
           <div className="flex items-center gap-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-neon">
@@ -94,24 +94,20 @@ export function Footer() {
         <div>
           <div className="font-display text-sm font-semibold">Producto</div>
           <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-            <li>Carga y verificación</li><li>Reporte</li><li>Evolución del atleta</li>
-          </ul>
-        </div>
-        <div>
-          <div className="font-display text-sm font-semibold">Compañía</div>
-          <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-            <li>Sobre nosotros</li><li>Investigación</li><li>Contacto</li>
+            <li><Link to="/tecnologia" className="hover:text-foreground">Tecnología</Link></li>
+            <li><Link to="/" hash="alcance" className="hover:text-foreground">Alcance del sistema</Link></li>
           </ul>
         </div>
         <div>
           <div className="font-display text-sm font-semibold">Legal</div>
           <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-            <li>Privacidad</li><li>Términos</li><li>Alcance del sistema</li>
+            <li><Link to="/privacidad" className="hover:text-foreground">Privacidad</Link></li>
           </ul>
         </div>
       </div>
       <div className="border-t border-border py-5 text-center font-mono text-xs text-muted-foreground">
-        © 2026 KinetiQ Sports Vision · Todos los derechos reservados
+        KinetiQ documenta el movimiento. No diagnostica ni reemplaza la evaluación de un profesional. · Proyecto final de Ingeniería en
+        Informática · Universidad del Salvador · 2026
       </div>
     </footer>
   );

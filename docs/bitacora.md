@@ -6,6 +6,52 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-13 (noche) — Higiene 2, paso 2 (cargar con varios golpes) y recortes del corpus para Evolución
+
+Pedido de Valentín tras revisar producción con capturas de cada pantalla. Servidor: **sin cambio de motor** (0.5.3); cambia la API (cupo de análisis simultáneos).
+
+### Higiene 2 (frontend)
+
+- **a) Reportes de motor < 0.5.2:** `observacionesDe` no muestra el veredicto (correcto / desvío leve / alerta): pasa a **"Solo registrado"**, sin la frase de "orden esperado" ni la cita, con la nota
+  *"Calculado con una versión anterior del motor"*; el reporte guardado no se toca. La Biblioteca ya no cuenta veredictos (cuenta golpes medidos) y marca "Incluye reportes calculados con una versión anterior".
+  Pruebas: 4 nuevas (comparación de versiones, versión ilegible, reporte viejo y reporte actual).
+- **b) Tecnología:** el sello "v0.1.0" se sacó (cada reporte lleva el suyo, en el detalle técnico); "YOLOv8-Pose" ahora dice que está **prevista, no implementada**; la caja E5 "Estados y alertas" pasó a
+  "Observaciones y trazabilidad" (no hay alertas con umbral); "el filtrado va después de la elevación" (la elevación 3D no está implementada) se corrigió; la frecuencia de corte no es fija (se elige por clip).
+- **c) Landing:** sin "Veredicto" (ya estaba); "ángulos articulares" pasó a "ángulos de rodilla y codo" (lo que el reporte muestra); "ángulo de tronco" (no se mide) salió; "comparación entre sesiones" lleva
+  "(en preparación)" hasta la Evolución; "unos 160 ms" (número sin fuente) pasó a "una fracción de segundo"; "se avisa cuando el reporte está listo" (no hay avisos) pasó a "podés cerrar la página y volver";
+  **la foto del kinesiólogo con el paciente se reemplazó por la del saque** y se borró del repositorio; para visitantes, **"Cargar un video" lleva a Crear cuenta**.
+- **d) Pie de página:** salieron "Sobre nosotros", "Investigación", "Contacto", "Términos", "Carga y verificación", "Reporte" y "Evolución del atleta" (texto sin enlace). Quedan Tecnología, Alcance del sistema
+  y **Privacidad (`/privacidad`, nueva)**: qué datos se guardan, para qué, dónde, cuánto tiempo y cómo pedir el borrado (Ley 25.326).
+- **e) Perfil:** sin planes, precios, "PLAYER" ni "Plan Player renovado". El resto (datos inventados, con la marca "Datos de ejemplo") sigue para el paso 5.
+
+### Paso 2 — Cargar con varios golpes
+
+- **Cargar:** selector de archivos **múltiple** (o arrastrar), hasta **12 golpes por sesión**; una fila por golpe con estado (listo / subiendo con progreso / enviando / en análisis / error y el motivo) y botón
+  para quitarlo; los que no cumplen (formato, 50 MB) quedan marcados "No se va a subir". Una sola sesión por carga; si un golpe falla, **los demás siguen** y se puede **reintentar solo los que fallaron**
+  (los datos de la sesión quedan fijos). Botón fijo abajo ("Subir y analizar N golpes"). **El mínimo de 6 no se recorta** (se recomienda, no se exige).
+- **Ayuda para elegir el encuadre:** dos tarjetas con un **esquema visto desde arriba** (cámara a 90° del golpe / en diagonal por detrás, a ~45°) y una frase; aclaración de que "lado de la cámara" es el lado del
+  jugador, no el tuyo, y de que el encuadre se mantiene en todas las sesiones para poder comparar.
+- **Servidor:** `KINETIQ_MAX_ANALISIS_SIMULTANEOS` (1 por defecto) en `workers/procesamiento.py`. Sin cupo, 6 golpes mandados a la vez habrían corrido en paralelo (~750 MB cada uno en 2 GB). Los que esperan
+  siguen en "encolado". Pruebas: `test_workers_procesamiento.py` (4).
+- **Limitación conocida:** un reinicio del servicio con golpes en cola los deja "encolado" para siempre (la recuperación al arranque es el paso 7). "Tardó en procesarse" de un golpe en cola incluye la espera.
+- **Falta (paso 3):** Procesando "golpe 2 de 6" y la vista de sesión (hoy la tarjeta de la Biblioteca abre el primer golpe).
+
+### Recortes del corpus para la Evolución de la demo (sin grabar)
+
+- **18 recortes** de los originales del 24/9 (IMG_6376, 6 golpes) y del 25/9 (IMG_6392 = toma 02b y IMG_6393 = toma 02c, 6 y 6), saque en tres cuartos: `ffmpeg -c copy` con las ventanas del Paso B.
+  Carpeta **fuera del repositorio**: `Desktop\corpus-originales-reales\recortes-evolucion\`. Script reproducible: `backend/app/recortar_evolucion.py`.
+- **Verificado, 18 de 18:** misma marca de tiempo de cada fotograma que el original (aritmética entera), ninguno de la ventana falta, tasa real 199,3–201,1 fps, decodifica sin errores y menos de 50 MiB
+  (el máximo 49,2 MB). El motor los lee como captura real (probado con 2). **Funciona: esa es la Evolución de la demo.** Qué subir y con qué fecha: `docs/protocolo-sesiones-evolucion.md` §A.
+
+### Para Valentín
+
+1. **Republicar el frontend** (`bun run build` y `wrangler deploy` en `frontend/`) y **pushear** (Render se reinicia con el cupo).
+2. **Correo de contacto de Privacidad:** la página dice `contacto@kinetiqtennis.me` (el alias que prevé la guía del dominio). **Hay que crear ese reenvío** (Cloudflare → Email Routing) o decirme otro correo.
+   **Revisá el texto de `/privacidad`**: es una declaración tuya (no se usa para publicidad ni se vende; no hay borrado automático).
+3. Confirmar el **lado de la cámara** de las sesiones del corpus mirando un golpe (el protocolo era del lado de la raqueta: "a la derecha del jugador").
+
+---
+
 ## 2026-10-13 (tarde) — Paso 1 del orden vigente: higiene de contenido (frontend) · plan §8 reordenado
 
 **Orden aprobado por Valentín:** 1) higiene, 2) cargar con varios golpes, 3) vista de sesión, 4) PDF sin interruptor, 5) perfil + eliminar cuenta, 6) Evolución mínima real, 7) respaldo, 8) ensayo. Plan §8 actualizado

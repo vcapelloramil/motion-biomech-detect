@@ -5,6 +5,9 @@ import {
   MAX_INTENTOS,
   contarGolpes,
   contarObservaciones,
+  observacionesDe,
+  reporteDeVersionAnterior,
+  versionAnteriorA,
   enCurso,
   estadoDeSesion,
   formatearDuracion,
@@ -128,6 +131,52 @@ describe("golpes medidos (Biblioteca)", () => {
 
   test("sin videos, todo en cero", () => {
     expect(contarGolpes([])).toEqual({ medidos: 0, no_medibles: 0, en_analisis: 0 });
+  });
+});
+
+describe("reportes de un motor anterior a 0.5.2 (sin veredicto)", () => {
+  test("compara versiones", () => {
+    expect(versionAnteriorA("0.4.1")).toBe(true);
+    expect(versionAnteriorA("0.5.0")).toBe(true);
+    expect(versionAnteriorA("0.5.1")).toBe(true);
+    expect(versionAnteriorA("0.5.2")).toBe(false);
+    expect(versionAnteriorA("0.5.10")).toBe(false);
+    expect(versionAnteriorA("0.6.0")).toBe(false);
+    expect(versionAnteriorA("1.0.0")).toBe(false);
+  });
+
+  test("una versión ilegible o ausente cuenta como anterior", () => {
+    expect(versionAnteriorA(null)).toBe(true);
+    expect(versionAnteriorA("")).toBe(true);
+    expect(versionAnteriorA("dev")).toBe(true);
+  });
+
+  const viejo = {
+    trazabilidad: { version_motor: "0.5.0" },
+    observaciones: [
+      { severidad: "desvio_leve", texto: "es distinto del orden esperado para este golpe", fundamento: "instantes", referencia: "Kovacs (2011)" },
+      { severidad: "correcto", texto: "es el orden esperado" },
+      { severidad: "sin_evaluar", texto: "El brazo alcanzó su velocidad máxima" },
+      { severidad: "no_auditable", texto: "No se pudo medir" },
+    ],
+  };
+
+  test("en un reporte viejo el veredicto pasa a 'Solo registrado', con la nota y sin la cita", () => {
+    const o = observacionesDe(viejo);
+    expect(o.map((x) => x.severidad)).toEqual(["sin_evaluar", "sin_evaluar", "sin_evaluar", "no_auditable"]);
+    expect(o[0].anterior).toBe(true);
+    expect(o[0].referencia).toBeNull();
+    expect(o[0].texto).not.toMatch(/esperado|correcto|desv/i);
+    expect(o[2].anterior).toBeUndefined();         // lo que ya era "sin evaluar" no se toca
+    expect(o[3].texto).toBe("No se pudo medir");  // ni lo "no auditable"
+  });
+
+  test("en un reporte actual no se toca nada", () => {
+    const actual = { ...viejo, trazabilidad: { version_motor: "0.5.3" } };
+    expect(observacionesDe(actual)).toEqual(viejo.observaciones);
+    expect(reporteDeVersionAnterior(actual)).toBe(false);
+    expect(reporteDeVersionAnterior(viejo)).toBe(true);
+    expect(reporteDeVersionAnterior(null)).toBe(false);
   });
 });
 

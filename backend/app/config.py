@@ -169,6 +169,27 @@ _MAX_INTENTOS_VAR = "KINETIQ_MAX_INTENTOS"
 _MAX_INTENTOS_POR_DEFECTO = 3
 
 
+_MAX_SIMULTANEOS_VAR = "KINETIQ_MAX_ANALISIS_SIMULTANEOS"
+_MAX_SIMULTANEOS_POR_DEFECTO = 1
+
+
+def get_max_analisis_simultaneos() -> int:
+    """Cuántos análisis corren a la vez en este proceso (los demás esperan en ``encolado``). 1 si no está configurado.
+
+    Un golpe usa ~750 MB de RSS (``docs/resultados/criterio4-latencia.md``) y Render Standard tiene 2 GB y 1 CPU: con una carga de
+    varios golpes a la vez, procesarlos en paralelo agota la memoria y mata el proceso. Un parámetro de operación, no un secreto."""
+    value = _read_env_var(_MAX_SIMULTANEOS_VAR)
+    if not value:
+        return _MAX_SIMULTANEOS_POR_DEFECTO
+    try:
+        n = int(value)
+    except ValueError:
+        raise ConfigError(f"{_MAX_SIMULTANEOS_VAR} tiene que ser un entero, y es {value!r}.") from None
+    if n < 1:
+        raise ConfigError(f"{_MAX_SIMULTANEOS_VAR} tiene que ser >= 1, y es {n}.")
+    return n
+
+
 def get_max_intentos() -> int:
     """Tope de intentos para reintentar un video que falló por un error inesperado (decisión 022).
     Opcional: 3 si no está configurado. No es un secreto ni depende de la máquina; es un

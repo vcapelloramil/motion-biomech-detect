@@ -12,6 +12,7 @@ import {
   estadoDeSesion,
   numero,
   reporteDe,
+  reporteDeVersionAnterior,
   type EstadoSesion,
 } from "@/lib/estado-video";
 import { listarSesiones, type SesionConVideos } from "@/lib/videos-data";
@@ -185,6 +186,7 @@ function TarjetaSesion({ sesion }: { sesion: SesionConVideos }) {
   const g = contarGolpes(videos);
   const hayConteo = g.medidos > 0 || g.no_medibles > 0;
   const analizando = g.en_analisis > 0;
+  const anterior = videos.some((v) => reporteDeVersionAnterior(reporteDe(v)?.reporte ?? null));
 
   return (
     <li className="overflow-hidden rounded-2xl border border-border bg-card">
@@ -229,6 +231,10 @@ function TarjetaSesion({ sesion }: { sesion: SesionConVideos }) {
             <p className="text-sm text-muted-foreground">No se pudo analizar. Abrí el detalle para ver qué hacer.</p>
           ) : (
             <p className="text-sm text-muted-foreground">Todavía no hay golpes medidos en esta sesión.</p>
+          )}
+
+          {anterior && !analizando && (
+            <p className="mt-3 text-xs text-muted-foreground">Incluye reportes calculados con una versión anterior del motor.</p>
           )}
 
           {primero && (reporteDe(primero)?.reporte ?? null) && !analizando ? (

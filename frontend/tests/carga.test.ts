@@ -1,6 +1,10 @@
 // Se corre con `bun test` desde frontend/. Vive fuera de src/ (no entra en el build ni en el tsconfig).
 import { describe, expect, test } from "bun:test";
 import {
+  MAX_GOLPES,
+  claveDeArchivo,
+  cuantosCaben,
+  resumenDeCarga,
   GESTOS,
   LIMITE_BYTES,
   MODOS_CAPTURA,
@@ -12,6 +16,28 @@ import {
   tipoDeContenido,
   urlProcesar,
 } from "../src/lib/carga";
+
+describe("varios golpes por sesión", () => {
+  test("el mismo archivo no se agrega dos veces", () => {
+    const a = { name: "saque_01.mov", size: 100, lastModified: 5 };
+    expect(claveDeArchivo(a)).toBe(claveDeArchivo({ ...a }));
+    expect(claveDeArchivo(a)).not.toBe(claveDeArchivo({ ...a, size: 101 }));
+  });
+
+  test("el tope deja entrar una sesión de 12 y descarta el resto", () => {
+    expect(MAX_GOLPES).toBe(12);
+    expect(cuantosCaben(0, 6)).toEqual({ aceptados: 6, descartados: 0 });
+    expect(cuantosCaben(10, 5)).toEqual({ aceptados: 2, descartados: 3 });
+    expect(cuantosCaben(12, 1)).toEqual({ aceptados: 0, descartados: 1 });
+  });
+
+  test("el resumen distingue enviados, con error y los que faltan", () => {
+    expect(resumenDeCarga([])).toMatchObject({ total: 0, terminado: false, completo: false });
+    expect(resumenDeCarga(["enviado", "enviado"])).toMatchObject({ enviados: 2, terminado: true, completo: true });
+    expect(resumenDeCarga(["enviado", "error", "enviado"])).toMatchObject({ enviados: 2, con_error: 1, terminado: true, completo: false });
+    expect(resumenDeCarga(["enviado", "subiendo", "pendiente"])).toMatchObject({ sin_enviar: 2, terminado: false });
+  });
+});
 
 describe("archivo", () => {
   test("acepta mp4 y mov, y deduce el tipo cuando el navegador lo deja vacío", () => {

@@ -16,6 +16,7 @@ import { Route as RestablecerRouteImport } from './routes/restablecer'
 import { Route as RegistroRouteImport } from './routes/registro'
 import { Route as RecuperarRouteImport } from './routes/recuperar'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as PrivacidadRouteImport } from './routes/privacidad'
 import { Route as PerformanceRouteImport } from './routes/performance'
 import { Route as IngresoRouteImport } from './routes/ingreso'
 import { Route as ClinicaRouteImport } from './routes/clinica'
@@ -59,6 +60,11 @@ const ProfileRoute = ProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrivacidadRoute = PrivacidadRouteImport.update({
+  id: '/privacidad',
+  path: '/privacidad',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PerformanceRoute = PerformanceRouteImport.update({
   id: '/performance',
   path: '/performance',
@@ -100,6 +106,7 @@ export interface FileRoutesByFullPath {
   '/clinica': typeof ClinicaRoute
   '/ingreso': typeof IngresoRoute
   '/performance': typeof PerformanceRoute
+  '/privacidad': typeof PrivacidadRoute
   '/profile': typeof ProfileRoute
   '/recuperar': typeof RecuperarRoute
   '/registro': typeof RegistroRoute
@@ -116,6 +123,7 @@ export interface FileRoutesByTo {
   '/clinica': typeof ClinicaRoute
   '/ingreso': typeof IngresoRoute
   '/performance': typeof PerformanceRoute
+  '/privacidad': typeof PrivacidadRoute
   '/profile': typeof ProfileRoute
   '/recuperar': typeof RecuperarRoute
   '/registro': typeof RegistroRoute
@@ -133,6 +141,7 @@ export interface FileRoutesById {
   '/clinica': typeof ClinicaRoute
   '/ingreso': typeof IngresoRoute
   '/performance': typeof PerformanceRoute
+  '/privacidad': typeof PrivacidadRoute
   '/profile': typeof ProfileRoute
   '/recuperar': typeof RecuperarRoute
   '/registro': typeof RegistroRoute
@@ -151,6 +160,7 @@ export interface FileRouteTypes {
     | '/clinica'
     | '/ingreso'
     | '/performance'
+    | '/privacidad'
     | '/profile'
     | '/recuperar'
     | '/registro'
@@ -167,6 +177,7 @@ export interface FileRouteTypes {
     | '/clinica'
     | '/ingreso'
     | '/performance'
+    | '/privacidad'
     | '/profile'
     | '/recuperar'
     | '/registro'
@@ -183,6 +194,7 @@ export interface FileRouteTypes {
     | '/clinica'
     | '/ingreso'
     | '/performance'
+    | '/privacidad'
     | '/profile'
     | '/recuperar'
     | '/registro'
@@ -200,6 +212,7 @@ export interface RootRouteChildren {
   ClinicaRoute: typeof ClinicaRoute
   IngresoRoute: typeof IngresoRoute
   PerformanceRoute: typeof PerformanceRoute
+  PrivacidadRoute: typeof PrivacidadRoute
   ProfileRoute: typeof ProfileRoute
   RecuperarRoute: typeof RecuperarRoute
   RegistroRoute: typeof RegistroRoute
@@ -263,6 +276,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacidad': {
+      id: '/privacidad'
+      path: '/privacidad'
+      fullPath: '/privacidad'
+      preLoaderRoute: typeof PrivacidadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/performance': {
       id: '/performance'
       path: '/performance'
@@ -320,6 +340,7 @@ const rootRouteChildren: RootRouteChildren = {
   ClinicaRoute: ClinicaRoute,
   IngresoRoute: IngresoRoute,
   PerformanceRoute: PerformanceRoute,
+  PrivacidadRoute: PrivacidadRoute,
   ProfileRoute: ProfileRoute,
   RecuperarRoute: RecuperarRoute,
   RegistroRoute: RegistroRoute,

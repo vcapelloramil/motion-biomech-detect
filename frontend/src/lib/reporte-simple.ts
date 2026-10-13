@@ -260,6 +260,7 @@ export type FundamentoObservacion = {
   /** null si ya se mostró idéntico en una observación anterior (la línea de instantes se repetía en las tarjetas). */
   fundamento: string | null;
   referencia: string | null;
+  anterior?: boolean;
 };
 
 /** Para el nivel 3: cada observación con su fundamento y su fuente, y cada línea de fundamento una sola vez. */
@@ -269,7 +270,7 @@ export function fundamentosSinRepetir(observaciones: readonly ObservacionLeida[]
     const f = o.fundamento ?? null;
     const dup = f !== null && vistos.has(f);
     if (f !== null) vistos.add(f);
-    return { severidad: o.severidad, texto: o.texto, fundamento: dup ? null : f, referencia: o.referencia ?? null };
+    return { severidad: o.severidad, texto: o.texto, fundamento: dup ? null : f, referencia: o.referencia ?? null, anterior: o.anterior };
   });
 }
 

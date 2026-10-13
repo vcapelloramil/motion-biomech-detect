@@ -8,7 +8,9 @@ import { useSesion } from "@/lib/sesion";
 import {
   ENCUADRE_ETIQUETA,
   GESTO_ETIQUETA,
+  TEXTO_VERSION_ANTERIOR,
   enCurso,
+  versionAnteriorA,
   formatearDuracion,
   latenciaDe,
   numero,
@@ -181,6 +183,13 @@ function Reporte({ video, reporte }: { video: VideoConReporte; reporte: Record<s
         {sesion?.atletas?.nombre ? ` · ${sesion.atletas.nombre}` : ""}
       </p>
 
+      {versionAnteriorA(t.version_motor) && (
+        <p role="note" className="mt-6 rounded-xl border border-dashed border-border px-4 py-3 text-sm text-muted-foreground">
+          Este reporte se calculó con una versión anterior del motor{t.version_motor ? ` (${t.version_motor})` : ""} y no se vuelve a calcular.
+          Para ver el análisis con la versión actual, volvé a subir el golpe.
+        </p>
+      )}
+
       {/* Nivel 1 — lo más importante: máximo tres observaciones, en lenguaje llano. */}
       <section aria-labelledby="importante" className="mt-10">
         <h2 id="importante" className="font-mono text-xs uppercase tracking-widest text-state-ok">Lo más importante</h2>
@@ -192,6 +201,7 @@ function Reporte({ video, reporte }: { video: VideoConReporte; reporte: Record<s
                 {clave === "sin_evaluar" ? <SinEvaluarBadge className="self-start" /> : clave ? <EstadoBadge estado={clave} className="self-start" /> : null}
                 {/* Nivel 1: lenguaje llano. El fundamento y la fuente de cada observación están en "Ver detalle técnico". */}
                 <p className="mt-4 text-base font-semibold leading-snug">{o.texto}</p>
+                {o.anterior && <p className="mt-2 text-xs text-muted-foreground">{TEXTO_VERSION_ANTERIOR}.</p>}
               </li>
             );
           })}
@@ -246,6 +256,7 @@ function Reporte({ video, reporte }: { video: VideoConReporte; reporte: Record<s
                     <li key={i} className="rounded-xl border border-border p-4 text-sm">
                       {clave === "sin_evaluar" ? <SinEvaluarBadge /> : clave ? <EstadoBadge estado={clave} /> : null}
                       <p className="mt-2">{o.texto}</p>
+                      {o.anterior && <p className="mt-1 text-xs text-muted-foreground">{TEXTO_VERSION_ANTERIOR}.</p>}
                       {o.fundamento && <p className="mt-1 font-mono text-xs text-muted-foreground">{o.fundamento}</p>}
                       {o.referencia && <p className="mt-1 text-xs text-muted-foreground">Fuente: {o.referencia}</p>}
                     </li>

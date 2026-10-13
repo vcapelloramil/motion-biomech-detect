@@ -1,7 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
-  Check,
-  Crown,
   Settings,
   Bell,
   User,
@@ -19,7 +17,7 @@ export const Route = createFileRoute("/profile")({
   head: () => ({
     meta: [
       { title: "Mi perfil — KinetiQ" },
-      { name: "description", content: "Perfil del jugador, plan y configuración." },
+      { name: "description", content: "Perfil del jugador y configuración." },
     ],
   }),
   // Requiere sesión (especificación §3). La barrera real son RLS y la API; esto evita mostrar datos de ejemplo a un anónimo.
@@ -31,40 +29,6 @@ export const Route = createFileRoute("/profile")({
 });
 
 function ProfilePage() {
-  const plans = [
-    {
-      name: "Free",
-      price: "0",
-      desc: "Probá la plataforma",
-      current: false,
-      features: ["1 video / mes", "Reporte de una repetición", "Sin historial de evolución"],
-    },
-    {
-      name: "Player",
-      price: "12",
-      desc: "Para jugadores serios",
-      current: true,
-      features: [
-        "Videos ilimitados",
-        "Evolución sesión a sesión",
-        "Reporte completo con trazabilidad",
-        "Historial 12 meses",
-      ],
-    },
-    {
-      name: "Equipo",
-      price: "49",
-      desc: "Entrenadores y preparadores",
-      current: false,
-      features: [
-        "Varios atletas por cuenta",
-        "Reporte completo + PDF",
-        "Exportación CSV de los valores",
-        "API + integraciones",
-      ],
-    },
-  ];
-
   return (
     <main className="mx-auto max-w-7xl px-6 py-16">
       <DatosDeEjemplo detalle="Tu perfil, los planes y los datos son una maqueta: todavía no se leen ni se guardan." />
@@ -82,9 +46,6 @@ function ProfilePage() {
             <div className="flex-1">
               <div className="flex items-center gap-2">
                 <h1 className="font-display text-3xl font-bold">Marco Rivera</h1>
-                <span className="inline-flex items-center gap-1 rounded-full bg-gradient-neon px-2 py-0.5 font-mono text-[10px] text-neon-foreground">
-                  <Crown className="h-3 w-3" /> PLAYER
-                </span>
               </div>
               <div className="mt-1 flex flex-wrap gap-4 font-mono text-xs text-muted-foreground">
                 <span className="flex items-center gap-1">
@@ -148,74 +109,6 @@ function ProfilePage() {
         </aside>
       </div>
 
-      {/* SUBSCRIPTION */}
-      <section className="mt-12">
-        <div className="flex items-end justify-between">
-          <div>
-            <div className="font-mono text-xs uppercase tracking-widest text-neon">Suscripción</div>
-            <h2 className="mt-2 font-display text-3xl font-bold md:text-4xl">
-              Tu plan actual: <span className="text-gradient-neon">Player</span>
-            </h2>
-            <p className="mt-2 text-muted-foreground">
-              Próxima renovación: 12 de junio de 2026 · USD 12 / mes
-            </p>
-          </div>
-          <button className="hidden rounded-md border border-border px-4 py-2 text-sm md:block">
-            Gestionar pago
-          </button>
-        </div>
-
-        <div className="mt-8 grid gap-6 md:grid-cols-3">
-          {plans.map((p) => (
-            <div
-              key={p.name}
-              className={`relative rounded-3xl border bg-card p-7 ${p.current ? "border-neon shadow-neon" : "border-border"}`}
-            >
-              {p.current && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-neon px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-neon-foreground">
-                  Plan actual
-                </div>
-              )}
-              <div className="font-display text-xl font-semibold">{p.name}</div>
-              <div className="text-sm text-muted-foreground">{p.desc}</div>
-              <div className="mt-5 flex items-end gap-1">
-                <span className="font-display text-5xl font-bold">${p.price}</span>
-                <span className="pb-2 font-mono text-xs text-muted-foreground">/mes</span>
-              </div>
-              <ul className="mt-5 space-y-2.5 text-sm">
-                {p.features.map((f) => (
-                  <li key={f} className="flex items-start gap-2">
-                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-neon" />
-                    {f}
-                  </li>
-                ))}
-              </ul>
-              <button
-                disabled={p.current}
-                className={`mt-7 w-full rounded-xl px-5 py-3 font-display font-semibold transition ${
-                  p.current
-                    ? "cursor-not-allowed border border-border bg-background text-muted-foreground"
-                    : p.name === "Equipo"
-                      ? "bg-gradient-clinic text-neon-foreground shadow-clinic"
-                      : "bg-gradient-neon text-neon-foreground shadow-neon hover:scale-[1.02]"
-                }`}
-              >
-                {p.current
-                  ? "Activo"
-                  : p.name === "Free"
-                    ? "Cambiar a Free"
-                    : `Upgrade a ${p.name}`}
-              </button>
-            </div>
-          ))}
-        </div>
-
-        <p className="mt-6 max-w-3xl text-xs text-muted-foreground">
-          KinetiQ documenta el movimiento observado y entrega los valores medidos con su nivel de
-          confianza. No es un producto sanitario ni reemplaza la evaluación de un profesional.
-        </p>
-      </section>
-
       {/* RECENT */}
       <section className="mt-12">
         <h2 className="font-display text-2xl font-bold">Actividad reciente</h2>
@@ -230,11 +123,6 @@ function ProfilePage() {
               i: <Activity className="h-4 w-4 text-clinic" />,
               t: "Reporte generado",
               d: "Hoy · 1 alerta de carga documentada en el saque 5",
-            },
-            {
-              i: <Crown className="h-4 w-4 text-neon" />,
-              t: "Plan Player renovado",
-              d: "1 May 2026",
             },
             {
               i: <Activity className="h-4 w-4 text-neon" />,
@@ -257,6 +145,11 @@ function ProfilePage() {
           ))}
         </div>
       </section>
+
+      <p className="mt-12 max-w-3xl text-xs text-muted-foreground">
+        KinetiQ documenta el movimiento observado y entrega los valores medidos con su nivel de confianza. No es un producto sanitario ni
+        reemplaza la evaluación de un profesional.
+      </p>
     </main>
   );
 }

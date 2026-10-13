@@ -163,7 +163,46 @@ export type ConteoObservaciones = {
   sin_evaluar: number;
 };
 
-export type ObservacionLeida = { severidad: string; texto: string; fundamento?: string | null; referencia?: string | null };
+export type ObservacionLeida = {
+  severidad: string;
+  texto: string;
+  fundamento?: string | null;
+  referencia?: string | null;
+  /** El reporte lo calculó un motor anterior a 0.5.2 y traía un veredicto que hoy no se muestra. */
+  anterior?: boolean;
+};
+
+/** Primera versión del motor que no emite veredicto del orden en ningún grupo (decisiones 035 y 036). */
+export const VERSION_SIN_VEREDICTO = "0.5.2";
+export const TEXTO_VERSION_ANTERIOR = "Calculado con una versión anterior del motor";
+const VEREDICTOS: readonly string[] = ["correcto", "desvio_leve", "alerta_de_carga"];
+
+function partesDeVersion(v: string): number[] | null {
+  const m = /^(\d+)\.(\d+)\.(\d+)/.exec(v.trim());
+  return m ? [Number(m[1]), Number(m[2]), Number(m[3])] : null;
+}
+
+/** `true` si la versión es anterior a `minima`. Una versión que no se puede leer cuenta como anterior (no se muestra un veredicto de más). */
+export function versionAnteriorA(version: string | null | undefined, minima: string = VERSION_SIN_VEREDICTO): boolean {
+  const v = typeof version === "string" ? partesDeVersion(version) : null;
+  const m = partesDeVersion(minima);
+  if (!v || !m) return true;
+  for (let i = 0; i < 3; i++) {
+    if (v[i] !== m[i]) return v[i] < m[i];
+  }
+  return false;
+}
+
+/** Versión del motor con la que se calculó el reporte (`trazabilidad.version_motor`), o `null` si no la trae. */
+export function versionMotorDe(reporte: Record<string, unknown> | null | undefined): string | null {
+  const v = (reporte?.trazabilidad as { version_motor?: unknown } | undefined)?.version_motor;
+  return typeof v === "string" ? v : null;
+}
+
+/** Hay un reporte y se calculó con un motor anterior a 0.5.2. Sin reporte no hay nada que marcar. */
+export function reporteDeVersionAnterior(reporte: Record<string, unknown> | null | undefined): boolean {
+  return !!reporte && versionAnteriorA(versionMotorDe(reporte));
+}
 
 /** Cuenta las observaciones por severidad. Una severidad desconocida no se cuenta ni se reinterpreta. */
 export function contarObservaciones(observaciones: readonly { severidad: string }[] | null | undefined): ConteoObservaciones {
@@ -205,9 +244,26 @@ export function reporteDe(video: { reportes_biomecanicos?: unknown }): { reporte
   return { reporte: rep && typeof rep === "object" ? (rep as Record<string, unknown>) : null };
 }
 
+/**
+ * Las observaciones del reporte. Si lo calculó un motor anterior a 0.5.2 y una observación trae un veredicto (correcto, desvío leve
+ * o alerta de carga), NO se muestra el veredicto: pasa a "Solo registrado", sin la frase de "orden esperado" ni la cita, y con la
+ * nota de que lo calculó una versión anterior. El reporte guardado no se modifica: es lo que dijo ese motor en ese momento.
+ */
 export function observacionesDe(reporte: Record<string, unknown> | null): ObservacionLeida[] {
   const o = reporte?.observaciones;
-  return Array.isArray(o) ? (o as ObservacionLeida[]) : [];
+  const lista = Array.isArray(o) ? (o as ObservacionLeida[]) : [];
+  if (!reporteDeVersionAnterior(reporte)) return lista;
+  return lista.map((x) =>
+    VEREDICTOS.includes(x.severidad)
+      ? {
+          severidad: "sin_evaluar",
+          texto: "Se registró el orden de tu cadera y tu tronco en este golpe.",
+          fundamento: x.fundamento ?? null,
+          referencia: null,
+          anterior: true,
+        }
+      : x,
+  );
 }
 
 // --- sesiones --------------------------------------------------------------------------------------------------------
