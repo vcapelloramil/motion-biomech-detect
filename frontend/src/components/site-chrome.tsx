@@ -1,6 +1,5 @@
 import { Link } from "@tanstack/react-router";
 import { Activity } from "lucide-react";
-import avatar from "@/assets/profile-avatar.jpg";
 import { useSesion } from "@/lib/sesion";
 
 export function Header() {
@@ -51,7 +50,7 @@ export function Header() {
                 Subir video
               </Link>
               <Link to="/profile" className="flex items-center gap-2 rounded-full border border-border p-1 sm:pr-3 transition-colors hover:border-neon/50" aria-label={`Perfil de ${nombre ?? "tu cuenta"}`}>
-                <img src={avatar} alt="" className="h-7 w-7 rounded-full object-cover" />
+                <span aria-hidden="true" className="flex h-7 w-7 items-center justify-center rounded-full bg-secondary font-mono text-[11px] font-semibold uppercase">{(nombre ?? "?").trim().charAt(0) || "?"}</span>
                 <span className="hidden font-mono text-xs text-muted-foreground sm:inline">{nombre}</span>
               </Link>
               <button

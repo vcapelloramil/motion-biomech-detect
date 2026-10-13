@@ -159,7 +159,7 @@ function RegistroPage() {
               <option key={r.valor} value={r.valor}>{r.etiqueta}</option>
             ))}
           </select>
-          <p className="mt-1 text-xs text-muted-foreground">Define qué vista del reporte se abre primero. Lo podés cambiar después.</p>
+          <p className="mt-1 text-xs text-muted-foreground">Hoy no cambia lo que ves en los reportes. Lo podés cambiar después en tu perfil.</p>
         </div>
         <div className="flex items-start gap-3">
           <input

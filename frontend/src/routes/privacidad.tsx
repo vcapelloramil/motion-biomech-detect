@@ -77,19 +77,24 @@ function PrivacidadPage() {
 
       <Seccion titulo="Cuánto tiempo los guarda">
         <p>
-          Hasta que pidas el borrado. Hoy no hay un borrado automático: los datos y los videos quedan guardados hasta que los elimines o los
-          pidas eliminar.
+          Hasta que los elimines. No hay un borrado automático: tus datos y tus videos quedan guardados hasta que elimines un golpe, una sesión o
+          toda tu cuenta.
         </p>
       </Seccion>
 
       <Seccion titulo="Tus derechos y cómo pedir el borrado">
         <p>
-          La Ley 25.326 de Protección de los Datos Personales te da derecho a acceder a tus datos, corregirlos y pedir que se supriman. Para
-          pedir el acceso o el borrado de tu cuenta, de un jugador o de un video, escribí a{" "}
+          La Ley 25.326 de Protección de los Datos Personales te da derecho a acceder a tus datos, corregirlos y pedir que se supriman. Lo podés
+          hacer vos mismo desde <strong className="text-foreground">Perfil</strong>: ahí corregís tus datos y los de tus jugadores, descargás
+          una copia en un archivo JSON y eliminás tu cuenta. Al eliminarla se borran tu cuenta, tus jugadores, tus sesiones, los reportes y los
+          archivos de video e imágenes. Un golpe o una sesión sueltos se eliminan desde la Biblioteca y la vista de la sesión.
+        </p>
+        <p>
+          Si no podés entrar a tu cuenta o algo no funciona, escribí a{" "}
           <a className="text-foreground underline underline-offset-4" href={`mailto:${CORREO_CONTACTO}`}>
             {CORREO_CONTACTO}
           </a>{" "}
-          desde el correo con el que te registraste. Se borra la cuenta y todo lo que cargaste, incluidos los archivos.
+          desde el correo con el que te registraste.
         </p>
         <p>
           La Agencia de Acceso a la Información Pública es el órgano de control de la Ley 25.326 y atiende las denuncias y reclamos de quienes

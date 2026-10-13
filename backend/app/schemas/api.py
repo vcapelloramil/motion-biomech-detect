@@ -45,3 +45,13 @@ class RespuestaConsistencia(BaseModel):
     versiones_motor: list[str]
     mezcla_de_versiones: bool
     minimos: dict[str, int]
+
+
+class PedidoEliminarCuenta(BaseModel):
+    """DELETE /cuenta — la confirmación explícita (``ELIMINAR``): un pedido sin ella no borra nada."""
+
+    confirmacion: str
+
+
+class RespuestaCuentaEliminada(BaseModel):
+    archivos_eliminados: int

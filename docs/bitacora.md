@@ -6,6 +6,38 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-14 (mañana) — Push (motor 0.5.4 en producción), hallazgo del brazo registrado y paso 5 (Perfil real + eliminar cuenta) en local
+
+### Push
+
+- **Pusheado `56a13c1`** (decisión 037, PDF, hallazgos a–e; antes `c9f0334`…`93a15aa` del paso 3: consistencia, eliminar, recuperación al arrancar). **`/health` muestra `0.5.4`** (verificado 3 veces seguidas
+  tras el despliegue). Al arrancar, la recuperación reencola lo que haya quedado "encolado"/"procesando".
+- **Falta (de Valentín):** republicar el frontend (`bun run build` y `wrangler deploy`): sin él, los reportes nuevos del servidor no se ven completos.
+
+### Hallazgo para el capítulo de resultados: el brazo (decisión de Valentín: queda "no medido", sin máximo parcial)
+
+- **Oclusión del codo dominante en tres cuartos:** **52 de 76 repeticiones del corpus (68 %) sin pico del brazo** con el motor actual; en el saque de tres cuartos, 18 de 18. El estimador reporta el codo como no
+  visible en todo el armado del golpe (ningún fotograma de los 0,3 s anteriores al pico del tronco llega a 0,5; 82 % de los 0,3 s siguientes), con el hombro visto el 100 %.
+- **El motor anterior (0.5.0) informaba un máximo parcial como si fuera del golpe completo** (pico del brazo en 69 de 76, el de la fase posterior al pico del tronco); la regla de cobertura del 75 % (0.5.1) lo retiró.
+- **Registrado en** `docs/resultados/brazo-por-golpe.md` ("Decisión" y "Hallazgo para el Capítulo 7", redactado para pegar) y en `docs/resultados/README.md`. Datos: `brazo-por-golpe-13-10.json` y
+  `codo-ventana-saque-trescuartos.json`.
+
+### Paso 5 — Perfil real mínimo + eliminar cuenta (local, sin push; suite del servidor 578 passed, `bun test` 93)
+
+- **Perfil** (`/profile`, ya sin datos inventados ni la foto de otra persona): nombre y rol editables (`usuarios`; el nombre también va a los metadatos de la sesión, de donde lo lee la cabecera);
+  **jugadores** con nombre, mano dominante y nivel editables (con el aviso de que la mano vale para los análisis nuevos, no recalcula los hechos); **"Descargar mis datos"** (JSON con la cuenta, los jugadores
+  y las sesiones con el reporte de cada golpe, sin los archivos); **"Eliminar mi cuenta"** con confirmación escrita ("ELIMINAR"). La cabecera muestra la inicial del nombre en lugar de una foto fija.
+  "Vista por defecto" no está: el interruptor Simple/Detallado salió del núcleo y una opción que no hace nada es una promesa falsa. El texto del rol en Registro y Perfil lo dice ("hoy no cambia lo que ves").
+- **Servidor:** `DELETE /cuenta` (`routers/cuenta.py`, `app/cuenta.py`) con el JWT del usuario y `{"confirmacion": "ELIMINAR"}`. **Borra primero los archivos** (recorre `<usuario>/` en los dos buckets, paginado)
+  **y después la cuenta** (`auth.admin.delete_user`; el resto sale en cascada por las claves foráneas). **Si un archivo falla, no se borra la cuenta** (502) y se puede reintentar: lo contrario dejaría archivos
+  con una persona identificable y sin fila que los referencie. Actúa solo sobre el `sub` del token. CORS ahora admite `DELETE`.
+- **Pruebas:** `test_cuenta.py` (8: orden archivos→cuenta, fallo parcial, solo la carpeta propia, paginación, confirmación, 401, 502) y `perfil.test.ts` (9).
+- **No probado contra la base real:** la cascada de claves foráneas y `delete_user` de Supabase están razonadas del esquema (`on delete cascade` en `usuarios`, `atletas`, `sesiones`, `videos`,
+  `reportes_*`), no ejecutadas: no puedo crear cuentas en producción. **Probalo con una cuenta descartable** antes de la demo (cargar un golpe, "Eliminar mi cuenta", y mirar que Storage quede sin la carpeta).
+- **`/privacidad`** actualizada: ahora dice que el acceso, la corrección y el borrado se hacen desde Perfil; `contacto@kinetiqtennis.me` queda para quien no puede entrar.
+
+---
+
 ## 2026-10-14 (madrugada) — Hallazgos de producción (a–e), decisión 037 y PDF (paso 4), todo en local
 
 **Sin pushear** (orden de Valentín: la cola de la sesión 2 del corpus sigue procesando; un reinicio de Render deja golpes "encolado" para siempre). Motor **0.5.4**, contrato **1.4**.

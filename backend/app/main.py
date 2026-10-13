@@ -20,7 +20,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import get_cors_origins, get_max_intentos, get_pausa_recuperacion_s
-from app.routers import analisis, salud, sesiones
+from app.routers import analisis, cuenta, salud, sesiones
 
 def _recuperar_tras_pausa() -> None:
     """Al arrancar: reencola los golpes que quedaron ``encolado``/``procesando`` por un reinicio (``app.recuperacion``). Nunca tumba la API."""
@@ -59,7 +59,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=get_cors_origins(),
     allow_credentials=False,
-    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_methods=["GET", "POST", "DELETE", "OPTIONS"],
     allow_headers=["Authorization", "Content-Type"],
     max_age=600,
 )
@@ -67,3 +67,4 @@ app.add_middleware(
 app.include_router(salud.router)
 app.include_router(analisis.router)
 app.include_router(sesiones.router)
+app.include_router(cuenta.router)
