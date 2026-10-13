@@ -6,7 +6,7 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
-## 2026-10-14 (cierre del día) — Estado, qué está solo en la rama de respaldo y cómo retomar
+## 2026-10-13 (cierre del día) — Estado, qué está solo en la rama de respaldo y cómo retomar
 
 **Lo que no se hizo hoy a propósito:** nada nuevo después de esta entrada. El árbol de trabajo está limpio y todo lo terminado está commiteado.
 
@@ -35,7 +35,7 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 3. **PDF** impreso de verdad (Archivo → Imprimir → Guardar como PDF) del reporte de un golpe y de una sesión: salto de página, imágenes cargadas y A4 vertical. Solo se miró el documento renderizado a 210 mm con
    datos sintéticos.
 4. **Perfil** con una cuenta real (guardar nombre y rol, editar un jugador, "Descargar mis datos").
-5. **Procesando en escritorio** (título, botón y etiqueta; arreglado el 14/10 pero sin ver con sesión real).
+5. **Procesando en escritorio** (título, botón y etiqueta; arreglado el 13/10 pero sin ver con sesión real).
 6. Antes de la demo: el **correo de contacto** `contacto@kinetiqtennis.me` (Valentín configuró el reenvío) y revisar el texto de `/privacidad` (declaración suya).
 
 ### Cómo retomar
