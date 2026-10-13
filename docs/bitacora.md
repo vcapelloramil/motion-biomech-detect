@@ -6,6 +6,35 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-13 (00:00) — PASO B COMPLETO (76 repeticiones) · cierre de la sesión
+
+**Estado final:** repositorio limpio y pusheado; nada en curso. Resumen completo en `docs/resultados/paso-b-resumen.md` (y `paso-b-saque.md` para el saque). Corrida: 131,9 min, commit `7c9535c`, motor 0.5.1.
+
+**Resultados (originales a tasa real, regularizados a 240 Hz; tolerancia 8,33 ms):**
+
+| Grupo | Válidas | Cadera primero | Tronco primero | Dentro |
+| --- | --- | --- | --- | --- |
+| Saque · perfil | 10 | 0 | 8 | 2 |
+| Saque · tres cuartos | 18 | 7 | 0 | 11 |
+| Drive · perfil | 12 | 1 | 7 | 4 |
+| Drive · tres cuartos | 12 | 3 | 0 | 9 |
+| Revés · perfil | 11 | 3 | 3 | 5 |
+| Revés · tres cuartos | 12 | 0 | 5 | 7 |
+
+- **Saque y drive: el orden depende del encuadre en el mismo sentido** (perfil tronco primero; tres cuartos cadera primero o dentro de la tolerancia; drive p = 0,024, exploratorio). **El revés no sigue el patrón**
+  (tres cuartos: tronco primero 5 de 5 ordenables; perfil 3 contra 3 y sensible al método).
+- **Criterio 1 (sesión de medición):** cumplen solo el **saque de perfil (1a 0,83)** y el **drive de perfil (1a 0,83)**, los dos con el tronco primero; en la réplica no cumple ninguno; ningún grupo de tres cuartos cumple
+  (resolución: más de la mitad dentro de 8,33 ms, con 1b = 1,00).
+- **Lectura:** el orden cadera-tronco con una sola cámara no es confiable como veredicto en este material; los grupos que cumplen el Criterio 1 son justamente los sospechosos. Es un resultado para el Capítulo 7.
+
+**Lo que NO se hizo (por orden de Valentín: "no empieces nada más"):**
+1. **`RESPALDO_POR_GRUPO` no se revisó con estas cifras:** `drive|perfil` pasaría a cumplir (b) con 1a 0,83; ningún veredicto cambia porque falta la referencia (a).
+2. **D (contraste de encuadre) no está calibrado para drive y revés** (hoy solo saque): se puede calibrar con las poses guardadas en `backend/.cache/corpus-real-pose-b`.
+3. **Criterio 3 con el tiempo real** (la métrica (ii) depende del tiempo) y el capítulo de resultados.
+4. **Mañana:** el resto del plan §8 (punto 1: registro real con correo propio, depende de Brevo/Resend; cargar con varios golpes; consistencia entre golpes; reporte detallado; PDF; perfil; eliminar cuenta; respaldo).
+
+---
+
 ## 2026-10-13 (madrugada) — Novedades de Valentín (solo registro): dominio en producción y Brevo
 
 - **Dominio hecho (Valentín):** pasos 1 a 5 de la guía. Deploy con **`kinetiqtennis.me` como dominio personalizado** (el `workers.dev` sigue activo); Supabase **Site URL y Redirect URLs** actualizadas;
