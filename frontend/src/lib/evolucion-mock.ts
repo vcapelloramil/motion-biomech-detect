@@ -1,6 +1,6 @@
 /**
  * Serie historica del atleta, tal como la devolveria la API.
- * Vive fuera del componente por la misma razon que reporte-mock.ts: el frontend
+ * Vive fuera del componente: el frontend
  * representa datos ya evaluados por el motor, no los calcula.
  */
 export interface SesionEvolucion {

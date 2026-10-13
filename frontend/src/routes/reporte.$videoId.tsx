@@ -181,7 +181,7 @@ function Reporte({ video, reporte }: { video: VideoConReporte; reporte: Record<s
         {sesion?.atletas?.nombre ? ` · ${sesion.atletas.nombre}` : ""}
       </p>
 
-      {/* Nivel 1 — veredicto: máximo tres observaciones, en lenguaje llano. */}
+      {/* Nivel 1 — lo más importante: máximo tres observaciones, en lenguaje llano. */}
       <section aria-labelledby="importante" className="mt-10">
         <h2 id="importante" className="font-mono text-xs uppercase tracking-widest text-state-ok">Lo más importante</h2>
         <ul className="mt-4 grid gap-4 md:grid-cols-3">

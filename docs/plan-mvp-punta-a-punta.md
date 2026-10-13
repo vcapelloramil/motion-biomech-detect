@@ -202,6 +202,27 @@ especificación que todavía no existen, (3) que el sistema funcione "como públ
 **Supuestos:** sesiones de ~medio día. Ritmo **observado**: el flujo de punta a punta estaba previsto para el 20/10 (11 sesiones a ~1 por día) y se cerró el 12/10, es decir ~1,5 por día. Se calcula con **1,5
 por día** (esperado) y **1 por día** (pesimista, sin imprevistos de paneles ni de DNS).
 
+### Orden vigente desde el 13/10 (aprobado por Valentín; reemplaza el orden de la columna # de la tabla de abajo)
+
+La tabla de abajo conserva el detalle de cada punto; **el orden que rige es este**, con las sesiones de la auditoría (`docs/ux/auditoria-pantallas-13-10.md` §3). El PDF sube antes que Perfil y Evolución, y el
+interruptor Simple/Detallado sale del núcleo ("PDF sin interruptor").
+
+| Orden | Qué | Ses. | Notas |
+| --- | --- | --- | --- |
+| 1 | **Higiene de contenido**: landing sin veredicto ni puntaje, retirar el reporte falso de `/reporte` y los botones que llevaban a él, Biblioteca con "golpes medidos / no medibles" | 0,75 | **Hecho el 13/10** (ver bitácora) |
+| 2 | **Cargar con varios golpes** + Procesando "golpe 2 de 6" | 2,25 | Habilita grabar la 1.ª sesión de Evolución |
+| 3 | **Vista de sesión y consistencia entre golpes** (agregador, `reportes_sesion`, tarjetas "Tus golpes entre sí", selector de golpe) | 1,5 | `docs/ux/valor-sin-veredictos.md` §3.2 |
+| 4 | **PDF barato, sin interruptor**: el reporte con el detalle técnico siempre abierto y estilo de impresión (`@media print`), con sello de versión, trazabilidad y limitaciones | 1 | Ya no depende de la vista detallada; la tabla 4.7 lo pone en el núcleo |
+| 5 | **Perfil real mínimo + eliminar cuenta y datos** (ambos buckets) | 2,5 | Rol, mano dominante, descargar mis datos (recortable), eliminar (no recortable) |
+| 6 | **Evolución mínima real** | 1 | Necesita **2 sesiones reales** del mismo gesto y encuadre en días distintos (las graba Valentín tras el 2) |
+| 7 | **Respaldo con restauración probada** y recuperación al arranque (6.5) | 1,25 | |
+| 8 | **Ensayo de la demo** | 0,5 | Un golpe por gesto subido, congelar |
+| | **Núcleo** | **10,75** | |
+
+**Recortes, en este orden (lo primero cae primero):** (a) diseño nuevo de Landing, Registro e Ingreso, miniatura real en Biblioteca y reproductor sincronizado; (b) "descargar mis datos" del paso 5 (queda eliminar);
+(c) de "varios golpes" a "hasta 3 golpes por sesión" (−0,75) en el paso 2. **Fuera del núcleo por decisión del 13/10:** el interruptor Simple/Detallado y la vista por defecto según el rol (0,5, si queda margen).
+**No se recortan:** 1, 2, 3, 4, eliminar cuenta y el ensayo.
+
 ### Núcleo: lo que tiene que estar para la demo (13,25 sesiones restantes; se hicieron el punto 3 y el Paso A)
 
 | # | Qué | Ses. | Valor | Depende de |

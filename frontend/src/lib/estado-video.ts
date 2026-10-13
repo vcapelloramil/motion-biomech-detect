@@ -174,6 +174,28 @@ export function contarObservaciones(observaciones: readonly { severidad: string 
   return c;
 }
 
+export type ConteoGolpes = { medidos: number; no_medibles: number; en_analisis: number };
+
+/**
+ * Cuántos golpes (un video = un golpe) se midieron, cuántos no se pudieron medir y cuántos siguen en análisis. "Medido" = el
+ * reporte trae al menos una repetición auditable (se pudo establecer el orden o, como mínimo, medir los picos). No juzga:
+ * desde las decisiones 035 y 036 ningún grupo emite veredicto del orden, así que la Biblioteca cuenta lo medido, no un estado.
+ */
+export function contarGolpes(videos: readonly { estado: EstadoVideo; reportes_biomecanicos?: unknown }[]): ConteoGolpes {
+  const c: ConteoGolpes = { medidos: 0, no_medibles: 0, en_analisis: 0 };
+  for (const v of videos) {
+    if (enCurso(v.estado)) {
+      c.en_analisis += 1;
+      continue;
+    }
+    const reps = (reporteDe(v)?.reporte?.secuenciacion as { repeticiones?: unknown } | undefined)?.repeticiones;
+    const medido = Array.isArray(reps) && reps.some((r) => (r as { auditable?: unknown } | null)?.auditable === true);
+    if (medido) c.medidos += 1;
+    else c.no_medibles += 1;
+  }
+  return c;
+}
+
 /** `reportes_biomecanicos` llega como objeto (relación 1 a 1) o como lista según la consulta: se normaliza. */
 export function reporteDe(video: { reportes_biomecanicos?: unknown }): { reporte: Record<string, unknown> | null } | null {
   const r = video.reportes_biomecanicos;

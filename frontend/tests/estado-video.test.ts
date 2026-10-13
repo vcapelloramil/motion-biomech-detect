@@ -3,6 +3,7 @@ import { describe, expect, test } from "bun:test";
 import {
   ETAPAS,
   MAX_INTENTOS,
+  contarGolpes,
   contarObservaciones,
   enCurso,
   estadoDeSesion,
@@ -100,6 +101,33 @@ describe("reporte y observaciones", () => {
     expect(reporteDe({ reportes_biomecanicos: { reporte: null } })?.reporte).toBeNull();
     expect(observacionesDe(rep)).toHaveLength(1);
     expect(observacionesDe(null)).toEqual([]);
+  });
+});
+
+describe("golpes medidos (Biblioteca)", () => {
+  const conReporte = (auditable: boolean[]) => ({
+    reportes_biomecanicos: { reporte: { secuenciacion: { repeticiones: auditable.map((a) => ({ auditable: a })) } } },
+  });
+
+  test("cuenta lo medido y lo que no se pudo medir, sin tocar el veredicto", () => {
+    const c = contarGolpes([
+      { estado: "completado", ...conReporte([true]) },
+      { estado: "completado", ...conReporte([false]) },
+      { estado: "parcial", ...conReporte([]) },
+      { estado: "fallido" },
+      { estado: "procesando" },
+      { estado: "encolado" },
+    ]);
+    expect(c).toEqual({ medidos: 1, no_medibles: 3, en_analisis: 2 });
+  });
+
+  test("un reporte con un veredicto viejo cuenta como medido y no como 'correcto'", () => {
+    const v = { estado: "completado" as const, reportes_biomecanicos: { reporte: { secuenciacion: { repeticiones: [{ auditable: true, correcto: false }] }, observaciones: [{ severidad: "desvio_leve" }] } } };
+    expect(contarGolpes([v])).toEqual({ medidos: 1, no_medibles: 0, en_analisis: 0 });
+  });
+
+  test("sin videos, todo en cero", () => {
+    expect(contarGolpes([])).toEqual({ medidos: 0, no_medibles: 0, en_analisis: 0 });
   });
 });
 

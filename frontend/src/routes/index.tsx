@@ -55,6 +55,10 @@ function Home() {
               brazo alcanzan su velocidad máxima, junto con los{" "}
               <strong className="text-foreground">ángulos articulares</strong> del gesto.
             </p>
+            <p className="mt-4 max-w-xl text-muted-foreground">
+              No te dice si tu técnica es buena o mala: mide tu golpe con su confianza y te muestra cuánto cambia de una sesión
+              a otra.
+            </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 to="/upload"
@@ -64,17 +68,17 @@ function Home() {
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
               <Link
-                to="/reporte"
+                to="/tecnologia"
                 className="inline-flex items-center gap-2 rounded-xl border border-border bg-card px-6 py-3 font-semibold text-foreground hover:border-clinic"
               >
-                <FileText className="h-4 w-4 text-clinic" /> Ver un reporte de ejemplo
+                <FileText className="h-4 w-4 text-clinic" /> Cómo se calcula cada número
               </Link>
             </div>
             <div className="mt-10 grid grid-cols-3 gap-6 border-t border-border pt-6">
               {[
                 { k: "120 fps", v: "Frecuencia mínima" },
                 { k: "3", v: "Gestos: saque, drive, revés" },
-                { k: "4", v: "Estados, incluido no auditable" },
+                { k: "Sin juicio", v: "Mide y registra; no evalúa" },
               ].map((s) => (
                 <div key={s.v}>
                   <div className="font-display text-3xl font-bold text-gradient-neon">{s.k}</div>
@@ -103,8 +107,8 @@ function Home() {
                 <div className="text-neon">CONF 0.97</div>
               </div>
               <div className="absolute right-4 top-4 glass rounded-lg px-3 py-2 font-mono text-[10px]">
-                <div className="text-muted-foreground">PICO PELVIS</div>
-                <div className="text-neon">0,42 s</div>
+                <div className="text-muted-foreground">ILUSTRACIÓN</div>
+                <div className="text-neon">PICO PELVIS</div>
               </div>
               <div className="absolute bottom-4 left-4 right-4 glass rounded-xl px-4 py-3">
                 <div className="flex items-center justify-between">
@@ -114,10 +118,10 @@ function Home() {
                     </div>
                     <div className="font-display text-sm font-semibold">pelvis → torso → brazo</div>
                   </div>
-                  <div className="font-mono text-xs text-state-ok">✓ Coincide</div>
+                  <div className="font-mono text-xs text-muted-foreground">Solo registrado</div>
                 </div>
                 <div className="mt-2 font-mono text-[10px] text-muted-foreground">
-                  Orden esperado: pelvis → torso → brazo
+                  Se documenta el orden; no se lo juzga
                 </div>
               </div>
             </div>
@@ -152,8 +156,8 @@ function Home() {
               "Comparación del jugador consigo mismo entre sesiones",
               "Confianza por articulación y estado no auditable explícito",
             ]}
-            cta="Ver un reporte de ejemplo"
-            to="/reporte"
+            cta="Cómo se calcula cada número"
+            to="/tecnologia"
           />
           <PillarCard
             tag="Fuera del alcance"
@@ -165,6 +169,7 @@ function Home() {
               "Velocidad de la pelota, precisión de tiro y ubicación en cancha",
               "Partidos completos, voleas y varios jugadores en cuadro",
               "Análisis en tiempo real y comparativas contra jugadores profesionales",
+              "Decirte si tu orden de cadera y tronco es el correcto: con una sola cámara depende de desde dónde grabes",
               "Exportación a formatos médicos y conclusiones clínicas",
             ]}
             cta="Cómo grabar correctamente"
@@ -201,7 +206,7 @@ function Home() {
             {
               i: <FileText />,
               t: "04 · Reporte",
-              d: "Veredicto en tres observaciones, evidencia y fundamento de cada número.",
+              d: "Tres observaciones en lenguaje llano, los datos medidos y el fundamento de cada número.",
             },
           ].map((s, idx) => (
             <div
@@ -285,10 +290,10 @@ function Home() {
               ))}
             </div>
             <Link
-              to="/reporte"
+              to="/tecnologia"
               className="mt-8 inline-flex items-center gap-2 rounded-xl bg-gradient-clinic px-6 py-3 font-semibold text-neon-foreground shadow-clinic"
             >
-              Ver reporte de ejemplo <ArrowRight className="h-4 w-4" />
+              Cómo se calcula cada número <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
         </div>
@@ -316,7 +321,7 @@ function Home() {
                 { k: "MediaPipe Pose", v: "Estimación de pose" },
                 { k: "Butterworth", v: "Filtrado de fase cero" },
                 { k: "120 fps", v: "Frecuencia mínima" },
-                { k: "4 estados", v: "Incluye no auditable" },
+                { k: "No auditable", v: "Si no se pudo medir, se dice" },
               ].map((c) => (
                 <div key={c.k} className="rounded-xl border border-border bg-background p-5">
                   <div className="font-display text-xl font-bold">{c.k}</div>

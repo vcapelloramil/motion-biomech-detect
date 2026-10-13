@@ -2,16 +2,15 @@ import { useEffect, useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Film, Loader2, Search } from "lucide-react";
 import { RutaProtegida } from "@/components/ruta-protegida";
-import { EstadoBadge, SinEvaluarBadge } from "@/components/estado";
+import { EstadoBadge } from "@/components/estado";
 import { useSesion } from "@/lib/sesion";
 import {
   ENCUADRE_ETIQUETA,
   GESTO_ETIQUETA,
-  contarObservaciones,
+  contarGolpes,
   enCurso,
   estadoDeSesion,
   numero,
-  observacionesDe,
   reporteDe,
   type EstadoSesion,
 } from "@/lib/estado-video";
@@ -182,11 +181,10 @@ function TarjetaSesion({ sesion }: { sesion: SesionConVideos }) {
   const fps = numero(primero?.fps_real);
   const fecha = new Date(sesion.fecha + "T12:00:00").toLocaleDateString("es-AR", { day: "numeric", month: "short", year: "numeric" });
 
-  // Conteo de lo observado, sumando las observaciones de los golpes con reporte.
-  const todas = videos.flatMap((v) => observacionesDe(reporteDe(v)?.reporte ?? null));
-  const c = contarObservaciones(todas);
-  const hayConteo = Object.values(c).some((n) => n > 0);
-  const analizando = videos.some((v) => enCurso(v.estado));
+  // Lo medido, no un veredicto: ningún grupo emite veredicto del orden (decisiones 035 y 036).
+  const g = contarGolpes(videos);
+  const hayConteo = g.medidos > 0 || g.no_medibles > 0;
+  const analizando = g.en_analisis > 0;
 
   return (
     <li className="overflow-hidden rounded-2xl border border-border bg-card">
@@ -218,16 +216,19 @@ function TarjetaSesion({ sesion }: { sesion: SesionConVideos }) {
             <p className="text-sm text-muted-foreground">Analizando. El resultado aparece acá cuando esté listo.</p>
           ) : hayConteo ? (
             <div className="flex flex-wrap gap-2">
-              {c.correcto > 0 && <EstadoBadge estado="correcto">{c.correcto} correcto{c.correcto > 1 ? "s" : ""}</EstadoBadge>}
-              {c.desvio_leve > 0 && <EstadoBadge estado="desvio">{c.desvio_leve} desvío{c.desvio_leve > 1 ? "s" : ""} leve{c.desvio_leve > 1 ? "s" : ""}</EstadoBadge>}
-              {c.alerta_de_carga > 0 && <EstadoBadge estado="alerta">{c.alerta_de_carga} alerta{c.alerta_de_carga > 1 ? "s" : ""} de carga</EstadoBadge>}
-              {c.no_auditable > 0 && <EstadoBadge estado="no-auditable">{c.no_auditable} no auditable{c.no_auditable > 1 ? "s" : ""}</EstadoBadge>}
-              {c.sin_evaluar > 0 && <SinEvaluarBadge />}
+              {g.medidos > 0 && (
+                <span className="inline-flex items-center rounded-full border border-border px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-widest">
+                  {g.medidos} {g.medidos === 1 ? "golpe medido" : "golpes medidos"}
+                </span>
+              )}
+              {g.no_medibles > 0 && (
+                <EstadoBadge estado="no-auditable">{g.no_medibles} {g.no_medibles === 1 ? "no medible" : "no medibles"}</EstadoBadge>
+              )}
             </div>
           ) : estado === "fallida" ? (
             <p className="text-sm text-muted-foreground">No se pudo analizar. Abrí el detalle para ver qué hacer.</p>
           ) : (
-            <p className="text-sm text-muted-foreground">Este golpe no produjo observaciones.</p>
+            <p className="text-sm text-muted-foreground">Todavía no hay golpes medidos en esta sesión.</p>
           )}
 
           {primero && (reporteDe(primero)?.reporte ?? null) && !analizando ? (

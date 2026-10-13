@@ -6,6 +6,32 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-13 (tarde) — Paso 1 del orden vigente: higiene de contenido (frontend) · plan §8 reordenado
+
+**Orden aprobado por Valentín:** 1) higiene, 2) cargar con varios golpes, 3) vista de sesión, 4) PDF sin interruptor, 5) perfil + eliminar cuenta, 6) Evolución mínima real, 7) respaldo, 8) ensayo. Plan §8 actualizado
+(núcleo 10,75 sesiones; el interruptor Simple/Detallado sale del núcleo). Push del commit anterior (decisión 036, motor 0.5.3) hecho.
+
+### Qué se hizo (solo frontend; el servidor no cambia)
+
+- **"Ver un reporte de ejemplo": se sacó el botón** (los tres) y `/reporte` ya no muestra nada: redirige a la Biblioteca. **Por qué esa y no un "Ejemplo real" público:** el ejemplo real pide una ruta pública
+  nueva, una copia congelada del reporte con sus fotogramas y su video (hoy en un bucket privado, que se tendría que sacar a un lugar público), y un segundo camino de dibujo del reporte; las imágenes son del
+  cuerpo de Valentín en un video real (no se puede asegurar "sin datos personales"); y una copia congelada envejece con el motor y el contrato. Cuesta ≥ 0,5–1 sesión y deja una superficie pública para
+  mantener. Sacar el botón cuesta cero y no puede equivocarse. En su lugar: **"Cómo se calcula cada número"** (`/tecnologia`, pública). El ejemplo real queda como opción posterior a la demo.
+- **Landing:** sin "Veredicto" ni "✓ Coincide / Orden esperado" (la tarjeta del hero dice "Ilustración" y "Solo registrado"); sin "4 estados" (pasa a "Sin juicio" y "No auditable: si no se pudo medir, se dice");
+  agrega la frase de valor y la limitación "no te dice si tu orden de cadera y tronco es el correcto".
+- **Biblioteca:** en vez del conteo por veredicto, **"N golpes medidos" y "M no medibles"** (`contarGolpes`, con pruebas). Un reporte viejo con veredicto cuenta como medido, no como "correcto".
+- **Código huérfano retirado:** el reporte falso y sus dos componentes (`reporte-mock.ts`, `grafico-secuenciacion.tsx`, `reproductor-sincronizado.tsx`; quedan en el historial de git). `evolucion-atleta` y su mock
+  quedan para el paso 6.
+- **Pruebas:** `bun test` **62 pass** (3 nuevas), `tsc` limpio, build limpio, `eslint` sin errores (los 6000 avisos de `prettier` son anteriores y de todo el árbol).
+
+### Para Valentín
+
+- **Hay que republicar el frontend** (`bun run build` y `wrangler deploy` en `frontend/`): la landing y la Biblioteca cambian. Render no cambia con este commit.
+- **Los reportes que ya están en la base generados antes de la 0.5.2** conservan el veredicto que tenían (es el registro de lo que dijo el motor de esa versión); en la Biblioteca ya no se ven, pero al abrir el
+  reporte sí. Si va a mostrar uno en la demo, conviene volver a subir ese golpe.
+
+---
+
 ## 2026-10-13 (sesión nueva) — Decisión 036 (ningún grupo emite veredicto), auditoría de pantallas y valor sin veredictos
 
 Retomada desde la bitácora. **No se tocó nada de Brevo ni del correo.** Sin commit ni push todavía (reinicia Render): lo decide Valentín.
