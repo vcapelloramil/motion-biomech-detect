@@ -6,6 +6,23 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-13 (después del cierre) — Lado de la cámara confirmado (izquierda, no dominante), insumos del Capítulo 7 y documentos corregidos
+
+**Solo documentación y verificación de lectura; sin cambios de código ni de motor.** Rama `respaldo-13-10`.
+
+- **Confirmado por Valentín:** en todos sus videos la cámara estuvo **a su izquierda (lado no dominante; es diestro)**. La decisión 013 era la correcta; el protocolo y las notas que decían "del lado de la
+  raqueta" estaban mal.
+- **Verificado en la base (solo lectura):** las **7 sesiones** subidas (24 y 25/9) tienen `lado_camara = izquierda` y el atleta `mano_dominante = derecha`. **Un lado mal declarado no cambia ningún cálculo:** el
+  motor usa la mano dominante del atleta para elegir el brazo, no el lado de la cámara; `lado_camara` solo viaja al reporte de sesión y a Evolución, que avisa si dos sesiones de una serie tienen lados
+  distintos. El contraste de encuadre (D) usa el valor absoluto del giro de hombros.
+- **Documentos corregidos:** `protocolo-sesiones-evolucion.md` (lado = izquierda, también para las sesiones nuevas opcionales), `protocolo-saques-tres-cuartos.md`, `protocolo-grabacion.md` (ángulo A y ficha de
+  la sesión), `resultados/brazo-por-golpe.md` ("Implicancia" y el hallazgo: condición del lado de grabación, trabajo futuro del lado de la raqueta con la salvedad de comparabilidad), decisión 013
+  (actualización) y `tesis/correcciones-pendientes-capitulo-4.md` (nota 19, limitación para los Capítulos 6 y 7). `tesis/insumos-capitulo-7.md` ya lo trae.
+- **Queda abierto (decisión de Valentín):** el esquema de encuadre de Cargar (`frontend/src/components/esquema-encuadre.tsx`) dibuja la cámara del lado de la raqueta de un jugador diestro, contrario al
+  corpus. No se tocó. Además `protocolo-grabacion.md` describe tres cuartos "a unos 45° por delante del jugador" y los otros protocolos "por detrás": no se verificó cuál fue el del corpus.
+
+---
+
 ## 2026-10-13 (cierre del día) — Estado, qué está solo en la rama de respaldo y cómo retomar
 
 **Lo que no se hizo hoy a propósito:** nada nuevo después de esta entrada. El árbol de trabajo está limpio y todo lo terminado está commiteado.

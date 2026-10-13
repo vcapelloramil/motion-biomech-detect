@@ -30,8 +30,8 @@ archivo está en `recortes.json` de esa carpeta. Reproducible: `python -m app.re
 | **2** | **25/09/2026** | `20260925_saque_trescuartos_toma02b_golpe1.mov` … `golpe6.mov` | 6 |
 | 2 (opcional, +6) | 25/09/2026 | `20260925_saque_trescuartos_toma02c_golpe1.mov` … `golpe6.mov` | 6 |
 
-**Cómo cargarlas** (cuando esté el paso 2, ya hecho): en Cargar, **una sesión por día**, *Golpe* = saque, *Encuadre* = **tres cuartos**, *Lado de la cámara* = el del protocolo (a la derecha del jugador,
-del lado de la raqueta: **confirmalo mirando un golpe**), *¿Cómo lo grabaste?* = **cámara lenta 240**, y **la fecha real** (24 y 25 de septiembre). Los archivos se eligen **desde la computadora**: no
+**Cómo cargarlas** (cuando esté el paso 2, ya hecho): en Cargar, **una sesión por día**, *Golpe* = saque, *Encuadre* = **tres cuartos**, *Lado de la cámara* = **a la izquierda del jugador** (el lado no dominante: el jugador es diestro y la cámara
+estuvo a su izquierda en todos los videos del corpus; confirmado por Valentín el 13/10/2026; las dos sesiones ya subidas lo tienen declarado así), *¿Cómo lo grabaste?* = **cámara lenta 240**, y **la fecha real** (24 y 25 de septiembre). Los archivos se eligen **desde la computadora**: no
 hace falta "Formato: Actual" ni tocar nada en Fotos, porque el navegador sube el archivo tal cual.
 
 **Qué esperar:** los mismos golpes que midió el Paso B (el mismo motor sobre la misma señal): sirve de control cruzado "producción contra Paso B". En el Paso B estas tomas dieron cadera primero o dentro de la
@@ -56,7 +56,7 @@ orden vigente (`docs/plan-mvp-punta-a-punta.md` §8). Complementa a `docs/protoc
 | | Valor | Por qué |
 | --- | --- | --- |
 | **Gesto** | **Saque** | Es el único con D calibrado (el aviso de "el video parece de otro encuadre" funciona para el saque) y el gesto con respaldo bibliográfico de la tesis |
-| **Encuadre** | **Tres cuartos** (cámara a ~45° por detrás del lado de la raqueta) | En el corpus la separación cadera-hombro es mayor en tres cuartos (30–33°) que en perfil (24–26°) y la variación habitual dentro de una sesión es de ~3°: un cambio real es más fácil de ver sobre ese ruido |
+| **Encuadre** | **Tres cuartos** (cámara a ~45° por detrás, **del lado izquierdo del jugador**, el no dominante: el mismo de todo el corpus) | En el corpus la separación cadera-hombro es mayor en tres cuartos (30–33°) que en perfil (24–26°) y la variación habitual dentro de una sesión es de ~3°: un cambio real es más fácil de ver sobre ese ruido |
 | **Sesiones** | **2 mínimo, 3 ideal**, en **días distintos** | Con 2 hay un cambio; con 3 aparece la banda propia ("tu variación habitual") |
 | **Golpes por sesión** | **8 grabados**, subir **todos los que estén completos** (mínimo 6) | Con 4 golpes medidos hay dispersión; con 5 ordenables, repetibilidad del orden. Con 3 no hay ninguna de las dos |
 | **Cada video** | **un solo golpe, 3 a 4 s** (≈ 1 s antes del inicio del movimiento y ≈ 1 s después del impacto), **menos de 50 MB** | Es lo que acepta Cargar; el recorte validado de 3,1 s (626 fotogramas) procesó en 117 s |
@@ -81,7 +81,7 @@ Evolución solo compara sesiones del mismo gesto y encuadre, y el sesgo del inst
 
 1. En Fotos: recortar cada saque y **sacar la cámara lenta** (barra de rayitas, todo el tramo a velocidad normal).
 2. Subir con **Opciones → Formato: Actual** o desde la app Archivos.
-3. En Cargar: **una sesión por día**, gesto *saque*, encuadre *tres cuartos*, el lado de la cámara, *"¿Cómo lo grabaste?" = cámara lenta 240*, y **en la fecha, la fecha real de la grabación** (se puede
+3. En Cargar: **una sesión por día**, gesto *saque*, encuadre *tres cuartos*, lado de la cámara **izquierda** (siempre el mismo del corpus: con otro lado la comparación con las sesiones del 24 y 25/9 deja de ser válida y la Evolución lo avisa), *"¿Cómo lo grabaste?" = cámara lenta 240*, y **en la fecha, la fecha real de la grabación** (se puede
    editar; Evolución ordena por esa fecha).
 4. Guardar los **originales sin modificar** aparte (Archivos o iCloud).
 

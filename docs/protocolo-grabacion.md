@@ -103,9 +103,14 @@ esa comparación solo es válida si el encuadre es el mismo. Anotar además la d
 
 ### Dos ángulos
 
-**Ángulo A — Perfil.** La cámara perpendicular al jugador, del lado del brazo dominante. Es el
-encuadre principal: captura mejor la flexión de rodilla, la extensión de codo y el arqueo del
-tronco.
+**Ángulo A — Perfil.** La cámara perpendicular al jugador. Es el encuadre principal: captura mejor
+la flexión de rodilla, la extensión de codo y el arqueo del tronco.
+
+**Lado de la cámara (corrección del 13/10/2026).** En todas las grabaciones del corpus propio la
+cámara estuvo **a la izquierda del jugador, el lado no dominante** (el jugador es diestro; confirmado
+por Valentín; decisión 013), de modo que el brazo que golpea queda del lado lejano. **Las sesiones
+nuevas deben usar el mismo lado** para que sean comparables con el corpus y entre sí. Grabar del lado
+de la raqueta no se probó y queda como trabajo futuro (cambia la comparabilidad con lo ya medido).
 
 **Ángulo B — Tres cuartos.** La cámara a unos 45° por delante del jugador. Captura mejor la
 rotación de cadera y hombros, y por lo tanto la separación cadera-hombro.
@@ -278,6 +283,7 @@ apartado 2.6 y se cita en la tesis.
 | Nivel | |
 | Modelo de celular | |
 | Resolución y fps configurados | |
+| Lado de la cámara respecto del jugador | Izquierda / derecha (en el corpus: izquierda, lado no dominante) |
 | Altura de la cámara (cm) | |
 | Distancia cámara–jugador (m) | |
 | Condición de luz | Sol directo / nublado / sombra abierta |

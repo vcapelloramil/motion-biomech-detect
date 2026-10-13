@@ -99,3 +99,15 @@ desenfoque — usando el revés de tres cuartos de este material como el caso de
   cobertura de 30–50 % en el saque y el drive, causa (desenfoque o autooclusión) no separada.
 - **Protocolo de grabación:** registrar en la ficha de cada toma el lado de la cámara respecto del lado
   dominante. No estaba anotado y hoy solo se infiere de la `z` relativa de los hombros.
+
+## Actualización (13/10/2026) — el lado de la cámara, confirmado
+
+**Confirmado por Valentín:** en **todos** sus videos la cámara estuvo **a su izquierda** (el lado no dominante; es diestro). Verificado además en la base: las 7 sesiones subidas (24 y 25/9) tienen
+declarado `lado_camara = izquierda` y la mano dominante `derecha`. Consecuencias:
+
+- **El brazo dominante queda del lado lejano a la cámara y el torso lo tapa en el armado del golpe.** Es una condición del **lado de grabación**, no solo del encuadre (en el revés, que expone el brazo
+  dominante a la cámara, el codo se ve). Es la lectura que mejor explica los datos (`docs/resultados/brazo-por-golpe.md`); sigue **sin contrastarse** grabando del lado de la raqueta.
+- **Todos los resultados de orden (Criterios 1 y 3, Pasos A y B, encuadre D) se midieron con la cámara del lado no dominante.** No se sabe qué darían con la cámara del lado de la raqueta.
+- **Trabajo futuro:** grabar del lado de la raqueta, con la salvedad de que cambia la comparabilidad con el corpus. Las sesiones nuevas opcionales usan el mismo lado del corpus (izquierda).
+- **Documentos corregidos:** `docs/protocolo-grabacion.md`, `docs/protocolo-sesiones-evolucion.md`, `docs/protocolo-saques-tres-cuartos.md` y `docs/resultados/brazo-por-golpe.md` decían "del lado de la
+  raqueta" o "del lado del brazo dominante".

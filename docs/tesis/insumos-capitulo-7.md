@@ -13,7 +13,9 @@
 - **Estados:** **FIRME** (medido con un procedimiento versionado y reproducible, sin depender de algo pendiente) · **PROVISORIO** (medido, pero con una limitación que puede cambiar la conclusión; se dice cuál) ·
   **PENDIENTE** (falta hacerlo o falta verlo funcionando) · **NO MEDIDO** (no hay dato en el repositorio; no se estima).
 - **Fechas:** son las del commit o las del archivo, en hora local (−03:00). La bitácora del repositorio rotula `14/10` a trabajo cuyos commits son del 13/10 (01:59 a 04:20): acá prevalece la fecha del commit.
-- **Un jugador.** Todo el corpus propio es de un solo jugador (el autor, diestro), un iPhone 15 Pro Max, dos sesiones consecutivas (24 y 25/9/2026). Esto condiciona todo lo que sigue y se repite en §7.
+- **Un jugador, un lado.** Todo el corpus propio es de un solo jugador (el autor, diestro), un iPhone 15 Pro Max, dos sesiones consecutivas (24 y 25/9/2026), y **en todos los videos la cámara estuvo a la
+  izquierda del jugador, el lado no dominante** (confirmado por Valentín el 13/10/2026; verificado en la base). **Todos los resultados de orden se midieron con la cámara de ese lado.** Esto condiciona todo lo que
+  sigue y se repite en §7.
 - **Vocabulario del producto (regla R2 del proyecto):** el sistema *documenta y mide*; no predice, no diagnostica, no previene. La etiqueta de una alerta es "alerta de carga". Conviene mantenerlo en el capítulo.
 - **Texto de la hipótesis:** el apartado 1.4 de la tesis (donde está enunciada) **no está en el repositorio**. Lo que sí está es cómo la citan los Capítulos 3 y 4 (§5). Habría que cotejar la redacción literal contra el Capítulo 1.
 
@@ -39,7 +41,8 @@
 3. **Con los originales (Paso B, 76 repeticiones), el orden cadera→tronco depende del encuadre** en el saque (0 de 8 contra 7 de 7 con la cadera primero, Fisher p = 0,0002) y en el drive (1 de 8 contra 3 de 3, p = 0,024); el revés no sigue el patrón (§2.5).
 4. **Los dos grupos que cumplen el Criterio 1 (saque y drive de perfil, 1a = 0,83) son justamente los sospechosos** de sesgo del encuadre; en la réplica ninguno cumple (§2.5).
 5. Por eso desde el 13/10 **ningún grupo emite veredicto del orden** (decisiones 035 y 036): el sistema mide y registra; no juzga (§4).
-6. **El pico del brazo no se pudo medir en el 68 % de las repeticiones (52 de 76)**; 18 de 18 en el saque de tres cuartos (§2.7).
+6. **El pico del brazo no se pudo medir en el 68 % de las repeticiones (52 de 76)**; 18 de 18 en el saque de tres cuartos. Con la cámara del lado no dominante el brazo que golpea queda del lado lejano y el torso lo
+   tapa en el armado: es una condición del lado de grabación (§2.7).
 7. Error angular contra goniometría manual: rodilla 8,5° y codo 12,5° de media (meta < 20,6°); el p95 del codo (36,4°) supera la meta y el codo dominante tiene n = 2 (§2.6).
 8. Consistencia entre sesiones (Criterio 3): 9 de 11 combinaciones (82 %) por la regla original, 10 de 11 por la lectura calibrada; la métrica de instante está pendiente de recalcularse con el tiempo real (§2.6).
 9. El valor que queda es **medición trazable + seguimiento del jugador consigo mismo en el mismo encuadre**, no un juicio del orden (§5).
@@ -326,8 +329,13 @@ Las 76 repeticiones del Paso B medidas con el motor actual (regla de cobertura d
 - **No es un caso de borde:** en las 52 repeticiones que pierden el brazo, la cobertura medida va del 6 al 59 % y **ninguna** queda entre el 60 y el 75 %. Bajar el piso no recuperaría ni una repetición.
 - **El motor anterior (0.5.0) reportaba un pico del brazo en 69 de 76** repeticiones, pero era el máximo de la fase posterior al pico del tronco, la única en que el codo se veía: un máximo parcial presentado como del golpe completo. La regla de cobertura lo retiró.
 - **Decisión de Valentín:** el brazo queda "**no medido**" con su motivo en palabras simples, **sin máximo parcial** (un dato que parece el pico del brazo y no lo es sería un dato equivocado presentado como bueno).
-- **Causa física: no separada.** La decisión 013 (26 y 29/9) deja abiertas dos explicaciones, desenfoque durante el golpe y autooclusión geométrica (el torso o la raqueta tapan el brazo), y el revés de tres cuartos —único caso con el brazo que golpea de cara a la cámara y cobertura ≈ 1,0— apoya la geométrica sin ser concluyente con un jugador. **Cámara del lado no dominante** (el brazo que golpea es el lejano) en las dos sesiones: ver el aviso del Anexo B sobre el lado de la cámara.
-- **Hallazgo redactado para el capítulo** (tal como figura en `brazo-por-golpe.md`): "el pico de velocidad angular del brazo dominante no se pudo medir en el 68 % de los golpes (52 de 76): 18 de 18 en el saque de tres cuartos, 12 de 12 en el drive de perfil y en el de tres cuartos, 9 de 11 en el saque de perfil y 1 de 11 y 0 de 12 en el revés".
+- **Lado de grabación.** **La cámara estuvo siempre a la izquierda del jugador, el lado no dominante** (jugador diestro; confirmado por Valentín el 13/10/2026; decisión 013): el brazo dominante queda del lado
+  **lejano** a la cámara y **el torso lo tapa en el armado del golpe**. Es una condición del **lado de grabación**, no solo del encuadre: en el revés, donde el giro del cuerpo expone el brazo dominante a la
+  cámara, el codo se ve (cobertura ≈ 1,0; 1 de 11 y 0 de 12 sin pico). Es la lectura que mejor explica los datos —el codo no se ve justo en el armado, la fase más lenta, mientras el hombro se ve siempre—; la
+  decisión 013 dejaba abiertas el desenfoque y la autooclusión, y **no se contrastó grabando del lado de la raqueta** (trabajo futuro, §7.3).
+- **Hallazgo redactado para el capítulo** (versión del 13/10 de `brazo-por-golpe.md`): con la cámara del lado no dominante, "el pico de velocidad angular del brazo dominante no se pudo medir en el 68 % de los
+  golpes (52 de 76): 18 de 18 en el saque de tres cuartos, 12 de 12 en el drive de perfil y en el de tres cuartos, 9 de 11 en el saque de perfil y 1 de 11 y 0 de 12 en el revés"; el brazo que golpea queda del
+  lado lejano y el torso lo tapa en el armado: **una condición del lado de grabación, no solo del encuadre**.
 
 ### 2.8 Detección del encuadre (D, decisión 035) — **PROVISORIO**
 
@@ -342,7 +350,8 @@ El encuadre lo declara el usuario y de él depende qué grupo se aplica; en la p
 | Verificación sobre el corpus | las **28 repeticiones válidas del saque** se clasifican en el encuadre con que se grabaron: **0 avisos falsos, 0 sin afirmar** | decisión 035 |
 | La apertura de hombros / largo del tronco (primera idea) | **no sirve**: medianas 0,23 (perfil) y 0,15 (tres cuartos), con el golpe nuevo en 0,11 | `paso-b-saque.md` |
 
-**Por qué PROVISORIO:** el umbral se calibró con los mismos saques sobre los que se verificó (consistencia, no validación independiente); un jugador; **solo calibrado para el saque** (drive y revés, pendiente); detecta una discrepancia **gruesa**, no mide el ángulo de la cámara; pide ≥ 0,8 s de preparación antes del pico. **No bloquea la carga**: avisa y retira el veredicto.
+**Por qué PROVISORIO:** el umbral se calibró con los mismos saques sobre los que se verificó (consistencia, no validación independiente); un jugador; **solo con la cámara a la izquierda del jugador** (el cálculo toma
+el valor absoluto del giro, así que no distingue el signo, pero no se verificó con la cámara del otro lado); **solo calibrado para el saque** (drive y revés, pendiente); detecta una discrepancia **gruesa**, no mide el ángulo de la cámara; pide ≥ 0,8 s de preparación antes del pico. **No bloquea la carga**: avisa y retira el veredicto.
 
 ### 2.9 Recortes del corpus para la Evolución de la demo — **FIRME (los recortes) · PENDIENTE (verlos en pantalla)**
 
@@ -383,7 +392,7 @@ El encuadre lo declara el usuario y de él depende qué grupo se aplica; en la p
 | 15 | Criterio 3, métrica (ii) | — | **PENDIENTE** | Hay que recalcularla con el tiempo real; revés de perfil, no auditable (censura de ventana). |
 | 16 | Criterio 4 | 117–147 s · 678 s | **PROVISORIO** | Sin umbral; ver 5, 6 y 7. |
 | 17 | Criterio 5 / I4 | — | **PENDIENTE** (no evaluado) | Sin pruebas con otros usuarios. |
-| 18 | Brazo no medible | 52 de 76 (68 %) | **FIRME** (conteo y visibilidad del codo) · **PROVISORIO** (causa) | Desenfoque y autooclusión no separados (013); cámara de un solo lado. |
+| 18 | Brazo no medible | 52 de 76 (68 %) | **FIRME** (conteo y visibilidad del codo) · **PROVISORIO** (causa) | La atribución al lado de grabación (brazo lejano tapado por el torso) es la lectura que mejor explica los datos, pero no se contrastó grabando del lado de la raqueta (013). |
 | 19 | Detección de encuadre D | 28/28, 0 falsos | **PROVISORIO** | Misma muestra para calibrar y verificar; solo saque; drive y revés pendientes. |
 | 20 | Recortes de Evolución | 18/18 verificados | **FIRME** | Aritmética entera sobre las marcas de tiempo. |
 | 21 | Evolución real, Perfil real, eliminar cuenta, PDF A4 | — | **PENDIENTE** | Solo en `respaldo-13-10`; sin verlos en pantalla real. |
@@ -408,7 +417,7 @@ Cada fila: qué se esperaba, qué se encontró, la decisión que lo documenta y 
 | 8 | **035** (12–13/10) | Que el orden medido sea una propiedad del gesto | **Depende del encuadre en el saque**: perfil 0 cadera primero / 8 tronco primero; tres cuartos 7 / 0; p = 0,0002. El golpe de prueba "contradictorio" era un saque de tres cuartos declarado perfil. Se suspende el veredicto y se agrega D. | Cap. 7, Cap. 6 |
 | 9 | **036** (13/10) | Veredicto en al menos algunos gestos | El patrón se repite en el **drive** (1/7 contra 3/0; p = 0,024) y el **revés** no es confiable con una sola cámara. **Ningún grupo emite veredicto.** Los grupos que cumplen el Criterio 1 son los sospechosos. | Cap. 4 (4.3.3 "auditoría de secuenciación"), Cap. 7, Cap. 6 |
 | 10 | **037** (13/10) | "No auditable" para todo lo que no se ordena | Un empate a la resolución **es un golpe medido** ("sin diferencia medible"); "no auditable" queda para datos no confiables (R3). Un pico que falta lleva su motivo. | Cap. 4 (R3), Cap. 7 |
-| 11 | bitácora del 13/10 y `brazo-por-golpe.md` | Pico del brazo medible en el saque y el drive | **68 % sin pico del brazo** (18 de 18 en saque de tres cuartos): oclusión del codo en el armado del golpe. El motor 0.5.0 mostraba un máximo parcial como si fuera del golpe. | Cap. 7, Cap. 6 |
+| 11 | bitácora del 13/10 y `brazo-por-golpe.md` | Pico del brazo medible en el saque y el drive | **68 % sin pico del brazo** (18 de 18 en saque de tres cuartos): el brazo dominante queda del lado lejano a la cámara y el torso lo tapa en el armado (condición del lado de grabación). El motor 0.5.0 mostraba un máximo parcial como si fuera del golpe. | Cap. 7, Cap. 6 |
 | 12 | decisión 006 (27/8) | ~25 fps de inferencia (Cap. 4 §4.2.3 y §4.5.4) | **3,57 fps** medidos; el procesamiento asincrónico se vuelve más necesario. | Cap. 4 |
 
 ---
@@ -422,7 +431,7 @@ Cada fila: qué se esperaba, qué se encontró, la decisión que lo documenta y 
 | **Ejecución en hardware convencional, sin GPU** | **Se confirma** | Corre en CPU: 117–147 s por golpe de 3–4 s en 1 CPU / 2 GB (USD 25/mes) | n = 2 en Standard; un golpe a la vez |
 | **I2 · error angular < 20,6° en articulaciones proximales** | **Se confirma parcialmente** | Media rodilla 8,5° y codo 12,5° (2D, n = 18 por articulación) | p95 del codo 36,4° supera la meta; el codo dominante (n = 2) dio 27,2°; solo fotogramas con confianza ≥ 0,6; un observador; motor 0.4.1 |
 | **I1 · orden repetible de los picos con una sola cámara, 120–240 fps** | **Se confirma parcialmente la repetibilidad; no se confirma el orden como medida** | 2 de 6 grupos cumplen el Criterio 1 en la medición (1a 0,83) y 0 de 6 en la réplica; el instante de cada pico se mide con ~5 ms de resolución | En tres cuartos más de la mitad de las repeticiones queda dentro de la tolerancia; **el orden de saque y drive cambia con el encuadre**, así que la repetibilidad que se observa puede ser la de un sesgo fijo |
-| **I1 · cadena completa pelvis → torso → brazo** | **No se confirma** | El pico del brazo no se pudo medir en 52 de 76 repeticiones (68 %); 18 de 18 en saque de tres cuartos | Cámara de un solo lado; causa física no separada |
+| **I1 · cadena completa pelvis → torso → brazo** | **No se confirma** | El pico del brazo no se pudo medir en 52 de 76 repeticiones (68 %); 18 de 18 en saque de tres cuartos | Cámara del lado no dominante (brazo dominante lejano, tapado por el torso en el armado); no se probó el otro lado |
 | **I3 · comparar al jugador consigo mismo** | **Se confirma parcialmente** | 9 de 11 combinaciones (82 %) por la regla original y 10 de 11 (91 %) por la calibrada; σ intra-sesión de la separación cadera-hombro ≈ 2,8–3,1° | Métrica (ii) por recalcular; n = 6 por sesión; **un jugador y dos sesiones consecutivas**; un cambio real de técnica no se indujo ni se detectó |
 | **Núcleo: detectar la desincronización de la cadena cinética con una cámara** | **No se confirma con este material** (el sistema deja de emitir el juicio) | El orden cadera → tronco depende del encuadre y no se puede decir cuál mide bien | Sin referencia independiente de la pelvis; un jugador; el resultado no refuta el orden esperado de la literatura: **delimita lo que este instrumento puede afirmar** |
 | **I5 · latencia tolerable** | **Medida, sin umbral** | Ver §2.3 | El umbral lo debían definir los usuarios |
@@ -476,10 +485,13 @@ La lista viva de correcciones al capítulo, con la decisión que origina cada un
 ### 7.1 Limitaciones (declarar en el Capítulo 6 y recordar en el 7)
 
 1. **Un solo jugador** (el autor, diestro), un iPhone 15 Pro Max, un lugar, dos sesiones consecutivas (24 y 25/9/2026). Nada generaliza más allá de eso.
+   **Todos los resultados de orden se midieron con la cámara del lado no dominante** (a la izquierda del jugador, en todos los videos; confirmado el 13/10/2026): el orden cadera-tronco, la separación, los
+   ángulos, los Criterios 1 y 3, los Pasos A y B y la calibración del contraste de encuadre valen **para ese lado**. No se sabe qué darían con la cámara del lado de la raqueta.
 2. **n pequeño:** 6 repeticiones por grupo y sesión (12 el saque de tres cuartos en la sesión 2). Las repeticiones de una misma toma **no son independientes**. Los p de Fisher son **exploratorios**, sin corrección por comparaciones (6 grupos × varias métricas).
 3. **Sin medición independiente de la pelvis:** no hay referencia (marcadores, sensores inerciales, segunda cámara). El sistema dice qué mide en cada encuadre, no cuál es verdad.
 4. **Resolución temporal:** ~5 ms por fotograma real a ~200 fps; tolerancia de "ordenable" 8,33 ms; **16–17 % de los puntos de la grilla de 240 Hz son interpolados** (un instante que cae en uno es una reconstrucción, con error acotado por el hueco, ≤ 6 ms). En tres cuartos más de la mitad de las repeticiones queda dentro de la tolerancia.
-5. **Una cámara, un lado y 2D:** la pose es monocular (la profundidad la infiere el estimador); el brazo que golpea es el lejano a la cámara; el codo dominante se ve entre el 0 y el 82 % de la ventana según la fase.
+5. **Una cámara, un lado y 2D:** la pose es monocular (la profundidad la infiere el estimador); el brazo que golpea es el lejano a la cámara y el torso lo tapa en el armado; el codo dominante se ve entre el 0 y el
+   82 % de la ventana según la fase. En consecuencia, **el codo que se mide es, en la mayoría de los fotogramas, el no dominante** (16 de las 18 mediciones del Criterio 2).
 6. **Criterio 2:** plano de la imagen (2D), 18 fotogramas, solo donde el sistema es confiable (≥ 0,6: "vale para la región auditable"), un observador (error intra-observador 4,1°), codo dominante con n = 2; medido con motor 0.4.1.
 7. **Ventana de ±300 ms anclada al torso:** puede **censurar** la métrica (ii) del Criterio 3 (revés de perfil: 5 de 12 en el borde exacto; excluido a mano) y condiciona qué picos se encuentran.
 8. **Latencia:** un golpe a la vez, un usuario, una instancia, n pequeño; sin carga concurrente; la espera en cola no está medida.
@@ -493,7 +505,7 @@ La lista viva de correcciones al capítulo, con la decisión que origina cada un
 | **Interna (decisiones posteriores a ver datos)** | Override manual del revés de perfil (ii); suspensiones 035 y 036; unificación de tolerancia (032); controles del Paso A no pre-registrados. | Todo documentado con su fecha y motivo; los controles se informan todos, también los que no apoyan la hipótesis. |
 | **Interna (selección)** | 8 repeticiones fuera del Paso B (2 en rampa, 6 de `IMG_6391` incompleto); el saque de tres cuartos pesa 18 de 76. | Declaradas; las 6 de `IMG_6391` se perdieron por un original incompleto. |
 | **De constructo** | El "orden" es el de los picos de la velocidad angular **total** del vector (no el giro axial); el "brazo" es el vector hombro→codo, un proxy de orientación (no rotación interna; no comparable con Fleisig, decisión 011); el estimador devuelve profundidad inferida. | Control con giro axial y cortes fijos en el Paso A y B; el brazo se informa como dato, sin evaluar. |
-| **Externa** | Un jugador, un teléfono, una iluminación, gestos de entrenamiento (no de partido). | R5: alcance declarado. |
+| **Externa** | Un jugador, un teléfono, una iluminación, un solo lado de cámara (el no dominante), gestos de entrenamiento (no de partido). | R5: alcance declarado; el lado se registra en cada sesión (`lado_camara`) y la Evolución avisa si cambia. |
 | **De conclusión** | n = 6, p exploratorios, regla del 75 % que coincide con el azar con n = 6. | Lectura calibrada (permutación) y todos los resultados informados. |
 | **Instrumento** | La tasa real varía por grabación; el teléfono puede convertir el archivo; el formato "Actual" es necesario. | El motor lee la tasa del archivo, regulariza, cuenta lo interpolado y rechaza lo convertido. |
 
@@ -502,7 +514,8 @@ La lista viva de correcciones al capítulo, con la decisión que origina cada un
 - **Multivista:** grabar el mismo golpe a la vez desde perfil y desde tres cuartos (la prueba más limpia de la dependencia del encuadre). **Descartada por ahora: no hay un segundo teléfono.**
 - **Cintas de color:** una medición independiente de la pelvis con un solo teléfono (cuatro colores en cresta ilíaca y acromion), que permitiría levantar la suspensión del veredicto grupo por grupo. **Registrada, sin diseñar** (cuántas repeticiones, criterio de acuerdo y qué levanta la suspensión se define si se decide hacerla).
 - **Validación contra una referencia independiente** (marcadores, sensores inerciales o captura óptica) y **más de un jugador**, en más de un día y con niveles distintos.
-- **Cámara del lado dominante** en saque y drive, para separar desenfoque de autooclusión (decisión 013); una sesión con encuadre invertido.
+- **Grabar del lado de la raqueta** (cámara a la derecha de un jugador diestro) en saque y drive, para medir el brazo dominante y contrastar la explicación del lado de grabación (decisión 013). **Salvedad:** cambia
+  la comparabilidad con el corpus; esas sesiones serían un corpus aparte. Las sesiones nuevas opcionales para Evolución usan el mismo lado del corpus (izquierda).
 - **Calibrar D para drive y revés** con las poses del Paso B; **Criterio 3 con el tiempo real**; revisar la columna (b) de `RESPALDO_POR_GRUPO` con las cifras del Paso B (el drive de perfil pasaría a cumplir con 1a 0,83; no cambia ningún veredicto porque la suspensión gana).
 - **Ventana específica por gesto**, pre-registrada, para no censurar la métrica (ii).
 - **Marca por pico del instante medido o reconstruido** y suma de la incertidumbre del hueco a la decisión de "ordenable".
@@ -524,8 +537,9 @@ Orden vigente del plan (`docs/plan-mvp-punta-a-punta.md` §8): pasos 1 a 6 hecho
 | 4 | **Revisar el texto de `/privacidad`:** es una declaración de Valentín (no se usa para publicidad ni se vende; no hay borrado automático). | Pendiente |
 | 5 | **Paso 7: respaldo de la base con restauración probada de punta a punta** (Supabase Free no respalda; los datos del respaldo no van al repositorio). | Pendiente (0,75 sesión) |
 | 6 | **Paso 8: ensayo de la demo** (un golpe por gesto subido; congelar). | Pendiente (0,5 sesión) |
-| 7 | **Confirmar el lado de la cámara de las sesiones del corpus** mirando un golpe (ver Anexo B, aviso 4). | Pendiente |
+| 7 | ~~Confirmar el lado de la cámara de las sesiones del corpus.~~ **Resuelto el 13/10/2026:** izquierda del jugador (no dominante) en todos los videos; las 7 sesiones subidas lo tienen declarado así y la mano dominante `derecha` (Anexo B, aviso 4). Las sesiones nuevas opcionales usan la izquierda. | Hecho |
 | 8 | No cambiar el plan de Render ni reiniciar el servicio con un análisis en curso. | Regla |
+| 9 | **Decidir qué lado recomienda la aplicación:** el esquema de encuadre de Cargar (`frontend/src/components/esquema-encuadre.tsx`) dibuja la cámara del lado de la raqueta de un jugador diestro, y el corpus es del lado contrario. No cambia ningún cálculo (el lado declarado no entra en el motor), pero un usuario que siga el dibujo grabaría del otro lado y no sería comparable con el corpus. | Pendiente (decisión de Valentín) |
 
 ### 8.2 Antes de la defensa (entrega final: 17/11/2026; MVP completo: 2/11; la fecha de defensa **no consta en el repositorio**)
 
@@ -570,8 +584,11 @@ Orden vigente del plan (`docs/plan-mvp-punta-a-punta.md` §8): pasos 1 a 6 hecho
 1. **Dos p de Fisher distintos para el saque.** Paso A (corpus horneado, 120,2 fps): 0 de 9 contra 6 de 9, **p = 0,009**. Paso B (originales): 0 de 8 contra 7 de 7, **p = 0,0002**. Son dos mediciones; citar la del Paso B como definitiva y la del A como control.
 2. **"El único grupo que cumple el Criterio 1".** La decisión 029 y la nota 3 de las correcciones dicen que es `drive|perfil` (1a 0,83), cifra que corresponde a τ = 3; la tabla formal (014) a τ = 1 da **tres grupos** y a τ = 2 y 3 **dos**. La decisión 031 lo corrigió. Citar siempre la tabla, con su τ y su motor.
 3. **Fechas.** Las entradas de la bitácora rotuladas "2026-10-14" (tarde, mañana y madrugada) y las menciones "14/10" de `plan-mvp-punta-a-punta.md` (§8, filas 5 y 6: "Hecho el 14/10"), `brazo-por-golpe.md` ("Decisión (Valentín, 14/10/2026)") y `especificacion-frontend.md` ("decisión de Valentín, 14/10/2026", tres veces) corresponden a trabajo cuyos commits son del 13/10 (01:59 a 04:20, −03:00). En esta sesión se corrigió solo la entrada de cierre de la bitácora (su título y una mención dentro de ella); las demás quedan para que Valentín decida.
-4. **Lado de la cámara.** La decisión 013 midió con la `z` relativa de los hombros que la cámara quedó del lado **izquierdo (no dominante)** en 74 de 84 clips (el brazo que golpea es el lejano). El protocolo de grabación decía "del lado de la raqueta" y la bitácora del 13/10 pide **confirmarlo mirando un golpe**. La frase de "Implicancia" de `brazo-por-golpe.md` ("con una cámara fija a un costado o por detrás del lado del brazo que golpea… del lado opuesto") **depende de ese dato**: no pegarla en el capítulo sin confirmarlo.
-5. **"Oclusión real" frente a "causa no separada".** `brazo-por-golpe.md` concluye "oclusión real, no una regla demasiado estricta" (lo que descarta es que la regla del 75 % sea el motivo); la decisión 013 deja abiertas desenfoque y autooclusión. Ambas afirmaciones son compatibles, pero el capítulo debe decir qué se afirma: **el estimador no ve el codo en el armado del golpe**; por qué, no está separado.
+4. **Lado de la cámara: RESUELTO el 13/10/2026.** Valentín confirmó que en todos sus videos la cámara estuvo **a su izquierda (lado no dominante; es diestro)**, como decía la decisión 013 (medido con la `z`
+   relativa de los hombros en 74 de 84 clips). Verificado en la base: las **7 sesiones** subidas (24 y 25/9) tienen `lado_camara = izquierda` y el atleta `mano_dominante = derecha`. Se corrigieron los documentos
+   que decían "del lado de la raqueta" o "del lado del brazo dominante" (`protocolo-grabacion.md`, `protocolo-sesiones-evolucion.md`, `protocolo-saques-tres-cuartos.md`, y la "Implicancia" de
+   `brazo-por-golpe.md`, ya reformulada). **Queda un cartel de la aplicación que dibuja la cámara del lado de la raqueta** (esquema de encuadre en Cargar): ver §8.1, punto 9.
+5. **"Oclusión real" frente a "causa no separada".** `brazo-por-golpe.md` concluye "oclusión real, no una regla demasiado estricta" (lo que descarta es que la regla del 75 % sea el motivo); la decisión 013 dejaba abiertas el desenfoque y la autooclusión. Tras confirmar el lado de la cámara (13/10), la lectura vigente es que el brazo dominante queda del lado lejano y el torso lo tapa en el armado; el capítulo debe decir qué se afirma: **el estimador no ve el codo en el armado del golpe**, y que la explicación por el lado de grabación es la que mejor encaja, **sin haberla contrastado** grabando del lado de la raqueta.
 6. **D calibrado con 22 saques y verificado con 28.** El umbral de ~46° sale de 22 saques; las 28 repeticiones válidas del saque son la verificación de consistencia. Es la misma muestra.
 7. **La decisión 037 dice "Decide Valentín" sobre el brazo; ya decidió** (queda "no medido", sin máximo parcial). El texto de la 037 no se actualizó.
 8. **"76 repeticiones válidas" frente a 75.** El Paso B midió 76 repeticiones y 75 son válidas para el par cadera-tronco (una de saque de perfil de la sesión 1 no lo es); `brazo-por-golpe.md` llama "válidas" a las 76.

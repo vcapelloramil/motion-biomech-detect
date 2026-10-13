@@ -77,3 +77,9 @@ en el Capítulo 7 ni mostrar en la demo como medición.
     decisión 035.
 18. **En tres cuartos el instrumento está en el límite de su resolución con este material:** en 34 de 48 repeticiones la cadera y el tronco quedan a 8,33 ms o menos (un fotograma a 120 fps). El Paso B
     (originales a ~200 fps, regularizados a 240 Hz) es el que puede resolverlo.
+
+19. **Todos los resultados de orden se midieron con la cámara del lado no dominante (confirmado el 13/10/2026).** En todas las grabaciones del corpus propio la cámara estuvo a la izquierda de un jugador
+    diestro (decisión 013, actualización del 13/10; verificado también en el `lado_camara` declarado de las 7 sesiones subidas). Es una **limitación para los Capítulos 6 y 7**: el orden cadera-tronco, la
+    separación, los ángulos, el Criterio 1 y el Criterio 3, y la calibración del contraste de encuadre (D) valen **para ese lado**. El brazo dominante queda del lado lejano y el torso lo tapa en el armado
+    (52 de 76 repeticiones sin pico del brazo; 0 de 12 y 1 de 11 en el revés, que lo expone a la cámara): es una condición del lado de grabación y no solo del encuadre. Grabar del lado de la raqueta
+    queda como trabajo futuro, con la salvedad de que cambia la comparabilidad con el corpus.

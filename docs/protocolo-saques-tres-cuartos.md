@@ -26,10 +26,14 @@ Alternar evita que el cansancio o el cambio de luz se confundan con el encuadre.
 
 | Bloque | Encuadre | Cámara respecto del jugador | Saques |
 | --- | --- | --- | --- |
-| 1 | **Tres cuartos** | a ~45° por detrás del lado de la raqueta | 5 |
-| 2 | **Perfil** | a 90° (de costado), del lado de la raqueta | 5 |
+| 1 | **Tres cuartos** | a ~45° por detrás, **del lado izquierdo del jugador** (el no dominante, como todo el corpus) | 5 |
+| 2 | **Perfil** | a 90° (de costado), **del lado izquierdo del jugador** | 5 |
 | 3 | **Tres cuartos** | igual que el bloque 1 | 5 |
 | 4 | **Perfil** | igual que el bloque 2 | 5 |
+
+**El lado es el mismo del corpus (izquierda del jugador, no dominante), a propósito:** todas las grabaciones con que se midió el orden se hicieron con la cámara a la izquierda de un jugador diestro
+(confirmado por Valentín el 13/10/2026). Cambiar de lado mezclaría dos variables (encuadre y lado) y rompería la comparación con lo ya medido. Grabar del lado de la raqueta queda como trabajo futuro, con
+esa salvedad (`docs/resultados/brazo-por-golpe.md`).
 
 - Entre bloques: mover el celular **a la marca**, no "a ojo". Anotar la hora.
 - **Un video por saque o uno por bloque:** lo que sea más cómodo, pero **recortá cada saque** después.
