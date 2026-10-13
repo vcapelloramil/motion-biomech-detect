@@ -14,7 +14,7 @@ const base: Consistencia = {
   encuadre: "tres_cuartos",
   fecha: "2026-09-24",
   version_regla: "1",
-  golpes: { total: 6, medidos: 6, no_medibles: 0, en_analisis: 0 },
+  golpes: { total: 6, medidos: 6, no_medibles: 0, en_analisis: 0, con_orden_distinguible: 5 },
   separacion_cadera_hombro: { n: 6, unidad: "grados", mediana: 30.4, dispersion: 2.6, minimo: 26.1, maximo: 34.9, valores: [] },
   orden: { medidos: 6, ordenables: 5, mismo_orden: 4, orden_modal: ["pelvis", "torso"], suficiente: true },
   golpe_tipico: "v1",
@@ -59,8 +59,18 @@ describe("tarjetas de consistencia", () => {
   });
 
   test("el conteo de golpes nombra los no medibles y los que siguen en análisis", () => {
-    const c = { ...base, golpes: { total: 6, medidos: 3, no_medibles: 1, en_analisis: 2 } };
-    expect(tarjetasDeConsistencia(c)[2].texto).toBe("Se midieron 3 de 6 golpes; 1 no se pudo medir y 2 siguen en análisis.");
+    const c = { ...base, golpes: { total: 6, medidos: 3, no_medibles: 1, en_analisis: 2, con_orden_distinguible: 1 } };
+    expect(tarjetasDeConsistencia(c)[2].texto).toBe(
+      "Se midieron 3 de 6 golpes; 1 no se pudo medir y 2 siguen en análisis. En 1 se distingue cuál llegó primero, la cadera o el tronco.",
+    );
+  });
+
+  test("un empate no es un golpe perdido: se mide y se dice que no se distingue el orden", () => {
+    const c = { ...base, golpes: { total: 6, medidos: 6, no_medibles: 0, en_analisis: 0, con_orden_distinguible: 0 } };
+    const t = tarjetasDeConsistencia(c)[2];
+    expect(t.valor).toBe("6 de 6");
+    expect(t.texto).toContain("En ninguno se distingue");
+    expect(t.texto).not.toMatch(/no se pudo medir/i);
   });
 
   test("sin separación medida lo dice", () => {

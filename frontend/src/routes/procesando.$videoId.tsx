@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { AlertTriangle, Check, Clock, Loader2, RefreshCw } from "lucide-react";
 import { RutaProtegida } from "@/components/ruta-protegida";
-import { EstadoBadge, SinEvaluarBadge, type Estado } from "@/components/estado";
+import { BadgePorClave, EstadoBadge, type Estado } from "@/components/estado";
 import { useSesion } from "@/lib/sesion";
 import { MODOS_CAPTURA, esValor, type ModoCaptura } from "@/lib/carga";
 import {
@@ -36,12 +36,13 @@ export const Route = createFileRoute("/procesando/$videoId")({
 
 const INTERVALO_MS = 5000;
 
-const BADGE_POR_SEVERIDAD: Record<string, Estado | "sin_evaluar"> = {
+const BADGE_POR_SEVERIDAD: Record<string, Estado | "sin_evaluar" | "sin_diferencia"> = {
   correcto: "correcto",
   desvio_leve: "desvio",
   alerta_de_carga: "alerta",
   no_auditable: "no-auditable",
   sin_evaluar: "sin_evaluar",
+  sin_diferencia_medible: "sin_diferencia",
 };
 
 function ProcesandoPage() {
@@ -155,23 +156,23 @@ function Detalle({ video, ahora, alCambiar }: { video: VideoConReporte; ahora: n
 
   return (
     <main className="mx-auto max-w-5xl px-5 py-10 md:py-14">
-      <p className="font-mono text-xs uppercase tracking-widest text-acento">/ {termino ? "Resultado" : "Procesando"}</p>
-      <div className="mt-4 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-        <div>
-          <h1 className="font-display text-4xl font-extrabold leading-tight tracking-tight md:text-6xl">{titulo}</h1>
-          <p className="mt-3 text-muted-foreground">
-            {sesion
-              ? `${GESTO_ETIQUETA[sesion.gesto] ?? sesion.gesto} · de ${ENCUADRE_ETIQUETA[sesion.encuadre] ?? sesion.encuadre}`
-              : "Golpe"}
-            {sesion?.atletas?.nombre ? ` · ${sesion.atletas.nombre}` : ""}
-          </p>
-        </div>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <p className="font-mono text-xs uppercase tracking-widest text-acento">/ {termino ? "Resultado" : "Procesando"}</p>
         <Link
           to="/videos"
-          className="inline-flex min-h-11 items-center justify-center rounded-xl border border-border px-5 text-sm font-semibold hover:border-accent/60"
+          className="inline-flex min-h-10 items-center rounded-lg border border-border px-4 text-sm font-semibold hover:border-accent/60"
         >
-          Volver a la biblioteca
+          ← Volver a la biblioteca
         </Link>
+      </div>
+      <div className="mt-4">
+        <h1 className="font-display text-3xl font-extrabold leading-tight tracking-tight md:text-4xl lg:text-5xl">{titulo}</h1>
+        <p className="mt-3 text-muted-foreground">
+          {sesion
+            ? `${GESTO_ETIQUETA[sesion.gesto] ?? sesion.gesto} · de ${ENCUADRE_ETIQUETA[sesion.encuadre] ?? sesion.encuadre}`
+            : "Golpe"}
+          {sesion?.atletas?.nombre ? ` · ${sesion.atletas.nombre}` : ""}
+        </p>
       </div>
 
       {!termino && (
@@ -186,8 +187,8 @@ function Detalle({ video, ahora, alCambiar }: { video: VideoConReporte; ahora: n
 
       <div className="mt-6 grid gap-5 lg:grid-cols-[1.6fr_1fr]">
         <section aria-labelledby="estado-titulo" className="rounded-2xl border border-border bg-card p-5 md:p-7">
-          <div className="flex items-start justify-between gap-3">
-            <h2 id="estado-titulo" className="font-display text-xl font-bold md:text-2xl">
+          <div className="flex flex-wrap items-start justify-between gap-x-3 gap-y-2">
+            <h2 id="estado-titulo" className="min-w-0 flex-1 font-display text-lg font-bold [overflow-wrap:anywhere] md:text-xl">
               Golpe · {nombreArchivo}
             </h2>
             <EtiquetaEstado estado={video.estado} />
@@ -234,7 +235,7 @@ function Detalle({ video, ahora, alCambiar }: { video: VideoConReporte; ahora: n
             </p>
           )}
           <div className="mt-4 rounded-xl border border-border px-4 py-3">
-            <p className="font-display text-sm font-bold">{nombreArchivo}</p>
+            <p className="font-display text-sm font-bold [overflow-wrap:anywhere]">{nombreArchivo}</p>
             <p className="mt-1 font-mono text-xs text-muted-foreground">
               {fps !== null ? `${Math.round(fps)} fps` : "fps: se lee al procesar"} · {resumenEstado(video.estado)}
             </p>
@@ -490,11 +491,7 @@ function Observacion({ o }: { o: ObservacionLeida }) {
   const clave = BADGE_POR_SEVERIDAD[o.severidad];
   return (
     <li className="rounded-xl border border-border p-4">
-      {clave === "sin_evaluar" ? (
-        <SinEvaluarBadge />
-      ) : clave ? (
-        <EstadoBadge estado={clave} />
-      ) : null}
+      <BadgePorClave clave={clave} />
       {/* Texto llano: el fundamento y la fuente están en "Ver detalle técnico" del reporte (ajuste del 12/10). */}
       <p className="mt-3 text-sm leading-relaxed">{o.texto}</p>
       {o.anterior && <p className="mt-2 text-xs text-muted-foreground">{TEXTO_VERSION_ANTERIOR}.</p>}

@@ -16,7 +16,8 @@ export type Consistencia = {
   encuadre: string;
   fecha: string;
   version_regla: string;
-  golpes: { total: number; medidos: number; no_medibles: number; en_analisis: number };
+  /** `medidos`: cadera y tronco con pico y confianza, aunque empaten. `con_orden_distinguible`: de esos, los que se pueden ordenar. */
+  golpes: { total: number; medidos: number; no_medibles: number; en_analisis: number; con_orden_distinguible: number };
   separacion_cadera_hombro: {
     n: number;
     unidad: string;
@@ -111,11 +112,19 @@ export function tarjetasDeConsistencia(c: Consistencia): TarjetaConsistencia[] {
   const resto: string[] = [];
   if (g.no_medibles > 0) resto.push(`${plural(g.no_medibles, "no se pudo medir", "no se pudieron medir")}`);
   if (g.en_analisis > 0) resto.push(`${plural(g.en_analisis, "sigue en análisis", "siguen en análisis")}`);
+  const distingue =
+    g.medidos === 0
+      ? ""
+      : g.con_orden_distinguible === g.medidos
+        ? " En todos se distingue cuál llegó primero, la cadera o el tronco."
+        : g.con_orden_distinguible === 0
+          ? " En ninguno se distingue cuál llegó primero: a esta resolución quedaron casi al mismo tiempo."
+          : ` En ${g.con_orden_distinguible} se distingue cuál llegó primero, la cadera o el tronco.`;
   const golpes: TarjetaConsistencia = {
     clave: "golpes",
     titulo: "Golpes medidos",
     valor: `${g.medidos} de ${g.total}`,
-    texto: `Se midieron ${g.medidos} de ${plural(g.total, "golpe", "golpes")}${resto.length > 0 ? `; ${resto.join(" y ")}` : ""}.`,
+    texto: `Se midieron ${g.medidos} de ${plural(g.total, "golpe", "golpes")}${resto.length > 0 ? `; ${resto.join(" y ")}` : ""}.${distingue}`,
   };
 
   return [separacion, orden, golpes];

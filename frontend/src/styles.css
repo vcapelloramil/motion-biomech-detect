@@ -159,3 +159,83 @@
   }
   .animate-scan { animation: scan 3s ease-in-out infinite; }
 }
+
+/* --- Impresión / "Guardar como PDF" (paso 4 del plan §8) ------------------------------------------------------------------------------
+   Papel blanco y texto oscuro (la interfaz es oscura), sin navegación ni botones, y el detalle técnico siempre abierto. */
+@page {
+  margin: 14mm;
+}
+
+@media print {
+  :root {
+    --background: #ffffff;
+    --foreground: #111827;
+    --card: #ffffff;
+    --card-foreground: #111827;
+    --secondary: #f3f4f6;
+    --secondary-foreground: #111827;
+    --muted: #f3f4f6;
+    --muted-foreground: #4b5563;
+    --accent: #0e7490;
+    --border: #cbd5e1;
+    --neon: #047857;
+    --state-ok: #047857;
+    --state-warn: #b45309;
+    --state-alert: #b91c1c;
+    --state-none: #4b5563;
+    --state-ok-bg: #ecfdf5;
+    --state-warn-bg: #fffbeb;
+    --state-alert-bg: #fef2f2;
+    --state-none-bg: #f3f4f6;
+    --grid-line: transparent;
+  }
+  html,
+  body {
+    background: #ffffff !important;
+    background-image: none !important;
+    color: #111827 !important;
+  }
+  /* El texto con degradé es transparente (se recorta el fondo): en papel el fondo no se imprime y el título desaparecería. */
+  .text-gradient-neon,
+  .text-gradient-clinic {
+    background: none !important;
+    -webkit-text-fill-color: currentColor !important;
+    color: #047857 !important;
+  }
+  .glass,
+  .shadow-neon,
+  .shadow-clinic {
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+  }
+  video {
+    display: none !important;
+  }
+  section,
+  li,
+  figure,
+  table,
+  tr {
+    break-inside: avoid;
+  }
+  h1,
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+  summary {
+    list-style: none;
+  }
+  summary svg {
+    display: none;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  /* Los fotogramas se imprimen más chicos: tres por fila en el ancho de la página. */
+  img {
+    max-height: 70mm;
+    object-fit: contain;
+  }
+}

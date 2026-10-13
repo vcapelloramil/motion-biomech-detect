@@ -22,8 +22,8 @@ def _reporte(sep: float | None = 30.0, t_pelvis: float = 0.30, t_torso: float = 
                 {
                     "auditable": auditable,
                     "picos": [
-                        {"segmento": "pelvis", "instante_s": t_pelvis},
-                        {"segmento": "torso", "instante_s": t_torso},
+                        {"segmento": "pelvis", "instante_s": t_pelvis, "confianza": 0.9},
+                        {"segmento": "torso", "instante_s": t_torso, "confianza": 0.9},
                     ],
                 }
             ]
@@ -42,14 +42,33 @@ def _golpes(reportes: list[dict | None], estado: str = "completado") -> list[dic
 
 def test_sin_golpes_no_inventa_nada():
     r = resumen_de_sesion([])
-    assert r["golpes"] == {"total": 0, "medidos": 0, "no_medibles": 0, "en_analisis": 0}
+    assert r["golpes"] == {"total": 0, "medidos": 0, "no_medibles": 0, "en_analisis": 0, "con_orden_distinguible": 0}
     assert r["separacion_cadera_hombro"]["mediana"] is None and r["separacion_cadera_hombro"]["dispersion"] is None
     assert r["golpe_tipico"] is None and r["golpes_que_se_apartan"] == []
 
 
 def test_cuenta_medidos_no_medibles_y_en_analisis():
-    golpes = _golpes([_reporte(), _reporte(auditable=False), None]) + [{"video_id": "vq", "estado": "encolado", "reporte": None}]
-    assert resumen_de_sesion(golpes)["golpes"] == {"total": 4, "medidos": 1, "no_medibles": 2, "en_analisis": 1}
+    sin_picos = _reporte()
+    sin_picos["secuenciacion"]["repeticiones"][0]["picos"] = []
+    golpes = _golpes([_reporte(), sin_picos, None]) + [{"video_id": "vq", "estado": "encolado", "reporte": None}]
+    assert resumen_de_sesion(golpes)["golpes"] == {
+        "total": 4, "medidos": 1, "no_medibles": 2, "en_analisis": 1, "con_orden_distinguible": 1,
+    }
+
+
+def test_un_golpe_con_cadera_y_tronco_empatados_esta_medido_aunque_su_orden_no_se_distinga():
+    """Decisión 037: 'medido' = los dos picos medidos con confianza; el empate a la resolución del video no lo vuelve 'no medible'."""
+    empatado = _reporte(t_pelvis=0.296, t_torso=0.300, auditable=False)   # el motor lo marca no ordenable; los picos existen
+    r = resumen_de_sesion(_golpes([empatado, _reporte(), _reporte()]))
+    assert r["golpes"]["medidos"] == 3 and r["golpes"]["no_medibles"] == 0
+    assert r["golpes"]["con_orden_distinguible"] == 2
+    assert r["separacion_cadera_hombro"]["n"] == 3        # su separación cuenta: se midió
+
+
+def test_un_pico_de_baja_confianza_no_cuenta_como_medido():
+    r = _reporte()
+    r["secuenciacion"]["repeticiones"][0]["picos"][1]["confianza"] = 0.3
+    assert resumen_de_sesion(_golpes([r]))["golpes"]["medidos"] == 0
 
 
 def test_la_dispersion_solo_aparece_con_suficientes_golpes():

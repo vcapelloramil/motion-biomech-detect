@@ -1,0 +1,1446 @@
+[
+ {
+  "clip": "20260924_VCR_saque_perfil_240_01_rep02.mov",
+  "gesto": "saque",
+  "encuadre": "perfil",
+  "fecha": "20260924",
+  "toma": "01",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 44 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260924_VCR_saque_perfil_240_01_rep03.mov",
+  "gesto": "saque",
+  "encuadre": "perfil",
+  "fecha": "20260924",
+  "toma": "01",
+  "actual": {
+   "b": false,
+   "motivo": "sin pico calculado",
+   "t": false,
+   "p": false
+  },
+  "anterior": {
+   "b": false,
+   "motivo": "sin pico calculado",
+   "t": false,
+   "p": false
+  }
+ },
+ {
+  "clip": "20260924_VCR_saque_perfil_240_01_rep04.mov",
+  "gesto": "saque",
+  "encuadre": "perfil",
+  "fecha": "20260924",
+  "toma": "01",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 43 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260924_VCR_saque_perfil_240_01_rep05.mov",
+  "gesto": "saque",
+  "encuadre": "perfil",
+  "fecha": "20260924",
+  "toma": "01",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 41 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260924_VCR_saque_perfil_240_01_rep06.mov",
+  "gesto": "saque",
+  "encuadre": "perfil",
+  "fecha": "20260924",
+  "toma": "01",
+  "actual": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_saque_perfil_240_02_rep01.mov",
+  "gesto": "saque",
+  "encuadre": "perfil",
+  "fecha": "20260925",
+  "toma": "02",
+  "actual": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_saque_perfil_240_02_rep02.mov",
+  "gesto": "saque",
+  "encuadre": "perfil",
+  "fecha": "20260925",
+  "toma": "02",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 28 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_saque_perfil_240_02_rep03.mov",
+  "gesto": "saque",
+  "encuadre": "perfil",
+  "fecha": "20260925",
+  "toma": "02",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 42 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_saque_perfil_240_02_rep04.mov",
+  "gesto": "saque",
+  "encuadre": "perfil",
+  "fecha": "20260925",
+  "toma": "02",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 40 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_saque_perfil_240_02_rep05.mov",
+  "gesto": "saque",
+  "encuadre": "perfil",
+  "fecha": "20260925",
+  "toma": "02",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 34 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_saque_perfil_240_02_rep06.mov",
+  "gesto": "saque",
+  "encuadre": "perfil",
+  "fecha": "20260925",
+  "toma": "02",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 54 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260924_VCR_saque_trescuartos_240_01_rep01.mov",
+  "gesto": "saque",
+  "encuadre": "trescuartos",
+  "fecha": "20260924",
+  "toma": "01",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 41 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260924_VCR_saque_trescuartos_240_01_rep02.mov",
+  "gesto": "saque",
+  "encuadre": "trescuartos",
+  "fecha": "20260924",
+  "toma": "01",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 45 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260924_VCR_saque_trescuartos_240_01_rep03.mov",
+  "gesto": "saque",
+  "encuadre": "trescuartos",
+  "fecha": "20260924",
+  "toma": "01",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 41 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260924_VCR_saque_trescuartos_240_01_rep04.mov",
+  "gesto": "saque",
+  "encuadre": "trescuartos",
+  "fecha": "20260924",
+  "toma": "01",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 38 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260924_VCR_saque_trescuartos_240_01_rep05.mov",
+  "gesto": "saque",
+  "encuadre": "trescuartos",
+  "fecha": "20260924",
+  "toma": "01",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 50 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260924_VCR_saque_trescuartos_240_01_rep06.mov",
+  "gesto": "saque",
+  "encuadre": "trescuartos",
+  "fecha": "20260924",
+  "toma": "01",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 43 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_saque_trescuartos_240_02b_rep01.mov",
+  "gesto": "saque",
+  "encuadre": "trescuartos",
+  "fecha": "20260925",
+  "toma": "02b",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 46 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_saque_trescuartos_240_02b_rep02.mov",
+  "gesto": "saque",
+  "encuadre": "trescuartos",
+  "fecha": "20260925",
+  "toma": "02b",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 45 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_saque_trescuartos_240_02b_rep03.mov",
+  "gesto": "saque",
+  "encuadre": "trescuartos",
+  "fecha": "20260925",
+  "toma": "02b",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 47 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_saque_trescuartos_240_02b_rep04.mov",
+  "gesto": "saque",
+  "encuadre": "trescuartos",
+  "fecha": "20260925",
+  "toma": "02b",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 37 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_saque_trescuartos_240_02b_rep05.mov",
+  "gesto": "saque",
+  "encuadre": "trescuartos",
+  "fecha": "20260925",
+  "toma": "02b",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 36 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_saque_trescuartos_240_02b_rep06.mov",
+  "gesto": "saque",
+  "encuadre": "trescuartos",
+  "fecha": "20260925",
+  "toma": "02b",
+  "actual": {
+   "b": false,
+   "motivo": "serie demasiado corta o incompleta",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": false,
+   "motivo": "serie demasiado corta o incompleta",
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_saque_trescuartos_240_02c_rep01.mov",
+  "gesto": "saque",
+  "encuadre": "trescuartos",
+  "fecha": "20260925",
+  "toma": "02c",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 41 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_saque_trescuartos_240_02c_rep02.mov",
+  "gesto": "saque",
+  "encuadre": "trescuartos",
+  "fecha": "20260925",
+  "toma": "02c",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 33 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": false,
+   "motivo": "sin picos marcados por encima de la prominencia mínima",
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_saque_trescuartos_240_02c_rep03.mov",
+  "gesto": "saque",
+  "encuadre": "trescuartos",
+  "fecha": "20260925",
+  "toma": "02c",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 39 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_saque_trescuartos_240_02c_rep04.mov",
+  "gesto": "saque",
+  "encuadre": "trescuartos",
+  "fecha": "20260925",
+  "toma": "02c",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 40 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_saque_trescuartos_240_02c_rep05.mov",
+  "gesto": "saque",
+  "encuadre": "trescuartos",
+  "fecha": "20260925",
+  "toma": "02c",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 34 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_saque_trescuartos_240_02c_rep06.mov",
+  "gesto": "saque",
+  "encuadre": "trescuartos",
+  "fecha": "20260925",
+  "toma": "02c",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 43 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260924_VCR_drive_perfil_240_01_rep01.mov",
+  "gesto": "drive",
+  "encuadre": "perfil",
+  "fecha": "20260924",
+  "toma": "01",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 48 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260924_VCR_drive_perfil_240_01_rep02.mov",
+  "gesto": "drive",
+  "encuadre": "perfil",
+  "fecha": "20260924",
+  "toma": "01",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 57 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260924_VCR_drive_perfil_240_01_rep03.mov",
+  "gesto": "drive",
+  "encuadre": "perfil",
+  "fecha": "20260924",
+  "toma": "01",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 42 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260924_VCR_drive_perfil_240_01_rep04.mov",
+  "gesto": "drive",
+  "encuadre": "perfil",
+  "fecha": "20260924",
+  "toma": "01",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 37 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260924_VCR_drive_perfil_240_01_rep05.mov",
+  "gesto": "drive",
+  "encuadre": "perfil",
+  "fecha": "20260924",
+  "toma": "01",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 30 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260924_VCR_drive_perfil_240_01_rep06.mov",
+  "gesto": "drive",
+  "encuadre": "perfil",
+  "fecha": "20260924",
+  "toma": "01",
+  "actual": {
+   "b": false,
+   "motivo": "serie demasiado corta o incompleta",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": false,
+   "motivo": "serie demasiado corta o incompleta",
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_drive_perfil_240_02_rep01.mov",
+  "gesto": "drive",
+  "encuadre": "perfil",
+  "fecha": "20260925",
+  "toma": "02",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 32 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_drive_perfil_240_02_rep02.mov",
+  "gesto": "drive",
+  "encuadre": "perfil",
+  "fecha": "20260925",
+  "toma": "02",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 43 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_drive_perfil_240_02_rep03.mov",
+  "gesto": "drive",
+  "encuadre": "perfil",
+  "fecha": "20260925",
+  "toma": "02",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 51 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_drive_perfil_240_02_rep04.mov",
+  "gesto": "drive",
+  "encuadre": "perfil",
+  "fecha": "20260925",
+  "toma": "02",
+  "actual": {
+   "b": false,
+   "motivo": "serie demasiado corta o incompleta",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": false,
+   "motivo": "serie demasiado corta o incompleta",
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_drive_perfil_240_02_rep05.mov",
+  "gesto": "drive",
+  "encuadre": "perfil",
+  "fecha": "20260925",
+  "toma": "02",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 48 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_drive_perfil_240_02_rep06.mov",
+  "gesto": "drive",
+  "encuadre": "perfil",
+  "fecha": "20260925",
+  "toma": "02",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 43 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260924_VCR_reves_perfil_240_01_rep01.mov",
+  "gesto": "reves",
+  "encuadre": "perfil",
+  "fecha": "20260924",
+  "toma": "01",
+  "actual": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260924_VCR_reves_perfil_240_01_rep02.mov",
+  "gesto": "reves",
+  "encuadre": "perfil",
+  "fecha": "20260924",
+  "toma": "01",
+  "actual": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260924_VCR_reves_perfil_240_01_rep03.mov",
+  "gesto": "reves",
+  "encuadre": "perfil",
+  "fecha": "20260924",
+  "toma": "01",
+  "actual": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260924_VCR_reves_perfil_240_01_rep04.mov",
+  "gesto": "reves",
+  "encuadre": "perfil",
+  "fecha": "20260924",
+  "toma": "01",
+  "actual": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260924_VCR_reves_perfil_240_01_rep05.mov",
+  "gesto": "reves",
+  "encuadre": "perfil",
+  "fecha": "20260924",
+  "toma": "01",
+  "actual": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260924_VCR_reves_perfil_240_01_rep06.mov",
+  "gesto": "reves",
+  "encuadre": "perfil",
+  "fecha": "20260924",
+  "toma": "01",
+  "actual": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_reves_perfil_240_02_rep02.mov",
+  "gesto": "reves",
+  "encuadre": "perfil",
+  "fecha": "20260925",
+  "toma": "02",
+  "actual": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_reves_perfil_240_02_rep03.mov",
+  "gesto": "reves",
+  "encuadre": "perfil",
+  "fecha": "20260925",
+  "toma": "02",
+  "actual": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_reves_perfil_240_02_rep04.mov",
+  "gesto": "reves",
+  "encuadre": "perfil",
+  "fecha": "20260925",
+  "toma": "02",
+  "actual": {
+   "b": false,
+   "motivo": "sin picos marcados por encima de la prominencia mínima",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": false,
+   "motivo": "sin picos marcados por encima de la prominencia mínima",
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_reves_perfil_240_02_rep05.mov",
+  "gesto": "reves",
+  "encuadre": "perfil",
+  "fecha": "20260925",
+  "toma": "02",
+  "actual": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_reves_perfil_240_02_rep06.mov",
+  "gesto": "reves",
+  "encuadre": "perfil",
+  "fecha": "20260925",
+  "toma": "02",
+  "actual": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260924_VCR_drive_trescuartos_240_01_rep01.mov",
+  "gesto": "drive",
+  "encuadre": "trescuartos",
+  "fecha": "20260924",
+  "toma": "01",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 18 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260924_VCR_drive_trescuartos_240_01_rep02.mov",
+  "gesto": "drive",
+  "encuadre": "trescuartos",
+  "fecha": "20260924",
+  "toma": "01",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 48 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260924_VCR_drive_trescuartos_240_01_rep03.mov",
+  "gesto": "drive",
+  "encuadre": "trescuartos",
+  "fecha": "20260924",
+  "toma": "01",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 29 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260924_VCR_drive_trescuartos_240_01_rep04.mov",
+  "gesto": "drive",
+  "encuadre": "trescuartos",
+  "fecha": "20260924",
+  "toma": "01",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 32 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260924_VCR_drive_trescuartos_240_01_rep05.mov",
+  "gesto": "drive",
+  "encuadre": "trescuartos",
+  "fecha": "20260924",
+  "toma": "01",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 59 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260924_VCR_drive_trescuartos_240_01_rep06.mov",
+  "gesto": "drive",
+  "encuadre": "trescuartos",
+  "fecha": "20260924",
+  "toma": "01",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 48 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_drive_trescuartos_240_02_rep01.mov",
+  "gesto": "drive",
+  "encuadre": "trescuartos",
+  "fecha": "20260925",
+  "toma": "02",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 51 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_drive_trescuartos_240_02_rep02.mov",
+  "gesto": "drive",
+  "encuadre": "trescuartos",
+  "fecha": "20260925",
+  "toma": "02",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 45 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_drive_trescuartos_240_02_rep03.mov",
+  "gesto": "drive",
+  "encuadre": "trescuartos",
+  "fecha": "20260925",
+  "toma": "02",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 43 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_drive_trescuartos_240_02_rep04.mov",
+  "gesto": "drive",
+  "encuadre": "trescuartos",
+  "fecha": "20260925",
+  "toma": "02",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 6 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": false,
+   "motivo": "sin picos marcados por encima de la prominencia mínima",
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_drive_trescuartos_240_02_rep05.mov",
+  "gesto": "drive",
+  "encuadre": "trescuartos",
+  "fecha": "20260925",
+  "toma": "02",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 42 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_drive_trescuartos_240_02_rep06.mov",
+  "gesto": "drive",
+  "encuadre": "trescuartos",
+  "fecha": "20260925",
+  "toma": "02",
+  "actual": {
+   "b": false,
+   "motivo": "ventana incompleta: se midió el 49 % de la ventana (mínimo 75 %)",
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260924_VCR_reves_trescuartos_240_01_rep01.mov",
+  "gesto": "reves",
+  "encuadre": "trescuartos",
+  "fecha": "20260924",
+  "toma": "01",
+  "actual": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260924_VCR_reves_trescuartos_240_01_rep02.mov",
+  "gesto": "reves",
+  "encuadre": "trescuartos",
+  "fecha": "20260924",
+  "toma": "01",
+  "actual": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260924_VCR_reves_trescuartos_240_01_rep03.mov",
+  "gesto": "reves",
+  "encuadre": "trescuartos",
+  "fecha": "20260924",
+  "toma": "01",
+  "actual": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260924_VCR_reves_trescuartos_240_01_rep04.mov",
+  "gesto": "reves",
+  "encuadre": "trescuartos",
+  "fecha": "20260924",
+  "toma": "01",
+  "actual": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260924_VCR_reves_trescuartos_240_01_rep05.mov",
+  "gesto": "reves",
+  "encuadre": "trescuartos",
+  "fecha": "20260924",
+  "toma": "01",
+  "actual": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260924_VCR_reves_trescuartos_240_01_rep06.mov",
+  "gesto": "reves",
+  "encuadre": "trescuartos",
+  "fecha": "20260924",
+  "toma": "01",
+  "actual": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_reves_trescuartos_240_02_rep01.mov",
+  "gesto": "reves",
+  "encuadre": "trescuartos",
+  "fecha": "20260925",
+  "toma": "02",
+  "actual": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_reves_trescuartos_240_02_rep02.mov",
+  "gesto": "reves",
+  "encuadre": "trescuartos",
+  "fecha": "20260925",
+  "toma": "02",
+  "actual": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_reves_trescuartos_240_02_rep03.mov",
+  "gesto": "reves",
+  "encuadre": "trescuartos",
+  "fecha": "20260925",
+  "toma": "02",
+  "actual": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_reves_trescuartos_240_02_rep04.mov",
+  "gesto": "reves",
+  "encuadre": "trescuartos",
+  "fecha": "20260925",
+  "toma": "02",
+  "actual": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_reves_trescuartos_240_02_rep05.mov",
+  "gesto": "reves",
+  "encuadre": "trescuartos",
+  "fecha": "20260925",
+  "toma": "02",
+  "actual": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ },
+ {
+  "clip": "20260925_VCR_reves_trescuartos_240_02_rep06.mov",
+  "gesto": "reves",
+  "encuadre": "trescuartos",
+  "fecha": "20260925",
+  "toma": "02",
+  "actual": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  },
+  "anterior": {
+   "b": true,
+   "motivo": null,
+   "t": true,
+   "p": true
+  }
+ }
+]

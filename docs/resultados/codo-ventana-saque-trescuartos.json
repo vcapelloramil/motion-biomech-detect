@@ -1,0 +1,200 @@
+[
+ {
+  "clip": "20260924 01 rep01",
+  "frames_ventana": 145,
+  "hombro_ok_pct": 100.0,
+  "codo_ok_pct": 42.0,
+  "codo_ok_primera_mitad_pct": 0.0,
+  "codo_ok_segunda_mitad_pct": 84.0,
+  "codo_conf_mediana": 0.0,
+  "codo_ok_con_umbral_0_3_pct": 42.0,
+  "muneca_ok_pct": 63.0
+ },
+ {
+  "clip": "20260924 01 rep02",
+  "frames_ventana": 145,
+  "hombro_ok_pct": 100.0,
+  "codo_ok_pct": 44.0,
+  "codo_ok_primera_mitad_pct": 0.0,
+  "codo_ok_segunda_mitad_pct": 88.0,
+  "codo_conf_mediana": 0.0,
+  "codo_ok_con_umbral_0_3_pct": 46.0,
+  "muneca_ok_pct": 60.0
+ },
+ {
+  "clip": "20260924 01 rep03",
+  "frames_ventana": 145,
+  "hombro_ok_pct": 100.0,
+  "codo_ok_pct": 41.0,
+  "codo_ok_primera_mitad_pct": 0.0,
+  "codo_ok_segunda_mitad_pct": 82.0,
+  "codo_conf_mediana": 0.0,
+  "codo_ok_con_umbral_0_3_pct": 41.0,
+  "muneca_ok_pct": 90.0
+ },
+ {
+  "clip": "20260924 01 rep04",
+  "frames_ventana": 145,
+  "hombro_ok_pct": 100.0,
+  "codo_ok_pct": 39.0,
+  "codo_ok_primera_mitad_pct": 0.0,
+  "codo_ok_segunda_mitad_pct": 77.0,
+  "codo_conf_mediana": 0.0,
+  "codo_ok_con_umbral_0_3_pct": 39.0,
+  "muneca_ok_pct": 74.0
+ },
+ {
+  "clip": "20260924 01 rep05",
+  "frames_ventana": 145,
+  "hombro_ok_pct": 100.0,
+  "codo_ok_pct": 50.0,
+  "codo_ok_primera_mitad_pct": 0.0,
+  "codo_ok_segunda_mitad_pct": 100.0,
+  "codo_conf_mediana": 0.54,
+  "codo_ok_con_umbral_0_3_pct": 50.0,
+  "muneca_ok_pct": 62.0
+ },
+ {
+  "clip": "20260924 01 rep06",
+  "frames_ventana": 145,
+  "hombro_ok_pct": 100.0,
+  "codo_ok_pct": 43.0,
+  "codo_ok_primera_mitad_pct": 0.0,
+  "codo_ok_segunda_mitad_pct": 86.0,
+  "codo_conf_mediana": 0.0,
+  "codo_ok_con_umbral_0_3_pct": 43.0,
+  "muneca_ok_pct": 70.0
+ },
+ {
+  "clip": "20260925 02b rep01",
+  "frames_ventana": 145,
+  "hombro_ok_pct": 100.0,
+  "codo_ok_pct": 45.0,
+  "codo_ok_primera_mitad_pct": 0.0,
+  "codo_ok_segunda_mitad_pct": 89.0,
+  "codo_conf_mediana": 0.0,
+  "codo_ok_con_umbral_0_3_pct": 47.0,
+  "muneca_ok_pct": 50.0
+ },
+ {
+  "clip": "20260925 02b rep02",
+  "frames_ventana": 145,
+  "hombro_ok_pct": 100.0,
+  "codo_ok_pct": 46.0,
+  "codo_ok_primera_mitad_pct": 0.0,
+  "codo_ok_segunda_mitad_pct": 90.0,
+  "codo_conf_mediana": 0.0,
+  "codo_ok_con_umbral_0_3_pct": 46.0,
+  "muneca_ok_pct": 48.0
+ },
+ {
+  "clip": "20260925 02b rep03",
+  "frames_ventana": 145,
+  "hombro_ok_pct": 100.0,
+  "codo_ok_pct": 48.0,
+  "codo_ok_primera_mitad_pct": 0.0,
+  "codo_ok_segunda_mitad_pct": 95.0,
+  "codo_conf_mediana": 0.0,
+  "codo_ok_con_umbral_0_3_pct": 48.0,
+  "muneca_ok_pct": 53.0
+ },
+ {
+  "clip": "20260925 02b rep04",
+  "frames_ventana": 145,
+  "hombro_ok_pct": 100.0,
+  "codo_ok_pct": 38.0,
+  "codo_ok_primera_mitad_pct": 0.0,
+  "codo_ok_segunda_mitad_pct": 75.0,
+  "codo_conf_mediana": 0.0,
+  "codo_ok_con_umbral_0_3_pct": 38.0,
+  "muneca_ok_pct": 43.0
+ },
+ {
+  "clip": "20260925 02b rep05",
+  "frames_ventana": 145,
+  "hombro_ok_pct": 100.0,
+  "codo_ok_pct": 36.0,
+  "codo_ok_primera_mitad_pct": 0.0,
+  "codo_ok_segunda_mitad_pct": 71.0,
+  "codo_conf_mediana": 0.0,
+  "codo_ok_con_umbral_0_3_pct": 37.0,
+  "muneca_ok_pct": 43.0
+ },
+ {
+  "clip": "20260925 02b rep06",
+  "frames_ventana": 145,
+  "hombro_ok_pct": 100.0,
+  "codo_ok_pct": 0.0,
+  "codo_ok_primera_mitad_pct": 0.0,
+  "codo_ok_segunda_mitad_pct": 0.0,
+  "codo_conf_mediana": 0.0,
+  "codo_ok_con_umbral_0_3_pct": 0.0,
+  "muneca_ok_pct": 0.0
+ },
+ {
+  "clip": "20260925 02c rep01",
+  "frames_ventana": 145,
+  "hombro_ok_pct": 100.0,
+  "codo_ok_pct": 41.0,
+  "codo_ok_primera_mitad_pct": 0.0,
+  "codo_ok_segunda_mitad_pct": 82.0,
+  "codo_conf_mediana": 0.0,
+  "codo_ok_con_umbral_0_3_pct": 41.0,
+  "muneca_ok_pct": 70.0
+ },
+ {
+  "clip": "20260925 02c rep02",
+  "frames_ventana": 145,
+  "hombro_ok_pct": 100.0,
+  "codo_ok_pct": 32.0,
+  "codo_ok_primera_mitad_pct": 0.0,
+  "codo_ok_segunda_mitad_pct": 63.0,
+  "codo_conf_mediana": 0.0,
+  "codo_ok_con_umbral_0_3_pct": 34.0,
+  "muneca_ok_pct": 81.0
+ },
+ {
+  "clip": "20260925 02c rep03",
+  "frames_ventana": 145,
+  "hombro_ok_pct": 100.0,
+  "codo_ok_pct": 40.0,
+  "codo_ok_primera_mitad_pct": 0.0,
+  "codo_ok_segunda_mitad_pct": 79.0,
+  "codo_conf_mediana": 0.0,
+  "codo_ok_con_umbral_0_3_pct": 40.0,
+  "muneca_ok_pct": 61.0
+ },
+ {
+  "clip": "20260925 02c rep04",
+  "frames_ventana": 145,
+  "hombro_ok_pct": 100.0,
+  "codo_ok_pct": 41.0,
+  "codo_ok_primera_mitad_pct": 0.0,
+  "codo_ok_segunda_mitad_pct": 81.0,
+  "codo_conf_mediana": 0.0,
+  "codo_ok_con_umbral_0_3_pct": 41.0,
+  "muneca_ok_pct": 48.0
+ },
+ {
+  "clip": "20260925 02c rep05",
+  "frames_ventana": 145,
+  "hombro_ok_pct": 100.0,
+  "codo_ok_pct": 34.0,
+  "codo_ok_primera_mitad_pct": 0.0,
+  "codo_ok_segunda_mitad_pct": 68.0,
+  "codo_conf_mediana": 0.0,
+  "codo_ok_con_umbral_0_3_pct": 34.0,
+  "muneca_ok_pct": 43.0
+ },
+ {
+  "clip": "20260925 02c rep06",
+  "frames_ventana": 145,
+  "hombro_ok_pct": 100.0,
+  "codo_ok_pct": 41.0,
+  "codo_ok_primera_mitad_pct": 0.0,
+  "codo_ok_segunda_mitad_pct": 82.0,
+  "codo_conf_mediana": 0.0,
+  "codo_ok_con_umbral_0_3_pct": 43.0,
+  "muneca_ok_pct": 48.0
+ }
+]

@@ -274,6 +274,11 @@ function TarjetaSesion({
                   {g.medidos} {g.medidos === 1 ? "golpe medido" : "golpes medidos"}
                 </span>
               )}
+              {g.medidos > 0 && (
+                <span className="inline-flex items-center rounded-full border border-dashed border-border px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                  {g.con_orden} con orden distinguible
+                </span>
+              )}
               {g.no_medibles > 0 && (
                 <EstadoBadge estado="no-auditable">{g.no_medibles} {g.no_medibles === 1 ? "no medible" : "no medibles"}</EstadoBadge>
               )}

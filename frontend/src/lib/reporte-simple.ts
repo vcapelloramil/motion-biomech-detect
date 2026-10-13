@@ -25,12 +25,14 @@ export type RepeticionLeida = {
   correcto: boolean | null;
   motivo_no_auditable: string | null;
   picos: PicoLeido[];
+  /** v1.4: los segmentos sin pico y por qué, en palabras simples. */
+  picos_no_medidos?: { segmento: Segmento; motivo: string; detalle?: string | null }[];
 };
 
 // --- observaciones ---------------------------------------------------------------------------------------------------
 
 /** Orden de importancia (R3: lo que más pide atención primero; "sin evaluar" es un dato, no un juicio). */
-const PRIORIDAD = ["alerta_de_carga", "desvio_leve", "correcto", "no_auditable", "sin_evaluar"] as const;
+const PRIORIDAD = ["alerta_de_carga", "desvio_leve", "correcto", "sin_diferencia_medible", "no_auditable", "sin_evaluar"] as const;
 
 /** Nivel 1 (CLAUDE.md §3): máximo TRES observaciones, visibles sin desplazamiento. El resto queda en el detalle. */
 export const MAX_OBSERVACIONES = 3;
@@ -284,4 +286,34 @@ export function tramosNoAuditablesDe(reporte: Json | null): TramoNoAuditable[] {
 
 export function coberturaDe(reporte: Json | null): number | null {
   return num((reporte?.cobertura as Json | undefined)?.auditable_pct);
+}
+
+// --- picos que no se pudieron medir ---------------------------------------------------------------------------------------------------
+
+export type PicoNoMedidoLeido = { segmento: Segmento; motivo: string };
+
+const PARTE: Record<Segmento, string> = { pelvis: "la cadera", torso: "el tronco", brazo: "el brazo que golpea" };
+
+/**
+ * Los segmentos de los que no hay pico en el primer golpe, con el motivo en palabras simples. Un reporte v1.4 lo trae en
+ * `picos_no_medidos`; uno anterior no: si falta algún segmento (y hay al menos uno medido) se dice igual, con un motivo genérico, para que
+ * el pico no desaparezca en silencio de "Tres momentos".
+ */
+export function picosNoMedidosDe(reporte: Json | null): PicoNoMedidoLeido[] {
+  const rep = repeticionesDe(reporte)[0];
+  if (!rep) return [];
+  if (Array.isArray(rep.picos_no_medidos)) {
+    return rep.picos_no_medidos.filter((p) => typeof p?.motivo === "string").map((p) => ({ segmento: p.segmento, motivo: p.motivo }));
+  }
+  const medidos = new Set((rep.picos ?? []).map((p) => p.segmento));
+  if (medidos.size === 0) return [];
+  const orden: Segmento[] = ["pelvis", "torso", "brazo"];
+  return orden
+    .filter((s) => !medidos.has(s))
+    .map((s) => ({
+      segmento: s,
+      motivo:
+        `No se pudo medir el momento más rápido de ${PARTE[s]} en este golpe.` +
+        (s === "brazo" ? " Suele pasar cuando el cuerpo tapa el brazo desde donde estaba la cámara." : ""),
+    }));
 }

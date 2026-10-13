@@ -20,7 +20,7 @@ export function Header() {
   ) as { to: "/" | "/videos" | "/upload" | "/profile" | "/tecnologia"; label: string }[];
 
   return (
-    <header className="relative z-50 glass md:sticky md:top-0">
+    <header className="relative z-50 glass md:sticky md:top-0 print:hidden">
       <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-y-2 px-4 py-3 md:px-6 md:py-4">
         <Link to="/" className="flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-neon shadow-neon">
@@ -80,7 +80,7 @@ export function Header() {
 
 export function Footer() {
   return (
-    <footer className="mt-32 border-t border-border">
+    <footer className="mt-32 border-t border-border print:hidden">
       <div className="mx-auto grid max-w-7xl gap-8 px-6 py-12 md:grid-cols-3">
         <div>
           <div className="flex items-center gap-2">

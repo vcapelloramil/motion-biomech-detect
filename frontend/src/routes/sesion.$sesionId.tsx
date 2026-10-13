@@ -2,14 +2,17 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowRight, CircleDashed, Info, Loader2, Trash2 } from "lucide-react";
 import { RutaProtegida } from "@/components/ruta-protegida";
-import { EstadoBadge } from "@/components/estado";
+import { EstadoBadge, SinDiferenciaBadge } from "@/components/estado";
 import { TresMomentos } from "@/components/reporte/tres-momentos";
+import { BotonDescargarPdf, LimitacionesDelPdf, SelloDelPdf, useAbrirDetallesAlImprimir } from "@/components/reporte/pdf";
 import { useSesion } from "@/lib/sesion";
 import {
   ENCUADRE_ETIQUETA,
   GESTO_ETIQUETA,
   TEXTO_VERSION_ANTERIOR,
   enCurso,
+  golpeMedido,
+  ordenDistinguible,
   numero,
   reporteDe,
   reporteDeVersionAnterior,
@@ -19,7 +22,7 @@ import {
 } from "@/lib/estado-video";
 import { NOTA_MEZCLA_DE_VERSIONES, fraseGolpeQueSeAparta, tarjetasDeConsistencia, type Consistencia } from "@/lib/consistencia";
 import { leerConsistencia } from "@/lib/consistencia-api";
-import { artefactosDe, fraseDeSecuencia, repeticionesDe, trazabilidadDe } from "@/lib/reporte-simple";
+import { artefactosDe, fraseDeSecuencia, picosNoMedidosDe, repeticionesDe, trazabilidadDe } from "@/lib/reporte-simple";
 import { eliminarGolpe, eliminarSesion, leerSesion, type SesionConVideos } from "@/lib/videos-data";
 import { fmt } from "@/lib/formato";
 
@@ -51,6 +54,7 @@ function SesionPage() {
   const [elegido, setElegido] = useState<string | null>(null);
   const [confirmar, setConfirmar] = useState<string | null>(null); // id del golpe, o "sesion"
   const [borrando, setBorrando] = useState(false);
+  useAbrirDetallesAlImprimir();
 
   const cargar = useCallback(async () => {
     try {
@@ -163,8 +167,12 @@ function SesionPage() {
   }
 
   return (
-    <main className="mx-auto max-w-5xl px-5 py-10 md:py-14">
-      <nav aria-label="Ruta" className="font-mono text-xs text-muted-foreground">
+    <main className="mx-auto max-w-5xl px-5 py-10 md:py-14 print:py-0">
+      <SelloDelPdf
+        titulo={`${gesto} · cámara de ${encuadre} · ${fecha} · ${videos.length} ${videos.length === 1 ? "golpe" : "golpes"}${datos.atletas?.nombre ? ` · ${datos.atletas.nombre}` : ""}`}
+        versiones={consistencia?.versiones_motor ?? []}
+      />
+      <nav aria-label="Ruta" className="font-mono text-xs text-muted-foreground print:hidden">
         <Link to="/videos" className="hover:text-foreground">Biblioteca</Link>
         {" / "}
         {gesto} · {encuadre} · {fecha}
@@ -173,10 +181,13 @@ function SesionPage() {
       <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight md:text-6xl">
         {gesto} <span className="text-gradient-neon">· {videos.length} {videos.length === 1 ? "golpe" : "golpes"}</span>
       </h1>
-      <p className="mt-3 text-muted-foreground">
-        {fecha} · cámara de {encuadre}
-        {datos.atletas?.nombre ? ` · ${datos.atletas.nombre}` : ""}
-      </p>
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+        <p className="text-muted-foreground">
+          {fecha} · cámara de {encuadre}
+          {datos.atletas?.nombre ? ` · ${datos.atletas.nombre}` : ""}
+        </p>
+        <BotonDescargarPdf />
+      </div>
 
       {error && (
         <p role="alert" className="mt-4 rounded-xl border border-state-alert/40 bg-state-alert-bg px-4 py-3 text-sm">
@@ -185,7 +196,7 @@ function SesionPage() {
       )}
 
       {hayEnCurso && (
-        <p role="status" className="mt-6 flex items-center gap-3 rounded-2xl border border-border bg-card px-4 py-3 text-sm">
+        <p role="status" className="mt-6 flex items-center gap-3 rounded-2xl border border-border bg-card px-4 py-3 text-sm print:hidden">
           <Loader2 className="h-4 w-4 shrink-0 animate-spin" aria-hidden="true" />
           <span>
             <strong>{listos} de {videos.length}</strong> golpes analizados. Se analizan de a uno: la página se actualiza sola y podés cerrarla.
@@ -234,7 +245,7 @@ function SesionPage() {
                 Golpe {mostrado ? numeroDe.get(mostrado.id) : "—"}
               </p>
             </div>
-            <div role="group" aria-label="Elegir el golpe" className="flex flex-wrap gap-2">
+            <div role="group" aria-label="Elegir el golpe" className="flex flex-wrap gap-2 print:hidden">
               {videos.map((v) => {
                 const tiene = !!reporteDe(v)?.reporte;
                 const activo = v.id === idMostrado;
@@ -259,13 +270,13 @@ function SesionPage() {
           </div>
           {frase && <p className="mt-4 rounded-2xl border border-border bg-card px-4 py-3 text-sm">{frase.texto}</p>}
           {(artefactos.fotogramas.length > 0 || artefactos.overlay) && (
-            <TresMomentos key={idMostrado ?? "ninguno"} artefactos={artefactos} />
+            <TresMomentos key={idMostrado ?? "ninguno"} artefactos={artefactos} noMedidos={picosNoMedidosDe(repMostrado)} />
           )}
           {mostrado && (
             <Link
               to="/reporte/$videoId"
               params={{ videoId: mostrado.id }}
-              className="mt-5 inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-state-ok hover:underline"
+              className="mt-5 inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-state-ok hover:underline print:hidden"
             >
               Ver el reporte completo de este golpe <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
@@ -297,6 +308,7 @@ function SesionPage() {
                     </span>
                   )}
                   {sep !== undefined && <span className="font-mono text-sm">{fmt(sep, 0)}°</span>}
+                  {golpeMedido(rep) && !ordenDistinguible(rep) && <SinDiferenciaBadge />}
                   {seApartan.has(v.id) && (
                     <span className="rounded-full border border-dashed border-border px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
                       Se pareció menos
@@ -312,7 +324,7 @@ function SesionPage() {
                   <button
                     type="button"
                     onClick={() => setConfirmar(confirmar === v.id ? null : v.id)}
-                    className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
+                    className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground print:hidden"
                     aria-label={`Eliminar el golpe ${n}`}
                   >
                     <Trash2 className="h-3.5 w-3.5" aria-hidden="true" /> Eliminar
@@ -343,7 +355,7 @@ function SesionPage() {
         {algunoViejo && <p className="mt-3 text-xs text-muted-foreground">{TEXTO_VERSION_ANTERIOR} en algunos golpes.</p>}
       </section>
 
-      <section className="mt-12 rounded-2xl border border-border p-5">
+      <section className="mt-12 rounded-2xl border border-border p-5 print:hidden">
         {confirmar === "sesion" ? (
           <div role="alert" className="text-sm">
             ¿Eliminar esta sesión con sus {videos.length} {videos.length === 1 ? "golpe" : "golpes"}? Se borran los videos y los reportes. No se
@@ -363,6 +375,8 @@ function SesionPage() {
           </button>
         )}
       </section>
+
+      <LimitacionesDelPdf />
 
       <p className="mt-10 text-center text-xs text-muted-foreground">
         KinetiQ documenta el movimiento. No diagnostica ni reemplaza la evaluación de un profesional.

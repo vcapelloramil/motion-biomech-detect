@@ -6,6 +6,51 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-14 (madrugada) — Hallazgos de producción (a–e), decisión 037 y PDF (paso 4), todo en local
+
+**Sin pushear** (orden de Valentín: la cola de la sesión 2 del corpus sigue procesando; un reinicio de Render deja golpes "encolado" para siempre). Motor **0.5.4**, contrato **1.4**.
+Pruebas: backend suite rápida **569 passed**, frontend `bun test` **84**, `tsc` y build limpios.
+
+### a) y b) Empate de cadera y tronco = golpe medido (decisión 037)
+
+- Un golpe con cadera 0,296 s y tronco 0,300 s salía "NO AUDITABLE". **Se midió:** pasa a la observación **`sin_diferencia_medible`** (contrato 1.4, aditivo; pastilla gris neutra *"Sin diferencia medible a esta
+  resolución"*, con ícono). "No auditable" queda solo para datos no confiables (R3). Corrige la nota del 29/9 de la decisión 015. Los reportes ya guardados se leen igual sin recalcular.
+- **"Golpe medido" = picos de cadera y tronco con confianza ≥ 0,5, aunque empaten**; aparte, **"orden distinguible"** (> 8,33 ms). Misma definición en `par_medido` (servidor), `consistencia.py`, el estado
+  final del video ("completado") y el frontend (`golpeMedido`, `ordenDistinguible`). La Biblioteca dice "N golpes medidos · K con orden distinguible · M no medibles"; las tarjetas de la sesión, igual.
+
+### c) El pico del brazo (`docs/resultados/brazo-por-golpe.md`)
+
+- **Con el motor actual lo pierden 52 de 76 repeticiones del corpus (68 %); con el anterior, 7 (9 %).** Saque en tres cuartos: 18 de 18 contra 2 de 18; la sesión del 24/9, 6 de 6 contra 0.
+- **Es oclusión real, no una regla demasiado estricta:** en la ventana de ±0,3 s del pico del tronco, el hombro dominante tiene confianza ≥ 0,5 el 100 % del tiempo y el **codo el 41 %**; **0 % en la primera
+  mitad** (el armado del golpe; confianza cruda del estimador ≈ 0,06) y 82 % en la segunda. Ninguna repetición queda entre 60 y 75 % de cobertura: bajar el piso no recuperaría ninguna.
+- **Hecho:** el pico que falta no desaparece: tarjeta **"Pico del brazo: no medido"** en "Tres momentos" con el motivo en palabras simples (`picos_no_medidos`, `motivo_pico_llano`), y el mismo motivo como
+  fundamento de la observación del brazo.
+- **Decide Valentín** (opciones en el documento): dejarlo así (recomendada), mostrar el máximo de la parte visible como dato parcial rotulado (0,5 sesión), o cambiar el encuadre de grabación del saque.
+
+### d) Procesando en escritorio
+
+- Título `text-3xl md:text-4xl lg:text-5xl` (antes 6xl); "← Volver a la biblioteca" en la fila de arriba, junto al "/ Procesando"; el nombre del archivo corta donde haga falta (`overflow-wrap:anywhere`) y la
+  etiqueta "EN CURSO" ya no se sale de la tarjeta (la fila pasa a `flex-wrap`). **No lo vi en un navegador de escritorio con una sesión real** (no inicié sesión): a verificar por Valentín.
+
+### e) Portada del video
+
+- El `<video>` con esqueleto lleva como `poster` el fotograma clave del pico del tronco (el primero que haya): ya no se ve negro antes de reproducir.
+
+### Paso 4 — PDF barato, sin interruptor
+
+- Botón **"Descargar PDF"** en el reporte del golpe y en la vista de sesión: abre el detalle técnico y llama a `window.print()` (también con Ctrl+P, por `beforeprint`). Hoja de impresión en `styles.css`:
+  fondo blanco y texto oscuro (la interfaz es oscura), sin cabecera, pie ni botones, sin el video, sin saltos de página dentro de una tarjeta. Solo en el papel: **sello** (título del reporte, versión del motor,
+  fecha de generación) y **limitaciones** (R2 y R5: no diagnostica; el orden depende del encuadre; resolución del instrumento; "no medido" no es "normal"; no compara con otros).
+- **No lo vi impreso:** se prueba con Archivo → Imprimir → Guardar como PDF sobre un reporte real. Pendiente de Valentín.
+
+### Pendiente / siguiente
+
+- Valentín: avisar cuando la cola termine → push (reinicia Render con el motor 0.5.4, el contrato 1.4, la recuperación al arrancar y el cupo) y republicar el frontend. **Hace falta las dos cosas:** un frontend
+  nuevo contra un servidor viejo no ve `picos_no_medidos` ni `sin_diferencia_medible` en reportes nuevos (los viejos los lee igual).
+- Paso 5: Perfil real mínimo + eliminar cuenta y datos.
+
+---
+
 ## 2026-10-13 (madrugada del 14) — Paso 3: vista de sesión, consistencia entre golpes, eliminar, miniatura, tiempos de cola y recuperación al arrancar
 
 **Sin pushear** (orden de Valentín: un reinicio de Render deja golpes "encolado" para siempre hasta que termine de subir las sesiones del corpus). Esta entrada es del trabajo local.

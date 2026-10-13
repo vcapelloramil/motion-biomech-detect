@@ -196,6 +196,13 @@ export type ObservacionLeida = {
 export const VERSION_SIN_VEREDICTO = "0.5.2";
 export const TEXTO_VERSION_ANTERIOR = "Calculado con una versión anterior del motor";
 const VEREDICTOS: readonly string[] = ["correcto", "desvio_leve", "alerta_de_carga"];
+/**
+ * Los reportes anteriores a 0.5.4 marcaban "no auditable" cuando cadera y tronco empataban (decisión 015 del 29/9). Se midieron: se
+ * leen como "sin diferencia medible" sin tocar lo guardado (decisión 037).
+ */
+const SIMULTANEIDAD = /casi al mismo tiempo|simultaneidad/i;
+const TEXTO_SIN_DIFERENCIA =
+  "La cadera y el tronco alcanzaron su velocidad máxima casi al mismo tiempo: a esta resolución del video no hay diferencia medible entre los dos.";
 
 function partesDeVersion(v: string): number[] | null {
   const m = /^(\d+)\.(\d+)\.(\d+)/.exec(v.trim());
@@ -233,24 +240,71 @@ export function contarObservaciones(observaciones: readonly { severidad: string 
   return c;
 }
 
-export type ConteoGolpes = { medidos: number; no_medibles: number; en_analisis: number };
+export type ConteoGolpes = { medidos: number; no_medibles: number; en_analisis: number; con_orden: number };
+
+/** Confianza mínima de un pico para darlo por medido: la misma que la validación del motor (`engine/validation.UMBRAL_CONFIANZA`). */
+export const UMBRAL_CONFIANZA_PICO = 0.5;
+/** La tolerancia del orden si el reporte no la trae (reportes anteriores al contrato 1.3): 1/120 s (decisión 032). */
+const TOLERANCIA_ORDEN_MS_POR_DEFECTO = 1000 / 120;
+
+type PicoCrudo = { segmento?: unknown; instante_s?: unknown; confianza?: unknown };
+
+function repeticionesCrudas(reporte: Record<string, unknown> | null | undefined): { picos?: unknown; auditable?: unknown }[] {
+  const reps = (reporte?.secuenciacion as { repeticiones?: unknown } | undefined)?.repeticiones;
+  return Array.isArray(reps) ? (reps as { picos?: unknown; auditable?: unknown }[]) : [];
+}
+
+function picoDe(picos: unknown, segmento: string): PicoCrudo | null {
+  if (!Array.isArray(picos)) return null;
+  const p = (picos as PicoCrudo[]).find((x) => x?.segmento === segmento);
+  return p ?? null;
+}
 
 /**
- * Cuántos golpes (un video = un golpe) se midieron, cuántos no se pudieron medir y cuántos siguen en análisis. "Medido" = el
- * reporte trae al menos una repetición auditable (se pudo establecer el orden o, como mínimo, medir los picos). No juzga:
- * desde las decisiones 035 y 036 ningún grupo emite veredicto del orden, así que la Biblioteca cuenta lo medido, no un estado.
+ * Un golpe está MEDIDO si los picos de cadera y de tronco se midieron con confianza suficiente, AUNQUE empaten (decisión 037):
+ * dos picos a menos de la tolerancia se midieron igual, solo que a esta resolución no hay diferencia entre ellos.
+ */
+export function golpeMedido(reporte: Record<string, unknown> | null | undefined): boolean {
+  return repeticionesCrudas(reporte).some((r) =>
+    ["pelvis", "torso"].every((s) => {
+      const c = picoDe(r.picos, s)?.confianza;
+      return typeof c === "number" && c >= UMBRAL_CONFIANZA_PICO;
+    }),
+  );
+}
+
+/** El orden entre cadera y tronco es distinguible: los dos picos medidos difieren en MÁS que la tolerancia del reporte. */
+export function ordenDistinguible(reporte: Record<string, unknown> | null | undefined): boolean {
+  const tolMs = (reporte?.trazabilidad as { tolerancia_orden_ms?: unknown } | undefined)?.tolerancia_orden_ms;
+  const tolerancia = (typeof tolMs === "number" && tolMs > 0 ? tolMs : TOLERANCIA_ORDEN_MS_POR_DEFECTO) / 1000;
+  return repeticionesCrudas(reporte).some((r) => {
+    const p = picoDe(r.picos, "pelvis");
+    const t = picoDe(r.picos, "torso");
+    if (!p || !t || typeof p.instante_s !== "number" || typeof t.instante_s !== "number") return false;
+    if (!golpeMedido({ secuenciacion: { repeticiones: [r] } })) return false;
+    return Math.abs(t.instante_s - p.instante_s) > tolerancia + 1e-9;
+  });
+}
+
+/**
+ * Cuántos golpes (un video = un golpe) se midieron, cuántos no se pudieron medir y cuántos siguen en análisis, y de los medidos en
+ * cuántos el orden entre cadera y tronco es distinguible. No juzga: desde las decisiones 035 y 036 ningún grupo emite veredicto del
+ * orden, así que la Biblioteca cuenta lo medido, no un estado.
  */
 export function contarGolpes(videos: readonly { estado: EstadoVideo; reportes_biomecanicos?: unknown }[]): ConteoGolpes {
-  const c: ConteoGolpes = { medidos: 0, no_medibles: 0, en_analisis: 0 };
+  const c: ConteoGolpes = { medidos: 0, no_medibles: 0, en_analisis: 0, con_orden: 0 };
   for (const v of videos) {
     if (enCurso(v.estado)) {
       c.en_analisis += 1;
       continue;
     }
-    const reps = (reporteDe(v)?.reporte?.secuenciacion as { repeticiones?: unknown } | undefined)?.repeticiones;
-    const medido = Array.isArray(reps) && reps.some((r) => (r as { auditable?: unknown } | null)?.auditable === true);
-    if (medido) c.medidos += 1;
-    else c.no_medibles += 1;
+    const rep = reporteDe(v)?.reporte ?? null;
+    if (golpeMedido(rep)) {
+      c.medidos += 1;
+      if (ordenDistinguible(rep)) c.con_orden += 1;
+    } else {
+      c.no_medibles += 1;
+    }
   }
   return c;
 }
@@ -272,7 +326,8 @@ export function reporteDe(video: { reportes_biomecanicos?: unknown }): { reporte
 export function observacionesDe(reporte: Record<string, unknown> | null): ObservacionLeida[] {
   const o = reporte?.observaciones;
   const lista = Array.isArray(o) ? (o as ObservacionLeida[]) : [];
-  if (!reporteDeVersionAnterior(reporte)) return lista;
+  const sinDiferencia = (x: ObservacionLeida) => (x.severidad === "no_auditable" && SIMULTANEIDAD.test(x.texto) ? { ...x, severidad: "sin_diferencia_medible", texto: TEXTO_SIN_DIFERENCIA } : x);
+  if (!reporteDeVersionAnterior(reporte)) return lista.map(sinDiferencia);
   return lista.map((x) =>
     VEREDICTOS.includes(x.severidad)
       ? {
@@ -282,7 +337,7 @@ export function observacionesDe(reporte: Record<string, unknown> | null): Observ
           referencia: null,
           anterior: true,
         }
-      : x,
+      : sinDiferencia(x),
   );
 }
 

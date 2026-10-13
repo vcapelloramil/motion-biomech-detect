@@ -125,7 +125,7 @@ def test_modo_normal_con_factor_uno_es_valido():
 def test_la_version_del_contrato_es_obligatoria_y_conocida():
     from app.schemas.reporte import VERSION_CONTRATO
 
-    assert Reporte.model_validate(_ejemplo_dict()).version_contrato == VERSION_CONTRATO == "1.3"
+    assert Reporte.model_validate(_ejemplo_dict()).version_contrato == VERSION_CONTRATO == "1.4"
     datos = _ejemplo_dict()
     del datos["version_contrato"]
     with pytest.raises(ValidationError):
@@ -134,6 +134,22 @@ def test_la_version_del_contrato_es_obligatoria_y_conocida():
     datos["version_contrato"] = "0.9"
     with pytest.raises(ValidationError):
         Reporte.model_validate(datos)
+
+
+def test_un_reporte_1_3_sigue_siendo_valido_y_el_1_4_acepta_lo_nuevo():
+    """Contrato 1.4 (decisión 037), aditivo: `sin_diferencia_medible` y `picos_no_medidos` son opcionales."""
+    datos = _ejemplo_dict()
+    datos["version_contrato"] = "1.3"
+    assert Reporte.model_validate(datos).version_contrato == "1.3"
+    datos["version_contrato"] = "1.4"
+    datos["observaciones"].append(
+        {"severidad": "sin_diferencia_medible", "texto": "x", "fundamento": None, "referencia": None}
+    )
+    datos["secuenciacion"]["repeticiones"][0]["picos_no_medidos"] = [
+        {"segmento": "brazo", "motivo": "El sistema no pudo seguir el brazo con confianza.", "detalle": "ventana incompleta"}
+    ]
+    r = Reporte.model_validate(datos)
+    assert r.secuenciacion.repeticiones[0].picos_no_medidos[0].segmento == "brazo"
 
 
 def test_artefactos_son_opcionales_en_la_primera_entrega():

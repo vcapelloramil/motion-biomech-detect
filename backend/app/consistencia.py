@@ -6,8 +6,8 @@ sí** (decisiones 035 y 036: el orden cadera → tronco no se evalúa, solo se i
 
 Qué devuelve y con qué regla:
 
-* **Golpes**: cuántos se midieron (el reporte trae al menos una repetición auditable), cuántos no se pudieron medir y cuántos siguen en
-  análisis.
+* **Golpes**: cuántos se **midieron** (cadera y tronco con pico y confianza suficiente, **aunque empaten**: decisión 037), cuántos no se
+  pudieron medir y cuántos siguen en análisis; y, aparte, en cuántos de los medidos el orden es **distinguible** (más de la tolerancia).
 * **Separación cadera-hombro máxima** (°), mediana y dispersión robusta (MAD × 1,4826, la regla de la decisión 014). La dispersión solo
   se da con ``MIN_GOLPES_DISPERSION`` golpes o más: con menos, una desviación no describe nada.
 * **Repetibilidad del orden**: de los golpes en que cadera y tronco son *ordenables* (más de 8,33 ms, decisión 032), en cuántos fue el
@@ -26,6 +26,7 @@ from collections import Counter
 from typing import Any
 
 from app.engine.tolerancia_orden import TOLERANCIA_ORDEN_S, es_ordenable
+from app.ensamblar_reporte import par_medido
 
 VERSION_REGLA = "1"
 
@@ -59,7 +60,8 @@ def _repeticiones(reporte: dict[str, Any] | None) -> list[dict[str, Any]]:
 
 
 def _medido(reporte: dict[str, Any] | None) -> bool:
-    return any(r.get("auditable") is True for r in _repeticiones(reporte))
+    """Los picos de cadera y tronco se midieron con confianza suficiente (aunque empaten): ``ensamblar_reporte.par_medido``."""
+    return any(par_medido(r) for r in _repeticiones(reporte))
 
 
 def _separacion(reporte: dict[str, Any] | None) -> float | None:
@@ -76,7 +78,7 @@ def _orden_del_par(reporte: dict[str, Any] | None) -> tuple[str, ...] | None:
     tolerancia_ms = ((reporte or {}).get("trazabilidad") or {}).get("tolerancia_orden_ms")
     tolerancia_s = float(tolerancia_ms) / 1000.0 if isinstance(tolerancia_ms, (int, float)) and tolerancia_ms > 0 else TOLERANCIA_ORDEN_S
     for rep in _repeticiones(reporte):
-        if rep.get("auditable") is not True:
+        if not par_medido(rep):
             continue
         instantes: dict[str, float] = {}
         for p in rep.get("picos") or []:
@@ -148,7 +150,13 @@ def resumen_de_sesion(golpes: list[dict[str, Any]]) -> dict[str, Any]:
 
     return {
         "version_regla": VERSION_REGLA,
-        "golpes": {"total": len(golpes), "medidos": len(medidos), "no_medibles": no_medibles, "en_analisis": en_analisis},
+        "golpes": {
+            "total": len(golpes),
+            "medidos": len(medidos),
+            "no_medibles": no_medibles,
+            "en_analisis": en_analisis,
+            "con_orden_distinguible": len(ordenes),
+        },
         "separacion_cadera_hombro": separacion,
         "orden": orden,
         "golpe_tipico": tipico,

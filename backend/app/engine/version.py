@@ -51,6 +51,9 @@ del motor"); el discriminador práctico es la ``version_contrato`` del propio re
 - 0.5.3 — Decisión 036 (13/10/2026): ningún grupo emite veredicto del orden. El drive se suspende por encuadre (como el saque) y el revés
   por no ser confiable con una sola cámara; la suspensión decide aunque haya referencia y el Criterio 1 se cumpla. Cambia el texto de
   las observaciones del drive y del revés. Sin cambio de contrato.
+- 0.5.4 — Decisión 037 (13/10/2026): un golpe con cadera y tronco empatados a la resolución del video está **medido** (no "no auditable"):
+  la observación pasa a "sin diferencia medible" (contrato 1.4); un golpe está medido si los picos de cadera y tronco se midieron con
+  confianza suficiente; los picos que no se pudieron medir (el brazo, sobre todo) llevan su motivo en palabras simples.
 """
 
-__version__ = "0.5.3"
+__version__ = "0.5.4"

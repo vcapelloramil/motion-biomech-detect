@@ -43,7 +43,13 @@ def _reporte(sep):
         "trazabilidad": {"version_motor": "0.5.3", "tolerancia_orden_ms": 8.33},
         "secuenciacion": {
             "repeticiones": [
-                {"auditable": True, "picos": [{"segmento": "pelvis", "instante_s": 0.3}, {"segmento": "torso", "instante_s": 0.4}]}
+                {
+                    "auditable": True,
+                    "picos": [
+                        {"segmento": "pelvis", "instante_s": 0.3, "confianza": 0.9},
+                        {"segmento": "torso", "instante_s": 0.4, "confianza": 0.9},
+                    ],
+                }
             ]
         },
         "metricas": [{"nombre": "separacion_cadera_hombro_max", "valor": sep, "auditable": True}],

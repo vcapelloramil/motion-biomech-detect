@@ -501,7 +501,7 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
 
             # Reporte completo del contrato v1.1 (E5.4 mínimo): se ensambla y se VALIDA antes de tocar la base; si no cumple el
             # contrato, falla acá (queda 'fallido' con error_inesperado) y no se guarda un reporte roto.
-            from app.ensamblar_reporte import ensamblar_reporte, segmento_de_metrica_velocidad
+            from app.ensamblar_reporte import ensamblar_reporte, par_medido, segmento_de_metrica_velocidad
 
             reporte_id = uuid4()
             creado_en = datetime.now(timezone.utc)
@@ -538,7 +538,11 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
             # Una sola fuente: lo que se guarda en las columnas planas y el estado final salen del reporte validado, no del motor crudo
             # (que ordena por instantes y no conoce la tolerancia de un fotograma de la decisión 014).
             orden_observado = repeticiones_json[0]["orden_observado"] if repeticiones_json else None
-            repeticion_auditable = bool(repeticiones_json and repeticiones_json[0]["auditable"])
+            # "Completado" = golpe MEDIDO: cadera y tronco con pico y confianza, aunque empaten (decisión 037). Un empate a la resolución
+            # del video no es un análisis a medias.
+            repeticion_auditable = bool(
+                repeticiones_json and (repeticiones_json[0]["auditable"] or par_medido(repeticiones_json[0]))
+            )
 
             # reportes_biomecanicos.video_id es único: un reporte previo (resto de un intento anterior que
             # falló después de insertarlo, o una corrida manual por línea de comandos sobre un video ya

@@ -1,4 +1,4 @@
-import { CheckCircle2, AlertTriangle, AlertOctagon, CircleSlash, CircleDashed } from "lucide-react";
+import { CheckCircle2, AlertTriangle, AlertOctagon, CircleSlash, CircleDashed, Equal } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /**
@@ -95,4 +95,31 @@ export function SinEvaluarBadge({ className }: { className?: string }) {
       {ETIQUETA_SIN_EVALUAR}
     </span>
   );
+}
+
+/**
+ * "Sin diferencia medible a esta resolución" (decisión 037): cadera y tronco SE MIDIERON y llegaron dentro de la tolerancia del orden.
+ * No es "no auditable" (R3 lo reserva para datos que no son confiables) ni un estado del semáforo: es gris neutro, con ícono y texto.
+ */
+export const ETIQUETA_SIN_DIFERENCIA = "Sin diferencia medible a esta resolución";
+
+export function SinDiferenciaBadge({ className }: { className?: string }) {
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center gap-1.5 rounded-full border border-dashed border-muted-foreground/50 px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground",
+        className,
+      )}
+    >
+      <Equal className="h-3 w-3 shrink-0" aria-hidden />
+      {ETIQUETA_SIN_DIFERENCIA}
+    </span>
+  );
+}
+
+/** La pastilla de una observación según su clave de vista; `undefined` (una severidad que no se conoce) no dibuja nada. */
+export function BadgePorClave({ clave, className }: { clave: Estado | "sin_evaluar" | "sin_diferencia" | undefined; className?: string }) {
+  if (clave === "sin_evaluar") return <SinEvaluarBadge className={className} />;
+  if (clave === "sin_diferencia") return <SinDiferenciaBadge className={className} />;
+  return clave ? <EstadoBadge estado={clave} className={className} /> : null;
 }

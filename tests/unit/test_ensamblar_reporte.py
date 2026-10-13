@@ -6,6 +6,7 @@ Usa la misma secuencia sintética que ``test_sequencing`` (picos en instantes co
 
 from __future__ import annotations
 
+import dataclasses
 import re
 from datetime import datetime, timezone
 from pathlib import Path
@@ -81,10 +82,10 @@ def seq_invertida():
 # --- el reporte valida contra el contrato -----------------------------------------------------------------
 
 
-def test_el_reporte_ensamblado_valida_contra_el_contrato_v1_3(seq_ordenada):
+def test_el_reporte_ensamblado_valida_contra_el_contrato_v1_4(seq_ordenada):
     datos = _ensamblar(seq_ordenada)
     r = Reporte.model_validate(datos)
-    assert r.version_contrato == "1.3"
+    assert r.version_contrato == "1.4"
     assert r.trazabilidad.tolerancia_orden_ms == pytest.approx(8.333, abs=0.001)
     assert r.segmentacion.repeticiones_marcadas == 1
     assert r.secuenciacion.orden_esperado == ["pelvis", "torso", "brazo"]
@@ -253,13 +254,14 @@ def test_el_par_cadera_tronco_respeta_la_tolerancia_de_8_3_ms(t_torso, estado, v
     assert _veredicto("saque", "perfil", rep) is veredicto
 
 
-def test_una_simultaneidad_se_informa_como_no_auditable_y_no_como_sin_evaluar():
-    """Decisión 015 (corrección del 29/9): 'no ordenable' es un motivo de no auditable, no un estado nuevo."""
+def test_una_simultaneidad_es_sin_diferencia_medible_y_no_no_auditable():
+    """Decisión 037 (corrige la 015 del 29/9): cadera y tronco empatados SE MIDIERON; 'no auditable' es solo para datos no confiables (R3)."""
     from app.ensamblar_reporte import _obs_par
 
     obs = _obs_par("saque", "perfil", [_rep_con_picos(0.2, 0.2 + 1 / 240.0)], True)
-    assert obs["severidad"] == "no_auditable" and "casi al mismo tiempo" in obs["texto"]
-    assert "no se puede saber cuál fue primero" in obs["texto"]
+    assert obs["severidad"] == "sin_diferencia_medible" and "casi al mismo tiempo" in obs["texto"]
+    assert "no hay diferencia medible" in obs["texto"]
+    assert not re.search(r"no se pudo|no auditable|falla", obs["texto"], re.IGNORECASE)
     # la resolución que se informa es la del archivo real (5 ms a ~200 fps), no la de la grilla de 240 Hz
     assert "4 ms" in obs["fundamento"] and "8,3 ms" in obs["fundamento"]
 
@@ -430,8 +432,68 @@ def test_cadera_y_tronco_a_un_fotograma_dejan_la_repeticion_no_auditable_sin_ord
     assert [p["segmento"] for p in rep["picos"]] == ["pelvis", "torso", "brazo"]  # lo medido se informa igual
     assert datos["segmentacion"]["repeticiones_auditables"] == 0
     assert datos["secuenciacion"]["resumen"]["orden_predominante"] == []
-    assert datos["observaciones"][0]["severidad"] == "no_auditable"
+    assert datos["observaciones"][0]["severidad"] == "sin_diferencia_medible"
     Reporte.model_validate(datos)
+
+
+def test_un_empate_es_un_golpe_medido_aunque_su_orden_no_se_distinga(seq_ordenada):
+    """Decisión 037: 'medido' = picos de cadera y tronco con confianza; no depende de que el orden sea distinguible."""
+    from app.ensamblar_reporte import par_medido
+
+    datos = _ensamblar_con(seq_ordenada, [_rep_con_picos(0.2 + 1 / 240.0, 0.2)])
+    rep = datos["secuenciacion"]["repeticiones"][0]
+    assert rep["auditable"] is False and par_medido(rep) is True
+
+
+def test_sin_pico_de_cadera_o_de_tronco_el_golpe_no_esta_medido():
+    from app.ensamblar_reporte import par_medido
+
+    assert par_medido({"picos": [{"segmento": "pelvis", "confianza": 0.9}]}) is False
+    assert par_medido({"picos": [{"segmento": "pelvis", "confianza": 0.9}, {"segmento": "torso", "confianza": 0.2}]}) is False
+    assert par_medido({"picos": [{"segmento": "pelvis", "confianza": 0.9}, {"segmento": "torso", "confianza": 0.6}]}) is True
+    assert par_medido({}) is False
+
+
+@pytest.mark.parametrize(
+    ("motivo", "debe_decir"),
+    [
+        ("ventana incompleta: se midió el 43 % de la ventana (mínimo 75 %)", "43 %"),
+        ("sin picos marcados por encima de la prominencia mínima", "no tuvo un momento claro"),
+        ("el pico cae en un tramo no auditable", "no se lo veía con confianza"),
+        ("velocidad implausible (3000 °/s > techo 2500): probable error de detección", "imposible"),
+        ("serie demasiado corta o incompleta", "Casi no hubo datos"),
+        (None, "No se pudo medir"),
+    ],
+)
+def test_el_motivo_de_un_pico_no_medido_esta_en_palabras_simples(motivo, debe_decir):
+    from app.engine.segmentos_corporales import SegmentoCadena
+    from app.ensamblar_reporte import motivo_pico_llano
+
+    texto = motivo_pico_llano(SegmentoCadena.BRAZO, motivo)
+    assert debe_decir in texto and "brazo que golpea" in texto
+    assert not _PROHIBIDO.search(texto)
+    assert not re.search(r"prominencia|techo|ventana|°/s", texto)      # nada de jerga del motor
+
+
+def test_el_reporte_lleva_los_picos_no_medidos_con_su_motivo(seq_ordenada):
+    """El brazo sin medir no desaparece: queda en `picos_no_medidos` con el motivo (decisión 037)."""
+    from app.engine.sequencing import PicoSegmento
+    from app.engine.segmentos_corporales import SegmentoCadena as S
+
+    rep = _rep_con_picos(0.2, 0.3)
+    picos = dict(rep.picos)
+    picos[S.BRAZO] = PicoSegmento(S.BRAZO, -1, float("nan"), float("nan"), auditable=False,
+                                  motivo="ventana incompleta: se midió el 43 % de la ventana (mínimo 75 %)")
+    rep = dataclasses.replace(rep, picos=picos)
+    datos = _ensamblar_con(seq_ordenada, [rep])
+    r0 = datos["secuenciacion"]["repeticiones"][0]
+    assert [p["segmento"] for p in r0["picos_no_medidos"]] == ["brazo"]
+    assert "43 %" in r0["picos_no_medidos"][0]["motivo"] and r0["picos_no_medidos"][0]["detalle"].startswith("ventana incompleta")
+    assert [p["segmento"] for p in r0["picos"]] == ["pelvis", "torso"]
+    Reporte.model_validate(datos)
+    # y la observación del brazo trae el motivo, no solo "no se pudo medir"
+    obs_brazo = [o for o in datos["observaciones"] if "brazo" in o["texto"]][0]
+    assert "43 %" in obs_brazo["fundamento"]
 
 
 def test_con_tres_fotogramas_de_separacion_la_repeticion_sigue_siendo_auditable(seq_ordenada):

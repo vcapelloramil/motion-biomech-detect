@@ -36,7 +36,10 @@ from pydantic import BaseModel, ConfigDict, Field
 # v1.3 (decisión 032, aditiva): la trazabilidad lleva la tolerancia con que se decidió "ordenable" (`tolerancia_orden_ms`) y los
 # artefactos describen el video con esqueleto (`overlay_info`).
 # Un reporte guardado como "1.0", "1.1" o "1.2" sigue siendo válido: lo nuevo es opcional o un valor más de un vocabulario.
-VERSION_CONTRATO = "1.3"
+# v1.4 (13/10/2026, aditiva): la observación "sin diferencia medible" (`sin_diferencia_medible`) y, por repetición, los picos que no se
+# pudieron medir con su motivo en palabras simples (`picos_no_medidos`). Dos picos que empatan a la resolución del video se midieron: no
+# son "no auditables" (R3 reserva ese estado para datos que no son confiables).
+VERSION_CONTRATO = "1.4"
 
 Gesto = Literal["saque", "drive", "reves"]
 Segmento = Literal["pelvis", "torso", "brazo"]
@@ -46,7 +49,11 @@ Severidad = Literal["correcto", "desvio_leve", "alerta_de_carga", "no_auditable"
 # Lo que puede llevar una OBSERVACIÓN. "sin_evaluar" NO es un quinto estado del semáforo (R3 sigue teniendo cuatro y `Severidad` es
 # la que coincide con alertas.severidad): es la etiqueta de un dato que se documenta sin juicio, la misma que el brazo en la decisión
 # 011. No significa "no se pudo medir" (eso es `no_auditable`): se midió y no hay respaldo para evaluarlo (decisión 031).
-SeveridadObservacion = Literal["correcto", "desvio_leve", "alerta_de_carga", "no_auditable", "sin_evaluar"]
+# "sin_diferencia_medible" (v1.4): cadera y tronco se midieron y llegaron dentro de la tolerancia del orden; tampoco es un estado del
+# semáforo ni un "no se pudo medir".
+SeveridadObservacion = Literal[
+    "correcto", "desvio_leve", "alerta_de_carga", "no_auditable", "sin_evaluar", "sin_diferencia_medible"
+]
 # Mismos vocabularios cerrados que sesiones.modo_captura y reportes_biomecanicos.origen_factor.
 ModoCaptura = Literal["normal", "camara_lenta_120", "camara_lenta_240"]
 OrigenFactor = Literal["declaracion_usuario", "marcas_de_tiempo"]
@@ -139,6 +146,14 @@ class Pico(_Base):
     confianza: float = Field(ge=0.0, le=1.0)
 
 
+class PicoNoMedido(_Base):
+    """Un segmento cuyo pico no se pudo medir en esta repetición (v1.4): se dice cuál y por qué, en vez de omitirlo en silencio (R3)."""
+
+    segmento: Segmento
+    motivo: str                    # en palabras simples, para el jugador
+    detalle: str | None = None     # el motivo técnico del motor, para el detalle del reporte
+
+
 class RepeticionSecuenciacion(_Base):
     indice: int = Field(ge=1)
     desde_s: float = Field(ge=0.0)
@@ -154,6 +169,8 @@ class RepeticionSecuenciacion(_Base):
     correcto: bool | None = None
     motivo_no_auditable: str | None = None
     picos: list[Pico] = Field(default_factory=list)
+    # v1.4: los segmentos sin pico y por qué. Una repetición con cadera y tronco empatados lleva sus dos picos en `picos` (se midieron).
+    picos_no_medidos: list[PicoNoMedido] = Field(default_factory=list)
 
 
 class ResumenSecuenciacion(_Base):
@@ -237,7 +254,7 @@ class Artefactos(_Base):
 # --- Reporte (raíz del contrato) -----------------------------------------
 
 class Reporte(_Base):
-    version_contrato: Literal["1.0", "1.1", "1.2", "1.3"]
+    version_contrato: Literal["1.0", "1.1", "1.2", "1.3", "1.4"]
     reporte_id: UUID
     video_id: UUID
     gesto: Gesto

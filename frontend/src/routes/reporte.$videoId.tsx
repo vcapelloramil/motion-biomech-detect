@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ChevronDown, Info, Loader2 } from "lucide-react";
 import { RutaProtegida } from "@/components/ruta-protegida";
-import { EstadoBadge, SinEvaluarBadge, type Estado } from "@/components/estado";
+import { BadgePorClave, type Estado } from "@/components/estado";
 import { SecuenciaReal } from "@/components/reporte/secuencia-real";
 import { TresMomentos } from "@/components/reporte/tres-momentos";
+import { BotonDescargarPdf, LimitacionesDelPdf, SelloDelPdf, useAbrirDetallesAlImprimir } from "@/components/reporte/pdf";
 import { useSesion } from "@/lib/sesion";
 import {
   ENCUADRE_ETIQUETA,
@@ -26,6 +27,7 @@ import {
   fundamentosSinRepetir,
   magnitudesDe,
   masImportantes,
+  picosNoMedidosDe,
   picosOrdenados,
   repeticionesDe,
   resolucionTexto,
@@ -44,12 +46,13 @@ export const Route = createFileRoute("/reporte/$videoId")({
   ),
 });
 
-const BADGE: Record<string, Estado | "sin_evaluar"> = {
+const BADGE: Record<string, Estado | "sin_evaluar" | "sin_diferencia"> = {
   correcto: "correcto",
   desvio_leve: "desvio",
   alerta_de_carga: "alerta",
   no_auditable: "no-auditable",
   sin_evaluar: "sin_evaluar",
+  sin_diferencia_medible: "sin_diferencia",
 };
 
 const BORDE: Record<string, string> = {
@@ -58,6 +61,7 @@ const BORDE: Record<string, string> = {
   alerta_de_carga: "border-state-alert/40",
   no_auditable: "border-border",
   sin_evaluar: "border-border border-dashed",
+  sin_diferencia_medible: "border-border border-dashed",
 };
 
 function ReportePage() {
@@ -160,10 +164,15 @@ function Reporte({ video, reporte }: { video: VideoConReporte; reporte: Record<s
   const cobertura = coberturaDe(reporte);
   const tiempos = tiemposDe(video);
   const fecha = sesion ? new Date(sesion.fecha + "T12:00:00").toLocaleDateString("es-AR", { day: "numeric", month: "long", year: "numeric" }) : null;
+  useAbrirDetallesAlImprimir();
 
   return (
-    <main className="mx-auto max-w-5xl px-5 py-10 md:py-14">
-      <nav aria-label="Ruta" className="font-mono text-xs text-muted-foreground">
+    <main className="mx-auto max-w-5xl px-5 py-10 md:py-14 print:py-0">
+      <SelloDelPdf
+        titulo={`${sesion ? (GESTO_ETIQUETA[sesion.gesto] ?? sesion.gesto) : "Golpe"}${sesion ? ` · cámara de ${ENCUADRE_ETIQUETA[sesion.encuadre] ?? sesion.encuadre}` : ""}${fecha ? ` · ${fecha}` : ""}${sesion?.atletas?.nombre ? ` · ${sesion.atletas.nombre}` : ""}`}
+        versiones={t.version_motor ? [t.version_motor] : []}
+      />
+      <nav aria-label="Ruta" className="font-mono text-xs text-muted-foreground print:hidden">
         <Link to="/videos" className="hover:text-foreground">Biblioteca</Link>
         {sesion && (
           <>
@@ -177,12 +186,15 @@ function Reporte({ video, reporte }: { video: VideoConReporte; reporte: Record<s
       <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight md:text-6xl">
         {sesion ? (GESTO_ETIQUETA[sesion.gesto] ?? sesion.gesto) : "Golpe"} <span className="text-gradient-neon">· 1 golpe</span>
       </h1>
-      <p className="mt-3 text-muted-foreground">
-        {fecha ? `${fecha} · ` : ""}
-        {fps !== null ? `${Math.round(fps)} fps reales · ` : ""}
-        {sesion ? `cámara de ${ENCUADRE_ETIQUETA[sesion.encuadre] ?? sesion.encuadre}` : ""}
-        {sesion?.atletas?.nombre ? ` · ${sesion.atletas.nombre}` : ""}
-      </p>
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+        <p className="text-muted-foreground">
+          {fecha ? `${fecha} · ` : ""}
+          {fps !== null ? `${Math.round(fps)} fps reales · ` : ""}
+          {sesion ? `cámara de ${ENCUADRE_ETIQUETA[sesion.encuadre] ?? sesion.encuadre}` : ""}
+          {sesion?.atletas?.nombre ? ` · ${sesion.atletas.nombre}` : ""}
+        </p>
+        <BotonDescargarPdf />
+      </div>
 
       {versionAnteriorA(t.version_motor) && (
         <p role="note" className="mt-6 rounded-xl border border-dashed border-border px-4 py-3 text-sm text-muted-foreground">
@@ -199,7 +211,7 @@ function Reporte({ video, reporte }: { video: VideoConReporte; reporte: Record<s
             const clave = BADGE[o.severidad];
             return (
               <li key={i} className={"flex flex-col rounded-2xl border bg-card p-5 " + (BORDE[o.severidad] ?? "border-border")}>
-                {clave === "sin_evaluar" ? <SinEvaluarBadge className="self-start" /> : clave ? <EstadoBadge estado={clave} className="self-start" /> : null}
+                <BadgePorClave clave={clave} className="self-start" />
                 {/* Nivel 1: lenguaje llano. El fundamento y la fuente de cada observación están en "Ver detalle técnico". */}
                 <p className="mt-4 text-base font-semibold leading-snug">{o.texto}</p>
                 {o.anterior && <p className="mt-2 text-xs text-muted-foreground">{TEXTO_VERSION_ANTERIOR}.</p>}
@@ -238,7 +250,9 @@ function Reporte({ video, reporte }: { video: VideoConReporte; reporte: Record<s
       </section>
 
       {/* Tres momentos del golpe y video con esqueleto (artefactos del motor; ausentes = no generados). */}
-      {(artefactos.fotogramas.length > 0 || artefactos.overlay) && <TresMomentos artefactos={artefactos} />}
+      {(artefactos.fotogramas.length > 0 || artefactos.overlay) && (
+        <TresMomentos artefactos={artefactos} noMedidos={picosNoMedidosDe(reporte)} />
+      )}
 
       {/* Nivel 3, plegado: dato y fundamento. */}
       <details className="group mt-12 rounded-2xl border border-border bg-card">
@@ -255,7 +269,7 @@ function Reporte({ video, reporte }: { video: VideoConReporte; reporte: Record<s
                   const clave = BADGE[o.severidad];
                   return (
                     <li key={i} className="rounded-xl border border-border p-4 text-sm">
-                      {clave === "sin_evaluar" ? <SinEvaluarBadge /> : clave ? <EstadoBadge estado={clave} /> : null}
+                      <BadgePorClave clave={clave} />
                       <p className="mt-2">{o.texto}</p>
                       {o.anterior && <p className="mt-1 text-xs text-muted-foreground">{TEXTO_VERSION_ANTERIOR}.</p>}
                       {o.fundamento && <p className="mt-1 font-mono text-xs text-muted-foreground">{o.fundamento}</p>}
@@ -377,6 +391,8 @@ function Reporte({ video, reporte }: { video: VideoConReporte; reporte: Record<s
           )}
         </div>
       </details>
+
+      <LimitacionesDelPdf />
 
       <p className="mt-10 text-center text-xs text-muted-foreground">
         KinetiQ documenta el movimiento. No diagnostica ni reemplaza la evaluación de un profesional.

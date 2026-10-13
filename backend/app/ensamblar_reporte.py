@@ -28,6 +28,7 @@ entran por el parámetro ``artefactos``, ya subidos a Storage: este módulo sigu
 from __future__ import annotations
 
 import math
+import re
 from collections import Counter
 import dataclasses
 from dataclasses import dataclass
@@ -44,6 +45,7 @@ from app.engine.render import indice_fuente_mas_cercano
 from app.engine.segmentos_corporales import ORDEN_ESPERADO, SegmentoCadena, articulaciones_de_segmento
 from app.engine.sequencing import ResultadoRepeticion, ResumenSecuenciacion
 from app.engine.tolerancia_orden import TOLERANCIA_ORDEN_MS, es_ordenable
+from app.engine.validation import UMBRAL_CONFIANZA
 from app.schemas.reporte import VERSION_CONTRATO, Reporte
 
 # Los metadatos y los resultados llegan como objetos del motor; se anotan como Any para que este módulo no
@@ -227,6 +229,54 @@ def respaldo_del_grupo(gesto: str, encuadre: str) -> RespaldoGrupo:
     return RESPALDO_POR_GRUPO.get((gesto, encuadre), _SIN_RESPALDO)
 
 
+_PARTE_DEL_CUERPO = {
+    SegmentoCadena.PELVIS: "la cadera",
+    SegmentoCadena.TORSO: "el tronco",
+    SegmentoCadena.BRAZO: "el brazo que golpea",
+}
+
+
+def motivo_pico_llano(seg: SegmentoCadena, motivo_tecnico: str | None) -> str:
+    """El motivo por el que no hay pico de un segmento, en palabras simples. Mapea los motivos de ``engine.sequencing.detectar_pico``."""
+    parte = _PARTE_DEL_CUERPO[seg]
+    m = (motivo_tecnico or "").lower()
+    if m.startswith("ventana incompleta"):
+        pct = re.search(r"(\d+)\s*%", m)
+        visto = f" durante el {pct.group(1)} % del golpe" if pct else " durante buena parte del golpe"
+        tapado = (
+            " Suele pasar cuando el cuerpo tapa el brazo desde donde estaba la cámara." if seg is SegmentoCadena.BRAZO else ""
+        )
+        return (
+            f"El sistema no pudo seguir {parte} con confianza{visto}. Con tan pocos datos no se puede decir cuándo fue su momento "
+            f"más rápido.{tapado}"
+        )
+    if m.startswith("sin picos"):
+        return f"El movimiento de {parte} no tuvo un momento claro de máxima velocidad en este golpe."
+    if "no auditable" in m:
+        return f"El momento más rápido de {parte} cayó en un tramo donde no se lo veía con confianza."
+    if m.startswith("velocidad implausible"):
+        return f"El valor calculado para {parte} era imposible para un movimiento real (probable error de detección): no se muestra."
+    if m.startswith("serie demasiado corta"):
+        return f"Casi no hubo datos de {parte} en este golpe."
+    return f"No se pudo medir el momento más rápido de {parte} en este golpe."
+
+
+def par_medido(repeticion: dict[str, Any]) -> bool:
+    """Un golpe está MEDIDO si los picos de cadera y de tronco se midieron con confianza suficiente, aunque empaten (decisión 037).
+
+    No es lo mismo que *ordenable*: dos picos a menos de la tolerancia se midieron igual, solo que a esta resolución no hay diferencia
+    entre ellos. ``repeticion`` es la repetición del JSON del reporte."""
+    por_segmento = {
+        p.get("segmento"): p for p in repeticion.get("picos") or [] if isinstance(p, dict)
+    }
+    return all(
+        s in por_segmento
+        and isinstance(por_segmento[s].get("confianza"), (int, float))
+        and por_segmento[s]["confianza"] >= UMBRAL_CONFIANZA
+        for s in ("pelvis", "torso")
+    )
+
+
 def _pico_medido(rep: ResultadoRepeticion, seg: SegmentoCadena):
     p = rep.picos.get(seg)
     return p if p is not None and p.auditable and math.isfinite(p.velocidad) else None
@@ -357,12 +407,12 @@ def _obs_par(
             else ""
         )
         return {
-            "severidad": "no_auditable",
+            "severidad": "sin_diferencia_medible",
             "texto": (
                 "La cadera y el tronco alcanzaron su velocidad máxima casi al mismo tiempo: "
-                "a esta resolución del video no se puede saber cuál fue primero."
+                "a esta resolución del video no hay diferencia medible entre los dos."
             ),
-            "fundamento": "Simultaneidad al límite de resolución." + ms,
+            "fundamento": "Se midieron los dos picos; la diferencia queda dentro de la tolerancia (decisión 037)." + ms,
             "referencia": None,
         }
 
@@ -422,10 +472,13 @@ def _obs_brazo(resultados: list[ResultadoRepeticion], escala: bool) -> dict[str,
     """El brazo (balanceo del vector hombro-codo) se informa como dato, nunca como correcto o incorrecto (decisión 011)."""
     medidos = [r for r in resultados if _pico_medido(r, SegmentoCadena.TORSO) and _pico_medido(r, SegmentoCadena.BRAZO)]
     if not medidos:
+        # El motivo (en palabras simples) viaja con la observación: el jugador tiene que saber POR QUÉ falta, no solo que falta.
+        primero = resultados[0] if resultados else None
+        pico = primero.picos.get(SegmentoCadena.BRAZO) if primero is not None else None
         return {
             "severidad": "no_auditable",
             "texto": "No se pudo medir el instante en que el brazo alcanzó su velocidad máxima en este golpe.",
-            "fundamento": None,
+            "fundamento": motivo_pico_llano(SegmentoCadena.BRAZO, pico.motivo if pico is not None else None),
             "referencia": None,
         }
     if len(resultados) == 1:
@@ -667,6 +720,18 @@ def ensamblar_reporte(
                     "confianza": _confianza_en_frame(conf_seq, p.frame, arts_por_segmento[seg]),
                 }
             )
+        no_medidos = []
+        for seg in ORDEN_ESPERADO:
+            p = r.picos.get(seg)
+            if p is not None and p.auditable and math.isfinite(p.velocidad):
+                continue
+            no_medidos.append(
+                {
+                    "segmento": seg.value,
+                    "motivo": motivo_pico_llano(seg, p.motivo if p is not None else None),
+                    "detalle": p.motivo if p is not None else None,
+                }
+            )
         repeticiones.append(
             {
                 "indice": r.indice,
@@ -688,6 +753,7 @@ def ensamblar_reporte(
                 # Los picos medidos se informan aunque la repetición no sea ordenable: son datos reales
                 # (y están en `metricas`); lo que queda en None es el orden y el veredicto.
                 "picos": picos,
+                "picos_no_medidos": no_medidos,
             }
         )
 
