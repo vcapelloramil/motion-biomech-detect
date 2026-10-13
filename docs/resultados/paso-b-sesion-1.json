@@ -1,5 +1,5 @@
 {
- "generado_utc": "2026-10-13T00:00:44+00:00",
+ "generado_utc": "2026-10-13T00:11:26+00:00",
  "decision": "032 y 035 / plan de recálculo §2 (Paso B)",
  "sesion": 1,
  "rol": "RÉPLICA EXPLORATORIA (no independiente)",
@@ -19,7 +19,7 @@
    "motivo": "empieza en la rampa de velocidad"
   }
  ],
- "repeticiones_medidas": 5,
+ "repeticiones_medidas": 11,
  "repeticiones_previstas": 11,
  "repeticiones": [
   {
@@ -431,6 +431,498 @@
     "fps_real_medio": 199.848,
     "hueco_maximo_ms": 12.5
    }
+  },
+  {
+   "valida": true,
+   "motivo": "sin pico auditable para: brazo",
+   "instantes_s": {
+    "p": 2.529166666666667,
+    "t": 2.525,
+    "b": null
+   },
+   "corte_hz": 9.0,
+   "delta_torso_menos_pelvis_ms": -4.166666666666874,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.9477012940792102,
+    "desfase_ms": -4.166666666666667,
+    "correlacion_en_el_desfase": 0.9489505185162197
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 2.533333333333333,
+      "t": 2.55,
+      "b": null
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 2.529166666666667,
+      "t": 2.533333333333333,
+      "b": null
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 2.529166666666667,
+      "t": 2.525,
+      "b": null
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 2.533333333333333,
+      "t": 2.5125,
+      "b": null
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 2.533333333333333,
+      "t": 2.504166666666667,
+      "b": null
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 2.529166666666667,
+     "t": 2.5166666666666666,
+     "b": null
+    },
+    "valida": true
+   },
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep01.mov",
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "real": "IMG_6376.MOV",
+   "regularizacion": {
+    "fotogramas_fuente": 747,
+    "puntos_de_la_grilla": 901,
+    "puntos_copiados": 747,
+    "puntos_interpolados": 154,
+    "puntos_interpolados_pct": 17.09,
+    "puntos_sin_dato": 0,
+    "fps_grilla": 240.0,
+    "fps_real_medio": 198.911,
+    "hueco_maximo_ms": 12.5
+   }
+  },
+  {
+   "valida": true,
+   "motivo": "sin pico auditable para: brazo",
+   "instantes_s": {
+    "p": 2.9166666666666665,
+    "t": 2.9375,
+    "b": null
+   },
+   "corte_hz": 8.0,
+   "delta_torso_menos_pelvis_ms": 20.83333333333348,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.8369660526724712,
+    "desfase_ms": 20.833333333333332,
+    "correlacion_en_el_desfase": 0.8839409735144753
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 2.925,
+      "t": 2.9541666666666666,
+      "b": null
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 2.9166666666666665,
+      "t": 2.95,
+      "b": null
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 2.9166666666666665,
+      "t": 2.9375,
+      "b": null
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 2.9125,
+      "t": 2.925,
+      "b": null
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 2.904166666666667,
+      "t": 2.9208333333333334,
+      "b": null
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 2.9125,
+     "t": 2.933333333333333,
+     "b": null
+    },
+    "valida": true
+   },
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep02.mov",
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "real": "IMG_6376.MOV",
+   "regularizacion": {
+    "fotogramas_fuente": 806,
+    "puntos_de_la_grilla": 960,
+    "puntos_copiados": 806,
+    "puntos_interpolados": 154,
+    "puntos_interpolados_pct": 16.04,
+    "puntos_sin_dato": 0,
+    "fps_grilla": 240.0,
+    "fps_real_medio": 201.439,
+    "hueco_maximo_ms": 12.5
+   }
+  },
+  {
+   "valida": true,
+   "motivo": "sin pico auditable para: brazo",
+   "instantes_s": {
+    "p": 2.5083333333333333,
+    "t": 2.504166666666667,
+    "b": null
+   },
+   "corte_hz": 8.0,
+   "delta_torso_menos_pelvis_ms": -4.16666666666643,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.9394004882782638,
+    "desfase_ms": -4.166666666666667,
+    "correlacion_en_el_desfase": 0.9419317585687605
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 2.5208333333333335,
+      "t": 2.529166666666667,
+      "b": null
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 2.5166666666666666,
+      "t": 2.5208333333333335,
+      "b": null
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 2.5083333333333333,
+      "t": 2.504166666666667,
+      "b": null
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 2.5,
+      "t": 2.4916666666666667,
+      "b": null
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 2.495833333333333,
+      "t": 2.4875,
+      "b": null
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 2.5083333333333333,
+     "t": 2.5,
+     "b": null
+    },
+    "valida": true
+   },
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep03.mov",
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "real": "IMG_6376.MOV",
+   "regularizacion": {
+    "fotogramas_fuente": 755,
+    "puntos_de_la_grilla": 901,
+    "puntos_copiados": 755,
+    "puntos_interpolados": 146,
+    "puntos_interpolados_pct": 16.2,
+    "puntos_sin_dato": 0,
+    "fps_grilla": 240.0,
+    "fps_real_medio": 201.067,
+    "hueco_maximo_ms": 12.5
+   }
+  },
+  {
+   "valida": true,
+   "motivo": "sin pico auditable para: brazo",
+   "instantes_s": {
+    "p": 2.4625,
+    "t": 2.466666666666667,
+    "b": null
+   },
+   "corte_hz": 8.0,
+   "delta_torso_menos_pelvis_ms": 4.166666666666874,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.9735538236708161,
+    "desfase_ms": 4.166666666666667,
+    "correlacion_en_el_desfase": 0.9754007046655803
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 2.5125,
+      "t": 2.5208333333333335,
+      "b": null
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 2.470833333333333,
+      "t": 2.470833333333333,
+      "b": null
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 2.4625,
+      "t": 2.466666666666667,
+      "b": null
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 2.4625,
+      "t": 2.466666666666667,
+      "b": null
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 2.4625,
+      "t": 2.466666666666667,
+      "b": null
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 2.4583333333333335,
+     "t": 2.466666666666667,
+     "b": null
+    },
+    "valida": true
+   },
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep04.mov",
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "real": "IMG_6376.MOV",
+   "regularizacion": {
+    "fotogramas_fuente": 752,
+    "puntos_de_la_grilla": 898,
+    "puntos_copiados": 752,
+    "puntos_interpolados": 146,
+    "puntos_interpolados_pct": 16.26,
+    "puntos_sin_dato": 0,
+    "fps_grilla": 240.0,
+    "fps_real_medio": 200.914,
+    "hueco_maximo_ms": 12.92
+   }
+  },
+  {
+   "valida": true,
+   "motivo": "sin pico auditable para: brazo",
+   "instantes_s": {
+    "p": 3.7708333333333335,
+    "t": 3.775,
+    "b": null
+   },
+   "corte_hz": 9.0,
+   "delta_torso_menos_pelvis_ms": 4.16666666666643,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.9183895605236357,
+    "desfase_ms": -4.166666666666667,
+    "correlacion_en_el_desfase": 0.9196769531332308
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 3.8,
+      "t": 3.7958333333333334,
+      "b": null
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 3.783333333333333,
+      "t": 3.783333333333333,
+      "b": null
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 3.7708333333333335,
+      "t": 3.775,
+      "b": null
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 3.7708333333333335,
+      "t": 3.775,
+      "b": null
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 3.7708333333333335,
+      "t": 3.775,
+      "b": null
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 3.7666666666666666,
+     "t": 3.783333333333333,
+     "b": null
+    },
+    "valida": true
+   },
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep05.mov",
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "real": "IMG_6376.MOV",
+   "regularizacion": {
+    "fotogramas_fuente": 1007,
+    "puntos_de_la_grilla": 1205,
+    "puntos_copiados": 1007,
+    "puntos_interpolados": 198,
+    "puntos_interpolados_pct": 16.43,
+    "puntos_sin_dato": 0,
+    "fps_grilla": 240.0,
+    "fps_real_medio": 200.515,
+    "hueco_maximo_ms": 12.92
+   }
+  },
+  {
+   "valida": true,
+   "motivo": "sin pico auditable para: brazo",
+   "instantes_s": {
+    "p": 2.475,
+    "t": 2.4791666666666665,
+    "b": null
+   },
+   "corte_hz": 7.0,
+   "delta_torso_menos_pelvis_ms": 4.16666666666643,
+   "omega_cadera_vs_tronco": {
+    "correlacion": 0.9365423998272243,
+    "desfase_ms": -12.5,
+    "correlacion_en_el_desfase": 0.9484465450094858
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "instantes_s": {
+      "p": 2.504166666666667,
+      "t": 2.5083333333333333,
+      "b": null
+     },
+     "valida": true
+    },
+    "6.0": {
+     "instantes_s": {
+      "p": 2.4833333333333334,
+      "t": 2.5,
+      "b": null
+     },
+     "valida": true
+    },
+    "8.0": {
+     "instantes_s": {
+      "p": 2.470833333333333,
+      "t": 2.470833333333333,
+      "b": null
+     },
+     "valida": true
+    },
+    "10.0": {
+     "instantes_s": {
+      "p": 2.466666666666667,
+      "t": 2.4625,
+      "b": null
+     },
+     "valida": true
+    },
+    "12.0": {
+     "instantes_s": {
+      "p": 2.466666666666667,
+      "t": 2.4625,
+      "b": null
+     },
+     "valida": true
+    }
+   },
+   "giro_axial": {
+    "instantes_s": {
+     "p": 2.470833333333333,
+     "t": 2.475,
+     "b": null
+    },
+    "valida": true
+   },
+   "clip": "20260924_VCR_saque_trescuartos_240_01_rep06.mov",
+   "gesto": "saque",
+   "encuadre": "trescuartos",
+   "toma": "01",
+   "real": "IMG_6376.MOV",
+   "regularizacion": {
+    "fotogramas_fuente": 699,
+    "puntos_de_la_grilla": 839,
+    "puntos_copiados": 699,
+    "puntos_interpolados": 140,
+    "puntos_interpolados_pct": 16.69,
+    "puntos_sin_dato": 0,
+    "fps_grilla": 240.0,
+    "fps_real_medio": 199.881,
+    "hueco_maximo_ms": 12.5
+   }
   }
  ],
  "resultado_por_tolerancia": {
@@ -463,6 +955,102 @@
       "ordenes": {
        "tp": 3
       },
+      "criterio_1_cumplido": false
+     }
+    },
+    "saque|trescuartos": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 1,
+      "1a_sobre_todas": 0.16666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.03005258587173032,
+       0.563509436563646
+      ],
+      "1a_sobre_validas": 0.16666666666666666,
+      "1b_orden_modal": "pt",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 1.0,
+      "1c_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "ordenes": {
+       "pt": 1
+      },
+      "criterio_1_cumplido": false
+     },
+     "cadena": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 0,
+      "1a_sobre_todas": 0.0,
+      "1a_sobre_todas_ic95": [
+       0.0,
+       0.3903430336530645
+      ],
+      "1a_sobre_validas": 0.0,
+      "1b_orden_modal": null,
+      "1b_repetibilidad": null,
+      "1b_ic95": null,
+      "1c_esperado": "ptb",
+      "1c_coincidencia": null,
+      "1c_ic95": null,
+      "ordenes": {},
+      "criterio_1_cumplido": false
+     }
+    },
+    "saque|trescuartos|toma 01": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 1,
+      "1a_sobre_todas": 0.16666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.03005258587173032,
+       0.563509436563646
+      ],
+      "1a_sobre_validas": 0.16666666666666666,
+      "1b_orden_modal": "pt",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 1.0,
+      "1c_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "ordenes": {
+       "pt": 1
+      },
+      "criterio_1_cumplido": false
+     },
+     "cadena": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 0,
+      "1a_sobre_todas": 0.0,
+      "1a_sobre_todas_ic95": [
+       0.0,
+       0.3903430336530645
+      ],
+      "1a_sobre_validas": 0.0,
+      "1b_orden_modal": null,
+      "1b_repetibilidad": null,
+      "1b_ic95": null,
+      "1c_esperado": "ptb",
+      "1c_coincidencia": null,
+      "1c_ic95": null,
+      "ordenes": {},
       "criterio_1_cumplido": false
      }
     }
@@ -499,6 +1087,102 @@
       },
       "criterio_1_cumplido": false
      }
+    },
+    "saque|trescuartos": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 1,
+      "1a_sobre_todas": 0.16666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.03005258587173032,
+       0.563509436563646
+      ],
+      "1a_sobre_validas": 0.16666666666666666,
+      "1b_orden_modal": "pt",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 1.0,
+      "1c_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "ordenes": {
+       "pt": 1
+      },
+      "criterio_1_cumplido": false
+     },
+     "cadena": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 0,
+      "1a_sobre_todas": 0.0,
+      "1a_sobre_todas_ic95": [
+       0.0,
+       0.3903430336530645
+      ],
+      "1a_sobre_validas": 0.0,
+      "1b_orden_modal": null,
+      "1b_repetibilidad": null,
+      "1b_ic95": null,
+      "1c_esperado": "ptb",
+      "1c_coincidencia": null,
+      "1c_ic95": null,
+      "ordenes": {},
+      "criterio_1_cumplido": false
+     }
+    },
+    "saque|trescuartos|toma 01": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 1,
+      "1a_sobre_todas": 0.16666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.03005258587173032,
+       0.563509436563646
+      ],
+      "1a_sobre_validas": 0.16666666666666666,
+      "1b_orden_modal": "pt",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 1.0,
+      "1c_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "ordenes": {
+       "pt": 1
+      },
+      "criterio_1_cumplido": false
+     },
+     "cadena": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 0,
+      "1a_sobre_todas": 0.0,
+      "1a_sobre_todas_ic95": [
+       0.0,
+       0.3903430336530645
+      ],
+      "1a_sobre_validas": 0.0,
+      "1b_orden_modal": null,
+      "1b_repetibilidad": null,
+      "1b_ic95": null,
+      "1c_esperado": "ptb",
+      "1c_coincidencia": null,
+      "1c_ic95": null,
+      "ordenes": {},
+      "criterio_1_cumplido": false
+     }
     }
    }
   },
@@ -531,6 +1215,102 @@
       "ordenes": {
        "tp": 3
       },
+      "criterio_1_cumplido": false
+     }
+    },
+    "saque|trescuartos": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 1,
+      "1a_sobre_todas": 0.16666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.03005258587173032,
+       0.563509436563646
+      ],
+      "1a_sobre_validas": 0.16666666666666666,
+      "1b_orden_modal": "pt",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 1.0,
+      "1c_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "ordenes": {
+       "pt": 1
+      },
+      "criterio_1_cumplido": false
+     },
+     "cadena": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 0,
+      "1a_sobre_todas": 0.0,
+      "1a_sobre_todas_ic95": [
+       0.0,
+       0.3903430336530645
+      ],
+      "1a_sobre_validas": 0.0,
+      "1b_orden_modal": null,
+      "1b_repetibilidad": null,
+      "1b_ic95": null,
+      "1c_esperado": "ptb",
+      "1c_coincidencia": null,
+      "1c_ic95": null,
+      "ordenes": {},
+      "criterio_1_cumplido": false
+     }
+    },
+    "saque|trescuartos|toma 01": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 1,
+      "1a_sobre_todas": 0.16666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.03005258587173032,
+       0.563509436563646
+      ],
+      "1a_sobre_validas": 0.16666666666666666,
+      "1b_orden_modal": "pt",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 1.0,
+      "1c_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "ordenes": {
+       "pt": 1
+      },
+      "criterio_1_cumplido": false
+     },
+     "cadena": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 0,
+      "1a_sobre_todas": 0.0,
+      "1a_sobre_todas_ic95": [
+       0.0,
+       0.3903430336530645
+      ],
+      "1a_sobre_validas": 0.0,
+      "1b_orden_modal": null,
+      "1b_repetibilidad": null,
+      "1b_ic95": null,
+      "1c_esperado": "ptb",
+      "1c_coincidencia": null,
+      "1c_ic95": null,
+      "ordenes": {},
       "criterio_1_cumplido": false
      }
     }
@@ -567,6 +1347,102 @@
       },
       "criterio_1_cumplido": false
      }
+    },
+    "saque|trescuartos": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 1,
+      "1a_sobre_todas": 0.16666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.03005258587173032,
+       0.563509436563646
+      ],
+      "1a_sobre_validas": 0.16666666666666666,
+      "1b_orden_modal": "pt",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 1.0,
+      "1c_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "ordenes": {
+       "pt": 1
+      },
+      "criterio_1_cumplido": false
+     },
+     "cadena": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 0,
+      "1a_sobre_todas": 0.0,
+      "1a_sobre_todas_ic95": [
+       0.0,
+       0.3903430336530645
+      ],
+      "1a_sobre_validas": 0.0,
+      "1b_orden_modal": null,
+      "1b_repetibilidad": null,
+      "1b_ic95": null,
+      "1c_esperado": "ptb",
+      "1c_coincidencia": null,
+      "1c_ic95": null,
+      "ordenes": {},
+      "criterio_1_cumplido": false
+     }
+    },
+    "saque|trescuartos|toma 01": {
+     "par_pelvis_torso": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 1,
+      "1a_sobre_todas": 0.16666666666666666,
+      "1a_sobre_todas_ic95": [
+       0.03005258587173032,
+       0.563509436563646
+      ],
+      "1a_sobre_validas": 0.16666666666666666,
+      "1b_orden_modal": "pt",
+      "1b_repetibilidad": 1.0,
+      "1b_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "1c_esperado": "pt",
+      "1c_coincidencia": 1.0,
+      "1c_ic95": [
+       0.20654329147389294,
+       1.0
+      ],
+      "ordenes": {
+       "pt": 1
+      },
+      "criterio_1_cumplido": false
+     },
+     "cadena": {
+      "n": 6,
+      "validas": 6,
+      "ordenables": 0,
+      "1a_sobre_todas": 0.0,
+      "1a_sobre_todas_ic95": [
+       0.0,
+       0.3903430336530645
+      ],
+      "1a_sobre_validas": 0.0,
+      "1b_orden_modal": null,
+      "1b_repetibilidad": null,
+      "1b_ic95": null,
+      "1c_esperado": "ptb",
+      "1c_coincidencia": null,
+      "1c_ic95": null,
+      "ordenes": {},
+      "criterio_1_cumplido": false
+     }
     }
    }
   }
@@ -583,6 +1459,30 @@
    "cadera_primero": 0,
    "tronco_primero": 3,
    "dentro_de_la_tolerancia": 1
+  },
+  "saque|trescuartos": {
+   "n": 6,
+   "mediana_ms": 4.16666666666643,
+   "q1_ms": -2.083333333333215,
+   "q3_ms": 4.166666666666763,
+   "media_ms": 4.166666666666652,
+   "min_ms": -4.166666666666874,
+   "max_ms": 20.83333333333348,
+   "cadera_primero": 1,
+   "tronco_primero": 0,
+   "dentro_de_la_tolerancia": 5
+  },
+  "saque|trescuartos|toma 01": {
+   "n": 6,
+   "mediana_ms": 4.16666666666643,
+   "q1_ms": -2.083333333333215,
+   "q3_ms": 4.166666666666763,
+   "media_ms": 4.166666666666652,
+   "min_ms": -4.166666666666874,
+   "max_ms": 20.83333333333348,
+   "cadera_primero": 1,
+   "tronco_primero": 0,
+   "dentro_de_la_tolerancia": 5
   }
  },
  "controles": {
@@ -648,6 +1548,134 @@
     "1b": 1.0,
     "1c_cadera_primero": 0.0,
     "delta_mediana_ms": -18.749999999999932
+   }
+  },
+  "saque|trescuartos": {
+   "acople_omega": {
+    "correlacion_mediana": 0.937971444052744,
+    "desfase_mediano_ms": -4.166666666666667
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "n": 6,
+     "ordenables": 2,
+     "orden_modal": "pt",
+     "1b": 1.0,
+     "1c_cadera_primero": 1.0,
+     "delta_mediana_ms": 8.333333333333304
+    },
+    "6.0": {
+     "n": 6,
+     "ordenables": 2,
+     "orden_modal": "pt",
+     "1b": 1.0,
+     "1c_cadera_primero": 1.0,
+     "delta_mediana_ms": 4.166666666666652
+    },
+    "8.0": {
+     "n": 6,
+     "ordenables": 1,
+     "orden_modal": "pt",
+     "1b": 1.0,
+     "1c_cadera_primero": 1.0,
+     "delta_mediana_ms": 2.083333333333215
+    },
+    "10.0": {
+     "n": 6,
+     "ordenables": 2,
+     "orden_modal": "tp",
+     "1b": 0.5,
+     "1c_cadera_primero": 0.5,
+     "delta_mediana_ms": -2.220446049250313e-13
+    },
+    "12.0": {
+     "n": 6,
+     "ordenables": 2,
+     "orden_modal": "tp",
+     "1b": 0.5,
+     "1c_cadera_primero": 0.5,
+     "delta_mediana_ms": -2.220446049250313e-13
+    }
+   },
+   "giro_axial": {
+    "n": 6,
+    "ordenables": 3,
+    "orden_modal": "pt",
+    "1b": 0.6666666666666666,
+    "1c_cadera_primero": 0.6666666666666666,
+    "delta_mediana_ms": 6.250000000000089
+   },
+   "winter_3d": {
+    "n": 6,
+    "ordenables": 1,
+    "orden_modal": "pt",
+    "1b": 1.0,
+    "1c_cadera_primero": 1.0,
+    "delta_mediana_ms": 4.16666666666643
+   }
+  },
+  "saque|trescuartos|toma 01": {
+   "acople_omega": {
+    "correlacion_mediana": 0.937971444052744,
+    "desfase_mediano_ms": -4.166666666666667
+   },
+   "por_corte_fijo_hz": {
+    "4.0": {
+     "n": 6,
+     "ordenables": 2,
+     "orden_modal": "pt",
+     "1b": 1.0,
+     "1c_cadera_primero": 1.0,
+     "delta_mediana_ms": 8.333333333333304
+    },
+    "6.0": {
+     "n": 6,
+     "ordenables": 2,
+     "orden_modal": "pt",
+     "1b": 1.0,
+     "1c_cadera_primero": 1.0,
+     "delta_mediana_ms": 4.166666666666652
+    },
+    "8.0": {
+     "n": 6,
+     "ordenables": 1,
+     "orden_modal": "pt",
+     "1b": 1.0,
+     "1c_cadera_primero": 1.0,
+     "delta_mediana_ms": 2.083333333333215
+    },
+    "10.0": {
+     "n": 6,
+     "ordenables": 2,
+     "orden_modal": "tp",
+     "1b": 0.5,
+     "1c_cadera_primero": 0.5,
+     "delta_mediana_ms": -2.220446049250313e-13
+    },
+    "12.0": {
+     "n": 6,
+     "ordenables": 2,
+     "orden_modal": "tp",
+     "1b": 0.5,
+     "1c_cadera_primero": 0.5,
+     "delta_mediana_ms": -2.220446049250313e-13
+    }
+   },
+   "giro_axial": {
+    "n": 6,
+    "ordenables": 3,
+    "orden_modal": "pt",
+    "1b": 0.6666666666666666,
+    "1c_cadera_primero": 0.6666666666666666,
+    "delta_mediana_ms": 6.250000000000089
+   },
+   "winter_3d": {
+    "n": 6,
+    "ordenables": 1,
+    "orden_modal": "pt",
+    "1b": 1.0,
+    "1c_cadera_primero": 1.0,
+    "delta_mediana_ms": 4.16666666666643
    }
   }
  }

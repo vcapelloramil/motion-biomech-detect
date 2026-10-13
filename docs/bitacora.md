@@ -6,6 +6,36 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-12, tarde — ESTADO DE TRABAJO (retomar desde acá si se compacta la conversación)
+
+Pedido de Valentín: (1) terminar el SAQUE del Paso B (toma 02c incluida), drive y revés al final; (2) analizar la "contradicción" del golpe del celular; (3) proponer la 035 **sin aplicarla**; (4) pushear las 2 notas de
+documentación y hacer mi parte del dominio, dejando `workers.dev` funcionando, y darle su parte paso a paso; (5) registrar que Brevo no deja generar la clave SMTP.
+
+**Hecho:**
+- Paso B del saque **lanzado** (commit `33dd7d9`, `--grupos "saque|perfil,saque|trescuartos"`, 29 repeticiones; las 23 ya guardadas se re-miden con el motor 0.5.1 y solo se infiere el original IMG_6393). Log:
+  `backend/.cache/paso_b_saque.log`. **No mirarlo seguido**: espera de 10–15 min entre controles. Cuando termine escribe `docs/resultados/paso-b-sesion-1.json` y `-2.json`.
+- El Paso B ahora fija el commit al arrancar (no al HEAD del momento de escribir).
+- **Pusheado** a origin (`33dd7d9`): bitácora y resultados parciales.
+- **Dominio, mi parte** (commit `67c1024`, **sin pushear**): `frontend/wrangler.jsonc` con `kinetiqtennis.me` (`custom_domain`) y `workers_dev: true`; verificado en el build. La guía
+  (`docs/guia-dominio-correo-y-hosting.md`, sección E) tiene la parte de Valentín paso a paso (deploy, Supabase Site URL y Redirect URLs, `KINETIQ_CORS_ORIGINS` en Render).
+- **Brevo (13/10):** el dominio figura **autenticado**; Valentín **no pudo generar la clave SMTP** y lo reintenta él. Si no sale: respaldo Gmail con contraseña de aplicación (decisión 027, B) o Resend. Anotado en la
+  decisión 034 y en la guía.
+- **Análisis de la "contradicción"** (golpe de producción `cbaf328d`, cadera 13 ms antes que el tronco, contra el tronco primero del Paso B en el perfil):
+  - **El video es del corpus: `com.apple.quicktime.creationdate = 2026-09-25T15:23:05-0300` = el original `IMG_6391` (saque de TRES CUARTOS, toma 02)**, recortado. Se subió declarado como "perfil".
+    El reporte de producción aplicó entonces el veredicto del grupo `saque|perfil` a un video de tres cuartos: ese "correcto" no corresponde.
+  - Se reprocesó el mismo video por el camino del Paso B: **reproduce Δ = +12,5 ms** (cadera 1,658 s, tronco 1,671 s); con cortes de 4 a 12 Hz da +16,7 a +4,2 ms y el giro axial +16,7 ms: **cadera primero o dentro de la
+    tolerancia, nunca tronco primero**, como el saque de tres cuartos del corpus (4 de 4 ordenables con la cadera primero). No contradice al Paso B: lo confirma.
+  - La apertura de hombros / largo del tronco **no separa** perfil de tres cuartos en el corpus (medianas 0,23 y 0,15; el golpe nuevo, 0,11): no sirve para verificar el encuadre declarado.
+
+**Pendiente (en este orden):**
+1. Esperar el saque del Paso B (IMG_6393, ~27 min + re-medición ~5 min) y mirar el resultado **una vez**.
+2. Escribir `docs/decisiones/035-...` como propuesta con el saque completo y el análisis de arriba (**no aplicar sin el OK de Valentín**).
+3. Escribir el análisis de la contradicción en `docs/resultados/` (causas posibles y cómo comprobarlas sin grabar de nuevo).
+4. Pushear `67c1024` y lo que siga (reinicia Render; sin análisis en curso).
+5. Drive y revés del Paso B **al final de la sesión** (`--grupos` omitido retoma todo).
+
+---
+
 ## 2026-10-12, 19:10 — PARADA ORDENADA (se apaga la PC) · qué quedó a medias y cómo retomar
 
 **No se empezó nada nuevo.** El Paso B estaba corriendo y se detuvo a mano (pid 10196) antes de apagar; lo que ya estaba guardado queda guardado. **Nada de esta entrada está pusheado.**
