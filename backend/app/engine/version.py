@@ -48,6 +48,9 @@ del motor"); el discriminador práctico es la ``version_contrato`` del propio re
   cadera-hombro máxima y ángulos de rodilla y codo en el pico del tronco). Sin cambio de contrato.
 - 0.5.2 — Decisión 035 (13/10/2026, con el OK de Valentín): el saque no emite veredicto del orden (depende del encuadre) y el reporte contrasta
   el encuadre declarado con el que se ve (``engine/encuadre.py``); si discrepa, avisa y no emite veredicto. Sin cambio de contrato.
+- 0.5.3 — Decisión 036 (13/10/2026): ningún grupo emite veredicto del orden. El drive se suspende por encuadre (como el saque) y el revés
+  por no ser confiable con una sola cámara; la suspensión decide aunque haya referencia y el Criterio 1 se cumpla. Cambia el texto de
+  las observaciones del drive y del revés. Sin cambio de contrato.
 """
 
-__version__ = "0.5.2"
+__version__ = "0.5.3"

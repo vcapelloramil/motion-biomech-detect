@@ -18,8 +18,9 @@ Las maquetas usan datos de ejemplo armados con los patrones reales del corpus. L
 4. **R4.** Todo valor en la vista detallada y en el PDF lleva confianza y fundamento. Todo reporte lleva versión del motor, backend de pose y parámetros de filtrado.
 5. **El frontend no calcula nada biomecánico.** Solo representa el JSON del reporte que produce el motor.
 6. **El brazo (balanceo, vector hombro–codo) se informa como dato, "sin evaluar".** Nunca como correcto o incorrecto (decisión 011).
-   **"Sin evaluar" también es la etiqueta del orden cadera → tronco** donde no hay referencia del orden esperado y Criterio 1 cumplido para ese gesto y encuadre (decisión 031; hoy solo
-   el saque de perfil tiene veredicto). En el contrato v1.2 es `Observacion.severidad = "sin_evaluar"`: **no es un quinto estado del semáforo** (R3 sigue con cuatro) ni significa "no se pudo
+   **"Sin evaluar" también es la etiqueta del orden cadera → tronco** donde no hay referencia del orden esperado y Criterio 1 cumplido para ese gesto y encuadre (decisión 031). **Desde el
+   13/10/2026 (decisiones 035 y 036) ningún grupo emite veredicto del orden**: el orden se muestra siempre "solo registrado" (o "no auditable" si no se pudo medir). El reporte real no produce
+   "correcto" ni "desvío leve" por el orden; las maquetas que los muestran (ReporteSimple, Biblioteca, Evolución, Main) hay que leerlas con esa corrección: ver `docs/ux/auditoria-pantallas-13-10.md`. En el contrato v1.2 es `Observacion.severidad = "sin_evaluar"`: **no es un quinto estado del semáforo** (R3 sigue con cuatro) ni significa "no se pudo
    medir" (ese es `no_auditable`, gris). Se muestra como una etiqueta neutra con borde punteado ("SIN EVALUAR", como en las maquetas), sin color de semáforo, con ícono y texto (R3).
 
 ## 2. Estilo visual

@@ -65,30 +65,67 @@ REFERENCIA_ORDEN_SAQUE = "Kovacs y Ellenbecker (2011); Fleisig et al. (2003)"
 
 
 @dataclass(frozen=True)
+class Suspension:
+    """(c) Decisiones 035 y 036: el orden medido de este gesto no es confiable con una sola cámara y NO se emite veredicto, aunque haya
+    referencia (a) y el Criterio 1 (b) se cumpla: los grupos que lo cumplen son justamente los sospechosos (Paso B)."""
+
+    por_encuadre: bool   # True: el orden cambia con el encuadre (saque y drive); False: no sigue ese patrón y es sensible al método (revés)
+    detalle: str         # la razón técnica con las cifras del Paso B, para el detalle del reporte (nivel 3); no va al texto del jugador
+
+
+@dataclass(frozen=True)
 class RespaldoGrupo:
     referencia_orden: str | None   # (a) cita del orden esperado; None = sin referencia
     criterio1_cumplido: bool       # (b) Criterio 1 del par pelvis-torso, tolerancia de 1 fotograma, sesión 2 (decisión 014)
-    # (c) Decisión 035: el orden medido del gesto cambia según el encuadre (saque: perfil tronco primero, tres cuartos cadera primero,
-    # Paso B con los originales). Mientras no haya una medición independiente, no se emite veredicto en ningún encuadre de ese gesto.
-    depende_del_encuadre: bool = False
+    # (c) Mientras haya una suspensión, no se emite veredicto, sean cuales sean (a) y (b). Solo se levanta con una medición independiente
+    # de la pelvis (cintas de color o dos cámaras); ver la decisión 036.
+    suspension: Suspension | None = None
+
+    @property
+    def depende_del_encuadre(self) -> bool:
+        return self.suspension is not None and self.suspension.por_encuadre
 
     @property
     def con_veredicto(self) -> bool:
-        return self.referencia_orden is not None and self.criterio1_cumplido and not self.depende_del_encuadre
+        return self.suspension is None and self.referencia_orden is not None and self.criterio1_cumplido
 
+
+_CIERRE_SUSPENSION = "Mientras no haya una medición independiente de la pelvis no se emite veredicto."
+_SUSPENSION_SAQUE = Suspension(
+    True,
+    "En este gesto el orden medido depende del encuadre: con los originales a tasa real, el saque da la cadera primero en tres cuartos "
+    f"(7 de 7 ordenables) y el tronco primero en perfil (8 de 8). {_CIERRE_SUSPENSION}",
+)
+_SUSPENSION_DRIVE = Suspension(
+    True,
+    "En este gesto el orden medido depende del encuadre: con los originales a tasa real, el drive da la cadera primero en tres cuartos "
+    f"(3 de 3 ordenables) y el tronco primero en perfil (7 de 8). {_CIERRE_SUSPENSION}",
+)
+_SUSPENSION_REVES = Suspension(
+    False,
+    "En este gesto el orden medido no es confiable con una sola cámara: con los originales a tasa real, el revés da el tronco primero en "
+    "tres cuartos (5 de 5 ordenables) y queda 3 contra 3 en perfil, y el orden de perfil cambia con el método de medición (giro axial). "
+    f"Con estos datos no se puede separar el gesto del sesgo de la medición. {_CIERRE_SUSPENSION}",
+)
 
 # Las cifras de (b) son las del PASO A del recálculo (12/10/2026, ``docs/resultados/paso-a-resumen.md``): tiempo real a 120,2 fps y
 # tolerancia de 8,33 ms (la misma constante de ``engine/tolerancia_orden.py``), sesión 2. Reemplazan a las de la medición original
-# (decisión 014), que usaba el reloj y la ventana equivocados. Ver la decisión 031 (revisión) y la 035 (propuesta sobre el saque de perfil).
+# (decisión 014), que usaba el reloj y la ventana equivocados. Ver la decisión 031 (revisión) y las 035 y 036.
+#
+# Decisión 036 (extiende la 035): NINGÚN grupo emite veredicto. Se suspendieron los seis, y la suspensión es lo que decide, no (a) ni (b):
+# aunque aparezca una referencia del orden para el drive o el revés, o el Criterio 1 de un grupo de perfil se cumpla (el drive de perfil
+# lo cumple en el Paso B, 1a 0,83, con el tronco primero), no se emite veredicto hasta levantar la suspensión con una medición independiente.
 RESPALDO_POR_GRUPO: dict[tuple[str, str], RespaldoGrupo] = {
-    # Decisión 035 (aplicada el 13/10 con el OK de Valentín): el saque no emite veredicto. Perfil cumple el Criterio 1 (1a 0,83 · 1b 1,00,
-    # tronco primero 8 de 8 con los originales) pero tres cuartos da cadera primero 7 de 7: el orden depende del encuadre.
-    ("saque", "perfil"): RespaldoGrupo(REFERENCIA_ORDEN_SAQUE, True, depende_del_encuadre=True),
-    ("saque", "tres_cuartos"): RespaldoGrupo(REFERENCIA_ORDEN_SAQUE, False, depende_del_encuadre=True),  # 1a 0,17 y 0,50
-    ("drive", "perfil"): RespaldoGrupo(None, False),                          # Paso A: 1a 0,50 (antes 1,00); 1b 1,00 (tp)
-    ("drive", "tres_cuartos"): RespaldoGrupo(None, False),                    # Paso A: 1a 0,00: ninguna ordenable
-    ("reves", "perfil"): RespaldoGrupo(None, False),                          # Paso A: 1a 0,60 · 1b 0,67
-    ("reves", "tres_cuartos"): RespaldoGrupo(None, False),                    # Paso A: 1a 0,50 (antes 1,00); 1b 1,00 (tp)
+    # Decisión 035: perfil cumple el Criterio 1 (1a 0,83 · 1b 1,00, tronco primero 8 de 8 con los originales) pero tres cuartos da cadera
+    # primero 7 de 7: el orden depende del encuadre.
+    ("saque", "perfil"): RespaldoGrupo(REFERENCIA_ORDEN_SAQUE, True, _SUSPENSION_SAQUE),
+    ("saque", "tres_cuartos"): RespaldoGrupo(REFERENCIA_ORDEN_SAQUE, False, _SUSPENSION_SAQUE),   # 1a 0,17 y 0,50
+    # La columna (b) de drive y revés sigue con las cifras del Paso A: su revisión con el Paso B (`docs/resultados/paso-b-resumen.md`: el drive
+    # de perfil pasaría a cumplir, 1a 0,83 · 1b 1,00, con el tronco primero) es un pendiente posterior a la demo. No cambia ningún veredicto.
+    ("drive", "perfil"): RespaldoGrupo(None, False, _SUSPENSION_DRIVE),
+    ("drive", "tres_cuartos"): RespaldoGrupo(None, False, _SUSPENSION_DRIVE),
+    ("reves", "perfil"): RespaldoGrupo(None, False, _SUSPENSION_REVES),
+    ("reves", "tres_cuartos"): RespaldoGrupo(None, False, _SUSPENSION_REVES),
 }
 _SIN_RESPALDO = RespaldoGrupo(None, False)
 
@@ -268,19 +305,22 @@ _SIN_ENCUADRE = (
 )
 
 
+_SIN_METODO = (
+    "El orden entre tu cadera y tu tronco en este golpe todavía no se puede medir con suficiente confianza con una sola cámara, "
+    "y no podemos asegurar cuál es el correcto. Por eso lo registramos sin evaluarlo."
+)
+
+
 def _cierre_sin_evaluar(respaldo: RespaldoGrupo) -> str:
-    if respaldo.depende_del_encuadre:
-        return _SIN_ENCUADRE
+    if respaldo.suspension is not None:
+        return _SIN_ENCUADRE if respaldo.suspension.por_encuadre else _SIN_METODO
     return _SIN_PATRON if respaldo.referencia_orden is None else _SIN_VALIDACION
 
 
 def _porque_sin_evaluar(respaldo: RespaldoGrupo) -> str:
     """La razón técnica, para el detalle (nivel 3): ahí sí van la literatura y la validación propia."""
-    if respaldo.depende_del_encuadre:
-        return (
-            "En este gesto el orden medido depende del encuadre: con los originales a tasa real, el saque da la cadera primero en tres cuartos "
-            "(7 de 7 ordenables) y el tronco primero en perfil (8 de 8). Mientras no haya una medición independiente de la pelvis no se emite veredicto."
-        )
+    if respaldo.suspension is not None:
+        return respaldo.suspension.detalle
     if respaldo.referencia_orden is None and not respaldo.criterio1_cumplido:
         return "Para este gesto y encuadre todavía no hay una referencia del orden esperado ni una validación propia suficiente."
     if respaldo.referencia_orden is None:

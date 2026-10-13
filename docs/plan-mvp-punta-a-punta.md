@@ -196,6 +196,9 @@ especificación que todavía no existen, (3) que el sistema funcione "como públ
 
 **Demo a los profesores: 28–30/10 (decisión de Valentín, 12/10).**
 
+> **13/10 (decisiones 035 y 036):** ningún grupo emite veredicto del orden y el puntaje 0–100 sale del plan. Las filas que cambian están marcadas (13 y 15) y el orden revisado de pantallas está en
+> `docs/ux/auditoria-pantallas-13-10.md` §3. Lo que sigue a la demo, en el orden de Valentín, está en **§9**.
+
 **Supuestos:** sesiones de ~medio día. Ritmo **observado**: el flujo de punta a punta estaba previsto para el 20/10 (11 sesiones a ~1 por día) y se cerró el 12/10, es decir ~1,5 por día. Se calcula con **1,5
 por día** (esperado) y **1 por día** (pesimista, sin imprevistos de paneles ni de DNS).
 
@@ -217,7 +220,7 @@ por día** (esperado) y **1 por día** (pesimista, sin imprevistos de paneles ni
 | 10 | **Perfil real:** rol, vista por defecto, nombre y datos del jugador (mano dominante, nivel), **descargar mis datos** (JSON, derecho de acceso) y botón de eliminar. **Se retiran los planes y precios de la maqueta** (la especificación §11 los deja fuera del MVP) | 1,5 | Ley 25.326: acceso y supresión; es lo que cierra "como público" | 6 (la vista por defecto) |
 | 11 | **Eliminar cuenta y datos, funcional** (incluye los objetos de **ambos** buckets) | 1 | Derecho de supresión; sin esto la demo "como público" no es defendible | 10 |
 | 12 | **Respaldo con restauración probada** y **recuperación al arranque (6.5)** | 1,25 | Un análisis no queda `procesando` para siempre; Supabase Free no respalda | — |
-| 13 | **Evolución con la marca "Datos de ejemplo"** (revisar que la marca esté y que no se confunda con datos propios) | 0,25 | Honestidad (R3/R4); real solo si hay ≥ 2 sesiones comparables | — |
+| ~~13~~ | ~~**Evolución con la marca "Datos de ejemplo"**~~ **REEMPLAZADO el 13/10:** Evolución pasa a ser una pantalla **real mínima** (1 sesión; `docs/ux/valor-sin-veredictos.md` §3.3). Una pantalla de ejemplo con datos inventados ya no tiene lugar sin veredictos | 1 | Es el seguimiento consigo mismo, el valor que quedó | 5 y sesiones reales de Valentín |
 | 13b | **Verificar en producción** las correcciones del 12/10 noche (video a 720 px, magnitudes, regla de cobertura del brazo, comas) con un golpe del celular y medir la latencia en Standard con el video más grande | 0,25 | Cierra el ciclo de la prueba de hoy | push |
 | 14 | **Ensayo de la demo** (guion, un golpe por gesto subido, congelar) | 0,5 | Evita sorpresas | todo |
 | | **Total restante** | **13,25** | | |
@@ -248,7 +251,7 @@ sección plegable), el diseño nuevo de Registro/Ingreso del 8 (quedan los token
 
 | # | Qué | Ses. | Nota |
 | --- | --- | --- | --- |
-| 15 | Puntaje de rendimiento + comparación con la sesión anterior (E5.2) y, con ellos, **Evolución real** | 2 | Sin número hasta la 2.ª sesión ("Desde tu 2.ª sesión"); Evolución real con ≥ 2 sesiones comparables |
+| ~~15~~ | ~~Puntaje de rendimiento + comparación con la sesión anterior (E5.2)~~ **ELIMINADO el 13/10** (decisiones 035 y 036: sin veredictos, el puntaje 0–100 era la suma de juicios). La comparación consigo mismo la cubren el 5 y la Evolución mínima | — | Ver `docs/ux/valor-sin-veredictos.md` |
 | 16 | Reproductor sincronizado (video + curvas + picos) | 2 | El video con esqueleto ya existe y trae `overlay_info` para volver al eje del análisis |
 | 17 | Ángulos dibujados sobre el esqueleto | 0,5 | Solo con el punto 3 hecho |
 | 18 | **Paso B del recálculo** (medición definitiva, 8 h de pose de noche) | 1 + noche | Es "el resultado" de la tesis (plan de recálculo §3); no bloquea la demo |
@@ -270,3 +273,17 @@ sección plegable), el diseño nuevo de Registro/Ingreso del 8 (quedan los token
 | Un frente nuevo (las "investigaciones nuevas" de la regla del 9/10) | Se come el colchón | Se anota y se sigue |
 
 **Qué necesito de vos para arrancar el punto 1:** que hagas las partes A a D de la guía y me pases el **nombre del dominio** y un "listo" (o el síntoma). Mientras tanto avanzo con el Paso A.
+
+## 9. Después de la demo (orden de Valentín, 13/10/2026)
+
+Nada de esto entra antes del 28–30/10. Está en este orden porque cada punto prepara al siguiente. El fundamento de las decisiones está en `docs/decisiones/036-ningun-grupo-emite-veredicto-del-orden.md`.
+
+| # | Qué | Por qué en este lugar | Esfuerzo (estimado) |
+| --- | --- | --- | --- |
+| 1 | **Calibrar D (contraste del encuadre declarado con el visto) para drive y revés** con las poses de `backend/.cache/corpus-real-pose-b` | Hoy solo está calibrado con el saque (28 repeticiones). El revés agrega la pregunta de por qué el tronco primero en tres cuartos. Es barato (poses ya guardadas) | 0,5–1 |
+| 2 | **Criterio 3 con el tiempo real** (métrica (ii): instante del pico del tronco desde la separación máxima) | La métrica (ii) depende del tiempo; la (i) no. Hasta que no se recalcule, esa métrica no entra a Evolución | 0,5 de análisis + cómputo |
+| 3 | **`RESPALDO_POR_GRUPO` (columna (b)) con las cifras del Paso B** | Va después de 1 y 2 porque la tabla debe reflejar ambas. No cambia ningún veredicto: la suspensión (036) gana. El drive de perfil pasaría a cumplir (1a 0,83) | 0,25 |
+| 4 | **Validación con cintas de color** *(tentativa, solo si hay tiempo antes de la defensa; **sin diseñar**)* | Es la única forma de levantar la suspensión con una medición independiente de la pelvis con un solo teléfono. Cuatro colores en cresta ilíaca y acromion permiten seguir la rotación de la pelvis en el mismo video, sin el estimador. Hay una descripción preliminar en `docs/protocolo-saques-tres-cuartos.md`; **el diseño de la prueba (cuántas repeticiones, criterio de acuerdo, qué se considera "levanta la suspensión") se hace cuando se decida hacerla** | a definir |
+
+**Prueba tentativa — cintas de color:** *registrada, no diseñada.* Si se hace, su resultado decide grupo por grupo si la suspensión de la 036 se levanta (saque, drive o revés), y es independiente del orden
+de los puntos 1 a 3. Si no hay tiempo, queda como **trabajo futuro del Capítulo 7**, junto con la grabación simultánea desde dos ángulos.

@@ -6,6 +6,49 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-13 (sesión nueva) — Decisión 036 (ningún grupo emite veredicto), auditoría de pantallas y valor sin veredictos
+
+Retomada desde la bitácora. **No se tocó nada de Brevo ni del correo.** Sin commit ni push todavía (reinicia Render): lo decide Valentín.
+
+### 1. Decisión 036 — hecho (código, pruebas y documentos)
+
+- **Qué:** la suspensión de la 035 se extiende a **drive** (por encuadre: perfil tronco primero 7 de 8, tres cuartos cadera primero 3 de 3; Fisher p = 0,024) y a **revés** (por método: no sigue el patrón y
+  el orden de perfil cambia con el giro axial). **Los seis grupos quedan suspendidos.**
+- **Por qué hizo falta código:** el drive de perfil estaba sin veredicto **solo porque faltaba la referencia (a)**; con el Criterio 1 cumplido en el Paso B (1a 0,83) y una referencia agregada, habría emitido
+  "desvío leve" por la misma causa que la 035. Ahora la garantía es de la tabla: `Suspension` en `RespaldoGrupo`; `con_veredicto` es falso mientras haya suspensión, **sean cuales sean (a) y (b)**.
+- **Código:** `backend/app/ensamblar_reporte.py` (`Suspension`, texto y fundamento por gesto), motor **0.5.3** (`engine/version.py`; cambia el texto de las observaciones de drive y revés, sin cambio de contrato).
+  Pruebas: nueva `test_la_suspension_gana_aunque_haya_referencia_y_el_criterio_1_se_cumpla` (los seis grupos con (a) y (b) forzados en verdadero); suite rápida **535 passed**.
+- **No cambia:** `criterio1_cumplido` de drive y revés (queda con las cifras del Paso A; su revisión es el pendiente 3 de la lista de abajo) ni D para drive y revés.
+- **Documentos:** `docs/decisiones/036-…` (nueva) + índice, `especificacion-frontend.md` §1 (el "hoy solo el saque de perfil tiene veredicto" ya no vale), `CLAUDE.md` (motor 0.5.3).
+
+### 2. Auditoría pantalla por pantalla — hecho, sin programar (`docs/ux/auditoria-pantallas-13-10.md`)
+
+- **Lo que no esperaba:** (a) la **landing de producción promete "Veredicto"** y muestra "✓ Coincide / Orden esperado"; (b) **"Ver un reporte de ejemplo" manda a Ingreso** a un visitante (verificado), y detrás
+  del login hay un **reporte falso con "5 de 6 correctos"**; (c) **Evolución no existe como pantalla** (hay un componente huérfano con datos de abril); (d) **Perfil sigue siendo la maqueta** (otra persona,
+  planes y precios); (e) el reporte real es de **un solo golpe**: lo que la maqueta muestra de "6 golpes" depende de Cargar con varios golpes.
+- **Limitación declarada:** las pantallas con sesión las leí del código de `main`, no en producción (no inicié sesión ni creé cuentas); no verifiqué qué commit del frontend está desplegado.
+- **Orden propuesto** (núcleo ≈ 11,25 sesiones, mismo margen corto del plan): higiene de contenido 0,75 → Cargar con varios golpes 2,25 → vista de sesión 1,5 → Evolución mínima 1 → PDF e interruptor 1,5 →
+  Perfil y eliminar 2,5 → respaldo 1,25 → ensayo 0,5. **Se elimina del plan el puntaje (§8 #15) y la Evolución "de ejemplo" (#13).**
+
+### 3. Valor sin veredictos — propuesta (`docs/ux/valor-sin-veredictos.md`)
+
+- El sesgo es fijo por encuadre, así que **comparar contra uno mismo en el mismo encuadre lo cancela**. Se destaca: variación entre golpes, repetibilidad del orden (**si es el mismo, no cuál es el correcto**),
+  golpes medidos completos, magnitudes con su error y cambio entre sesiones **contra la variación propia**; vocabulario neutro y sin color de estado. Sin esto el reporte "parece vacío": el valor visible es la
+  cadena fotos reales → datos con confianza → Evolución con sesiones reales.
+
+### 4. Para después de la demo (en el orden de Valentín; `plan-mvp-punta-a-punta.md` §9)
+
+1. Calibrar D para drive y revés. 2. Criterio 3 con el tiempo real. 3. `RESPALDO_POR_GRUPO` (columna (b)). 4. **Al final y solo si hay tiempo antes de la defensa: validación con cintas de color — prueba
+tentativa, registrada, sin diseñar.**
+
+### Pendiente / siguiente
+
+- **Decide Valentín:** (a) si commitea y pushea (reinicia Render con el motor 0.5.3); (b) el orden de pantallas de la auditoría §3; (c) **grabar o recortar de los originales dos sesiones reales** de un gesto y un
+  encuadre para que Evolución muestre algo real; (d) mirar él las pantallas con sesión en producción una vez.
+- **Primer paso de código, con su OK:** higiene de contenido (landing sin veredicto, retirar `/reporte` falso, conteo de Biblioteca) ≈ 0,75 sesión.
+
+---
+
 ## 2026-10-13 (00:00) — PASO B COMPLETO (76 repeticiones) · cierre de la sesión
 
 **Estado final:** repositorio limpio y pusheado; nada en curso. Resumen completo en `docs/resultados/paso-b-resumen.md` (y `paso-b-saque.md` para el saque). Corrida: 131,9 min, commit `7c9535c`, motor 0.5.1.

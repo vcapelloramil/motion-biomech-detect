@@ -129,11 +129,36 @@ def test_la_tabla_de_respaldo_es_la_de_la_decision_031_tras_la_035():
     """(a) referencia del orden: solo el saque (tesis, tabla 4.8). (b) Criterio 1, par pelvis-torso, con el tiempo real y la
     tolerancia de 8,33 ms, sesión 2 (Paso A, docs/resultados/paso-a-resumen.md): solo el saque de perfil. Veredicto = (a) y (b)."""
     con_veredicto = {g for g, r in RESPALDO_POR_GRUPO.items() if r.con_veredicto}
-    assert con_veredicto == set()          # decisión 035: el orden del saque depende del encuadre, ningún grupo emite veredicto
-    assert {g for g, r in RESPALDO_POR_GRUPO.items() if r.depende_del_encuadre} == {("saque", "perfil"), ("saque", "tres_cuartos")}
+    assert con_veredicto == set()          # decisiones 035 y 036: ningún grupo emite veredicto
+    assert all(r.suspension is not None for r in RESPALDO_POR_GRUPO.values())     # y los seis están suspendidos, no solo "sin (a)"
+    assert {g for g, r in RESPALDO_POR_GRUPO.items() if r.depende_del_encuadre} == {
+        ("saque", "perfil"), ("saque", "tres_cuartos"), ("drive", "perfil"), ("drive", "tres_cuartos")
+    }
     assert {g for g, r in RESPALDO_POR_GRUPO.items() if r.referencia_orden} == {("saque", "perfil"), ("saque", "tres_cuartos")}
     assert {g for g, r in RESPALDO_POR_GRUPO.items() if r.criterio1_cumplido} == {("saque", "perfil")}
     assert len(RESPALDO_POR_GRUPO) == 6
+
+
+@pytest.mark.parametrize("grupo", sorted(RESPALDO_POR_GRUPO))
+def test_la_suspension_gana_aunque_haya_referencia_y_el_criterio_1_se_cumpla(grupo, seq_ordenada, seq_invertida, monkeypatch):
+    """Decisión 036: la garantía es de la tabla y no de que falte una referencia. Con (a) y (b) en verdadero el grupo sigue sin veredicto
+    (el caso del drive de perfil en el Paso B); solo levantar la suspensión a propósito lo habilita."""
+    import dataclasses
+
+    from app import ensamblar_reporte as e
+
+    gesto, encuadre = grupo
+    forzado = dataclasses.replace(RESPALDO_POR_GRUPO[grupo], referencia_orden="referencia de prueba", criterio1_cumplido=True)
+    assert forzado.con_veredicto is False
+    monkeypatch.setattr(e, "RESPALDO_POR_GRUPO", {**RESPALDO_POR_GRUPO, grupo: forzado})
+    for seq in (seq_ordenada, seq_invertida):
+        datos = _ensamblar(seq, gesto=gesto, encuadre=encuadre)
+        assert datos["secuenciacion"]["repeticiones"][0]["correcto"] is None
+        assert datos["secuenciacion"]["resumen"]["repeticiones_correctas"] == 0
+        assert not any(o["severidad"] in ("correcto", "desvio_leve", "alerta_de_carga") for o in datos["observaciones"])
+    # y levantar la suspensión es lo único que lo habilita
+    levantado = dataclasses.replace(forzado, suspension=None)
+    assert levantado.con_veredicto is True
 
 
 def test_saque_de_perfil_con_la_cadera_primero_es_correcto_y_cita_la_tesis(seq_ordenada, saque_perfil_con_veredicto):
@@ -159,10 +184,10 @@ def test_saque_de_perfil_con_el_tronco_primero_es_desvio_leve_y_nunca_alerta_de_
     ("gesto", "encuadre", "porque"),
     [
         ("saque", "tres_cuartos", "depende del encuadre"),  # decisión 035: tiene referencia, pero el orden cambia con el encuadre
-        ("drive", "perfil", "ni una validación propia"),  # sin referencia y (tras el Paso A) sin Criterio 1
-        ("reves", "tres_cuartos", "ni una validación propia"),
-        ("drive", "tres_cuartos", "ni una validación propia"),  # ninguna de las dos
-        ("reves", "perfil", "ni una validación propia"),
+        ("drive", "perfil", "depende del encuadre"),  # decisión 036: el drive sigue el patrón del saque
+        ("drive", "tres_cuartos", "depende del encuadre"),
+        ("reves", "tres_cuartos", "no es confiable con una sola cámara"),  # decisión 036: el revés no sigue el patrón
+        ("reves", "perfil", "no es confiable con una sola cámara"),
     ],
 )
 def test_sin_las_dos_condiciones_el_orden_se_documenta_sin_evaluar(seq_ordenada, gesto, encuadre, porque):
@@ -175,7 +200,8 @@ def test_sin_las_dos_condiciones_el_orden_se_documenta_sin_evaluar(seq_ordenada,
     par = datos["observaciones"][0]
     # La razón técnica (con la literatura y la validación propia) va en el detalle, no en el texto que lee el jugador.
     assert par["severidad"] == "sin_evaluar" and porque in par["fundamento"] and par["referencia"] is None
-    assert ("Todavía no" in par["texto"] and "puedas compararte en tus próximas sesiones" in par["texto"]) or         "cambia según desde dónde se grabó el golpe" in par["texto"]
+    assert "Por eso lo registramos sin evaluarlo" in par["texto"]
+    assert "cambia según desde dónde se grabó el golpe" in par["texto"] or "con una sola cámara" in par["texto"]
     assert "no_auditable" not in {o["severidad"] for o in datos["observaciones"]}
     assert not _obs(datos, "correcto") and not _obs(datos, "desvio_leve")
 
