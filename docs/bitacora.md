@@ -6,6 +6,18 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-12, 22:30 — SAQUE DEL PASO B TERMINADO · decisión 035 propuesta · drive y revés en cola
+
+- **Paso B del saque completo** (29 repeticiones, commit `33dd7d9`, motor 0.5.1): perfil **0 cadera primero / 8 tronco primero / 2 dentro**; tres cuartos **7 / 0 / 11**. Fisher p = 0,0002 (exploratorio). Detalle en
+  `docs/resultados/paso-b-saque.md`.
+- **"Contradicción" resuelta:** el golpe del celular es de `IMG_6391` (saque de **tres cuartos**, toma 02) subido como "perfil" (fecha de captura 25/9 15:23:05 y giro de hombros 59°, dentro de los 50–83° de tres cuartos y
+  fuera de los 26–42° del perfil). El reporte le aplicó el veredicto del grupo equivocado.
+- **Decisión 035 reescrita como propuesta** (B: suspender el veredicto del saque de perfil + D: contrastar el encuadre declarado con el visto). **Sin aplicar, a la espera del OK de Valentín.**
+- **Dominio:** `wrangler.jsonc` con `kinetiqtennis.me` (commit `67c1024`) y la parte de Valentín paso a paso en la guía (sección E). **Brevo:** dominio autenticado, sin poder generar la clave SMTP (Valentín reintenta).
+- **En curso:** Paso B de drive y revés (~2 h 10 min), lanzado al final de la sesión. Retomar con el mismo comando de la entrada de parada si se corta; guarda al terminar cada original.
+
+---
+
 ## 2026-10-12, tarde — ESTADO DE TRABAJO (retomar desde acá si se compacta la conversación)
 
 Pedido de Valentín: (1) terminar el SAQUE del Paso B (toma 02c incluida), drive y revés al final; (2) analizar la "contradicción" del golpe del celular; (3) proponer la 035 **sin aplicarla**; (4) pushear las 2 notas de
