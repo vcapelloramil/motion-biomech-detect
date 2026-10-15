@@ -641,3 +641,44 @@ def test_drive_y_reves_no_se_contrastan_hasta_calibrarlos(seq_larga):
     for gesto in ("drive", "reves"):
         datos = _ensamblar(seq_larga, gesto=gesto, encuadre="tres_cuartos")
         assert not any("parece grabado" in o["texto"] for o in datos["observaciones"])
+
+
+# --- nota del lado de la cámara (decisión 013, recomendación revisable) -----------------------------------------
+
+
+def test_la_camara_del_lado_de_la_mano_dominante_agrega_una_nota_neutra(seq_ordenada):
+    from app.ensamblar_reporte import NOTA_LADO_NO_VALIDADO
+
+    datos = _ensamblar(seq_ordenada, lado_camara="derecha", mano_dominante="derecha")
+    notas = [o for o in datos["observaciones"] if o["texto"] == NOTA_LADO_NO_VALIDADO]
+    assert len(notas) == 1
+    assert notas[0]["severidad"] == "sin_evaluar"  # neutra: "Solo registrado", sin color de estado
+    assert "todavía no está validado" in notas[0]["texto"]
+    assert "diagnóstic" not in notas[0]["texto"].lower()
+
+
+def test_el_lado_validado_no_agrega_nota(seq_ordenada):
+    from app.ensamblar_reporte import NOTA_LADO_NO_VALIDADO
+
+    for lado, mano in (("izquierda", "derecha"), ("derecha", "izquierda")):
+        datos = _ensamblar(seq_ordenada, lado_camara=lado, mano_dominante=mano)
+        assert not any(o["texto"] == NOTA_LADO_NO_VALIDADO for o in datos["observaciones"])
+
+
+def test_sin_lado_o_sin_mano_no_se_afirma_nada(seq_ordenada):
+    from app.ensamblar_reporte import nota_lado_de_camara
+
+    assert nota_lado_de_camara(None, "derecha") is None
+    assert nota_lado_de_camara("derecha", None) is None
+    assert nota_lado_de_camara("otro", "derecha") is None
+    datos = _ensamblar(seq_ordenada)  # los llamados anteriores no pasan el lado
+    assert datos["observaciones"]
+
+
+def test_la_nota_del_lado_no_cambia_ningun_numero(seq_ordenada):
+    sin = _ensamblar(seq_ordenada, lado_camara="izquierda", mano_dominante="derecha")
+    con = _ensamblar(seq_ordenada, lado_camara="derecha", mano_dominante="derecha")
+    assert sin["secuenciacion"] == con["secuenciacion"]
+    assert sin["metricas"] == con["metricas"]
+    assert len(con["observaciones"]) == len(sin["observaciones"]) + 1
+    Reporte.model_validate(con)  # el contrato lo admite sin cambios

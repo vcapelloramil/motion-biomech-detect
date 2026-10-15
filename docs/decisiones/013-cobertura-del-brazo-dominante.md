@@ -111,3 +111,14 @@ declarado `lado_camara = izquierda` y la mano dominante `derecha`. Consecuencias
 - **Trabajo futuro:** grabar del lado de la raqueta, con la salvedad de que cambia la comparabilidad con el corpus. Las sesiones nuevas opcionales usan el mismo lado del corpus (izquierda).
 - **Documentos corregidos:** `docs/protocolo-grabacion.md`, `docs/protocolo-sesiones-evolucion.md`, `docs/protocolo-saques-tres-cuartos.md` y `docs/resultados/brazo-por-golpe.md` decían "del lado de la
   raqueta" o "del lado del brazo dominante".
+
+### Recomendación revisable del lado de la cámara (15/10/2026, pedido de Valentín)
+
+- **El lado de la cámara es una RECOMENDACIÓN, no una restricción.** Se recomienda el lado **contrario a la mano dominante** (a la izquierda de un diestro) porque es **la condición validada con el corpus**:
+  orden, separación, ángulos, Criterios 1 y 3 y el contraste de encuadre se calibraron y midieron así.
+- **El sistema acepta los dos lados.** Cargar lo dice en una línea (el esquema marca "Recomendado" y no impide el otro lado) y la base admite `izquierda` y `derecha`. Cualquier usuario, o Valentín en la sesión del
+  lado de la raqueta (`docs/protocolo-sesion-lado-derecho.md`), puede grabar del otro lado.
+- **En el reporte,** si la cámara estuvo del lado de la mano dominante, una **nota neutra** ("Solo registrado", sin color de estado, sin cambiar ningún número): *"Este lado de cámara todavía no está validado; el
+  brazo puede verse mejor, pero cadera, tronco y encuadre se calibraron con el otro lado."* (motor 0.5.5, `nota_lado_de_camara` en `ensamblar_reporte.py`).
+- **Se revisa después de la sesión del lado de la raqueta:** si el detector de lado, el brazo sin oclusión y el orden de ese lado se comportan, la recomendación y la nota se pueden relajar o quitar; si no,
+  quedan. La revisión es una decisión nueva, con los resultados A1 a A4 del protocolo a la vista.

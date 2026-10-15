@@ -54,6 +54,8 @@ del motor"); el discriminador práctico es la ``version_contrato`` del propio re
 - 0.5.4 — Decisión 037 (13/10/2026): un golpe con cadera y tronco empatados a la resolución del video está **medido** (no "no auditable"):
   la observación pasa a "sin diferencia medible" (contrato 1.4); un golpe está medido si los picos de cadera y tronco se midieron con
   confianza suficiente; los picos que no se pudieron medir (el brazo, sobre todo) llevan su motivo en palabras simples.
+- 0.5.5 — Nota del lado de la cámara (15/10/2026, decisión 013): si la cámara estuvo del lado de la mano dominante, el reporte agrega una
+  observación neutra ("este lado de cámara todavía no está validado…"). Se acepta cualquier lado; no cambia ningún número. Sin cambio de contrato.
 """
 
-__version__ = "0.5.4"
+__version__ = "0.5.5"

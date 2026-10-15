@@ -512,8 +512,12 @@ function CargarPage() {
             </div>
             <p id="ayuda-encuadre" className="mt-2 text-xs text-muted-foreground">
               Elegí el que corresponde a donde estaba la cámara, y mantenelo en todas tus sesiones: tus resultados solo se pueden comparar
-              entre sesiones grabadas desde el mismo lugar. El esquema muestra la cámara del lado contrario a la mano dominante
-              {recomendado ? ` (a la ${recomendado} del jugador)` : " (a la izquierda de un jugador diestro)"}, que es el lado recomendado.
+              entre sesiones grabadas desde el mismo lugar.
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              <span className="font-semibold text-foreground">Recomendado:</span> la cámara del lado contrario a la mano dominante
+              {recomendado ? ` (a la ${recomendado} del jugador)` : " (a la izquierda de un jugador diestro)"}. Es la condición con la que
+              se calibró y validó el sistema. También se puede grabar del otro lado.
             </p>
           </div>
 
@@ -521,19 +525,24 @@ function CargarPage() {
             <label htmlFor="lado" className="text-sm font-medium">Lado de la cámara</label>
             <select id="lado" className={CAMPO} value={lado} onChange={(e) => setLado(e.target.value)} aria-describedby="ayuda-lado">
               <option value="" disabled>Elegí una opción</option>
-              {LADOS_CAMARA.map((x) => <option key={x.valor} value={x.valor}>{x.etiqueta}</option>)}
+              {LADOS_CAMARA.map((x) => (
+                <option key={x.valor} value={x.valor}>
+                  {x.etiqueta}
+                  {x.valor === recomendado ? " (recomendado)" : ""}
+                </option>
+              ))}
             </select>
             <p id="ayuda-lado" className="mt-1 text-xs text-muted-foreground">
               Es el lado del jugador, no el tuyo: «a la derecha del jugador» es del lado de su mano derecha.
               {recomendado
-                ? ` Recomendado: a la ${recomendado} del jugador (el lado contrario a su mano dominante). Usá siempre el mismo lado para poder comparar tus sesiones.`
-                : " Recomendado: el lado contrario a la mano dominante del jugador. Usá siempre el mismo lado para poder comparar tus sesiones."}
+                ? ` Recomendado: a la ${recomendado} del jugador (el lado contrario a su mano dominante), que es el validado. Usá siempre el mismo lado para poder comparar tus sesiones.`
+                : " Recomendado: el lado contrario a la mano dominante del jugador, que es el validado. Usá siempre el mismo lado para poder comparar tus sesiones."}
             </p>
             {esLadoDeLaMano(lado, manoJugador) && (
               <p role="status" className="mt-2 flex items-start gap-2 text-xs text-muted-foreground">
                 <Info className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
-                Elegiste el lado de la mano dominante: el brazo que golpea queda más cerca de la cámara y estas sesiones no se pueden comparar con
-                las grabadas del otro lado.
+                Podés grabar de este lado. Este lado de cámara todavía no está validado: el brazo puede verse mejor, pero cadera, tronco y
+                encuadre se calibraron con el otro lado. El reporte lo indica, y estas sesiones no se comparan con las grabadas del otro lado.
               </p>
             )}
           </div>

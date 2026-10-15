@@ -272,7 +272,7 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
         admin.table("videos")
         .select(
             "id, usuario_id, ruta_almacenamiento, "
-            "sesiones(gesto, encuadre, modo_captura, atletas(mano_dominante))"
+            "sesiones(gesto, encuadre, lado_camara, modo_captura, atletas(mano_dominante))"
         )
         .eq("id", video_id)
         .single()
@@ -285,6 +285,7 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
     modo_captura = video["sesiones"]["modo_captura"]
     gesto = video["sesiones"]["gesto"]
     encuadre = video["sesiones"]["encuadre"]
+    lado_camara = video["sesiones"].get("lado_camara")  # solo viaja al reporte como nota: no entra en ningún cálculo
 
     # modo_captura_intentado (decisión 022): con qué declaración se intenta, para saber después si el
     # usuario la corrigió antes de reintentar.
@@ -527,6 +528,8 @@ def procesar_video(admin, video_id: str) -> dict[str, Any]:
                 resultados=resultados,
                 resumen=resumen,
                 lado_dominante=lado_dominante,
+                lado_camara=lado_camara,
+                mano_dominante=mano_dominante,
                 brazo_via="codo",
                 metodo_segmentacion="ancla_torso",
                 regularizacion=regularizacion,

@@ -134,6 +134,7 @@ Supabase (con service_role): reporte JSON (contrato 1.4), estados, tiempos de co
 | 0.5.2 | Decisión 035: el saque no emite veredicto; contraste del encuadre declarado con el visto. | 1.3 |
 | 0.5.3 | Decisión 036: ningún grupo emite veredicto. | 1.3 |
 | 0.5.4 | Decisión 037: el empate es "golpe medido"; el pico que falta lleva su motivo. | 1.4 |
+| 0.5.5 | Nota neutra cuando la cámara estuvo del lado de la mano dominante (lado todavía no validado; decisión 013). *(15/10/2026; solo en `respaldo-13-10` hasta publicar.)* | 1.4 |
 
 ---
 

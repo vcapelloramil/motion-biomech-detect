@@ -503,6 +503,34 @@ def _obs_brazo(resultados: list[ResultadoRepeticion], escala: bool) -> dict[str,
     }
 
 
+NOTA_LADO_NO_VALIDADO = (
+    "Este lado de cámara todavía no está validado; el brazo puede verse mejor, pero cadera, tronco y encuadre se calibraron con el otro lado."
+)
+
+
+def nota_lado_de_camara(lado_camara: str | None, mano_dominante: str | None) -> dict[str, Any] | None:
+    """Nota neutra cuando la cámara estuvo del lado de la mano dominante (el lado de la raqueta).
+
+    Todo lo calibrado y medido (orden, separación, Criterios 1 y 3, contraste de encuadre) se hizo con la cámara del lado contrario
+    a la mano dominante (a la izquierda de un diestro; decisión 013). El otro lado **se acepta**, pero todavía no está validado: la
+    nota no bloquea ni cambia ningún número. Sin la mano o sin el lado no se afirma nada (``None``).
+    """
+    if lado_camara not in ("derecha", "izquierda") or mano_dominante not in ("derecha", "izquierda"):
+        return None
+    if lado_camara != mano_dominante:
+        return None
+    return {
+        "severidad": "sin_evaluar",
+        "texto": NOTA_LADO_NO_VALIDADO,
+        "fundamento": (
+            f"La cámara estuvo a la {lado_camara} del jugador, el lado de su mano dominante ({mano_dominante}). "
+            "Las mediciones propias de referencia se hicieron con la cámara del lado contrario (decisión 013); "
+            "con este lado no hay una calibración propia. Es una recomendación revisable, no una restricción."
+        ),
+        "referencia": None,
+    }
+
+
 def _observaciones(
     gesto: str,
     encuadre: str,
@@ -510,6 +538,7 @@ def _observaciones(
     escala_temporal_conocida: bool,
     fps_real: float | None = None,
     aviso_encuadre: dict[str, Any] | None = None,
+    nota_lado: dict[str, Any] | None = None,
 ) -> list[dict[str, Any]]:
     if not resultados:
         return [
@@ -526,6 +555,8 @@ def _observaciones(
     ]
     if aviso_encuadre is not None:
         obs.insert(0, aviso_encuadre)
+    if nota_lado is not None:
+        obs.append(nota_lado)
     if not escala_temporal_conocida:
         obs.append(
             {
@@ -633,6 +664,8 @@ def ensamblar_reporte(
     resultados: list[ResultadoRepeticion],
     resumen: ResumenSecuenciacion,
     lado_dominante: str,
+    lado_camara: str | None = None,
+    mano_dominante: str | None = None,
     brazo_via: str = "codo",
     metodo_segmentacion: str = "ancla_torso",
     regularizacion: dict | None = None,
@@ -823,7 +856,15 @@ def ensamblar_reporte(
         },
         "metricas": metricas,
         "comparacion_propia": None,
-        "observaciones": _observaciones(gesto, encuadre, resultados, escala_temporal_conocida, fps_real, aviso_encuadre),
+        "observaciones": _observaciones(
+            gesto,
+            encuadre,
+            resultados,
+            escala_temporal_conocida,
+            fps_real,
+            aviso_encuadre,
+            nota_lado_de_camara(lado_camara, mano_dominante),
+        ),
         # Rutas en Storage (no URLs) de lo que generó engine/render.py; {} = no generado (nunca "cero").
         "artefactos": artefactos or {},
     }
