@@ -1,8 +1,8 @@
-# Decisión 038 — PROPUESTA: detección automática, en la carga, del tipo de golpe, del encuadre y del lado de la cámara
+# Decisión 038 — Detección automática, en la carga, del tipo de golpe, del encuadre y del lado de la cámara (diseño A aprobado; implementación después de la demo)
 
 **Fecha:** 15 de octubre de 2026
-**Estado:** **PROPUESTA, sin aplicar y sin programar** (sugerencia del tutor, pedida por Valentín). Nada de esto está implementado; las cifras de acierto **no se midieron** todavía (**NO MEDIDO**): lo
-que sigue es el diseño de cómo medirlas.
+**Estado:** **APROBADA en lo esencial por Valentín el 15/10/2026** (ver "Aprobación y pre-registro"): diseño **A**, criterio de aceptación del 5 % y del 20 % como **pre-registro** e implementación **después de la demo**.
+Nada de esto está implementado; las cifras de acierto **no se midieron** todavía (**NO MEDIDO**): lo que sigue es el diseño de cómo medirlas.
 **Afecta a (si se aprueba):** `docs/ux/especificacion-frontend.md` §5 (Cargar) · `backend/app/engine/encuadre.py` · `backend/app/procesar_video.py` · contrato del reporte (1.4 → 1.5, aditivo) ·
 `backend/app/consistencia.py` y `routers/evolucion.py` · una migración aditiva · decisiones 013, 035 y 036 · plan §9
 **Protocolo de datos nuevos que la acompaña:** `docs/protocolo-sesion-lado-derecho.md`
@@ -31,6 +31,33 @@ y agregan tres preguntas a una pantalla que ya pide jugador, fecha y modo de cap
 | Regla "hombro más cercano" por la `z` relativa de los hombros, en la ventana ±0,3 s del gesto, sobre 84 clips | "izquierda" en **74 de 84 (88 %)**; **falla en el revés de tres cuartos: 9 de 12 dan "derecha"** (el giro del cuerpo adelanta el hombro dominante); saque 36/36 y drive 24/24 bien | `docs/resultados/pose-oclusion-lado-dominante.json` (campo `lado_cercano`; tabulado de nuevo, no re-medido) |
 | Contraste de encuadre D (giro de la línea de hombros en la preparación, de 0,8 a 0,3 s antes del pico del tronco) | calibrado **solo con el saque**: perfil 26–42° (mediana 35°), tres cuartos 50–83° (mediana 56°); verificado con 28 repeticiones de la misma muestra: 0 avisos falsos, 0 sin afirmar | `docs/resultados/paso-b-saque.md`, decisión 035 |
 | Costo de procesar un golpe | ~0,18 s por fotograma en Render Standard (117–147 s por golpe de 3–4 s); la pose es la mayor parte | `docs/resultados/criterio4-latencia.md` |
+
+## Aprobación y pre-registro (15/10/2026)
+
+**Aprobado por Valentín:**
+
+1. **Diseño A** (la detección corre dentro del análisis que ya existe, "propone después"); el diseño B (pasada rápida previa en la carga) queda para cuando la validación lo justifique.
+2. **Criterio de aceptación:** por campo, **error ≤ 5 % entre los determinados** y **"no determinado" ≤ 20 %**. Si un campo no lo cumple, queda como pregunta al usuario, sin propuesta.
+3. **La implementación va DESPUÉS de la demo (28–30/10).** Antes de la demo, **solo si el 24/10 el núcleo está completo: extender D (el contraste de encuadre) a drive y revés.** Nada de la pantalla de Cargar se toca antes.
+4. **La sesión del lado derecho** (`docs/protocolo-sesion-lado-derecho.md`) la graba Valentín **cuando el clima lo permita**; avisa. Sin esa sesión no se programa (c).
+
+**Quedan abiertas** (se proponen como están hasta que Valentín diga otra cosa): un golpe que contradice a su sesión **se mueve a pedido, nunca solo**; y el lado de la cámara **entra en la clave de la serie de Evolución**.
+
+### Pre-registro (fijado ANTES de ver resultados de detección)
+
+Esto se escribe el 15/10/2026, **antes de calcular cualquier acierto**. Lo único visto de la detección es la tabla del campo `lado_cercano` de `pose-oclusion-lado-dominante.json` (74 de 84 en la ventana del gesto), que ya
+estaba en el repositorio y **no es** la regla propuesta (la propuesta mira la preparación y exige margen). **No se reajusta nada después de ver la evaluación.**
+
+| Qué se fija | Valor |
+| --- | --- |
+| Unidad | la **repetición**; los umbrales se ajustan en **una sesión** y se evalúan en **la otra** (24/9 ↔ 25/9) y, para el lado, en la sesión nueva del lado derecho |
+| "Determinado" | el sistema afirma un valor; "no determinado" = no cumple el margen o la fracción de fotogramas |
+| Error | `errores / determinados` (los "no determinados" no cuentan como error ni como acierto; se informan aparte) |
+| **Aceptación** | error ≤ 5 % **y** no determinado ≤ 20 %, **por campo** y **por gesto** donde corresponda |
+| Lado: regla | mediana de `z(hombro derecho) − z(hombro izquierdo)` en la preparación (de 0,8 a 0,3 s antes del pico del tronco); afirma solo si la **fracción de fotogramas con el mismo signo ≥ 0,8** y `|mediana|` supera un margen que se **fija en la sesión de ajuste** como el menor valor que da **0 errores** en esa sesión |
+| Encuadre: regla | giro de la línea de hombros en la preparación (la definición de D); por gesto, **perfil ≤ P** y **tres cuartos ≥ T** con P y T fijados en la sesión de ajuste como los extremos observados (como en el saque: 42° y 50°); entre los dos, "no determinado" |
+| Gesto: regla | saque = muñeca dominante sobre la nariz y codo sobre el hombro sostenido en la preparación; drive y revés = **la que de las tres candidatas** (sentido del giro axial con la mano, distancia entre muñecas, lado del eje del tronco) **dé 0 errores en la sesión de ajuste**; si ninguna, se declara que no se pudo y el campo se pregunta |
+| Qué se informa | matriz de confusión, acierto con Wilson de 95 %, cobertura, y las etiquetas dudosas revisadas a mano (con el motivo) |
 
 ## Propuesta por campo
 
@@ -121,14 +148,16 @@ esta semana, con un ritmo observado de 1 a 1,5 sesiones por día y la regla de r
 2. **Después de la demo, en este orden:** sesión del lado derecho → (c) → diseño A de (a) y (b) en la carga → recién entonces evaluar B.
 3. **No se recomienda** meter (a) ni la pantalla nueva de Cargar antes del 28/10: es la pantalla por la que pasa todo, y un error ahí rompe la demo.
 
-## Decisiones que necesito de Valentín y del tutor
+## Decisiones (estado al 15/10/2026)
 
-1. ¿Se empieza por **A** (propone después) y B queda para cuando la validación lo justifique? *(recomendado)*
-2. ¿Criterio de aceptación del 5 % de error y 20 % de "no determinado"?
-3. ¿Un golpe que contradice a su sesión se **mueve a pedido** (propuesto) o se reagrupa solo? *(propuesto: nunca solo)*
-4. ¿El lado de la cámara entra en la clave de la serie de Evolución?
-5. ¿Se graba la sesión del lado derecho **antes** de programar (c)? *(recomendado: sí; el protocolo está listo)*
-6. ¿Qué parte entra antes de la demo? *(propuesto: solo el banco y (b))*
+| # | Pregunta | Estado |
+| --- | --- | --- |
+| 1 | ¿Se empieza por A (propone después)? | **Aprobado** |
+| 2 | ¿Criterio de aceptación del 5 % de error y 20 % de "no determinado"? | **Aprobado, como pre-registro** |
+| 3 | ¿Un golpe que contradice a su sesión se mueve a pedido o se reagrupa solo? | **Abierta** (propuesto: a pedido, nunca solo) |
+| 4 | ¿El lado de la cámara entra en la clave de la serie de Evolución? | **Abierta** (propuesto: sí) |
+| 5 | ¿Se graba la sesión del lado derecho antes de programar (c)? | **Sí**: la graba Valentín cuando el clima lo permita |
+| 6 | ¿Qué parte entra antes de la demo? | **Solo D para drive y revés, y solo si el 24/10 el núcleo está completo** |
 
 ## Riesgos
 

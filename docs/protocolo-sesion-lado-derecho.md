@@ -46,6 +46,31 @@ la detección de lado y de tipo de golpe con los tres gestos. El revés además 
 - **Tres cuartos = por delante y en diagonal:** la cámara entre el jugador y la red, a 45° de la dirección del golpe, de modo que se lo vea un poco de frente (el esquema de Cargar lo dibuja así).
 - **Izquierda** y **derecha** son las del **jugador**, no las tuyas detrás de la cámara.
 
+## Variante: en vez de mover la cámara, girar al jugador (aprobada por Valentín el 15/10/2026)
+
+Se deja la cámara **fija en su marca de la izquierda** (la del corpus) y se **gira al jugador** en su marca: la cámara queda del lado de la raqueta sin tocar el trípode. Ventajas: el trípode no se mueve (misma distancia, misma altura,
+mismo fondo y misma luz sobre el lente en todos los bloques) y los cambios de bloque son más rápidos (≈ 1 h 15 min el mínimo).
+
+| Bloque | Cámara (fija, a la izquierda de la posición original) | El jugador respecto de la posición del corpus | Resultado |
+| --- | --- | --- | --- |
+| **I-P**, **I-3/4** (controles) | sin cambios | **sin girar**: de cara a la red, como en el corpus | cámara a su **izquierda**, perfil y tres cuartos por delante |
+| **D-P** (perfil, derecha) | sin cambios | **gira 180°** | cámara a su **derecha**, perfil (90°) |
+| **D-3/4** (tres cuartos por delante, derecha) | sin cambios | **gira 90° hacia su izquierda** (antihorario visto desde arriba) | cámara a su **derecha**, en diagonal, **por delante** |
+
+**Por qué 90° y no 180° en tres cuartos:** la cámara está en diagonal por delante de la izquierda (a −45° de la dirección del golpe). Girar 180° la deja a +135°, es decir **por detrás** y a la derecha; girar 90° hacia la izquierda la
+deja a **+45°**, por delante y a la derecha. En perfil la cámara está a −90°; girar 180° la deja a +90°.
+
+**Controles antes de cada bloque (30 segundos, con un saque de prueba grabado y mirado en el teléfono):**
+
+1. Que la cámara vea al jugador **un poco de frente** (no de espaldas) y **del lado de la raqueta**: en el bloque derecha-perfil, el hombro y el brazo que saca quedan del lado de la cámara; en el de tres cuartos por delante, se le ve el pecho y el hombro de la raqueta.
+2. **Sin contraluz:** el sol no puede estar detrás del jugador respecto de la cámara. Con el jugador girado el sol le cae del otro lado del cuerpo (una sombra distinta): anotarlo en la ficha.
+3. **Fondo parejo** detrás del jugador (la cámara no cambió, pero el jugador ahora se recorta contra la misma pared o cerco: confirmar que no se mezcla con la ropa ni con las cintas).
+4. **Espacio y seguridad:** el saque sale hacia otra dirección; comprobar que hay lugar para el lanzamiento y el recorrido de la raqueta, y que la pelota (si se usa) no va hacia la cámara ni hacia gente.
+5. **Marcas del piso para los pies:** una por orientación (0°, 180°, 90° a la izquierda), para repetir la posición sin mirar.
+
+**Efectos a anotar y a declarar** (no son neutros): el jugador ya no saca hacia la red ni hacia el mismo lado de la cancha (la dirección del golpe cambió; el encuadre se define respecto del golpe, no de la red); la luz sobre el cuerpo cambia; y
+el cansancio de girar y volver. Por eso los controles de la izquierda son del **mismo día** y alternados.
+
 ## Cintas de color
 
 - **Cuatro cintas mate de ~3–4 cm, de cuatro colores distintos entre sí y distintos de la ropa y del fondo:** cresta ilíaca izquierda y derecha (arriba de la cadera, a los costados) y acromion izquierdo y derecho (la punta
@@ -66,7 +91,7 @@ la detección de lado y de tipo de golpe con los tres gestos. El revés además 
 | Tarea | Tiempo |
 | --- | --- |
 | Preparación (marcas, cintas, fotos de prueba) | 20–30 min |
-| Grabación del mínimo (28 saques con cambios de lugar) | ≈ 1 h 30 min |
+| Grabación del mínimo (28 saques; con la variante de girar al jugador ≈ 1 h 15 min, moviendo el trípode ≈ 1 h 30 min) | ≈ 1 h 15 min – 1 h 30 min |
 | Recomendado (+12 golpes de fondo) | ≈ +30 min |
 | Recortar y guardar originales | 30–45 min |
 | Cómputo de pose (de noche, ~5 min por golpe en esta PC) | ≈ 2 h 30 min (28) a ≈ 3 h 30 min (40) |

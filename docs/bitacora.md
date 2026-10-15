@@ -6,6 +6,20 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-15 (noche) — Push a main, 0.5.5 en producción, 038 aprobada y guion de la demo
+
+- **`main` publicado:** `56a13c1..a377e71` (avance rápido; sin análisis en curso al momento del push). **`/health` = 0.5.5 verificado tres veces seguidas**; `GET /evolucion` y `DELETE /cuenta` responden 401 sin token (rutas nuevas vivas).
+  Falta que Valentín **republique el frontend** (`bun run build` y `wrangler deploy`).
+- **Decisión 038 aprobada por Valentín:** diseño **A**, criterio **≤ 5 % de error y ≤ 20 % de "no determinado"** como **pre-registro** (fijado antes de ver resultados de detección), implementación **después de la demo**; antes de
+  la demo **solo si el 24/10 el núcleo está completo: extender D a drive y revés**. Abiertas: mover un golpe a pedido y el lado en la clave de Evolución. Protocolo del lado derecho: **variante de girar al jugador** en vez de mover la
+  cámara (perfil 180°; tres cuartos por delante 90° hacia su izquierda, porque con 180° queda por detrás), con controles previos y sin contraluz.
+- **Hallazgo de la base (solo lectura):** todas las sesiones están en la cuenta B; **A, C y D no tienen sesiones**; hay **15 archivos huérfanos (245 MB)** en `prueba-iphone` de la cuenta A (restos de la página de prueba del iPhone);
+  versiones del motor mezcladas (0.4.1, 0.5.0, 0.5.2, 0.5.3 × 12, 0.5.4) y dos sesiones por fecha: hay que limpiar antes de la demo. `tools/respaldo/estado_de_la_base.py` (solo lectura) lo verifica.
+- **`docs/demo-guion.md`** (paso 8, sin programar): guion de ~13 min con lo que hay que decir de los límites, preguntas esperables, checklist de D−1, plan de limpieza ordenado y plan B. **Falta:** cortar un drive y un revés del corpus,
+  probar "Eliminar mi cuenta" con una cuenta descartable, ensayar con cronómetro y grabar el video de respaldo.
+
+---
+
 ## 2026-10-15 — Publicación preparada (sin push a main), Perfil real, esquema de encuadre, nota del lado, correo funcionando, propuesta 038 y paso 7
 
 **`main` y `origin/main` no se tocaron:** todo está en `respaldo-13-10`, a la espera del OK de Valentín para el push (cada push a `main` redeploya Render).
