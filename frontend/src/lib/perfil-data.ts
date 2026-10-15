@@ -1,5 +1,12 @@
 import { API_URL, getSupabase } from "@/lib/supabase";
-import { urlCuenta, CONFIRMACION_ELIMINAR, armarExportacion, type DatosJugador } from "@/lib/perfil";
+import {
+  urlCuenta,
+  CONFIRMACION_ELIMINAR,
+  armarExportacion,
+  resumirActividad,
+  type ActividadDelUsuario,
+  type DatosJugador,
+} from "@/lib/perfil";
 
 /** Lecturas y escrituras del Perfil: directo a Supabase con la sesión del usuario (RLS) y, para eliminar la cuenta, la API. */
 
@@ -25,6 +32,15 @@ export async function leerJugadores(): Promise<JugadorLeido[]> {
     .order("creado_en", { ascending: true });
   if (error) throw error;
   return (data ?? []) as JugadorLeido[];
+}
+
+/** Cuántas sesiones y golpes tiene el usuario y cuántos se midieron (la RLS limita a lo propio). */
+export async function leerActividad(): Promise<ActividadDelUsuario> {
+  const { data, error } = await cliente()
+    .from("sesiones")
+    .select("id, videos(id, estado, reportes_biomecanicos(reporte))");
+  if (error) throw error;
+  return resumirActividad((data ?? []) as never);
 }
 
 /** Guarda nombre y rol. El nombre también va a los metadatos de la sesión, que es de donde lo lee la cabecera. */

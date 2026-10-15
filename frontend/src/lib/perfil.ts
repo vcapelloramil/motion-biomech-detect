@@ -5,6 +5,7 @@
 
 import { MANOS, NIVELES, esValor } from "@/lib/carga";
 import { esRol } from "@/lib/auth-errores";
+import { contarGolpes, type EstadoVideo } from "@/lib/estado-video";
 
 /** La palabra que hay que escribir para eliminar la cuenta. El servidor exige la misma (`routers/cuenta.py`). */
 export const CONFIRMACION_ELIMINAR = "ELIMINAR";
@@ -86,4 +87,30 @@ export function armarExportacion(entrada: EntradaExportacion, generadoEn: string
 
 export function nombreArchivoExportacion(generadoEn: string): string {
   return `kinetiq-mis-datos-${generadoEn.slice(0, 10)}.json`;
+}
+
+export type ActividadDelUsuario = {
+  sesiones: number;
+  golpes: number;
+  medidos: number;
+  no_medibles: number;
+  en_analisis: number;
+};
+
+/**
+ * Lo que el usuario cargó, contado de sus propias sesiones (sin inventar nada): sesiones, golpes cargados y, de ellos, cuántos se
+ * midieron, cuántos no se pudieron medir y cuántos siguen en análisis. Usa la misma definición de "golpe medido" que la Biblioteca.
+ */
+export function resumirActividad(
+  sesiones: readonly { videos?: readonly { estado: EstadoVideo; reportes_biomecanicos?: unknown }[] | null }[],
+): ActividadDelUsuario {
+  const videos = sesiones.flatMap((s) => s.videos ?? []);
+  const c = contarGolpes(videos);
+  return {
+    sesiones: sesiones.length,
+    golpes: videos.length,
+    medidos: c.medidos,
+    no_medibles: c.no_medibles,
+    en_analisis: c.en_analisis,
+  };
 }

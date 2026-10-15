@@ -16,12 +16,14 @@ import {
   eliminarMiCuenta,
   guardarJugador,
   guardarPerfil,
+  leerActividad,
   leerJugadores,
   leerMisDatos,
   leerPerfil,
   type JugadorLeido,
   type PerfilLeido,
 } from "@/lib/perfil-data";
+import type { ActividadDelUsuario } from "@/lib/perfil";
 
 export const Route = createFileRoute("/profile")({
   head: () => ({
@@ -48,15 +50,17 @@ function PerfilPage() {
   const [perfil, setPerfil] = useState<PerfilLeido | null | undefined>(undefined);
   const [jugadores, setJugadores] = useState<JugadorLeido[]>([]);
   const [errorLectura, setErrorLectura] = useState(false);
+  const [actividad, setActividad] = useState<ActividadDelUsuario | null>(null);
 
   useEffect(() => {
     if (cargando) return;
     let activo = true;
-    Promise.all([leerPerfil(), leerJugadores()])
-      .then(([p, j]) => {
+    Promise.all([leerPerfil(), leerJugadores(), leerActividad().catch(() => null)])
+      .then(([p, j, a]) => {
         if (!activo) return;
         setPerfil(p);
         setJugadores(j);
+        setActividad(a);
       })
       .catch(() => {
         if (!activo) return;
@@ -100,6 +104,7 @@ function PerfilPage() {
 
       <div className="mt-10 space-y-8">
         <DatosPersonales perfil={perfil} alGuardar={setPerfil} />
+        <Actividad actividad={actividad} />
         <Jugadores jugadores={jugadores} alCambiar={setJugadores} />
         <MisDatos />
         <Eliminar
@@ -120,6 +125,45 @@ function PerfilPage() {
         reemplaza la evaluación de un profesional. Qué datos se guardan y para qué: <Link to="/privacidad" className="underline underline-offset-4">Privacidad</Link>.
       </p>
     </main>
+  );
+}
+
+function Actividad({ actividad }: { actividad: ActividadDelUsuario | null }) {
+  const datos: { etiqueta: string; valor: number }[] = actividad
+    ? [
+        { etiqueta: "Sesiones", valor: actividad.sesiones },
+        { etiqueta: "Golpes cargados", valor: actividad.golpes },
+        { etiqueta: "Golpes medidos", valor: actividad.medidos },
+      ]
+    : [];
+  return (
+    <section aria-labelledby="actividad" className={TARJETA}>
+      <h2 id="actividad" className="font-display text-xl font-bold">Tu actividad</h2>
+      {!actividad ? (
+        <p className="mt-2 text-sm text-muted-foreground">No pudimos leer tu actividad ahora.</p>
+      ) : actividad.sesiones === 0 ? (
+        <p className="mt-2 text-sm text-muted-foreground">
+          Todavía no cargaste ninguna sesión. <Link to="/upload" className="underline underline-offset-4">Cargar golpes</Link>
+        </p>
+      ) : (
+        <>
+          <dl className="mt-4 grid grid-cols-3 gap-4">
+            {datos.map((d) => (
+              <div key={d.etiqueta} className="rounded-2xl border border-border p-4">
+                <dd className="font-display text-3xl font-extrabold">{d.valor}</dd>
+                <dt className="mt-1 text-xs text-muted-foreground">{d.etiqueta}</dt>
+              </div>
+            ))}
+          </dl>
+          {(actividad.no_medibles > 0 || actividad.en_analisis > 0) && (
+            <p className="mt-3 text-xs text-muted-foreground">
+              {actividad.no_medibles > 0 && `${actividad.no_medibles} no se pudieron medir. `}
+              {actividad.en_analisis > 0 && `${actividad.en_analisis} siguen en análisis.`}
+            </p>
+          )}
+        </>
+      )}
+    </section>
   );
 }
 
@@ -299,7 +343,7 @@ function MisDatos() {
 
   return (
     <section aria-labelledby="mis-datos" className={TARJETA}>
-      <h2 id="mis-datos" className="font-display text-xl font-bold">Tus datos</h2>
+      <h2 id="mis-datos" className="font-display text-xl font-bold">Una copia de tus datos</h2>
       <p className="mt-2 text-sm text-muted-foreground">
         Descargá una copia de lo que KinetiQ guarda de vos: tu cuenta, tus jugadores y tus sesiones con el reporte de cada golpe, en un archivo JSON.
         No incluye los archivos de video ni las imágenes.

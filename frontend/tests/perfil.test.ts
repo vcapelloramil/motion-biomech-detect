@@ -8,6 +8,7 @@ import {
   problemaDelJugador,
   problemaDelNombre,
   problemaDelPerfil,
+  resumirActividad,
   urlCuenta,
 } from "../src/lib/perfil";
 
@@ -92,5 +93,33 @@ describe("descargar mis datos", () => {
 
   test("nombre del archivo con la fecha", () => {
     expect(nombreArchivoExportacion("2026-10-14T03:00:00.000Z")).toBe("kinetiq-mis-datos-2026-10-14.json");
+  });
+});
+
+describe("actividad del usuario (Perfil)", () => {
+  test("sin sesiones, todo en cero", () => {
+    expect(resumirActividad([])).toEqual({ sesiones: 0, golpes: 0, medidos: 0, no_medibles: 0, en_analisis: 0 });
+  });
+
+  test("cuenta sesiones, golpes cargados, medidos, no medibles y en análisis", () => {
+    const medido = {
+      reporte: {
+        secuenciacion: {
+          repeticiones: [
+            { picos: [{ segmento: "pelvis", instante_s: 1, confianza: 0.9 }, { segmento: "torso", instante_s: 1.02, confianza: 0.9 }] },
+          ],
+        },
+      },
+    };
+    const r = resumirActividad([
+      { videos: [{ estado: "completado", reportes_biomecanicos: medido }, { estado: "fallido" }, { estado: "encolado" }] },
+      { videos: [] },
+      { videos: null },
+    ]);
+    expect(r.sesiones).toBe(3);
+    expect(r.golpes).toBe(3);
+    expect(r.medidos).toBe(1);
+    expect(r.no_medibles).toBe(1);
+    expect(r.en_analisis).toBe(1);
   });
 });
