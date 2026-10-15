@@ -6,6 +6,49 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-15 — Publicación preparada (sin push a main), Perfil real, esquema de encuadre, nota del lado, correo funcionando, propuesta 038 y paso 7
+
+**`main` y `origin/main` no se tocaron:** todo está en `respaldo-13-10`, a la espera del OK de Valentín para el push (cada push a `main` redeploya Render).
+
+### Publicación de los pasos 5 y 6 — qué se comprobó antes
+- **Migraciones: ninguna.** `git diff origin/main respaldo-13-10 -- supabase` está vacío; los pasos 5 y 6 y lo de hoy no tocan esquema ni políticas. No hay nada que aplicar ni deshacer en la base.
+- **Pruebas en verde sobre la rama:** servidor, suite rápida **589 passed** (antes de los cambios de hoy; se corrió de nuevo al final); frontend `bun test` 106 → 114 con lo nuevo, `tsc` y `bun run build` limpios.
+- **Respaldo antes de publicar** (porque `DELETE /cuenta` es irreversible): hecho (ver paso 7). **Volver atrás en Render y en Cloudflare:** `docs/publicacion-y-vuelta-atras.md`.
+
+### Perfil sin nada de la maqueta
+- Auditado todo `frontend/src`: la maqueta ya no estaba en la rama de respaldo (el Perfil real salió en el paso 5); no hay estadísticas inventadas, "Compartir con un profesional", "Notificaciones", "Métricas preferidas", planes ni
+  precios. "Alerta de carga" solo queda como etiqueta del vocabulario de estados que ningún reporte emite.
+- **Agregado:** tarjeta **"Tu actividad"** con datos reales: sesiones, golpes cargados y golpes medidos (misma definición que la Biblioteca), y cuántos no se pudieron medir o siguen en análisis. `resumirActividad` con pruebas.
+
+### Esquema de encuadre en Cargar (decisión 013)
+- La cámara se dibuja del lado **contrario a la mano dominante** (a la izquierda de un diestro; **espejo para zurdos** según la mano del jugador elegido o cargado) y, en tres cuartos, **por delante** del jugador en diagonal de 45°.
+  Geometría en `lib/esquema-encuadre.ts` con pruebas. Protocolos corregidos ("por detrás" y "del lado de la raqueta").
+- **Es una recomendación, no una restricción:** el esquema y el selector dicen "Recomendado" y por qué (la condición validada con el corpus); se acepta el otro lado. **Motor 0.5.5:** si la cámara estuvo del lado de la mano
+  dominante, el reporte agrega una nota neutra ("Este lado de cámara todavía no está validado; el brazo puede verse mejor, pero cadera, tronco y encuadre se calibraron con el otro lado."). Sin cambio de contrato ni de números.
+  Registrado en la decisión 013 como recomendación revisable tras la sesión del lado de la raqueta.
+
+### Correo propio funcionando (informe de Valentín)
+- Brevo generó la clave SMTP, Valentín la cargó en Supabase y probó **registro, confirmación y "Olvidé mi contraseña"** con una cuenta de prueba: funciona todo. Registrado en las decisiones 034 y 027. **Sin verificar:** entrega a otros
+  proveedores y el límite de envíos por hora.
+
+### Propuesta 038 (sin programar)
+- `docs/decisiones/038-deteccion-automatica-en-la-carga-propuesta.md` y `docs/protocolo-sesion-lado-derecho.md` (28 saques, ≈ 1 h 30 min; recomendado 40 golpes). Dato que condiciona todo: **el corpus es de un solo lado**, así que el
+  detector de lado no se puede validar sin esa sesión. Antes de la demo solo entraría el banco de validación y D para drive y revés, y solo si el 24/10 el núcleo está al 80 %.
+
+### Paso 7 — respaldo con restauración probada
+- `backend/app/respaldo.py` (exportar y verificar) y `tools/respaldo/restaurar_prueba.py` (Postgres local descartable). **Primer respaldo:** 3 cuentas, 8 sesiones, 18 videos, 17 reportes, 35 métricas, 33 + 47 archivos, **840 MB,
+  íntegro**; en `C:/Users/valen/kinetiq-data/respaldos` (fuera del repositorio). **Restauración verificada: 16 de 16 comprobaciones** (`docs/resultados/respaldo-restauracion-2026-10-15.json`). Procedimiento y límites
+  (contraseñas, configuración de Supabase y Render, probado en local y no en un proyecto Supabase real): `docs/respaldo-y-restauracion.md`.
+- **Falta:** copiar la carpeta a un disco externo y la copia completa con `pg_dump` (necesita la contraseña de la base, que no tengo).
+
+### Pendiente
+1. **OK de Valentín para el push a `main`**; después: `/health` = 0.5.5 (tres veces) y republicar el frontend.
+2. Probar en pantalla real los pasos 5 y 6 (eliminar cuenta con una cuenta descartable, Evolución con las dos sesiones, PDF impreso).
+3. Decidir la 038 (A o B, criterio de aceptación) y si se graba la sesión del lado derecho el fin de semana.
+4. Paso 8: ensayo de la demo.
+
+---
+
 ## 2026-10-13 (después del cierre) — Lado de la cámara confirmado (izquierda, no dominante), insumos del Capítulo 7 y documentos corregidos
 
 **Solo documentación y verificación de lectura; sin cambios de código ni de motor.** Rama `respaldo-13-10`.

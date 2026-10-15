@@ -27,6 +27,7 @@ Principio 5 del plan de desarrollo: *"Nada se mide sin poder reproducirse."*
 | `criterio3.json` | `python -m app.medicion_criterio3 --con-instante-pico --salida ...` | **Criterio 3 (redefinido), completo**: las dos métricas (separación cadera-hombro máxima e instante del pico de torso desde la máxima separación), con Δ vs σ_w, IC bootstrap, p de permutación, equivalencia de encuadre y diagnóstico de censura de la métrica (ii) contra el borde de la ventana. |
 | `criterio3-parcial-metrica-i.json` | (histórico, 26/9) | Corrida parcial con solo la métrica (i), antes de confirmar la definición de la (ii). Superada por `criterio3.json` (mismos valores en la métrica i). |
 | `e3-series-sin-filtrar.json` | `python -m app.diagnosticos_e3 sin-filtrar --salida ...` | Por clip y articulación: cuántas series tenían algún NaN (= sin filtrar en E3 < 0.4.1), con y sin el detector de inversión de z. |
+| `respaldo-restauracion-2026-10-15.json` | `python tools/respaldo/restaurar_prueba.py <carpeta del respaldo>` (con `pgserver` y `psycopg`; ver `docs/respaldo-y-restauracion.md`) | **Prueba de restauración (paso 7)** del primer respaldo (`python -m app.respaldo exportar`, 15/10/2026): migraciones sobre base vacía, tablas fila por fila, archivos con huella, referencias a Storage y aislamiento por política, en un Postgres local descartable. Sin datos personales. |
 
 Los resultados dependen del hardware: no se comparan entre máquinas, solo consigo
 mismos a lo largo del tiempo.

@@ -1,0 +1,67 @@
+{
+ "respaldo_creado_utc": "2026-10-15T21:49:53.118720+00:00",
+ "comprobaciones": {
+  "las migraciones aplican sobre una base vacía": {
+   "ok": true,
+   "detalle": {
+    "aplicadas": 13,
+    "esperadas": 13
+   }
+  },
+  "todas las columnas del respaldo existen en el esquema restaurado": {
+   "ok": true,
+   "detalle": {}
+  },
+  "tabla usuarios: 3 filas iguales al respaldo": {
+   "ok": true
+  },
+  "tabla atletas: 1 filas iguales al respaldo": {
+   "ok": true
+  },
+  "tabla sesiones: 8 filas iguales al respaldo": {
+   "ok": true
+  },
+  "tabla versiones_motor: 6 filas iguales al respaldo": {
+   "ok": true
+  },
+  "tabla videos: 18 filas iguales al respaldo": {
+   "ok": true
+  },
+  "tabla reportes_biomecanicos: 17 filas iguales al respaldo": {
+   "ok": true
+  },
+  "tabla metricas: 35 filas iguales al respaldo": {
+   "ok": true
+  },
+  "tabla alertas: 0 filas iguales al respaldo": {
+   "ok": true
+  },
+  "tabla reportes_sesion: 0 filas iguales al respaldo": {
+   "ok": true
+  },
+  "cuentas: 3": {
+   "ok": true
+  },
+  "archivos de videos: 33 con su huella": {
+   "ok": true,
+   "detalle": []
+  },
+  "archivos de artefactos: 47 con su huella": {
+   "ok": true,
+   "detalle": []
+  },
+  "cada uno de los 18 videos tiene su archivo en el bucket": {
+   "ok": true,
+   "detalle": {
+    "sin_archivo": 0
+   }
+  },
+  "aislamiento: cada una de las 3 cuentas ve solo sus videos (1 con datos)": {
+   "ok": true
+  }
+ },
+ "ok": true,
+ "desviaciones_del_arnes": [
+  "20261001090000_esquema_inicial.sql: se omitió 'create extension if not exists pgcrypto;' (gen_random_uuid() es nativo desde PostgreSQL 13)"
+ ]
+}
