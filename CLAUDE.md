@@ -197,3 +197,7 @@ permite, se prioriza terminar antes de esas fechas, no llegar justo a ellas.
 - **Cambios acotados.** Preferir ediciones puntuales sobre regeneraciones amplias.
 - **Ante la duda sobre alcance o vocabulario, preguntar.** Un texto que suena bien pero
   contradice la sección 2 cuesta más de lo que ahorra.
+- **Todo lo que contradiga el Capítulo 4 se registra en el momento** (regla de Valentín, 15/10/2026). Cada vez que algo que se construya o se decida contradiga lo que dice
+  `docs/tesis/capitulo-4-marco-tecnologico.md` (tecnología, arquitectura, costos, alcance, estados, vocabulario, pruebas o despliegue), se agrega en esa misma sesión una fila a la tabla de
+  `docs/tesis/correcciones-pendientes-capitulo-4.md` con: **apartado**, **qué dice hoy**, **qué corresponde** (con la cifra o el hecho medido, y si está en producción o solo en una rama) y **decisión**
+  que lo documenta. No se espera al cierre ni a la redacción del capítulo. El capítulo no se edita todavía: la lista se acumula y se redacta de una vez.
