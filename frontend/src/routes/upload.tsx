@@ -3,6 +3,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { AlertTriangle, CheckCircle2, CircleDashed, Film, Info, Loader2, UploadCloud, X } from "lucide-react";
 import { RutaProtegida } from "@/components/ruta-protegida";
 import { EsquemaEncuadre } from "@/components/esquema-encuadre";
+import { esLadoDeLaMano, ladoRecomendado, type LadoCamara as LadoEsquema } from "@/lib/esquema-encuadre";
 import { useSesion } from "@/lib/sesion";
 import {
   ENCUADRES,
@@ -89,7 +90,7 @@ const ETIQUETA_ESTADO: Record<EstadoArchivoCarga, string> = {
 
 const DESCRIPCION_ENCUADRE: Record<string, string> = {
   perfil: "La cámara está a un costado del jugador, a 90° de la dirección del golpe: se ve su lado completo.",
-  tres_cuartos: "La cámara está en diagonal, por detrás de un costado del jugador, a unos 45° de la dirección del golpe.",
+  tres_cuartos: "La cámara está por delante del jugador, en diagonal, a unos 45° de la dirección del golpe: lo ves un poco de frente.",
 };
 
 function textoDeError(err: unknown): string {
@@ -330,6 +331,11 @@ function CargarPage() {
   const enCurso = fase === "enviando";
   const bloqueado = enCurso || sesionCreada;
   const listaAtletas = atletas ?? [];
+  // La mano del jugador elegido (o de la que se está cargando) define de qué lado se recomienda la cámara: el contrario a la mano
+  // dominante, como en las grabaciones de referencia (decisión 013). El esquema se espeja para un zurdo.
+  const manoJugador = atletaId === "nuevo" ? mano : (listaAtletas.find((a) => a.id === atletaId)?.mano_dominante ?? "");
+  const recomendado = ladoRecomendado(manoJugador);
+  const ladoDibujado: LadoEsquema = lado === "derecha" || lado === "izquierda" ? lado : (recomendado ?? "izquierda");
   const validos = items.filter((it) => !it.problema);
   const pendientes = validos.filter((it) => it.estado !== "enviado");
   const resumen = resumenDeCarga(validos.map((it) => it.estado));
@@ -494,7 +500,7 @@ function CargarPage() {
                       onChange={() => setEncuadre(x.valor)}
                       className="sr-only"
                     />
-                    <EsquemaEncuadre encuadre={x.valor} className="h-24 w-full" />
+                    <EsquemaEncuadre encuadre={x.valor} lado={ladoDibujado} className="h-24 w-full" />
                     <span className="flex items-center gap-2 text-sm font-semibold">
                       {activo ? <CheckCircle2 className="h-4 w-4 text-neon" aria-hidden="true" /> : <CircleDashed className="h-4 w-4 text-muted-foreground" aria-hidden="true" />}
                       {x.etiqueta}
@@ -506,7 +512,8 @@ function CargarPage() {
             </div>
             <p id="ayuda-encuadre" className="mt-2 text-xs text-muted-foreground">
               Elegí el que corresponde a donde estaba la cámara, y mantenelo en todas tus sesiones: tus resultados solo se pueden comparar
-              entre sesiones grabadas desde el mismo lugar.
+              entre sesiones grabadas desde el mismo lugar. El esquema muestra la cámara del lado contrario a la mano dominante
+              {recomendado ? ` (a la ${recomendado} del jugador)` : " (a la izquierda de un jugador diestro)"}, que es el lado recomendado.
             </p>
           </div>
 
@@ -518,7 +525,17 @@ function CargarPage() {
             </select>
             <p id="ayuda-lado" className="mt-1 text-xs text-muted-foreground">
               Es el lado del jugador, no el tuyo: «a la derecha del jugador» es del lado de su mano derecha.
+              {recomendado
+                ? ` Recomendado: a la ${recomendado} del jugador (el lado contrario a su mano dominante). Usá siempre el mismo lado para poder comparar tus sesiones.`
+                : " Recomendado: el lado contrario a la mano dominante del jugador. Usá siempre el mismo lado para poder comparar tus sesiones."}
             </p>
+            {esLadoDeLaMano(lado, manoJugador) && (
+              <p role="status" className="mt-2 flex items-start gap-2 text-xs text-muted-foreground">
+                <Info className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+                Elegiste el lado de la mano dominante: el brazo que golpea queda más cerca de la cámara y estas sesiones no se pueden comparar con
+                las grabadas del otro lado.
+              </p>
+            )}
           </div>
 
           <div>
