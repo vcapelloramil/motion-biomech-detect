@@ -1,7 +1,7 @@
 # Decisión 034 — Dominio `.me` propio para la aplicación y el correo, con el DNS en Cloudflare
 
 **Fecha:** 12 de octubre de 2026
-**Estado:** vigente (decisión de Valentín: tiene el Student Pack y consigue el dominio; **pendiente de que pase el nombre**)
+**Estado:** vigente y **cumplida** (decisión de Valentín: Student Pack y dominio; la aplicación está en el dominio y **el correo propio funciona desde el 15/10/2026**, ver abajo)
 **Afecta a:** decisión 026 (el frontend deja de mostrarse en `workers.dev`) · decisión 027 (la opción A pasa de "en curso" a "ejecutándose": Brevo con el dominio) · `frontend/wrangler.jsonc` ·
 `KINETIQ_CORS_ORIGINS` en Render · Supabase (*Site URL* y direcciones permitidas) · plan §8 (punto 1)
 
@@ -54,3 +54,14 @@ frontend". El Pack ya está: hay que decidir **dónde vive el DNS**, porque de e
 - Cambiar `KINETIQ_CORS_ORIGINS` **reinicia** el servicio de Render: se hace cuando no haya un análisis en curso.
 - La guía con los pasos de los paneles, el orden y cómo comprobar cada uno está en [`docs/guia-dominio-correo-y-hosting.md`](../guia-dominio-correo-y-hosting.md).
 - Capítulo 4 (despliegue): la corrección 1 de `correcciones-pendientes-capitulo-4.md` ("Cloudflare, no Vercel") suma "con dominio propio y DNS en Cloudflare".
+
+## Hecho el 15/10/2026 — el correo propio funciona (informe de Valentín)
+
+- **Brevo generó la clave SMTP** (el ticket a soporte se resolvió; no hizo falta el plan B de Resend) y **Valentín la cargó en Supabase** (Authentication → Emails → SMTP Settings). La clave no se guarda
+  en el repositorio ni en ningún documento.
+- **Probado con una cuenta de prueba:** registro, correo de confirmación, confirmación y "Olvidé mi contraseña" (recuperar y restablecer): **funciona todo**.
+- **Consecuencias:** se habilita el **registro abierto** (la confirmación por correo deja de depender de usuarios creados a mano en el panel) y "Olvidé mi contraseña"; la decisión 027 queda resuelta en su opción A
+  (dominio propio + Brevo). Los planes B y C (Resend, Gmail con contraseña de aplicación) pasan a ser solo respaldo.
+- **Qué no se verificó acá** (lo informó Valentín; no lo probé yo): la entrega a otros proveedores (Gmail, Outlook), la carpeta de spam y el límite de envíos por hora de Supabase con SMTP propio
+  (30 por hora al principio, se sube en Authentication → Rate Limits). Conviene una prueba con una dirección de otro proveedor antes de la demo.
+- **Sigue pendiente de esta decisión:** el alias de contacto del dominio que cita `/privacidad` (reenvío de correo) y el vencimiento anual del dominio.

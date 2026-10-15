@@ -157,8 +157,8 @@ E5 Auditoría y alertas
 
 **Estado al 7/10/2026 (detalle en `docs/bitacora.md`):** keep-alive de Supabase hecho (decisión 021); reintento `fallido → encolado` y
 permisos por columna hechos (decisión 022); **contrato del reporte v1.0 hecho (decisión 024)**. Quedan decididos, sin implementar:
-carga directa a Storage y autenticación de la API por JWKS (025), frontend en Cloudflare (026), correo de confirmación (027, **pendiente de
-elegir** dominio propio + Brevo o Gmail dedicado). Control contra historial, diferido.
+carga directa a Storage y autenticación de la API por JWKS (025), frontend en Cloudflare (026), correo de confirmación (027, **resuelto el 15/10/2026**: dominio propio + Brevo, probado
+registro, confirmación y recuperar contraseña). Control contra historial, diferido.
 
 **Tasa real (decisiones 029 y 030, 9/10/2026):** el iPhone captura "a 240" con una tasa real media de ~200 fps y el **corpus propio horneado es un
 remuestreo a ~120 fps con rampas de velocidad**, no 240: lo medido con él tiene las velocidades ×2 sobreestimadas y los ms ×0,5 subestimados (los ángulos no cambian). El motor **lee la tasa real de las marcas de tiempo** del

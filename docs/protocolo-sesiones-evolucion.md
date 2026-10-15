@@ -56,7 +56,7 @@ orden vigente (`docs/plan-mvp-punta-a-punta.md` §8). Complementa a `docs/protoc
 | | Valor | Por qué |
 | --- | --- | --- |
 | **Gesto** | **Saque** | Es el único con D calibrado (el aviso de "el video parece de otro encuadre" funciona para el saque) y el gesto con respaldo bibliográfico de la tesis |
-| **Encuadre** | **Tres cuartos** (cámara a ~45° por detrás, **del lado izquierdo del jugador**, el no dominante: el mismo de todo el corpus) | En el corpus la separación cadera-hombro es mayor en tres cuartos (30–33°) que en perfil (24–26°) y la variación habitual dentro de una sesión es de ~3°: un cambio real es más fácil de ver sobre ese ruido |
+| **Encuadre** | **Tres cuartos** (cámara a ~45° **por delante** del jugador, en diagonal, **del lado izquierdo del jugador**, el no dominante: el mismo de todo el corpus) | En el corpus la separación cadera-hombro es mayor en tres cuartos (30–33°) que en perfil (24–26°) y la variación habitual dentro de una sesión es de ~3°: un cambio real es más fácil de ver sobre ese ruido |
 | **Sesiones** | **2 mínimo, 3 ideal**, en **días distintos** | Con 2 hay un cambio; con 3 aparece la banda propia ("tu variación habitual") |
 | **Golpes por sesión** | **8 grabados**, subir **todos los que estén completos** (mínimo 6) | Con 4 golpes medidos hay dispersión; con 5 ordenables, repetibilidad del orden. Con 3 no hay ninguna de las dos |
 | **Cada video** | **un solo golpe, 3 a 4 s** (≈ 1 s antes del inicio del movimiento y ≈ 1 s después del impacto), **menos de 50 MB** | Es lo que acepta Cargar; el recorte validado de 3,1 s (626 fotogramas) procesó en 117 s |

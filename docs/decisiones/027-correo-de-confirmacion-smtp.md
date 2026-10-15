@@ -88,3 +88,8 @@ que no se sostiene es el del remitente sin dominio. Brevo en sí (plan, límites
 - Hasta que haya un SMTP propio funcionando (A o B), el registro de usuarios que no sean del equipo de Supabase **no funciona** con la confirmación activa.
 - El 20/10 (prueba desde el celular) depende de que haya SMTP funcionando, o de que el usuario de prueba se cree desde el panel de Supabase ya confirmado (como ya se hizo para la prueba del iPhone).
 - Si el Pack tarda más allá del 20/10, se pasa a B sin cambiar nada más del sistema; el cambio es solo de los datos de SMTP en el panel.
+
+## Actualización del 15/10/2026 — resuelta (opción A)
+
+Brevo con el dominio `kinetiqtennis.me` autenticado: la clave SMTP se generó, se cargó en Supabase y se probó registro, confirmación y "Olvidé mi contraseña" con una cuenta de prueba (funciona todo).
+Detalle en la decisión 034 ("Hecho el 15/10/2026"). La opción B (Gmail dedicado) queda como respaldo.

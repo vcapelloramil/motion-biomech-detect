@@ -79,7 +79,7 @@ cuando la PC pueda quedar encendida.
 | D5 | **API autenticada con el JWT de Supabase validado contra su JWKS** + chequeo de que el video es del usuario (404 si no). El token compartido se retira. | 025 |
 | D6 | Primera entrega con **tres fotogramas clave con esqueleto**; video con esqueleto y PDF, después. | 024 |
 | D7 | **Frontend en Cloudflare**; **el repositorio es la única fuente** (Lovable deja de editar código). | 026 |
-| D8 | **SMTP propio** para el correo de confirmación (el de Supabase no sirve para usuarios reales). **Pendiente de elegir:** dominio propio + Brevo (recomendado) o cuenta Gmail dedicada (puente). | 027 |
+| D8 | **SMTP propio** para el correo de confirmación (el de Supabase no sirve para usuarios reales). **Resuelto el 15/10/2026:** dominio propio + Brevo, con la clave SMTP cargada en Supabase y probado registro, confirmación y "Olvidé mi contraseña". | 027, 034 |
 
 ## 4. Plan por semanas
 

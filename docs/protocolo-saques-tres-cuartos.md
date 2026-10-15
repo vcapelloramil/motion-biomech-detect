@@ -26,7 +26,7 @@ Alternar evita que el cansancio o el cambio de luz se confundan con el encuadre.
 
 | Bloque | Encuadre | Cámara respecto del jugador | Saques |
 | --- | --- | --- | --- |
-| 1 | **Tres cuartos** | a ~45° por detrás, **del lado izquierdo del jugador** (el no dominante, como todo el corpus) | 5 |
+| 1 | **Tres cuartos** | a ~45° **por delante** del jugador (en diagonal, lo ves un poco de frente), **del lado izquierdo del jugador** (el no dominante, como todo el corpus) | 5 |
 | 2 | **Perfil** | a 90° (de costado), **del lado izquierdo del jugador** | 5 |
 | 3 | **Tres cuartos** | igual que el bloque 1 | 5 |
 | 4 | **Perfil** | igual que el bloque 2 | 5 |

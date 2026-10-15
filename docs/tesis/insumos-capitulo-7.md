@@ -81,7 +81,7 @@ Supabase (con service_role): reporte JSON (contrato 1.4), estados, tiempos de co
 | Datos, identidad, archivos | Supabase Cloud (Postgres + Auth + Storage) | Free (500 MB de base, 1 GB de almacenamiento; **sin respaldos**) | decisiones 018, 021, 025 |
 | Motor + API | Render, contenedor Docker, `render.yaml` (`plan: standard`) | **USD 25/mes** (1 CPU, 2 GB) desde el 12/10/2026; antes plan Free (0,1 CPU, 512 MB) | decisiones 017, 019, 023; `render.yaml` |
 | Pose | MediaPipe Pose (33 puntos, 3D directo), `model_complexity=2`, `static_image_mode=True`, CPU | — | decisión 005 |
-| Correo de confirmación | SMTP propio con el dominio (Brevo; plan B Resend). **Estado: sin clave SMTP generada, ticket abierto con soporte** | — | decisiones 027 y 034 |
+| Correo de confirmación | SMTP propio con el dominio (Brevo). **Estado: funciona desde el 15/10/2026** (registro, confirmación y recuperar contraseña probados con una cuenta de prueba) | Plan gratuito de Brevo; costo **NO VERIFICADO** | decisiones 027 y 034 |
 | Integración continua | GitHub (repositorio privado) | Free | `.github/` |
 
 **Reglas de arquitectura que rigen (CLAUDE.md §4):** el frontend no calcula nada biomecánico (solo representa lo que evalúa el motor); el motor no importa bibliotecas web; el filtrado es de **fase cero** (adelante y atrás) y va antes de calcular velocidades.
@@ -89,8 +89,8 @@ Supabase (con service_role): reporte JSON (contrato 1.4), estados, tiempos de co
 
 ### 1.2 Qué hace, de punta a punta
 
-1. **Registro** con rol (jugador, entrenador, profesional de la salud) y consentimiento (Ley 25.326); la cuenta se activa al confirmar el correo (decisión 027). *Con usuarios de prueba creados ya confirmados desde el panel mientras el correo propio no esté: ver §8.*
-2. **Ingreso** y "Olvidé mi contraseña" (`/recuperar`, `/restablecer`; sin probar con correo propio).
+1. **Registro** con rol (jugador, entrenador, profesional de la salud) y consentimiento (Ley 25.326); la cuenta se activa al confirmar el correo (decisión 027), con SMTP propio (Brevo) funcionando desde el 15/10/2026.
+2. **Ingreso** y "Olvidé mi contraseña" (`/recuperar`, `/restablecer`; probado con una cuenta de prueba el 15/10/2026).
 3. **Cargar:** una sesión de hasta 12 golpes (se recomienda un mínimo de 6), 50 MB por archivo, mp4/mov; el usuario declara gesto, encuadre, lado de la cámara y cómo grabó. El navegador sube **directo a Storage** con su sesión (RLS por carpeta). Instrucción previa: en el iPhone, *Opciones → Formato: Actual* o subir desde Archivos (§2.1).
 4. **API:** valida el JWT y que el video sea del usuario, responde 202 y procesa en segundo plano, de a un golpe por vez.
 5. **Motor:** lee la tasa **real** del archivo (nunca la asume; pisos de aptitud 114 y 57 fps, con 5 % de tolerancia), extrae la pose, regulariza el tiempo, filtra, mide y arma el reporte. Si el usuario declaró cámara lenta y el archivo llegó en tiempo real con la grilla por debajo de 114 fps (la firma de una conversión hecha por el teléfono), el análisis falla con un motivo propio (`archivo_convertido`) y el mensaje explica el camino que funciona; si declaró grabación normal, queda `parcial` (solo la fase de preparación, regla R1).
@@ -396,7 +396,7 @@ el valor absoluto del giro, así que no distingue el signo, pero no se verificó
 | 19 | Detección de encuadre D | 28/28, 0 falsos | **PROVISORIO** | Misma muestra para calibrar y verificar; solo saque; drive y revés pendientes. |
 | 20 | Recortes de Evolución | 18/18 verificados | **FIRME** | Aritmética entera sobre las marcas de tiempo. |
 | 21 | Evolución real, Perfil real, eliminar cuenta, PDF A4 | — | **PENDIENTE** | Solo en `respaldo-13-10`; sin verlos en pantalla real. |
-| 22 | Correo propio (registro abierto, recuperar contraseña) | — | **PENDIENTE** | Brevo sin clave SMTP; plan B Resend. |
+| 22 | Correo propio (registro abierto, recuperar contraseña) | funciona (15/10) | **FIRME** en lo probado; **PROVISORIO** la entrega a otros proveedores | Lo probó Valentín con una cuenta de prueba; falta una prueba con otro proveedor y el límite de envíos por hora. |
 | 23 | Costo marginal por análisis (USD) | — | **NO MEDIDO** | El Cap. 4 lo estimó en USD 0,13–0,25 con ocho minutos por video; hoy es USD 25/mes fijos de Render. |
 
 ---
@@ -413,7 +413,7 @@ Cada fila: qué se esperaba, qué se encontró, la decisión que lo documenta y 
 | 4 | **031** (9/10) | Veredicto del orden en los gestos con referencia | El único grupo con referencia (saque) y con Criterio 1 cumplido (perfil) daba "tronco primero" en 6 de 6: **todo saque de perfil saldría "desvío leve"**. Quedó "bloqueante de la demo" hasta validar. También corrigió la frase "el único grupo que cumple es drive, perfil" de la 029. | Cap. 7 |
 | 5 | **032** (12/10) | Una sola regla de "ordenable" | El producto usaba 4,17 ms (un fotograma de la grilla) y la medición 8,33 ms: eran dos reglas. Unificada en 8,33 ms estricta; un revés de 8,3 ms dejó de ser ordenable. El motor había cambiado cuatro veces con el mismo sello 0.4.1. | Cap. 4 (RNF-02), Cap. 7 |
 | 6 | **033** (12/10) | Reproductor sincronizado (tabla 4.7) y retención con video con esqueleto | Se entregó el video con esqueleto en cámara lenta fija y tres fotogramas clave; a 360 px "se veía mal" → 720 px, CRF 20 (~1,6 MB por 12 s). Memoria en Linux 748 MB. | Cap. 4 (4.3.3, 4.5.3) |
-| 7 | **034** (12–13/10) | Dominio opcional ≈ USD 1,20 | Un Worker solo acepta un dominio propio si la zona DNS está **activa en Cloudflare**; el Student Pack deja un repositorio de GitHub Pages residual (se eliminó); Brevo autentica el dominio pero **no entregó la clave SMTP**. | Cap. 4 (4.5), Cap. 5 |
+| 7 | **034** (12–13/10) | Dominio opcional ≈ USD 1,20 | Un Worker solo acepta un dominio propio si la zona DNS está **activa en Cloudflare**; el Student Pack deja un repositorio de GitHub Pages residual (se eliminó); Brevo autentica el dominio y la clave SMTP se generó después (resuelto el 15/10). | Cap. 4 (4.5), Cap. 5 |
 | 8 | **035** (12–13/10) | Que el orden medido sea una propiedad del gesto | **Depende del encuadre en el saque**: perfil 0 cadera primero / 8 tronco primero; tres cuartos 7 / 0; p = 0,0002. El golpe de prueba "contradictorio" era un saque de tres cuartos declarado perfil. Se suspende el veredicto y se agrega D. | Cap. 7, Cap. 6 |
 | 9 | **036** (13/10) | Veredicto en al menos algunos gestos | El patrón se repite en el **drive** (1/7 contra 3/0; p = 0,024) y el **revés** no es confiable con una sola cámara. **Ningún grupo emite veredicto.** Los grupos que cumplen el Criterio 1 son los sospechosos. | Cap. 4 (4.3.3 "auditoría de secuenciación"), Cap. 7, Cap. 6 |
 | 10 | **037** (13/10) | "No auditable" para todo lo que no se ordena | Un empate a la resolución **es un golpe medido** ("sin diferencia medible"); "no auditable" queda para datos no confiables (R3). Un pico que falta lleva su motivo. | Cap. 4 (R3), Cap. 7 |
@@ -465,7 +465,7 @@ La lista viva de correcciones al capítulo, con la decisión que origina cada un
 | Tiempo por análisis | "ocho minutos por video"; costo marginal USD 0,13–0,25 | **117–147 s en Standard** (golpes de 3–4 s); 678 s en Free. Costo marginal por análisis: **NO MEDIDO** | 023 |
 | Velocidad de inferencia | ~25 fps (§4.2.3 y §4.5.4) | **3,57 fps** en CPU (`model_complexity=2`) | 006 |
 | Dominio | Opcional, ≈ USD 1,20 | `kinetiqtennis.me` por el Student Pack; renovación **NO VERIFICADA**; DNS en Cloudflare | 034 |
-| Correo | No previsto como componente | SMTP propio con el dominio (el correo integrado de Supabase entrega 2 por hora y solo al equipo del proyecto): **componente agregado, sin resolver** | 027 |
+| Correo | No previsto como componente | SMTP propio con el dominio (el correo integrado de Supabase entrega 2 por hora y solo al equipo del proyecto): **componente agregado; funciona desde el 15/10/2026** | 027, 034 |
 | Tasa de captura | "240 fps" en todo el capítulo; RNF-01 prueba con 30, 60, 120 y 240 fps | **240 nominales, ~200 reales**; el corpus propio es ~120 fps; agregar a RNF-01 el archivo convertido y el de fotogramas perdidos | 029, 030 · 10, 11, 12 |
 | Estimación de pose | YOLOv8-Pose + elevación 3D como vía A; MediaPipe como vía B | **MediaPipe** por defecto, 3D directo, sin etapa de elevación (descartada); YOLOv8-Pose/ONNX previsto como alternativa, **no implementado** (según el contexto del proyecto, el objetivo específico 1 de la tesis nombra YOLOv8-Pose vía ONNX: cotejar su redacción) | 005 |
 | Auditoría de secuenciación | "Comparación del orden observado contra el esperado y generación de alertas" | **Sin veredicto en ningún grupo**; solo registro (`sin_evaluar`), `sin_diferencia_medible` y `no_auditable`; sin alertas con umbral (falta referencia) | 031, 035, 036, 037 |
@@ -476,7 +476,7 @@ La lista viva de correcciones al capítulo, con la decisión que origina cada un
 | Validación con usuarios (I4, Criterio 4 y 5) | Pruebas de usabilidad con usuarios | **Autovalidación**: grabaciones propias, sin otros usuarios (cambio de alcance del 7/10) | plan MVP §4 |
 | Corpus de evaluación | Grabaciones propias a 240 fps | Mismas grabaciones, con la tasa corregida; **un jugador** | 029, 030 |
 
-**Costos reales hoy (13/10/2026):** Render Standard **USD 25/mes** (el único costo recurrente); Supabase Free, Cloudflare (Workers y DNS) y GitHub en planes gratuitos; dominio sin costo el primer año; correo propio sin resolver (Brevo 300 correos por día según fuente secundaria; Resend, no verificado). **Costo acumulado de Render desde el 12/10: NO MEDIDO** (se factura por plan y tiempo; verificar en el panel).
+**Costos reales hoy (13/10/2026):** Render Standard **USD 25/mes** (el único costo recurrente); Supabase Free, Cloudflare (Workers y DNS) y GitHub en planes gratuitos; dominio sin costo el primer año; correo propio funcionando desde el 15/10 (Brevo, 300 correos por día según fuente secundaria; costo no verificado). **Costo acumulado de Render desde el 12/10: NO MEDIDO** (se factura por plan y tiempo; verificar en el panel).
 
 ---
 
@@ -533,7 +533,7 @@ Orden vigente del plan (`docs/plan-mvp-punta-a-punta.md` §8): pasos 1 a 6 hecho
 | --- | --- | --- |
 | 1 | **Publicar los pasos 5 y 6** (hoy solo en `respaldo-13-10`): llevarlos a `main`, correr las pruebas, `git push origin main` (Render redeploya el servidor) y **republicar el frontend** (`bun run build` + `wrangler deploy`). Hacen falta las dos cosas: Evolución y Perfil llaman a `/evolucion` y `/cuenta`. | Pendiente de decisión de Valentín; **no se hizo** (`main` no se tocó) |
 | 2 | **Probar en pantalla real:** (a) eliminar cuenta con una cuenta descartable (Storage queda sin la carpeta del usuario en los dos buckets y la cuenta ya no entra); (b) Evolución con las dos sesiones del corpus (los dos puntos, la variación, "se mantuvo" o "aumentó/disminuyó", el aviso de mezcla de versiones 0.5.3/0.5.4); (c) imprimir de verdad el PDF de un golpe y de una sesión (salto de página, imágenes, A4 vertical); (d) Perfil con una cuenta real; (e) Procesando en escritorio. | Pendiente (ninguno verificado) |
-| 3 | **Correo propio** (SMTP con el dominio): habilita el registro abierto y "Olvidé mi contraseña"; hoy Brevo sin clave SMTP, ticket abierto; respaldos: Resend (decisión 034) o Gmail con contraseña de aplicación (decisión 027, B). Después, configurar el alias de contacto de Privacidad. | Pendiente (de Valentín) |
+| 3 | ~~Correo propio~~ **Resuelto el 15/10/2026** (Brevo; registro, confirmación y "Olvidé mi contraseña" probados). Falta probar con una dirección de otro proveedor y configurar el alias de contacto de Privacidad. | Hecho · parte pendiente |
 | 4 | **Revisar el texto de `/privacidad`:** es una declaración de Valentín (no se usa para publicidad ni se vende; no hay borrado automático). | Pendiente |
 | 5 | **Paso 7: respaldo de la base con restauración probada de punta a punta** (Supabase Free no respalda; los datos del respaldo no van al repositorio). | Pendiente (0,75 sesión) |
 | 6 | **Paso 8: ensayo de la demo** (un golpe por gesto subido; congelar). | Pendiente (0,5 sesión) |
