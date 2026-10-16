@@ -11,6 +11,10 @@ Nada de esto está implementado; las cifras de acierto **no se midieron** todav�
 >    de D **por tipo de golpe**, ajustando en una sesión y evaluando en la otra, con el criterio pre-registrado (≤ 5 % de error entre los determinados y ≤ 20 % de "no determinado").
 > 2. **Etapa 2 — solo si la etapa 1 cumple, y solo con el OK de Valentín:** antes de programar, una propuesta corta de cómo queda Cargar, las sesiones, Procesando, el reporte y el "no determinado".
 >
+> **Resultado de la etapa 1 (16/10/2026, `docs/resultados/deteccion-038-etapa1.md`): NO cumple en ningún campo.** Con las reglas pre-registradas y la partición por sesión: tipo de golpe, 98,7 % sin determinar (1 determinado de 76); encuadre con el tipo verdadero, 14,3 % de
+> error y 53,9 % sin determinar (saque: 0 % de error entre 18 determinados, pero 37,9 % sin determinar; drive 15,4 %; revés 75 %); encuadre con el tipo detectado, 66,7 % de error y 92,1 % sin determinar. **La etapa 2 no se propone** (condición: que la etapa 1 cumpla).
+> Un análisis exploratorio posterior (post hoc, optimista, no cuenta) llega a ~10 % de error para saque contra resto y para drive contra revés: tampoco alcanza el 5 %. Falta una sesión con saque, drive y revés para validar reglas fijadas de antemano.
+>
 > **Límite duro:** lo que **no esté validado e integrado el 23/10 queda para después de la demo**; el motor se congela el 24/10 (`engine/` y `ensamblar_reporte.py`). **Un campo que no cumpla el criterio no se asigna
 > solo** (queda "el sistema propone y el usuario confirma", o sigue declarado), y la demo se hace con lo que haya. Riesgo que se asume y se declara: Cargar es la pantalla por la que pasa todo y quedan 12 días de
 > calendario; por eso la etapa 2 exige propuesta y OK antes de programar, y la vuelta atrás (`docs/publicacion-y-vuelta-atras.md`) se prepara antes de publicar.

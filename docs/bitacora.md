@@ -6,6 +6,37 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-16 (tarde) — Navegación del celular publicada en main, 038 adelantada (etapa 1: NO cumple) y verificación de cuentas
+
+**Cambio de calendario (pedido de Valentín el 16/10):** el tipo de golpe y el encuadre se **intentan antes de la demo** (el lado de la cámara, no), en **dos etapas con puerta** y **límite el 23/10** (lo que no esté validado e integrado ese día queda para después; el motor se congela el 24/10).
+Reemplaza el punto 3 de la aprobación del 15/10 en `docs/decisiones/038-…` (actualizada, con el resultado) y en `demo-guion.md` y `plan-mvp-punta-a-punta.md`.
+
+- **Verificación de las cuentas borradas (solo lectura, 16/10):** **1 cuenta** en `auth.users` (la de v.capelloramil); `usuarios` 1, `atletas` 1, `sesiones` 8, `videos` 18, `reportes_biomecanicos` 17, todas con dueño; **0 filas sin dueño**; `metricas` y `alertas` cuelgan de `reportes_biomecanicos` con
+  `on delete cascade` (no se pudieron leer con el cliente de servicio, la integridad la da la clave foránea). Storage: `videos` 18 archivos (607 MB) y `artefactos` 47 (28 MB), **todos bajo la carpeta de la cuenta que existe: 0 archivos de cuentas inexistentes**; `estado_de_la_base.py`: 0 huérfanos, 0 en curso, 1 fallido. **Los 245 MB huérfanos ya no existen.**
+- **Frontend, puntos 1 y 2 (`main` = `9415814`, empujado; sin análisis en curso al momento del push; solo frontend, el servidor sigue en 0.5.5):**
+  - **Celular, con sesión:** arriba logo + inicial (menú con «Salir»); abajo barra fija **Biblioteca · Cargar · Perfil** con ícono y texto (56 px; la pestaña Biblioteca queda activa también en reporte, sesión y procesando). El botón «Subir y analizar» queda **sobre** la barra (medido a 390 px: 11 px de aire) y el pie no queda tapado (`--barra-inferior`).
+  - **Celular, sin sesión:** logo + Ingresar + Crear cuenta; sin «Inicio»; Tecnología en un menú ☰ (**oculto bajo 360 px** por falta de lugar: queda en el pie). **Escritorio sin cambios.**
+  - **Cargar:** sin el texto «iPhone · Android · Computadora» del título; en el esquema de tres cuartos «CÁMARA» ya no pisa la línea punteada, el «90°» pasó debajo de la línea y hay una **raqueta en la mano dominante** (espejada para zurdos; usa la mano del jugador elegido y, sin ella, la contraria al lado de la cámara).
+  - **Pruebas:** frontend **122 pasan** (+4: rótulo sin cruzar la línea en los 4 casos, raqueta espejada y sobre el mango), `tsc` y `build` limpios. **Visto en pantalla:** encabezado sin sesión a 360 px y los esquemas (12 variantes); con sesión, la barra, el menú de la inicial y la posición del botón con una sesión simulada **solo para la vista local**
+  (alias de Vite en una configuración temporal, ya borrada; no se tocó el código de autenticación). **No visto:** la pantalla de Cargar completa con una sesión real (pide ingresar) ni nada en un celular físico. **Falta que Valentín republique el frontend** (`bun run build` y `wrangler deploy`).
+- **038, etapa 1 (validación sin tocar el producto): NO cumple en ningún campo** (`docs/resultados/deteccion-038-etapa1.md`; arnés `backend/app/medicion_deteccion.py`; reglas fijadas y commiteadas **antes** de medir, `fee1003`; ajuste en una sesión y evaluación en la otra):
+
+  | Campo | Determinados | Error (Wilson 95 %) | No determinado | ¿Cumple? |
+  | --- | --- | --- | --- | --- |
+  | Tipo de golpe | 1 de 76 | 100 % | **98,7 %** | No |
+  | Encuadre, tipo verdadero | 35 de 76 | 14,3 % (6,3–29,4 %) | 53,9 % | No |
+  | · saque / drive / revés | 18 / 13 / 4 | 0 % / 15,4 % / 75 % | 37,9 % / 45,8 % / 82,6 % | No |
+  | Encuadre, tipo detectado | 6 de 76 | 66,7 % | 92,1 % | No |
+
+  Causas: la posición de «trofeo» del saque no existe en la ventana de preparación de este jugador (muñeca 5–18 cm **bajo** la nariz; `s_saque` = 0 en los 8 saques con dato; 32 de 76 sin dato por el brazo lejano); drive contra revés, dos candidatas separan una sesión y ninguna la otra (un atípico por clase rompe los extremos); D **no distingue el encuadre del drive y va invertido en el revés**.
+  Análisis **exploratorio posterior** (post hoc, optimista, no cuenta; `1eef8d7`): ~10 % de error para saque contra resto y drive contra revés, encuadre de saque 0/28; tampoco llega al 5 %. **Cinco revés de perfil** tienen la muñeca alta en el contacto: hay que **mirarlos a mano** (¿pose, técnica o etiqueta?).
+  **La etapa 2 no se propone** (condición: que la etapa 1 cumpla). Camino posible: una sesión nueva con saque, drive y revés (≥ 12 por celda; se puede sumar a la del lado derecho) para validar reglas robustas fijadas de antemano; el segundo camino de la 038 («propone y el usuario confirma») no exige el 5 %.
+- **Capítulo 7:** §2.10 y fila 24 en `docs/tesis/insumos-capitulo-7.md`.
+
+**Estado de commits:** `main` local = **`HEAD`** (los de docs y arnés de la 038 **no están empujados**: empujar redeploya Render; se publican con el próximo push, sin efecto en el motor). Producción sigue en 0.5.5.
+
+---
+
 ## 2026-10-16 — ESTADO DE CIERRE DE CONTEXTO (retomar desde acá)
 
 **Nada nuevo se empezó en esta entrada:** es el resumen de lo que hay, lo que se probó y lo que viene. Verificado el 16/10 con las herramientas de solo lectura (`tools/respaldo/estado_de_la_base.py`) y contra producción.

@@ -371,6 +371,23 @@ el valor absoluto del giro, así que no distingue el signo, pero no se verificó
 **Límites a declarar:** son las mismas dos sesiones con las que se validó el Criterio 3 (no es una validación independiente) y un solo jugador. Alcanza para mostrar el sistema funcionando sobre datos reales con trazabilidad, no para probar nada nuevo.
 **Pendiente:** ver la pantalla de Evolución con esas dos sesiones (hoy solo se miró con una serie sintética) y comparar producción contra Paso B (control cruzado previsto en `docs/protocolo-sesiones-evolucion.md`).
 
+### 2.10 Detección automática del tipo de golpe y del encuadre (decisión 038, etapa 1, 16/10/2026) — **FIRME (el resultado negativo) · PROVISORIO (la lectura)**
+
+**Qué se hizo:** reglas simples sobre la pose (posición de "trofeo" para el saque; giro neto de hombros, distancia entre muñecas y lado del eje de los hombros para drive contra revés; el contraste D por tipo de golpe para el encuadre), fijadas **antes** de medir, con los cortes ajustados en una sesión y evaluados en la otra (24/9 ↔ 25/9) sobre las **76 repeticiones** del Paso B. Criterio pre-registrado: error ≤ 5 % entre los determinados y ≤ 20 % de "no determinado". Detalle y matrices: `docs/resultados/deteccion-038-etapa1.md`; arnés `backend/app/medicion_deteccion.py` (commit `fee1003`).
+
+| Campo | Determinados | Error (Wilson 95 %) | No determinado | ¿Cumple? |
+| --- | --- | --- | --- | --- |
+| Tipo de golpe | 1 de 76 | 100 % (1 de 1) | **98,7 %** | **No** |
+| Encuadre, con el tipo verdadero | 35 de 76 | 14,3 % (6,3–29,4 %) | 53,9 % | **No** |
+| · saque / drive / revés | 18 / 13 / 4 | 0 % / 15,4 % / 75 % | 37,9 % / 45,8 % / 82,6 % | No |
+| Encuadre, con el tipo detectado | 6 de 76 | 66,7 % (30–90 %) | 92,1 % | **No** |
+
+**Lectura:** ningún campo cumple. La regla del saque se pre-registró para la preparación y en este jugador la muñeca no está sobre la nariz ahí (la altura llega en el contacto); el brazo dominante queda lejos de la cámara y falta el dato en 32 de 76 repeticiones. Drive contra revés:
+dos candidatas separan una sesión pero ninguna la otra (un valor atípico por clase rompe los extremos). El contraste D del encuadre funciona para el saque, **no distingue el encuadre del drive y va invertido en el revés**, en línea con el hallazgo del Paso B de que el revés no sigue el patrón de los otros gestos.
+Un análisis posterior **post hoc** (optimista, no cuenta) da ~10 % de error para saque contra resto y para drive contra revés: tampoco llega al 5 %.
+
+**Límites:** un jugador diestro, un teléfono, dos sesiones consecutivas, cámara siempre a la izquierda, tres cuartos por delante, una sola técnica de revés (a una o dos manos: no registrado), etiquetas del mismo autor (cinco revés de perfil con la muñeca alta en el contacto sin revisar a mano). No se midió el lado de la cámara (el corpus es de una sola clase). **No generaliza a otros jugadores.** Lo que cambiaría la lectura: una sesión nueva con saque, drive y revés para validar reglas fijadas de antemano.
+
 ---
 
 ## 3. Estado de cada resultado
@@ -400,6 +417,7 @@ el valor absoluto del giro, así que no distingue el signo, pero no se verificó
 | 21 | Evolución real, Perfil real, eliminar cuenta, PDF A4 | funcionan (15/10) | **FIRME** en lo probado; **PROVISORIO** Evolución con datos finales | Publicados el 15/10 (`main` `a377e71`). Probados por Valentín en producción; eliminar cuenta, verificado en la base (0 filas y 0 archivos). Evolución se vuelve a mirar tras la nueva subida del corpus. |
 | 22 | Correo propio (registro abierto, recuperar contraseña) | funciona (15/10) | **FIRME** en lo probado; **PROVISORIO** la entrega a otros proveedores | Lo probó Valentín con una cuenta de prueba; falta una prueba con otro proveedor y el límite de envíos por hora. |
 | 23 | Costo marginal por análisis (USD) | — | **NO MEDIDO** | El Cap. 4 lo estimó en USD 0,13–0,25 con ocho minutos por video; hoy es USD 25/mes fijos de Render. |
+| 24 | Detección automática de tipo de golpe y encuadre (038, etapa 1) | ningún campo cumple (tipo 98,7 % sin determinar; encuadre 14,3 % de error y 53,9 % sin determinar) | **FIRME** el resultado negativo · **PROVISORIO** la lectura | Reglas pre-registradas, partición por sesión, commit con árbol limpio; un jugador y dos sesiones. Lo cambiaría una sesión nueva de validación. |
 
 ---
 
