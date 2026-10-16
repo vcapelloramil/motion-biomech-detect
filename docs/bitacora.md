@@ -33,7 +33,7 @@ Reemplaza el punto 3 de la aprobación del 15/10 en `docs/decisiones/038-…` (a
   **La etapa 2 no se propone** (condición: que la etapa 1 cumpla). Camino posible: una sesión nueva con saque, drive y revés (≥ 12 por celda; se puede sumar a la del lado derecho) para validar reglas robustas fijadas de antemano; el segundo camino de la 038 («propone y el usuario confirma») no exige el 5 %.
 - **Capítulo 7:** §2.10 y fila 24 en `docs/tesis/insumos-capitulo-7.md`.
 
-**Estado de commits:** `main` local = **`HEAD`** (los de docs y arnés de la 038 **no están empujados**: empujar redeploya Render; se publican con el próximo push, sin efecto en el motor). Producción sigue en 0.5.5.
+**Estado de commits:** `main` local está **por delante de `origin/main` (`9415814`)** (`git log origin/main..main`) (los de docs y arnés de la 038 **no están empujados**: empujar redeploya Render; se publican con el próximo push, sin efecto en el motor). Producción sigue en 0.5.5.
 
 ---
 
