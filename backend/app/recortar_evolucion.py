@@ -11,7 +11,7 @@ Qué hace:
      de la ventana falta, el archivo decodifica sin errores y pesa menos del tope de Cargar (50 MiB).
   3. Escribe ``recortes.json`` con lo anterior.
 
-Los videos NO van al repositorio: la carpeta de salida debe estar fuera de él (o ignorada). Uso, desde ``backend/``::
+Los videos NO van al repositorio: la carpeta de salida debe estar fuera de él (o ignorada). Uso, desde ``backend/`` (``--grupos demo`` corta además un drive de perfil y un revés de tres cuartos para la demo)::
 
     PYTHONPATH=. .venv/Scripts/python.exe -m app.recortar_evolucion --originales <carpeta> --salida <carpeta>
     PYTHONPATH=. .venv/Scripts/python.exe -m app.recortar_evolucion --originales <carpeta> --salida <carpeta> --solo-verificar
@@ -30,11 +30,18 @@ ALINEACION = Path(__file__).resolve().parents[2] / "docs" / "resultados" / "corp
 MARGEN_S = 0.3
 TOPE_BYTES = 50 * 1024 * 1024
 
-# (original, prefijo de la repetición en la tabla de alineación, sesión, fecha, toma)
+# (original, prefijo de la repetición en la tabla de alineación, sesión, fecha, toma, gesto, encuadre)
 GRUPOS = [
-    ("IMG_6376.MOV", "20260924_VCR_saque_trescuartos_240_01", 1, "2026-09-24", "01"),
-    ("IMG_6392.MOV", "20260925_VCR_saque_trescuartos_240_02b", 2, "2026-09-25", "02b"),
-    ("IMG_6393.MOV", "20260925_VCR_saque_trescuartos_240_02c", 2, "2026-09-25", "02c"),
+    ("IMG_6376.MOV", "20260924_VCR_saque_trescuartos_240_01", 1, "2026-09-24", "01", "saque", "trescuartos"),
+    ("IMG_6392.MOV", "20260925_VCR_saque_trescuartos_240_02b", 2, "2026-09-25", "02b", "saque", "trescuartos"),
+    ("IMG_6393.MOV", "20260925_VCR_saque_trescuartos_240_02c", 2, "2026-09-25", "02c", "saque", "trescuartos"),
+]
+
+# Un drive y un revés para el "un golpe por gesto" de la demo (docs/demo-guion.md §C): drive de perfil y revés de tres cuartos de la
+# sesión 2 (25/9). El revés expone el brazo dominante a la cámara (el pico del brazo se mide); el drive de perfil muestra el pico "no medido".
+GRUPOS_DEMO = [
+    ("IMG_6397.MOV", "20260925_VCR_drive_perfil_240_02", 2, "2026-09-25", "02", "drive", "perfil"),
+    ("IMG_6395.MOV", "20260925_VCR_reves_trescuartos_240_02", 2, "2026-09-25", "02", "reves", "trescuartos"),
 ]
 
 
@@ -110,11 +117,15 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--originales", type=Path, required=True)
     ap.add_argument("--salida", type=Path, required=True)
     ap.add_argument("--solo-verificar", action="store_true", help="no corta: verifica los recortes ya hechos")
+    ap.add_argument(
+        "--grupos", choices=["evolucion", "demo"], default="evolucion",
+        help="evolucion: los 18 saques de tres cuartos (por defecto); demo: un drive de perfil y un revés de tres cuartos",
+    )
     args = ap.parse_args(argv)
     args.salida.mkdir(parents=True, exist_ok=True)
     tabla = json.loads(ALINEACION.read_text(encoding="utf-8"))["repeticiones"]
     filas: list[dict] = []
-    for original, prefijo, sesion, fecha, toma in GRUPOS:
+    for original, prefijo, sesion, fecha, toma, gesto, encuadre in (GRUPOS_DEMO if args.grupos == "demo" else GRUPOS):
         ruta = args.originales / original
         reps = sorted((r for r in tabla if r["repeticion"].startswith(prefijo) and r["real"] == original), key=lambda r: r["repeticion"])
         if len(reps) != 6:
@@ -123,13 +134,13 @@ def main(argv: list[str] | None = None) -> int:
         seg = [float(Fraction(p) * tb) for p in pts]
         for n, r in enumerate(reps, start=1):
             a, b = (int(x) for x in r["ventana_real"])
-            nombre = f"{fecha.replace('-', '')}_saque_trescuartos_toma{toma}_golpe{n}.mov"
+            nombre = f"{fecha.replace('-', '')}_{gesto}_{encuadre}_toma{toma}_golpe{n}.mov"
             destino = args.salida / nombre
             if not args.solo_verificar:
                 _cortar(ruta, destino, seg[a] - MARGEN_S, seg[b] + MARGEN_S)
             v = _verificar(ruta, destino, (a, b))
-            fila = {"archivo": nombre, "sesion": sesion, "fecha": fecha, "original": original, "toma": toma, "golpe": n,
-                    "ventana_original": [a, b], **v}
+            fila = {"archivo": nombre, "sesion": sesion, "fecha": fecha, "original": original, "toma": toma, "gesto": gesto,
+                    "encuadre": encuadre, "golpe": n, "ventana_original": [a, b], **v}
             filas.append(fila)
             print(f"{nombre}: {v['fotogramas']} fot., {v['duracion_s']} s, {v['fps_real_medio']} fps, {v['mb']} MB -> "
                   f"{'OK' if v['ok'] else 'REVISAR'}", flush=True)

@@ -64,7 +64,7 @@ Decirlo en este orden y con estas cifras (todas medidas con los originales del i
 
 ## B. Checklist del día anterior (D−1; si la demo es el 28/10, el 27/10)
 
-**Congelar:** desde la mañana de D−1 **no se publica nada** (ni servidor ni frontend). Si hay algo que arreglar, se arregla hacia atrás con `docs/publicacion-y-vuelta-atras.md`, no hacia adelante.
+**Congelar:** el **motor** quedó congelado el 24/10 (§C) y los datos de la demo se subieron el 25–26/10. Desde la mañana de D−1 **no se publica nada** (ni servidor ni frontend). Si hay algo que arreglar, se arregla hacia atrás con `docs/publicacion-y-vuelta-atras.md`, no hacia adelante.
 
 | ☐ | Qué | Cómo se comprueba |
 | --- | --- | --- |
@@ -87,25 +87,42 @@ Decirlo en este orden y con estas cifras (todas medidas con los originales del i
 
 ---
 
-## C. Plan de limpieza (qué borrar, qué volver a subir y en qué orden)
+## C. Plan de limpieza y nueva subida (se ejecuta DESPUÉS del congelamiento del motor)
 
-**Estado al 15/10/2026** (`tools/respaldo/estado_de_la_base.py`, solo lectura): 4 cuentas, 8 sesiones, 18 videos; **todas las sesiones están en la cuenta B** ("Valentín"); las cuentas A, C y D no tienen sesiones; 15 archivos sueltos (245 MB) en la carpeta
-`prueba-iphone` de la cuenta A. Versiones del motor mezcladas: 0.4.1, 0.5.0, 0.5.2, 0.5.3 (12 golpes), 0.5.4.
+**Regla:** las sesiones de la demo se suben **una sola vez**, con el motor ya congelado. Si el motor cambia después de subirlas, quedan con otra versión y habría que volver a subirlas (y Evolución avisaría
+"versiones distintas"). Por eso:
 
-**Por qué hay que limpiar:** dos sesiones del 24/9 y dos del 25/9 de saque en tres cuartos darían **puntos duplicados** en Evolución, y las versiones mezcladas disparan el aviso de "versiones distintas del motor".
+| Fecha | Qué |
+| --- | --- |
+| **ya** (no depende del motor) | Eliminar las cuentas de prueba vacías y, con ellas, los 15 archivos huérfanos (paso 0) |
+| **24/10 — congelamiento del motor** | Si ese día el núcleo está completo, se decide D para drive y revés (decisión 038) **y se congela**: `engine/version.py` sin cambios pendientes, `git tag motor-congelado-<versión>`. Después de esa fecha, **ningún cambio en `engine/` ni en `ensamblar_reporte.py`** |
+| **25–26/10** | Limpieza y nueva subida (pasos 1 a 8 de abajo) |
+| **26–27/10** | Ensayo cronometrado con los datos definitivos |
+| **27/10 (D−1)** | Checklist de §B y congelamiento total (nada se publica) |
+| **28–30/10** | Demo |
 
-> **Antes de empezar: un respaldo nuevo y verificado** (`docs/respaldo-y-restauracion.md`). Borrar es irreversible.
+**Estado al 15/10/2026** (`tools/respaldo/estado_de_la_base.py`, solo lectura; después de que Valentín eliminó una cuenta de prueba y verificado que no quedaron filas ni archivos): **3 cuentas.** La principal (B, "Valentín", creada el 9/10)
+tiene **las 8 sesiones**, 18 videos y 65 archivos (635 MB). **A** (creada el 6/10, nombre "valencapello", último ingreso el 9/10) no tiene sesiones y guarda **15 archivos sueltos de la página de prueba del iPhone (245 MB)**. **C** (creada el 15/10,
+rol "entrenador") no tiene sesiones ni archivos. Versiones del motor mezcladas en B: 0.4.1, 0.5.0, 0.5.2, 0.5.3 (12 golpes) y 0.5.4.
 
-| Paso | Qué | Cómo | Verificación |
-| --- | --- | --- | --- |
-| **1** | **Probar "Eliminar mi cuenta" con una cuenta descartable** (todavía no se ejecutó contra la base real) | Elegir una cuenta **vacía y de prueba** (C, creada el 15/10). Subir **un** golpe corto, esperar a que termine, **Descargar mis datos**, y después Perfil → **Eliminar mi cuenta** → escribir `ELIMINAR` | La cuenta ya no entra; `estado_de_la_base.py` no la lista; **no quedan archivos** en las carpetas de esa cuenta en `videos` ni en `artefactos` |
-| **2** | **Eliminar las otras cuentas de prueba vacías** (A y D) | Mismo camino. **Confirmar con Valentín que son de prueba antes de borrarlas** (D tiene el rol "entrenador" y el nombre completo). Al borrar A desaparecen sus 15 archivos huérfanos (245 MB) | `estado_de_la_base.py`: "ARCHIVOS HUÉRFANOS: 0" |
-| **3** | **Eliminar en la cuenta B las 8 sesiones actuales** (6 de prueba de un golpe y las 2 del corpus procesadas con 0.5.3) | Biblioteca → cada sesión → **Eliminar sesión** (borra los archivos de los dos buckets y las filas) | Biblioteca vacía; "SESIONES" vacío |
-| **4** | **Volver a subir con 0.5.5, en este orden:** (a) **sesión 1**: 6 golpes de `20260924_saque_trescuartos_toma01_golpe1..6.mov`; (b) esperar a que terminen; (c) **sesión 2**: 6 golpes de `20260925_saque_trescuartos_toma02b_golpe1..6.mov`; (d) esperar | **Datos de la carga:** jugador Valentín (mano derecha), gesto **saque**, encuadre **tres cuartos**, lado de la cámara **izquierda**, cámara lenta 240, y la **fecha real** (24/09/2026 y 25/09/2026). Los archivos se eligen desde la computadora (no hace falta "Formato: Actual"). Carpeta: `Desktop\corpus-originales-reales\recortes-evolucion\` | Cada sesión: 6 golpes con estado *medido* y motor **0.5.5** en el detalle técnico. Tiempo: 6 golpes × ~2–2,5 min en cola de a uno ≈ **12–15 min por sesión** |
-| **5** | **Un golpe de drive y uno de revés** para tener "un golpe por gesto" | **Falta cortarlos:** `backend/app/recortar_evolucion.py` hoy solo corta el saque (lista `GRUPOS`); extenderlo con un drive de perfil (`IMG_6397`) y un revés de tres cuartos (`IMG_6395`) es ~0,25 sesión. Cargar cada uno en su sesión (24/09 y 25/09 u otra fecha real), lado **izquierda** | Dos sesiones de un golpe, motor 0.5.5 |
-| **6** | **Dejar listo el archivo de la carga en vivo** | Un recorte **no subido** (por ejemplo `20260925_saque_trescuartos_toma02c_golpe1.mov`). Decir en la demo que **es del corpus** y subirlo con la fecha real de la grabación; **borrar la sesión después de la demo** para no dejar un tercer punto en Evolución | — |
-| **7** | **Verificar todo** | `estado_de_la_base.py`: 1 cuenta de demo con 4 sesiones (12 + 2 golpes), "VERSIONES DEL MOTOR: {'0.5.5': 14}", sin golpes en curso ni fallidos, sin huérfanos. En la aplicación: Biblioteca, vista de sesión, Evolución (dos puntos, sin aviso de mezcla), Perfil ("Tu actividad": 4 sesiones, 14 golpes) | todo en verde |
-| **8** | **Respaldo final** y **congelar** | `python -m app.respaldo exportar`, copia externa, `git tag` | — |
+**Por qué hay que limpiar B:** dos sesiones del 24/9 y dos del 25/9 de saque en tres cuartos darían **puntos duplicados** en Evolución, y las versiones mezcladas disparan el aviso de versiones distintas del motor.
+
+**Qué hace cada uno:** *vos* borrás y subís desde la aplicación; *yo* verifico con la herramienta de solo lectura después de cada paso y te aviso si algo no coincide.
+
+| Paso | Qué hacés | Verificación (yo) |
+| --- | --- | --- |
+| **0** *(ya; no depende del motor)* | **Eliminar las cuentas de prueba vacías A y C**: entrar a cada una → Perfil → **Eliminar mi cuenta** → escribir `ELIMINAR`. (Descargá los datos antes si querés conservar algo.) | La cuenta ya no figura; **0 archivos huérfanos**; 0 filas sin dueño |
+| **1** *(25/10)* | **Respaldo nuevo y verificado** (`python -m app.respaldo exportar …`) y copia a un disco externo. Borrar es irreversible | Manifiesto "ÍNTEGRO" |
+| **2** | **En la cuenta B, eliminar las 8 sesiones** (Biblioteca → cada sesión → **Eliminar sesión**; borra los archivos de los dos buckets y las filas): las 6 de un golpe de prueba (24/9 saque perfil, 24/9 revés tres cuartos, 24/9 saque tres cuartos de 0.5.4, 25/9 revés fallido, 25/9 revés tres cuartos, 25/9 saque perfil) y las dos del corpus procesadas con 0.5.3 | Biblioteca vacía; B sin sesiones, sin videos y **sin archivos** |
+| **3** | **Subir la sesión 1** (en este orden de datos): *Jugador:* Valentín (mano derecha) · *Golpe:* **Saque** · *Encuadre:* **Tres cuartos** · *Lado de la cámara:* **izquierda** · *¿Cómo lo grabaste?:* **Cámara lenta de 240 fps** · *Fecha:* **24/09/2026**. *Archivos* (los 6): `20260924_saque_trescuartos_toma01_golpe1.mov` … `golpe6.mov` de `Desktop\corpus-originales-reales\recortes-evolucion\`. Se eligen desde la computadora (no hace falta "Formato: Actual"). **Esperar a que terminen los 6** (≈ 12–15 min: de a uno en el servidor) | 6 golpes medidos, **todos con la misma versión del motor** |
+| **4** | **Subir la sesión 2:** los mismos datos pero *Fecha:* **25/09/2026** y los 6 archivos `20260925_saque_trescuartos_toma02b_golpe1.mov` … `golpe6.mov`. **Esperar** (≈ 12–15 min) | 6 golpes medidos, misma versión |
+| **5** | **Subir un drive y un revés** (ya cortados y verificados, en `Desktop\corpus-originales-reales\recortes-demo\`): **drive** → *Golpe:* Drive · *Encuadre:* **De perfil** · *Lado:* izquierda · *Fecha:* 25/09/2026 · archivo `20260925_drive_perfil_toma02_golpe1.mov`. **Revés** → *Golpe:* Revés · *Encuadre:* **Tres cuartos** · *Lado:* izquierda · *Fecha:* 25/09/2026 · archivo `20260925_reves_trescuartos_toma02_golpe1.mov` (cada uno en su sesión de un golpe). Si un reporte sale con el orden "no medido", probar con otro golpe de los 6 de esa carpeta | 2 sesiones de un golpe, medidos, misma versión |
+| **6** | **Mirar todo en la aplicación:** Biblioteca (4 sesiones), vista de sesión, **Evolución** (dos puntos, **sin** aviso de versiones), **Perfil → Tu actividad** (4 sesiones, 14 golpes) y un PDF de golpe y de sesión | `estado_de_la_base.py`: una sola versión del motor, **0 en curso, 0 fallidos, 0 huérfanos** |
+| **7** | **Dejar el archivo de la carga en vivo:** un recorte **no subido**, por ejemplo `20260925_saque_trescuartos_toma02c_golpe1.mov`. En la demo se dice que **es del corpus** y se sube con la fecha real de la grabación; **se borra la sesión después**, para no dejar un tercer punto en Evolución | — |
+| **8** | **Respaldo final** y **congelar** (`git tag demo-…`; no se publica más) | Manifiesto "ÍNTEGRO" |
+
+**Tiempo total de proceso:** ≈ 12–15 + 12–15 + 5 min de cola ≈ **35 min** (más lo que tardes en cargar los formularios).
+**Si el motor cambia después de congelarlo:** repetir los pasos 1 a 8 (los pasos 3 a 5 dependen de la versión). No se sube nada antes del congelamiento.
 
 **Qué NO va a la cuenta de la demo:** las sesiones del lado derecho (`docs/protocolo-sesion-lado-derecho.md`) —son un corpus aparte, y la aplicación avisaría que cambia el lado—, ni sesiones de prueba de ninguna clase.
 **Qué NO se borra:** la cuenta B, el respaldo (`kinetiq-data\respaldos`), ni los originales del corpus (`corpus-originales-reales`, fuera del repositorio).
@@ -150,9 +167,10 @@ impresos o en PDF · esta guía. **Dos pestañas con los reportes del guion ya a
 
 ## F. Lo que falta para que este guion esté listo
 
-1. Cortar un drive y un revés del corpus y cargarlos (§C, paso 5) — ~0,25 sesión.
-2. Probar "Eliminar mi cuenta" con una cuenta descartable (§C, paso 1).
-3. Ensayar dos veces con cronómetro y ajustar los minutos.
-4. Grabar el video de pantalla del recorrido y sacar las capturas.
-5. Decidir si se muestra una diapositiva con la tabla del orden por encuadre (§A.1) o se usa la pantalla Tecnología.
-6. **Si el 24/10 el núcleo está completo:** extender D a drive y revés (decisión 038), y entonces el reporte avisará también en esos gestos.
+1. ~~Cortar un drive y un revés del corpus~~ **Hecho el 15/10:** 12 recortes verificados en `recortes-demo` (6 de drive de perfil y 6 de revés de tres cuartos de la sesión 2).
+2. ~~Probar "Eliminar mi cuenta"~~ **Probado el 15/10 en producción** (Valentín): la cuenta, sus filas y sus archivos desaparecieron (verificado).
+3. **Congelar el motor el 24/10** y ejecutar §C el 25–26/10.
+4. Ensayar dos veces con cronómetro y ajustar los minutos.
+5. Grabar el video de pantalla del recorrido y sacar las capturas.
+6. Decidir si se muestra una diapositiva con la tabla del orden por encuadre (§A.1) o se usa la pantalla Tecnología.
+7. **Si el 24/10 el núcleo está completo:** extender D a drive y revés (decisión 038) **antes** de congelar; entonces el reporte avisará también en esos gestos.

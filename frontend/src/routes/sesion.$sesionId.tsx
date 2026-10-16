@@ -373,9 +373,6 @@ function SesionPage() {
         )}
       </section>
 
-      <p className="mt-10 text-center text-xs text-muted-foreground">
-        KinetiQ documenta el movimiento. No diagnostica ni reemplaza la evaluación de un profesional.
-      </p>
     </main>
     {/* El PDF es un documento aparte (A4 vertical), no esta pantalla impresa: ver documento-sesion.tsx. */}
     <DocumentoDeSesion datos={datos} consistencia={consistencia} idTipico={idMostrado} />

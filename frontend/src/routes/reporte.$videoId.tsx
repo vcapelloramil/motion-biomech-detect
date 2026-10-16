@@ -389,9 +389,6 @@ function Reporte({ video, reporte }: { video: VideoConReporte; reporte: Record<s
         </div>
       </details>
 
-      <p className="mt-10 text-center text-xs text-muted-foreground">
-        KinetiQ documenta el movimiento. No diagnostica ni reemplaza la evaluación de un profesional.
-      </p>
     </main>
     {/* El PDF es un documento aparte (A4 vertical), no esta pantalla impresa: ver documento-golpe.tsx. */}
     <DocumentoDeGolpe video={video} reporte={reporte} />

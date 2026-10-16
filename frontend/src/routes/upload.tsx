@@ -3,6 +3,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { AlertTriangle, CheckCircle2, CircleDashed, Film, Info, Loader2, UploadCloud, X } from "lucide-react";
 import { RutaProtegida } from "@/components/ruta-protegida";
 import { EsquemaEncuadre } from "@/components/esquema-encuadre";
+import { InstruccionesDeCarga } from "@/components/instrucciones-carga";
 import { esLadoDeLaMano, ladoRecomendado, type LadoCamara as LadoEsquema } from "@/lib/esquema-encuadre";
 import { useSesion } from "@/lib/sesion";
 import {
@@ -378,31 +379,8 @@ function CargarPage() {
         golpes conviene cargar al menos 6.
       </p>
 
-      {/* La instrucción va ANTES de elegir el archivo (decisiones 029 y 030): si el teléfono convierte el video, no hay arreglo posterior. */}
-      <section aria-labelledby="como-subir" className="mt-8 rounded-xl border border-neon/40 bg-neon/5 p-5">
-        <h2 id="como-subir" className="flex items-center gap-2 font-display text-base font-semibold">
-          <Info className="h-4 w-4 text-neon" aria-hidden="true" />
-          Antes de elegir los archivos (iPhone)
-        </h2>
-        <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm">
-          <li>
-            En <strong>Fotos</strong>, abrí el video y tocá <strong>Editar</strong>. <strong>Recortá</strong> cada golpe: dejá solo el
-            golpe (unos 2 a 5 segundos) y guardalo como un clip aparte.
-          </li>
-          <li>
-            Sacale la cámara lenta: en la <strong>barra de rayitas</strong> de abajo, dejá <strong>todo el tramo a velocidad normal</strong>.
-          </li>
-          <li>
-            Al subirlos, en el selector tocá <strong>Opciones</strong> (abajo a la izquierda) y elegí <strong>Formato: Actual</strong>.
-          </li>
-        </ol>
-        <p className="mt-3 text-sm text-muted-foreground">
-          Lo que grabaste a 240 fps se conserva aunque se vea a velocidad normal. Si el recorte mantiene parte en cámara lenta, el
-          teléfono lo convierte al subirlo (llega a unos 50 fps) aunque elijas «Actual», y no se puede analizar. Con el formato por
-          defecto también convierte el video y descarta fotogramas: queda por debajo de los 120 fps que hacen falta. Otra opción:
-          guardalos en la app <strong>Archivos</strong> y elegilos desde ahí. Un video sin recortar de más de 50 MB tampoco entra.
-        </p>
-      </section>
+      {/* La instrucción va ANTES de elegir el archivo (decisiones 029 y 030): desplegable por dispositivo, cerrado por defecto. */}
+      <InstruccionesDeCarga lado={recomendado ?? "izquierda"} />
 
       <form onSubmit={enviar} className="mt-8 space-y-8" noValidate>
         {sesionCreada && (

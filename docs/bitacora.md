@@ -6,6 +6,24 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-15 (más tarde) — Probado en producción, cuentas, 038 (tipo de golpe automático), Cargar por dispositivo, Evolución y recortes de la demo
+
+- **Probado en producción por Valentín** (frontend republicado): **Perfil, Evolución y PDF (golpe y sesión)** funcionan y se descargan. **"Eliminar mi cuenta" probado con una cuenta de prueba: funcionó.**
+  **Verificado por mí (solo lectura):** la cuenta ya no está en `auth.users` (3 cuentas; estaba en el respaldo de las 21:49), **0 filas** de `usuarios`, `atletas`, `sesiones` ni `videos` sin dueño y **0 archivos** en carpetas de cuentas
+  inexistentes en los dos buckets. Es la primera ejecución real de `DELETE /cuenta` (antes solo razonada del esquema).
+- **Cuentas restantes:** A (6/10, sin sesiones, **15 archivos huérfanos de 245 MB** de la página de prueba del iPhone), B (principal: 8 sesiones, 18 videos, 65 archivos, 635 MB) y C (15/10, rol entrenador, sin sesiones ni archivos).
+- **Decisión 038, segunda ronda:** (a) el **tipo de golpe** lo asigna el sistema solo cuando la detección es segura y, si una carga trae golpes de distinto tipo, los **separa en sesiones distintas y lo informa** ("5 saques y 1 drive");
+  pregunta solo si es "no determinado"; el usuario corrige; si no se cumple el criterio (≤ 5 % de error), pasa a "propone y confirma". (b) **El lado de la cámara entra en la clave de Evolución: sí.**
+- **Cargar:** las instrucciones son ahora un **desplegable cerrado con pestañas iPhone · Android · Computadora** (la del dispositivo detectado viene preseleccionada), cada una con el esquema del encuadre recomendado. Android: "Cámara lenta" (no
+  "Súper cámara lenta"), recortar sin cambiar la velocidad, evitar WhatsApp y a veces Google Fotos, **no probado en todos los modelos** (el sistema avisa si no llega a 120 fps). Computadora: original sin compresión y recorte sin recodificar; se nombra
+  **LosslessCut** porque su documentación dice que corta sin recodificar ("lossless trimming", copia directa de datos con FFmpeg), con la salvedad de que corta en fotogramas clave.
+- **Evolución:** el gráfico "Golpes con el mismo orden" se **oculta** cuando ninguna sesión tiene 5 golpes ordenables y queda una frase que explica por qué (lo habitual en tres cuartos: 8,33 ms de tolerancia). La leyenda "KinetiQ documenta…" quedó **una sola vez**
+  (en el pie) en Perfil, Privacidad, Reporte y Sesión.
+- **Recortes de la demo** (fuera de git, `Desktop\corpus-originales-reales\recortes-demo\`): **12 recortes verificados** (6 drive de perfil y 6 revés de tres cuartos de la sesión 2); `recortar_evolucion.py --grupos demo`.
+- **Guion de la demo, §C reescrito:** la limpieza y la nueva subida se ejecutan **después del congelamiento del motor (24/10)**, el 25–26/10, con paso a paso (qué borra Valentín, en qué orden, qué sube con qué fecha).
+
+---
+
 ## 2026-10-15 (noche) — Push a main, 0.5.5 en producción, 038 aprobada y guion de la demo
 
 - **`main` publicado:** `56a13c1..a377e71` (avance rápido; sin análisis en curso al momento del push). **`/health` = 0.5.5 verificado tres veces seguidas**; `GET /evolucion` y `DELETE /cuenta` responden 401 sin token (rutas nuevas vivas).

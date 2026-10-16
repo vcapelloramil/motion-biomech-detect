@@ -119,11 +119,6 @@ function PerfilPage() {
           }}
         />
       </div>
-
-      <p className="mt-12 text-xs text-muted-foreground">
-        KinetiQ documenta el movimiento observado y entrega los valores medidos con su nivel de confianza. No es un producto sanitario ni
-        reemplaza la evaluación de un profesional. Qué datos se guardan y para qué: <Link to="/privacidad" className="underline underline-offset-4">Privacidad</Link>.
-      </p>
     </main>
   );
 }

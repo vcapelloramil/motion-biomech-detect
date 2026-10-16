@@ -102,9 +102,6 @@ function PrivacidadPage() {
         </p>
       </Seccion>
 
-      <p className="mt-12 text-xs text-muted-foreground">
-        KinetiQ documenta el movimiento observado. No diagnostica ni reemplaza la evaluación de un profesional.
-      </p>
     </main>
   );
 }

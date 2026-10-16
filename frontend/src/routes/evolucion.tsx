@@ -200,12 +200,20 @@ function Serie({ serie }: { serie: SerieDeEvolucion }) {
             "Una sesión sin dato queda como hueco: no se completa con una estimación."
           }
         />
-        <PanelBarras
-          titulo="Golpes con el mismo orden de cadera y tronco"
-          barras={serie.sesiones.map((s) => ({ mismo: s.orden.mismo_orden, ordenables: s.orden.ordenables, suficiente: s.orden.suficiente }))}
-          etiquetas={etiquetas}
-          nota="De los golpes en que se distingue cuál llegó primero, cuántos tuvieron el mismo orden. Mide si se repite, no cuál es el correcto. Con menos de 5 golpes ordenables no se dice."
-        />
+        {serie.sesiones.some((s) => s.orden.suficiente) ? (
+          <PanelBarras
+            titulo="Golpes con el mismo orden de cadera y tronco"
+            barras={serie.sesiones.map((s) => ({ mismo: s.orden.mismo_orden, ordenables: s.orden.ordenables, suficiente: s.orden.suficiente }))}
+            etiquetas={etiquetas}
+            nota="De los golpes en que se distingue cuál llegó primero, cuántos tuvieron el mismo orden. Mide si se repite, no cuál es el correcto. Con menos de 5 golpes ordenables no se dice."
+          />
+        ) : (
+          <p className="rounded-2xl border border-dashed border-border p-5 text-sm text-muted-foreground">
+            <strong className="text-foreground">No hay gráfico del orden de cadera y tronco:</strong> ninguna sesión llega a 5 golpes en los que se
+            distinga cuál llegó primero. Es lo habitual con la cámara en tres cuartos: la cadera y el tronco llegan a su pico con menos de 8,33 ms
+            de diferencia y, a esa resolución, no se puede saber cuál fue primero. Los golpes medidos se ven en la separación de arriba.
+          </p>
+        )}
       </div>
     </div>
   );

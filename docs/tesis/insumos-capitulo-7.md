@@ -3,7 +3,7 @@
 **Para quién es:** otro chat que redacta el capítulo y **no ve el repositorio**. Este documento es autocontenido: todas las cifras están acá, con su unidad, su fecha y el archivo de donde salen
 (rutas relativas a la raíz del repositorio `motion-biomech-detect`; los videos y el corpus **no** están en el repositorio).
 
-**Corte:** 13/10/2026, commit `60751d8` de la rama `respaldo-13-10` (04:20 hora local, −03:00). Producción es `origin/main` = `56a13c1` (13/10, 03:04).
+**Corte:** 13/10/2026 (commit `60751d8`), **actualizado el 15/10/2026**: los pasos 5 y 6 y el motor 0.5.5 están **publicados** (`origin/main` = `a377e71` desde el 15/10; antes, `56a13c1`). Lo marcado "15/10" en este documento es posterior al corte original.
 **Quién escribe:** Claude Code, a pedido de Valentín Capello Ramil (autor). Nada de este documento es redacción de tesis: es material para redactarla.
 
 ---
@@ -98,11 +98,11 @@ Supabase (con service_role): reporte JSON (contrato 1.4), estados, tiempos de co
 7. **Reporte de un golpe:** "Tres momentos" (fotogramas reales con esqueleto en el pico de cadera, tronco y brazo), observaciones **sin veredicto**, magnitudes con su confianza (separación cadera-hombro máxima; ángulos de rodilla y codo en el pico del tronco), trazabilidad (versión del motor, tasa, regularización, tolerancia) y limitaciones.
 8. **Vista de sesión:** consistencia entre golpes (separación mediana y dispersión, "mismo orden en N de M", golpes medidos, golpe típico, golpes que se apartan), calculada al leerla (no se guarda).
 9. **Biblioteca** (miniatura real, "N golpes medidos · K con orden distinguible · M no medibles"), **eliminar un golpe o una sesión** (borra los archivos de ambos buckets y las filas), **PDF** por impresión del navegador.
-10. **Solo en la rama de respaldo (no en producción):** Perfil real (nombre, rol, jugadores, "Descargar mis datos"), **eliminar la cuenta** con sus archivos, **Evolución real** (la serie de sesiones del mismo jugador, gesto y encuadre) y el **PDF como documento A4**.
+10. **Publicado el 15/10/2026:** Perfil real (nombre, rol, jugadores, "Descargar mis datos"), **eliminar la cuenta** con sus archivos, **Evolución real** (la serie de sesiones del mismo jugador, gesto y encuadre) y el **PDF como documento A4**.
 
 **Qué produce el reporte real hoy:** solo `sin_evaluar` ("Solo registrado"), `sin_diferencia_medible` y `no_auditable`. Los estados `correcto`, `desvio_leve` y `alerta_de_carga` siguen existiendo en el contrato pero, con el orden suspendido y sin umbrales con referencia, ningún reporte los emite (decisión 036).
 
-### 1.3 Qué está en producción y qué solo en `respaldo-13-10`
+### 1.3 Qué está en producción (y cuándo llegó)
 
 | Capacidad | Dónde | Commit · fecha (−03:00) | En producción |
 | --- | --- | --- | --- |
@@ -116,13 +116,14 @@ Supabase (con service_role): reporte JSON (contrato 1.4), estados, tiempos de co
 | Higiene de contenido; varios golpes por sesión (hasta 12) | `main` | `c55139e` 13/10 00:37 · `c9f0334` 13/10 01:25 | Sí |
 | Vista de sesión, consistencia, eliminar golpe/sesión, miniatura, tiempos, recuperación al arrancar | `main` | `93a15aa` · 13/10 01:59 | Sí |
 | **Motor 0.5.4, contrato 1.4, decisión 037**, PDF por impresión, hallazgos de producción | `main` | `56a13c1` · 13/10 03:04 | **Sí** (`/health` = 0.5.4, verificado 3 veces seguidas; frontend republicado por Valentín, según la bitácora) |
-| **Paso 5:** Perfil real, "Descargar mis datos", `DELETE /cuenta` (archivos de ambos buckets primero) | solo `respaldo-13-10` | `5b1dc01` · 13/10 03:50 | **No** |
-| **Paso 6:** Evolución real (`GET /evolucion`, pantalla `/evolucion`) y PDF como documento A4 | solo `respaldo-13-10` | `0bbc1df` · 13/10 04:17 | **No** |
-| Bitácora de cierre del día | solo `respaldo-13-10` | `60751d8` · 13/10 04:20 | — |
+| **Paso 5:** Perfil real, "Descargar mis datos", `DELETE /cuenta` (archivos de ambos buckets primero) | `main` (desde el 15/10) | `5b1dc01` · 13/10 03:50 | **Sí**, desde el 15/10; **"Eliminar mi cuenta" probado** con una cuenta de prueba |
+| **Paso 6:** Evolución real (`GET /evolucion`, pantalla `/evolucion`) y PDF como documento A4 | `main` (desde el 15/10) | `0bbc1df` · 13/10 04:17 | **Sí**, desde el 15/10; Evolución y PDF probados en producción |
+| Bitácora de cierre del día | `main` (desde el 15/10) | `60751d8` · 13/10 04:20 | — |
 
-- `main` y `origin/main` quedan en `56a13c1`: Render no tiene nada nuevo que desplegar (la rama de respaldo no se despliega). Los pasos 5 y 6 **no agregan migraciones** ni tocan el motor.
+- Hasta el 14/10 `main` y `origin/main` estaban en `56a13c1` y la rama de respaldo no se desplegaba. **Desde el 15/10 `main` = `a377e71`.** Los pasos 5 y 6 **no agregan migraciones** (verificado: `supabase/` sin cambios).
 - **Pruebas automáticas (reportadas en la bitácora al cierre, sin volver a correrlas para este documento):** servidor, suite rápida **589 passed** (569 en `56a13c1`); frontend, `bun test` **106 pass** (84 en `56a13c1`), `tsc` y `build` limpios.
-- **Nada de los pasos 5 y 6 está verificado en pantalla real:** los gráficos de Evolución solo se miraron con una serie sintética; el PDF solo se renderizó a 210 mm con datos sintéticos; la cascada de eliminar cuenta está razonada del esquema, no ejecutada.
+- **Probado en producción el 15/10/2026** (Valentín, con el frontend republicado): Perfil, Evolución y el PDF del golpe y de la sesión funcionan y se descargan; **"Eliminar mi cuenta" funcionó con una cuenta de prueba** y, verificado en la base,
+  no quedaron filas ni archivos de esa cuenta en Postgres ni en Storage. Sin verificar todavía: Evolución con las sesiones del corpus subidas con el motor 0.5.5 (se vuelven a subir después del congelamiento del motor) y el PDF impreso en papel.
 
 ### 1.4 Versiones del motor y del contrato (RNF-02: el reporte lleva su versión)
 
@@ -134,7 +135,7 @@ Supabase (con service_role): reporte JSON (contrato 1.4), estados, tiempos de co
 | 0.5.2 | Decisión 035: el saque no emite veredicto; contraste del encuadre declarado con el visto. | 1.3 |
 | 0.5.3 | Decisión 036: ningún grupo emite veredicto. | 1.3 |
 | 0.5.4 | Decisión 037: el empate es "golpe medido"; el pico que falta lleva su motivo. | 1.4 |
-| 0.5.5 | Nota neutra cuando la cámara estuvo del lado de la mano dominante (lado todavía no validado; decisión 013). *(15/10/2026; solo en `respaldo-13-10` hasta publicar.)* | 1.4 |
+| 0.5.5 | Nota neutra cuando la cámara estuvo del lado de la mano dominante (lado todavía no validado; decisión 013). *(15/10/2026; en producción: `/health` = 0.5.5 verificado tres veces seguidas.)* | 1.4 |
 
 ---
 
@@ -396,7 +397,7 @@ el valor absoluto del giro, así que no distingue el signo, pero no se verificó
 | 18 | Brazo no medible | 52 de 76 (68 %) | **FIRME** (conteo y visibilidad del codo) · **PROVISORIO** (causa) | La atribución al lado de grabación (brazo lejano tapado por el torso) es la lectura que mejor explica los datos, pero no se contrastó grabando del lado de la raqueta (013). |
 | 19 | Detección de encuadre D | 28/28, 0 falsos | **PROVISORIO** | Misma muestra para calibrar y verificar; solo saque; drive y revés pendientes. |
 | 20 | Recortes de Evolución | 18/18 verificados | **FIRME** | Aritmética entera sobre las marcas de tiempo. |
-| 21 | Evolución real, Perfil real, eliminar cuenta, PDF A4 | — | **PENDIENTE** | Solo en `respaldo-13-10`; sin verlos en pantalla real. |
+| 21 | Evolución real, Perfil real, eliminar cuenta, PDF A4 | funcionan (15/10) | **FIRME** en lo probado; **PROVISORIO** Evolución con datos finales | Publicados el 15/10 (`main` `a377e71`). Probados por Valentín en producción; eliminar cuenta, verificado en la base (0 filas y 0 archivos). Evolución se vuelve a mirar tras la nueva subida del corpus. |
 | 22 | Correo propio (registro abierto, recuperar contraseña) | funciona (15/10) | **FIRME** en lo probado; **PROVISORIO** la entrega a otros proveedores | Lo probó Valentín con una cuenta de prueba; falta una prueba con otro proveedor y el límite de envíos por hora. |
 | 23 | Costo marginal por análisis (USD) | — | **NO MEDIDO** | El Cap. 4 lo estimó en USD 0,13–0,25 con ocho minutos por video; hoy es USD 25/mes fijos de Render. |
 
@@ -532,7 +533,7 @@ Orden vigente del plan (`docs/plan-mvp-punta-a-punta.md` §8): pasos 1 a 6 hecho
 
 | # | Qué | Estado |
 | --- | --- | --- |
-| 1 | **Publicar los pasos 5 y 6** (hoy solo en `respaldo-13-10`): llevarlos a `main`, correr las pruebas, `git push origin main` (Render redeploya el servidor) y **republicar el frontend** (`bun run build` + `wrangler deploy`). Hacen falta las dos cosas: Evolución y Perfil llaman a `/evolucion` y `/cuenta`. | Pendiente de decisión de Valentín; **no se hizo** (`main` no se tocó) |
+| 1 | ~~**Publicar los pasos 5 y 6**~~ **Hecho el 15/10/2026** (antes eran solo de `respaldo-13-10`): llevarlos a `main`, correr las pruebas, `git push origin main` (Render redeploya el servidor) y **republicar el frontend** (`bun run build` + `wrangler deploy`). Hacen falta las dos cosas: Evolución y Perfil llaman a `/evolucion` y `/cuenta`. | Pendiente de decisión de Valentín; **no se hizo** (`main` no se tocó) |
 | 2 | **Probar en pantalla real:** (a) eliminar cuenta con una cuenta descartable (Storage queda sin la carpeta del usuario en los dos buckets y la cuenta ya no entra); (b) Evolución con las dos sesiones del corpus (los dos puntos, la variación, "se mantuvo" o "aumentó/disminuyó", el aviso de mezcla de versiones 0.5.3/0.5.4); (c) imprimir de verdad el PDF de un golpe y de una sesión (salto de página, imágenes, A4 vertical); (d) Perfil con una cuenta real; (e) Procesando en escritorio. | Pendiente (ninguno verificado) |
 | 3 | ~~Correo propio~~ **Resuelto el 15/10/2026** (Brevo; registro, confirmación y "Olvidé mi contraseña" probados). Falta probar con una dirección de otro proveedor y configurar el alias de contacto de Privacidad. | Hecho · parte pendiente |
 | 4 | **Revisar el texto de `/privacidad`:** es una declaración de Valentín (no se usa para publicidad ni se vende; no hay borrado automático). | Pendiente |

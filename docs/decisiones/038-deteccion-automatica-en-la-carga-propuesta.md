@@ -37,11 +37,19 @@ y agregan tres preguntas a una pantalla que ya pide jugador, fecha y modo de cap
 **Aprobado por Valentín:**
 
 1. **Diseño A** (la detección corre dentro del análisis que ya existe, "propone después"); el diseño B (pasada rápida previa en la carga) queda para cuando la validación lo justifique.
-2. **Criterio de aceptación:** por campo, **error ≤ 5 % entre los determinados** y **"no determinado" ≤ 20 %**. Si un campo no lo cumple, queda como pregunta al usuario, sin propuesta.
+2. **Criterio de aceptación:** por campo, **error ≤ 5 % entre los determinados** y **"no determinado" ≤ 20 %**. Si un campo no lo cumple, **no se asigna solo**: pasa a **"el sistema propone y el usuario confirma"**.
 3. **La implementación va DESPUÉS de la demo (28–30/10).** Antes de la demo, **solo si el 24/10 el núcleo está completo: extender D (el contraste de encuadre) a drive y revés.** Nada de la pantalla de Cargar se toca antes.
 4. **La sesión del lado derecho** (`docs/protocolo-sesion-lado-derecho.md`) la graba Valentín **cuando el clima lo permita**; avisa. Sin esa sesión no se programa (c).
 
-**Quedan abiertas** (se proponen como están hasta que Valentín diga otra cosa): un golpe que contradice a su sesión **se mueve a pedido, nunca solo**; y el lado de la cámara **entra en la clave de la serie de Evolución**.
+**Resueltas el 15/10/2026 (segunda ronda):**
+
+5. **Tipo de golpe: el usuario NO elige nada.** Si la detección es segura, el sistema **asigna el tipo solo**; si en una misma carga hay golpes de distinto tipo, **los separa solo en sesiones distintas y lo informa**
+   ("5 saques y 1 drive"). **Solo pregunta si la detección es dudosa ("no determinado").** El usuario **siempre puede corregir** (mover un golpe a otra sesión). Si en la validación **no se cumple el criterio**
+   (≤ 5 % de error entre los determinados, ≤ 20 % de "no determinado"), el tipo pasa a **"propone y el usuario confirma"**.
+6. **El lado de la cámara entra en la clave de la serie de Evolución: sí.** Nunca se mezclan lados en una misma serie.
+
+**Encuadre y lado de la cámara** (sin instrucción nueva): siguen el criterio base de esta decisión (el sistema detecta y propone, el usuario corrige, lo dudoso se pregunta); la asignación automática de esos dos campos
+se decide con el mismo criterio de aceptación cuando haya datos del lado derecho.
 
 ### Pre-registro (fijado ANTES de ver resultados de detección)
 
@@ -100,7 +108,7 @@ estaba en el repositorio y **no es** la regla propuesta (la propuesta mira la pr
 | --- | --- |
 | Unidad y partición | la **sesión**: umbrales con la sesión 1 (24/9) y evaluación en la sesión 2 (25/9), y al revés; nunca se evalúa sobre lo que se usó para fijar el umbral |
 | Qué se informa | por campo: **matriz de confusión** (gesto 3 × 3; encuadre 2 × 2 por gesto; lado 2 × 2 con la sesión del lado derecho), **% de acierto con intervalo de Wilson de 95 %**, **% "no determinado"** (cobertura) y el error **entre los determinados** |
-| Criterio de aceptación propuesto (a confirmar con el tutor) | error entre los determinados **≤ 5 %** y "no determinado" **≤ 20 %**; si no, el campo queda como pregunta al usuario, sin propuesta |
+| Criterio de aceptación (aprobado) | error entre los determinados **≤ 5 %** y "no determinado" **≤ 20 %**; si no, el campo **no se asigna solo**: el sistema propone y el usuario confirma |
 | Qué cuenta como verdad | la etiqueta declarada, **revisada a mano** donde haya duda (hay un error de etiqueta conocido) |
 
 **Límites que hay que declarar:** un solo jugador (diestro); un teléfono y un lugar; dos sesiones consecutivas; el corpus es **todo del lado izquierdo** (el lado no se valida sin la sesión nueva); no hay zurdos; tres cuartos
@@ -121,10 +129,11 @@ estaba en el repositorio y **no es** la regla propuesta (la propuesta mira la pr
 
 - **Datos.** Una columna aditiva `videos.deteccion` (jsonb: valor, confianza, motivo, versión de la regla; la escribe solo el servidor, como los tiempos) y `trazabilidad.deteccion` en el reporte (contrato 1.5, aditivo).
   Migración **aditiva**: no rompe nada de lo que está en producción.
-- **Sesión con golpes mezclados.** La sesión conserva lo que **el usuario confirmó**. Un golpe cuya detección **contradice con confianza** a la sesión **no se reagrupa solo**: queda fuera de las cifras de consistencia
-  de esa sesión y de la Evolución, se lista aparte ("parece un drive en una sesión de saque") y ofrece **"mover a otra sesión"** (crea o reutiliza la del mismo jugador y fecha con ese gesto, encuadre y lado).
-  Un golpe "no determinado" **no se excluye**: se cuenta con lo declarado y se marca.
-- **Evolución.** Hoy elige jugador × golpe × encuadre y **avisa** si el lado de la cámara cambia entre sesiones. Con el lado detectado confiable, **el lado pasa a ser parte de la clave de la serie** (nunca se mezclan
+- **Tipo de golpe y sesiones mezcladas (resuelto el 15/10).** En una misma carga, el sistema **separa solo** los golpes por tipo detectado en **sesiones distintas** (mismo jugador y fecha, con el tipo, el encuadre y el lado que
+  corresponden) y lo **informa** ("5 saques y 1 drive"), con la opción de **corregir** cualquiera (mover un golpe a otra sesión). Un golpe **"no determinado" no se asigna ni se excluye**: se pregunta, y mientras tanto se cuenta
+  con lo declarado y se marca. Un golpe **ya separado se sigue viendo** en la Biblioteca (nada desaparece en silencio) y su reporte lleva lo detectado y la confianza.
+- **Si el criterio no se cumple** para el tipo de golpe: la separación **no es automática**: el sistema propone ("parece un drive") y el usuario confirma antes de que se cree la sesión.
+- **Evolución (resuelto el 15/10: sí).** Hoy elige jugador × golpe × encuadre y **avisa** si el lado de la cámara cambia entre sesiones. **El lado pasa a ser parte de la clave de la serie** (nunca se mezclan
   lados). Los cambios en `consistencia.py` y `routers/evolucion.py` son chicos.
 - **Lo que no cambia:** ningún veredicto (035 y 036); el contraste de encuadre existente se integra, no se duplica.
 
@@ -154,8 +163,8 @@ esta semana, con un ritmo observado de 1 a 1,5 sesiones por día y la regla de r
 | --- | --- | --- |
 | 1 | ¿Se empieza por A (propone después)? | **Aprobado** |
 | 2 | ¿Criterio de aceptación del 5 % de error y 20 % de "no determinado"? | **Aprobado, como pre-registro** |
-| 3 | ¿Un golpe que contradice a su sesión se mueve a pedido o se reagrupa solo? | **Abierta** (propuesto: a pedido, nunca solo) |
-| 4 | ¿El lado de la cámara entra en la clave de la serie de Evolución? | **Abierta** (propuesto: sí) |
+| 3 | ¿Un golpe que contradice a su sesión se mueve a pedido o se reagrupa solo? | **Resuelta para el tipo de golpe: se separa solo, en sesiones distintas, y se informa; solo pregunta si es dudoso; el usuario corrige. Si la validación no cumple el criterio: propone y confirma.** Encuadre y lado: propone y el usuario corrige |
+| 4 | ¿El lado de la cámara entra en la clave de la serie de Evolución? | **Sí** |
 | 5 | ¿Se graba la sesión del lado derecho antes de programar (c)? | **Sí**: la graba Valentín cuando el clima lo permita |
 | 6 | ¿Qué parte entra antes de la demo? | **Solo D para drive y revés, y solo si el 24/10 el núcleo está completo** |
 
