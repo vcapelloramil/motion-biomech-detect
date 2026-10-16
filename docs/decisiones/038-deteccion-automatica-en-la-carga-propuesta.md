@@ -3,6 +3,17 @@
 **Fecha:** 15 de octubre de 2026
 **Estado:** **APROBADA en lo esencial por Valentín el 15/10/2026** (ver "Aprobación y pre-registro"): diseño **A**, criterio de aceptación del 5 % y del 20 % como **pre-registro** e implementación **después de la demo**.
 Nada de esto está implementado; las cifras de acierto **no se midieron** todavía (**NO MEDIDO**): lo que sigue es el diseño de cómo medirlas.
+
+> **ACTUALIZACIÓN del 16/10/2026 (cambio de calendario pedido por Valentín).** Se **intenta adelantar a ANTES de la demo** la detección automática del **tipo de golpe y del encuadre** (**no** la del lado de la cámara,
+> que sigue después de la sesión con el cuerpo girado). **Esto reemplaza el punto 3 de la aprobación del 15/10** ("la implementación va después de la demo; antes, solo D para drive y revés") y la recomendación 3 de
+> "Esfuerzo y calendario" (no tocar Cargar antes del 28/10). Va **en dos etapas con una puerta**:
+> 1. **Etapa 1 — validación, sin tocar el producto** (arnés `backend/app/medicion_deteccion.py`, resultados en `docs/resultados/deteccion-038-etapa1.*`): primero el tipo de golpe y después el encuadre con la calibración
+>    de D **por tipo de golpe**, ajustando en una sesión y evaluando en la otra, con el criterio pre-registrado (≤ 5 % de error entre los determinados y ≤ 20 % de "no determinado").
+> 2. **Etapa 2 — solo si la etapa 1 cumple, y solo con el OK de Valentín:** antes de programar, una propuesta corta de cómo queda Cargar, las sesiones, Procesando, el reporte y el "no determinado".
+>
+> **Límite duro:** lo que **no esté validado e integrado el 23/10 queda para después de la demo**; el motor se congela el 24/10 (`engine/` y `ensamblar_reporte.py`). **Un campo que no cumpla el criterio no se asigna
+> solo** (queda "el sistema propone y el usuario confirma", o sigue declarado), y la demo se hace con lo que haya. Riesgo que se asume y se declara: Cargar es la pantalla por la que pasa todo y quedan 12 días de
+> calendario; por eso la etapa 2 exige propuesta y OK antes de programar, y la vuelta atrás (`docs/publicacion-y-vuelta-atras.md`) se prepara antes de publicar.
 **Afecta a (si se aprueba):** `docs/ux/especificacion-frontend.md` §5 (Cargar) · `backend/app/engine/encuadre.py` · `backend/app/procesar_video.py` · contrato del reporte (1.4 → 1.5, aditivo) ·
 `backend/app/consistencia.py` y `routers/evolucion.py` · una migración aditiva · decisiones 013, 035 y 036 · plan §9
 **Protocolo de datos nuevos que la acompaña:** `docs/protocolo-sesion-lado-derecho.md`
@@ -38,7 +49,8 @@ y agregan tres preguntas a una pantalla que ya pide jugador, fecha y modo de cap
 
 1. **Diseño A** (la detección corre dentro del análisis que ya existe, "propone después"); el diseño B (pasada rápida previa en la carga) queda para cuando la validación lo justifique.
 2. **Criterio de aceptación:** por campo, **error ≤ 5 % entre los determinados** y **"no determinado" ≤ 20 %**. Si un campo no lo cumple, **no se asigna solo**: pasa a **"el sistema propone y el usuario confirma"**.
-3. **La implementación va DESPUÉS de la demo (28–30/10).** Antes de la demo, **solo si el 24/10 el núcleo está completo: extender D (el contraste de encuadre) a drive y revés.** Nada de la pantalla de Cargar se toca antes.
+3. ~~**La implementación va DESPUÉS de la demo (28–30/10).** Antes de la demo, **solo si el 24/10 el núcleo está completo: extender D (el contraste de encuadre) a drive y revés.** Nada de la pantalla de Cargar se toca antes.~~
+   **Reemplazado el 16/10/2026** (ver la actualización al comienzo): se intenta antes de la demo, en dos etapas y con límite el 23/10. El lado de la cámara **sigue** para después de la demo.
 4. **La sesión del lado derecho** (`docs/protocolo-sesion-lado-derecho.md`) la graba Valentín **cuando el clima lo permita**; avisa. Sin esa sesión no se programa (c).
 
 **Resueltas el 15/10/2026 (segunda ronda):**
@@ -66,6 +78,7 @@ estaba en el repositorio y **no es** la regla propuesta (la propuesta mira la pr
 | Encuadre: regla | giro de la línea de hombros en la preparación (la definición de D); por gesto, **perfil ≤ P** y **tres cuartos ≥ T** con P y T fijados en la sesión de ajuste como los extremos observados (como en el saque: 42° y 50°); entre los dos, "no determinado" |
 | Gesto: regla | saque = muñeca dominante sobre la nariz y codo sobre el hombro sostenido en la preparación; drive y revés = **la que de las tres candidatas** (sentido del giro axial con la mano, distancia entre muñecas, lado del eje del tronco) **dé 0 errores en la sesión de ajuste**; si ninguna, se declara que no se pudo y el campo se pregunta |
 | Qué se informa | matriz de confusión, acierto con Wilson de 95 %, cobertura, y las etiquetas dudosas revisadas a mano (con el motivo) |
+| Operacionalización (16/10, antes de medir) | ventanas, estadísticos, cortes y candidatas exactas en `docs/resultados/deteccion-038-etapa1.md`, apartado "Qué se fijó antes de medir" |
 
 ## Propuesta por campo
 
@@ -150,6 +163,9 @@ estaba en el repositorio y **no es** la regla propuesta (la propuesta mira la pr
 | Pruebas y regresión | 0,5 | |
 | **Total (diseño A completo)** | **≈ 4–5** | el diseño B suma ~1 (pasada rápida y estado nuevo) |
 
+> **Nota del 16/10/2026:** lo que sigue es el análisis del 15/10 y su recomendación **fue reemplazada** por la decisión de Valentín del 16/10 (ver la actualización al comienzo): se intenta antes de la demo, por etapas y con
+> el límite del 23/10. Se conserva porque sigue siendo la estimación de esfuerzo y de riesgo.
+
 **¿Entra antes de la demo del 28–30/10? Solo una parte, y condicionada.** Quedan 13 días; el núcleo restante es ≈ 1,25 sesiones (respaldo con restauración probada, ensayo) más las pruebas de los pasos 5 y 6 y de
 esta semana, con un ritmo observado de 1 a 1,5 sesiones por día y la regla de recorte del plan (si el 24/10 el núcleo no está al 80 %, se recorta). Recomendación:
 
@@ -166,7 +182,7 @@ esta semana, con un ritmo observado de 1 a 1,5 sesiones por día y la regla de r
 | 3 | ¿Un golpe que contradice a su sesión se mueve a pedido o se reagrupa solo? | **Resuelta para el tipo de golpe: se separa solo, en sesiones distintas, y se informa; solo pregunta si es dudoso; el usuario corrige. Si la validación no cumple el criterio: propone y confirma.** Encuadre y lado: propone y el usuario corrige |
 | 4 | ¿El lado de la cámara entra en la clave de la serie de Evolución? | **Sí** |
 | 5 | ¿Se graba la sesión del lado derecho antes de programar (c)? | **Sí**: la graba Valentín cuando el clima lo permita |
-| 6 | ¿Qué parte entra antes de la demo? | **Solo D para drive y revés, y solo si el 24/10 el núcleo está completo** |
+| 6 | ¿Qué parte entra antes de la demo? | ~~Solo D para drive y revés, y solo si el 24/10 el núcleo está completo~~ → **16/10: tipo de golpe y encuadre se intentan antes de la demo (etapa 1 de validación; etapa 2 solo con el OK de Valentín); límite: validado e integrado el 23/10, motor congelado el 24/10. El lado de la cámara, después** |
 
 ## Riesgos
 

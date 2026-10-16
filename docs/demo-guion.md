@@ -95,7 +95,8 @@ Decirlo en este orden y con estas cifras (todas medidas con los originales del i
 | Fecha | Qué |
 | --- | --- |
 | **ya** (no depende del motor) | Eliminar las cuentas de prueba vacías y, con ellas, los 15 archivos huérfanos (paso 0) |
-| **24/10 — congelamiento del motor** | Si ese día el núcleo está completo, se decide D para drive y revés (decisión 038) **y se congela**: `engine/version.py` sin cambios pendientes, `git tag motor-congelado-<versión>`. Después de esa fecha, **ningún cambio en `engine/` ni en `ensamblar_reporte.py`** |
+| **23/10 — límite de la detección automática** | Lo que no esté **validado e integrado** (tipo de golpe y encuadre, decisión 038, actualización del 16/10) queda para después de la demo |
+| **24/10 — congelamiento del motor** | Se **congela**: `engine/version.py` sin cambios pendientes, `git tag motor-congelado-<versión>`. Después de esa fecha, **ningún cambio en `engine/` ni en `ensamblar_reporte.py`** |
 | **25–26/10** | Limpieza y nueva subida (pasos 1 a 8 de abajo) |
 | **26–27/10** | Ensayo cronometrado con los datos definitivos |
 | **27/10 (D−1)** | Checklist de §B y congelamiento total (nada se publica) |
@@ -173,4 +174,4 @@ impresos o en PDF · esta guía. **Dos pestañas con los reportes del guion ya a
 4. Ensayar dos veces con cronómetro y ajustar los minutos.
 5. Grabar el video de pantalla del recorrido y sacar las capturas.
 6. Decidir si se muestra una diapositiva con la tabla del orden por encuadre (§A.1) o se usa la pantalla Tecnología.
-7. **Si el 24/10 el núcleo está completo:** extender D a drive y revés (decisión 038) **antes** de congelar; entonces el reporte avisará también en esos gestos.
+7. **Detección automática (decisión 038, actualización del 16/10):** si la etapa 1 cumple y Valentín da el OK a la etapa 2, tiene que estar **validada e integrada el 23/10**, antes de congelar; si no, queda para después de la demo y la demo se hace con la carga declarada.
