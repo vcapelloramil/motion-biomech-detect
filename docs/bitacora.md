@@ -6,6 +6,86 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-16 — ESTADO DE CIERRE DE CONTEXTO (retomar desde acá)
+
+**Nada nuevo se empezó en esta entrada:** es el resumen de lo que hay, lo que se probó y lo que viene. Verificado el 16/10 con las herramientas de solo lectura (`tools/respaldo/estado_de_la_base.py`) y contra producción.
+
+### 1. Qué está en producción
+| Qué | Estado | Cómo se verificó |
+| --- | --- | --- |
+| **Servidor (Render Standard)** | `main` = **`4f07ee7`**; motor **0.5.5**, contrato 1.4; `/health` = `{"estado":"ok","version_motor":"0.5.5"}` | `curl /health` (16/10) |
+| **Frontend (Cloudflare, `kinetiqtennis.me`)** | el build de `4f07ee7` está publicado: el chunk `upload-DdiH1VuF.js` de producción es **idéntico** al del build local y trae el desplegable de Cargar | comparación del nombre y del texto del chunk (16/10) |
+| **Base (Supabase)** | **sin migraciones nuevas** desde `20261012000000` (13 archivos en `supabase/migrations/`); 1 cuenta, 8 sesiones, 18 videos, 17 reportes | herramienta de estado |
+| **Correo** | SMTP propio (Brevo) funcionando; registro, confirmación y "Olvidé mi contraseña" probados (informe de Valentín) | decisión 034 |
+| **Pruebas** | servidor **597 pasan** (suite rápida), frontend **118 pasan**, `tsc` y `build` limpios | corridas del 15/10 antes del push |
+
+`main` y `respaldo-13-10` están en el mismo commit. Los documentos de esta entrada son el único cambio posterior.
+
+### 2. Qué se probó el 15/10 (en producción, con el frontend republicado)
+- **Informe de Valentín:** **Perfil, Evolución, PDF (golpe y sesión), desplegable de Cargar y "Eliminar mi cuenta"** funcionan.
+- **Verificado por mí:** "Eliminar mi cuenta" no dejó nada (**0 filas** sin dueño y **0 archivos** en carpetas de cuentas inexistentes, en Postgres y en los dos buckets). Del desplegable verifiqué que **el texto está en el chunk publicado**;
+  no lo vi renderizado (la pantalla pide sesión).
+- **Sigue sin verse:** Evolución con las sesiones del corpus **subidas con el motor congelado** (hoy tiene versiones mezcladas) y el PDF **impreso en papel**.
+
+### 3. Cuentas y datos (16/10)
+- **Una sola cuenta:** la principal ("Valentín", creada el 9/10, jugador): **8 sesiones, 18 videos, 65 archivos (635 MB)**, último ingreso el 16/10.
+- **Eliminadas por Valentín** con "Eliminar mi cuenta": la de prueba del 15/10 (gmail), la de la página de prueba del iPhone (creada el 6/10) y la de rol entrenador (creada el 15/10). **Los 15 archivos huérfanos (245 MB) desaparecieron con la de prueba del iPhone.**
+  Verificado: sin filas ni archivos sin dueño.
+- **Datos de B (sin tocar todavía):** versiones del motor **mezcladas** (0.4.1 ×2, 0.5.0, 0.5.2, 0.5.3 ×12, 0.5.4) y **dos sesiones por fecha** (24 y 25/9) → Evolución mostraría puntos duplicados. **1 video fallido.** **Nada en curso.**
+
+### 4. Decisiones aprobadas (15/10)
+- **038 — detección automática** (`docs/decisiones/038-…`): **diseño A** (propone después, dentro del análisis); **criterio de aceptación ≤ 5 % de error entre los determinados y ≤ 20 % de "no determinado"** como **pre-registro**
+  (fijado antes de ver datos); **tipo de golpe: lo asigna el sistema solo si es seguro, separa en sesiones distintas y lo informa ("5 saques y 1 drive"), pregunta solo si es "no determinado", el usuario corrige; si no se cumple el criterio,
+  "propone y confirma"**; **el lado de la cámara entra en la clave de la serie de Evolución**. **La implementación va DESPUÉS de la demo.** Antes de la demo, **solo si el 24/10 el núcleo está completo: extender D a drive y revés.**
+  Abiertas sin instrucción nueva: encuadre y lado siguen "detecta y propone, el usuario corrige".
+- **013 — el lado de la cámara es una recomendación, no una restricción:** se recomienda el contrario a la mano dominante (el validado con el corpus); se aceptan los dos lados; nota neutra en el reporte si es el de la mano dominante (motor 0.5.5).
+- **Sesión del lado derecho** (`docs/protocolo-sesion-lado-derecho.md`): la graba Valentín **cuando el clima lo permita** (avisa); variante aprobada de **girar al jugador** (perfil 180°, tres cuartos por delante 90° hacia su izquierda).
+
+### 5. Calendario y congelamiento
+| Fecha | Qué |
+| --- | --- |
+| **24/10** | **Congelar el motor** (`engine/` y `ensamblar_reporte.py` sin cambios pendientes; `git tag motor-congelado-<versión>`). Ese día, **si el núcleo está completo**, antes de congelar: extender D a drive y revés |
+| **25–26/10** | **Limpieza y nueva subida** (plan paso a paso en `docs/demo-guion.md` §C): respaldo, eliminar las 8 sesiones de la cuenta, subir sesión 1 (24/09, 6 saques), sesión 2 (25/09, 6 saques), un drive de perfil y un revés de tres cuartos (`recortes-demo`), verificar con la herramienta, respaldo final |
+| **26–27/10** | Ensayo cronometrado con los datos definitivos; video de pantalla y capturas de respaldo |
+| **27/10 (D−1)** | Checklist (`demo-guion.md` §B) y **congelamiento total** (no se publica nada) |
+| **28–30/10** | **Demo** |
+
+**No se sube nada antes del congelamiento:** si el motor cambia después de subir, hay que repetir.
+
+### 6. Pendiente (en orden)
+1. **Congelar el motor el 24/10** y decidir D para drive y revés (0,5–1 sesión, solo si el núcleo está completo).
+2. **Limpieza y nueva subida** el 25–26/10 (Valentín borra y sube; yo verifico después de cada paso).
+3. **Ensayo** de la demo dos veces con cronómetro; **video de pantalla** y **capturas**; PDF impreso en papel.
+4. **Copia del respaldo fuera de la PC** y copia completa con `pg_dump` (necesita la contraseña de la base; no la tengo): ver `docs/respaldo-y-restauracion.md`.
+5. **Correo:** probar con una dirección de **otro proveedor** y el límite de envíos por hora; alias de contacto de Privacidad; revisar el texto de `/privacidad` (declaración de Valentín).
+6. **Sesión del lado derecho** cuando el clima lo permita; después, decidir (c) de la 038.
+7. Después de la demo: calibrar D drive/revés si no entró, Criterio 3 con el tiempo real, `RESPALDO_POR_GRUPO` (columna b), implementación de la 038, y solo si hay tiempo cintas de color.
+8. Redacción: Cap. 4 (35 filas en `docs/tesis/correcciones-pendientes-capitulo-4.md`), Cap. 6 y 7 (`docs/tesis/insumos-capitulo-7.md`).
+
+### 7. Reglas vigentes que no hay que revertir sin avisar
+- **Ningún grupo emite veredicto del orden** (035 y 036); **"golpe medido"** y "sin diferencia medible" (037); brazo "no medido" con su motivo, sin máximo parcial.
+- **Todo lo que contradiga el Capítulo 4 se registra en el momento** en `correcciones-pendientes-capitulo-4.md` (CLAUDE.md §6).
+- **Vocabulario:** se documenta, no se diagnostica ni predice; etiqueta "Solo registrado".
+- **Avisar antes de cada push a `main`** (redeploya Render); no publicar con análisis en curso; **el respaldo antes de publicar** (`docs/publicacion-y-vuelta-atras.md`).
+- **Todo el corpus es de un jugador, dos sesiones y cámara a la izquierda:** toda cifra de orden vale para ese lado.
+
+### 8. Dónde está cada cosa
+`docs/demo-guion.md` (guion, checklist, limpieza, plan B) · `docs/publicacion-y-vuelta-atras.md` · `docs/respaldo-y-restauracion.md` y `tools/respaldo/` · `docs/decisiones/038-…` y `013-…` ·
+`docs/protocolo-sesion-lado-derecho.md` · `docs/tesis/insumos-capitulo-7.md` y `correcciones-pendientes-capitulo-4.md` · `docs/resultados/` · respaldo local en `C:/Users/valen/kinetiq-data/respaldos/` (fuera del repositorio) ·
+recortes en `Desktop/corpus-originales-reales/recortes-evolucion/` y `recortes-demo/` (fuera del repositorio).
+
+### 9. Cómo retomar
+```bash
+cd C:\Users\valen\motion-biomech-detect
+git fetch origin && git status -sb                       # main = origin/main = 4f07ee7 (más esta entrada)
+cd backend
+PYTHONPATH=. .venv/Scripts/python.exe ../tools/respaldo/estado_de_la_base.py   # cuentas, sesiones, versiones, en curso, huérfanos
+PYTHONPATH=. .venv/Scripts/python.exe -m pytest ../tests -m "not slow" -q      # 597 esperadas
+cd ../frontend && bun test && node_modules/.bin/tsc --noEmit                   # 118 esperadas
+```
+
+---
+
 ## 2026-10-15 (más tarde) — Probado en producción, cuentas, 038 (tipo de golpe automático), Cargar por dispositivo, Evolución y recortes de la demo
 
 - **Probado en producción por Valentín** (frontend republicado): **Perfil, Evolución y PDF (golpe y sesión)** funcionan y se descargan. **"Eliminar mi cuenta" probado con una cuenta de prueba: funcionó.**
