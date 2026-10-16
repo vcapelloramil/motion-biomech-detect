@@ -31,6 +31,7 @@ Reemplaza el punto 3 de la aprobación del 15/10 en `docs/decisiones/038-…` (a
   Causas: la posición de «trofeo» del saque no existe en la ventana de preparación de este jugador (muñeca 5–18 cm **bajo** la nariz; `s_saque` = 0 en los 8 saques con dato; 32 de 76 sin dato por el brazo lejano); drive contra revés, dos candidatas separan una sesión y ninguna la otra (un atípico por clase rompe los extremos); D **no distingue el encuadre del drive y va invertido en el revés**.
   Análisis **exploratorio posterior** (post hoc, optimista, no cuenta; `1eef8d7`): ~10 % de error para saque contra resto y drive contra revés, encuadre de saque 0/28; tampoco llega al 5 %. **Cinco revés de perfil** tienen la muñeca alta en el contacto: hay que **mirarlos a mano** (¿pose, técnica o etiqueta?).
   **La etapa 2 no se propone** (condición: que la etapa 1 cumpla). Camino posible: una sesión nueva con saque, drive y revés (≥ 12 por celda; se puede sumar a la del lado derecho) para validar reglas robustas fijadas de antemano; el segundo camino de la 038 («propone y el usuario confirma») no exige el 5 %.
+- **Pruebas del servidor:** suite rápida **620 pasan** (597 + 23 del arnés de la 038).
 - **Capítulo 7:** §2.10 y fila 24 en `docs/tesis/insumos-capitulo-7.md`.
 
 **Estado de commits:** `main` local está **por delante de `origin/main` (`9415814`)** (`git log origin/main..main`) (los de docs y arnés de la 038 **no están empujados**: empujar redeploya Render; se publican con el próximo push, sin efecto en el motor). Producción sigue en 0.5.5.
