@@ -1,7 +1,7 @@
 import { createRootRouteWithContext, Outlet, HeadContent, Scripts, Link, useRouter } from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Header, Footer } from "@/components/site-chrome";
-import { SesionProvider } from "@/lib/sesion";
+import { SesionProvider, useSesion } from "@/lib/sesion";
 import appCss from "../styles.css?url";
 
 function NotFoundComponent() {
@@ -58,14 +58,22 @@ function RootShell({ children }: { children: React.ReactNode }) {
   );
 }
 
+/** Con sesión, en el celular hay una barra fija abajo: se deja su alto libre para que no tape el pie ni el final de la página. */
+function EspacioBarraInferior({ children }: { children: React.ReactNode }) {
+  const { sesion, cargando } = useSesion();
+  return <div className={!cargando && sesion ? "pb-[var(--barra-inferior)] md:pb-0" : undefined}>{children}</div>;
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   return (
     <QueryClientProvider client={queryClient}>
       <SesionProvider>
         <Header />
-        <Outlet />
-        <Footer />
+        <EspacioBarraInferior>
+          <Outlet />
+          <Footer />
+        </EspacioBarraInferior>
       </SesionProvider>
     </QueryClientProvider>
   );

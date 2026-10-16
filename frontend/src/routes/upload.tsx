@@ -337,6 +337,8 @@ function CargarPage() {
   const manoJugador = atletaId === "nuevo" ? mano : (listaAtletas.find((a) => a.id === atletaId)?.mano_dominante ?? "");
   const recomendado = ladoRecomendado(manoJugador);
   const ladoDibujado: LadoEsquema = lado === "derecha" || lado === "izquierda" ? lado : (recomendado ?? "izquierda");
+  // La raqueta del esquema va en la mano dominante del jugador (sin mano elegida, el esquema usa la contraria al lado dibujado).
+  const manoDibujada = manoJugador === "derecha" || manoJugador === "izquierda" ? manoJugador : undefined;
   const validos = items.filter((it) => !it.problema);
   const pendientes = validos.filter((it) => it.estado !== "enviado");
   const resumen = resumenDeCarga(validos.map((it) => it.estado));
@@ -478,7 +480,7 @@ function CargarPage() {
                       onChange={() => setEncuadre(x.valor)}
                       className="sr-only"
                     />
-                    <EsquemaEncuadre encuadre={x.valor} lado={ladoDibujado} className="h-24 w-full" />
+                    <EsquemaEncuadre encuadre={x.valor} lado={ladoDibujado} mano={manoDibujada} className="h-24 w-full" />
                     <span className="flex items-center gap-2 text-sm font-semibold">
                       {activo ? <CheckCircle2 className="h-4 w-4 text-neon" aria-hidden="true" /> : <CircleDashed className="h-4 w-4 text-muted-foreground" aria-hidden="true" />}
                       {x.etiqueta}
@@ -691,7 +693,7 @@ function CargarPage() {
             </p>
           </div>
         ) : (
-          <div className="sticky bottom-0 -mx-2 border-t border-border bg-background/95 px-2 py-3 backdrop-blur">
+          <div className={"sticky -mx-2 border-t border-border bg-background/95 px-2 py-3 backdrop-blur md:bottom-0 " + (sesion ? "bottom-[var(--barra-inferior)]" : "bottom-0")}>
             <button
               type="submit"
               className="flex w-full items-center justify-center gap-2 rounded-md bg-gradient-neon px-4 py-2.5 text-sm font-semibold text-neon-foreground shadow-neon"

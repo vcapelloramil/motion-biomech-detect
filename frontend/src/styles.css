@@ -48,6 +48,7 @@
   /* Especificación del frontend §2 (docs/ux/especificacion-frontend.md). Los nombres de variable no cambian: lo que ya usa
      bg-card, border-border, text-muted-foreground, bg-gradient-neon, etc. toma los valores nuevos. */
   --radius: 0.875rem;                 /* rounded-xl = 20 px: el radio de las tarjetas de la maqueta */
+  --barra-inferior: calc(3.5rem + env(safe-area-inset-bottom)); /* alto de la barra de pestañas del celular (especificación §8) */
   --background: #081015;
   --foreground: #eaf1f5;
   --card: #0d181e;

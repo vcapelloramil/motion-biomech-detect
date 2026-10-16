@@ -35,7 +35,6 @@ export function InstruccionesDeCarga({ lado }: { lado: LadoCamara }) {
       <summary className="flex cursor-pointer items-center gap-2 font-display text-base font-semibold">
         <Info className="h-4 w-4 text-neon" aria-hidden="true" />
         Cómo grabar y subir los videos
-        <span className="ml-auto text-xs font-normal text-muted-foreground">iPhone · Android · Computadora</span>
       </summary>
 
       <div role="tablist" aria-label="Dispositivo" className="mt-4 flex gap-1 border-b border-border">
