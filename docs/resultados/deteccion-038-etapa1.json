@@ -1,0 +1,2649 @@
+{
+ "generado_utc": "2026-10-16T04:11:24+00:00",
+ "decision": "038 (etapa 1: validación, sin tocar el producto)",
+ "version_motor": "0.5.5",
+ "commit": "fee1003361ddb4dc4aaa00044ab832278f2be376",
+ "arbol_sucio": false,
+ "mano_dominante": "der",
+ "criterio": {
+  "error_entre_determinados_max": 0.05,
+  "no_determinado_max": 0.2
+ },
+ "reglas_contraste_saque_vigente": {
+  "perfil_max": 42.0,
+  "tres_cuartos_min": 50.0
+ },
+ "repeticiones": 76,
+ "con_pico_del_tronco": 75,
+ "pliegues": [
+  {
+   "sesion_ajuste": 1,
+   "sesion_evaluacion": 2,
+   "ajuste_gesto": {
+    "saque": {
+     "p": 0.6964285714285714,
+     "t": 0.0,
+     "separable": false,
+     "brecha": -0.6964285714285714,
+     "n_baja": 20,
+     "n_alta": 4,
+     "mediana_baja": 0.0,
+     "mediana_alta": 0.0
+    },
+    "candidatas": {
+     "c1_giro": {
+      "p": 24.36005021323686,
+      "t": -40.12548441452078,
+      "separable": false,
+      "brecha": -64.48553462775763,
+      "n_baja": 12,
+      "n_alta": 12,
+      "mediana_baja": 7.01207761529856,
+      "mediana_alta": 39.89765128806256,
+      "alta": "drive",
+      "baja": "reves",
+      "brecha_relativa": -1.9609064834762142
+     },
+     "c2_munecas": {
+      "p": 1.9363747372093716,
+      "t": 2.2718273849433737,
+      "separable": true,
+      "brecha": 0.3354526477340021,
+      "n_baja": 12,
+      "n_alta": 11,
+      "mediana_baja": 0.814623016393497,
+      "mediana_alta": 2.616032023966564,
+      "alta": "drive",
+      "baja": "reves",
+      "brecha_relativa": 0.18621681490642583
+     },
+     "c3_eje": {
+      "p": 0.2543714115669796,
+      "t": 0.4684706631131085,
+      "separable": true,
+      "brecha": 0.21409925154612885,
+      "n_baja": 12,
+      "n_alta": 11,
+      "mediana_baja": -1.0893348562517349,
+      "mediana_alta": 0.880112706307943,
+      "alta": "drive",
+      "baja": "reves",
+      "brecha_relativa": 0.10871030821854707
+     }
+    },
+    "elegida": "c2_munecas"
+   },
+   "ajuste_encuadre": {
+    "saque": {
+     "p": 35.772888776065706,
+     "t": 49.90822677588271,
+     "separable": true,
+     "brecha": 14.135337999817004,
+     "n_baja": 4,
+     "n_alta": 6,
+     "mediana_baja": 33.6460773771823,
+     "mediana_alta": 52.605501366852565
+    },
+    "drive": {
+     "p": 71.8064762956168,
+     "t": 34.2603473217261,
+     "separable": false,
+     "brecha": -37.5461289738907,
+     "n_baja": 6,
+     "n_alta": 6,
+     "mediana_baja": 36.24385261974514,
+     "mediana_alta": 48.44930539215115
+    },
+    "reves": {
+     "p": 59.9333823552703,
+     "t": 9.332892061150176,
+     "separable": false,
+     "brecha": -50.60049029412012,
+     "n_baja": 6,
+     "n_alta": 6,
+     "mediana_baja": 51.49711646009422,
+     "mediana_alta": 13.526135977982904
+    }
+   },
+   "resumen": {
+    "gesto": {
+     "n": 41,
+     "determinados": 1,
+     "aciertos": 0,
+     "errores": 1,
+     "no_determinados": 40,
+     "error_entre_determinados": 1.0,
+     "error_ic95": [
+      0.2065,
+      1.0
+     ],
+     "no_determinado_pct": 0.975609756097561,
+     "no_determinado_ic95": [
+      0.874,
+      0.9957
+     ],
+     "acierto_sobre_todas": 0.0,
+     "cumple": false,
+     "matriz": {
+      "saque": {
+       "saque": 0,
+       "drive": 0,
+       "reves": 0,
+       "no_determinado": 18
+      },
+      "drive": {
+       "saque": 0,
+       "drive": 0,
+       "reves": 0,
+       "no_determinado": 12
+      },
+      "reves": {
+       "saque": 1,
+       "drive": 0,
+       "reves": 0,
+       "no_determinado": 10
+      }
+     }
+    },
+    "gesto_por_verdad": {
+     "saque": {
+      "n": 18,
+      "determinados": 0,
+      "aciertos": 0,
+      "errores": 0,
+      "no_determinados": 18,
+      "error_entre_determinados": null,
+      "error_ic95": null,
+      "no_determinado_pct": 1.0,
+      "no_determinado_ic95": [
+       0.8241,
+       1.0
+      ],
+      "acierto_sobre_todas": 0.0,
+      "cumple": false,
+      "matriz": {
+       "saque": {
+        "saque": 0,
+        "drive": 0,
+        "reves": 0,
+        "no_determinado": 18
+       },
+       "drive": {
+        "saque": 0,
+        "drive": 0,
+        "reves": 0,
+        "no_determinado": 0
+       },
+       "reves": {
+        "saque": 0,
+        "drive": 0,
+        "reves": 0,
+        "no_determinado": 0
+       }
+      }
+     },
+     "drive": {
+      "n": 12,
+      "determinados": 0,
+      "aciertos": 0,
+      "errores": 0,
+      "no_determinados": 12,
+      "error_entre_determinados": null,
+      "error_ic95": null,
+      "no_determinado_pct": 1.0,
+      "no_determinado_ic95": [
+       0.7575,
+       1.0
+      ],
+      "acierto_sobre_todas": 0.0,
+      "cumple": false,
+      "matriz": {
+       "saque": {
+        "saque": 0,
+        "drive": 0,
+        "reves": 0,
+        "no_determinado": 0
+       },
+       "drive": {
+        "saque": 0,
+        "drive": 0,
+        "reves": 0,
+        "no_determinado": 12
+       },
+       "reves": {
+        "saque": 0,
+        "drive": 0,
+        "reves": 0,
+        "no_determinado": 0
+       }
+      }
+     },
+     "reves": {
+      "n": 11,
+      "determinados": 1,
+      "aciertos": 0,
+      "errores": 1,
+      "no_determinados": 10,
+      "error_entre_determinados": 1.0,
+      "error_ic95": [
+       0.2065,
+       1.0
+      ],
+      "no_determinado_pct": 0.9090909090909091,
+      "no_determinado_ic95": [
+       0.6226,
+       0.9838
+      ],
+      "acierto_sobre_todas": 0.0,
+      "cumple": false,
+      "matriz": {
+       "saque": {
+        "saque": 0,
+        "drive": 0,
+        "reves": 0,
+        "no_determinado": 0
+       },
+       "drive": {
+        "saque": 0,
+        "drive": 0,
+        "reves": 0,
+        "no_determinado": 0
+       },
+       "reves": {
+        "saque": 1,
+        "drive": 0,
+        "reves": 0,
+        "no_determinado": 10
+       }
+      }
+     }
+    },
+    "encuadre_con_gesto_verdadero": {
+     "n": 41,
+     "determinados": 23,
+     "aciertos": 20,
+     "errores": 3,
+     "no_determinados": 18,
+     "error_entre_determinados": 0.13043478260869565,
+     "error_ic95": [
+      0.0454,
+      0.3213
+     ],
+     "no_determinado_pct": 0.43902439024390244,
+     "no_determinado_ic95": [
+      0.2989,
+      0.5896
+     ],
+     "acierto_sobre_todas": 0.4878048780487805,
+     "cumple": false,
+     "matriz": {
+      "perfil": {
+       "perfil": 6,
+       "tres_cuartos": 2,
+       "no_determinado": 9
+      },
+      "tres_cuartos": {
+       "perfil": 1,
+       "tres_cuartos": 14,
+       "no_determinado": 9
+      }
+     }
+    },
+    "encuadre_con_gesto_detectado": {
+     "n": 41,
+     "determinados": 5,
+     "aciertos": 2,
+     "errores": 3,
+     "no_determinados": 36,
+     "error_entre_determinados": 0.6,
+     "error_ic95": [
+      0.2307,
+      0.8824
+     ],
+     "no_determinado_pct": 0.8780487804878049,
+     "no_determinado_ic95": [
+      0.7446,
+      0.9468
+     ],
+     "acierto_sobre_todas": 0.04878048780487805,
+     "cumple": false,
+     "matriz": {
+      "perfil": {
+       "perfil": 0,
+       "tres_cuartos": 3,
+       "no_determinado": 14
+      },
+      "tres_cuartos": {
+       "perfil": 0,
+       "tres_cuartos": 2,
+       "no_determinado": 22
+      }
+     }
+    },
+    "encuadre_por_gesto_con_gesto_verdadero": {
+     "saque": {
+      "n": 18,
+      "determinados": 14,
+      "aciertos": 14,
+      "errores": 0,
+      "no_determinados": 4,
+      "error_entre_determinados": 0.0,
+      "error_ic95": [
+       0.0,
+       0.2153
+      ],
+      "no_determinado_pct": 0.2222222222222222,
+      "no_determinado_ic95": [
+       0.09,
+       0.4521
+      ],
+      "acierto_sobre_todas": 0.7777777777777778,
+      "cumple": false,
+      "matriz": {
+       "perfil": {
+        "perfil": 2,
+        "tres_cuartos": 0,
+        "no_determinado": 4
+       },
+       "tres_cuartos": {
+        "perfil": 0,
+        "tres_cuartos": 12,
+        "no_determinado": 0
+       }
+      }
+     },
+     "drive": {
+      "n": 12,
+      "determinados": 6,
+      "aciertos": 5,
+      "errores": 1,
+      "no_determinados": 6,
+      "error_entre_determinados": 0.16666666666666666,
+      "error_ic95": [
+       0.0301,
+       0.5635
+      ],
+      "no_determinado_pct": 0.5,
+      "no_determinado_ic95": [
+       0.2538,
+       0.7462
+      ],
+      "acierto_sobre_todas": 0.4166666666666667,
+      "cumple": false,
+      "matriz": {
+       "perfil": {
+        "perfil": 4,
+        "tres_cuartos": 0,
+        "no_determinado": 2
+       },
+       "tres_cuartos": {
+        "perfil": 1,
+        "tres_cuartos": 1,
+        "no_determinado": 4
+       }
+      }
+     },
+     "reves": {
+      "n": 11,
+      "determinados": 3,
+      "aciertos": 1,
+      "errores": 2,
+      "no_determinados": 8,
+      "error_entre_determinados": 0.6666666666666666,
+      "error_ic95": [
+       0.2077,
+       0.9385
+      ],
+      "no_determinado_pct": 0.7272727272727273,
+      "no_determinado_ic95": [
+       0.4344,
+       0.9025
+      ],
+      "acierto_sobre_todas": 0.09090909090909091,
+      "cumple": false,
+      "matriz": {
+       "perfil": {
+        "perfil": 0,
+        "tres_cuartos": 2,
+        "no_determinado": 3
+       },
+       "tres_cuartos": {
+        "perfil": 0,
+        "tres_cuartos": 1,
+        "no_determinado": 5
+       }
+      }
+     }
+    },
+    "encuadre_por_gesto_con_gesto_detectado": {
+     "saque": {
+      "n": 18,
+      "determinados": 1,
+      "aciertos": 1,
+      "errores": 0,
+      "no_determinados": 17,
+      "error_entre_determinados": 0.0,
+      "error_ic95": [
+       0.0,
+       0.7935
+      ],
+      "no_determinado_pct": 0.9444444444444444,
+      "no_determinado_ic95": [
+       0.7424,
+       0.9901
+      ],
+      "acierto_sobre_todas": 0.05555555555555555,
+      "cumple": false,
+      "matriz": {
+       "perfil": {
+        "perfil": 0,
+        "tres_cuartos": 0,
+        "no_determinado": 6
+       },
+       "tres_cuartos": {
+        "perfil": 0,
+        "tres_cuartos": 1,
+        "no_determinado": 11
+       }
+      }
+     },
+     "drive": {
+      "n": 12,
+      "determinados": 1,
+      "aciertos": 1,
+      "errores": 0,
+      "no_determinados": 11,
+      "error_entre_determinados": 0.0,
+      "error_ic95": [
+       0.0,
+       0.7935
+      ],
+      "no_determinado_pct": 0.9166666666666666,
+      "no_determinado_ic95": [
+       0.6461,
+       0.9851
+      ],
+      "acierto_sobre_todas": 0.08333333333333333,
+      "cumple": false,
+      "matriz": {
+       "perfil": {
+        "perfil": 0,
+        "tres_cuartos": 0,
+        "no_determinado": 6
+       },
+       "tres_cuartos": {
+        "perfil": 0,
+        "tres_cuartos": 1,
+        "no_determinado": 5
+       }
+      }
+     },
+     "reves": {
+      "n": 11,
+      "determinados": 3,
+      "aciertos": 0,
+      "errores": 3,
+      "no_determinados": 8,
+      "error_entre_determinados": 1.0,
+      "error_ic95": [
+       0.4385,
+       1.0
+      ],
+      "no_determinado_pct": 0.7272727272727273,
+      "no_determinado_ic95": [
+       0.4344,
+       0.9025
+      ],
+      "acierto_sobre_todas": 0.0,
+      "cumple": false,
+      "matriz": {
+       "perfil": {
+        "perfil": 0,
+        "tres_cuartos": 3,
+        "no_determinado": 2
+       },
+       "tres_cuartos": {
+        "perfil": 0,
+        "tres_cuartos": 0,
+        "no_determinado": 6
+       }
+      }
+     }
+    }
+   }
+  },
+  {
+   "sesion_ajuste": 2,
+   "sesion_evaluacion": 1,
+   "ajuste_gesto": {
+    "saque": {
+     "p": 0.7012987012987013,
+     "t": 0.0,
+     "separable": false,
+     "brecha": -0.7012987012987013,
+     "n_baja": 16,
+     "n_alta": 4,
+     "mediana_baja": 0.2975206611570248,
+     "mediana_alta": 0.0
+    },
+    "candidatas": {
+     "c1_giro": {
+      "p": 37.782343221445785,
+      "t": -9.295411709426771,
+      "separable": false,
+      "brecha": -47.07775493087256,
+      "n_baja": 11,
+      "n_alta": 12,
+      "mediana_baja": -9.639771617325,
+      "mediana_alta": 28.614210572834445,
+      "alta": "drive",
+      "baja": "reves",
+      "brecha_relativa": -1.230662854833005
+     },
+     "c2_munecas": {
+      "p": 2.530093231382203,
+      "t": 0.4869955354981012,
+      "separable": false,
+      "brecha": -2.043097695884102,
+      "n_baja": 6,
+      "n_alta": 11,
+      "mediana_baja": 0.7897845526458609,
+      "mediana_alta": 2.559446607345965,
+      "alta": "drive",
+      "baja": "reves",
+      "brecha_relativa": -1.1545129141791626
+     },
+     "c3_eje": {
+      "p": 0.754801788195989,
+      "t": 0.02970138469246078,
+      "separable": false,
+      "brecha": -0.7251004035035282,
+      "n_baja": 11,
+      "n_alta": 11,
+      "mediana_baja": -0.5431767080042067,
+      "mediana_alta": 0.9168025570691496,
+      "alta": "drive",
+      "baja": "reves",
+      "brecha_relativa": -0.49665116543082943
+     }
+    },
+    "elegida": null
+   },
+   "ajuste_encuadre": {
+    "saque": {
+     "p": 41.928100243517285,
+     "t": 56.54078964436012,
+     "separable": true,
+     "brecha": 14.612689400842832,
+     "n_baja": 6,
+     "n_alta": 12,
+     "mediana_baja": 36.06431523211189,
+     "mediana_alta": 60.22334096909404
+    },
+    "drive": {
+     "p": 46.086337386220066,
+     "t": 32.96945720880042,
+     "separable": false,
+     "brecha": -13.116880177419645,
+     "n_baja": 6,
+     "n_alta": 6,
+     "mediana_baja": 33.147363310254484,
+     "mediana_alta": 59.07052337022492
+    },
+    "reves": {
+     "p": 86.28681290944971,
+     "t": 9.959245136163702,
+     "separable": false,
+     "brecha": -76.327567773286,
+     "n_baja": 5,
+     "n_alta": 6,
+     "mediana_baja": 58.595711002042606,
+     "mediana_alta": 16.60919506263521
+    }
+   },
+   "resumen": {
+    "gesto": {
+     "n": 35,
+     "determinados": 0,
+     "aciertos": 0,
+     "errores": 0,
+     "no_determinados": 35,
+     "error_entre_determinados": null,
+     "error_ic95": null,
+     "no_determinado_pct": 1.0,
+     "no_determinado_ic95": [
+      0.9011,
+      1.0
+     ],
+     "acierto_sobre_todas": 0.0,
+     "cumple": false,
+     "matriz": {
+      "saque": {
+       "saque": 0,
+       "drive": 0,
+       "reves": 0,
+       "no_determinado": 11
+      },
+      "drive": {
+       "saque": 0,
+       "drive": 0,
+       "reves": 0,
+       "no_determinado": 12
+      },
+      "reves": {
+       "saque": 0,
+       "drive": 0,
+       "reves": 0,
+       "no_determinado": 12
+      }
+     }
+    },
+    "gesto_por_verdad": {
+     "saque": {
+      "n": 11,
+      "determinados": 0,
+      "aciertos": 0,
+      "errores": 0,
+      "no_determinados": 11,
+      "error_entre_determinados": null,
+      "error_ic95": null,
+      "no_determinado_pct": 1.0,
+      "no_determinado_ic95": [
+       0.7412,
+       1.0
+      ],
+      "acierto_sobre_todas": 0.0,
+      "cumple": false,
+      "matriz": {
+       "saque": {
+        "saque": 0,
+        "drive": 0,
+        "reves": 0,
+        "no_determinado": 11
+       },
+       "drive": {
+        "saque": 0,
+        "drive": 0,
+        "reves": 0,
+        "no_determinado": 0
+       },
+       "reves": {
+        "saque": 0,
+        "drive": 0,
+        "reves": 0,
+        "no_determinado": 0
+       }
+      }
+     },
+     "drive": {
+      "n": 12,
+      "determinados": 0,
+      "aciertos": 0,
+      "errores": 0,
+      "no_determinados": 12,
+      "error_entre_determinados": null,
+      "error_ic95": null,
+      "no_determinado_pct": 1.0,
+      "no_determinado_ic95": [
+       0.7575,
+       1.0
+      ],
+      "acierto_sobre_todas": 0.0,
+      "cumple": false,
+      "matriz": {
+       "saque": {
+        "saque": 0,
+        "drive": 0,
+        "reves": 0,
+        "no_determinado": 0
+       },
+       "drive": {
+        "saque": 0,
+        "drive": 0,
+        "reves": 0,
+        "no_determinado": 12
+       },
+       "reves": {
+        "saque": 0,
+        "drive": 0,
+        "reves": 0,
+        "no_determinado": 0
+       }
+      }
+     },
+     "reves": {
+      "n": 12,
+      "determinados": 0,
+      "aciertos": 0,
+      "errores": 0,
+      "no_determinados": 12,
+      "error_entre_determinados": null,
+      "error_ic95": null,
+      "no_determinado_pct": 1.0,
+      "no_determinado_ic95": [
+       0.7575,
+       1.0
+      ],
+      "acierto_sobre_todas": 0.0,
+      "cumple": false,
+      "matriz": {
+       "saque": {
+        "saque": 0,
+        "drive": 0,
+        "reves": 0,
+        "no_determinado": 0
+       },
+       "drive": {
+        "saque": 0,
+        "drive": 0,
+        "reves": 0,
+        "no_determinado": 0
+       },
+       "reves": {
+        "saque": 0,
+        "drive": 0,
+        "reves": 0,
+        "no_determinado": 12
+       }
+      }
+     }
+    },
+    "encuadre_con_gesto_verdadero": {
+     "n": 35,
+     "determinados": 12,
+     "aciertos": 10,
+     "errores": 2,
+     "no_determinados": 23,
+     "error_entre_determinados": 0.16666666666666666,
+     "error_ic95": [
+      0.047,
+      0.448
+     ],
+     "no_determinado_pct": 0.6571428571428571,
+     "no_determinado_ic95": [
+      0.4915,
+      0.7917
+     ],
+     "acierto_sobre_todas": 0.2857142857142857,
+     "cumple": false,
+     "matriz": {
+      "perfil": {
+       "perfil": 6,
+       "tres_cuartos": 1,
+       "no_determinado": 10
+      },
+      "tres_cuartos": {
+       "perfil": 1,
+       "tres_cuartos": 4,
+       "no_determinado": 13
+      }
+     }
+    },
+    "encuadre_con_gesto_detectado": {
+     "n": 35,
+     "determinados": 1,
+     "aciertos": 0,
+     "errores": 1,
+     "no_determinados": 34,
+     "error_entre_determinados": 1.0,
+     "error_ic95": [
+      0.2065,
+      1.0
+     ],
+     "no_determinado_pct": 0.9714285714285714,
+     "no_determinado_ic95": [
+      0.8547,
+      0.9949
+     ],
+     "acierto_sobre_todas": 0.0,
+     "cumple": false,
+     "matriz": {
+      "perfil": {
+       "perfil": 0,
+       "tres_cuartos": 0,
+       "no_determinado": 17
+      },
+      "tres_cuartos": {
+       "perfil": 1,
+       "tres_cuartos": 0,
+       "no_determinado": 17
+      }
+     }
+    },
+    "encuadre_por_gesto_con_gesto_verdadero": {
+     "saque": {
+      "n": 11,
+      "determinados": 4,
+      "aciertos": 4,
+      "errores": 0,
+      "no_determinados": 7,
+      "error_entre_determinados": 0.0,
+      "error_ic95": [
+       0.0,
+       0.4899
+      ],
+      "no_determinado_pct": 0.6363636363636364,
+      "no_determinado_ic95": [
+       0.3538,
+       0.8483
+      ],
+      "acierto_sobre_todas": 0.36363636363636365,
+      "cumple": false,
+      "matriz": {
+       "perfil": {
+        "perfil": 4,
+        "tres_cuartos": 0,
+        "no_determinado": 1
+       },
+       "tres_cuartos": {
+        "perfil": 0,
+        "tres_cuartos": 0,
+        "no_determinado": 6
+       }
+      }
+     },
+     "drive": {
+      "n": 12,
+      "determinados": 7,
+      "aciertos": 6,
+      "errores": 1,
+      "no_determinados": 5,
+      "error_entre_determinados": 0.14285714285714285,
+      "error_ic95": [
+       0.0257,
+       0.5131
+      ],
+      "no_determinado_pct": 0.4166666666666667,
+      "no_determinado_ic95": [
+       0.1933,
+       0.6805
+      ],
+      "acierto_sobre_todas": 0.5,
+      "cumple": false,
+      "matriz": {
+       "perfil": {
+        "perfil": 2,
+        "tres_cuartos": 1,
+        "no_determinado": 3
+       },
+       "tres_cuartos": {
+        "perfil": 0,
+        "tres_cuartos": 4,
+        "no_determinado": 2
+       }
+      }
+     },
+     "reves": {
+      "n": 12,
+      "determinados": 1,
+      "aciertos": 0,
+      "errores": 1,
+      "no_determinados": 11,
+      "error_entre_determinados": 1.0,
+      "error_ic95": [
+       0.2065,
+       1.0
+      ],
+      "no_determinado_pct": 0.9166666666666666,
+      "no_determinado_ic95": [
+       0.6461,
+       0.9851
+      ],
+      "acierto_sobre_todas": 0.0,
+      "cumple": false,
+      "matriz": {
+       "perfil": {
+        "perfil": 0,
+        "tres_cuartos": 0,
+        "no_determinado": 6
+       },
+       "tres_cuartos": {
+        "perfil": 1,
+        "tres_cuartos": 0,
+        "no_determinado": 5
+       }
+      }
+     }
+    },
+    "encuadre_por_gesto_con_gesto_detectado": {
+     "saque": {
+      "n": 11,
+      "determinados": 0,
+      "aciertos": 0,
+      "errores": 0,
+      "no_determinados": 11,
+      "error_entre_determinados": null,
+      "error_ic95": null,
+      "no_determinado_pct": 1.0,
+      "no_determinado_ic95": [
+       0.7412,
+       1.0
+      ],
+      "acierto_sobre_todas": 0.0,
+      "cumple": false,
+      "matriz": {
+       "perfil": {
+        "perfil": 0,
+        "tres_cuartos": 0,
+        "no_determinado": 5
+       },
+       "tres_cuartos": {
+        "perfil": 0,
+        "tres_cuartos": 0,
+        "no_determinado": 6
+       }
+      }
+     },
+     "drive": {
+      "n": 12,
+      "determinados": 0,
+      "aciertos": 0,
+      "errores": 0,
+      "no_determinados": 12,
+      "error_entre_determinados": null,
+      "error_ic95": null,
+      "no_determinado_pct": 1.0,
+      "no_determinado_ic95": [
+       0.7575,
+       1.0
+      ],
+      "acierto_sobre_todas": 0.0,
+      "cumple": false,
+      "matriz": {
+       "perfil": {
+        "perfil": 0,
+        "tres_cuartos": 0,
+        "no_determinado": 6
+       },
+       "tres_cuartos": {
+        "perfil": 0,
+        "tres_cuartos": 0,
+        "no_determinado": 6
+       }
+      }
+     },
+     "reves": {
+      "n": 12,
+      "determinados": 1,
+      "aciertos": 0,
+      "errores": 1,
+      "no_determinados": 11,
+      "error_entre_determinados": 1.0,
+      "error_ic95": [
+       0.2065,
+       1.0
+      ],
+      "no_determinado_pct": 0.9166666666666666,
+      "no_determinado_ic95": [
+       0.6461,
+       0.9851
+      ],
+      "acierto_sobre_todas": 0.0,
+      "cumple": false,
+      "matriz": {
+       "perfil": {
+        "perfil": 0,
+        "tres_cuartos": 0,
+        "no_determinado": 6
+       },
+       "tres_cuartos": {
+        "perfil": 1,
+        "tres_cuartos": 0,
+        "no_determinado": 5
+       }
+      }
+     }
+    }
+   }
+  }
+ ],
+ "agregado": {
+  "gesto": {
+   "n": 76,
+   "determinados": 1,
+   "aciertos": 0,
+   "errores": 1,
+   "no_determinados": 75,
+   "error_entre_determinados": 1.0,
+   "error_ic95": [
+    0.2065,
+    1.0
+   ],
+   "no_determinado_pct": 0.9868421052631579,
+   "no_determinado_ic95": [
+    0.9292,
+    0.9977
+   ],
+   "acierto_sobre_todas": 0.0,
+   "cumple": false,
+   "matriz": {
+    "saque": {
+     "saque": 0,
+     "drive": 0,
+     "reves": 0,
+     "no_determinado": 29
+    },
+    "drive": {
+     "saque": 0,
+     "drive": 0,
+     "reves": 0,
+     "no_determinado": 24
+    },
+    "reves": {
+     "saque": 1,
+     "drive": 0,
+     "reves": 0,
+     "no_determinado": 22
+    }
+   }
+  },
+  "gesto_por_verdad": {
+   "saque": {
+    "n": 29,
+    "determinados": 0,
+    "aciertos": 0,
+    "errores": 0,
+    "no_determinados": 29,
+    "error_entre_determinados": null,
+    "error_ic95": null,
+    "no_determinado_pct": 1.0,
+    "no_determinado_ic95": [
+     0.883,
+     1.0
+    ],
+    "acierto_sobre_todas": 0.0,
+    "cumple": false,
+    "matriz": {
+     "saque": {
+      "saque": 0,
+      "drive": 0,
+      "reves": 0,
+      "no_determinado": 29
+     },
+     "drive": {
+      "saque": 0,
+      "drive": 0,
+      "reves": 0,
+      "no_determinado": 0
+     },
+     "reves": {
+      "saque": 0,
+      "drive": 0,
+      "reves": 0,
+      "no_determinado": 0
+     }
+    }
+   },
+   "drive": {
+    "n": 24,
+    "determinados": 0,
+    "aciertos": 0,
+    "errores": 0,
+    "no_determinados": 24,
+    "error_entre_determinados": null,
+    "error_ic95": null,
+    "no_determinado_pct": 1.0,
+    "no_determinado_ic95": [
+     0.862,
+     1.0
+    ],
+    "acierto_sobre_todas": 0.0,
+    "cumple": false,
+    "matriz": {
+     "saque": {
+      "saque": 0,
+      "drive": 0,
+      "reves": 0,
+      "no_determinado": 0
+     },
+     "drive": {
+      "saque": 0,
+      "drive": 0,
+      "reves": 0,
+      "no_determinado": 24
+     },
+     "reves": {
+      "saque": 0,
+      "drive": 0,
+      "reves": 0,
+      "no_determinado": 0
+     }
+    }
+   },
+   "reves": {
+    "n": 23,
+    "determinados": 1,
+    "aciertos": 0,
+    "errores": 1,
+    "no_determinados": 22,
+    "error_entre_determinados": 1.0,
+    "error_ic95": [
+     0.2065,
+     1.0
+    ],
+    "no_determinado_pct": 0.9565217391304348,
+    "no_determinado_ic95": [
+     0.7901,
+     0.9923
+    ],
+    "acierto_sobre_todas": 0.0,
+    "cumple": false,
+    "matriz": {
+     "saque": {
+      "saque": 0,
+      "drive": 0,
+      "reves": 0,
+      "no_determinado": 0
+     },
+     "drive": {
+      "saque": 0,
+      "drive": 0,
+      "reves": 0,
+      "no_determinado": 0
+     },
+     "reves": {
+      "saque": 1,
+      "drive": 0,
+      "reves": 0,
+      "no_determinado": 22
+     }
+    }
+   }
+  },
+  "encuadre_con_gesto_verdadero": {
+   "n": 76,
+   "determinados": 35,
+   "aciertos": 30,
+   "errores": 5,
+   "no_determinados": 41,
+   "error_entre_determinados": 0.14285714285714285,
+   "error_ic95": [
+    0.0626,
+    0.2938
+   ],
+   "no_determinado_pct": 0.5394736842105263,
+   "no_determinado_ic95": [
+    0.4282,
+    0.6469
+   ],
+   "acierto_sobre_todas": 0.39473684210526316,
+   "cumple": false,
+   "matriz": {
+    "perfil": {
+     "perfil": 12,
+     "tres_cuartos": 3,
+     "no_determinado": 19
+    },
+    "tres_cuartos": {
+     "perfil": 2,
+     "tres_cuartos": 18,
+     "no_determinado": 22
+    }
+   }
+  },
+  "encuadre_con_gesto_detectado": {
+   "n": 76,
+   "determinados": 6,
+   "aciertos": 2,
+   "errores": 4,
+   "no_determinados": 70,
+   "error_entre_determinados": 0.6666666666666666,
+   "error_ic95": [
+    0.3,
+    0.9032
+   ],
+   "no_determinado_pct": 0.9210526315789473,
+   "no_determinado_ic95": [
+    0.8383,
+    0.9633
+   ],
+   "acierto_sobre_todas": 0.02631578947368421,
+   "cumple": false,
+   "matriz": {
+    "perfil": {
+     "perfil": 0,
+     "tres_cuartos": 3,
+     "no_determinado": 31
+    },
+    "tres_cuartos": {
+     "perfil": 1,
+     "tres_cuartos": 2,
+     "no_determinado": 39
+    }
+   }
+  },
+  "encuadre_por_gesto_con_gesto_verdadero": {
+   "saque": {
+    "n": 29,
+    "determinados": 18,
+    "aciertos": 18,
+    "errores": 0,
+    "no_determinados": 11,
+    "error_entre_determinados": 0.0,
+    "error_ic95": [
+     0.0,
+     0.1759
+    ],
+    "no_determinado_pct": 0.3793103448275862,
+    "no_determinado_ic95": [
+     0.2269,
+     0.56
+    ],
+    "acierto_sobre_todas": 0.6206896551724138,
+    "cumple": false,
+    "matriz": {
+     "perfil": {
+      "perfil": 6,
+      "tres_cuartos": 0,
+      "no_determinado": 5
+     },
+     "tres_cuartos": {
+      "perfil": 0,
+      "tres_cuartos": 12,
+      "no_determinado": 6
+     }
+    }
+   },
+   "drive": {
+    "n": 24,
+    "determinados": 13,
+    "aciertos": 11,
+    "errores": 2,
+    "no_determinados": 11,
+    "error_entre_determinados": 0.15384615384615385,
+    "error_ic95": [
+     0.0433,
+     0.4223
+    ],
+    "no_determinado_pct": 0.4583333333333333,
+    "no_determinado_ic95": [
+     0.2789,
+     0.6493
+    ],
+    "acierto_sobre_todas": 0.4583333333333333,
+    "cumple": false,
+    "matriz": {
+     "perfil": {
+      "perfil": 6,
+      "tres_cuartos": 1,
+      "no_determinado": 5
+     },
+     "tres_cuartos": {
+      "perfil": 1,
+      "tres_cuartos": 5,
+      "no_determinado": 6
+     }
+    }
+   },
+   "reves": {
+    "n": 23,
+    "determinados": 4,
+    "aciertos": 1,
+    "errores": 3,
+    "no_determinados": 19,
+    "error_entre_determinados": 0.75,
+    "error_ic95": [
+     0.3006,
+     0.9544
+    ],
+    "no_determinado_pct": 0.8260869565217391,
+    "no_determinado_ic95": [
+     0.6286,
+     0.9302
+    ],
+    "acierto_sobre_todas": 0.043478260869565216,
+    "cumple": false,
+    "matriz": {
+     "perfil": {
+      "perfil": 0,
+      "tres_cuartos": 2,
+      "no_determinado": 9
+     },
+     "tres_cuartos": {
+      "perfil": 1,
+      "tres_cuartos": 1,
+      "no_determinado": 10
+     }
+    }
+   }
+  },
+  "encuadre_por_gesto_con_gesto_detectado": {
+   "saque": {
+    "n": 29,
+    "determinados": 1,
+    "aciertos": 1,
+    "errores": 0,
+    "no_determinados": 28,
+    "error_entre_determinados": 0.0,
+    "error_ic95": [
+     0.0,
+     0.7935
+    ],
+    "no_determinado_pct": 0.9655172413793104,
+    "no_determinado_ic95": [
+     0.8282,
+     0.9939
+    ],
+    "acierto_sobre_todas": 0.034482758620689655,
+    "cumple": false,
+    "matriz": {
+     "perfil": {
+      "perfil": 0,
+      "tres_cuartos": 0,
+      "no_determinado": 11
+     },
+     "tres_cuartos": {
+      "perfil": 0,
+      "tres_cuartos": 1,
+      "no_determinado": 17
+     }
+    }
+   },
+   "drive": {
+    "n": 24,
+    "determinados": 1,
+    "aciertos": 1,
+    "errores": 0,
+    "no_determinados": 23,
+    "error_entre_determinados": 0.0,
+    "error_ic95": [
+     0.0,
+     0.7935
+    ],
+    "no_determinado_pct": 0.9583333333333334,
+    "no_determinado_ic95": [
+     0.7976,
+     0.9926
+    ],
+    "acierto_sobre_todas": 0.041666666666666664,
+    "cumple": false,
+    "matriz": {
+     "perfil": {
+      "perfil": 0,
+      "tres_cuartos": 0,
+      "no_determinado": 12
+     },
+     "tres_cuartos": {
+      "perfil": 0,
+      "tres_cuartos": 1,
+      "no_determinado": 11
+     }
+    }
+   },
+   "reves": {
+    "n": 23,
+    "determinados": 4,
+    "aciertos": 0,
+    "errores": 4,
+    "no_determinados": 19,
+    "error_entre_determinados": 1.0,
+    "error_ic95": [
+     0.5101,
+     1.0
+    ],
+    "no_determinado_pct": 0.8260869565217391,
+    "no_determinado_ic95": [
+     0.6286,
+     0.9302
+    ],
+    "acierto_sobre_todas": 0.0,
+    "cumple": false,
+    "matriz": {
+     "perfil": {
+      "perfil": 0,
+      "tres_cuartos": 3,
+      "no_determinado": 8
+     },
+     "tres_cuartos": {
+      "perfil": 1,
+      "tres_cuartos": 0,
+      "no_determinado": 11
+     }
+    }
+   }
+  }
+ },
+ "detalle": [
+  {
+   "repeticion": "20260925_VCR_drive_perfil_240_02_rep01",
+   "sesion": 2,
+   "gesto": "drive",
+   "encuadre": "perfil",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": "perfil",
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_drive_perfil_240_02_rep02",
+   "sesion": 2,
+   "gesto": "drive",
+   "encuadre": "perfil",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": "perfil",
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_drive_perfil_240_02_rep03",
+   "sesion": 2,
+   "gesto": "drive",
+   "encuadre": "perfil",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_drive_perfil_240_02_rep04",
+   "sesion": 2,
+   "gesto": "drive",
+   "encuadre": "perfil",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": "perfil",
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_drive_perfil_240_02_rep05",
+   "sesion": 2,
+   "gesto": "drive",
+   "encuadre": "perfil",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": "perfil",
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_drive_perfil_240_02_rep06",
+   "sesion": 2,
+   "gesto": "drive",
+   "encuadre": "perfil",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_drive_trescuartos_240_02_rep01",
+   "sesion": 2,
+   "gesto": "drive",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_drive_trescuartos_240_02_rep02",
+   "sesion": 2,
+   "gesto": "drive",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_drive_trescuartos_240_02_rep03",
+   "sesion": 2,
+   "gesto": "drive",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_drive_trescuartos_240_02_rep04",
+   "sesion": 2,
+   "gesto": "drive",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": "perfil",
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_drive_trescuartos_240_02_rep05",
+   "sesion": 2,
+   "gesto": "drive",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": "tres_cuartos",
+   "encuadre_con_gesto_detectado": "tres_cuartos",
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_drive_trescuartos_240_02_rep06",
+   "sesion": 2,
+   "gesto": "drive",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_reves_perfil_240_02_rep02",
+   "sesion": 2,
+   "gesto": "reves",
+   "encuadre": "perfil",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": "tres_cuartos",
+   "encuadre_con_gesto_detectado": "tres_cuartos",
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_reves_perfil_240_02_rep03",
+   "sesion": 2,
+   "gesto": "reves",
+   "encuadre": "perfil",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": "tres_cuartos",
+   "encuadre_con_gesto_detectado": "tres_cuartos",
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_reves_perfil_240_02_rep04",
+   "sesion": 2,
+   "gesto": "reves",
+   "encuadre": "perfil",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_reves_perfil_240_02_rep05",
+   "sesion": 2,
+   "gesto": "reves",
+   "encuadre": "perfil",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_reves_perfil_240_02_rep06",
+   "sesion": 2,
+   "gesto": "reves",
+   "encuadre": "perfil",
+   "gesto_detectado": "saque",
+   "motivo_gesto": "trofeo sostenido",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": "tres_cuartos",
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_reves_trescuartos_240_02_rep01",
+   "sesion": 2,
+   "gesto": "reves",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": "tres_cuartos",
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_reves_trescuartos_240_02_rep02",
+   "sesion": 2,
+   "gesto": "reves",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_reves_trescuartos_240_02_rep03",
+   "sesion": 2,
+   "gesto": "reves",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_reves_trescuartos_240_02_rep04",
+   "sesion": 2,
+   "gesto": "reves",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_reves_trescuartos_240_02_rep05",
+   "sesion": 2,
+   "gesto": "reves",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_reves_trescuartos_240_02_rep06",
+   "sesion": 2,
+   "gesto": "reves",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_saque_perfil_240_02_rep01",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": "perfil",
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_saque_perfil_240_02_rep02",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_saque_perfil_240_02_rep03",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_saque_perfil_240_02_rep04",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_saque_perfil_240_02_rep05",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": "perfil",
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_saque_perfil_240_02_rep06",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_saque_trescuartos_240_02b_rep01",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": "tres_cuartos",
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_saque_trescuartos_240_02b_rep02",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": "tres_cuartos",
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_saque_trescuartos_240_02b_rep03",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": "tres_cuartos",
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_saque_trescuartos_240_02b_rep04",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": "tres_cuartos",
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_saque_trescuartos_240_02b_rep05",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": "tres_cuartos",
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_saque_trescuartos_240_02b_rep06",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": "tres_cuartos",
+   "encuadre_con_gesto_detectado": "tres_cuartos",
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_saque_trescuartos_240_02c_rep01",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": "tres_cuartos",
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_saque_trescuartos_240_02c_rep02",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": "tres_cuartos",
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_saque_trescuartos_240_02c_rep03",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": "tres_cuartos",
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_saque_trescuartos_240_02c_rep04",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": "tres_cuartos",
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_saque_trescuartos_240_02c_rep05",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": "tres_cuartos",
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260925_VCR_saque_trescuartos_240_02c_rep06",
+   "sesion": 2,
+   "gesto": "saque",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": "tres_cuartos",
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260924_VCR_drive_perfil_240_01_rep01",
+   "sesion": 1,
+   "gesto": "drive",
+   "encuadre": "perfil",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260924_VCR_drive_perfil_240_01_rep02",
+   "sesion": 1,
+   "gesto": "drive",
+   "encuadre": "perfil",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260924_VCR_drive_perfil_240_01_rep03",
+   "sesion": 1,
+   "gesto": "drive",
+   "encuadre": "perfil",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260924_VCR_drive_perfil_240_01_rep04",
+   "sesion": 1,
+   "gesto": "drive",
+   "encuadre": "perfil",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": "perfil",
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260924_VCR_drive_perfil_240_01_rep05",
+   "sesion": 1,
+   "gesto": "drive",
+   "encuadre": "perfil",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": "perfil",
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260924_VCR_drive_perfil_240_01_rep06",
+   "sesion": 1,
+   "gesto": "drive",
+   "encuadre": "perfil",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": "tres_cuartos",
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260924_VCR_drive_trescuartos_240_01_rep01",
+   "sesion": 1,
+   "gesto": "drive",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": "tres_cuartos",
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260924_VCR_drive_trescuartos_240_01_rep02",
+   "sesion": 1,
+   "gesto": "drive",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": "tres_cuartos",
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260924_VCR_drive_trescuartos_240_01_rep03",
+   "sesion": 1,
+   "gesto": "drive",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": "tres_cuartos",
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260924_VCR_drive_trescuartos_240_01_rep04",
+   "sesion": 1,
+   "gesto": "drive",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260924_VCR_drive_trescuartos_240_01_rep05",
+   "sesion": 1,
+   "gesto": "drive",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260924_VCR_drive_trescuartos_240_01_rep06",
+   "sesion": 1,
+   "gesto": "drive",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": "tres_cuartos",
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260924_VCR_reves_perfil_240_01_rep01",
+   "sesion": 1,
+   "gesto": "reves",
+   "encuadre": "perfil",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260924_VCR_reves_perfil_240_01_rep02",
+   "sesion": 1,
+   "gesto": "reves",
+   "encuadre": "perfil",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260924_VCR_reves_perfil_240_01_rep03",
+   "sesion": 1,
+   "gesto": "reves",
+   "encuadre": "perfil",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260924_VCR_reves_perfil_240_01_rep04",
+   "sesion": 1,
+   "gesto": "reves",
+   "encuadre": "perfil",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260924_VCR_reves_perfil_240_01_rep05",
+   "sesion": 1,
+   "gesto": "reves",
+   "encuadre": "perfil",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260924_VCR_reves_perfil_240_01_rep06",
+   "sesion": 1,
+   "gesto": "reves",
+   "encuadre": "perfil",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260924_VCR_reves_trescuartos_240_01_rep01",
+   "sesion": 1,
+   "gesto": "reves",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260924_VCR_reves_trescuartos_240_01_rep02",
+   "sesion": 1,
+   "gesto": "reves",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260924_VCR_reves_trescuartos_240_01_rep03",
+   "sesion": 1,
+   "gesto": "reves",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260924_VCR_reves_trescuartos_240_01_rep04",
+   "sesion": 1,
+   "gesto": "reves",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": "perfil",
+   "encuadre_con_gesto_detectado": "perfil",
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260924_VCR_reves_trescuartos_240_01_rep05",
+   "sesion": 1,
+   "gesto": "reves",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260924_VCR_reves_trescuartos_240_01_rep06",
+   "sesion": 1,
+   "gesto": "reves",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260924_VCR_saque_perfil_240_01_rep02",
+   "sesion": 1,
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": "perfil",
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260924_VCR_saque_perfil_240_01_rep03",
+   "sesion": 1,
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "gesto_detectado": null,
+   "motivo_gesto": "sin pico del tronco",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": false
+  },
+  {
+   "repeticion": "20260924_VCR_saque_perfil_240_01_rep04",
+   "sesion": 1,
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": "perfil",
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260924_VCR_saque_perfil_240_01_rep05",
+   "sesion": 1,
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": "perfil",
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260924_VCR_saque_perfil_240_01_rep06",
+   "sesion": 1,
+   "gesto": "saque",
+   "encuadre": "perfil",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": "perfil",
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260924_VCR_saque_trescuartos_240_01_rep01",
+   "sesion": 1,
+   "gesto": "saque",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260924_VCR_saque_trescuartos_240_01_rep02",
+   "sesion": 1,
+   "gesto": "saque",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260924_VCR_saque_trescuartos_240_01_rep03",
+   "sesion": 1,
+   "gesto": "saque",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260924_VCR_saque_trescuartos_240_01_rep04",
+   "sesion": 1,
+   "gesto": "saque",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260924_VCR_saque_trescuartos_240_01_rep05",
+   "sesion": 1,
+   "gesto": "saque",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  },
+  {
+   "repeticion": "20260924_VCR_saque_trescuartos_240_01_rep06",
+   "sesion": 1,
+   "gesto": "saque",
+   "encuadre": "tres_cuartos",
+   "gesto_detectado": null,
+   "motivo_gesto": "ni saque ni resto: sin dato o en la franja",
+   "encuadre_con_gesto_verdadero": null,
+   "encuadre_con_gesto_detectado": null,
+   "con_pico": true
+  }
+ ],
+ "descriptivo": {
+  "s1|saque|perfil": {
+   "n": 5,
+   "con_pico": 4,
+   "s_saque": {
+    "n": 4,
+    "min": 0.0,
+    "mediana": 0.0,
+    "max": 0.0
+   },
+   "c1_giro": {
+    "n": 4,
+    "min": 23.322,
+    "mediana": 31.728,
+    "max": 36.165
+   },
+   "c2_munecas": {
+    "n": 4,
+    "min": 2.157,
+    "mediana": 2.369,
+    "max": 2.46
+   },
+   "c3_eje": {
+    "n": 4,
+    "min": 1.108,
+    "mediana": 1.141,
+    "max": 1.216
+   },
+   "giro_hombros": {
+    "n": 4,
+    "min": 26.17,
+    "mediana": 33.646,
+    "max": 35.773
+   }
+  },
+  "s1|saque|tres_cuartos": {
+   "n": 6,
+   "con_pico": 6,
+   "s_saque": null,
+   "c1_giro": {
+    "n": 6,
+    "min": 16.535,
+    "mediana": 20.033,
+    "max": 32.758
+   },
+   "c2_munecas": {
+    "n": 5,
+    "min": 2.397,
+    "mediana": 2.42,
+    "max": 2.525
+   },
+   "c3_eje": {
+    "n": 5,
+    "min": 1.178,
+    "mediana": 1.215,
+    "max": 1.264
+   },
+   "giro_hombros": {
+    "n": 6,
+    "min": 49.908,
+    "mediana": 52.606,
+    "max": 54.312
+   }
+  },
+  "s1|drive|perfil": {
+   "n": 6,
+   "con_pico": 6,
+   "s_saque": {
+    "n": 6,
+    "min": 0.0,
+    "mediana": 0.0,
+    "max": 0.5
+   },
+   "c1_giro": {
+    "n": 6,
+    "min": -40.125,
+    "mediana": 32.976,
+    "max": 44.243
+   },
+   "c2_munecas": {
+    "n": 5,
+    "min": 2.49,
+    "mediana": 2.653,
+    "max": 2.716
+   },
+   "c3_eje": {
+    "n": 5,
+    "min": 0.831,
+    "mediana": 0.893,
+    "max": 1.065
+   },
+   "giro_hombros": {
+    "n": 6,
+    "min": 28.372,
+    "mediana": 36.244,
+    "max": 71.806
+   }
+  },
+  "s1|drive|tres_cuartos": {
+   "n": 6,
+   "con_pico": 6,
+   "s_saque": {
+    "n": 3,
+    "min": 0.0,
+    "mediana": 0.038,
+    "max": 0.083
+   },
+   "c1_giro": {
+    "n": 6,
+    "min": 20.668,
+    "mediana": 44.519,
+    "max": 51.131
+   },
+   "c2_munecas": {
+    "n": 6,
+    "min": 2.272,
+    "mediana": 2.426,
+    "max": 2.651
+   },
+   "c3_eje": {
+    "n": 6,
+    "min": 0.468,
+    "mediana": 0.739,
+    "max": 1.066
+   },
+   "giro_hombros": {
+    "n": 6,
+    "min": 34.26,
+    "mediana": 48.449,
+    "max": 63.389
+   }
+  },
+  "s1|reves|perfil": {
+   "n": 6,
+   "con_pico": 6,
+   "s_saque": {
+    "n": 5,
+    "min": 0.0,
+    "mediana": 0.0,
+    "max": 0.696
+   },
+   "c1_giro": {
+    "n": 6,
+    "min": 5.9,
+    "mediana": 12.222,
+    "max": 24.36
+   },
+   "c2_munecas": {
+    "n": 6,
+    "min": 0.309,
+    "mediana": 0.463,
+    "max": 1.385
+   },
+   "c3_eje": {
+    "n": 6,
+    "min": -1.181,
+    "mediana": -0.54,
+    "max": 0.254
+   },
+   "giro_hombros": {
+    "n": 6,
+    "min": 26.014,
+    "mediana": 51.497,
+    "max": 59.933
+   }
+  },
+  "s1|reves|tres_cuartos": {
+   "n": 6,
+   "con_pico": 6,
+   "s_saque": {
+    "n": 6,
+    "min": 0.0,
+    "mediana": 0.0,
+    "max": 0.223
+   },
+   "c1_giro": {
+    "n": 6,
+    "min": -35.187,
+    "mediana": -8.863,
+    "max": 20.083
+   },
+   "c2_munecas": {
+    "n": 6,
+    "min": 0.486,
+    "mediana": 1.446,
+    "max": 1.936
+   },
+   "c3_eje": {
+    "n": 6,
+    "min": -1.526,
+    "mediana": -1.407,
+    "max": -0.775
+   },
+   "giro_hombros": {
+    "n": 6,
+    "min": 9.333,
+    "mediana": 13.526,
+    "max": 18.033
+   }
+  },
+  "s2|saque|perfil": {
+   "n": 6,
+   "con_pico": 6,
+   "s_saque": {
+    "n": 3,
+    "min": 0.0,
+    "mediana": 0.0,
+    "max": 0.0
+   },
+   "c1_giro": {
+    "n": 6,
+    "min": 22.621,
+    "mediana": 39.764,
+    "max": 48.287
+   },
+   "c2_munecas": {
+    "n": 6,
+    "min": 1.654,
+    "mediana": 2.045,
+    "max": 2.405
+   },
+   "c3_eje": {
+    "n": 6,
+    "min": 0.912,
+    "mediana": 1.047,
+    "max": 1.156
+   },
+   "giro_hombros": {
+    "n": 6,
+    "min": 32.783,
+    "mediana": 36.064,
+    "max": 41.928
+   }
+  },
+  "s2|saque|tres_cuartos": {
+   "n": 12,
+   "con_pico": 12,
+   "s_saque": {
+    "n": 1,
+    "min": 0.0,
+    "mediana": 0.0,
+    "max": 0.0
+   },
+   "c1_giro": {
+    "n": 12,
+    "min": -0.214,
+    "mediana": 25.404,
+    "max": 46.206
+   },
+   "c2_munecas": {
+    "n": 4,
+    "min": 1.056,
+    "mediana": 1.977,
+    "max": 2.365
+   },
+   "c3_eje": {
+    "n": 4,
+    "min": 0.632,
+    "mediana": 0.921,
+    "max": 1.221
+   },
+   "giro_hombros": {
+    "n": 12,
+    "min": 56.541,
+    "mediana": 60.223,
+    "max": 76.371
+   }
+  },
+  "s2|drive|perfil": {
+   "n": 6,
+   "con_pico": 6,
+   "s_saque": {
+    "n": 6,
+    "min": 0.0,
+    "mediana": 0.324,
+    "max": 0.523
+   },
+   "c1_giro": {
+    "n": 6,
+    "min": 14.694,
+    "mediana": 22.031,
+    "max": 35.235
+   },
+   "c2_munecas": {
+    "n": 6,
+    "min": 1.294,
+    "mediana": 2.694,
+    "max": 2.901
+   },
+   "c3_eje": {
+    "n": 6,
+    "min": 0.194,
+    "mediana": 1.124,
+    "max": 1.318
+   },
+   "giro_hombros": {
+    "n": 6,
+    "min": 27.332,
+    "mediana": 33.147,
+    "max": 46.086
+   }
+  },
+  "s2|drive|tres_cuartos": {
+   "n": 6,
+   "con_pico": 6,
+   "s_saque": {
+    "n": 1,
+    "min": 0.0,
+    "mediana": 0.0,
+    "max": 0.0
+   },
+   "c1_giro": {
+    "n": 6,
+    "min": -9.295,
+    "mediana": 39.237,
+    "max": 52.039
+   },
+   "c2_munecas": {
+    "n": 5,
+    "min": 0.487,
+    "mediana": 2.41,
+    "max": 2.574
+   },
+   "c3_eje": {
+    "n": 5,
+    "min": 0.03,
+    "mediana": 0.661,
+    "max": 1.089
+   },
+   "giro_hombros": {
+    "n": 6,
+    "min": 32.969,
+    "mediana": 59.071,
+    "max": 71.899
+   }
+  },
+  "s2|reves|perfil": {
+   "n": 5,
+   "con_pico": 5,
+   "s_saque": {
+    "n": 3,
+    "min": 0.0,
+    "mediana": 0.547,
+    "max": 0.701
+   },
+   "c1_giro": {
+    "n": 5,
+    "min": -13.765,
+    "mediana": -5.745,
+    "max": 37.782
+   },
+   "c2_munecas": {
+    "n": 5,
+    "min": 0.375,
+    "mediana": 0.421,
+    "max": 1.332
+   },
+   "c3_eje": {
+    "n": 5,
+    "min": -1.142,
+    "mediana": -1.105,
+    "max": 0.755
+   },
+   "giro_hombros": {
+    "n": 5,
+    "min": 54.074,
+    "mediana": 58.596,
+    "max": 86.287
+   }
+  },
+  "s2|reves|tres_cuartos": {
+   "n": 6,
+   "con_pico": 6,
+   "s_saque": {
+    "n": 6,
+    "min": 0.0,
+    "mediana": 0.235,
+    "max": 0.529
+   },
+   "c1_giro": {
+    "n": 6,
+    "min": -41.456,
+    "mediana": -14.481,
+    "max": -8.401
+   },
+   "c2_munecas": {
+    "n": 1,
+    "min": 2.53,
+    "mediana": 2.53,
+    "max": 2.53
+   },
+   "c3_eje": {
+    "n": 6,
+    "min": -0.978,
+    "mediana": -0.409,
+    "max": -0.051
+   },
+   "giro_hombros": {
+    "n": 6,
+    "min": 9.959,
+    "mediana": 16.609,
+    "max": 63.606
+   }
+  }
+ }
+}
