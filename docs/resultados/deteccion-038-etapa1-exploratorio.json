@@ -1,0 +1,337 @@
+{
+ "aviso": "EXPLORATORIO POSTERIOR (post hoc). Se diseñó viendo ambas sesiones: no cuenta para el criterio de aceptación ni se puede citar como acierto de la detección.",
+ "commit": "1eef8d74f40721e9b637a6ed2632ddd796bcbe70",
+ "arbol_sucio": false,
+ "repeticiones": 76,
+ "resultados": {
+  "saque_contra_resto_muneca_alta_en_contacto": {
+   "cortes": {
+    "ajuste_s1": 0.3302,
+    "ajuste_s2": 0.4169
+   },
+   "n": 76,
+   "determinados": 70,
+   "aciertos": 63,
+   "errores": 7,
+   "no_determinados": 6,
+   "error_entre_determinados": 0.1,
+   "error_ic95": [
+    0.0493,
+    0.1923
+   ],
+   "no_determinado_pct": 0.07894736842105263,
+   "no_determinado_ic95": [
+    0.0367,
+    0.1617
+   ],
+   "acierto_sobre_todas": 0.8289473684210527,
+   "cumple": false,
+   "matriz": {
+    "saque": {
+     "saque": 23,
+     "resto": 1,
+     "no_determinado": 5
+    },
+    "resto": {
+     "saque": 6,
+     "resto": 40,
+     "no_determinado": 1
+    }
+   }
+  },
+  "drive_contra_reves_c1_giro": {
+   "cortes": {
+    "ajuste_s1": 23.4549,
+    "ajuste_s2": 9.4872
+   },
+   "n": 47,
+   "determinados": 47,
+   "aciertos": 34,
+   "errores": 13,
+   "no_determinados": 0,
+   "error_entre_determinados": 0.2765957446808511,
+   "error_ic95": [
+    0.1694,
+    0.4176
+   ],
+   "no_determinado_pct": 0.0,
+   "no_determinado_ic95": [
+    0.0,
+    0.0756
+   ],
+   "acierto_sobre_todas": 0.723404255319149,
+   "cumple": false,
+   "matriz": {
+    "drive": {
+     "drive": 18,
+     "reves": 6,
+     "no_determinado": 0
+    },
+    "reves": {
+     "drive": 7,
+     "reves": 16,
+     "no_determinado": 0
+    }
+   }
+  },
+  "drive_contra_reves_c2_munecas": {
+   "cortes": {
+    "ajuste_s1": 1.7153,
+    "ajuste_s2": 1.6746
+   },
+   "n": 47,
+   "determinados": 40,
+   "aciertos": 36,
+   "errores": 4,
+   "no_determinados": 7,
+   "error_entre_determinados": 0.1,
+   "error_ic95": [
+    0.0396,
+    0.2305
+   ],
+   "no_determinado_pct": 0.14893617021276595,
+   "no_determinado_ic95": [
+    0.0741,
+    0.2769
+   ],
+   "acierto_sobre_todas": 0.7659574468085106,
+   "cumple": false,
+   "matriz": {
+    "drive": {
+     "drive": 20,
+     "reves": 2,
+     "no_determinado": 2
+    },
+    "reves": {
+     "drive": 2,
+     "reves": 16,
+     "no_determinado": 5
+    }
+   }
+  },
+  "drive_contra_reves_c3_eje": {
+   "cortes": {
+    "ajuste_s1": -0.1046,
+    "ajuste_s2": 0.1868
+   },
+   "n": 47,
+   "determinados": 45,
+   "aciertos": 40,
+   "errores": 5,
+   "no_determinados": 2,
+   "error_entre_determinados": 0.1111111111111111,
+   "error_ic95": [
+    0.0484,
+    0.235
+   ],
+   "no_determinado_pct": 0.0425531914893617,
+   "no_determinado_ic95": [
+    0.0117,
+    0.1425
+   ],
+   "acierto_sobre_todas": 0.851063829787234,
+   "cumple": false,
+   "matriz": {
+    "drive": {
+     "drive": 22,
+     "reves": 0,
+     "no_determinado": 2
+    },
+    "reves": {
+     "drive": 5,
+     "reves": 18,
+     "no_determinado": 0
+    }
+   }
+  },
+  "encuadre_saque_giro_hombros": {
+   "cortes": {
+    "ajuste_s1": 43.1258,
+    "ajuste_s2": 48.1438
+   },
+   "n": 29,
+   "determinados": 28,
+   "aciertos": 28,
+   "errores": 0,
+   "no_determinados": 1,
+   "error_entre_determinados": 0.0,
+   "error_ic95": [
+    0.0,
+    0.1206
+   ],
+   "no_determinado_pct": 0.034482758620689655,
+   "no_determinado_ic95": [
+    0.0061,
+    0.1718
+   ],
+   "acierto_sobre_todas": 0.9655172413793104,
+   "cumple": true,
+   "matriz": {
+    "perfil": {
+     "perfil": 10,
+     "tres_cuartos": 0,
+     "no_determinado": 1
+    },
+    "tres_cuartos": {
+     "perfil": 0,
+     "tres_cuartos": 18,
+     "no_determinado": 0
+    }
+   }
+  },
+  "encuadre_drive_giro_hombros": {
+   "cortes": {
+    "ajuste_s1": 42.3466,
+    "ajuste_s2": 46.1089
+   },
+   "n": 24,
+   "determinados": 24,
+   "aciertos": 19,
+   "errores": 5,
+   "no_determinados": 0,
+   "error_entre_determinados": 0.20833333333333334,
+   "error_ic95": [
+    0.0924,
+    0.4047
+   ],
+   "no_determinado_pct": 0.0,
+   "no_determinado_ic95": [
+    0.0,
+    0.138
+   ],
+   "acierto_sobre_todas": 0.7916666666666666,
+   "cumple": false,
+   "matriz": {
+    "perfil": {
+     "perfil": 10,
+     "tres_cuartos": 2,
+     "no_determinado": 0
+    },
+    "tres_cuartos": {
+     "perfil": 3,
+     "tres_cuartos": 9,
+     "no_determinado": 0
+    }
+   }
+  },
+  "encuadre_reves_giro_hombros": {
+   "cortes": {
+    "ajuste_s1": 32.5116,
+    "ajuste_s2": 37.6025
+   },
+   "n": 23,
+   "determinados": 23,
+   "aciertos": 21,
+   "errores": 2,
+   "no_determinados": 0,
+   "error_entre_determinados": 0.08695652173913043,
+   "error_ic95": [
+    0.0242,
+    0.268
+   ],
+   "no_determinado_pct": 0.0,
+   "no_determinado_ic95": [
+    0.0,
+    0.1431
+   ],
+   "acierto_sobre_todas": 0.9130434782608695,
+   "cumple": false,
+   "matriz": {
+    "perfil": {
+     "perfil": 10,
+     "tres_cuartos": 1,
+     "no_determinado": 0
+    },
+    "tres_cuartos": {
+     "perfil": 1,
+     "tres_cuartos": 11,
+     "no_determinado": 0
+    }
+   }
+  }
+ },
+ "x_muneca_alta_por_clase": {
+  "s1|saque": [
+   1.0,
+   0.614,
+   0.956,
+   1.0,
+   0.625,
+   0.5,
+   0.623,
+   0.333,
+   1.0,
+   0.696
+  ],
+  "s1|drive": [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "s1|reves": [
+   1.0,
+   0.426,
+   1.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.148,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "s2|saque": [
+   0.614,
+   0.652,
+   0.574,
+   0.477,
+   0.929,
+   0.578,
+   1.0,
+   1.0,
+   1.0,
+   1.0,
+   0.739,
+   0.571,
+   1.0,
+   1.0
+  ],
+  "s2|drive": [
+   0.0,
+   0.0,
+   0.0,
+   0.357,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "s2|reves": [
+   0.852,
+   1.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ]
+ }
+}
