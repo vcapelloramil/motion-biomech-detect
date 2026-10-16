@@ -18,7 +18,7 @@ Reemplaza el punto 3 de la aprobación del 15/10 en `docs/decisiones/038-…` (a
   - **Celular, sin sesión:** logo + Ingresar + Crear cuenta; sin «Inicio»; Tecnología en un menú ☰ (**oculto bajo 360 px** por falta de lugar: queda en el pie). **Escritorio sin cambios.**
   - **Cargar:** sin el texto «iPhone · Android · Computadora» del título; en el esquema de tres cuartos «CÁMARA» ya no pisa la línea punteada, el «90°» pasó debajo de la línea y hay una **raqueta en la mano dominante** (espejada para zurdos; usa la mano del jugador elegido y, sin ella, la contraria al lado de la cámara).
   - **Pruebas:** frontend **122 pasan** (+4: rótulo sin cruzar la línea en los 4 casos, raqueta espejada y sobre el mango), `tsc` y `build` limpios. **Visto en pantalla:** encabezado sin sesión a 360 px y los esquemas (12 variantes); con sesión, la barra, el menú de la inicial y la posición del botón con una sesión simulada **solo para la vista local**
-  (alias de Vite en una configuración temporal, ya borrada; no se tocó el código de autenticación). **No visto:** la pantalla de Cargar completa con una sesión real (pide ingresar) ni nada en un celular físico. **Falta que Valentín republique el frontend** (`bun run build` y `wrangler deploy`).
+  (alias de Vite en una configuración temporal, ya borrada; no se tocó el código de autenticación). **No visto:** la pantalla de Cargar completa con una sesión real (pide ingresar) ni nada en un celular físico. Republicado por Valentín (ver el cierre al final de esta entrada).
 - **038, etapa 1 (validación sin tocar el producto): NO cumple en ningún campo** (`docs/resultados/deteccion-038-etapa1.md`; arnés `backend/app/medicion_deteccion.py`; reglas fijadas y commiteadas **antes** de medir, `fee1003`; ajuste en una sesión y evaluación en la otra):
 
   | Campo | Determinados | Error (Wilson 95 %) | No determinado | ¿Cumple? |
@@ -33,6 +33,16 @@ Reemplaza el punto 3 de la aprobación del 15/10 en `docs/decisiones/038-…` (a
   **La etapa 2 no se propone** (condición: que la etapa 1 cumpla). Camino posible: una sesión nueva con saque, drive y revés (≥ 12 por celda; se puede sumar a la del lado derecho) para validar reglas robustas fijadas de antemano; el segundo camino de la 038 («propone y el usuario confirma») no exige el 5 %.
 - **Pruebas del servidor:** suite rápida **620 pasan** (597 + 23 del arnés de la 038).
 - **Capítulo 7:** §2.10 y fila 24 en `docs/tesis/insumos-capitulo-7.md`.
+
+### Cierre del 16/10 (informe de Valentín) y plan para mañana
+- **Frontend republicado** y **navegación en celular verificada por Valentín, con y sin sesión** (lo que yo no había podido ver: Cargar completo con sesión real y un celular físico). Se reemplaza la nota «falta que Valentín republique» de arriba.
+- **Resultado negativo de la etapa 1 de la 038** (ver arriba y `docs/resultados/deteccion-038-etapa1.md`): ningún campo cumple.
+- **Plan para el 17/10 (no se empezó nada de esto):**
+  1. **Reglas nuevas, exploratorias:** brazo del lanzamiento para el saque (la otra muñeca arriba al comienzo, cláusula que no se usó el 16/10), sentido de giro del tronco para drive contra revés, y recalibrar D **por tipo de golpe** (con la orientación invertida del revés). Todo exploratorio: lo que se elija mirando las dos sesiones del corpus no se puede validar con ellas.
+  2. **Revisar a mano los 5 revés de perfil «raros»** (muñeca alta en el contacto): `20260924_VCR_reves_perfil_240_01_rep01/02/03` y `20260925_VCR_reves_perfil_240_02_rep02/03` (¿pose, técnica o etiqueta?).
+  3. **Protocolo de una sola jornada** para datos nuevos de validación: tipo de golpe, encuadre y lado de la cámara en el mismo día; **un video largo por combinación** (a recortar después). Se integra con `docs/protocolo-sesion-lado-derecho.md`.
+  4. **Calendario:** la **demo va con la carga declarada**; la detección se integra **solo si valida antes del 23/10**; el motor se congela el 24/10.
+- **Push:** sin análisis en curso (verificado con `estado_de_la_base.py` al cerrar), se empujan a `main` los commits de docs y del arnés de la 038 (sin efecto en el motor; Render redeploya el mismo 0.5.5).
 
 **Estado de commits:** `main` local está **por delante de `origin/main` (`9415814`)** (`git log origin/main..main`) (los de docs y arnés de la 038 **no están empujados**: empujar redeploya Render; se publican con el próximo push, sin efecto en el motor). Producción sigue en 0.5.5.
 
