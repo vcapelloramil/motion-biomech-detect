@@ -29,8 +29,8 @@ Las rutas son relativas a la raíz del repositorio `motion-biomech-detect`; los 
 - Que el jugador «llegue tarde con la cadera», que el **tres cuartos sea el encuadre correcto** (coincide con la literatura, pero elegirlo así sería elegir por el resultado) ni cuál de los dos encuadres mide bien: **no hay medición independiente de la pelvis**.
 - Que el sistema **detecte cambios reales de técnica** (no se indujeron ni se detectaron); que los resultados **generalicen** a otros jugadores, zurdos, otros teléfonos, el lado de la raqueta o partidos.
 - Que el brazo no se mide **por** el lado de la cámara (es la lectura que mejor encaja, sin contrastar), ni que **otro estimador** (YOLOv8-Pose con elevación, otros 3D) no cambiaría la dependencia del orden con el encuadre: **no se probó** (§10.2 del Cap. 7).
-- Utilidad percibida (Criterio 5, I4) y umbral de latencia (Criterio 4): **no evaluados** (sin pruebas con otros usuarios; el motivo del cambio de alcance del 7/10 **no consta** en el repositorio, §10.3).
-- Objetivo específico 4 (comparación con un modelo de referencia): **no realizado** y su texto no está en el repositorio (§10.5).
+- Utilidad percibida (Criterio 5, I4) y umbral de latencia (Criterio 4): **no evaluados** (sin pruebas con otros usuarios; **motivo del cambio de alcance del 7/10, según Valentín: el plazo y no tener otros usuarios disponibles**, §10.3).
+- **Objetivo específico 4** («análisis comparativo visual… contraste de la ejecución del jugador con modelos de referencia, permitiendo así corregir errores y mejorar el rendimiento deportivo»): **no se construyó la comparación contra modelos de referencia; se reemplazó por la comparación del jugador consigo mismo** (declaración de Valentín, 19/10/2026; §10.5). Tampoco se puede afirmar que el sistema «corrija errores» o «mejore el rendimiento»: documenta y mide (R2).
 
 ### 1.3 Estado de la hipótesis (resumen; el detalle y la redacción literal a cotejar con el Capítulo 1 están en `insumos-capitulo-7.md` §5)
 
@@ -55,7 +55,8 @@ Cada una cita su base; ninguna es una recomendación comercial.
 3. **Para la resolución temporal:** a ~200 fps reales (5 ms) y con 16–17 % de puntos interpolados, el orden de dos picos a menos de 8,33 ms **no es resoluble**; en tres cuartos más de la mitad de las repeticiones queda dentro de esa tolerancia. El instrumento tiene que **decirlo** («sin diferencia medible»), no decidir.
 4. **Para los datos de captura:** leer la tasa del archivo y rechazar el convertido es un requisito de validez, no de comodidad: con el flujo por defecto del iPhone un golpe a 240 fps llega a 100 fps y **no es analizable**; con «Formato: Actual» sí.
 5. **Para la carga de datos:** si el usuario declara mal (2 de 5), el sistema debe **contrastar** (hoy solo el saque) y la sesión debe poder corregirse; una detección automática con estas reglas **no** es todavía una alternativa válida (§2.10 del Cap. 7).
-6. **Para el alcance declarado (R5):** todo resultado de orden, separación, ángulos y D vale **para la cámara a la izquierda de un diestro**; el otro lado se acepta pero está **sin validar** (el reporte lo dice).
+6. **Para el objetivo específico 4:** reemplazar la referencia externa por el propio jugador es coherente con lo medido: una referencia (modelo ideal o profesional) exigiría un orden de picos confiable, y con una cámara el orden depende del encuadre. Lo que el sistema ofrece es un **contraste del jugador con su propia variación**, en el mismo encuadre; la redacción debe presentarlo como un **cambio de alcance justificado**, no como el cumplimiento del objetivo tal como está enunciado.
+7. **Para el alcance declarado (R5):** todo resultado de orden, separación, ángulos y D vale **para la cámara a la izquierda de un diestro**; el otro lado se acepta pero está **sin validar** (el reporte lo dice).
 
 ---
 
@@ -128,7 +129,7 @@ Cada una cita su base; ninguna es una recomendación comercial.
 | --- | --- | --- | --- |
 | 1 | Detección automática de tipo de golpe y encuadre en la carga | decisión 038; `plan-mvp` §9.5 | Diseño A aprobado (15/10); etapa 1 de validación **negativa** (16/10); etapa 2 **no propuesta**; integración solo si valida antes del 23/10 |
 | 2 | Detección del lado de la cámara | decisión 038 (c) | **Sin hacer:** no se puede validar con el corpus (una sola clase); necesita la sesión del lado derecho |
-| 3 | Sesión con la cámara del lado derecho (girando al jugador) y cintas | `protocolo-sesion-lado-derecho.md` | Protocolo escrito; **grabación: NO CONSTA** (la hace Valentín cuando el clima lo permita) |
+| 3 | Sesión con la cámara del lado derecho (girando al jugador) y cintas | `protocolo-sesion-lado-derecho.md` | Protocolo escrito; **no consta que se haya grabado** (la hace Valentín cuando el clima lo permita; del 17 al 19/10 no hubo desarrollo) |
 | 4 | Cintas de color: medición independiente de la pelvis | `plan-mvp` §9.4 | **Registrada, sin diseñar** (tentativa) |
 | 5 | Calibrar D para drive y revés | `plan-mvp` §9.1 | **Explorado, no calibrado** (D no distingue el drive y va invertido en el revés) |
 | 6 | Criterio 3, métrica (ii) con el tiempo real | `plan-mvp` §9.2 | Pendiente |
@@ -152,6 +153,7 @@ Cada una cita su base; ninguna es una recomendación comercial.
 | 24 | Validación de utilidad con un entrenador o kinesiólogo (Criterio 5) | `plan-mvp` §4 | Pendiente («no evaluado, trabajo futuro» es la alternativa) |
 | 25 | Congelar la versión que se defiende (etiqueta de git) | bitácora 16/10 | Prevista el **24/10**; **no existe todavía** |
 | 26 | Limpieza y nueva subida del corpus con el motor congelado (corregir la fecha de la sesión `3a101dd3`) | `demo-guion.md` §C | Prevista el 25–26/10 |
+| 27 | Comparación contra modelos de referencia (OE4) | Cap. 1 (texto del objetivo, citado por Valentín) | **No construida; reemplazada por la comparación consigo mismo** (declarado 19/10). Si se quisiera: exige antes una medición independiente de la pelvis y un orden confiable (§4.3) |
 
 ---
 

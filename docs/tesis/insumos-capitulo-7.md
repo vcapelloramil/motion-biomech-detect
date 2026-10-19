@@ -500,6 +500,7 @@ La lista viva de correcciones al capítulo, con la decisión que origina cada un
 | Política de retención | Original 7 días y luego solo el video con esqueleto | **No implementada** (tarea 7.6 diferida); el bucket `artefactos` aparte la deja lista; el usuario puede eliminar un golpe, una sesión o la cuenta (cuenta: solo en respaldo) | 033 |
 | Segmentación de golpes | Marcado manual asistido dentro de un video | Una subida = un golpe (límite de 50 MB); la sesión agrupa golpes | 016 |
 | Validación con usuarios (I4, Criterio 4 y 5) | Pruebas de usabilidad con usuarios | **Autovalidación**: grabaciones propias, sin otros usuarios (cambio de alcance del 7/10) | plan MVP §4 |
+| Objetivo específico 4 (análisis comparativo visual y contraste con modelos de referencia) | Comparar la ejecución del jugador con modelos de referencia para corregir errores y mejorar el rendimiento | **Comparación del jugador consigo mismo** (Evolución, vista de sesión); **sin modelos de referencia**, sin «corregir» ni «mejorar» (R2, R5; decisiones 035 y 036). Declarado por Valentín el 19/10/2026 | OE4 · CLAUDE.md R2, R5 · 036 |
 | Corpus de evaluación | Grabaciones propias a 240 fps | Mismas grabaciones, con la tasa corregida; **un jugador** | 029, 030 |
 
 **Costos reales hoy (13/10/2026):** Render Standard **USD 25/mes** (el único costo recurrente); Supabase Free, Cloudflare (Workers y DNS) y GitHub en planes gratuitos; dominio sin costo el primer año; correo propio funcionando desde el 15/10 (Brevo, 300 correos por día según fuente secundaria; costo no verificado). **Costo acumulado de Render desde el 12/10: NO MEDIDO** (se factura por plan y tiempo; verificar en el panel).
@@ -569,7 +570,7 @@ Orden vigente del plan (`docs/plan-mvp-punta-a-punta.md` §8): **pasos 1 a 7 hec
 | 10 | **Detección automática del tipo de golpe y del encuadre (038):** se intentó adelantarla antes de la demo (límite 23/10). **La etapa 1 no cumple** (§2.10): la etapa 2 no se propuso. La demo va con la carga declarada; la integración solo si valida antes del 23/10 | Etapa 1 hecha, negativa; resto condicionado |
 | 11 | **Limpieza y nueva subida con el motor congelado (25–26/10):** borrar las 8 sesiones y subir los recortes; **corregir** la sesión `3a101dd3` (fecha 24/9 con un golpe del 25/9) y no volver a subir `IMG_6376` ni `IMG_6391` como «perfil» (§10.1) | Pendiente |
 
-### 8.2 Antes de la defensa (entrega final: 17/11/2026; MVP completo: 2/11; la fecha de defensa **no consta en el repositorio**)
+### 8.2 Antes de la defensa (**17/11/2026: fecha final de entrega de documentación y sistema para regularizar la materia**, según Valentín el 19/10; MVP completo: 2/11; no se informó otra fecha de defensa)
 
 **Mediciones y software (en el orden de Valentín, 13/10, `plan-mvp-punta-a-punta.md` §9):**
 
@@ -594,8 +595,7 @@ Orden vigente del plan (`docs/plan-mvp-punta-a-punta.md` §8): **pasos 1 a 7 hec
 ## 9. Delta desde el 13/10 (corte de esta versión: 19/10/2026)
 
 **Cómo se verificó (19/10/2026):** `git log 60751d8..HEAD`; `/health` de producción tres veces seguidas; `pytest -m "not slow"` y `bun test` corridos de nuevo; `tools/respaldo/estado_de_la_base.py` y `tools/respaldo/tiempos_y_origen_de_las_subidas.py`
-(solo lectura sobre la base y Storage); consulta de las páginas de límites de Cloudflare. **No hay commits ni registros posteriores al 16/10 02:56 (−03:00):** lo que Valentín haya hecho del 17 al 19/10 (la sesión de validación, la revisión de los cinco revés)
-**NO CONSTA en el repositorio**.
+(solo lectura sobre la base y Storage); consulta de las páginas de límites de Cloudflare. **No hay commits ni registros posteriores al 16/10 02:56 (−03:00):** **Valentín confirmó el 19/10 que del 17 al 19/10 no hubo desarrollo:** el plan del 17/10 (reglas exploratorias nuevas, revisión de los cinco revés, protocolo de una jornada) **no se hizo** y sigue pendiente.
 
 ### 9.1 Commits (21 desde `60751d8`; dos del 13/10 por la tarde son documentos)
 
@@ -654,7 +654,7 @@ Orden vigente del plan (`docs/plan-mvp-punta-a-punta.md` §8): **pasos 1 a 7 hec
 
 ## 10. Pendientes del Capítulo 7: resueltos o declarados (corte 19/10/2026)
 
-Cada punto lleva su estado. **RESUELTO** = hay evidencia en el repositorio o la obtuve hoy; **NO CONSTA** = el repositorio no lo dice (pregunta para Valentín); **NO MEDIDO / NO REALIZADO** = no se hizo.
+Cada punto lleva su estado. **RESUELTO** = hay evidencia en el repositorio o la obtuve hoy; **NO CONSTA** = el repositorio no lo dice (se le preguntó a Valentín); **NO MEDIDO / NO REALIZADO** = no se hizo. **Valentín contestó el 19/10 las cuatro preguntas abiertas** (motivo del cambio de alcance, texto del OE4, actividad del 17 al 19/10, fecha de defensa): sus respuestas están incorporadas abajo y marcadas «declaración de Valentín» (no constan en un documento del repositorio de esa fecha).
 
 ### 10.1 `IMG_6376` e `IMG_6395`: ¿qué encuadre y qué fecha? — **RESUELTO (con una corrección al documento del 13/10)**
 
@@ -686,10 +686,10 @@ Lo que dice el repositorio, en orden:
 5. **Decisiones 035 y 036 (12–13/10):** suspenden el veredicto **sin mencionar la Vía A** (no aparece en ninguna de las dos). **No hay una decisión escrita de no probarla**: lo que hay es que nunca se activó su condición y que el tiempo se destinó al flujo de punta a punta.
 - **Lo que NO se sabe:** si otro estimador cambiaría la dependencia del orden con el encuadre (puede ser del estimador monocular o del movimiento). **NO MEDIDO.** Es trabajo futuro (§7.3 y Capítulo 8).
 
-### 10.3 Motivo del cambio de alcance del 7/10 (autovalidación) — **NO CONSTA el motivo**
+### 10.3 Motivo del cambio de alcance del 7/10 (autovalidación) — **RESUELTO (declaración de Valentín, 19/10/2026)**
 
 El repositorio registra **el hecho y su efecto**, no la razón: `plan-mvp-punta-a-punta.md` §1 («cambio del 7/10: no habrá pruebas con otros usuarios; la validación la hace Valentín grabándose; el sistema igual tiene que funcionar para cualquier usuario nuevo… como si fuera público»), la decisión 023 («el cambio a Standard ya no depende de pruebas con usuarios») y CLAUDE.md §5.
-Lo único cercano es el contexto de calendario (plan §1b del 9/10: ~40–50 % de llegar al 20/10 con trabajo todos los días), pero **ningún documento dice que esa sea la causa**. **Pregunta para Valentín:** cuál fue el motivo (plazo, disponibilidad de usuarios, privacidad de los videos). Consecuencias registradas: Criterios 4 (umbral) y 5 y la incertidumbre I4 quedan **no evaluados** (§2.6).
+**Motivo, según Valentín (19/10/2026): el plazo y no tener otros usuarios disponibles.** Es una declaración del autor; el repositorio solo trae el contexto de calendario (plan §1b del 9/10: ~40–50 % de llegar al 20/10 con trabajo todos los días) y no dice la causa. Consecuencias registradas: Criterios 4 (umbral) y 5 y la incertidumbre I4 quedan **no evaluados** (§2.6).
 
 ### 10.4 Pruebas de los requisitos no funcionales — **RESUELTO en parte; lo que falta se declara**
 
@@ -707,12 +707,12 @@ Lo único cercano es el contexto de calendario (plan §1b del 9/10: ~40–50 % d
 - **Pruebas de extremo a extremo con Playwright: no existen.** Playwright no figura en `frontend/package.json` ni en ningún archivo de configuración; la integración continua es solo el keep-alive de Supabase; las pruebas del frontend son `bun test` (lógica pura, 122) sin navegador. Es lo que dice la corrección 31 del Capítulo 4.
 - **Pruebas manuales por Valentín en producción (informe, sin capturas en el repositorio):** registro y confirmación, recuperar contraseña, carga desde el iPhone, Perfil, Evolución, PDF, «Eliminar mi cuenta» y navegación del celular.
 
-### 10.5 ¿Hay una comparación contra un modelo de referencia (objetivo específico 4)? — **NO REALIZADA; el texto del objetivo NO ESTÁ en el repositorio**
+### 10.5 ¿Hay una comparación contra un modelo de referencia (objetivo específico 4)? — **NO REALIZADA; reemplazada por la comparación del jugador consigo mismo (declaración de Valentín, 19/10/2026)**
 
-El apartado de la tesis que enuncia los objetivos específicos no está en el repositorio (solo se citan el OE1 y el OE5 en los Capítulos 3 y 4). Lo que hay, y lo que no:
+**Texto del objetivo específico 4 (Valentín, 19/10/2026):** «Implementar una funcionalidad de análisis comparativo visual y un sistema que permita observar el contraste de la ejecución del jugador con modelos de referencia, permitiendo así corregir errores y mejorar el rendimiento deportivo.» **Valentín confirma que no se construyó la comparación contra un modelo de referencia: se reemplazó por la comparación del jugador consigo mismo.** El Capítulo 1 no está en el repositorio (los Capítulos 3 y 4 solo citan el OE1 y el OE5). **Es un objetivo cumplido solo en parte y el cambio debe declararse** (Capítulo 6 y conclusiones). Lo que hay, y lo que no:
 - **No existe** una comparación del sistema contra un modelo, captura óptica, sensores o un jugador de referencia. Es una exclusión declarada: CLAUDE.md R5 («Fuera: comparativas con jugadores ATP/WTA») y §3 («comparar al jugador consigo mismo… no contra un promedio poblacional ni contra un modelo ideal»).
 - **Referencias parciales que sí hay:** (a) el **Criterio 2** compara los ángulos de rodilla y codo contra goniometría manual (n = 18; §2.6); (b) el orden esperado de la literatura (cadera antes que tronco) se usa solo como «referencia» de un grupo, y la 036 lo suspendió; (c) los valores de Fleisig del brazo **no son comparables** con la ω del vector hombro→codo (decisión 011).
-- **Falta una medición independiente de la pelvis** (cintas de color, registrada y sin diseñar; §7.3). **Pregunta para Valentín:** cómo se redactó el OE4 en el Capítulo 1; si pide comparar contra un modelo de referencia, **es un objetivo no cumplido** y hay que declararlo.
+- **Falta una medición independiente de la pelvis** (cintas de color, registrada y sin diseñar; §7.3). **Lo que sí cubre parcialmente el objetivo:** (i) la comparación **visual** del jugador consigo mismo (Evolución, vista de sesión, tres fotogramas clave y video con esqueleto); (ii) el seguimiento entre sesiones del mismo encuadre. **Lo que no cubre:** el contraste con modelos de referencia, y «corregir errores y mejorar el rendimiento» (la regla R2 lo excluye: el sistema documenta y mide, no diagnostica ni prescribe; la 036 retiró el veredicto). Motivos documentados del reemplazo: R5 y CLAUDE.md §3 (no comparar contra jugadores profesionales ni un modelo ideal), y la dependencia del orden con el encuadre, que impide usar una referencia (§2.5).
 
 ### 10.6 Auditoría de fatiga, panel del profesional y umbrales poblacionales — **NO IMPLEMENTADOS (ni simulados)**
 
@@ -766,7 +766,7 @@ El apartado de la tesis que enuncia los objetivos específicos no está en el re
 
 ### 10.11 Versión que se va a defender — **NO CONGELADA al 19/10**
 
-- **Congelamiento previsto:** **24/10/2026** (`git tag motor-congelado-<versión>`; `engine/` y `ensamblar_reporte.py` sin cambios pendientes); **27/10 (D−1):** congelamiento total (no se publica nada); demo 28–30/10; MVP completo el 2/11; entrega final 17/11; **la fecha de defensa no consta**.
+- **Congelamiento previsto:** **24/10/2026** (`git tag motor-congelado-<versión>`; `engine/` y `ensamblar_reporte.py` sin cambios pendientes); **27/10 (D−1):** congelamiento total (no se publica nada); demo 28–30/10; MVP completo el 2/11; **17/11/2026 es la fecha final de entrega de la documentación y del sistema para regularizar la materia** (Valentín, 19/10/2026); no se informó otra fecha de defensa.
 - **Hoy (candidata, no firme):** motor **0.5.5**, contrato **1.4**, `main` = `08ccec1` (último cambio del motor: `6df3d9d`). **No existe la etiqueta de congelamiento** (la última es `v0.5.0-etapa4`). Si la integración de la detección automática (038) no valida antes del 23/10, **la versión que se defiende es la que está en producción hoy**.
 
 ---
