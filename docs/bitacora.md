@@ -18,6 +18,33 @@ Pedido de Valentín: poner al día `docs/tesis/insumos-capitulo-7.md` (corte 13/
 - **Commit `7b61d86` y el siguiente quedan locales** por decisión de Valentín; si se empujan, que sea sin ningún análisis corriendo (Render redeploya).
 - **Sin empujar:** los commits de esta entrada quedan en `main` local (empujar redeploya Render).
 
+### Cierre de contexto del 19/10 (retomar desde acá)
+
+**Estado:** producción = `origin/main` = `08ccec1`, **motor 0.5.5, contrato 1.4**, sin cambios desde el 16/10. En `main` local hay **3 commits de solo documentos sin empujar** (`7b61d86`, `7a13750`, `434add3`): **empujarlos redeploya Render**, así que hacerlo solo con la base sin análisis en curso (`tools/respaldo/estado_de_la_base.py` → «EN CURSO: ninguno»); Valentín dijo que por ahora quedan locales. Árbol de trabajo limpio. Pruebas del 19/10: servidor 620 pasan, frontend 122.
+
+**Calendario vigente:** demo con la **carga declarada** (la detección automática, 038, no cumplió en la etapa 1 y solo se integra si valida antes del **23/10**) · **24/10** congelar el motor (`git tag motor-congelado-<versión>`) · **25–26/10** limpieza y nueva subida (corregir la sesión `3a101dd3`, fecha 24/9 con un golpe del 25/9; no volver a subir `IMG_6376` ni `IMG_6391` como «perfil») · 26–27/10 ensayo · 27/10 congelamiento total · **28–30/10 demo** · **17/11 fecha final de entrega de documentación y sistema** para regularizar la materia.
+
+**Respuestas de Valentín (19/10), ya incorporadas en los insumos:** OE4 reemplazado por la comparación del jugador consigo mismo; motivo del cambio de alcance del 7/10 = plazo y falta de otros usuarios; del 17 al 19/10 no hubo desarrollo; dominio registrado el 5/10/2026 (vence ≈ 5/10/2027).
+
+**Pendiente, en orden:**
+1. Plan del 17/10 (no se hizo): reglas exploratorias nuevas (brazo del lanzamiento para el saque, sentido de giro del tronco para drive contra revés, D por golpe), **revisar a mano los 5 revés de perfil** (`20260924_VCR_reves_perfil_240_01_rep01/02/03`, `20260925_VCR_reves_perfil_240_02_rep02/03`) y el **protocolo de una jornada** (tipo de golpe, encuadre y lado; un video largo por combinación) para datos nuevos de validación.
+2. Congelar el motor el 24/10; limpieza y nueva subida; ensayo cronometrado; video y capturas de respaldo; PDF impreso en papel.
+3. Respaldo fuera de la PC y `pg_dump` (necesita la contraseña de la base); correo con otro proveedor y alias de Privacidad; revisar `/privacidad`.
+4. Después de la demo: Criterio 3 (ii) con el tiempo real, calibrar D, `RESPALDO_POR_GRUPO` (b), re-medir el Criterio 2 con el motor 0.5.x, sesión del lado derecho, cintas de color.
+5. Redacción: Cap. 4 (40 filas en `correcciones-pendientes-capitulo-4.md`), Cap. 6 y 7 (`insumos-capitulo-7.md`, §9 delta y §10 pendientes resueltos), Cap. 8 (`insumos-capitulo-8.md`).
+
+**Cómo retomar:**
+```bash
+cd C:\Users\valen\motion-biomech-detect
+git fetch origin && git status -sb                       # main = origin/main + 3 commits de docs
+cd backend
+PYTHONPATH=. .venv/Scripts/python.exe ../tools/respaldo/estado_de_la_base.py                      # cuentas, sesiones, en curso, huérfanos
+PYTHONPATH=. .venv/Scripts/python.exe ../tools/respaldo/tiempos_y_origen_de_las_subidas.py        # cola y origen de los archivos
+PYTHONPATH=. .venv/Scripts/python.exe -m pytest ../tests -m "not slow" -q                         # 620 esperadas
+cd ../frontend && bun test                                                                         # 122 esperadas
+```
+**Reglas que no hay que revertir:** ningún grupo emite veredicto del orden (035–037); no reintroducir puntaje ni color de estado; todo lo que contradiga el Capítulo 4 se registra en el momento (CLAUDE.md §6); avisar antes de cada push a `main`; todo el corpus es de un jugador diestro, dos sesiones, cámara a la izquierda.
+
 ---
 
 ## 2026-10-16 (tarde) — Navegación del celular publicada en main, 038 adelantada (etapa 1: NO cumple) y verificación de cuentas
