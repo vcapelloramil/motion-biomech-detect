@@ -6,6 +6,19 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-19 — Actualización de los insumos del Capítulo 7, insumos del Capítulo 8 y correcciones del Capítulo 4 (solo documentos; sin cambios en el producto)
+
+Pedido de Valentín: poner al día `docs/tesis/insumos-capitulo-7.md` (corte 13/10 → 19/10), resolver sus pendientes y preparar material para el Capítulo 8 y la lista del Capítulo 4. **No hay registros posteriores al 16/10 02:56:** lo que se haya hecho del 17 al 19/10 (sesión de validación, revés raros) **no consta**.
+
+- **Verificado hoy:** producción `/health` = 0.5.5 (3 veces), contrato 1.4, `main` = `origin/main` = `08ccec1`; suite rápida del servidor **620 passed**, frontend **122 pass**; base: 1 cuenta, 8 sesiones, 18 golpes, 17 reportes, 1 fallido, 0 filas sin dueño, 0 archivos huérfanos, nada en curso.
+- **Hallazgos nuevos:** (1) **`IMG_6376`, subido como «saque de perfil», es un saque de tres cuartos** (marca de captura 24/9 14:58:43 = original del corpus; D = 52,9° sobre el archivo subido); `IMG_6395`, `IMG_6380` e `IMG_6391` son recortes de originales del corpus, no grabaciones nuevas. (2) La sesión `3a101dd3` tiene **fecha 24/9 con un golpe del 25/9**. (3) **Espera en cola medida:** sesión de 6 golpes 19,6 min (la estimación de ~12 min era baja); 12 golpes en cola 43,7 min. (4) RNF-03 (17 pruebas; fase cero 0 ms contra +70,8 ms del filtro de una pasada) y RNF-07 (28 pruebas contra el Supabase real) pasan; **no existen** Playwright ni la prueba de RNF-05. (5) Cloudflare Workers gratis: 100 000 solicitudes por día y 10 ms de CPU por solicitud (fuente oficial); renovación del dominio ≈ USD 19,18 por año (fuente de terceros).
+- **Documentos:** `insumos-capitulo-7.md` (§9 delta con las cifras que cambiaron, §10 pendientes resueltos o declarados NO CONSTA / NO MEDIDO, correcciones en el cuerpo); **`insumos-capitulo-8.md`** (conclusiones, implicancias, 16 aportes técnicos con su evidencia, recomendaciones para usuarios, desarrollo e investigación, 26 mejoras con su estado); `correcciones-pendientes-capitulo-4.md` (filas 36 a 40, filas 2, 19 y 34 actualizadas, anotaciones 20 a 22 y nota 8 corregida); `criterio4-latencia.md` (fila 1).
+- **Herramienta nueva (solo lectura):** `tools/respaldo/tiempos_y_origen_de_las_subidas.py`.
+- **Preguntas para Valentín:** motivo del cambio de alcance del 7/10; texto del objetivo específico 4; qué se hizo del 17 al 19/10; fecha de defensa; fecha exacta de registro del dominio.
+- **Sin empujar:** los commits de esta entrada quedan en `main` local (empujar redeploya Render).
+
+---
+
 ## 2026-10-16 (tarde) — Navegación del celular publicada en main, 038 adelantada (etapa 1: NO cumple) y verificación de cuentas
 
 **Cambio de calendario (pedido de Valentín el 16/10):** el tipo de golpe y el encuadre se **intentan antes de la demo** (el lado de la cámara, no), en **dos etapas con puerta** y **límite el 23/10** (lo que no esté validado e integrado ese día queda para después; el motor se congela el 24/10).
