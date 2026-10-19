@@ -79,7 +79,7 @@ Supabase (con service_role): reporte JSON (contrato 1.4), estados, tiempos de co
 | Componente | Qué es | Plan / costo real hoy | Fuente |
 | --- | --- | --- | --- |
 | Frontend | Cloudflare Workers (TanStack Start, React 19, Tailwind 4, shadcn/ui) | Plan gratuito; **cuotas NO VERIFICADAS** (corrección 2 del Cap. 4) | decisión 026; `frontend/wrangler.jsonc` |
-| Dominio | `kinetiqtennis.me`, registrado en Namecheap por el GitHub Student Developer Pack; DNS en Cloudflare; renovación automática apagada; **vence al año** | Sin costo el primer año; **costo de renovación NO VERIFICADO** | decisión 034 |
+| Dominio | `kinetiqtennis.me`, registrado en Namecheap por el GitHub Student Developer Pack; DNS en Cloudflare; renovación automática apagada; **registrado el 5/10/2026 (Valentín); vence al año, ≈ 5/10/2027** (supuesto: un año exacto de la oferta del Pack) | Sin costo el primer año; **costo de renovación NO VERIFICADO** | decisión 034 |
 | Datos, identidad, archivos | Supabase Cloud (Postgres + Auth + Storage) | Free (500 MB de base, 1 GB de almacenamiento; **sin respaldos**) | decisiones 018, 021, 025 |
 | Motor + API | Render, contenedor Docker, `render.yaml` (`plan: standard`) | **USD 25/mes** (1 CPU, 2 GB) desde el 12/10/2026; antes plan Free (0,1 CPU, 512 MB) | decisiones 017, 019, 023; `render.yaml` |
 | Pose | MediaPipe Pose (33 puntos, 3D directo), `model_complexity=2`, `static_image_mode=True`, CPU | — | decisión 005 |
@@ -726,7 +726,7 @@ El repositorio registra **el hecho y su efecto**, no la razón: `plan-mvp-punta-
 
 - **Workers Free** (páginas `developers.cloudflare.com/workers/platform/limits/` y `/pricing/`, consultadas el 19/10/2026): **100 000 solicitudes por día** (se reinicia a las 00:00 UTC); **10 ms de CPU por solicitud HTTP**; 50 subsolicitudes por invocación; tamaño del Worker 64 MiB; 100 Workers por cuenta; 128 MB de memoria por isolate;
   hasta 20 000 archivos estáticos de 25 MiB cada uno; **«las solicitudes a assets estáticos son gratuitas e ilimitadas»**. El frontend se publica como Worker con renderizado en el servidor: cada página que se renderiza consume CPU del Worker. No se midió el consumo real de la aplicación (**NO MEDIDO**).
-- **Renovación del dominio `.me` en Namecheap:** **≈ USD 19,18 por año** según una comparación de terceros (`domainoffer.net`, cifras de mayo de 2026); **no se pudo leer la página oficial de Namecheap** (respondió 403). **NO VERIFICADO en la fuente oficial.** La oferta del Student Pack es el primer año; **vence al año del registro** (octubre de 2026 + 1 año; fecha exacta no registrada en el repositorio); renovación automática apagada (decisión 034).
+- **Renovación del dominio `.me` en Namecheap:** **≈ USD 19,18 por año** según una comparación de terceros (`domainoffer.net`, cifras de mayo de 2026); **no se pudo leer la página oficial de Namecheap** (respondió 403). **NO VERIFICADO en la fuente oficial.** La oferta del Student Pack es el primer año; **registrado el 5/10/2026 (declaración de Valentín, 19/10) y vence al año, ≈ 5/10/2027** (supuesto: un año exacto; el vencimiento real se ve en el panel de Namecheap); renovación automática apagada (decisión 034).
 
 ### 10.8 Espera en cola medida de una sesión de varios golpes y costo acumulado de Render — **RESUELTO (cola) · NO MEDIDO (costo)**
 

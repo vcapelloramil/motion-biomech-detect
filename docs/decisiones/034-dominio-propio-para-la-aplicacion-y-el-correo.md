@@ -50,7 +50,7 @@ frontend". El Pack ya está: hay que decidir **dónde vive el DNS**, porque de e
 ## Consecuencias
 
 - Se habilita el **registro abierto** (correos de confirmación a cualquier proveedor) y **"Olvidé mi contraseña"** (pantalla y plantilla preparadas con el punto 1 del plan §8).
-- **El dominio vence al año** (oferta del Pack): hay que anotarlo y renovarlo si la aplicación tiene que seguir en pie después de la defensa. Costo de renovación sin verificar.
+- **El dominio vence al año** (oferta del Pack; **registrado el 5/10/2026**, según Valentín el 19/10, así que vence ≈ 5/10/2027): hay que anotarlo y renovarlo si la aplicación tiene que seguir en pie después de la defensa. Costo de renovación sin verificar.
 - Cambiar `KINETIQ_CORS_ORIGINS` **reinicia** el servicio de Render: se hace cuando no haya un análisis en curso.
 - La guía con los pasos de los paneles, el orden y cómo comprobar cada uno está en [`docs/guia-dominio-correo-y-hosting.md`](../guia-dominio-correo-y-hosting.md).
 - Capítulo 4 (despliegue): la corrección 1 de `correcciones-pendientes-capitulo-4.md` ("Cloudflare, no Vercel") suma "con dominio propio y DNS en Cloudflare".
