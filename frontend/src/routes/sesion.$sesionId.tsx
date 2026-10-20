@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { ArrowRight, CircleDashed, Info, Loader2, Trash2 } from "lucide-react";
+import { ArrowRight, CircleDashed, Loader2, Trash2 } from "lucide-react";
 import { RutaProtegida } from "@/components/ruta-protegida";
 import { EstadoBadge, SinDiferenciaBadge } from "@/components/estado";
 import { TresMomentos } from "@/components/reporte/tres-momentos";
-import { BotonDescargarPdf } from "@/components/reporte/pdf";
+import { DetalleTecnico, EnUnaFrase, ParaTuProfesional, PieDeTextos, QuePodesHacer, QueVimos } from "@/components/reporte/bloques";
 import { DocumentoDeSesion } from "@/components/reporte/documento-sesion";
 import { useSesion } from "@/lib/sesion";
 import {
@@ -14,16 +14,16 @@ import {
   enCurso,
   golpeMedido,
   ordenDistinguible,
-  numero,
   reporteDe,
   reporteDeVersionAnterior,
   tiemposDe,
   formatearDuracion,
   type EstadoVideo,
 } from "@/lib/estado-video";
-import { NOTA_MEZCLA_DE_VERSIONES, fraseGolpeQueSeAparta, tarjetasDeConsistencia, type Consistencia } from "@/lib/consistencia";
+import { NOTA_MEZCLA_DE_VERSIONES, type Consistencia } from "@/lib/consistencia";
 import { leerConsistencia } from "@/lib/consistencia-api";
-import { artefactosDe, fraseDeSecuencia, picosNoMedidosDe, repeticionesDe, trazabilidadDe } from "@/lib/reporte-simple";
+import { artefactosDe, picosNoMedidosDe, repeticionesDe } from "@/lib/reporte-simple";
+import { fotosDe, textosDeSesion } from "@/lib/textos-reporte";
 import { eliminarGolpe, eliminarSesion, leerSesion, type SesionConVideos } from "@/lib/videos-data";
 import { fmt } from "@/lib/formato";
 
@@ -41,7 +41,7 @@ const ETIQUETA_ESTADO: Record<EstadoVideo, string> = {
   encolado: "En cola",
   procesando: "Analizando",
   completado: "Medido",
-  parcial: "Medido en parte",
+  parcial: "Medido",
   fallido: "No se pudo",
 };
 
@@ -96,6 +96,20 @@ function SesionPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [firma, token, sesionId]);
 
+  const textos = useMemo(
+    () =>
+      datos
+        ? textosDeSesion({
+            gesto: datos.gesto,
+            encuadre: datos.encuadre,
+            ladoCamara: datos.lado_camara,
+            manoDominante: datos.atletas?.mano_dominante ?? null,
+            golpes: datos.videos.map((v) => ({ id: v.id, estado: v.estado, reporte: reporteDe(v)?.reporte ?? null })),
+            consistencia,
+          })
+        : null,
+    [datos, consistencia],
+  );
   const numeroDe = useMemo(() => new Map(videos.map((v, i) => [v.id, i + 1])), [videos]);
   const valorDe = useMemo(() => new Map((consistencia?.separacion_cadera_hombro.valores ?? []).map((x) => [x.video_id, x.valor])), [consistencia]);
   const seApartan = new Set(consistencia?.golpes_que_se_apartan ?? []);
@@ -133,10 +147,7 @@ function SesionPage() {
   const mostrado = videos.find((v) => v.id === idMostrado) ?? null;
   const repMostrado = reporteDe(mostrado ?? {})?.reporte ?? null;
   const artefactos = artefactosDe(repMostrado);
-  const traz = trazabilidadDe(repMostrado);
-  const frase = repMostrado
-    ? fraseDeSecuencia(repeticionesDe(repMostrado)[0] ?? null, traz.fps_real ?? numero(mostrado?.fps_real), traz.tolerancia_orden_ms)
-    : null;
+  const fotos = fotosDe(repMostrado);
   const algunoViejo = videos.some((v) => reporteDeVersionAnterior(reporteDe(v)?.reporte ?? null));
 
   async function borrarGolpe(id: string) {
@@ -178,13 +189,10 @@ function SesionPage() {
       <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight md:text-6xl">
         {gesto} <span className="text-gradient-neon">· {videos.length} {videos.length === 1 ? "golpe" : "golpes"}</span>
       </h1>
-      <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
-        <p className="text-muted-foreground">
-          {fecha} · cámara de {encuadre}
-          {datos.atletas?.nombre ? ` · ${datos.atletas.nombre}` : ""}
-        </p>
-        <BotonDescargarPdf />
-      </div>
+      <p className="mt-3 text-muted-foreground">
+        {fecha} · cámara de {encuadre}
+        {datos.atletas?.nombre ? ` · ${datos.atletas.nombre}` : ""}
+      </p>
 
       {error && (
         <p role="alert" className="mt-4 rounded-xl border border-state-alert/40 bg-state-alert-bg px-4 py-3 text-sm">
@@ -201,42 +209,29 @@ function SesionPage() {
         </p>
       )}
 
-      {/* Tus golpes entre sí: cuánto se parecen, sin juzgar (decisiones 035 y 036). */}
-      <section aria-labelledby="entre-si" className="mt-10">
-        <h2 id="entre-si" className="font-mono text-xs uppercase tracking-widest text-state-ok">Tus golpes entre sí</h2>
-        {consistencia ? (
-          <>
-            <ul className="mt-4 grid gap-4 md:grid-cols-3">
-              {tarjetasDeConsistencia(consistencia).map((t) => (
-                <li key={t.clave} className="rounded-2xl border border-border bg-card p-5">
-                  <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">{t.titulo}</p>
-                  <p className="mt-2 font-display text-3xl font-bold">{t.valor ?? "—"}</p>
-                  <p className="mt-2 text-sm text-muted-foreground">{t.texto}</p>
-                </li>
-              ))}
-            </ul>
-            {[...seApartan].map((id) => (
-              <p key={id} className="mt-3 flex items-start gap-2 rounded-xl border border-dashed border-border px-4 py-3 text-sm">
-                <Info className="mt-0.5 h-4 w-4 shrink-0 text-acento" aria-hidden="true" />
-                {fraseGolpeQueSeAparta(numeroDe.get(id) ?? 0)}
-              </p>
-            ))}
-            {consistencia.mezcla_de_versiones && <p className="mt-3 text-xs text-muted-foreground">{NOTA_MEZCLA_DE_VERSIONES}</p>}
-          </>
-        ) : (
+      {/* En una frase y Qué vimos: lo medido primero (decisión 039). */}
+      {textos && consistencia ? (
+        <>
+          <EnUnaFrase texto={textos.enUnaFrase} />
+          <QueVimos medido={textos.vimos.medido} noMedido={textos.vimos.noMedido} seAparta={textos.vimos.seAparta} sesionId={datos.id} />
+          {consistencia.mezcla_de_versiones && <p className="mt-3 text-xs text-muted-foreground">{NOTA_MEZCLA_DE_VERSIONES}</p>}
+        </>
+      ) : (
+        <section aria-labelledby="que-vimos" className="mt-10">
+          <h2 id="que-vimos" className="font-mono text-xs uppercase tracking-widest text-state-ok">Qué vimos</h2>
           <p className="mt-4 rounded-2xl border border-dashed border-border p-5 text-sm text-muted-foreground">
             {hayEnCurso ? "Se calcula cuando termine el análisis de los golpes." : "No pudimos calcular la comparación entre golpes ahora."}
           </p>
-        )}
-      </section>
+        </section>
+      )}
 
-      {/* Un golpe de la sesión: el típico por defecto (el más cercano a la mediana, no el "mejor"). */}
+      {/* Fotos y video de un golpe de la sesión: el típico por defecto (el más cercano al valor típico, no un golpe ejemplar). */}
       {conReporte.length > 0 && (
         <section aria-labelledby="golpe-elegido" className="mt-12">
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div>
               <h2 id="golpe-elegido" className="font-mono text-xs uppercase tracking-widest text-state-ok">
-                {mostrado && mostrado.id === consistencia?.golpe_tipico ? "Tu golpe típico" : "Un golpe de la sesión"}
+                {mostrado && mostrado.id === consistencia?.golpe_tipico ? "Fotos y video · tu golpe típico" : "Fotos y video · un golpe de la sesión"}
               </h2>
               <p className="mt-2 font-display text-2xl font-bold md:text-3xl">
                 Golpe {mostrado ? numeroDe.get(mostrado.id) : "—"}
@@ -265,10 +260,19 @@ function SesionPage() {
               })}
             </div>
           </div>
-          {frase && <p className="mt-4 rounded-2xl border border-border bg-card px-4 py-3 text-sm">{frase.texto}</p>}
-          {(artefactos.fotogramas.length > 0 || artefactos.overlay) && (
-            <TresMomentos key={idMostrado ?? "ninguno"} artefactos={artefactos} noMedidos={picosNoMedidosDe(repMostrado)} />
+          {textos?.tipico && mostrado?.id === consistencia?.golpe_tipico && (
+            <p className="mt-4 text-sm text-muted-foreground">{textos.tipico.texto}</p>
           )}
+          {(artefactos.fotogramas.length > 0 || artefactos.overlay) && (
+            <TresMomentos
+              key={idMostrado ?? "ninguno"}
+              artefactos={artefactos}
+              noMedidos={picosNoMedidosDe(repMostrado)}
+              textos={fotos}
+              desdeS={repeticionesDe(repMostrado)[0]?.desde_s ?? null}
+            />
+          )}
+          {textos?.tipico && mostrado?.id === consistencia?.golpe_tipico && <p className="mt-3 text-sm text-muted-foreground">{textos.tipico.queMirar}</p>}
           {mostrado && (
             <Link
               to="/reporte/$videoId"
@@ -351,6 +355,52 @@ function SesionPage() {
         </ul>
         {algunoViejo && <p className="mt-3 text-xs text-muted-foreground">{TEXTO_VERSION_ANTERIOR} en algunos golpes.</p>}
       </section>
+
+      {textos && consistencia && (
+        <>
+          <QuePodesHacer medir={textos.hacer.medir} usar={textos.hacer.usar} literatura={textos.hacer.literatura} />
+          <ParaTuProfesional profesional={textos.profesional} />
+          <DetalleTecnico>
+            <div>
+              <h3 className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Los golpes, uno por uno</h3>
+              <div className="mt-3 overflow-x-auto">
+                <table className="w-full min-w-[40rem] text-left text-sm">
+                  <thead className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                    <tr>
+                      {textos.detalle.columnas.map((c) => (
+                        <th key={c} className="py-2 pr-4">{c}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {textos.detalle.filas.map((f) => (
+                      <tr key={f[0]} className="border-t border-border align-top">
+                        {f.map((c, k) => (
+                          <td key={k} className={"py-2 pr-4 " + (k === 0 ? "font-semibold" : "font-mono")}>{c}</td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p className="mt-2 text-xs text-muted-foreground">{textos.detalle.nota}</p>
+            </div>
+            <div>
+              <h3 className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Qué significa cada término</h3>
+              <dl className="mt-3 divide-y divide-border text-sm">
+                {textos.detalle.terminos.map((x) => (
+                  <div key={x.termino} className="grid gap-x-4 gap-y-1 py-2.5 md:grid-cols-[14rem_1fr]">
+                    <dt className="font-semibold">{x.termino}</dt>
+                    <dd className="text-muted-foreground">{x.significa}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+            <p className="font-mono text-xs text-muted-foreground">{textos.detalle.versiones}</p>
+            <PieDeTextos />
+          </DetalleTecnico>
+        </>
+      )}
 
       <section className="mt-12 rounded-2xl border border-border p-5 print:hidden">
         {confirmar === "sesion" ? (

@@ -17,7 +17,7 @@ export type SesionLeida = {
   modo_captura: ModoCaptura;
   fecha: string;
   creado_en: string;
-  atletas: { nombre: string } | null;
+  atletas: { nombre: string; mano_dominante?: string | null } | null;
 };
 
 export type VideoConReporte = FilaVideo & {
@@ -36,7 +36,7 @@ function cliente() {
 export async function leerVideo(videoId: string): Promise<VideoConReporte | null> {
   const { data, error } = await cliente()
     .from("videos")
-    .select("*, sesiones(id, gesto, encuadre, lado_camara, modo_captura, fecha, creado_en, atletas(nombre)), reportes_biomecanicos(reporte)")
+    .select("*, sesiones(id, gesto, encuadre, lado_camara, modo_captura, fecha, creado_en, atletas(nombre, mano_dominante)), reportes_biomecanicos(reporte)")
     .eq("id", videoId)
     .maybeSingle();
   if (error) throw error;
@@ -48,7 +48,7 @@ export async function leerSesion(sesionId: string): Promise<SesionConVideos | nu
   const { data, error } = await cliente()
     .from("sesiones")
     .select(
-      "id, gesto, encuadre, lado_camara, modo_captura, fecha, creado_en, atletas(nombre), videos(*, reportes_biomecanicos(reporte))",
+      "id, gesto, encuadre, lado_camara, modo_captura, fecha, creado_en, atletas(nombre, mano_dominante), videos(*, reportes_biomecanicos(reporte))",
     )
     .eq("id", sesionId)
     .order("creado_en", { referencedTable: "videos", ascending: true })
@@ -74,7 +74,7 @@ export async function listarSesiones(): Promise<SesionConVideos[]> {
   const { data, error } = await cliente()
     .from("sesiones")
     .select(
-      "id, gesto, encuadre, lado_camara, modo_captura, fecha, creado_en, atletas(nombre), videos(*, reportes_biomecanicos(reporte))",
+      "id, gesto, encuadre, lado_camara, modo_captura, fecha, creado_en, atletas(nombre, mano_dominante), videos(*, reportes_biomecanicos(reporte))",
     )
     .order("creado_en", { ascending: false });
   if (error) throw error;

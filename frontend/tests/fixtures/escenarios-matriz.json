@@ -1,0 +1,5212 @@
+{
+ "nota": "Variantes del dato real del 25/9/2026 para la matriz de casos de docs/ux/textos-reporte-039-propuesta.md",
+ "reportes": {
+  "cadera_antes": {
+   "gesto": "saque",
+   "metricas": [
+    {
+     "valor": 428.693,
+     "nombre": "velocidad_pico_pelvis",
+     "unidad": "grados/s",
+     "auditable": true,
+     "confianza": 1.0
+    },
+    {
+     "valor": 373.406,
+     "nombre": "velocidad_pico_torso",
+     "unidad": "grados/s",
+     "auditable": true,
+     "confianza": 0.999
+    },
+    {
+     "valor": null,
+     "nombre": "velocidad_pico_brazo",
+     "unidad": "grados/s",
+     "auditable": false,
+     "confianza": 0.958
+    },
+    {
+     "valor": 31.9,
+     "nombre": "separacion_cadera_hombro_max",
+     "unidad": "grados",
+     "auditable": true,
+     "confianza": 1.0
+    },
+    {
+     "valor": 172.0,
+     "nombre": "angulo_rodilla_izq_en_pico_tronco",
+     "unidad": "grados",
+     "auditable": true,
+     "confianza": 0.669
+    },
+    {
+     "valor": 138.7,
+     "nombre": "angulo_codo_izq_en_pico_tronco",
+     "unidad": "grados",
+     "auditable": true,
+     "confianza": 0.862
+    }
+   ],
+   "video_id": "5aabb44a-690a-44ae-89d7-f0755017f53e",
+   "cobertura": {
+    "auditable_pct": 78.73,
+    "tramos_no_auditables": [
+     {
+      "motivo": "sin_datos_confiables: codo_der",
+      "desde_s": 2.304,
+      "hasta_s": 2.346
+     },
+     {
+      "motivo": "sin_datos_confiables: codo_der",
+      "desde_s": 2.896,
+      "hasta_s": 2.925
+     },
+     {
+      "motivo": "sin_datos_confiables: codo_der",
+      "desde_s": 3.05,
+      "hasta_s": 3.087
+     },
+     {
+      "motivo": "sin_datos_confiables: codo_der",
+      "desde_s": 3.188,
+      "hasta_s": 3.246
+     },
+     {
+      "motivo": "sin_datos_confiables: codo_der",
+      "desde_s": 3.812,
+      "hasta_s": 5.138
+     }
+    ]
+   },
+   "creado_en": "2026-10-13T05:21:04.480195Z",
+   "artefactos": {
+    "pdf_ruta": null,
+    "overlay_info": {
+     "desde_s": 4.3208,
+     "hasta_s": 5.9208,
+     "factor_lento": 8.0,
+     "fps_reproduccion": 30
+    },
+    "overlay_ruta": "usuario/5aabb44a-690a-44ae-89d7-f0755017f53e/esqueleto.mp4",
+    "fotogramas_clave": [
+     {
+      "ruta": "usuario/5aabb44a-690a-44ae-89d7-f0755017f53e/clave_pelvis.jpg",
+      "segmento": "pelvis",
+      "instante_s": 0.2583
+     },
+     {
+      "ruta": "usuario/5aabb44a-690a-44ae-89d7-f0755017f53e/clave_torso.jpg",
+      "segmento": "torso",
+      "instante_s": 0.3
+     }
+    ]
+   },
+   "reporte_id": "50628524-ba16-4fb9-8a38-92d7c4f33f08",
+   "segmentacion": {
+    "metodo": "ancla_torso",
+    "repeticiones_marcadas": 1,
+    "repeticiones_auditables": 1
+   },
+   "trazabilidad": {
+    "filtro": {
+     "tipo": "butterworth",
+     "orden": 4,
+     "corte_hz": 7.0,
+     "fase_cero": true
+    },
+    "fps_real": 200.86537126521284,
+    "fps_nominal": 239.981,
+    "backend_pose": "mediapipe",
+    "modo_captura": "camara_lenta_240",
+    "origen_factor": "marcas_de_tiempo",
+    "version_motor": "0.5.3",
+    "regularizacion": {
+     "fps_grilla": 240.0,
+     "fps_real_medio": 201.034,
+     "hueco_maximo_ms": 16.67,
+     "puntos_copiados": 1410,
+     "puntos_sin_dato": 0,
+     "fotogramas_fuente": 1410,
+     "puntos_de_la_grilla": 1683,
+     "puntos_interpolados": 273,
+     "puntos_interpolados_pct": 16.22
+    },
+    "apto_fase_rapida": true,
+    "tolerancia_orden_ms": 8.333,
+    "factor_ralentizacion": 1.0,
+    "fotogramas_perdidos_pct": 16.3,
+    "escala_temporal_conocida": true
+   },
+   "observaciones": [
+    {
+     "texto": "Se observa que la cadera alcanzó su velocidad máxima 42 ms antes que el tronco. El orden entre tu cadera y tu tronco cambia según desde dónde se grabó el golpe, y todavía no podemos asegurar cuál es el correcto. Por eso lo registramos sin evaluarlo.",
+     "severidad": "sin_evaluar",
+     "fundamento": "Instantes de la velocidad máxima, desde el inicio de la ventana analizada: cadera 0,258 s, tronco 0,300 s. En este gesto el orden medido depende del encuadre: con los originales a tasa real, el saque da la cadera primero en tres cuartos (7 de 7 ordenables) y el tronco primero en perfil (8 de 8). Mientras no haya una medición independiente de la pelvis no se emite veredicto.",
+     "referencia": null
+    },
+    {
+     "texto": "No se pudo medir el instante en que el brazo alcanzó su velocidad máxima en este golpe.",
+     "severidad": "no_auditable",
+     "fundamento": null,
+     "referencia": null
+    }
+   ],
+   "secuenciacion": {
+    "resumen": {
+     "orden_predominante": [
+      "pelvis",
+      "torso"
+     ],
+     "repeticiones_correctas": 0,
+     "repeticiones_evaluadas": 1,
+     "dispersion_instante_pico_torso_ms": null
+    },
+    "repeticiones": [
+     {
+      "picos": [
+       {
+        "unidad": "grados/s",
+        "segmento": "pelvis",
+        "confianza": 1.0,
+        "velocidad": 428.693,
+        "instante_s": 0.2583
+       },
+       {
+        "unidad": "grados/s",
+        "segmento": "torso",
+        "confianza": 0.999,
+        "velocidad": 373.406,
+        "instante_s": 0.3
+       }
+      ],
+      "indice": 1,
+      "desde_s": 4.8208,
+      "hasta_s": 5.4208,
+      "correcto": null,
+      "auditable": true,
+      "orden_observado": [
+       "pelvis",
+       "torso"
+      ],
+      "motivo_no_auditable": null
+     }
+    ],
+    "orden_esperado": [
+     "pelvis",
+     "torso",
+     "brazo"
+    ]
+   },
+   "version_contrato": "1.3",
+   "comparacion_propia": null
+  },
+  "tronco_antes": {
+   "gesto": "saque",
+   "metricas": [
+    {
+     "valor": 428.693,
+     "nombre": "velocidad_pico_pelvis",
+     "unidad": "grados/s",
+     "auditable": true,
+     "confianza": 1.0
+    },
+    {
+     "valor": 373.406,
+     "nombre": "velocidad_pico_torso",
+     "unidad": "grados/s",
+     "auditable": true,
+     "confianza": 0.999
+    },
+    {
+     "valor": null,
+     "nombre": "velocidad_pico_brazo",
+     "unidad": "grados/s",
+     "auditable": false,
+     "confianza": 0.958
+    },
+    {
+     "valor": 31.9,
+     "nombre": "separacion_cadera_hombro_max",
+     "unidad": "grados",
+     "auditable": true,
+     "confianza": 1.0
+    },
+    {
+     "valor": 172.0,
+     "nombre": "angulo_rodilla_izq_en_pico_tronco",
+     "unidad": "grados",
+     "auditable": true,
+     "confianza": 0.669
+    },
+    {
+     "valor": 138.7,
+     "nombre": "angulo_codo_izq_en_pico_tronco",
+     "unidad": "grados",
+     "auditable": true,
+     "confianza": 0.862
+    }
+   ],
+   "video_id": "5aabb44a-690a-44ae-89d7-f0755017f53e",
+   "cobertura": {
+    "auditable_pct": 78.73,
+    "tramos_no_auditables": [
+     {
+      "motivo": "sin_datos_confiables: codo_der",
+      "desde_s": 2.304,
+      "hasta_s": 2.346
+     },
+     {
+      "motivo": "sin_datos_confiables: codo_der",
+      "desde_s": 2.896,
+      "hasta_s": 2.925
+     },
+     {
+      "motivo": "sin_datos_confiables: codo_der",
+      "desde_s": 3.05,
+      "hasta_s": 3.087
+     },
+     {
+      "motivo": "sin_datos_confiables: codo_der",
+      "desde_s": 3.188,
+      "hasta_s": 3.246
+     },
+     {
+      "motivo": "sin_datos_confiables: codo_der",
+      "desde_s": 3.812,
+      "hasta_s": 5.138
+     }
+    ]
+   },
+   "creado_en": "2026-10-13T05:21:04.480195Z",
+   "artefactos": {
+    "pdf_ruta": null,
+    "overlay_info": {
+     "desde_s": 4.3208,
+     "hasta_s": 5.9208,
+     "factor_lento": 8.0,
+     "fps_reproduccion": 30
+    },
+    "overlay_ruta": "usuario/5aabb44a-690a-44ae-89d7-f0755017f53e/esqueleto.mp4",
+    "fotogramas_clave": [
+     {
+      "ruta": "usuario/5aabb44a-690a-44ae-89d7-f0755017f53e/clave_pelvis.jpg",
+      "segmento": "pelvis",
+      "instante_s": 0.2583
+     },
+     {
+      "ruta": "usuario/5aabb44a-690a-44ae-89d7-f0755017f53e/clave_torso.jpg",
+      "segmento": "torso",
+      "instante_s": 0.3
+     }
+    ]
+   },
+   "reporte_id": "50628524-ba16-4fb9-8a38-92d7c4f33f08",
+   "segmentacion": {
+    "metodo": "ancla_torso",
+    "repeticiones_marcadas": 1,
+    "repeticiones_auditables": 1
+   },
+   "trazabilidad": {
+    "filtro": {
+     "tipo": "butterworth",
+     "orden": 4,
+     "corte_hz": 7.0,
+     "fase_cero": true
+    },
+    "fps_real": 200.86537126521284,
+    "fps_nominal": 239.981,
+    "backend_pose": "mediapipe",
+    "modo_captura": "camara_lenta_240",
+    "origen_factor": "marcas_de_tiempo",
+    "version_motor": "0.5.3",
+    "regularizacion": {
+     "fps_grilla": 240.0,
+     "fps_real_medio": 201.034,
+     "hueco_maximo_ms": 16.67,
+     "puntos_copiados": 1410,
+     "puntos_sin_dato": 0,
+     "fotogramas_fuente": 1410,
+     "puntos_de_la_grilla": 1683,
+     "puntos_interpolados": 273,
+     "puntos_interpolados_pct": 16.22
+    },
+    "apto_fase_rapida": true,
+    "tolerancia_orden_ms": 8.333,
+    "factor_ralentizacion": 1.0,
+    "fotogramas_perdidos_pct": 16.3,
+    "escala_temporal_conocida": true
+   },
+   "observaciones": [
+    {
+     "texto": "Se observa que la cadera alcanzó su velocidad máxima 42 ms antes que el tronco. El orden entre tu cadera y tu tronco cambia según desde dónde se grabó el golpe, y todavía no podemos asegurar cuál es el correcto. Por eso lo registramos sin evaluarlo.",
+     "severidad": "sin_evaluar",
+     "fundamento": "Instantes de la velocidad máxima, desde el inicio de la ventana analizada: cadera 0,258 s, tronco 0,300 s. En este gesto el orden medido depende del encuadre: con los originales a tasa real, el saque da la cadera primero en tres cuartos (7 de 7 ordenables) y el tronco primero en perfil (8 de 8). Mientras no haya una medición independiente de la pelvis no se emite veredicto.",
+     "referencia": null
+    },
+    {
+     "texto": "No se pudo medir el instante en que el brazo alcanzó su velocidad máxima en este golpe.",
+     "severidad": "no_auditable",
+     "fundamento": null,
+     "referencia": null
+    }
+   ],
+   "secuenciacion": {
+    "resumen": {
+     "orden_predominante": [
+      "pelvis",
+      "torso"
+     ],
+     "repeticiones_correctas": 0,
+     "repeticiones_evaluadas": 1,
+     "dispersion_instante_pico_torso_ms": null
+    },
+    "repeticiones": [
+     {
+      "picos": [
+       {
+        "unidad": "grados/s",
+        "segmento": "pelvis",
+        "confianza": 1.0,
+        "velocidad": 428.693,
+        "instante_s": 0.342
+       },
+       {
+        "unidad": "grados/s",
+        "segmento": "torso",
+        "confianza": 0.999,
+        "velocidad": 373.406,
+        "instante_s": 0.3
+       }
+      ],
+      "indice": 1,
+      "desde_s": 4.8208,
+      "hasta_s": 5.4208,
+      "correcto": null,
+      "auditable": true,
+      "orden_observado": [
+       "pelvis",
+       "torso"
+      ],
+      "motivo_no_auditable": null
+     }
+    ],
+    "orden_esperado": [
+     "pelvis",
+     "torso",
+     "brazo"
+    ]
+   },
+   "version_contrato": "1.3",
+   "comparacion_propia": null
+  },
+  "vacio": {
+   "gesto": "saque",
+   "metricas": [
+    {
+     "valor": null,
+     "nombre": "velocidad_pico_pelvis",
+     "unidad": "grados/s",
+     "auditable": false,
+     "confianza": 0.2
+    },
+    {
+     "valor": null,
+     "nombre": "velocidad_pico_torso",
+     "unidad": "grados/s",
+     "auditable": false,
+     "confianza": 0.2
+    },
+    {
+     "valor": null,
+     "nombre": "velocidad_pico_brazo",
+     "unidad": "grados/s",
+     "auditable": false,
+     "confianza": 0.2
+    },
+    {
+     "valor": null,
+     "nombre": "separacion_cadera_hombro_max",
+     "unidad": "grados",
+     "auditable": false,
+     "confianza": 0.2
+    },
+    {
+     "valor": null,
+     "nombre": "angulo_rodilla_izq_en_pico_tronco",
+     "unidad": "grados",
+     "auditable": false,
+     "confianza": 0.2
+    },
+    {
+     "valor": null,
+     "nombre": "angulo_codo_izq_en_pico_tronco",
+     "unidad": "grados",
+     "auditable": false,
+     "confianza": 0.2
+    }
+   ],
+   "video_id": "53b304bd-cb18-4b9c-b2ce-a4eccbc2e9ed",
+   "cobertura": {
+    "auditable_pct": 8.1,
+    "tramos_no_auditables": [
+     {
+      "motivo": "sin_datos_confiables: codo_der",
+      "desde_s": 2.279,
+      "hasta_s": 2.383
+     },
+     {
+      "motivo": "sin_datos_confiables: codo_der",
+      "desde_s": 2.562,
+      "hasta_s": 2.587
+     },
+     {
+      "motivo": "sin_datos_confiables: codo_der",
+      "desde_s": 2.654,
+      "hasta_s": 2.679
+     },
+     {
+      "motivo": "sin_datos_confiables: codo_der",
+      "desde_s": 4.021,
+      "hasta_s": 5.283
+     }
+    ]
+   },
+   "creado_en": "2026-10-13T05:25:10.342934Z",
+   "artefactos": {
+    "pdf_ruta": null,
+    "overlay_ruta": null,
+    "fotogramas_clave": []
+   },
+   "reporte_id": "8c1579d0-52f0-4027-a5c0-d58dfafde8c7",
+   "segmentacion": {
+    "metodo": "ancla_torso",
+    "repeticiones_marcadas": 1,
+    "repeticiones_auditables": 0
+   },
+   "trazabilidad": {
+    "filtro": {
+     "tipo": "butterworth",
+     "orden": 4,
+     "corte_hz": 8.0,
+     "fase_cero": true
+    },
+    "fps_real": 200.77008069705226,
+    "fps_nominal": 239.981,
+    "backend_pose": "mediapipe",
+    "modo_captura": "camara_lenta_240",
+    "origen_factor": "marcas_de_tiempo",
+    "version_motor": "0.5.3",
+    "regularizacion": {
+     "fps_grilla": 240.0,
+     "fps_real_medio": 200.971,
+     "hueco_maximo_ms": 12.92,
+     "puntos_copiados": 1121,
+     "puntos_sin_dato": 0,
+     "fotogramas_fuente": 1346,
+     "puntos_de_la_grilla": 1607,
+     "puntos_interpolados": 486,
+     "puntos_interpolados_pct": 30.24
+    },
+    "apto_fase_rapida": true,
+    "tolerancia_orden_ms": 8.333,
+    "factor_ralentizacion": 1.0,
+    "fotogramas_perdidos_pct": 16.34,
+    "escala_temporal_conocida": true
+   },
+   "observaciones": [
+    {
+     "texto": "La cadera y el tronco alcanzaron su velocidad máxima casi al mismo tiempo: a esta resolución del video no se puede saber cuál fue primero.",
+     "severidad": "no_auditable",
+     "fundamento": "Simultaneidad al límite de resolución. Diferencia: 4 ms; la tolerancia es de 8,3 ms y 1 fotograma ≈ 5 ms a 201 fps reales.",
+     "referencia": null
+    },
+    {
+     "texto": "No se pudo medir el instante en que el brazo alcanzó su velocidad máxima en este golpe.",
+     "severidad": "no_auditable",
+     "fundamento": null,
+     "referencia": null
+    }
+   ],
+   "secuenciacion": {
+    "resumen": {
+     "orden_predominante": [],
+     "repeticiones_correctas": 0,
+     "repeticiones_evaluadas": 1,
+     "dispersion_instante_pico_torso_ms": null
+    },
+    "repeticiones": [
+     {
+      "picos": [],
+      "indice": 1,
+      "desde_s": 4.9083,
+      "hasta_s": 5.5083,
+      "correcto": null,
+      "auditable": false,
+      "orden_observado": null,
+      "motivo_no_auditable": "sin pico auditable para: cadera, tronco, brazo"
+     }
+    ],
+    "orden_esperado": [
+     "pelvis",
+     "torso",
+     "brazo"
+    ]
+   },
+   "version_contrato": "1.3",
+   "comparacion_propia": null
+  },
+  "con_brazo": {
+   "gesto": "saque",
+   "metricas": [
+    {
+     "valor": 428.693,
+     "nombre": "velocidad_pico_pelvis",
+     "unidad": "grados/s",
+     "auditable": true,
+     "confianza": 1.0
+    },
+    {
+     "valor": 373.406,
+     "nombre": "velocidad_pico_torso",
+     "unidad": "grados/s",
+     "auditable": true,
+     "confianza": 0.999
+    },
+    {
+     "valor": 1180.0,
+     "nombre": "velocidad_pico_brazo",
+     "unidad": "grados/s",
+     "auditable": true,
+     "confianza": 0.958
+    },
+    {
+     "valor": 31.9,
+     "nombre": "separacion_cadera_hombro_max",
+     "unidad": "grados",
+     "auditable": true,
+     "confianza": 1.0
+    },
+    {
+     "valor": 172.0,
+     "nombre": "angulo_rodilla_izq_en_pico_tronco",
+     "unidad": "grados",
+     "auditable": true,
+     "confianza": 0.669
+    },
+    {
+     "valor": 138.7,
+     "nombre": "angulo_codo_izq_en_pico_tronco",
+     "unidad": "grados",
+     "auditable": true,
+     "confianza": 0.862
+    }
+   ],
+   "video_id": "5aabb44a-690a-44ae-89d7-f0755017f53e",
+   "cobertura": {
+    "auditable_pct": 78.73,
+    "tramos_no_auditables": [
+     {
+      "motivo": "sin_datos_confiables: codo_der",
+      "desde_s": 2.304,
+      "hasta_s": 2.346
+     },
+     {
+      "motivo": "sin_datos_confiables: codo_der",
+      "desde_s": 2.896,
+      "hasta_s": 2.925
+     },
+     {
+      "motivo": "sin_datos_confiables: codo_der",
+      "desde_s": 3.05,
+      "hasta_s": 3.087
+     },
+     {
+      "motivo": "sin_datos_confiables: codo_der",
+      "desde_s": 3.188,
+      "hasta_s": 3.246
+     },
+     {
+      "motivo": "sin_datos_confiables: codo_der",
+      "desde_s": 3.812,
+      "hasta_s": 5.138
+     }
+    ]
+   },
+   "creado_en": "2026-10-13T05:21:04.480195Z",
+   "artefactos": {
+    "pdf_ruta": null,
+    "overlay_info": {
+     "desde_s": 4.3208,
+     "hasta_s": 5.9208,
+     "factor_lento": 8.0,
+     "fps_reproduccion": 30
+    },
+    "overlay_ruta": "usuario/5aabb44a-690a-44ae-89d7-f0755017f53e/esqueleto.mp4",
+    "fotogramas_clave": [
+     {
+      "ruta": "usuario/5aabb44a-690a-44ae-89d7-f0755017f53e/clave_pelvis.jpg",
+      "segmento": "pelvis",
+      "instante_s": 0.2583
+     },
+     {
+      "ruta": "usuario/5aabb44a-690a-44ae-89d7-f0755017f53e/clave_torso.jpg",
+      "segmento": "torso",
+      "instante_s": 0.3
+     }
+    ]
+   },
+   "reporte_id": "50628524-ba16-4fb9-8a38-92d7c4f33f08",
+   "segmentacion": {
+    "metodo": "ancla_torso",
+    "repeticiones_marcadas": 1,
+    "repeticiones_auditables": 1
+   },
+   "trazabilidad": {
+    "filtro": {
+     "tipo": "butterworth",
+     "orden": 4,
+     "corte_hz": 7.0,
+     "fase_cero": true
+    },
+    "fps_real": 200.86537126521284,
+    "fps_nominal": 239.981,
+    "backend_pose": "mediapipe",
+    "modo_captura": "camara_lenta_240",
+    "origen_factor": "marcas_de_tiempo",
+    "version_motor": "0.5.3",
+    "regularizacion": {
+     "fps_grilla": 240.0,
+     "fps_real_medio": 201.034,
+     "hueco_maximo_ms": 16.67,
+     "puntos_copiados": 1410,
+     "puntos_sin_dato": 0,
+     "fotogramas_fuente": 1410,
+     "puntos_de_la_grilla": 1683,
+     "puntos_interpolados": 273,
+     "puntos_interpolados_pct": 16.22
+    },
+    "apto_fase_rapida": true,
+    "tolerancia_orden_ms": 8.333,
+    "factor_ralentizacion": 1.0,
+    "fotogramas_perdidos_pct": 16.3,
+    "escala_temporal_conocida": true
+   },
+   "observaciones": [
+    {
+     "texto": "Se observa que la cadera alcanzó su velocidad máxima 42 ms antes que el tronco. El orden entre tu cadera y tu tronco cambia según desde dónde se grabó el golpe, y todavía no podemos asegurar cuál es el correcto. Por eso lo registramos sin evaluarlo.",
+     "severidad": "sin_evaluar",
+     "fundamento": "Instantes de la velocidad máxima, desde el inicio de la ventana analizada: cadera 0,258 s, tronco 0,300 s. En este gesto el orden medido depende del encuadre: con los originales a tasa real, el saque da la cadera primero en tres cuartos (7 de 7 ordenables) y el tronco primero en perfil (8 de 8). Mientras no haya una medición independiente de la pelvis no se emite veredicto.",
+     "referencia": null
+    },
+    {
+     "texto": "No se pudo medir el instante en que el brazo alcanzó su velocidad máxima en este golpe.",
+     "severidad": "no_auditable",
+     "fundamento": null,
+     "referencia": null
+    }
+   ],
+   "secuenciacion": {
+    "resumen": {
+     "orden_predominante": [
+      "pelvis",
+      "torso"
+     ],
+     "repeticiones_correctas": 0,
+     "repeticiones_evaluadas": 1,
+     "dispersion_instante_pico_torso_ms": null
+    },
+    "repeticiones": [
+     {
+      "picos": [
+       {
+        "unidad": "grados/s",
+        "segmento": "pelvis",
+        "confianza": 1.0,
+        "velocidad": 428.693,
+        "instante_s": 0.2583
+       },
+       {
+        "unidad": "grados/s",
+        "segmento": "torso",
+        "confianza": 0.999,
+        "velocidad": 373.406,
+        "instante_s": 0.3
+       },
+       {
+        "unidad": "grados/s",
+        "segmento": "brazo",
+        "confianza": 0.93,
+        "velocidad": 1180.0,
+        "instante_s": 0.352
+       }
+      ],
+      "indice": 1,
+      "desde_s": 4.8208,
+      "hasta_s": 5.4208,
+      "correcto": null,
+      "auditable": true,
+      "orden_observado": [
+       "pelvis",
+       "torso"
+      ],
+      "motivo_no_auditable": null
+     }
+    ],
+    "orden_esperado": [
+     "pelvis",
+     "torso",
+     "brazo"
+    ]
+   },
+   "version_contrato": "1.3",
+   "comparacion_propia": null
+  }
+ },
+ "sesiones": {
+  "mezclado": {
+   "golpes": [
+    {
+     "id": "bba27843-a2d3-440e-a8e7-7bfc27d8a95a",
+     "estado": "completado",
+     "reporte": {
+      "gesto": "saque",
+      "metricas": [
+       {
+        "valor": 626.915,
+        "nombre": "velocidad_pico_pelvis",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": 485.061,
+        "nombre": "velocidad_pico_torso",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 0.999
+       },
+       {
+        "valor": null,
+        "nombre": "velocidad_pico_brazo",
+        "unidad": "grados/s",
+        "auditable": false,
+        "confianza": 0.937
+       },
+       {
+        "valor": 34.7,
+        "nombre": "separacion_cadera_hombro_max",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": 178.1,
+        "nombre": "angulo_rodilla_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 0.855
+       },
+       {
+        "valor": 121.9,
+        "nombre": "angulo_codo_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 0.901
+       }
+      ],
+      "video_id": "bba27843-a2d3-440e-a8e7-7bfc27d8a95a",
+      "cobertura": {
+       "auditable_pct": 77.04,
+       "tramos_no_auditables": [
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 0.0,
+         "hasta_s": 0.004
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 2.625,
+         "hasta_s": 2.654
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 3.888,
+         "hasta_s": 5.508
+        }
+       ]
+      },
+      "creado_en": "2026-10-13T05:12:10.664658Z",
+      "artefactos": {
+       "pdf_ruta": null,
+       "overlay_info": {
+        "desde_s": 4.6875,
+        "hasta_s": 6.2875,
+        "factor_lento": 8.0,
+        "fps_reproduccion": 30
+       },
+       "overlay_ruta": "usuario/bba27843-a2d3-440e-a8e7-7bfc27d8a95a/esqueleto.mp4",
+       "fotogramas_clave": [
+        {
+         "ruta": "usuario/bba27843-a2d3-440e-a8e7-7bfc27d8a95a/clave_pelvis.jpg",
+         "segmento": "pelvis",
+         "instante_s": 0.2833
+        },
+        {
+         "ruta": "usuario/bba27843-a2d3-440e-a8e7-7bfc27d8a95a/clave_torso.jpg",
+         "segmento": "torso",
+         "instante_s": 0.3
+        }
+       ]
+      },
+      "reporte_id": "2942f412-e8b3-4c31-8e13-5ecb6b44acd1",
+      "segmentacion": {
+       "metodo": "ancla_torso",
+       "repeticiones_marcadas": 1,
+       "repeticiones_auditables": 1
+      },
+      "trazabilidad": {
+       "filtro": {
+        "tipo": "butterworth",
+        "orden": 4,
+        "corte_hz": 9.0,
+        "fase_cero": true
+       },
+       "fps_real": 199.98841733749586,
+       "fps_nominal": 239.981,
+       "backend_pose": "mediapipe",
+       "modo_captura": "camara_lenta_240",
+       "origen_factor": "marcas_de_tiempo",
+       "version_motor": "0.5.3",
+       "regularizacion": {
+        "fps_grilla": 240.0,
+        "fps_real_medio": 199.988,
+        "hueco_maximo_ms": 12.5,
+        "puntos_copiados": 1441,
+        "puntos_sin_dato": 0,
+        "fotogramas_fuente": 1441,
+        "puntos_de_la_grilla": 1729,
+        "puntos_interpolados": 288,
+        "puntos_interpolados_pct": 16.66
+       },
+       "apto_fase_rapida": true,
+       "tolerancia_orden_ms": 8.333,
+       "factor_ralentizacion": 1.0,
+       "fotogramas_perdidos_pct": 16.66,
+       "escala_temporal_conocida": true
+      },
+      "observaciones": [
+       {
+        "texto": "Se observa que la cadera alcanzó su velocidad máxima 17 ms antes que el tronco. El orden entre tu cadera y tu tronco cambia según desde dónde se grabó el golpe, y todavía no podemos asegurar cuál es el correcto. Por eso lo registramos sin evaluarlo.",
+        "severidad": "sin_evaluar",
+        "fundamento": "Instantes de la velocidad máxima, desde el inicio de la ventana analizada: cadera 0,283 s, tronco 0,300 s. En este gesto el orden medido depende del encuadre: con los originales a tasa real, el saque da la cadera primero en tres cuartos (7 de 7 ordenables) y el tronco primero en perfil (8 de 8). Mientras no haya una medición independiente de la pelvis no se emite veredicto.",
+        "referencia": null
+       },
+       {
+        "texto": "No se pudo medir el instante en que el brazo alcanzó su velocidad máxima en este golpe.",
+        "severidad": "no_auditable",
+        "fundamento": null,
+        "referencia": null
+       }
+      ],
+      "secuenciacion": {
+       "resumen": {
+        "orden_predominante": [
+         "pelvis",
+         "torso"
+        ],
+        "repeticiones_correctas": 0,
+        "repeticiones_evaluadas": 1,
+        "dispersion_instante_pico_torso_ms": null
+       },
+       "repeticiones": [
+        {
+         "picos": [
+          {
+           "unidad": "grados/s",
+           "segmento": "pelvis",
+           "confianza": 1.0,
+           "velocidad": 626.915,
+           "instante_s": 0.2833
+          },
+          {
+           "unidad": "grados/s",
+           "segmento": "torso",
+           "confianza": 0.999,
+           "velocidad": 485.061,
+           "instante_s": 0.3
+          }
+         ],
+         "indice": 1,
+         "desde_s": 5.1875,
+         "hasta_s": 5.7875,
+         "correcto": null,
+         "auditable": true,
+         "orden_observado": [
+          "pelvis",
+          "torso"
+         ],
+         "motivo_no_auditable": null
+        }
+       ],
+       "orden_esperado": [
+        "pelvis",
+        "torso",
+        "brazo"
+       ]
+      },
+      "version_contrato": "1.3",
+      "comparacion_propia": null
+     }
+    },
+    {
+     "id": "72448beb-db4b-4202-8a57-f99ab44dbd51",
+     "estado": "parcial",
+     "reporte": {
+      "gesto": "saque",
+      "metricas": [
+       {
+        "valor": 757.45,
+        "nombre": "velocidad_pico_pelvis",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": 612.945,
+        "nombre": "velocidad_pico_torso",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 0.999
+       },
+       {
+        "valor": null,
+        "nombre": "velocidad_pico_brazo",
+        "unidad": "grados/s",
+        "auditable": false,
+        "confianza": 0.963
+       },
+       {
+        "valor": 28.8,
+        "nombre": "separacion_cadera_hombro_max",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": 176.3,
+        "nombre": "angulo_rodilla_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 0.745
+       },
+       {
+        "valor": 165.1,
+        "nombre": "angulo_codo_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 0.991
+       }
+      ],
+      "video_id": "72448beb-db4b-4202-8a57-f99ab44dbd51",
+      "cobertura": {
+       "auditable_pct": 64.07,
+       "tramos_no_auditables": [
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 0.0,
+         "hasta_s": 0.525
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 2.862,
+         "hasta_s": 3.021
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 3.171,
+         "hasta_s": 3.204
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 3.629,
+         "hasta_s": 3.737
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 3.829,
+         "hasta_s": 4.35
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 4.758,
+         "hasta_s": 5.479
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 5.55,
+         "hasta_s": 6.287
+        }
+       ]
+      },
+      "creado_en": "2026-10-13T05:16:51.906735Z",
+      "artefactos": {
+       "pdf_ruta": null,
+       "overlay_info": {
+        "desde_s": 5.4583,
+        "hasta_s": 7.0583,
+        "factor_lento": 8.0,
+        "fps_reproduccion": 30
+       },
+       "overlay_ruta": "usuario/72448beb-db4b-4202-8a57-f99ab44dbd51/esqueleto.mp4",
+       "fotogramas_clave": [
+        {
+         "ruta": "usuario/72448beb-db4b-4202-8a57-f99ab44dbd51/clave_pelvis.jpg",
+         "segmento": "pelvis",
+         "instante_s": 0.2917
+        },
+        {
+         "ruta": "usuario/72448beb-db4b-4202-8a57-f99ab44dbd51/clave_torso.jpg",
+         "segmento": "torso",
+         "instante_s": 0.3
+        }
+       ]
+      },
+      "reporte_id": "8ef1fa5a-94de-49e5-a134-ea62ea418bd7",
+      "segmentacion": {
+       "metodo": "ancla_torso",
+       "repeticiones_marcadas": 1,
+       "repeticiones_auditables": 0
+      },
+      "trazabilidad": {
+       "filtro": {
+        "tipo": "butterworth",
+        "orden": 4,
+        "corte_hz": 7.0,
+        "fase_cero": true
+       },
+       "fps_real": 200.20253076466878,
+       "fps_nominal": 239.981,
+       "backend_pose": "mediapipe",
+       "modo_captura": "camara_lenta_240",
+       "origen_factor": "marcas_de_tiempo",
+       "version_motor": "0.5.3",
+       "regularizacion": {
+        "fps_grilla": 240.0,
+        "fps_real_medio": 200.374,
+        "hueco_maximo_ms": 16.67,
+        "puntos_copiados": 1564,
+        "puntos_sin_dato": 0,
+        "fotogramas_fuente": 1564,
+        "puntos_de_la_grilla": 1873,
+        "puntos_interpolados": 309,
+        "puntos_interpolados_pct": 16.5
+       },
+       "apto_fase_rapida": true,
+       "tolerancia_orden_ms": 8.333,
+       "factor_ralentizacion": 1.0,
+       "fotogramas_perdidos_pct": 16.58,
+       "escala_temporal_conocida": true
+      },
+      "observaciones": [
+       {
+        "texto": "La cadera y el tronco alcanzaron su velocidad máxima casi al mismo tiempo: a esta resolución del video no se puede saber cuál fue primero.",
+        "severidad": "no_auditable",
+        "fundamento": "Simultaneidad al límite de resolución. Diferencia: 8 ms; la tolerancia es de 8,3 ms y 1 fotograma ≈ 5 ms a 200 fps reales.",
+        "referencia": null
+       },
+       {
+        "texto": "No se pudo medir el instante en que el brazo alcanzó su velocidad máxima en este golpe.",
+        "severidad": "no_auditable",
+        "fundamento": null,
+        "referencia": null
+       }
+      ],
+      "secuenciacion": {
+       "resumen": {
+        "orden_predominante": [],
+        "repeticiones_correctas": 0,
+        "repeticiones_evaluadas": 1,
+        "dispersion_instante_pico_torso_ms": null
+       },
+       "repeticiones": [
+        {
+         "picos": [
+          {
+           "unidad": "grados/s",
+           "segmento": "pelvis",
+           "confianza": 1.0,
+           "velocidad": 757.45,
+           "instante_s": 0.2917
+          },
+          {
+           "unidad": "grados/s",
+           "segmento": "torso",
+           "confianza": 0.999,
+           "velocidad": 612.945,
+           "instante_s": 0.3
+          }
+         ],
+         "indice": 1,
+         "desde_s": 5.9583,
+         "hasta_s": 6.5583,
+         "correcto": null,
+         "auditable": false,
+         "orden_observado": null,
+         "motivo_no_auditable": "sin pico auditable para: brazo"
+        }
+       ],
+       "orden_esperado": [
+        "pelvis",
+        "torso",
+        "brazo"
+       ]
+      },
+      "version_contrato": "1.3",
+      "comparacion_propia": null
+     }
+    },
+    {
+     "id": "5aabb44a-690a-44ae-89d7-f0755017f53e",
+     "estado": "completado",
+     "reporte": {
+      "gesto": "saque",
+      "metricas": [
+       {
+        "valor": 428.693,
+        "nombre": "velocidad_pico_pelvis",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": 373.406,
+        "nombre": "velocidad_pico_torso",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 0.999
+       },
+       {
+        "valor": null,
+        "nombre": "velocidad_pico_brazo",
+        "unidad": "grados/s",
+        "auditable": false,
+        "confianza": 0.958
+       },
+       {
+        "valor": 31.9,
+        "nombre": "separacion_cadera_hombro_max",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": 172.0,
+        "nombre": "angulo_rodilla_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 0.669
+       },
+       {
+        "valor": 138.7,
+        "nombre": "angulo_codo_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 0.862
+       }
+      ],
+      "video_id": "5aabb44a-690a-44ae-89d7-f0755017f53e",
+      "cobertura": {
+       "auditable_pct": 78.73,
+       "tramos_no_auditables": [
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 2.304,
+         "hasta_s": 2.346
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 2.896,
+         "hasta_s": 2.925
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 3.05,
+         "hasta_s": 3.087
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 3.188,
+         "hasta_s": 3.246
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 3.812,
+         "hasta_s": 5.138
+        }
+       ]
+      },
+      "creado_en": "2026-10-13T05:21:04.480195Z",
+      "artefactos": {
+       "pdf_ruta": null,
+       "overlay_info": {
+        "desde_s": 4.3208,
+        "hasta_s": 5.9208,
+        "factor_lento": 8.0,
+        "fps_reproduccion": 30
+       },
+       "overlay_ruta": "usuario/5aabb44a-690a-44ae-89d7-f0755017f53e/esqueleto.mp4",
+       "fotogramas_clave": [
+        {
+         "ruta": "usuario/5aabb44a-690a-44ae-89d7-f0755017f53e/clave_pelvis.jpg",
+         "segmento": "pelvis",
+         "instante_s": 0.2583
+        },
+        {
+         "ruta": "usuario/5aabb44a-690a-44ae-89d7-f0755017f53e/clave_torso.jpg",
+         "segmento": "torso",
+         "instante_s": 0.3
+        }
+       ]
+      },
+      "reporte_id": "50628524-ba16-4fb9-8a38-92d7c4f33f08",
+      "segmentacion": {
+       "metodo": "ancla_torso",
+       "repeticiones_marcadas": 1,
+       "repeticiones_auditables": 1
+      },
+      "trazabilidad": {
+       "filtro": {
+        "tipo": "butterworth",
+        "orden": 4,
+        "corte_hz": 7.0,
+        "fase_cero": true
+       },
+       "fps_real": 200.86537126521284,
+       "fps_nominal": 239.981,
+       "backend_pose": "mediapipe",
+       "modo_captura": "camara_lenta_240",
+       "origen_factor": "marcas_de_tiempo",
+       "version_motor": "0.5.3",
+       "regularizacion": {
+        "fps_grilla": 240.0,
+        "fps_real_medio": 201.034,
+        "hueco_maximo_ms": 16.67,
+        "puntos_copiados": 1410,
+        "puntos_sin_dato": 0,
+        "fotogramas_fuente": 1410,
+        "puntos_de_la_grilla": 1683,
+        "puntos_interpolados": 273,
+        "puntos_interpolados_pct": 16.22
+       },
+       "apto_fase_rapida": true,
+       "tolerancia_orden_ms": 8.333,
+       "factor_ralentizacion": 1.0,
+       "fotogramas_perdidos_pct": 16.3,
+       "escala_temporal_conocida": true
+      },
+      "observaciones": [
+       {
+        "texto": "Se observa que la cadera alcanzó su velocidad máxima 42 ms antes que el tronco. El orden entre tu cadera y tu tronco cambia según desde dónde se grabó el golpe, y todavía no podemos asegurar cuál es el correcto. Por eso lo registramos sin evaluarlo.",
+        "severidad": "sin_evaluar",
+        "fundamento": "Instantes de la velocidad máxima, desde el inicio de la ventana analizada: cadera 0,258 s, tronco 0,300 s. En este gesto el orden medido depende del encuadre: con los originales a tasa real, el saque da la cadera primero en tres cuartos (7 de 7 ordenables) y el tronco primero en perfil (8 de 8). Mientras no haya una medición independiente de la pelvis no se emite veredicto.",
+        "referencia": null
+       },
+       {
+        "texto": "No se pudo medir el instante en que el brazo alcanzó su velocidad máxima en este golpe.",
+        "severidad": "no_auditable",
+        "fundamento": null,
+        "referencia": null
+       }
+      ],
+      "secuenciacion": {
+       "resumen": {
+        "orden_predominante": [
+         "pelvis",
+         "torso"
+        ],
+        "repeticiones_correctas": 0,
+        "repeticiones_evaluadas": 1,
+        "dispersion_instante_pico_torso_ms": null
+       },
+       "repeticiones": [
+        {
+         "picos": [
+          {
+           "unidad": "grados/s",
+           "segmento": "pelvis",
+           "confianza": 1.0,
+           "velocidad": 428.693,
+           "instante_s": 0.342
+          },
+          {
+           "unidad": "grados/s",
+           "segmento": "torso",
+           "confianza": 0.999,
+           "velocidad": 373.406,
+           "instante_s": 0.3
+          }
+         ],
+         "indice": 1,
+         "desde_s": 4.8208,
+         "hasta_s": 5.4208,
+         "correcto": null,
+         "auditable": true,
+         "orden_observado": [
+          "pelvis",
+          "torso"
+         ],
+         "motivo_no_auditable": null
+        }
+       ],
+       "orden_esperado": [
+        "pelvis",
+        "torso",
+        "brazo"
+       ]
+      },
+      "version_contrato": "1.3",
+      "comparacion_propia": null
+     }
+    },
+    {
+     "id": "53b304bd-cb18-4b9c-b2ce-a4eccbc2e9ed",
+     "estado": "parcial",
+     "reporte": {
+      "gesto": "saque",
+      "metricas": [
+       {
+        "valor": 792.971,
+        "nombre": "velocidad_pico_pelvis",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": 545.331,
+        "nombre": "velocidad_pico_torso",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 0.998
+       },
+       {
+        "valor": null,
+        "nombre": "velocidad_pico_brazo",
+        "unidad": "grados/s",
+        "auditable": false,
+        "confianza": 0.959
+       },
+       {
+        "valor": 34.0,
+        "nombre": "separacion_cadera_hombro_max",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": null,
+        "nombre": "angulo_rodilla_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": false,
+        "confianza": 0.455
+       },
+       {
+        "valor": 157.1,
+        "nombre": "angulo_codo_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 0.748
+       }
+      ],
+      "video_id": "53b304bd-cb18-4b9c-b2ce-a4eccbc2e9ed",
+      "cobertura": {
+       "auditable_pct": 78.84,
+       "tramos_no_auditables": [
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 2.279,
+         "hasta_s": 2.383
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 2.562,
+         "hasta_s": 2.587
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 2.654,
+         "hasta_s": 2.679
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 4.021,
+         "hasta_s": 5.283
+        }
+       ]
+      },
+      "creado_en": "2026-10-13T05:25:10.342934Z",
+      "artefactos": {
+       "pdf_ruta": null,
+       "overlay_info": {
+        "desde_s": 4.4083,
+        "hasta_s": 6.0083,
+        "factor_lento": 8.0,
+        "fps_reproduccion": 30
+       },
+       "overlay_ruta": "usuario/53b304bd-cb18-4b9c-b2ce-a4eccbc2e9ed/esqueleto.mp4",
+       "fotogramas_clave": [
+        {
+         "ruta": "usuario/53b304bd-cb18-4b9c-b2ce-a4eccbc2e9ed/clave_pelvis.jpg",
+         "segmento": "pelvis",
+         "instante_s": 0.2958
+        },
+        {
+         "ruta": "usuario/53b304bd-cb18-4b9c-b2ce-a4eccbc2e9ed/clave_torso.jpg",
+         "segmento": "torso",
+         "instante_s": 0.3
+        }
+       ]
+      },
+      "reporte_id": "8c1579d0-52f0-4027-a5c0-d58dfafde8c7",
+      "segmentacion": {
+       "metodo": "ancla_torso",
+       "repeticiones_marcadas": 1,
+       "repeticiones_auditables": 0
+      },
+      "trazabilidad": {
+       "filtro": {
+        "tipo": "butterworth",
+        "orden": 4,
+        "corte_hz": 8.0,
+        "fase_cero": true
+       },
+       "fps_real": 200.77008069705226,
+       "fps_nominal": 239.981,
+       "backend_pose": "mediapipe",
+       "modo_captura": "camara_lenta_240",
+       "origen_factor": "marcas_de_tiempo",
+       "version_motor": "0.5.3",
+       "regularizacion": {
+        "fps_grilla": 240.0,
+        "fps_real_medio": 200.971,
+        "hueco_maximo_ms": 12.92,
+        "puntos_copiados": 1121,
+        "puntos_sin_dato": 0,
+        "fotogramas_fuente": 1346,
+        "puntos_de_la_grilla": 1607,
+        "puntos_interpolados": 486,
+        "puntos_interpolados_pct": 30.24
+       },
+       "apto_fase_rapida": true,
+       "tolerancia_orden_ms": 8.333,
+       "factor_ralentizacion": 1.0,
+       "fotogramas_perdidos_pct": 16.34,
+       "escala_temporal_conocida": true
+      },
+      "observaciones": [
+       {
+        "texto": "La cadera y el tronco alcanzaron su velocidad máxima casi al mismo tiempo: a esta resolución del video no se puede saber cuál fue primero.",
+        "severidad": "no_auditable",
+        "fundamento": "Simultaneidad al límite de resolución. Diferencia: 4 ms; la tolerancia es de 8,3 ms y 1 fotograma ≈ 5 ms a 201 fps reales.",
+        "referencia": null
+       },
+       {
+        "texto": "No se pudo medir el instante en que el brazo alcanzó su velocidad máxima en este golpe.",
+        "severidad": "no_auditable",
+        "fundamento": null,
+        "referencia": null
+       }
+      ],
+      "secuenciacion": {
+       "resumen": {
+        "orden_predominante": [],
+        "repeticiones_correctas": 0,
+        "repeticiones_evaluadas": 1,
+        "dispersion_instante_pico_torso_ms": null
+       },
+       "repeticiones": [
+        {
+         "picos": [
+          {
+           "unidad": "grados/s",
+           "segmento": "pelvis",
+           "confianza": 1.0,
+           "velocidad": 792.971,
+           "instante_s": 0.2958
+          },
+          {
+           "unidad": "grados/s",
+           "segmento": "torso",
+           "confianza": 0.998,
+           "velocidad": 545.331,
+           "instante_s": 0.3
+          }
+         ],
+         "indice": 1,
+         "desde_s": 4.9083,
+         "hasta_s": 5.5083,
+         "correcto": null,
+         "auditable": false,
+         "orden_observado": null,
+         "motivo_no_auditable": "sin pico auditable para: brazo"
+        }
+       ],
+       "orden_esperado": [
+        "pelvis",
+        "torso",
+        "brazo"
+       ]
+      },
+      "version_contrato": "1.3",
+      "comparacion_propia": null
+     }
+    },
+    {
+     "id": "e3e341ff-527a-47bb-84d3-394afb9d46ca",
+     "estado": "completado",
+     "reporte": {
+      "gesto": "saque",
+      "metricas": [
+       {
+        "valor": 930.432,
+        "nombre": "velocidad_pico_pelvis",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": 497.836,
+        "nombre": "velocidad_pico_torso",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 0.999
+       },
+       {
+        "valor": null,
+        "nombre": "velocidad_pico_brazo",
+        "unidad": "grados/s",
+        "auditable": false,
+        "confianza": 0.962
+       },
+       {
+        "valor": 41.5,
+        "nombre": "separacion_cadera_hombro_max",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": 173.6,
+        "nombre": "angulo_rodilla_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 0.919
+       },
+       {
+        "valor": 131.9,
+        "nombre": "angulo_codo_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 0.946
+       }
+      ],
+      "video_id": "e3e341ff-527a-47bb-84d3-394afb9d46ca",
+      "cobertura": {
+       "auditable_pct": 73.68,
+       "tramos_no_auditables": [
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 2.15,
+         "hasta_s": 3.413
+        }
+       ]
+      },
+      "creado_en": "2026-10-13T05:28:12.717903Z",
+      "artefactos": {
+       "pdf_ruta": null,
+       "overlay_info": {
+        "desde_s": 2.5333,
+        "hasta_s": 4.1333,
+        "factor_lento": 8.0,
+        "fps_reproduccion": 30
+       },
+       "overlay_ruta": "usuario/e3e341ff-527a-47bb-84d3-394afb9d46ca/esqueleto.mp4",
+       "fotogramas_clave": [
+        {
+         "ruta": "usuario/e3e341ff-527a-47bb-84d3-394afb9d46ca/clave_pelvis.jpg",
+         "segmento": "pelvis",
+         "instante_s": 0.2833
+        },
+        {
+         "ruta": "usuario/e3e341ff-527a-47bb-84d3-394afb9d46ca/clave_torso.jpg",
+         "segmento": "torso",
+         "instante_s": 0.3
+        }
+       ]
+      },
+      "reporte_id": "9c5b7d20-3113-4cf4-9266-0361b8847dc8",
+      "segmentacion": {
+       "metodo": "ancla_torso",
+       "repeticiones_marcadas": 1,
+       "repeticiones_auditables": 1
+      },
+      "trazabilidad": {
+       "filtro": {
+        "tipo": "butterworth",
+        "orden": 4,
+        "corte_hz": 9.0,
+        "fase_cero": true
+       },
+       "fps_real": 200.25994281258124,
+       "fps_nominal": 239.981,
+       "backend_pose": "mediapipe",
+       "modo_captura": "camara_lenta_240",
+       "origen_factor": "marcas_de_tiempo",
+       "version_motor": "0.5.3",
+       "regularizacion": {
+        "fps_grilla": 240.0,
+        "fps_real_medio": 200.539,
+        "hueco_maximo_ms": 16.67,
+        "puntos_copiados": 962,
+        "puntos_sin_dato": 0,
+        "fotogramas_fuente": 962,
+        "puntos_de_la_grilla": 1151,
+        "puntos_interpolados": 189,
+        "puntos_interpolados_pct": 16.42
+       },
+       "apto_fase_rapida": true,
+       "tolerancia_orden_ms": 8.333,
+       "factor_ralentizacion": 1.0,
+       "fotogramas_perdidos_pct": 16.55,
+       "escala_temporal_conocida": true
+      },
+      "observaciones": [
+       {
+        "texto": "Se observa que la cadera alcanzó su velocidad máxima 17 ms antes que el tronco. El orden entre tu cadera y tu tronco cambia según desde dónde se grabó el golpe, y todavía no podemos asegurar cuál es el correcto. Por eso lo registramos sin evaluarlo.",
+        "severidad": "sin_evaluar",
+        "fundamento": "Instantes de la velocidad máxima, desde el inicio de la ventana analizada: cadera 0,283 s, tronco 0,300 s. En este gesto el orden medido depende del encuadre: con los originales a tasa real, el saque da la cadera primero en tres cuartos (7 de 7 ordenables) y el tronco primero en perfil (8 de 8). Mientras no haya una medición independiente de la pelvis no se emite veredicto.",
+        "referencia": null
+       },
+       {
+        "texto": "No se pudo medir el instante en que el brazo alcanzó su velocidad máxima en este golpe.",
+        "severidad": "no_auditable",
+        "fundamento": null,
+        "referencia": null
+       }
+      ],
+      "secuenciacion": {
+       "resumen": {
+        "orden_predominante": [
+         "pelvis",
+         "torso"
+        ],
+        "repeticiones_correctas": 0,
+        "repeticiones_evaluadas": 1,
+        "dispersion_instante_pico_torso_ms": null
+       },
+       "repeticiones": [
+        {
+         "picos": [
+          {
+           "unidad": "grados/s",
+           "segmento": "pelvis",
+           "confianza": 1.0,
+           "velocidad": 930.432,
+           "instante_s": 0.2833
+          },
+          {
+           "unidad": "grados/s",
+           "segmento": "torso",
+           "confianza": 0.999,
+           "velocidad": 497.836,
+           "instante_s": 0.3
+          }
+         ],
+         "indice": 1,
+         "desde_s": 3.0333,
+         "hasta_s": 3.6333,
+         "correcto": null,
+         "auditable": true,
+         "orden_observado": [
+          "pelvis",
+          "torso"
+         ],
+         "motivo_no_auditable": null
+        }
+       ],
+       "orden_esperado": [
+        "pelvis",
+        "torso",
+        "brazo"
+       ]
+      },
+      "version_contrato": "1.3",
+      "comparacion_propia": null
+     }
+    },
+    {
+     "id": "17001ba6-a464-43e6-b25a-4196b682e9d1",
+     "estado": "parcial",
+     "reporte": {
+      "gesto": "saque",
+      "metricas": [
+       {
+        "valor": 394.956,
+        "nombre": "velocidad_pico_pelvis",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": 425.469,
+        "nombre": "velocidad_pico_torso",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 0.999
+       },
+       {
+        "valor": null,
+        "nombre": "velocidad_pico_brazo",
+        "unidad": "grados/s",
+        "auditable": false,
+        "confianza": 0.999
+       },
+       {
+        "valor": 11.2,
+        "nombre": "separacion_cadera_hombro_max",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": 100.7,
+        "nombre": "angulo_rodilla_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 0.953
+       },
+       {
+        "valor": 167.5,
+        "nombre": "angulo_codo_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 0.985
+       }
+      ],
+      "video_id": "17001ba6-a464-43e6-b25a-4196b682e9d1",
+      "cobertura": {
+       "auditable_pct": 67.47,
+       "tramos_no_auditables": [
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 0.0,
+         "hasta_s": 0.087
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 0.3,
+         "hasta_s": 0.713
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 2.817,
+         "hasta_s": 3.117
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 3.212,
+         "hasta_s": 3.263
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 3.708,
+         "hasta_s": 4.942
+        }
+       ]
+      },
+      "creado_en": "2026-10-13T05:32:08.370014Z",
+      "artefactos": {
+       "pdf_ruta": null,
+       "overlay_info": {
+        "desde_s": 3.4667,
+        "hasta_s": 5.0667,
+        "factor_lento": 8.0,
+        "fps_reproduccion": 30
+       },
+       "overlay_ruta": "usuario/17001ba6-a464-43e6-b25a-4196b682e9d1/esqueleto.mp4",
+       "fotogramas_clave": [
+        {
+         "ruta": "usuario/17001ba6-a464-43e6-b25a-4196b682e9d1/clave_pelvis.jpg",
+         "segmento": "pelvis",
+         "instante_s": 0.2958
+        },
+        {
+         "ruta": "usuario/17001ba6-a464-43e6-b25a-4196b682e9d1/clave_torso.jpg",
+         "segmento": "torso",
+         "instante_s": 0.3
+        }
+       ]
+      },
+      "reporte_id": "31da581b-8d75-42ba-9fcb-8524f06c63e4",
+      "segmentacion": {
+       "metodo": "ancla_torso",
+       "repeticiones_marcadas": 1,
+       "repeticiones_auditables": 0
+      },
+      "trazabilidad": {
+       "filtro": {
+        "tipo": "butterworth",
+        "orden": 4,
+        "corte_hz": 7.0,
+        "fase_cero": true
+       },
+       "fps_real": 200.58399844267083,
+       "fps_nominal": 239.981,
+       "backend_pose": "mediapipe",
+       "modo_captura": "camara_lenta_240",
+       "origen_factor": "marcas_de_tiempo",
+       "version_motor": "0.5.3",
+       "regularizacion": {
+        "fps_grilla": 240.0,
+        "fps_real_medio": 200.768,
+        "hueco_maximo_ms": 25.0,
+        "puntos_copiados": 1286,
+        "puntos_sin_dato": 0,
+        "fotogramas_fuente": 1286,
+        "puntos_de_la_grilla": 1537,
+        "puntos_interpolados": 251,
+        "puntos_interpolados_pct": 16.33
+       },
+       "apto_fase_rapida": true,
+       "tolerancia_orden_ms": 8.333,
+       "factor_ralentizacion": 1.0,
+       "fotogramas_perdidos_pct": 16.42,
+       "escala_temporal_conocida": true
+      },
+      "observaciones": [
+       {
+        "texto": "La cadera y el tronco alcanzaron su velocidad máxima casi al mismo tiempo: a esta resolución del video no se puede saber cuál fue primero.",
+        "severidad": "no_auditable",
+        "fundamento": "Simultaneidad al límite de resolución. Diferencia: 4 ms; la tolerancia es de 8,3 ms y 1 fotograma ≈ 5 ms a 201 fps reales.",
+        "referencia": null
+       },
+       {
+        "texto": "No se pudo medir el instante en que el brazo alcanzó su velocidad máxima en este golpe.",
+        "severidad": "no_auditable",
+        "fundamento": null,
+        "referencia": null
+       }
+      ],
+      "secuenciacion": {
+       "resumen": {
+        "orden_predominante": [],
+        "repeticiones_correctas": 0,
+        "repeticiones_evaluadas": 1,
+        "dispersion_instante_pico_torso_ms": null
+       },
+       "repeticiones": [
+        {
+         "picos": [
+          {
+           "unidad": "grados/s",
+           "segmento": "pelvis",
+           "confianza": 1.0,
+           "velocidad": 394.956,
+           "instante_s": 0.2958
+          },
+          {
+           "unidad": "grados/s",
+           "segmento": "torso",
+           "confianza": 0.999,
+           "velocidad": 425.469,
+           "instante_s": 0.3
+          }
+         ],
+         "indice": 1,
+         "desde_s": 3.9667,
+         "hasta_s": 4.5667,
+         "correcto": null,
+         "auditable": false,
+         "orden_observado": null,
+         "motivo_no_auditable": "sin pico auditable para: brazo"
+        }
+       ],
+       "orden_esperado": [
+        "pelvis",
+        "torso",
+        "brazo"
+       ]
+      },
+      "version_contrato": "1.3",
+      "comparacion_propia": null
+     }
+    }
+   ],
+   "consistencia": {
+    "version_regla": "1",
+    "golpes": {
+     "total": 6,
+     "medidos": 6,
+     "no_medibles": 0,
+     "en_analisis": 0,
+     "con_orden_distinguible": 3
+    },
+    "separacion_cadera_hombro": {
+     "n": 6,
+     "unidad": "grados",
+     "mediana": 32.95,
+     "dispersion": 4.37,
+     "minimo": 11.2,
+     "maximo": 41.5,
+     "valores": [
+      {
+       "video_id": "bba27843-a2d3-440e-a8e7-7bfc27d8a95a",
+       "valor": 34.7
+      },
+      {
+       "video_id": "72448beb-db4b-4202-8a57-f99ab44dbd51",
+       "valor": 28.8
+      },
+      {
+       "video_id": "5aabb44a-690a-44ae-89d7-f0755017f53e",
+       "valor": 31.9
+      },
+      {
+       "video_id": "53b304bd-cb18-4b9c-b2ce-a4eccbc2e9ed",
+       "valor": 34.0
+      },
+      {
+       "video_id": "e3e341ff-527a-47bb-84d3-394afb9d46ca",
+       "valor": 41.5
+      },
+      {
+       "video_id": "17001ba6-a464-43e6-b25a-4196b682e9d1",
+       "valor": 11.2
+      }
+     ]
+    },
+    "orden": {
+     "medidos": 6,
+     "ordenables": 3,
+     "mismo_orden": 2,
+     "orden_modal": [
+      "pelvis",
+      "torso"
+     ],
+     "suficiente": false
+    },
+    "golpe_tipico": "53b304bd-cb18-4b9c-b2ce-a4eccbc2e9ed",
+    "golpes_que_se_apartan": [
+     "17001ba6-a464-43e6-b25a-4196b682e9d1"
+    ],
+    "versiones_motor": [
+     "0.5.3"
+    ],
+    "mezcla_de_versiones": false,
+    "minimos": {
+     "dispersion": 4,
+     "repetibilidad": 5,
+     "se_apartan": 5
+    },
+    "sesion_id": "sesion-ejemplo",
+    "gesto": "saque",
+    "encuadre": "tres_cuartos",
+    "fecha": "2026-09-25"
+   }
+  },
+  "tres_golpes": {
+   "golpes": [
+    {
+     "id": "bba27843-a2d3-440e-a8e7-7bfc27d8a95a",
+     "estado": "completado",
+     "reporte": {
+      "gesto": "saque",
+      "metricas": [
+       {
+        "valor": 626.915,
+        "nombre": "velocidad_pico_pelvis",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": 485.061,
+        "nombre": "velocidad_pico_torso",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 0.999
+       },
+       {
+        "valor": null,
+        "nombre": "velocidad_pico_brazo",
+        "unidad": "grados/s",
+        "auditable": false,
+        "confianza": 0.937
+       },
+       {
+        "valor": 34.7,
+        "nombre": "separacion_cadera_hombro_max",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": 178.1,
+        "nombre": "angulo_rodilla_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 0.855
+       },
+       {
+        "valor": 121.9,
+        "nombre": "angulo_codo_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 0.901
+       }
+      ],
+      "video_id": "bba27843-a2d3-440e-a8e7-7bfc27d8a95a",
+      "cobertura": {
+       "auditable_pct": 77.04,
+       "tramos_no_auditables": [
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 0.0,
+         "hasta_s": 0.004
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 2.625,
+         "hasta_s": 2.654
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 3.888,
+         "hasta_s": 5.508
+        }
+       ]
+      },
+      "creado_en": "2026-10-13T05:12:10.664658Z",
+      "artefactos": {
+       "pdf_ruta": null,
+       "overlay_info": {
+        "desde_s": 4.6875,
+        "hasta_s": 6.2875,
+        "factor_lento": 8.0,
+        "fps_reproduccion": 30
+       },
+       "overlay_ruta": "usuario/bba27843-a2d3-440e-a8e7-7bfc27d8a95a/esqueleto.mp4",
+       "fotogramas_clave": [
+        {
+         "ruta": "usuario/bba27843-a2d3-440e-a8e7-7bfc27d8a95a/clave_pelvis.jpg",
+         "segmento": "pelvis",
+         "instante_s": 0.2833
+        },
+        {
+         "ruta": "usuario/bba27843-a2d3-440e-a8e7-7bfc27d8a95a/clave_torso.jpg",
+         "segmento": "torso",
+         "instante_s": 0.3
+        }
+       ]
+      },
+      "reporte_id": "2942f412-e8b3-4c31-8e13-5ecb6b44acd1",
+      "segmentacion": {
+       "metodo": "ancla_torso",
+       "repeticiones_marcadas": 1,
+       "repeticiones_auditables": 1
+      },
+      "trazabilidad": {
+       "filtro": {
+        "tipo": "butterworth",
+        "orden": 4,
+        "corte_hz": 9.0,
+        "fase_cero": true
+       },
+       "fps_real": 199.98841733749586,
+       "fps_nominal": 239.981,
+       "backend_pose": "mediapipe",
+       "modo_captura": "camara_lenta_240",
+       "origen_factor": "marcas_de_tiempo",
+       "version_motor": "0.5.3",
+       "regularizacion": {
+        "fps_grilla": 240.0,
+        "fps_real_medio": 199.988,
+        "hueco_maximo_ms": 12.5,
+        "puntos_copiados": 1441,
+        "puntos_sin_dato": 0,
+        "fotogramas_fuente": 1441,
+        "puntos_de_la_grilla": 1729,
+        "puntos_interpolados": 288,
+        "puntos_interpolados_pct": 16.66
+       },
+       "apto_fase_rapida": true,
+       "tolerancia_orden_ms": 8.333,
+       "factor_ralentizacion": 1.0,
+       "fotogramas_perdidos_pct": 16.66,
+       "escala_temporal_conocida": true
+      },
+      "observaciones": [
+       {
+        "texto": "Se observa que la cadera alcanzó su velocidad máxima 17 ms antes que el tronco. El orden entre tu cadera y tu tronco cambia según desde dónde se grabó el golpe, y todavía no podemos asegurar cuál es el correcto. Por eso lo registramos sin evaluarlo.",
+        "severidad": "sin_evaluar",
+        "fundamento": "Instantes de la velocidad máxima, desde el inicio de la ventana analizada: cadera 0,283 s, tronco 0,300 s. En este gesto el orden medido depende del encuadre: con los originales a tasa real, el saque da la cadera primero en tres cuartos (7 de 7 ordenables) y el tronco primero en perfil (8 de 8). Mientras no haya una medición independiente de la pelvis no se emite veredicto.",
+        "referencia": null
+       },
+       {
+        "texto": "No se pudo medir el instante en que el brazo alcanzó su velocidad máxima en este golpe.",
+        "severidad": "no_auditable",
+        "fundamento": null,
+        "referencia": null
+       }
+      ],
+      "secuenciacion": {
+       "resumen": {
+        "orden_predominante": [
+         "pelvis",
+         "torso"
+        ],
+        "repeticiones_correctas": 0,
+        "repeticiones_evaluadas": 1,
+        "dispersion_instante_pico_torso_ms": null
+       },
+       "repeticiones": [
+        {
+         "picos": [
+          {
+           "unidad": "grados/s",
+           "segmento": "pelvis",
+           "confianza": 1.0,
+           "velocidad": 626.915,
+           "instante_s": 0.2833
+          },
+          {
+           "unidad": "grados/s",
+           "segmento": "torso",
+           "confianza": 0.999,
+           "velocidad": 485.061,
+           "instante_s": 0.3
+          }
+         ],
+         "indice": 1,
+         "desde_s": 5.1875,
+         "hasta_s": 5.7875,
+         "correcto": null,
+         "auditable": true,
+         "orden_observado": [
+          "pelvis",
+          "torso"
+         ],
+         "motivo_no_auditable": null
+        }
+       ],
+       "orden_esperado": [
+        "pelvis",
+        "torso",
+        "brazo"
+       ]
+      },
+      "version_contrato": "1.3",
+      "comparacion_propia": null
+     }
+    },
+    {
+     "id": "5aabb44a-690a-44ae-89d7-f0755017f53e",
+     "estado": "completado",
+     "reporte": {
+      "gesto": "saque",
+      "metricas": [
+       {
+        "valor": 428.693,
+        "nombre": "velocidad_pico_pelvis",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": 373.406,
+        "nombre": "velocidad_pico_torso",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 0.999
+       },
+       {
+        "valor": null,
+        "nombre": "velocidad_pico_brazo",
+        "unidad": "grados/s",
+        "auditable": false,
+        "confianza": 0.958
+       },
+       {
+        "valor": 31.9,
+        "nombre": "separacion_cadera_hombro_max",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": 172.0,
+        "nombre": "angulo_rodilla_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 0.669
+       },
+       {
+        "valor": 138.7,
+        "nombre": "angulo_codo_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 0.862
+       }
+      ],
+      "video_id": "5aabb44a-690a-44ae-89d7-f0755017f53e",
+      "cobertura": {
+       "auditable_pct": 78.73,
+       "tramos_no_auditables": [
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 2.304,
+         "hasta_s": 2.346
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 2.896,
+         "hasta_s": 2.925
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 3.05,
+         "hasta_s": 3.087
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 3.188,
+         "hasta_s": 3.246
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 3.812,
+         "hasta_s": 5.138
+        }
+       ]
+      },
+      "creado_en": "2026-10-13T05:21:04.480195Z",
+      "artefactos": {
+       "pdf_ruta": null,
+       "overlay_info": {
+        "desde_s": 4.3208,
+        "hasta_s": 5.9208,
+        "factor_lento": 8.0,
+        "fps_reproduccion": 30
+       },
+       "overlay_ruta": "usuario/5aabb44a-690a-44ae-89d7-f0755017f53e/esqueleto.mp4",
+       "fotogramas_clave": [
+        {
+         "ruta": "usuario/5aabb44a-690a-44ae-89d7-f0755017f53e/clave_pelvis.jpg",
+         "segmento": "pelvis",
+         "instante_s": 0.2583
+        },
+        {
+         "ruta": "usuario/5aabb44a-690a-44ae-89d7-f0755017f53e/clave_torso.jpg",
+         "segmento": "torso",
+         "instante_s": 0.3
+        }
+       ]
+      },
+      "reporte_id": "50628524-ba16-4fb9-8a38-92d7c4f33f08",
+      "segmentacion": {
+       "metodo": "ancla_torso",
+       "repeticiones_marcadas": 1,
+       "repeticiones_auditables": 1
+      },
+      "trazabilidad": {
+       "filtro": {
+        "tipo": "butterworth",
+        "orden": 4,
+        "corte_hz": 7.0,
+        "fase_cero": true
+       },
+       "fps_real": 200.86537126521284,
+       "fps_nominal": 239.981,
+       "backend_pose": "mediapipe",
+       "modo_captura": "camara_lenta_240",
+       "origen_factor": "marcas_de_tiempo",
+       "version_motor": "0.5.3",
+       "regularizacion": {
+        "fps_grilla": 240.0,
+        "fps_real_medio": 201.034,
+        "hueco_maximo_ms": 16.67,
+        "puntos_copiados": 1410,
+        "puntos_sin_dato": 0,
+        "fotogramas_fuente": 1410,
+        "puntos_de_la_grilla": 1683,
+        "puntos_interpolados": 273,
+        "puntos_interpolados_pct": 16.22
+       },
+       "apto_fase_rapida": true,
+       "tolerancia_orden_ms": 8.333,
+       "factor_ralentizacion": 1.0,
+       "fotogramas_perdidos_pct": 16.3,
+       "escala_temporal_conocida": true
+      },
+      "observaciones": [
+       {
+        "texto": "Se observa que la cadera alcanzó su velocidad máxima 42 ms antes que el tronco. El orden entre tu cadera y tu tronco cambia según desde dónde se grabó el golpe, y todavía no podemos asegurar cuál es el correcto. Por eso lo registramos sin evaluarlo.",
+        "severidad": "sin_evaluar",
+        "fundamento": "Instantes de la velocidad máxima, desde el inicio de la ventana analizada: cadera 0,258 s, tronco 0,300 s. En este gesto el orden medido depende del encuadre: con los originales a tasa real, el saque da la cadera primero en tres cuartos (7 de 7 ordenables) y el tronco primero en perfil (8 de 8). Mientras no haya una medición independiente de la pelvis no se emite veredicto.",
+        "referencia": null
+       },
+       {
+        "texto": "No se pudo medir el instante en que el brazo alcanzó su velocidad máxima en este golpe.",
+        "severidad": "no_auditable",
+        "fundamento": null,
+        "referencia": null
+       }
+      ],
+      "secuenciacion": {
+       "resumen": {
+        "orden_predominante": [
+         "pelvis",
+         "torso"
+        ],
+        "repeticiones_correctas": 0,
+        "repeticiones_evaluadas": 1,
+        "dispersion_instante_pico_torso_ms": null
+       },
+       "repeticiones": [
+        {
+         "picos": [
+          {
+           "unidad": "grados/s",
+           "segmento": "pelvis",
+           "confianza": 1.0,
+           "velocidad": 428.693,
+           "instante_s": 0.2583
+          },
+          {
+           "unidad": "grados/s",
+           "segmento": "torso",
+           "confianza": 0.999,
+           "velocidad": 373.406,
+           "instante_s": 0.3
+          }
+         ],
+         "indice": 1,
+         "desde_s": 4.8208,
+         "hasta_s": 5.4208,
+         "correcto": null,
+         "auditable": true,
+         "orden_observado": [
+          "pelvis",
+          "torso"
+         ],
+         "motivo_no_auditable": null
+        }
+       ],
+       "orden_esperado": [
+        "pelvis",
+        "torso",
+        "brazo"
+       ]
+      },
+      "version_contrato": "1.3",
+      "comparacion_propia": null
+     }
+    },
+    {
+     "id": "e3e341ff-527a-47bb-84d3-394afb9d46ca",
+     "estado": "completado",
+     "reporte": {
+      "gesto": "saque",
+      "metricas": [
+       {
+        "valor": 930.432,
+        "nombre": "velocidad_pico_pelvis",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": 497.836,
+        "nombre": "velocidad_pico_torso",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 0.999
+       },
+       {
+        "valor": null,
+        "nombre": "velocidad_pico_brazo",
+        "unidad": "grados/s",
+        "auditable": false,
+        "confianza": 0.962
+       },
+       {
+        "valor": 41.5,
+        "nombre": "separacion_cadera_hombro_max",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": 173.6,
+        "nombre": "angulo_rodilla_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 0.919
+       },
+       {
+        "valor": 131.9,
+        "nombre": "angulo_codo_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 0.946
+       }
+      ],
+      "video_id": "e3e341ff-527a-47bb-84d3-394afb9d46ca",
+      "cobertura": {
+       "auditable_pct": 73.68,
+       "tramos_no_auditables": [
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 2.15,
+         "hasta_s": 3.413
+        }
+       ]
+      },
+      "creado_en": "2026-10-13T05:28:12.717903Z",
+      "artefactos": {
+       "pdf_ruta": null,
+       "overlay_info": {
+        "desde_s": 2.5333,
+        "hasta_s": 4.1333,
+        "factor_lento": 8.0,
+        "fps_reproduccion": 30
+       },
+       "overlay_ruta": "usuario/e3e341ff-527a-47bb-84d3-394afb9d46ca/esqueleto.mp4",
+       "fotogramas_clave": [
+        {
+         "ruta": "usuario/e3e341ff-527a-47bb-84d3-394afb9d46ca/clave_pelvis.jpg",
+         "segmento": "pelvis",
+         "instante_s": 0.2833
+        },
+        {
+         "ruta": "usuario/e3e341ff-527a-47bb-84d3-394afb9d46ca/clave_torso.jpg",
+         "segmento": "torso",
+         "instante_s": 0.3
+        }
+       ]
+      },
+      "reporte_id": "9c5b7d20-3113-4cf4-9266-0361b8847dc8",
+      "segmentacion": {
+       "metodo": "ancla_torso",
+       "repeticiones_marcadas": 1,
+       "repeticiones_auditables": 1
+      },
+      "trazabilidad": {
+       "filtro": {
+        "tipo": "butterworth",
+        "orden": 4,
+        "corte_hz": 9.0,
+        "fase_cero": true
+       },
+       "fps_real": 200.25994281258124,
+       "fps_nominal": 239.981,
+       "backend_pose": "mediapipe",
+       "modo_captura": "camara_lenta_240",
+       "origen_factor": "marcas_de_tiempo",
+       "version_motor": "0.5.3",
+       "regularizacion": {
+        "fps_grilla": 240.0,
+        "fps_real_medio": 200.539,
+        "hueco_maximo_ms": 16.67,
+        "puntos_copiados": 962,
+        "puntos_sin_dato": 0,
+        "fotogramas_fuente": 962,
+        "puntos_de_la_grilla": 1151,
+        "puntos_interpolados": 189,
+        "puntos_interpolados_pct": 16.42
+       },
+       "apto_fase_rapida": true,
+       "tolerancia_orden_ms": 8.333,
+       "factor_ralentizacion": 1.0,
+       "fotogramas_perdidos_pct": 16.55,
+       "escala_temporal_conocida": true
+      },
+      "observaciones": [
+       {
+        "texto": "Se observa que la cadera alcanzó su velocidad máxima 17 ms antes que el tronco. El orden entre tu cadera y tu tronco cambia según desde dónde se grabó el golpe, y todavía no podemos asegurar cuál es el correcto. Por eso lo registramos sin evaluarlo.",
+        "severidad": "sin_evaluar",
+        "fundamento": "Instantes de la velocidad máxima, desde el inicio de la ventana analizada: cadera 0,283 s, tronco 0,300 s. En este gesto el orden medido depende del encuadre: con los originales a tasa real, el saque da la cadera primero en tres cuartos (7 de 7 ordenables) y el tronco primero en perfil (8 de 8). Mientras no haya una medición independiente de la pelvis no se emite veredicto.",
+        "referencia": null
+       },
+       {
+        "texto": "No se pudo medir el instante en que el brazo alcanzó su velocidad máxima en este golpe.",
+        "severidad": "no_auditable",
+        "fundamento": null,
+        "referencia": null
+       }
+      ],
+      "secuenciacion": {
+       "resumen": {
+        "orden_predominante": [
+         "pelvis",
+         "torso"
+        ],
+        "repeticiones_correctas": 0,
+        "repeticiones_evaluadas": 1,
+        "dispersion_instante_pico_torso_ms": null
+       },
+       "repeticiones": [
+        {
+         "picos": [
+          {
+           "unidad": "grados/s",
+           "segmento": "pelvis",
+           "confianza": 1.0,
+           "velocidad": 930.432,
+           "instante_s": 0.2833
+          },
+          {
+           "unidad": "grados/s",
+           "segmento": "torso",
+           "confianza": 0.999,
+           "velocidad": 497.836,
+           "instante_s": 0.3
+          }
+         ],
+         "indice": 1,
+         "desde_s": 3.0333,
+         "hasta_s": 3.6333,
+         "correcto": null,
+         "auditable": true,
+         "orden_observado": [
+          "pelvis",
+          "torso"
+         ],
+         "motivo_no_auditable": null
+        }
+       ],
+       "orden_esperado": [
+        "pelvis",
+        "torso",
+        "brazo"
+       ]
+      },
+      "version_contrato": "1.3",
+      "comparacion_propia": null
+     }
+    }
+   ],
+   "consistencia": {
+    "version_regla": "1",
+    "golpes": {
+     "total": 3,
+     "medidos": 3,
+     "no_medibles": 0,
+     "en_analisis": 0,
+     "con_orden_distinguible": 3
+    },
+    "separacion_cadera_hombro": {
+     "n": 3,
+     "unidad": "grados",
+     "mediana": 34.7,
+     "dispersion": null,
+     "minimo": 31.9,
+     "maximo": 41.5,
+     "valores": [
+      {
+       "video_id": "bba27843-a2d3-440e-a8e7-7bfc27d8a95a",
+       "valor": 34.7
+      },
+      {
+       "video_id": "5aabb44a-690a-44ae-89d7-f0755017f53e",
+       "valor": 31.9
+      },
+      {
+       "video_id": "e3e341ff-527a-47bb-84d3-394afb9d46ca",
+       "valor": 41.5
+      }
+     ]
+    },
+    "orden": {
+     "medidos": 3,
+     "ordenables": 3,
+     "mismo_orden": 3,
+     "orden_modal": [
+      "pelvis",
+      "torso"
+     ],
+     "suficiente": false
+    },
+    "golpe_tipico": "bba27843-a2d3-440e-a8e7-7bfc27d8a95a",
+    "golpes_que_se_apartan": [],
+    "versiones_motor": [
+     "0.5.3"
+    ],
+    "mezcla_de_versiones": false,
+    "minimos": {
+     "dispersion": 4,
+     "repetibilidad": 5,
+     "se_apartan": 5
+    },
+    "sesion_id": "sesion-ejemplo",
+    "gesto": "saque",
+    "encuadre": "tres_cuartos",
+    "fecha": "2026-09-25"
+   }
+  },
+  "sin_apartan": {
+   "golpes": [
+    {
+     "id": "bba27843-a2d3-440e-a8e7-7bfc27d8a95a",
+     "estado": "completado",
+     "reporte": {
+      "gesto": "saque",
+      "metricas": [
+       {
+        "valor": 626.915,
+        "nombre": "velocidad_pico_pelvis",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": 485.061,
+        "nombre": "velocidad_pico_torso",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 0.999
+       },
+       {
+        "valor": null,
+        "nombre": "velocidad_pico_brazo",
+        "unidad": "grados/s",
+        "auditable": false,
+        "confianza": 0.937
+       },
+       {
+        "valor": 34.7,
+        "nombre": "separacion_cadera_hombro_max",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": 178.1,
+        "nombre": "angulo_rodilla_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 0.855
+       },
+       {
+        "valor": 121.9,
+        "nombre": "angulo_codo_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 0.901
+       }
+      ],
+      "video_id": "bba27843-a2d3-440e-a8e7-7bfc27d8a95a",
+      "cobertura": {
+       "auditable_pct": 77.04,
+       "tramos_no_auditables": [
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 0.0,
+         "hasta_s": 0.004
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 2.625,
+         "hasta_s": 2.654
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 3.888,
+         "hasta_s": 5.508
+        }
+       ]
+      },
+      "creado_en": "2026-10-13T05:12:10.664658Z",
+      "artefactos": {
+       "pdf_ruta": null,
+       "overlay_info": {
+        "desde_s": 4.6875,
+        "hasta_s": 6.2875,
+        "factor_lento": 8.0,
+        "fps_reproduccion": 30
+       },
+       "overlay_ruta": "usuario/bba27843-a2d3-440e-a8e7-7bfc27d8a95a/esqueleto.mp4",
+       "fotogramas_clave": [
+        {
+         "ruta": "usuario/bba27843-a2d3-440e-a8e7-7bfc27d8a95a/clave_pelvis.jpg",
+         "segmento": "pelvis",
+         "instante_s": 0.2833
+        },
+        {
+         "ruta": "usuario/bba27843-a2d3-440e-a8e7-7bfc27d8a95a/clave_torso.jpg",
+         "segmento": "torso",
+         "instante_s": 0.3
+        }
+       ]
+      },
+      "reporte_id": "2942f412-e8b3-4c31-8e13-5ecb6b44acd1",
+      "segmentacion": {
+       "metodo": "ancla_torso",
+       "repeticiones_marcadas": 1,
+       "repeticiones_auditables": 1
+      },
+      "trazabilidad": {
+       "filtro": {
+        "tipo": "butterworth",
+        "orden": 4,
+        "corte_hz": 9.0,
+        "fase_cero": true
+       },
+       "fps_real": 199.98841733749586,
+       "fps_nominal": 239.981,
+       "backend_pose": "mediapipe",
+       "modo_captura": "camara_lenta_240",
+       "origen_factor": "marcas_de_tiempo",
+       "version_motor": "0.5.3",
+       "regularizacion": {
+        "fps_grilla": 240.0,
+        "fps_real_medio": 199.988,
+        "hueco_maximo_ms": 12.5,
+        "puntos_copiados": 1441,
+        "puntos_sin_dato": 0,
+        "fotogramas_fuente": 1441,
+        "puntos_de_la_grilla": 1729,
+        "puntos_interpolados": 288,
+        "puntos_interpolados_pct": 16.66
+       },
+       "apto_fase_rapida": true,
+       "tolerancia_orden_ms": 8.333,
+       "factor_ralentizacion": 1.0,
+       "fotogramas_perdidos_pct": 16.66,
+       "escala_temporal_conocida": true
+      },
+      "observaciones": [
+       {
+        "texto": "Se observa que la cadera alcanzó su velocidad máxima 17 ms antes que el tronco. El orden entre tu cadera y tu tronco cambia según desde dónde se grabó el golpe, y todavía no podemos asegurar cuál es el correcto. Por eso lo registramos sin evaluarlo.",
+        "severidad": "sin_evaluar",
+        "fundamento": "Instantes de la velocidad máxima, desde el inicio de la ventana analizada: cadera 0,283 s, tronco 0,300 s. En este gesto el orden medido depende del encuadre: con los originales a tasa real, el saque da la cadera primero en tres cuartos (7 de 7 ordenables) y el tronco primero en perfil (8 de 8). Mientras no haya una medición independiente de la pelvis no se emite veredicto.",
+        "referencia": null
+       },
+       {
+        "texto": "No se pudo medir el instante en que el brazo alcanzó su velocidad máxima en este golpe.",
+        "severidad": "no_auditable",
+        "fundamento": null,
+        "referencia": null
+       }
+      ],
+      "secuenciacion": {
+       "resumen": {
+        "orden_predominante": [
+         "pelvis",
+         "torso"
+        ],
+        "repeticiones_correctas": 0,
+        "repeticiones_evaluadas": 1,
+        "dispersion_instante_pico_torso_ms": null
+       },
+       "repeticiones": [
+        {
+         "picos": [
+          {
+           "unidad": "grados/s",
+           "segmento": "pelvis",
+           "confianza": 1.0,
+           "velocidad": 626.915,
+           "instante_s": 0.2833
+          },
+          {
+           "unidad": "grados/s",
+           "segmento": "torso",
+           "confianza": 0.999,
+           "velocidad": 485.061,
+           "instante_s": 0.3
+          }
+         ],
+         "indice": 1,
+         "desde_s": 5.1875,
+         "hasta_s": 5.7875,
+         "correcto": null,
+         "auditable": true,
+         "orden_observado": [
+          "pelvis",
+          "torso"
+         ],
+         "motivo_no_auditable": null
+        }
+       ],
+       "orden_esperado": [
+        "pelvis",
+        "torso",
+        "brazo"
+       ]
+      },
+      "version_contrato": "1.3",
+      "comparacion_propia": null
+     }
+    },
+    {
+     "id": "72448beb-db4b-4202-8a57-f99ab44dbd51",
+     "estado": "parcial",
+     "reporte": {
+      "gesto": "saque",
+      "metricas": [
+       {
+        "valor": 757.45,
+        "nombre": "velocidad_pico_pelvis",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": 612.945,
+        "nombre": "velocidad_pico_torso",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 0.999
+       },
+       {
+        "valor": null,
+        "nombre": "velocidad_pico_brazo",
+        "unidad": "grados/s",
+        "auditable": false,
+        "confianza": 0.963
+       },
+       {
+        "valor": 28.8,
+        "nombre": "separacion_cadera_hombro_max",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": 176.3,
+        "nombre": "angulo_rodilla_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 0.745
+       },
+       {
+        "valor": 165.1,
+        "nombre": "angulo_codo_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 0.991
+       }
+      ],
+      "video_id": "72448beb-db4b-4202-8a57-f99ab44dbd51",
+      "cobertura": {
+       "auditable_pct": 64.07,
+       "tramos_no_auditables": [
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 0.0,
+         "hasta_s": 0.525
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 2.862,
+         "hasta_s": 3.021
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 3.171,
+         "hasta_s": 3.204
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 3.629,
+         "hasta_s": 3.737
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 3.829,
+         "hasta_s": 4.35
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 4.758,
+         "hasta_s": 5.479
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 5.55,
+         "hasta_s": 6.287
+        }
+       ]
+      },
+      "creado_en": "2026-10-13T05:16:51.906735Z",
+      "artefactos": {
+       "pdf_ruta": null,
+       "overlay_info": {
+        "desde_s": 5.4583,
+        "hasta_s": 7.0583,
+        "factor_lento": 8.0,
+        "fps_reproduccion": 30
+       },
+       "overlay_ruta": "usuario/72448beb-db4b-4202-8a57-f99ab44dbd51/esqueleto.mp4",
+       "fotogramas_clave": [
+        {
+         "ruta": "usuario/72448beb-db4b-4202-8a57-f99ab44dbd51/clave_pelvis.jpg",
+         "segmento": "pelvis",
+         "instante_s": 0.2917
+        },
+        {
+         "ruta": "usuario/72448beb-db4b-4202-8a57-f99ab44dbd51/clave_torso.jpg",
+         "segmento": "torso",
+         "instante_s": 0.3
+        }
+       ]
+      },
+      "reporte_id": "8ef1fa5a-94de-49e5-a134-ea62ea418bd7",
+      "segmentacion": {
+       "metodo": "ancla_torso",
+       "repeticiones_marcadas": 1,
+       "repeticiones_auditables": 0
+      },
+      "trazabilidad": {
+       "filtro": {
+        "tipo": "butterworth",
+        "orden": 4,
+        "corte_hz": 7.0,
+        "fase_cero": true
+       },
+       "fps_real": 200.20253076466878,
+       "fps_nominal": 239.981,
+       "backend_pose": "mediapipe",
+       "modo_captura": "camara_lenta_240",
+       "origen_factor": "marcas_de_tiempo",
+       "version_motor": "0.5.3",
+       "regularizacion": {
+        "fps_grilla": 240.0,
+        "fps_real_medio": 200.374,
+        "hueco_maximo_ms": 16.67,
+        "puntos_copiados": 1564,
+        "puntos_sin_dato": 0,
+        "fotogramas_fuente": 1564,
+        "puntos_de_la_grilla": 1873,
+        "puntos_interpolados": 309,
+        "puntos_interpolados_pct": 16.5
+       },
+       "apto_fase_rapida": true,
+       "tolerancia_orden_ms": 8.333,
+       "factor_ralentizacion": 1.0,
+       "fotogramas_perdidos_pct": 16.58,
+       "escala_temporal_conocida": true
+      },
+      "observaciones": [
+       {
+        "texto": "La cadera y el tronco alcanzaron su velocidad máxima casi al mismo tiempo: a esta resolución del video no se puede saber cuál fue primero.",
+        "severidad": "no_auditable",
+        "fundamento": "Simultaneidad al límite de resolución. Diferencia: 8 ms; la tolerancia es de 8,3 ms y 1 fotograma ≈ 5 ms a 200 fps reales.",
+        "referencia": null
+       },
+       {
+        "texto": "No se pudo medir el instante en que el brazo alcanzó su velocidad máxima en este golpe.",
+        "severidad": "no_auditable",
+        "fundamento": null,
+        "referencia": null
+       }
+      ],
+      "secuenciacion": {
+       "resumen": {
+        "orden_predominante": [],
+        "repeticiones_correctas": 0,
+        "repeticiones_evaluadas": 1,
+        "dispersion_instante_pico_torso_ms": null
+       },
+       "repeticiones": [
+        {
+         "picos": [
+          {
+           "unidad": "grados/s",
+           "segmento": "pelvis",
+           "confianza": 1.0,
+           "velocidad": 757.45,
+           "instante_s": 0.2917
+          },
+          {
+           "unidad": "grados/s",
+           "segmento": "torso",
+           "confianza": 0.999,
+           "velocidad": 612.945,
+           "instante_s": 0.3
+          }
+         ],
+         "indice": 1,
+         "desde_s": 5.9583,
+         "hasta_s": 6.5583,
+         "correcto": null,
+         "auditable": false,
+         "orden_observado": null,
+         "motivo_no_auditable": "sin pico auditable para: brazo"
+        }
+       ],
+       "orden_esperado": [
+        "pelvis",
+        "torso",
+        "brazo"
+       ]
+      },
+      "version_contrato": "1.3",
+      "comparacion_propia": null
+     }
+    },
+    {
+     "id": "5aabb44a-690a-44ae-89d7-f0755017f53e",
+     "estado": "completado",
+     "reporte": {
+      "gesto": "saque",
+      "metricas": [
+       {
+        "valor": 428.693,
+        "nombre": "velocidad_pico_pelvis",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": 373.406,
+        "nombre": "velocidad_pico_torso",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 0.999
+       },
+       {
+        "valor": null,
+        "nombre": "velocidad_pico_brazo",
+        "unidad": "grados/s",
+        "auditable": false,
+        "confianza": 0.958
+       },
+       {
+        "valor": 31.9,
+        "nombre": "separacion_cadera_hombro_max",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": 172.0,
+        "nombre": "angulo_rodilla_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 0.669
+       },
+       {
+        "valor": 138.7,
+        "nombre": "angulo_codo_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 0.862
+       }
+      ],
+      "video_id": "5aabb44a-690a-44ae-89d7-f0755017f53e",
+      "cobertura": {
+       "auditable_pct": 78.73,
+       "tramos_no_auditables": [
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 2.304,
+         "hasta_s": 2.346
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 2.896,
+         "hasta_s": 2.925
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 3.05,
+         "hasta_s": 3.087
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 3.188,
+         "hasta_s": 3.246
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 3.812,
+         "hasta_s": 5.138
+        }
+       ]
+      },
+      "creado_en": "2026-10-13T05:21:04.480195Z",
+      "artefactos": {
+       "pdf_ruta": null,
+       "overlay_info": {
+        "desde_s": 4.3208,
+        "hasta_s": 5.9208,
+        "factor_lento": 8.0,
+        "fps_reproduccion": 30
+       },
+       "overlay_ruta": "usuario/5aabb44a-690a-44ae-89d7-f0755017f53e/esqueleto.mp4",
+       "fotogramas_clave": [
+        {
+         "ruta": "usuario/5aabb44a-690a-44ae-89d7-f0755017f53e/clave_pelvis.jpg",
+         "segmento": "pelvis",
+         "instante_s": 0.2583
+        },
+        {
+         "ruta": "usuario/5aabb44a-690a-44ae-89d7-f0755017f53e/clave_torso.jpg",
+         "segmento": "torso",
+         "instante_s": 0.3
+        }
+       ]
+      },
+      "reporte_id": "50628524-ba16-4fb9-8a38-92d7c4f33f08",
+      "segmentacion": {
+       "metodo": "ancla_torso",
+       "repeticiones_marcadas": 1,
+       "repeticiones_auditables": 1
+      },
+      "trazabilidad": {
+       "filtro": {
+        "tipo": "butterworth",
+        "orden": 4,
+        "corte_hz": 7.0,
+        "fase_cero": true
+       },
+       "fps_real": 200.86537126521284,
+       "fps_nominal": 239.981,
+       "backend_pose": "mediapipe",
+       "modo_captura": "camara_lenta_240",
+       "origen_factor": "marcas_de_tiempo",
+       "version_motor": "0.5.3",
+       "regularizacion": {
+        "fps_grilla": 240.0,
+        "fps_real_medio": 201.034,
+        "hueco_maximo_ms": 16.67,
+        "puntos_copiados": 1410,
+        "puntos_sin_dato": 0,
+        "fotogramas_fuente": 1410,
+        "puntos_de_la_grilla": 1683,
+        "puntos_interpolados": 273,
+        "puntos_interpolados_pct": 16.22
+       },
+       "apto_fase_rapida": true,
+       "tolerancia_orden_ms": 8.333,
+       "factor_ralentizacion": 1.0,
+       "fotogramas_perdidos_pct": 16.3,
+       "escala_temporal_conocida": true
+      },
+      "observaciones": [
+       {
+        "texto": "Se observa que la cadera alcanzó su velocidad máxima 42 ms antes que el tronco. El orden entre tu cadera y tu tronco cambia según desde dónde se grabó el golpe, y todavía no podemos asegurar cuál es el correcto. Por eso lo registramos sin evaluarlo.",
+        "severidad": "sin_evaluar",
+        "fundamento": "Instantes de la velocidad máxima, desde el inicio de la ventana analizada: cadera 0,258 s, tronco 0,300 s. En este gesto el orden medido depende del encuadre: con los originales a tasa real, el saque da la cadera primero en tres cuartos (7 de 7 ordenables) y el tronco primero en perfil (8 de 8). Mientras no haya una medición independiente de la pelvis no se emite veredicto.",
+        "referencia": null
+       },
+       {
+        "texto": "No se pudo medir el instante en que el brazo alcanzó su velocidad máxima en este golpe.",
+        "severidad": "no_auditable",
+        "fundamento": null,
+        "referencia": null
+       }
+      ],
+      "secuenciacion": {
+       "resumen": {
+        "orden_predominante": [
+         "pelvis",
+         "torso"
+        ],
+        "repeticiones_correctas": 0,
+        "repeticiones_evaluadas": 1,
+        "dispersion_instante_pico_torso_ms": null
+       },
+       "repeticiones": [
+        {
+         "picos": [
+          {
+           "unidad": "grados/s",
+           "segmento": "pelvis",
+           "confianza": 1.0,
+           "velocidad": 428.693,
+           "instante_s": 0.2583
+          },
+          {
+           "unidad": "grados/s",
+           "segmento": "torso",
+           "confianza": 0.999,
+           "velocidad": 373.406,
+           "instante_s": 0.3
+          }
+         ],
+         "indice": 1,
+         "desde_s": 4.8208,
+         "hasta_s": 5.4208,
+         "correcto": null,
+         "auditable": true,
+         "orden_observado": [
+          "pelvis",
+          "torso"
+         ],
+         "motivo_no_auditable": null
+        }
+       ],
+       "orden_esperado": [
+        "pelvis",
+        "torso",
+        "brazo"
+       ]
+      },
+      "version_contrato": "1.3",
+      "comparacion_propia": null
+     }
+    },
+    {
+     "id": "53b304bd-cb18-4b9c-b2ce-a4eccbc2e9ed",
+     "estado": "parcial",
+     "reporte": {
+      "gesto": "saque",
+      "metricas": [
+       {
+        "valor": 792.971,
+        "nombre": "velocidad_pico_pelvis",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": 545.331,
+        "nombre": "velocidad_pico_torso",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 0.998
+       },
+       {
+        "valor": null,
+        "nombre": "velocidad_pico_brazo",
+        "unidad": "grados/s",
+        "auditable": false,
+        "confianza": 0.959
+       },
+       {
+        "valor": 34.0,
+        "nombre": "separacion_cadera_hombro_max",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": null,
+        "nombre": "angulo_rodilla_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": false,
+        "confianza": 0.455
+       },
+       {
+        "valor": 157.1,
+        "nombre": "angulo_codo_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 0.748
+       }
+      ],
+      "video_id": "53b304bd-cb18-4b9c-b2ce-a4eccbc2e9ed",
+      "cobertura": {
+       "auditable_pct": 78.84,
+       "tramos_no_auditables": [
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 2.279,
+         "hasta_s": 2.383
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 2.562,
+         "hasta_s": 2.587
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 2.654,
+         "hasta_s": 2.679
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 4.021,
+         "hasta_s": 5.283
+        }
+       ]
+      },
+      "creado_en": "2026-10-13T05:25:10.342934Z",
+      "artefactos": {
+       "pdf_ruta": null,
+       "overlay_info": {
+        "desde_s": 4.4083,
+        "hasta_s": 6.0083,
+        "factor_lento": 8.0,
+        "fps_reproduccion": 30
+       },
+       "overlay_ruta": "usuario/53b304bd-cb18-4b9c-b2ce-a4eccbc2e9ed/esqueleto.mp4",
+       "fotogramas_clave": [
+        {
+         "ruta": "usuario/53b304bd-cb18-4b9c-b2ce-a4eccbc2e9ed/clave_pelvis.jpg",
+         "segmento": "pelvis",
+         "instante_s": 0.2958
+        },
+        {
+         "ruta": "usuario/53b304bd-cb18-4b9c-b2ce-a4eccbc2e9ed/clave_torso.jpg",
+         "segmento": "torso",
+         "instante_s": 0.3
+        }
+       ]
+      },
+      "reporte_id": "8c1579d0-52f0-4027-a5c0-d58dfafde8c7",
+      "segmentacion": {
+       "metodo": "ancla_torso",
+       "repeticiones_marcadas": 1,
+       "repeticiones_auditables": 0
+      },
+      "trazabilidad": {
+       "filtro": {
+        "tipo": "butterworth",
+        "orden": 4,
+        "corte_hz": 8.0,
+        "fase_cero": true
+       },
+       "fps_real": 200.77008069705226,
+       "fps_nominal": 239.981,
+       "backend_pose": "mediapipe",
+       "modo_captura": "camara_lenta_240",
+       "origen_factor": "marcas_de_tiempo",
+       "version_motor": "0.5.3",
+       "regularizacion": {
+        "fps_grilla": 240.0,
+        "fps_real_medio": 200.971,
+        "hueco_maximo_ms": 12.92,
+        "puntos_copiados": 1121,
+        "puntos_sin_dato": 0,
+        "fotogramas_fuente": 1346,
+        "puntos_de_la_grilla": 1607,
+        "puntos_interpolados": 486,
+        "puntos_interpolados_pct": 30.24
+       },
+       "apto_fase_rapida": true,
+       "tolerancia_orden_ms": 8.333,
+       "factor_ralentizacion": 1.0,
+       "fotogramas_perdidos_pct": 16.34,
+       "escala_temporal_conocida": true
+      },
+      "observaciones": [
+       {
+        "texto": "La cadera y el tronco alcanzaron su velocidad máxima casi al mismo tiempo: a esta resolución del video no se puede saber cuál fue primero.",
+        "severidad": "no_auditable",
+        "fundamento": "Simultaneidad al límite de resolución. Diferencia: 4 ms; la tolerancia es de 8,3 ms y 1 fotograma ≈ 5 ms a 201 fps reales.",
+        "referencia": null
+       },
+       {
+        "texto": "No se pudo medir el instante en que el brazo alcanzó su velocidad máxima en este golpe.",
+        "severidad": "no_auditable",
+        "fundamento": null,
+        "referencia": null
+       }
+      ],
+      "secuenciacion": {
+       "resumen": {
+        "orden_predominante": [],
+        "repeticiones_correctas": 0,
+        "repeticiones_evaluadas": 1,
+        "dispersion_instante_pico_torso_ms": null
+       },
+       "repeticiones": [
+        {
+         "picos": [
+          {
+           "unidad": "grados/s",
+           "segmento": "pelvis",
+           "confianza": 1.0,
+           "velocidad": 792.971,
+           "instante_s": 0.2958
+          },
+          {
+           "unidad": "grados/s",
+           "segmento": "torso",
+           "confianza": 0.998,
+           "velocidad": 545.331,
+           "instante_s": 0.3
+          }
+         ],
+         "indice": 1,
+         "desde_s": 4.9083,
+         "hasta_s": 5.5083,
+         "correcto": null,
+         "auditable": false,
+         "orden_observado": null,
+         "motivo_no_auditable": "sin pico auditable para: brazo"
+        }
+       ],
+       "orden_esperado": [
+        "pelvis",
+        "torso",
+        "brazo"
+       ]
+      },
+      "version_contrato": "1.3",
+      "comparacion_propia": null
+     }
+    },
+    {
+     "id": "e3e341ff-527a-47bb-84d3-394afb9d46ca",
+     "estado": "completado",
+     "reporte": {
+      "gesto": "saque",
+      "metricas": [
+       {
+        "valor": 930.432,
+        "nombre": "velocidad_pico_pelvis",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": 497.836,
+        "nombre": "velocidad_pico_torso",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 0.999
+       },
+       {
+        "valor": null,
+        "nombre": "velocidad_pico_brazo",
+        "unidad": "grados/s",
+        "auditable": false,
+        "confianza": 0.962
+       },
+       {
+        "valor": 41.5,
+        "nombre": "separacion_cadera_hombro_max",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": 173.6,
+        "nombre": "angulo_rodilla_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 0.919
+       },
+       {
+        "valor": 131.9,
+        "nombre": "angulo_codo_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 0.946
+       }
+      ],
+      "video_id": "e3e341ff-527a-47bb-84d3-394afb9d46ca",
+      "cobertura": {
+       "auditable_pct": 73.68,
+       "tramos_no_auditables": [
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 2.15,
+         "hasta_s": 3.413
+        }
+       ]
+      },
+      "creado_en": "2026-10-13T05:28:12.717903Z",
+      "artefactos": {
+       "pdf_ruta": null,
+       "overlay_info": {
+        "desde_s": 2.5333,
+        "hasta_s": 4.1333,
+        "factor_lento": 8.0,
+        "fps_reproduccion": 30
+       },
+       "overlay_ruta": "usuario/e3e341ff-527a-47bb-84d3-394afb9d46ca/esqueleto.mp4",
+       "fotogramas_clave": [
+        {
+         "ruta": "usuario/e3e341ff-527a-47bb-84d3-394afb9d46ca/clave_pelvis.jpg",
+         "segmento": "pelvis",
+         "instante_s": 0.2833
+        },
+        {
+         "ruta": "usuario/e3e341ff-527a-47bb-84d3-394afb9d46ca/clave_torso.jpg",
+         "segmento": "torso",
+         "instante_s": 0.3
+        }
+       ]
+      },
+      "reporte_id": "9c5b7d20-3113-4cf4-9266-0361b8847dc8",
+      "segmentacion": {
+       "metodo": "ancla_torso",
+       "repeticiones_marcadas": 1,
+       "repeticiones_auditables": 1
+      },
+      "trazabilidad": {
+       "filtro": {
+        "tipo": "butterworth",
+        "orden": 4,
+        "corte_hz": 9.0,
+        "fase_cero": true
+       },
+       "fps_real": 200.25994281258124,
+       "fps_nominal": 239.981,
+       "backend_pose": "mediapipe",
+       "modo_captura": "camara_lenta_240",
+       "origen_factor": "marcas_de_tiempo",
+       "version_motor": "0.5.3",
+       "regularizacion": {
+        "fps_grilla": 240.0,
+        "fps_real_medio": 200.539,
+        "hueco_maximo_ms": 16.67,
+        "puntos_copiados": 962,
+        "puntos_sin_dato": 0,
+        "fotogramas_fuente": 962,
+        "puntos_de_la_grilla": 1151,
+        "puntos_interpolados": 189,
+        "puntos_interpolados_pct": 16.42
+       },
+       "apto_fase_rapida": true,
+       "tolerancia_orden_ms": 8.333,
+       "factor_ralentizacion": 1.0,
+       "fotogramas_perdidos_pct": 16.55,
+       "escala_temporal_conocida": true
+      },
+      "observaciones": [
+       {
+        "texto": "Se observa que la cadera alcanzó su velocidad máxima 17 ms antes que el tronco. El orden entre tu cadera y tu tronco cambia según desde dónde se grabó el golpe, y todavía no podemos asegurar cuál es el correcto. Por eso lo registramos sin evaluarlo.",
+        "severidad": "sin_evaluar",
+        "fundamento": "Instantes de la velocidad máxima, desde el inicio de la ventana analizada: cadera 0,283 s, tronco 0,300 s. En este gesto el orden medido depende del encuadre: con los originales a tasa real, el saque da la cadera primero en tres cuartos (7 de 7 ordenables) y el tronco primero en perfil (8 de 8). Mientras no haya una medición independiente de la pelvis no se emite veredicto.",
+        "referencia": null
+       },
+       {
+        "texto": "No se pudo medir el instante en que el brazo alcanzó su velocidad máxima en este golpe.",
+        "severidad": "no_auditable",
+        "fundamento": null,
+        "referencia": null
+       }
+      ],
+      "secuenciacion": {
+       "resumen": {
+        "orden_predominante": [
+         "pelvis",
+         "torso"
+        ],
+        "repeticiones_correctas": 0,
+        "repeticiones_evaluadas": 1,
+        "dispersion_instante_pico_torso_ms": null
+       },
+       "repeticiones": [
+        {
+         "picos": [
+          {
+           "unidad": "grados/s",
+           "segmento": "pelvis",
+           "confianza": 1.0,
+           "velocidad": 930.432,
+           "instante_s": 0.2833
+          },
+          {
+           "unidad": "grados/s",
+           "segmento": "torso",
+           "confianza": 0.999,
+           "velocidad": 497.836,
+           "instante_s": 0.3
+          }
+         ],
+         "indice": 1,
+         "desde_s": 3.0333,
+         "hasta_s": 3.6333,
+         "correcto": null,
+         "auditable": true,
+         "orden_observado": [
+          "pelvis",
+          "torso"
+         ],
+         "motivo_no_auditable": null
+        }
+       ],
+       "orden_esperado": [
+        "pelvis",
+        "torso",
+        "brazo"
+       ]
+      },
+      "version_contrato": "1.3",
+      "comparacion_propia": null
+     }
+    }
+   ],
+   "consistencia": {
+    "version_regla": "1",
+    "golpes": {
+     "total": 5,
+     "medidos": 5,
+     "no_medibles": 0,
+     "en_analisis": 0,
+     "con_orden_distinguible": 3
+    },
+    "separacion_cadera_hombro": {
+     "n": 5,
+     "unidad": "grados",
+     "mediana": 34.0,
+     "dispersion": 3.11,
+     "minimo": 28.8,
+     "maximo": 41.5,
+     "valores": [
+      {
+       "video_id": "bba27843-a2d3-440e-a8e7-7bfc27d8a95a",
+       "valor": 34.7
+      },
+      {
+       "video_id": "72448beb-db4b-4202-8a57-f99ab44dbd51",
+       "valor": 28.8
+      },
+      {
+       "video_id": "5aabb44a-690a-44ae-89d7-f0755017f53e",
+       "valor": 31.9
+      },
+      {
+       "video_id": "53b304bd-cb18-4b9c-b2ce-a4eccbc2e9ed",
+       "valor": 34.0
+      },
+      {
+       "video_id": "e3e341ff-527a-47bb-84d3-394afb9d46ca",
+       "valor": 41.5
+      }
+     ]
+    },
+    "orden": {
+     "medidos": 5,
+     "ordenables": 3,
+     "mismo_orden": 3,
+     "orden_modal": [
+      "pelvis",
+      "torso"
+     ],
+     "suficiente": false
+    },
+    "golpe_tipico": "53b304bd-cb18-4b9c-b2ce-a4eccbc2e9ed",
+    "golpes_que_se_apartan": [],
+    "versiones_motor": [
+     "0.5.3"
+    ],
+    "mezcla_de_versiones": false,
+    "minimos": {
+     "dispersion": 4,
+     "repetibilidad": 5,
+     "se_apartan": 5
+    },
+    "sesion_id": "sesion-ejemplo",
+    "gesto": "saque",
+    "encuadre": "tres_cuartos",
+    "fecha": "2026-09-25"
+   }
+  },
+  "un_ordenable": {
+   "golpes": [
+    {
+     "id": "bba27843-a2d3-440e-a8e7-7bfc27d8a95a",
+     "estado": "completado",
+     "reporte": {
+      "gesto": "saque",
+      "metricas": [
+       {
+        "valor": 626.915,
+        "nombre": "velocidad_pico_pelvis",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": 485.061,
+        "nombre": "velocidad_pico_torso",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 0.999
+       },
+       {
+        "valor": null,
+        "nombre": "velocidad_pico_brazo",
+        "unidad": "grados/s",
+        "auditable": false,
+        "confianza": 0.937
+       },
+       {
+        "valor": 34.7,
+        "nombre": "separacion_cadera_hombro_max",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": 178.1,
+        "nombre": "angulo_rodilla_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 0.855
+       },
+       {
+        "valor": 121.9,
+        "nombre": "angulo_codo_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 0.901
+       }
+      ],
+      "video_id": "bba27843-a2d3-440e-a8e7-7bfc27d8a95a",
+      "cobertura": {
+       "auditable_pct": 77.04,
+       "tramos_no_auditables": [
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 0.0,
+         "hasta_s": 0.004
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 2.625,
+         "hasta_s": 2.654
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 3.888,
+         "hasta_s": 5.508
+        }
+       ]
+      },
+      "creado_en": "2026-10-13T05:12:10.664658Z",
+      "artefactos": {
+       "pdf_ruta": null,
+       "overlay_info": {
+        "desde_s": 4.6875,
+        "hasta_s": 6.2875,
+        "factor_lento": 8.0,
+        "fps_reproduccion": 30
+       },
+       "overlay_ruta": "usuario/bba27843-a2d3-440e-a8e7-7bfc27d8a95a/esqueleto.mp4",
+       "fotogramas_clave": [
+        {
+         "ruta": "usuario/bba27843-a2d3-440e-a8e7-7bfc27d8a95a/clave_pelvis.jpg",
+         "segmento": "pelvis",
+         "instante_s": 0.2833
+        },
+        {
+         "ruta": "usuario/bba27843-a2d3-440e-a8e7-7bfc27d8a95a/clave_torso.jpg",
+         "segmento": "torso",
+         "instante_s": 0.3
+        }
+       ]
+      },
+      "reporte_id": "2942f412-e8b3-4c31-8e13-5ecb6b44acd1",
+      "segmentacion": {
+       "metodo": "ancla_torso",
+       "repeticiones_marcadas": 1,
+       "repeticiones_auditables": 1
+      },
+      "trazabilidad": {
+       "filtro": {
+        "tipo": "butterworth",
+        "orden": 4,
+        "corte_hz": 9.0,
+        "fase_cero": true
+       },
+       "fps_real": 199.98841733749586,
+       "fps_nominal": 239.981,
+       "backend_pose": "mediapipe",
+       "modo_captura": "camara_lenta_240",
+       "origen_factor": "marcas_de_tiempo",
+       "version_motor": "0.5.3",
+       "regularizacion": {
+        "fps_grilla": 240.0,
+        "fps_real_medio": 199.988,
+        "hueco_maximo_ms": 12.5,
+        "puntos_copiados": 1441,
+        "puntos_sin_dato": 0,
+        "fotogramas_fuente": 1441,
+        "puntos_de_la_grilla": 1729,
+        "puntos_interpolados": 288,
+        "puntos_interpolados_pct": 16.66
+       },
+       "apto_fase_rapida": true,
+       "tolerancia_orden_ms": 8.333,
+       "factor_ralentizacion": 1.0,
+       "fotogramas_perdidos_pct": 16.66,
+       "escala_temporal_conocida": true
+      },
+      "observaciones": [
+       {
+        "texto": "Se observa que la cadera alcanzó su velocidad máxima 17 ms antes que el tronco. El orden entre tu cadera y tu tronco cambia según desde dónde se grabó el golpe, y todavía no podemos asegurar cuál es el correcto. Por eso lo registramos sin evaluarlo.",
+        "severidad": "sin_evaluar",
+        "fundamento": "Instantes de la velocidad máxima, desde el inicio de la ventana analizada: cadera 0,283 s, tronco 0,300 s. En este gesto el orden medido depende del encuadre: con los originales a tasa real, el saque da la cadera primero en tres cuartos (7 de 7 ordenables) y el tronco primero en perfil (8 de 8). Mientras no haya una medición independiente de la pelvis no se emite veredicto.",
+        "referencia": null
+       },
+       {
+        "texto": "No se pudo medir el instante en que el brazo alcanzó su velocidad máxima en este golpe.",
+        "severidad": "no_auditable",
+        "fundamento": null,
+        "referencia": null
+       }
+      ],
+      "secuenciacion": {
+       "resumen": {
+        "orden_predominante": [
+         "pelvis",
+         "torso"
+        ],
+        "repeticiones_correctas": 0,
+        "repeticiones_evaluadas": 1,
+        "dispersion_instante_pico_torso_ms": null
+       },
+       "repeticiones": [
+        {
+         "picos": [
+          {
+           "unidad": "grados/s",
+           "segmento": "pelvis",
+           "confianza": 1.0,
+           "velocidad": 626.915,
+           "instante_s": 0.2833
+          },
+          {
+           "unidad": "grados/s",
+           "segmento": "torso",
+           "confianza": 0.999,
+           "velocidad": 485.061,
+           "instante_s": 0.3
+          }
+         ],
+         "indice": 1,
+         "desde_s": 5.1875,
+         "hasta_s": 5.7875,
+         "correcto": null,
+         "auditable": true,
+         "orden_observado": [
+          "pelvis",
+          "torso"
+         ],
+         "motivo_no_auditable": null
+        }
+       ],
+       "orden_esperado": [
+        "pelvis",
+        "torso",
+        "brazo"
+       ]
+      },
+      "version_contrato": "1.3",
+      "comparacion_propia": null
+     }
+    },
+    {
+     "id": "72448beb-db4b-4202-8a57-f99ab44dbd51",
+     "estado": "parcial",
+     "reporte": {
+      "gesto": "saque",
+      "metricas": [
+       {
+        "valor": 757.45,
+        "nombre": "velocidad_pico_pelvis",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": 612.945,
+        "nombre": "velocidad_pico_torso",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 0.999
+       },
+       {
+        "valor": null,
+        "nombre": "velocidad_pico_brazo",
+        "unidad": "grados/s",
+        "auditable": false,
+        "confianza": 0.963
+       },
+       {
+        "valor": 28.8,
+        "nombre": "separacion_cadera_hombro_max",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": 176.3,
+        "nombre": "angulo_rodilla_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 0.745
+       },
+       {
+        "valor": 165.1,
+        "nombre": "angulo_codo_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 0.991
+       }
+      ],
+      "video_id": "72448beb-db4b-4202-8a57-f99ab44dbd51",
+      "cobertura": {
+       "auditable_pct": 64.07,
+       "tramos_no_auditables": [
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 0.0,
+         "hasta_s": 0.525
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 2.862,
+         "hasta_s": 3.021
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 3.171,
+         "hasta_s": 3.204
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 3.629,
+         "hasta_s": 3.737
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 3.829,
+         "hasta_s": 4.35
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 4.758,
+         "hasta_s": 5.479
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 5.55,
+         "hasta_s": 6.287
+        }
+       ]
+      },
+      "creado_en": "2026-10-13T05:16:51.906735Z",
+      "artefactos": {
+       "pdf_ruta": null,
+       "overlay_info": {
+        "desde_s": 5.4583,
+        "hasta_s": 7.0583,
+        "factor_lento": 8.0,
+        "fps_reproduccion": 30
+       },
+       "overlay_ruta": "usuario/72448beb-db4b-4202-8a57-f99ab44dbd51/esqueleto.mp4",
+       "fotogramas_clave": [
+        {
+         "ruta": "usuario/72448beb-db4b-4202-8a57-f99ab44dbd51/clave_pelvis.jpg",
+         "segmento": "pelvis",
+         "instante_s": 0.2917
+        },
+        {
+         "ruta": "usuario/72448beb-db4b-4202-8a57-f99ab44dbd51/clave_torso.jpg",
+         "segmento": "torso",
+         "instante_s": 0.3
+        }
+       ]
+      },
+      "reporte_id": "8ef1fa5a-94de-49e5-a134-ea62ea418bd7",
+      "segmentacion": {
+       "metodo": "ancla_torso",
+       "repeticiones_marcadas": 1,
+       "repeticiones_auditables": 0
+      },
+      "trazabilidad": {
+       "filtro": {
+        "tipo": "butterworth",
+        "orden": 4,
+        "corte_hz": 7.0,
+        "fase_cero": true
+       },
+       "fps_real": 200.20253076466878,
+       "fps_nominal": 239.981,
+       "backend_pose": "mediapipe",
+       "modo_captura": "camara_lenta_240",
+       "origen_factor": "marcas_de_tiempo",
+       "version_motor": "0.5.3",
+       "regularizacion": {
+        "fps_grilla": 240.0,
+        "fps_real_medio": 200.374,
+        "hueco_maximo_ms": 16.67,
+        "puntos_copiados": 1564,
+        "puntos_sin_dato": 0,
+        "fotogramas_fuente": 1564,
+        "puntos_de_la_grilla": 1873,
+        "puntos_interpolados": 309,
+        "puntos_interpolados_pct": 16.5
+       },
+       "apto_fase_rapida": true,
+       "tolerancia_orden_ms": 8.333,
+       "factor_ralentizacion": 1.0,
+       "fotogramas_perdidos_pct": 16.58,
+       "escala_temporal_conocida": true
+      },
+      "observaciones": [
+       {
+        "texto": "La cadera y el tronco alcanzaron su velocidad máxima casi al mismo tiempo: a esta resolución del video no se puede saber cuál fue primero.",
+        "severidad": "no_auditable",
+        "fundamento": "Simultaneidad al límite de resolución. Diferencia: 8 ms; la tolerancia es de 8,3 ms y 1 fotograma ≈ 5 ms a 200 fps reales.",
+        "referencia": null
+       },
+       {
+        "texto": "No se pudo medir el instante en que el brazo alcanzó su velocidad máxima en este golpe.",
+        "severidad": "no_auditable",
+        "fundamento": null,
+        "referencia": null
+       }
+      ],
+      "secuenciacion": {
+       "resumen": {
+        "orden_predominante": [],
+        "repeticiones_correctas": 0,
+        "repeticiones_evaluadas": 1,
+        "dispersion_instante_pico_torso_ms": null
+       },
+       "repeticiones": [
+        {
+         "picos": [
+          {
+           "unidad": "grados/s",
+           "segmento": "pelvis",
+           "confianza": 1.0,
+           "velocidad": 757.45,
+           "instante_s": 0.2917
+          },
+          {
+           "unidad": "grados/s",
+           "segmento": "torso",
+           "confianza": 0.999,
+           "velocidad": 612.945,
+           "instante_s": 0.3
+          }
+         ],
+         "indice": 1,
+         "desde_s": 5.9583,
+         "hasta_s": 6.5583,
+         "correcto": null,
+         "auditable": false,
+         "orden_observado": null,
+         "motivo_no_auditable": "sin pico auditable para: brazo"
+        }
+       ],
+       "orden_esperado": [
+        "pelvis",
+        "torso",
+        "brazo"
+       ]
+      },
+      "version_contrato": "1.3",
+      "comparacion_propia": null
+     }
+    },
+    {
+     "id": "53b304bd-cb18-4b9c-b2ce-a4eccbc2e9ed",
+     "estado": "parcial",
+     "reporte": {
+      "gesto": "saque",
+      "metricas": [
+       {
+        "valor": 792.971,
+        "nombre": "velocidad_pico_pelvis",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": 545.331,
+        "nombre": "velocidad_pico_torso",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 0.998
+       },
+       {
+        "valor": null,
+        "nombre": "velocidad_pico_brazo",
+        "unidad": "grados/s",
+        "auditable": false,
+        "confianza": 0.959
+       },
+       {
+        "valor": 34.0,
+        "nombre": "separacion_cadera_hombro_max",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": null,
+        "nombre": "angulo_rodilla_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": false,
+        "confianza": 0.455
+       },
+       {
+        "valor": 157.1,
+        "nombre": "angulo_codo_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 0.748
+       }
+      ],
+      "video_id": "53b304bd-cb18-4b9c-b2ce-a4eccbc2e9ed",
+      "cobertura": {
+       "auditable_pct": 78.84,
+       "tramos_no_auditables": [
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 2.279,
+         "hasta_s": 2.383
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 2.562,
+         "hasta_s": 2.587
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 2.654,
+         "hasta_s": 2.679
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 4.021,
+         "hasta_s": 5.283
+        }
+       ]
+      },
+      "creado_en": "2026-10-13T05:25:10.342934Z",
+      "artefactos": {
+       "pdf_ruta": null,
+       "overlay_info": {
+        "desde_s": 4.4083,
+        "hasta_s": 6.0083,
+        "factor_lento": 8.0,
+        "fps_reproduccion": 30
+       },
+       "overlay_ruta": "usuario/53b304bd-cb18-4b9c-b2ce-a4eccbc2e9ed/esqueleto.mp4",
+       "fotogramas_clave": [
+        {
+         "ruta": "usuario/53b304bd-cb18-4b9c-b2ce-a4eccbc2e9ed/clave_pelvis.jpg",
+         "segmento": "pelvis",
+         "instante_s": 0.2958
+        },
+        {
+         "ruta": "usuario/53b304bd-cb18-4b9c-b2ce-a4eccbc2e9ed/clave_torso.jpg",
+         "segmento": "torso",
+         "instante_s": 0.3
+        }
+       ]
+      },
+      "reporte_id": "8c1579d0-52f0-4027-a5c0-d58dfafde8c7",
+      "segmentacion": {
+       "metodo": "ancla_torso",
+       "repeticiones_marcadas": 1,
+       "repeticiones_auditables": 0
+      },
+      "trazabilidad": {
+       "filtro": {
+        "tipo": "butterworth",
+        "orden": 4,
+        "corte_hz": 8.0,
+        "fase_cero": true
+       },
+       "fps_real": 200.77008069705226,
+       "fps_nominal": 239.981,
+       "backend_pose": "mediapipe",
+       "modo_captura": "camara_lenta_240",
+       "origen_factor": "marcas_de_tiempo",
+       "version_motor": "0.5.3",
+       "regularizacion": {
+        "fps_grilla": 240.0,
+        "fps_real_medio": 200.971,
+        "hueco_maximo_ms": 12.92,
+        "puntos_copiados": 1121,
+        "puntos_sin_dato": 0,
+        "fotogramas_fuente": 1346,
+        "puntos_de_la_grilla": 1607,
+        "puntos_interpolados": 486,
+        "puntos_interpolados_pct": 30.24
+       },
+       "apto_fase_rapida": true,
+       "tolerancia_orden_ms": 8.333,
+       "factor_ralentizacion": 1.0,
+       "fotogramas_perdidos_pct": 16.34,
+       "escala_temporal_conocida": true
+      },
+      "observaciones": [
+       {
+        "texto": "La cadera y el tronco alcanzaron su velocidad máxima casi al mismo tiempo: a esta resolución del video no se puede saber cuál fue primero.",
+        "severidad": "no_auditable",
+        "fundamento": "Simultaneidad al límite de resolución. Diferencia: 4 ms; la tolerancia es de 8,3 ms y 1 fotograma ≈ 5 ms a 201 fps reales.",
+        "referencia": null
+       },
+       {
+        "texto": "No se pudo medir el instante en que el brazo alcanzó su velocidad máxima en este golpe.",
+        "severidad": "no_auditable",
+        "fundamento": null,
+        "referencia": null
+       }
+      ],
+      "secuenciacion": {
+       "resumen": {
+        "orden_predominante": [],
+        "repeticiones_correctas": 0,
+        "repeticiones_evaluadas": 1,
+        "dispersion_instante_pico_torso_ms": null
+       },
+       "repeticiones": [
+        {
+         "picos": [
+          {
+           "unidad": "grados/s",
+           "segmento": "pelvis",
+           "confianza": 1.0,
+           "velocidad": 792.971,
+           "instante_s": 0.2958
+          },
+          {
+           "unidad": "grados/s",
+           "segmento": "torso",
+           "confianza": 0.998,
+           "velocidad": 545.331,
+           "instante_s": 0.3
+          }
+         ],
+         "indice": 1,
+         "desde_s": 4.9083,
+         "hasta_s": 5.5083,
+         "correcto": null,
+         "auditable": false,
+         "orden_observado": null,
+         "motivo_no_auditable": "sin pico auditable para: brazo"
+        }
+       ],
+       "orden_esperado": [
+        "pelvis",
+        "torso",
+        "brazo"
+       ]
+      },
+      "version_contrato": "1.3",
+      "comparacion_propia": null
+     }
+    },
+    {
+     "id": "17001ba6-a464-43e6-b25a-4196b682e9d1",
+     "estado": "parcial",
+     "reporte": {
+      "gesto": "saque",
+      "metricas": [
+       {
+        "valor": 394.956,
+        "nombre": "velocidad_pico_pelvis",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": 425.469,
+        "nombre": "velocidad_pico_torso",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 0.999
+       },
+       {
+        "valor": null,
+        "nombre": "velocidad_pico_brazo",
+        "unidad": "grados/s",
+        "auditable": false,
+        "confianza": 0.999
+       },
+       {
+        "valor": 11.2,
+        "nombre": "separacion_cadera_hombro_max",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": 100.7,
+        "nombre": "angulo_rodilla_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 0.953
+       },
+       {
+        "valor": 167.5,
+        "nombre": "angulo_codo_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 0.985
+       }
+      ],
+      "video_id": "17001ba6-a464-43e6-b25a-4196b682e9d1",
+      "cobertura": {
+       "auditable_pct": 67.47,
+       "tramos_no_auditables": [
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 0.0,
+         "hasta_s": 0.087
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 0.3,
+         "hasta_s": 0.713
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 2.817,
+         "hasta_s": 3.117
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 3.212,
+         "hasta_s": 3.263
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 3.708,
+         "hasta_s": 4.942
+        }
+       ]
+      },
+      "creado_en": "2026-10-13T05:32:08.370014Z",
+      "artefactos": {
+       "pdf_ruta": null,
+       "overlay_info": {
+        "desde_s": 3.4667,
+        "hasta_s": 5.0667,
+        "factor_lento": 8.0,
+        "fps_reproduccion": 30
+       },
+       "overlay_ruta": "usuario/17001ba6-a464-43e6-b25a-4196b682e9d1/esqueleto.mp4",
+       "fotogramas_clave": [
+        {
+         "ruta": "usuario/17001ba6-a464-43e6-b25a-4196b682e9d1/clave_pelvis.jpg",
+         "segmento": "pelvis",
+         "instante_s": 0.2958
+        },
+        {
+         "ruta": "usuario/17001ba6-a464-43e6-b25a-4196b682e9d1/clave_torso.jpg",
+         "segmento": "torso",
+         "instante_s": 0.3
+        }
+       ]
+      },
+      "reporte_id": "31da581b-8d75-42ba-9fcb-8524f06c63e4",
+      "segmentacion": {
+       "metodo": "ancla_torso",
+       "repeticiones_marcadas": 1,
+       "repeticiones_auditables": 0
+      },
+      "trazabilidad": {
+       "filtro": {
+        "tipo": "butterworth",
+        "orden": 4,
+        "corte_hz": 7.0,
+        "fase_cero": true
+       },
+       "fps_real": 200.58399844267083,
+       "fps_nominal": 239.981,
+       "backend_pose": "mediapipe",
+       "modo_captura": "camara_lenta_240",
+       "origen_factor": "marcas_de_tiempo",
+       "version_motor": "0.5.3",
+       "regularizacion": {
+        "fps_grilla": 240.0,
+        "fps_real_medio": 200.768,
+        "hueco_maximo_ms": 25.0,
+        "puntos_copiados": 1286,
+        "puntos_sin_dato": 0,
+        "fotogramas_fuente": 1286,
+        "puntos_de_la_grilla": 1537,
+        "puntos_interpolados": 251,
+        "puntos_interpolados_pct": 16.33
+       },
+       "apto_fase_rapida": true,
+       "tolerancia_orden_ms": 8.333,
+       "factor_ralentizacion": 1.0,
+       "fotogramas_perdidos_pct": 16.42,
+       "escala_temporal_conocida": true
+      },
+      "observaciones": [
+       {
+        "texto": "La cadera y el tronco alcanzaron su velocidad máxima casi al mismo tiempo: a esta resolución del video no se puede saber cuál fue primero.",
+        "severidad": "no_auditable",
+        "fundamento": "Simultaneidad al límite de resolución. Diferencia: 4 ms; la tolerancia es de 8,3 ms y 1 fotograma ≈ 5 ms a 201 fps reales.",
+        "referencia": null
+       },
+       {
+        "texto": "No se pudo medir el instante en que el brazo alcanzó su velocidad máxima en este golpe.",
+        "severidad": "no_auditable",
+        "fundamento": null,
+        "referencia": null
+       }
+      ],
+      "secuenciacion": {
+       "resumen": {
+        "orden_predominante": [],
+        "repeticiones_correctas": 0,
+        "repeticiones_evaluadas": 1,
+        "dispersion_instante_pico_torso_ms": null
+       },
+       "repeticiones": [
+        {
+         "picos": [
+          {
+           "unidad": "grados/s",
+           "segmento": "pelvis",
+           "confianza": 1.0,
+           "velocidad": 394.956,
+           "instante_s": 0.2958
+          },
+          {
+           "unidad": "grados/s",
+           "segmento": "torso",
+           "confianza": 0.999,
+           "velocidad": 425.469,
+           "instante_s": 0.3
+          }
+         ],
+         "indice": 1,
+         "desde_s": 3.9667,
+         "hasta_s": 4.5667,
+         "correcto": null,
+         "auditable": false,
+         "orden_observado": null,
+         "motivo_no_auditable": "sin pico auditable para: brazo"
+        }
+       ],
+       "orden_esperado": [
+        "pelvis",
+        "torso",
+        "brazo"
+       ]
+      },
+      "version_contrato": "1.3",
+      "comparacion_propia": null
+     }
+    }
+   ],
+   "consistencia": {
+    "version_regla": "1",
+    "golpes": {
+     "total": 4,
+     "medidos": 4,
+     "no_medibles": 0,
+     "en_analisis": 0,
+     "con_orden_distinguible": 1
+    },
+    "separacion_cadera_hombro": {
+     "n": 4,
+     "unidad": "grados",
+     "mediana": 31.4,
+     "dispersion": 4.37,
+     "minimo": 11.2,
+     "maximo": 34.7,
+     "valores": [
+      {
+       "video_id": "bba27843-a2d3-440e-a8e7-7bfc27d8a95a",
+       "valor": 34.7
+      },
+      {
+       "video_id": "72448beb-db4b-4202-8a57-f99ab44dbd51",
+       "valor": 28.8
+      },
+      {
+       "video_id": "53b304bd-cb18-4b9c-b2ce-a4eccbc2e9ed",
+       "valor": 34.0
+      },
+      {
+       "video_id": "17001ba6-a464-43e6-b25a-4196b682e9d1",
+       "valor": 11.2
+      }
+     ]
+    },
+    "orden": {
+     "medidos": 4,
+     "ordenables": 1,
+     "mismo_orden": 1,
+     "orden_modal": [
+      "pelvis",
+      "torso"
+     ],
+     "suficiente": false
+    },
+    "golpe_tipico": "72448beb-db4b-4202-8a57-f99ab44dbd51",
+    "golpes_que_se_apartan": [],
+    "versiones_motor": [
+     "0.5.3"
+    ],
+    "mezcla_de_versiones": false,
+    "minimos": {
+     "dispersion": 4,
+     "repetibilidad": 5,
+     "se_apartan": 5
+    },
+    "sesion_id": "sesion-ejemplo",
+    "gesto": "saque",
+    "encuadre": "tres_cuartos",
+    "fecha": "2026-09-25"
+   }
+  },
+  "ningun_ordenable": {
+   "golpes": [
+    {
+     "id": "72448beb-db4b-4202-8a57-f99ab44dbd51",
+     "estado": "parcial",
+     "reporte": {
+      "gesto": "saque",
+      "metricas": [
+       {
+        "valor": 757.45,
+        "nombre": "velocidad_pico_pelvis",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": 612.945,
+        "nombre": "velocidad_pico_torso",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 0.999
+       },
+       {
+        "valor": null,
+        "nombre": "velocidad_pico_brazo",
+        "unidad": "grados/s",
+        "auditable": false,
+        "confianza": 0.963
+       },
+       {
+        "valor": 28.8,
+        "nombre": "separacion_cadera_hombro_max",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": 176.3,
+        "nombre": "angulo_rodilla_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 0.745
+       },
+       {
+        "valor": 165.1,
+        "nombre": "angulo_codo_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 0.991
+       }
+      ],
+      "video_id": "72448beb-db4b-4202-8a57-f99ab44dbd51",
+      "cobertura": {
+       "auditable_pct": 64.07,
+       "tramos_no_auditables": [
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 0.0,
+         "hasta_s": 0.525
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 2.862,
+         "hasta_s": 3.021
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 3.171,
+         "hasta_s": 3.204
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 3.629,
+         "hasta_s": 3.737
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 3.829,
+         "hasta_s": 4.35
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 4.758,
+         "hasta_s": 5.479
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 5.55,
+         "hasta_s": 6.287
+        }
+       ]
+      },
+      "creado_en": "2026-10-13T05:16:51.906735Z",
+      "artefactos": {
+       "pdf_ruta": null,
+       "overlay_info": {
+        "desde_s": 5.4583,
+        "hasta_s": 7.0583,
+        "factor_lento": 8.0,
+        "fps_reproduccion": 30
+       },
+       "overlay_ruta": "usuario/72448beb-db4b-4202-8a57-f99ab44dbd51/esqueleto.mp4",
+       "fotogramas_clave": [
+        {
+         "ruta": "usuario/72448beb-db4b-4202-8a57-f99ab44dbd51/clave_pelvis.jpg",
+         "segmento": "pelvis",
+         "instante_s": 0.2917
+        },
+        {
+         "ruta": "usuario/72448beb-db4b-4202-8a57-f99ab44dbd51/clave_torso.jpg",
+         "segmento": "torso",
+         "instante_s": 0.3
+        }
+       ]
+      },
+      "reporte_id": "8ef1fa5a-94de-49e5-a134-ea62ea418bd7",
+      "segmentacion": {
+       "metodo": "ancla_torso",
+       "repeticiones_marcadas": 1,
+       "repeticiones_auditables": 0
+      },
+      "trazabilidad": {
+       "filtro": {
+        "tipo": "butterworth",
+        "orden": 4,
+        "corte_hz": 7.0,
+        "fase_cero": true
+       },
+       "fps_real": 200.20253076466878,
+       "fps_nominal": 239.981,
+       "backend_pose": "mediapipe",
+       "modo_captura": "camara_lenta_240",
+       "origen_factor": "marcas_de_tiempo",
+       "version_motor": "0.5.3",
+       "regularizacion": {
+        "fps_grilla": 240.0,
+        "fps_real_medio": 200.374,
+        "hueco_maximo_ms": 16.67,
+        "puntos_copiados": 1564,
+        "puntos_sin_dato": 0,
+        "fotogramas_fuente": 1564,
+        "puntos_de_la_grilla": 1873,
+        "puntos_interpolados": 309,
+        "puntos_interpolados_pct": 16.5
+       },
+       "apto_fase_rapida": true,
+       "tolerancia_orden_ms": 8.333,
+       "factor_ralentizacion": 1.0,
+       "fotogramas_perdidos_pct": 16.58,
+       "escala_temporal_conocida": true
+      },
+      "observaciones": [
+       {
+        "texto": "La cadera y el tronco alcanzaron su velocidad máxima casi al mismo tiempo: a esta resolución del video no se puede saber cuál fue primero.",
+        "severidad": "no_auditable",
+        "fundamento": "Simultaneidad al límite de resolución. Diferencia: 8 ms; la tolerancia es de 8,3 ms y 1 fotograma ≈ 5 ms a 200 fps reales.",
+        "referencia": null
+       },
+       {
+        "texto": "No se pudo medir el instante en que el brazo alcanzó su velocidad máxima en este golpe.",
+        "severidad": "no_auditable",
+        "fundamento": null,
+        "referencia": null
+       }
+      ],
+      "secuenciacion": {
+       "resumen": {
+        "orden_predominante": [],
+        "repeticiones_correctas": 0,
+        "repeticiones_evaluadas": 1,
+        "dispersion_instante_pico_torso_ms": null
+       },
+       "repeticiones": [
+        {
+         "picos": [
+          {
+           "unidad": "grados/s",
+           "segmento": "pelvis",
+           "confianza": 1.0,
+           "velocidad": 757.45,
+           "instante_s": 0.2917
+          },
+          {
+           "unidad": "grados/s",
+           "segmento": "torso",
+           "confianza": 0.999,
+           "velocidad": 612.945,
+           "instante_s": 0.3
+          }
+         ],
+         "indice": 1,
+         "desde_s": 5.9583,
+         "hasta_s": 6.5583,
+         "correcto": null,
+         "auditable": false,
+         "orden_observado": null,
+         "motivo_no_auditable": "sin pico auditable para: brazo"
+        }
+       ],
+       "orden_esperado": [
+        "pelvis",
+        "torso",
+        "brazo"
+       ]
+      },
+      "version_contrato": "1.3",
+      "comparacion_propia": null
+     }
+    },
+    {
+     "id": "53b304bd-cb18-4b9c-b2ce-a4eccbc2e9ed",
+     "estado": "parcial",
+     "reporte": {
+      "gesto": "saque",
+      "metricas": [
+       {
+        "valor": 792.971,
+        "nombre": "velocidad_pico_pelvis",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": 545.331,
+        "nombre": "velocidad_pico_torso",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 0.998
+       },
+       {
+        "valor": null,
+        "nombre": "velocidad_pico_brazo",
+        "unidad": "grados/s",
+        "auditable": false,
+        "confianza": 0.959
+       },
+       {
+        "valor": 34.0,
+        "nombre": "separacion_cadera_hombro_max",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": null,
+        "nombre": "angulo_rodilla_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": false,
+        "confianza": 0.455
+       },
+       {
+        "valor": 157.1,
+        "nombre": "angulo_codo_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 0.748
+       }
+      ],
+      "video_id": "53b304bd-cb18-4b9c-b2ce-a4eccbc2e9ed",
+      "cobertura": {
+       "auditable_pct": 78.84,
+       "tramos_no_auditables": [
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 2.279,
+         "hasta_s": 2.383
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 2.562,
+         "hasta_s": 2.587
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 2.654,
+         "hasta_s": 2.679
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 4.021,
+         "hasta_s": 5.283
+        }
+       ]
+      },
+      "creado_en": "2026-10-13T05:25:10.342934Z",
+      "artefactos": {
+       "pdf_ruta": null,
+       "overlay_info": {
+        "desde_s": 4.4083,
+        "hasta_s": 6.0083,
+        "factor_lento": 8.0,
+        "fps_reproduccion": 30
+       },
+       "overlay_ruta": "usuario/53b304bd-cb18-4b9c-b2ce-a4eccbc2e9ed/esqueleto.mp4",
+       "fotogramas_clave": [
+        {
+         "ruta": "usuario/53b304bd-cb18-4b9c-b2ce-a4eccbc2e9ed/clave_pelvis.jpg",
+         "segmento": "pelvis",
+         "instante_s": 0.2958
+        },
+        {
+         "ruta": "usuario/53b304bd-cb18-4b9c-b2ce-a4eccbc2e9ed/clave_torso.jpg",
+         "segmento": "torso",
+         "instante_s": 0.3
+        }
+       ]
+      },
+      "reporte_id": "8c1579d0-52f0-4027-a5c0-d58dfafde8c7",
+      "segmentacion": {
+       "metodo": "ancla_torso",
+       "repeticiones_marcadas": 1,
+       "repeticiones_auditables": 0
+      },
+      "trazabilidad": {
+       "filtro": {
+        "tipo": "butterworth",
+        "orden": 4,
+        "corte_hz": 8.0,
+        "fase_cero": true
+       },
+       "fps_real": 200.77008069705226,
+       "fps_nominal": 239.981,
+       "backend_pose": "mediapipe",
+       "modo_captura": "camara_lenta_240",
+       "origen_factor": "marcas_de_tiempo",
+       "version_motor": "0.5.3",
+       "regularizacion": {
+        "fps_grilla": 240.0,
+        "fps_real_medio": 200.971,
+        "hueco_maximo_ms": 12.92,
+        "puntos_copiados": 1121,
+        "puntos_sin_dato": 0,
+        "fotogramas_fuente": 1346,
+        "puntos_de_la_grilla": 1607,
+        "puntos_interpolados": 486,
+        "puntos_interpolados_pct": 30.24
+       },
+       "apto_fase_rapida": true,
+       "tolerancia_orden_ms": 8.333,
+       "factor_ralentizacion": 1.0,
+       "fotogramas_perdidos_pct": 16.34,
+       "escala_temporal_conocida": true
+      },
+      "observaciones": [
+       {
+        "texto": "La cadera y el tronco alcanzaron su velocidad máxima casi al mismo tiempo: a esta resolución del video no se puede saber cuál fue primero.",
+        "severidad": "no_auditable",
+        "fundamento": "Simultaneidad al límite de resolución. Diferencia: 4 ms; la tolerancia es de 8,3 ms y 1 fotograma ≈ 5 ms a 201 fps reales.",
+        "referencia": null
+       },
+       {
+        "texto": "No se pudo medir el instante en que el brazo alcanzó su velocidad máxima en este golpe.",
+        "severidad": "no_auditable",
+        "fundamento": null,
+        "referencia": null
+       }
+      ],
+      "secuenciacion": {
+       "resumen": {
+        "orden_predominante": [],
+        "repeticiones_correctas": 0,
+        "repeticiones_evaluadas": 1,
+        "dispersion_instante_pico_torso_ms": null
+       },
+       "repeticiones": [
+        {
+         "picos": [
+          {
+           "unidad": "grados/s",
+           "segmento": "pelvis",
+           "confianza": 1.0,
+           "velocidad": 792.971,
+           "instante_s": 0.2958
+          },
+          {
+           "unidad": "grados/s",
+           "segmento": "torso",
+           "confianza": 0.998,
+           "velocidad": 545.331,
+           "instante_s": 0.3
+          }
+         ],
+         "indice": 1,
+         "desde_s": 4.9083,
+         "hasta_s": 5.5083,
+         "correcto": null,
+         "auditable": false,
+         "orden_observado": null,
+         "motivo_no_auditable": "sin pico auditable para: brazo"
+        }
+       ],
+       "orden_esperado": [
+        "pelvis",
+        "torso",
+        "brazo"
+       ]
+      },
+      "version_contrato": "1.3",
+      "comparacion_propia": null
+     }
+    },
+    {
+     "id": "17001ba6-a464-43e6-b25a-4196b682e9d1",
+     "estado": "parcial",
+     "reporte": {
+      "gesto": "saque",
+      "metricas": [
+       {
+        "valor": 394.956,
+        "nombre": "velocidad_pico_pelvis",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": 425.469,
+        "nombre": "velocidad_pico_torso",
+        "unidad": "grados/s",
+        "auditable": true,
+        "confianza": 0.999
+       },
+       {
+        "valor": null,
+        "nombre": "velocidad_pico_brazo",
+        "unidad": "grados/s",
+        "auditable": false,
+        "confianza": 0.999
+       },
+       {
+        "valor": 11.2,
+        "nombre": "separacion_cadera_hombro_max",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 1.0
+       },
+       {
+        "valor": 100.7,
+        "nombre": "angulo_rodilla_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 0.953
+       },
+       {
+        "valor": 167.5,
+        "nombre": "angulo_codo_izq_en_pico_tronco",
+        "unidad": "grados",
+        "auditable": true,
+        "confianza": 0.985
+       }
+      ],
+      "video_id": "17001ba6-a464-43e6-b25a-4196b682e9d1",
+      "cobertura": {
+       "auditable_pct": 67.47,
+       "tramos_no_auditables": [
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 0.0,
+         "hasta_s": 0.087
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 0.3,
+         "hasta_s": 0.713
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 2.817,
+         "hasta_s": 3.117
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 3.212,
+         "hasta_s": 3.263
+        },
+        {
+         "motivo": "sin_datos_confiables: codo_der",
+         "desde_s": 3.708,
+         "hasta_s": 4.942
+        }
+       ]
+      },
+      "creado_en": "2026-10-13T05:32:08.370014Z",
+      "artefactos": {
+       "pdf_ruta": null,
+       "overlay_info": {
+        "desde_s": 3.4667,
+        "hasta_s": 5.0667,
+        "factor_lento": 8.0,
+        "fps_reproduccion": 30
+       },
+       "overlay_ruta": "usuario/17001ba6-a464-43e6-b25a-4196b682e9d1/esqueleto.mp4",
+       "fotogramas_clave": [
+        {
+         "ruta": "usuario/17001ba6-a464-43e6-b25a-4196b682e9d1/clave_pelvis.jpg",
+         "segmento": "pelvis",
+         "instante_s": 0.2958
+        },
+        {
+         "ruta": "usuario/17001ba6-a464-43e6-b25a-4196b682e9d1/clave_torso.jpg",
+         "segmento": "torso",
+         "instante_s": 0.3
+        }
+       ]
+      },
+      "reporte_id": "31da581b-8d75-42ba-9fcb-8524f06c63e4",
+      "segmentacion": {
+       "metodo": "ancla_torso",
+       "repeticiones_marcadas": 1,
+       "repeticiones_auditables": 0
+      },
+      "trazabilidad": {
+       "filtro": {
+        "tipo": "butterworth",
+        "orden": 4,
+        "corte_hz": 7.0,
+        "fase_cero": true
+       },
+       "fps_real": 200.58399844267083,
+       "fps_nominal": 239.981,
+       "backend_pose": "mediapipe",
+       "modo_captura": "camara_lenta_240",
+       "origen_factor": "marcas_de_tiempo",
+       "version_motor": "0.5.3",
+       "regularizacion": {
+        "fps_grilla": 240.0,
+        "fps_real_medio": 200.768,
+        "hueco_maximo_ms": 25.0,
+        "puntos_copiados": 1286,
+        "puntos_sin_dato": 0,
+        "fotogramas_fuente": 1286,
+        "puntos_de_la_grilla": 1537,
+        "puntos_interpolados": 251,
+        "puntos_interpolados_pct": 16.33
+       },
+       "apto_fase_rapida": true,
+       "tolerancia_orden_ms": 8.333,
+       "factor_ralentizacion": 1.0,
+       "fotogramas_perdidos_pct": 16.42,
+       "escala_temporal_conocida": true
+      },
+      "observaciones": [
+       {
+        "texto": "La cadera y el tronco alcanzaron su velocidad máxima casi al mismo tiempo: a esta resolución del video no se puede saber cuál fue primero.",
+        "severidad": "no_auditable",
+        "fundamento": "Simultaneidad al límite de resolución. Diferencia: 4 ms; la tolerancia es de 8,3 ms y 1 fotograma ≈ 5 ms a 201 fps reales.",
+        "referencia": null
+       },
+       {
+        "texto": "No se pudo medir el instante en que el brazo alcanzó su velocidad máxima en este golpe.",
+        "severidad": "no_auditable",
+        "fundamento": null,
+        "referencia": null
+       }
+      ],
+      "secuenciacion": {
+       "resumen": {
+        "orden_predominante": [],
+        "repeticiones_correctas": 0,
+        "repeticiones_evaluadas": 1,
+        "dispersion_instante_pico_torso_ms": null
+       },
+       "repeticiones": [
+        {
+         "picos": [
+          {
+           "unidad": "grados/s",
+           "segmento": "pelvis",
+           "confianza": 1.0,
+           "velocidad": 394.956,
+           "instante_s": 0.2958
+          },
+          {
+           "unidad": "grados/s",
+           "segmento": "torso",
+           "confianza": 0.999,
+           "velocidad": 425.469,
+           "instante_s": 0.3
+          }
+         ],
+         "indice": 1,
+         "desde_s": 3.9667,
+         "hasta_s": 4.5667,
+         "correcto": null,
+         "auditable": false,
+         "orden_observado": null,
+         "motivo_no_auditable": "sin pico auditable para: brazo"
+        }
+       ],
+       "orden_esperado": [
+        "pelvis",
+        "torso",
+        "brazo"
+       ]
+      },
+      "version_contrato": "1.3",
+      "comparacion_propia": null
+     }
+    }
+   ],
+   "consistencia": {
+    "version_regla": "1",
+    "golpes": {
+     "total": 3,
+     "medidos": 3,
+     "no_medibles": 0,
+     "en_analisis": 0,
+     "con_orden_distinguible": 0
+    },
+    "separacion_cadera_hombro": {
+     "n": 3,
+     "unidad": "grados",
+     "mediana": 28.8,
+     "dispersion": null,
+     "minimo": 11.2,
+     "maximo": 34.0,
+     "valores": [
+      {
+       "video_id": "72448beb-db4b-4202-8a57-f99ab44dbd51",
+       "valor": 28.8
+      },
+      {
+       "video_id": "53b304bd-cb18-4b9c-b2ce-a4eccbc2e9ed",
+       "valor": 34.0
+      },
+      {
+       "video_id": "17001ba6-a464-43e6-b25a-4196b682e9d1",
+       "valor": 11.2
+      }
+     ]
+    },
+    "orden": {
+     "medidos": 3,
+     "ordenables": 0,
+     "mismo_orden": 0,
+     "orden_modal": null,
+     "suficiente": false
+    },
+    "golpe_tipico": "72448beb-db4b-4202-8a57-f99ab44dbd51",
+    "golpes_que_se_apartan": [],
+    "versiones_motor": [
+     "0.5.3"
+    ],
+    "mezcla_de_versiones": false,
+    "minimos": {
+     "dispersion": 4,
+     "repetibilidad": 5,
+     "se_apartan": 5
+    },
+    "sesion_id": "sesion-ejemplo",
+    "gesto": "saque",
+    "encuadre": "tres_cuartos",
+    "fecha": "2026-09-25"
+   }
+  }
+ }
+}

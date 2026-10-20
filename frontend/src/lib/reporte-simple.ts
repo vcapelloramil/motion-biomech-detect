@@ -292,7 +292,7 @@ export function coberturaDe(reporte: Json | null): number | null {
 
 export type PicoNoMedidoLeido = { segmento: Segmento; motivo: string };
 
-const PARTE: Record<Segmento, string> = { pelvis: "la cadera", torso: "el tronco", brazo: "el brazo que golpea" };
+const PARTE: Record<Segmento, string> = { pelvis: "de la cadera", torso: "del tronco", brazo: "del brazo que golpea" };
 
 /**
  * Los segmentos de los que no hay pico en el primer golpe, con el motivo en palabras simples. Un reporte v1.4 lo trae en
@@ -313,7 +313,7 @@ export function picosNoMedidosDe(reporte: Json | null): PicoNoMedidoLeido[] {
     .map((s) => ({
       segmento: s,
       motivo:
-        `No se pudo medir el momento más rápido de ${PARTE[s]} en este golpe.` +
+        `No se pudo medir el momento más rápido ${PARTE[s]} en este golpe.` +
         (s === "brazo" ? " Suele pasar cuando el cuerpo tapa el brazo desde donde estaba la cámara." : ""),
     }));
 }

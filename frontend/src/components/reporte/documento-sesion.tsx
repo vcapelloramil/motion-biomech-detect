@@ -1,44 +1,28 @@
+import { useMemo } from "react";
 import {
   CabeceraDeDocumento,
   FotogramasChicos,
   Hoja,
+  ItemsPdf,
   Limitaciones,
+  ParaProfesionalPdf,
   PieDeDocumento,
+  QuePodesHacerPdf,
   Seccion,
+  Subtitulo,
   Tabla,
   fechaDeHoy,
 } from "@/components/reporte/documento";
-import { ETIQUETA_SIN_DIFERENCIA } from "@/components/estado";
-import { ENCUADRE_ETIQUETA, GESTO_ETIQUETA, enCurso, numero, reporteDe, tiemposDe, formatearDuracion, type EstadoVideo } from "@/lib/estado-video";
-import { fraseGolpeQueSeAparta, tarjetasDeConsistencia, type Consistencia } from "@/lib/consistencia";
-import { artefactosDe, fraseDeSecuencia, picosNoMedidosDe, repeticionesDe, trazabilidadDe } from "@/lib/reporte-simple";
+import { ENCUADRE_ETIQUETA, GESTO_ETIQUETA, reporteDe } from "@/lib/estado-video";
+import type { Consistencia } from "@/lib/consistencia";
+import { artefactosDe, picosNoMedidosDe, repeticionesDe } from "@/lib/reporte-simple";
+import { fotosDe, textosDeSesion } from "@/lib/textos-reporte";
 import type { SesionConVideos } from "@/lib/videos-data";
-import { fmt } from "@/lib/formato";
 
-const ESTADO: Record<EstadoVideo, string> = {
-  pendiente: "Subido",
-  encolado: "En cola",
-  procesando: "Analizando",
-  completado: "Medido",
-  parcial: "Medido en parte",
-  fallido: "No se pudo medir",
-};
-
-type Reporte = Record<string, unknown> | null;
-
-/** Qué llegó primero en un golpe, como dato observado (no como juicio): la diferencia en ms entre los picos de cadera y tronco. */
-function ordenDelGolpe(reporte: Reporte): string {
-  const rep = repeticionesDe(reporte)[0];
-  const p = rep?.picos.find((x) => x.segmento === "pelvis");
-  const t = rep?.picos.find((x) => x.segmento === "torso");
-  if (!p || !t) return "—";
-  const tolMs = trazabilidadDe(reporte).tolerancia_orden_ms ?? 1000 / 120;
-  const dMs = (t.instante_s - p.instante_s) * 1000;
-  if (Math.abs(dMs) <= tolMs + 1e-6) return `${ETIQUETA_SIN_DIFERENCIA} (${fmt(Math.abs(dMs), 0)} ms)`;
-  return dMs > 0 ? `Cadera primero, ${fmt(dMs, 0)} ms antes` : `Tronco primero, ${fmt(-dMs, 0)} ms antes`;
-}
-
-/** La sesión como documento A4 vertical (solo en el papel). */
+/**
+ * La sesión como documento A4 vertical (solo en el papel). Mismos textos que la pantalla (`lib/textos-reporte.ts`, decisión 039);
+ * el detalle técnico va abierto.
+ */
 export function DocumentoDeSesion({
   datos,
   consistencia,
@@ -46,18 +30,25 @@ export function DocumentoDeSesion({
 }: {
   datos: SesionConVideos;
   consistencia: Consistencia | null;
-  /** El golpe de los "tres momentos": el típico (el más cercano a la mediana). */
+  /** El golpe de las fotos: el típico (el más cercano al valor típico), o el que se esté mirando. */
   idTipico: string | null;
 }) {
   const videos = datos.videos;
-  const num = new Map(videos.map((v, i) => [v.id, i + 1]));
-  const valores = new Map((consistencia?.separacion_cadera_hombro.valores ?? []).map((x) => [x.video_id, x.valor]));
+  const textos = useMemo(
+    () =>
+      textosDeSesion({
+        gesto: datos.gesto,
+        encuadre: datos.encuadre,
+        ladoCamara: datos.lado_camara,
+        manoDominante: datos.atletas?.mano_dominante ?? null,
+        golpes: videos.map((v) => ({ id: v.id, estado: v.estado, reporte: reporteDe(v)?.reporte ?? null })),
+        consistencia,
+      }),
+    [datos, videos, consistencia],
+  );
+  const numeroDe = new Map(videos.map((v, i) => [v.id, i + 1]));
   const tipico = videos.find((v) => v.id === idTipico) ?? null;
   const repTipico = reporteDe(tipico ?? {})?.reporte ?? null;
-  const trazTipico = trazabilidadDe(repTipico);
-  const frase = repTipico
-    ? fraseDeSecuencia(repeticionesDe(repTipico)[0] ?? null, trazTipico.fps_real ?? numero(tipico?.fps_real), trazTipico.tolerancia_orden_ms)
-    : null;
   const fecha = new Date(datos.fecha + "T12:00:00").toLocaleDateString("es-AR", { day: "numeric", month: "long", year: "numeric" });
   const versiones = consistencia?.versiones_motor ?? [];
 
@@ -70,71 +61,60 @@ export function DocumentoDeSesion({
           { k: "Fecha de la grabación", v: fecha },
           { k: "Golpe", v: GESTO_ETIQUETA[datos.gesto] ?? datos.gesto },
           { k: "Encuadre de la cámara", v: ENCUADRE_ETIQUETA[datos.encuadre] ?? datos.encuadre },
+          { k: "Cámara a la", v: datos.lado_camara },
           { k: "Golpes de la sesión", v: String(videos.length) },
-          { k: "Versión del motor", v: versiones.length ? versiones.join(", ") : "—" },
         ]}
       />
 
-      <Seccion titulo="Resumen: tus golpes entre sí">
-        {consistencia ? (
-          <ul className="space-y-1.5">
-            {tarjetasDeConsistencia(consistencia).map((t) => (
-              <li key={t.clave}>
-                <strong>
-                  {t.titulo}
-                  {t.valor ? `: ${t.valor}` : ""}.
-                </strong>{" "}
-                {t.texto}
-              </li>
-            ))}
-            {consistencia.golpes_que_se_apartan.map((id) => (
-              <li key={id}>{fraseGolpeQueSeAparta(num.get(id) ?? 0)}</li>
-            ))}
-          </ul>
-        ) : (
-          <p>La comparación entre golpes no estaba disponible al generar este documento.</p>
+      <Seccion titulo="En una frase">
+        <p className="text-[11pt] font-bold leading-snug">{textos.enUnaFrase}</p>
+      </Seccion>
+
+      <Seccion titulo="Qué vimos">
+        {textos.vimos.medido.length > 0 ? <ItemsPdf items={textos.vimos.medido} /> : <p>No hay golpes medidos para resumir.</p>}
+        {textos.vimos.seAparta.length > 0 && (
+          <>
+            <Subtitulo>Un golpe que se aparta</Subtitulo>
+            <ItemsPdf items={textos.vimos.seAparta} />
+          </>
+        )}
+        {textos.vimos.noMedido.length > 0 && (
+          <>
+            <Subtitulo>Lo que no se pudo medir</Subtitulo>
+            <ItemsPdf items={textos.vimos.noMedido} />
+          </>
         )}
       </Seccion>
 
-      {tipico && (
-        <Seccion titulo={`Golpe típico (golpe ${num.get(tipico.id)}): tres momentos`}>
-          <FotogramasChicos artefactos={artefactosDe(repTipico)} noMedidos={picosNoMedidosDe(repTipico)} />
-          {frase && <p className="mt-1.5">{frase.texto}</p>}
-          <p className="mt-1 text-[8pt] text-gray-600">
-            El golpe típico es el más cercano a la mediana de la sesión en la separación cadera-hombro; no es el «mejor».
-          </p>
+      {tipico && textos.tipico && (
+        <Seccion titulo={`Fotos y video · golpe ${numeroDe.get(tipico.id)}`}>
+          <p className="mb-1.5">{textos.tipico.texto}</p>
+          <FotogramasChicos
+            artefactos={artefactosDe(repTipico)}
+            noMedidos={picosNoMedidosDe(repTipico)}
+            textos={fotosDe(repTipico)}
+            desdeS={repeticionesDe(repTipico)[0]?.desde_s ?? null}
+          />
+          <p className="mt-1 text-[8.5pt]">{textos.tipico.queMirar}</p>
         </Seccion>
       )}
 
-      <Seccion titulo="Los golpes de la sesión">
-        <Tabla
-          columnas={["Golpe", "Estado", "Separación cadera-hombro", "Cadera y tronco", "fps reales", "Procesamiento"]}
-          filas={videos.map((v) => {
-            const rep = reporteDe(v)?.reporte ?? null;
-            const t = trazabilidadDe(rep);
-            const tiempos = tiemposDe(v);
-            const sep = valores.get(v.id);
-            return [
-              String(num.get(v.id)),
-              ESTADO[v.estado],
-              sep !== undefined ? `${fmt(sep, 1)} °` : enCurso(v.estado) ? "—" : "no medido",
-              rep ? ordenDelGolpe(rep) : "—",
-              t.fps_real !== null ? fmt(t.fps_real, 0) : "—",
-              tiempos.procesamiento_s !== null ? formatearDuracion(tiempos.procesamiento_s) : "—",
-            ];
-          })}
-        />
-        <p className="mt-1 text-[8pt] text-gray-600">
-          Las diferencias entre cadera y tronco son datos observados: el orden no se evalúa porque con una sola cámara depende del encuadre.
-        </p>
-      </Seccion>
+      <QuePodesHacerPdf medir={textos.hacer.medir} usar={textos.hacer.usar} literatura={textos.hacer.literatura} />
+      <ParaProfesionalPdf profesional={textos.profesional} />
 
-      <Seccion titulo="Trazabilidad">
-        <p className="text-[8.5pt]">
-          Motor {versiones.length ? versiones.join(", ") : "—"}. Tolerancia del orden: 8,3 ms. La mediana y la variación entre golpes se calculan
-          sobre los golpes medidos (cadera y tronco con confianza ≥ 0,5); la variación es el desvío robusto (MAD × 1,4826), desde 4 golpes.
-          {consistencia?.mezcla_de_versiones ? " Algunos golpes se calcularon con una versión anterior del motor." : ""}
-        </p>
+      <Seccion titulo="Detalle técnico" cortable>
+        <Tabla columnas={textos.detalle.columnas} filas={textos.detalle.filas} />
+        <p className="mt-1 text-[8pt] text-gray-600">{textos.detalle.nota}</p>
+        <Subtitulo>Qué significa cada término</Subtitulo>
+        <dl className="space-y-1 text-[8.5pt]">
+          {textos.detalle.terminos.map((x) => (
+            <div key={x.termino}>
+              <dt className="inline font-bold">{x.termino}: </dt>
+              <dd className="inline">{x.significa}</dd>
+            </div>
+          ))}
+        </dl>
+        <p className="mt-1 text-[8pt] text-gray-600">{textos.detalle.versiones}</p>
       </Seccion>
 
       <Seccion titulo="Limitaciones">

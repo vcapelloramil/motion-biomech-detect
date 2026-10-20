@@ -81,16 +81,22 @@ formatos médicos (DICOM/HL7).
 
 Tres niveles con revelación progresiva. Cada nivel es completo en sí mismo.
 
-1. **Veredicto** — máximo TRES observaciones accionables, lenguaje llano, sin jerga, visible
-   sin desplazamiento. Es lo que pidió el 60% de los encuestados.
+1. **Qué vimos** (antes «Veredicto»; decisión 039, 20/10/2026) — «En una frase» y 2 o 3 líneas en
+   lenguaje llano, sin jerga, **empezando por lo medido**; lo no medido va después, con el porqué en una
+   línea. Sin veredicto (035 a 037). Es lo que pidió el 60% de los encuestados. Las recomendaciones
+   («Qué podés hacer con esto») son solo de cuatro tipos (decisión 039); los textos se arman con reglas
+   fijas, sin IA generativa, con la misma versión en la web y en el PDF.
 2. **Evidencia** — video con esqueleto superpuesto sincronizado, gráfico de secuenciación,
    curvas por segmento. Cada observación del nivel 1 enlaza al instante exacto del video.
 3. **Dato y fundamento** — valores numéricos, confianza, parámetros de filtrado, versión del
    motor, referencia bibliográfica de cada umbral.
 
-**El gráfico de secuenciación es el elemento central del producto:** un eje temporal único con
-los instantes en que pelvis, torso y brazo alcanzan su velocidad máxima. Correcto = escalera
-ordenada de izquierda a derecha. Incorrecto = cruce.
+**El gráfico de secuenciación es el elemento central del producto** («Cuándo giró cada parte», visible
+debajo de «Qué vimos»): un eje único con los instantes en que pelvis, torso y brazo alcanzan su velocidad
+máxima, **todo relativo al tronco** (tronco = 0, en milésimas de segundo) y con una franja de ± la
+tolerancia del orden (8,3 ms) donde no se puede distinguir cuál fue primero (decisión 039). Los segundos
+desde el inicio de la ventana analizada quedan en el detalle técnico. Ya no se lee como «correcto =
+escalera, incorrecto = cruce»: ningún grupo emite veredicto del orden (036).
 
 **Comparar al jugador consigo mismo** es la base del reporte clínico, no compararlo contra un
 promedio poblacional ni contra un "modelo ideal".

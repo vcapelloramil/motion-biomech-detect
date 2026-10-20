@@ -3,15 +3,24 @@ import { CircleDashed, Loader2 } from "lucide-react";
 import { NOMBRE_SEGMENTO, type PicoNoMedidoLeido, type artefactosDe } from "@/lib/reporte-simple";
 import { urlsDeArtefactos } from "@/lib/videos-data";
 import { fmt } from "@/lib/formato";
+import type { FotosTexto } from "@/lib/textos-reporte";
 
-/** Los tres fotogramas reales con el esqueleto en el pico de cadera, tronco y brazo, y el video corto con el esqueleto. */
+/**
+ * Fotos y video (decisión 039): los fotogramas reales con el esqueleto en el giro más rápido de cadera, tronco y brazo, y el video corto.
+ * Si cadera y tronco quedaron a la vez, se muestra UNA sola foto (serían casi el mismo fotograma). Cada pieza lleva una línea de qué mirar.
+ */
 export function TresMomentos({
   artefactos,
   noMedidos = [],
+  textos,
+  desdeS = null,
 }: {
   artefactos: ReturnType<typeof artefactosDe>;
   /** Los picos que no se pudieron medir: se muestran como tarjeta, con su motivo, en vez de desaparecer. */
   noMedidos?: PicoNoMedidoLeido[];
+  textos: FotosTexto;
+  /** Dónde empieza el tramo analizado, en segundos del video: para decir "a los X s del video". */
+  desdeS?: number | null;
 }) {
   const [urls, setUrls] = useState<Record<string, string> | null>(null);
   const rutas = [...artefactos.fotogramas.map((f) => f.ruta), ...(artefactos.overlay ? [artefactos.overlay.ruta] : [])];
@@ -37,6 +46,13 @@ export function TresMomentos({
   for (const s of ["pelvis", "torso", "brazo"] as const) {
     const foto = artefactos.fotogramas.find((f) => f.segmento === s);
     const falta = noMedidos.find((n) => n.segmento === s);
+    // Foto única: cadera y tronco están en el mismo fotograma; se queda la del tronco (o la de la cadera si es la única).
+    if (textos.fotoUnica && (s === "pelvis" || s === "torso")) {
+      const otra = artefactos.fotogramas.find((f) => f.segmento === (s === "pelvis" ? "torso" : "pelvis"));
+      if (s === "pelvis" && otra) continue;
+      if (foto) tarjetas.push({ tipo: "foto", foto });
+      continue;
+    }
     if (foto) tarjetas.push({ tipo: "foto", foto });
     else if (falta) tarjetas.push({ tipo: "falta", segmento: s, motivo: falta.motivo });
   }
@@ -45,8 +61,8 @@ export function TresMomentos({
   const lento = artefactos.overlay?.factor_lento ?? null;
   return (
     <section aria-labelledby="momentos" className="mt-12">
-      <h2 id="momentos" className="font-mono text-xs uppercase tracking-widest text-state-ok">Tres momentos de tu golpe</h2>
-      <p className="mt-2 font-display text-2xl font-bold md:text-3xl">Así se veía tu cuerpo en cada pico</p>
+      <h2 id="momentos" className="font-mono text-xs uppercase tracking-widest text-state-ok">Fotos y video</h2>
+      <p className="mt-2 font-display text-2xl font-bold md:text-3xl">Así se veía tu cuerpo en su giro más rápido</p>
 
       {urls === null ? (
         <p role="status" className="mt-5 flex items-center gap-2 text-sm text-muted-foreground">
@@ -66,7 +82,11 @@ export function TresMomentos({
                     {urls[c.foto.ruta] ? (
                       <img
                         src={urls[c.foto.ruta]}
-                        alt={`Fotograma del golpe en el pico de velocidad de tu ${NOMBRE_SEGMENTO[c.foto.segmento]}, con el esqueleto dibujado`}
+                        alt={
+                          textos.fotoUnica
+                            ? "Fotograma del golpe en el giro más rápido de tu cadera y de tu tronco, con el esqueleto dibujado"
+                            : `Fotograma del golpe en el giro más rápido de tu ${NOMBRE_SEGMENTO[c.foto.segmento]}, con el esqueleto dibujado`
+                        }
                         loading="lazy"
                         className="aspect-[3/4] w-full object-cover"
                       />
@@ -74,8 +94,16 @@ export function TresMomentos({
                       <div className="flex aspect-[3/4] items-center justify-center text-sm text-muted-foreground">Sin imagen</div>
                     )}
                     <p className="px-4 py-3 text-sm">
-                      <span className="font-semibold">Pico de tu {NOMBRE_SEGMENTO[c.foto.segmento]}</span>
-                      <span className="font-mono text-xs text-muted-foreground"> · {fmt(c.foto.instante_s, 3)} s</span>
+                      {textos.fotoUnica && textos.etiquetaFotoUnica ? (
+                        <span className="font-semibold">{textos.etiquetaFotoUnica}</span>
+                      ) : (
+                        <>
+                          <span className="font-semibold">Giro más rápido de tu {NOMBRE_SEGMENTO[c.foto.segmento]}</span>
+                          {desdeS !== null && (
+                            <span className="font-mono text-xs text-muted-foreground"> · a los {fmt(desdeS + c.foto.instante_s, 2)} s del video</span>
+                          )}
+                        </>
+                      )}
                     </p>
                   </li>
                 ) : (
@@ -85,7 +113,7 @@ export function TresMomentos({
                   >
                     <p className="flex items-center gap-2 font-semibold">
                       <CircleDashed className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
-                      Pico de tu {NOMBRE_SEGMENTO[c.segmento]}: no medido
+                      Giro más rápido de tu {NOMBRE_SEGMENTO[c.segmento]}: no medido
                     </p>
                     <p className="mt-3 text-sm text-muted-foreground">{c.motivo}</p>
                   </li>
@@ -93,6 +121,7 @@ export function TresMomentos({
               )}
             </ul>
           )}
+          {tarjetas.length > 0 && <p className="mt-3 text-sm text-muted-foreground">{textos.queMirarFoto}</p>}
           {artefactos.overlay && urls[artefactos.overlay.ruta] && (
             <div className="mt-6">
               <video
@@ -104,9 +133,9 @@ export function TresMomentos({
                 className="w-full max-w-xs rounded-2xl border border-border bg-black md:max-w-sm"
                 aria-label="Video corto del golpe con el esqueleto dibujado"
               />
-              <p className="mt-2 text-xs text-muted-foreground">
-                Solo el tramo del golpe{lento ? `, en cámara lenta (${fmt(lento, 0)} veces más lento que la realidad)` : ""}. El esqueleto se
-                dibuja únicamente donde el sistema detectó cada articulación con confianza suficiente.
+              <p className="mt-2 text-sm text-muted-foreground">
+                {textos.video ?? `Solo el tramo del golpe${lento ? `, en cámara lenta (${fmt(lento, 0)} veces más lento que la realidad)` : ""}.`}{" "}
+                {textos.queMirarVideo} El esqueleto se dibuja únicamente donde el sistema detectó cada articulación con confianza suficiente.
               </p>
             </div>
           )}
