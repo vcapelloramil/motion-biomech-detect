@@ -6,6 +6,18 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-20 (noche) — Tercera ronda de la decisión 039: «En una frase» sin números, «¿Qué giró primero?», Evolución en lenguaje simple (`VERSION_TEXTOS` = 2; solo frontend)
+
+**Pedido de Valentín** tras ver el reporte del golpe 4 en producción (republicó el frontend del commit `b444c9a`).
+
+- **«En una frase» (golpe, sesión, Evolución):** una sola idea, **sin dígitos**, verbo «giró». Golpe 4: «Tu cadera y tu tronco giraron casi a la vez en este saque.» Sesión: «Medimos seis saques. Giraste parecido en casi todos y, cuando se pudo ver el orden, la cadera arrancó primero.» Los datos (grados, ms, rango, «salvo el golpe 6») están en «Qué vimos». **Prueba nueva: sin dígitos, sin «aceleró», sin «bien/mal/correcto/como se espera».**
+- **«¿Qué giró primero?»** (`secuencia-simple.tsx`) reemplaza al gráfico del cuerpo: cajas sin ejes ni números; a menos de 8,33 ms, UNA caja «casi a la vez»; si se distingue, «antes →»; parte no medida, caja punteada «Brazo · no se vio». El gráfico en ms con la franja pasó al **detalle técnico** y reemplaza al de segundos desde el inicio de la ventana (se borró `secuencia-real.tsx`); etiquetas con halo para que la línea punteada no las pise. Igual en el PDF del golpe.
+- **Textos:** «Saque · golpe N de M» (también en el PDF; «golpe único» si es uno solo); rodilla/codo en palabras («tenías la pierna izquierda casi estirada (rodilla a 172°; 180° es la pierna totalmente estirada)»); «de tu sesión» (una prueba lo cuida); sin la tarjeta vacía del brazo en «Fotos y video» (pantalla y PDF); «de el brazo» corregido.
+- **Pie:** sin «Proyecto final…»; descripción «Medí cómo gira tu cuerpo en cada golpe.»; el pie del PDF lleva «KinetiQ documenta el movimiento. No diagnostica ni reemplaza la evaluación de un profesional.»
+- **Evolución** (`textos-evolucion.ts`): «En una frase» + «Qué vimos» con ⓘ + texto simple con menos de 2 sesiones + detalle técnico (tabla por sesión); mismas pruebas de palabras prohibidas y jerga. **Limitación (no cambia en esta tanda): el lado de la cámara no es parte de la clave de la serie**; con lados distintos se compara igual y un aviso lo dice (toca `/evolucion`, servidor).
+- **Documento de textos regenerado** con los 12 casos + 6 de Evolución (`bun tests/generar-textos-doc.ts`).
+- **Pruebas:** frontend **221 pasan**; `tsc` y `build` limpios. **Visto en pantalla** (servidor temporal con datos simulados desde fixtures, ya borrado): golpe 4 (empate) y golpe 3 (orden distinguible) a **390 px** y en escritorio (sin desplazamiento horizontal), Evolución a 390 px, PDF del golpe simulado en papel. **No visto:** fotos y video reales, celular físico, impresión real.
+
 ## 2026-10-20 — Reportes rediseñados (decisión 039): golpe, sesión y PDF; solo frontend, sin tocar el motor
 
 **Pedido de Valentín (19 y 20/10):** el reporte no se entendía (arrancaba por lo no medido, jerga, datos sin significado). Aprobó los textos con 10 ajustes y, tras revisar la matriz de casos, con 5 más.

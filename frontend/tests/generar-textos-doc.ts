@@ -3,7 +3,8 @@
 // no puede decir otra cosa que el programa. Uso, desde frontend/:   bun tests/generar-textos-doc.ts
 import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { CASOS, consistenciaReal, golpesReales, type Incluir } from "./casos-matriz";
+import { CASOS, CASOS_EVOLUCION, consistenciaReal, golpesReales, type Incluir } from "./casos-matriz";
+import { textosDeEvolucion } from "../src/lib/textos-evolucion";
 import {
   VERSION_TEXTOS,
   contextoDeGolpe,
@@ -106,6 +107,26 @@ function matriz(): string {
   }).join("\n\n---\n\n");
 }
 
+function evolucion(): string {
+  return CASOS_EVOLUCION.map((c) => {
+    const t = textosDeEvolucion(c.serie);
+    const vimosMd = [
+      "**Lo que se midió**\n" + (t.vimos.medido.length ? lista(t.vimos.medido) : "- *(nada)*"),
+      t.vimos.noMedido.length ? "**Lo que no se pudo medir**\n" + lista(t.vimos.noMedido) : "",
+    ]
+      .filter(Boolean)
+      .join("\n\n");
+    const partes = [
+      `### Caso ${c.n} — ${c.titulo}\n\n*${c.escenario}*`,
+      `**En una frase**\n\n${cita(t.enUnaFrase)}`,
+      `**Qué vimos**\n\n${cita(vimosMd)}`,
+    ];
+    if (t.pocasSesiones) partes.push(`**Menos de dos sesiones comparables**\n\n${cita(t.pocasSesiones)}`);
+    if (t.avisos.length) partes.push(`**Avisos**\n\n${t.avisos.map((a) => `- ${a}`).join("\n")}`);
+    return partes.join("\n\n");
+  }).join("\n\n---\n\n");
+}
+
 function golpe4(): string {
   const g = golpesReales[3];
   return golpeCompleto(
@@ -136,6 +157,7 @@ let doc = readFileSync(ruta, "utf-8");
 doc = rellenar(doc, "golpe4", golpe4());
 doc = rellenar(doc, "sesion", sesion());
 doc = rellenar(doc, "matriz", matriz());
+doc = rellenar(doc, "evolucion", evolucion());
 doc = rellenar(doc, "version", `Textos **v${VERSION_TEXTOS}** · generado con \`bun tests/generar-textos-doc.ts\` desde \`frontend/src/lib/textos-reporte.ts\` y la sesión real del 25/9/2026.`);
 writeFileSync(ruta, doc, "utf-8");
 console.log("documento actualizado:", ruta);

@@ -81,8 +81,16 @@ El motor y su sello (0.5.5), el contrato (1.4), los cuatro estados de R3 (no se 
 - **Once casos de prueba** (matriz de la sección C del documento de textos): cadera antes, tronco antes, nada medido, drive, revés, cámara del lado de la mano dominante, zurdo, orden mezclado, 3 golpes, sin golpe que se aparte, un solo golpe ordenable y ninguno ordenable. El documento se **genera** con el mismo código que arma los textos.
 - **Evolución** queda fuera de este cambio (se hace después, si queda tiempo).
 
+## Ajustes del 20/10, tercera ronda (tras ver el reporte en producción) — `VERSION_TEXTOS` = «2»
+
+- **«En una frase» (golpe, sesión y Evolución): una sola idea, SIN números** (ni grados, ni milisegundos, ni rangos, ni «salvo el golpe X»; los números se escriben con palabras) y un solo verbo, **«giró/giraron»**. Golpe: «Tu cadera y tu tronco giraron casi a la vez en este saque.» Sesión: «Medimos seis saques. Giraste parecido en casi todos y, cuando se pudo ver el orden, la cadera arrancó primero.» Los datos pasan a «Qué vimos». «Giraste parecido» solo se dice desde 5 golpes (cuando el servidor puede marcar el golpe que se aparta). **Prueba nueva: «En una frase» no puede contener dígitos.** Sigue valiendo la decisión 036 (sin «bien», «mal», «como se espera», «correcto»).
+- **«¿Qué giró primero?» reemplaza al gráfico del cuerpo del reporte:** cajas de izquierda a derecha, sin eje ni números; dos partes a menos de 8,33 ms (decisión 032) van juntas en una caja «casi a la vez»; si se distingue, flecha con «antes»; parte no medida: caja punteada «Brazo · no se vio». El gráfico en milisegundos con la franja pasa al **detalle técnico** y **reemplaza** al de segundos desde el inicio de la ventana; sus etiquetas ya no las pisa la línea punteada. Igual en el PDF.
+- **Textos:** título «Saque · golpe N de M»; rodilla y codo dichos en palabras («la pierna izquierda casi estirada», con el ángulo y «180° es…» entre paréntesis); «de su sesión» → «de tu sesión» (prueba de que no queda); sin la tarjeta vacía del brazo en «Fotos y video».
+- **Pie del sitio y del PDF:** sin «Proyecto final de Ingeniería en Informática · Universidad del Salvador · 2026»; «KinetiQ documenta el movimiento. No diagnostica ni reemplaza la evaluación de un profesional.»; descripción: «Medí cómo gira tu cuerpo en cada golpe.»
+- **Evolución** en el mismo lenguaje («En una frase» sin números + «Qué vimos» con ⓘ + texto simple con menos de 2 sesiones comparables), con las mismas pruebas de palabras prohibidas y de jerga. **Limitación conocida:** la serie se arma por jugador × golpe × encuadre; **el lado de la cámara todavía no forma parte de la clave** (es una consulta del servidor): si las sesiones se grabaron desde lados distintos se comparan igual y un aviso lo dice. Hacerlo estricto toca `/evolucion`, no el motor.
+
 ## Puntos abiertos
 
 1. **Pasaje exacto de la cita** del recuadro C (Kovacs y Ellenbecker, 2011): no verificado; por eso la frase es general.
 2. **Revisión de la matriz de casos** por Valentín (nueve escenarios, `docs/ux/textos-reporte-039-propuesta.md` sección C).
-4. **Evolución** queda fuera de este cambio.
+4. **El lado de la cámara en la clave de Evolución** (servidor).

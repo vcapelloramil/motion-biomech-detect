@@ -54,7 +54,8 @@ export function TresMomentos({
       continue;
     }
     if (foto) tarjetas.push({ tipo: "foto", foto });
-    else if (falta) tarjetas.push({ tipo: "falta", segmento: s, motivo: falta.motivo });
+    // El brazo que no se midió no lleva tarjeta aquí: ya lo explica «Lo que no se pudo medir».
+    else if (falta && s !== "brazo") tarjetas.push({ tipo: "falta", segmento: s, motivo: falta.motivo });
   }
   // Portada del video: el fotograma del pico del tronco (si no, el primero), para que no se vea negro antes de reproducir.
   const portada = artefactos.fotogramas.find((f) => f.segmento === "torso") ?? artefactos.fotogramas[0];
@@ -75,10 +76,19 @@ export function TresMomentos({
       ) : (
         <>
           {tarjetas.length > 0 && (
-            <ul className="mt-5 flex snap-x gap-4 overflow-x-auto pb-2 md:grid md:grid-cols-3 md:overflow-visible">
+            <ul
+              className={
+                tarjetas.length === 1
+                  ? "mt-5 max-w-sm"
+                  : "mt-5 flex snap-x gap-4 overflow-x-auto pb-2 md:grid md:overflow-visible " + (tarjetas.length === 2 ? "md:grid-cols-2" : "md:grid-cols-3")
+              }
+            >
               {tarjetas.map((c) =>
                 c.tipo === "foto" ? (
-                  <li key={c.foto.segmento} className="min-w-[78%] snap-center overflow-hidden rounded-2xl border border-border bg-card md:min-w-0">
+                  <li
+                    key={c.foto.segmento}
+                    className={"snap-center overflow-hidden rounded-2xl border border-border bg-card md:min-w-0 " + (tarjetas.length === 1 ? "" : "min-w-[78%]")}
+                  >
                     {urls[c.foto.ruta] ? (
                       <img
                         src={urls[c.foto.ruta]}

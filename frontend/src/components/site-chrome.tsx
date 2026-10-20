@@ -191,7 +191,7 @@ export function Footer() {
             </div>
             <span className="font-display text-lg font-bold">KinetiQ</span>
           </div>
-          <p className="mt-3 text-sm text-muted-foreground">Visión artificial aplicada a la secuenciación de la cadena cinética en tenis.</p>
+          <p className="mt-3 text-sm text-muted-foreground">Medí cómo gira tu cuerpo en cada golpe.</p>
         </div>
         <div>
           <div className="font-display text-sm font-semibold">Producto</div>
@@ -208,8 +208,7 @@ export function Footer() {
         </div>
       </div>
       <div className="border-t border-border py-5 text-center font-mono text-xs text-muted-foreground">
-        KinetiQ documenta el movimiento. No diagnostica ni reemplaza la evaluación de un profesional. · Proyecto final de Ingeniería en
-        Informática · Universidad del Salvador · 2026
+        KinetiQ documenta el movimiento. No diagnostica ni reemplaza la evaluación de un profesional.
       </div>
     </footer>
   );

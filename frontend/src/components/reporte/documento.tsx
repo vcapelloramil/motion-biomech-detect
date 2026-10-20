@@ -109,10 +109,13 @@ export function FotogramasChicos({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clave]);
 
-  const segmentos: ("pelvis" | "torso" | "brazo")[] = textos.fotoUnica ? ["torso", "brazo"] : ["pelvis", "torso", "brazo"];
+  // El brazo que no se midió no lleva caja: ya lo explica «Lo que no se pudo medir».
+  const hayBrazo = artefactos.fotogramas.some((x) => x.segmento === "brazo");
+  const segmentos: ("pelvis" | "torso" | "brazo")[] = [...(textos.fotoUnica ? (["torso"] as const) : (["pelvis", "torso"] as const)), ...(hayBrazo ? (["brazo"] as const) : [])];
+  const columnas = segmentos.length === 1 ? "grid grid-cols-1 gap-3 max-w-[70mm] mx-auto" : segmentos.length === 2 ? "grid grid-cols-2 gap-3" : "grid grid-cols-3 gap-3";
   return (
     <>
-      <ul className={textos.fotoUnica ? "grid grid-cols-2 gap-3" : "grid grid-cols-3 gap-3"}>
+      <ul className={columnas}>
         {segmentos.map((s) => {
           // En la foto única, la del tronco hace de "cadera y tronco" (y si solo hay la de la cadera, esa).
           const f = artefactos.fotogramas.find((x) => x.segmento === s) ?? (textos.fotoUnica && s === "torso" ? artefactos.fotogramas.find((x) => x.segmento === "pelvis") : undefined);
@@ -214,9 +217,10 @@ export function ParaProfesionalPdf({ profesional }: { profesional: Profesional }
 }
 
 /** El detalle técnico del golpe, abierto en el papel: cada dato con su explicación en una línea. */
-export function DetalleGruposPdf({ grupos }: { grupos: GrupoDetalle[] }) {
+export function DetalleGruposPdf({ grupos, antes }: { grupos: GrupoDetalle[]; antes?: ReactNode }) {
   return (
     <Seccion titulo="Detalle técnico" cortable>
+      {antes}
       {grupos.map((g) => (
         <div key={g.titulo} className="mb-2">
           <Subtitulo>{g.titulo}</Subtitulo>
@@ -248,8 +252,8 @@ export function Limitaciones() {
 export function PieDeDocumento({ versiones, generado }: { versiones: string[]; generado: string }) {
   return (
     <footer className="mt-4 border-t border-gray-400 pt-1 text-[7.5pt] text-gray-600">
-      KinetiQ · motor {versiones.length ? versiones.join(", ") : "—"} · textos v{VERSION_TEXTOS} · documento generado el {generado}. Para
-      compartir con un entrenador o un profesional de la salud.
+      KinetiQ documenta el movimiento. No diagnostica ni reemplaza la evaluación de un profesional. · motor {versiones.length ? versiones.join(", ") : "—"} ·
+      textos v{VERSION_TEXTOS} · documento generado el {generado}. Para compartir con un entrenador o un profesional de la salud.
     </footer>
   );
 }

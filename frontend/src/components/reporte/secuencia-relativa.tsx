@@ -19,6 +19,9 @@ const FILA_H = 50;
 const BASE = TOP + FILAS.length * FILA_H;
 const H = BASE + 62;
 
+// Halo del color del fondo detrás de las letras: la línea punteada del tronco y la franja no las pisan.
+const HALO = { paintOrder: "stroke", stroke: "var(--card)", strokeWidth: 4, strokeLinejoin: "round" } as const;
+
 const PASOS = [5, 10, 20, 25, 50, 100, 200, 500];
 
 export function SecuenciaRelativa({ reporte }: { reporte: Record<string, unknown> }) {
@@ -49,10 +52,10 @@ export function SecuenciaRelativa({ reporte }: { reporte: Record<string, unknown
       >
         {/* franja de ± la tolerancia: no se puede decir cuál fue primero */}
         <rect x={x(-tol)} y={TOP - 6} width={x(tol) - x(-tol)} height={FILAS.length * FILA_H + 6} fill="var(--muted-foreground)" fillOpacity="0.18" />
-        <text x={cx} y={TOP - 28} textAnchor="middle" fontSize="11" fill="var(--muted-foreground)">
+        <text x={cx} y={TOP - 28} textAnchor="middle" fontSize="11" fill="var(--muted-foreground)" {...HALO}>
           Zona donde no se puede distinguir
         </text>
-        <text x={cx} y={TOP - 15} textAnchor="middle" fontSize="11" fill="var(--muted-foreground)">
+        <text x={cx} y={TOP - 15} textAnchor="middle" fontSize="11" fill="var(--muted-foreground)" {...HALO}>
           cuál fue primero (± {Math.round(tol)} ms)
         </text>
 
@@ -78,11 +81,12 @@ export function SecuenciaRelativa({ reporte }: { reporte: Record<string, unknown
               <circle cx={x(p.deltaMs)} cy={y(i)} r="9" fill={COLOR[p.segmento]} stroke="var(--foreground)" strokeOpacity="0.55" strokeWidth="1.5" />
               <text
                 x={Math.min(Math.max(x(p.deltaMs), PAD_L + 34), W - PAD_R - 34)}
-                y={y(i) - 15}
+                y={y(i) - 16}
                 textAnchor="middle"
                 fontSize="12"
                 fill="var(--foreground)"
                 fontFamily="var(--font-mono)"
+                {...HALO}
               >
                 {p.etiqueta}
               </text>

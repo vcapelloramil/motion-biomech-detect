@@ -1,15 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowDown, ArrowUp, Equal, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { RutaProtegida } from "@/components/ruta-protegida";
 import { Hueco, PanelBarras, PanelLinea } from "@/components/evolucion/graficos";
 import { BotonDescargarPdf, SelloDelPdf, LimitacionesDelPdf } from "@/components/reporte/pdf";
 import { useSesion } from "@/lib/sesion";
 import { ENCUADRE_ETIQUETA, GESTO_ETIQUETA } from "@/lib/estado-video";
-import { avisosDeEvolucion, etiquetaDeFecha, tarjetasDeEvolucion, type SerieDeEvolucion } from "@/lib/evolucion";
+import { etiquetaDeFecha, type SerieDeEvolucion } from "@/lib/evolucion";
+import { CABECERA_EVOLUCION, textosDeEvolucion } from "@/lib/textos-evolucion";
+import { DetalleTecnico, EnUnaFrase, PieDeTextos, QueVimos } from "@/components/reporte/bloques";
 import { leerEvolucion } from "@/lib/evolucion-api";
 import { gruposDeEvolucion, type GrupoDeEvolucion } from "@/lib/videos-data";
-import { fmt } from "@/lib/formato";
 
 export const Route = createFileRoute("/evolucion")({
   head: () => ({
@@ -82,10 +83,7 @@ function EvolucionPage() {
       <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight md:text-6xl">
         Vos, frente a <span className="text-gradient-neon">vos mismo</span>
       </h1>
-      <p className="mt-3 max-w-2xl text-muted-foreground">
-        Solo se comparan sesiones del mismo jugador, golpe y encuadre. No hay comparación con otros jugadores ni con un modelo ideal, y un cambio
-        no es mejor ni peor: es lo que cambió.
-      </p>
+      <p className="mt-3 max-w-2xl text-muted-foreground">{CABECERA_EVOLUCION}</p>
 
       {cargandoTodo ? (
         <p role="status" className="mt-10 flex items-center gap-2 text-sm text-muted-foreground">
@@ -151,70 +149,71 @@ function EvolucionPage() {
 }
 
 function Serie({ serie }: { serie: SerieDeEvolucion }) {
-  const tarjetas = tarjetasDeEvolucion(serie);
-  const avisos = avisosDeEvolucion(serie);
+  const textos = textosDeEvolucion(serie);
   const etiquetas = serie.sesiones.map((s) => etiquetaDeFecha(s.fecha));
-  const unaSola = serie.sesiones.length === 1;
   const banda =
     serie.centro_habitual !== null && serie.variacion_habitual !== null
       ? { centro: serie.centro_habitual, semiancho: serie.variacion_habitual }
       : null;
 
   return (
-    <div className="mt-8">
-      {unaSola && (
-        <p className="mb-6 rounded-2xl border border-dashed border-border px-4 py-3 text-sm">
-          Tenés una sola sesión de este golpe y encuadre: es tu punto de partida. La comparación empieza con la segunda.
-        </p>
+    <div className="mt-2">
+      <EnUnaFrase texto={textos.enUnaFrase} />
+      {textos.pocasSesiones && (
+        <p className="mt-4 rounded-2xl border border-dashed border-border px-4 py-3 text-sm">{textos.pocasSesiones}</p>
       )}
+      <QueVimos medido={textos.vimos.medido} noMedido={textos.vimos.noMedido} />
 
-      <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {tarjetas.map((t) => (
-          <li key={t.clave} className="rounded-2xl border border-border bg-card p-5">
-            <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">{t.titulo}</p>
-            <p className="mt-2 flex items-center gap-2 font-display text-3xl font-bold">
-              {t.direccion === "sube" && <ArrowUp className="h-5 w-5 text-acento" aria-label="Aumentó" />}
-              {t.direccion === "baja" && <ArrowDown className="h-5 w-5 text-acento" aria-label="Disminuyó" />}
-              {t.direccion === "igual" && <Equal className="h-5 w-5 text-acento" aria-label="Se mantuvo" />}
-              {t.valor ?? "—"}
-            </p>
-            <p className="mt-2 text-sm text-muted-foreground">{t.texto}</p>
-          </li>
-        ))}
-      </ul>
-
-      {avisos.map((a) => (
+      {textos.avisos.map((a) => (
         <p key={a} className="mt-3 text-xs text-muted-foreground">{a}</p>
       ))}
 
-      <div className="mt-6 grid gap-4 lg:grid-cols-2">
+      <div className="mt-8 grid gap-4 lg:grid-cols-2">
         <PanelLinea
-          titulo="Separación cadera-hombro máxima"
-          unidad="grados · mediana por sesión"
+          titulo={textos.graficos.tituloLinea}
+          unidad={textos.graficos.unidadLinea}
           puntos={serie.sesiones.map((s) => ({ valor: s.separacion_cadera_hombro.mediana, dispersion: s.separacion_cadera_hombro.dispersion }))}
           etiquetas={etiquetas}
           banda={banda}
-          textoBanda={`tu variación habitual ±${fmt(banda?.semiancho ?? 0, 0)}°`}
-          nota={
-            "Cada punto es la mediana de los golpes medidos de la sesión; la línea vertical, cuánto variaron entre sí. " +
-            "Una sesión sin dato queda como hueco: no se completa con una estimación."
-          }
+          textoBanda={textos.graficos.textoBanda ?? ""}
+          nota={textos.graficos.notaLinea}
         />
         {serie.sesiones.some((s) => s.orden.suficiente) ? (
           <PanelBarras
-            titulo="Golpes con el mismo orden de cadera y tronco"
+            titulo={textos.graficos.tituloBarras}
             barras={serie.sesiones.map((s) => ({ mismo: s.orden.mismo_orden, ordenables: s.orden.ordenables, suficiente: s.orden.suficiente }))}
             etiquetas={etiquetas}
-            nota="De los golpes en que se distingue cuál llegó primero, cuántos tuvieron el mismo orden. Mide si se repite, no cuál es el correcto. Con menos de 5 golpes ordenables no se dice."
+            nota={textos.graficos.notaBarras}
           />
         ) : (
-          <p className="rounded-2xl border border-dashed border-border p-5 text-sm text-muted-foreground">
-            <strong className="text-foreground">No hay gráfico del orden de cadera y tronco:</strong> ninguna sesión llega a 5 golpes en los que se
-            distinga cuál llegó primero. Es lo habitual con la cámara en tres cuartos: la cadera y el tronco llegan a su pico con menos de 8,33 ms
-            de diferencia y, a esa resolución, no se puede saber cuál fue primero. Los golpes medidos se ven en la separación de arriba.
-          </p>
+          <p className="rounded-2xl border border-dashed border-border p-5 text-sm text-muted-foreground">{textos.graficos.sinBarras}</p>
         )}
       </div>
+
+      <DetalleTecnico>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[34rem] text-left text-sm">
+            <thead className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+              <tr>
+                {textos.detalle.columnas.map((c) => (
+                  <th key={c} className="py-2 pr-4">{c}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {textos.detalle.filas.map((f, i) => (
+                <tr key={i} className="border-t border-border align-top">
+                  {f.map((c, k) => (
+                    <td key={k} className={"py-2 pr-4 " + (k === 0 ? "font-semibold" : "font-mono")}>{c}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="text-xs text-muted-foreground">{textos.detalle.nota}</p>
+        <PieDeTextos />
+      </DetalleTecnico>
     </div>
   );
 }

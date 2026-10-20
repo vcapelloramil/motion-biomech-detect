@@ -1,10 +1,10 @@
 # Textos de los reportes — decisión 039 (versión 2, con los ajustes de Valentín del 20/10)
 
-**Estado:** textos **aprobados por Valentín el 20/10/2026** (10 ajustes en la primera ronda; 5 en la segunda, tras revisar la matriz: ver «Segunda ronda»). **Implementados** en la pantalla del golpe, la de la sesión y los dos PDF.
+**Estado:** textos **aprobados por Valentín el 20/10/2026** en tres rondas (10 ajustes; 5 tras revisar la matriz; 5 tras verlo en producción: ver «Tercera ronda»). **Implementados** en la pantalla del golpe, la de la sesión, los dos PDF y Evolución. Lo que dicen las rondas 1 y 2 sobre «En una frase» y sobre el gráfico quedó **reemplazado por la tercera**.
 **Cómo se escribió este documento:** las secciones A, B y C **no están escritas a mano**: las genera el programa que arma los textos de verdad (`frontend/src/lib/textos-reporte.ts`) sobre la sesión **real** del 25/9/2026 (saque, tres cuartos, 6 golpes, motor 0.5.3, leída de la base en solo lectura) y sobre variantes de ese mismo dato. Se regeneran con `bun tests/generar-textos-doc.ts` (desde `frontend/`). Así este documento **no puede decir otra cosa que el sistema**.
 **Versión de los textos:** <!-- GENERADO:version -->
 
-Textos **v1** · generado con `bun tests/generar-textos-doc.ts` desde `frontend/src/lib/textos-reporte.ts` y la sesión real del 25/9/2026.
+Textos **v2** · generado con `bun tests/generar-textos-doc.ts` desde `frontend/src/lib/textos-reporte.ts` y la sesión real del 25/9/2026.
 
 <!-- /GENERADO:version -->
 
@@ -16,7 +16,7 @@ Reglas generales (decisión 039): primero lo medido; después lo no medido, con 
 
 | # | Pedido de Valentín | Cómo quedó |
 | --- | --- | --- |
-| 1 | «En una frase» arriba de «Qué vimos», con reglas fijas | Golpe: «Un saque típico de tu sesión: te enroscaste 34° y tu cadera y tu tronco aceleraron casi juntos.» (si no es el típico: «En este saque, …»). Sesión (versión de la segunda ronda): «En tus 6 saques te enroscaste entre 29° y 42°, salvo el golpe 6 (11°). En 3 de tus 6 saques se pudo distinguir el orden, y en los tres tu cadera aceleró antes que tu tronco.» |
+| 1 | «En una frase» arriba de «Qué vimos», con reglas fijas | Golpe: «Un saque típico de tu sesión: te enroscaste 34° y tu cadera y tu tronco aceleraron casi juntos.» (si no es el típico: «En este saque, …»). Sesión (versión de la segunda ronda): «En tus 6 saques te enroscaste entre 29° y 42°, salvo el golpe 6 (11°). En 3 de tus 6 saques se pudo distinguir el orden, y en los tres tu cadera aceleró antes que tu tronco.» *(Reemplazado por la tercera ronda.)* |
 | 2 | Todo ángulo de articulación con su referencia en una línea | «180° es la pierna totalmente estirada» / «180° es el brazo totalmente estirado» en cada frase que da un ángulo de rodilla o de codo, en el detalle técnico, en los encabezados de la tabla de la sesión y en el ⓘ. Una prueba lo verifica caso por caso. |
 | 3 | En «Qué vimos» no va el codo del brazo que no golpea; va la rodilla | La rodilla ocupa su lugar («Cuando el tronco giraba más rápido, tu rodilla izquierda estaba a 172°…»). El codo del brazo que no golpea pasó al detalle técnico, con la aclaración de que es el del lanzamiento de pelota. Solo el codo del brazo dominante, si se midió, puede ocupar el lugar de la rodilla. |
 | 4 | Recuadro de literatura: frase general, sin Fleisig | «La literatura describe el saque como una cadena que transmite energía desde las piernas, a través de la cadera y el tronco, hacia el brazo y la raqueta (Kovacs y Ellenbecker, 2011). La forma exacta varía de un jugador a otro.» Para drive y revés: «Para este golpe todavía no hay una referencia incorporada al proyecto.» **Registrado en la decisión 039:** una secuencia específica (el orden de los picos, valores) requiere verificar el pasaje antes de escribirla. |
@@ -48,7 +48,7 @@ Reglas generales (decisión 039): primero lo medido; después lo no medido, con 
 
 **En una frase**
 
-> Un saque típico de tu sesión: te enroscaste 34° y tu cadera y tu tronco aceleraron casi juntos.
+> Tu cadera y tu tronco giraron casi a la vez en este saque.
 
 #### 1. Qué vimos
 
@@ -72,7 +72,7 @@ Reglas generales (decisión 039): primero lo medido; después lo no medido, con 
 
 > **Para medir mejor**
 > - Con la cámara a tu izquierda, el cuerpo tapa el brazo con el que golpeás cuando armás el golpe. Si querés intentar medirlo, podés grabar desde el otro lado; ese lado todavía no está validado en KinetiQ, así que cadera y tronco de esa sesión no se podrían comparar con los de esta.
-> - Este golpe es uno de los 6 de su sesión. Para ver cuánto se parece a los demás, mirá la sesión. *(enlace a la sesión)*
+> - Este golpe es uno de los 6 de tu sesión. Para ver cuánto se parece a los demás, mirá la sesión. *(enlace a la sesión)*
 > - Un encuadre que muestre el cuerpo entero, con los pies a la vista, y buena luz pueden ayudar a que el sistema vea las rodillas con seguridad.
 >
 > **Para usar estos datos al entrenar**
@@ -86,7 +86,7 @@ Reglas generales (decisión 039): primero lo medido; después lo no medido, con 
 
 > **Preguntas para llevar**
 > 1. En este saque la cadera y el tronco giraron casi a la vez (4 ms). ¿Lo ves igual en el video? ¿Se parece a lo que sentís al sacar?
-> 2. Este es el golpe más cercano al valor típico de su sesión (torsión de 34°; la sesión va de 11° a 42°). ¿Te parece representativo de tus saques?
+> 2. Este es el golpe más cercano al valor típico de tu sesión (torsión de 34°; la sesión va de 11° a 42°). ¿Te parece representativo de tus saques?
 >
 > **[Descargar PDF]**
 >
@@ -135,7 +135,7 @@ Reglas generales (decisión 039): primero lo medido; después lo no medido, con 
 | Dato | Valor | Qué significa |
 | --- | --- | --- |
 | Motor | 0.5.3 · mediapipe | Versión del programa que calculó el reporte y detector de pose. |
-| Textos | v1 | Versión de las frases de este reporte; si cambian, sube el número. |
+| Textos | v2 | Versión de las frases de este reporte; si cambian, sube el número. |
 
 <!-- /GENERADO:golpe4 -->
 
@@ -147,17 +147,17 @@ Reglas generales (decisión 039): primero lo medido; después lo no medido, con 
 
 **En una frase**
 
-> En tus 6 saques te enroscaste entre 29° y 42°, salvo el golpe 6 (11°). En 3 de tus 6 saques se pudo distinguir el orden, y en los tres tu cadera aceleró antes que tu tronco.
+> Medimos seis saques. Giraste parecido en casi todos y, cuando se pudo ver el orden, la cadera arrancó primero.
 
 #### 1. Qué vimos
 
 > **Lo que se midió**
 > - Se midieron los 6 golpes. La torsión entre tus caderas y tus hombros tuvo un valor típico de 33°: 5 golpes quedaron entre 29° y 42° y el golpe 6 fue de 11°. ⓘ
 > - En 3 de los 6 golpes (1, 3 y 5) se pudo establecer cuál giró primero, y en los 3 fue la cadera: llegó a su giro más rápido entre 17 y 42 milésimas de segundo antes que el tronco. En los otros 3 quedaron casi a la vez (entre 4 y 8 ms) y no se puede decir cuál fue primero. Desde otra posición de cámara, este orden podría verse distinto. ⓘ
-> - Cuando el tronco giraba más rápido, tu rodilla izquierda estaba entre 172° y 178° en los 4 golpes en que se midió (180° es la pierna totalmente estirada). ⓘ
+> - Cuando el tronco giraba más rápido, tenías la pierna izquierda casi estirada en los 4 golpes en que se midió (rodilla entre 172° y 178°; 180° es la pierna totalmente estirada). ⓘ
 >
 > **Un golpe que se aparta**
-> - **El golpe 6 se parece menos a los demás:** su torsión fue de 11° y, además, tu rodilla izquierda estaba mucho más flexionada (101°, contra 172° a 178° en los otros 4 con dato; 180° es la pierna totalmente estirada). Puede ser tu golpe o la medición: miralo en el video. ⓘ
+> - **El golpe 6 se parece menos a los demás:** su torsión fue de 11° y, además, la pierna izquierda estaba mucho más flexionada (rodilla a 101°, contra 172° a 178° en los otros 4 con dato; 180° es la pierna totalmente estirada). Puede ser tu golpe o la medición: miralo en el video. ⓘ
 >
 > **Lo que no se pudo medir**
 > - **El brazo con el que golpeás,** en ningún golpe: desde la cámara, a tu izquierda, el cuerpo lo tapa. ⓘ
@@ -185,7 +185,7 @@ Reglas generales (decisión 039): primero lo medido; después lo no medido, con 
 #### 4. Para tu entrenador o profesional
 
 > **Preguntas para llevar**
-> 1. En el golpe 6 la torsión fue de 11° (en los otros, entre 29° y 42°) y tu rodilla izquierda estaba mucho más flexionada. ¿Qué ves en el video de ese golpe? ¿Fue un saque distinto a los demás?
+> 1. En el golpe 6 la torsión fue de 11° (en los otros, entre 29° y 42°) y la pierna izquierda estaba mucho más flexionada. ¿Qué ves en el video de ese golpe? ¿Fue un saque distinto a los demás?
 > 2. En 3 golpes la cadera llegó antes que el tronco y en otros 3 llegaron casi juntos. ¿Se ve esa diferencia en el video? ¿Vale la pena seguir mirándola en las próximas sesiones?
 > 3. ¿Cuál de estos 6 saques sentiste más cómodo o más potente? Mirá sus números y su video: ¿se distingue en algo?
 >
@@ -218,7 +218,7 @@ Reglas generales (decisión 039): primero lo medido; después lo no medido, con 
 - **Un golpe que se aparta:** Su torsión quedó a más de 3 variaciones típicas del valor típico de la sesión. Puede ser tu golpe o la medición: conviene mirarlo en el video.
 - **Casi a la vez:** Con la resolución de estos videos, menos de 8,3 ms de diferencia no se puede ordenar. La repetición del orden se informa desde 5 golpes en que se pudo establecer.
 
-*Motor 0.5.3 · textos v1*
+*Motor 0.5.3 · textos v2*
 
 <!-- /GENERADO:sesion -->
 
@@ -236,14 +236,14 @@ Cada caso muestra el «En una frase» y el «Qué vimos» que salen con las mism
 
 **En una frase**
 
-> En este saque, te enroscaste 32° y tu cadera aceleró antes que tu tronco.
+> Tu cadera giró antes que tu tronco en este saque.
 
 **Qué vimos**
 
 > **Lo que se midió**
 > - En el momento de mayor torsión, la línea de tus hombros y la de tus caderas formaron un ángulo de 32°. ⓘ
 > - Tu cadera alcanzó su giro más rápido 42 milésimas de segundo antes que tu tronco. Desde otra posición de cámara, este orden podría verse distinto. ⓘ
-> - Cuando el tronco giraba más rápido, tu rodilla izquierda estaba a 172° (180° es la pierna totalmente estirada). ⓘ
+> - Cuando el tronco giraba más rápido, tenías la pierna izquierda casi estirada (rodilla a 172°; 180° es la pierna totalmente estirada). ⓘ
 >
 > **Lo que no se pudo medir**
 > - **El brazo con el que golpeás:** desde la cámara, a tu izquierda, el cuerpo lo tapó durante buena parte del golpe. ⓘ
@@ -256,14 +256,14 @@ Cada caso muestra el «En una frase» y el «Qué vimos» que salen con las mism
 
 **En una frase**
 
-> En este saque, te enroscaste 32° y tu tronco aceleró antes que tu cadera.
+> Tu tronco giró antes que tu cadera en este saque.
 
 **Qué vimos**
 
 > **Lo que se midió**
 > - En el momento de mayor torsión, la línea de tus hombros y la de tus caderas formaron un ángulo de 32°. ⓘ
 > - Tu tronco alcanzó su giro más rápido 42 milésimas de segundo antes que tu cadera. Desde otra posición de cámara, este orden podría verse distinto. ⓘ
-> - Cuando el tronco giraba más rápido, tu rodilla izquierda estaba a 172° (180° es la pierna totalmente estirada). ⓘ
+> - Cuando el tronco giraba más rápido, tenías la pierna izquierda casi estirada (rodilla a 172°; 180° es la pierna totalmente estirada). ⓘ
 >
 > **Lo que no se pudo medir**
 > - **El brazo con el que golpeás:** desde la cámara, a tu izquierda, el cuerpo lo tapó durante buena parte del golpe. ⓘ
@@ -297,14 +297,14 @@ Cada caso muestra el «En una frase» y el «Qué vimos» que salen con las mism
 
 **En una frase**
 
-> En este drive, te enroscaste 32° y tu cadera aceleró antes que tu tronco.
+> Tu cadera giró antes que tu tronco en este drive.
 
 **Qué vimos**
 
 > **Lo que se midió**
 > - En el momento de mayor torsión, la línea de tus hombros y la de tus caderas formaron un ángulo de 32°. ⓘ
 > - Tu cadera alcanzó su giro más rápido 42 milésimas de segundo antes que tu tronco. Desde otra posición de cámara, este orden podría verse distinto. ⓘ
-> - Cuando el tronco giraba más rápido, tu rodilla izquierda estaba a 172° (180° es la pierna totalmente estirada). ⓘ
+> - Cuando el tronco giraba más rápido, tenías la pierna izquierda casi estirada (rodilla a 172°; 180° es la pierna totalmente estirada). ⓘ
 >
 > **Lo que no se pudo medir**
 > - **El brazo con el que golpeás:** el sistema no pudo seguirlo con confianza durante buena parte del golpe.
@@ -320,14 +320,14 @@ Cada caso muestra el «En una frase» y el «Qué vimos» que salen con las mism
 
 **En una frase**
 
-> En este revés, te enroscaste 32° y tu cadera aceleró antes que tu tronco.
+> Tu cadera giró antes que tu tronco en este revés.
 
 **Qué vimos**
 
 > **Lo que se midió**
 > - En el momento de mayor torsión, la línea de tus hombros y la de tus caderas formaron un ángulo de 32°. ⓘ
 > - Tu cadera alcanzó su giro más rápido 42 milésimas de segundo antes que tu tronco. Desde otra posición de cámara, este orden podría verse distinto. ⓘ
-> - Cuando el tronco giraba más rápido, tu rodilla izquierda estaba a 172° (180° es la pierna totalmente estirada). ⓘ
+> - Cuando el tronco giraba más rápido, tenías la pierna izquierda casi estirada (rodilla a 172°; 180° es la pierna totalmente estirada). ⓘ
 >
 > **Lo que no se pudo medir**
 > - **El brazo con el que golpeás:** el sistema no pudo seguirlo con confianza durante buena parte del golpe.
@@ -343,14 +343,14 @@ Cada caso muestra el «En una frase» y el «Qué vimos» que salen con las mism
 
 **En una frase**
 
-> En este saque, te enroscaste 32° y tu cadera aceleró antes que tu tronco.
+> Tu cadera giró antes que tu tronco en este saque.
 
 **Qué vimos**
 
 > **Lo que se midió**
 > - En el momento de mayor torsión, la línea de tus hombros y la de tus caderas formaron un ángulo de 32°. ⓘ
 > - Tu cadera alcanzó su giro más rápido 42 milésimas de segundo antes que tu tronco. Desde otra posición de cámara, este orden podría verse distinto. ⓘ
-> - Cuando el tronco giraba más rápido, tu rodilla izquierda estaba a 172° (180° es la pierna totalmente estirada). ⓘ
+> - Cuando el tronco giraba más rápido, tenías la pierna izquierda casi estirada (rodilla a 172°; 180° es la pierna totalmente estirada). ⓘ
 
 > **Qué podés hacer → para medir mejor**
 > - Grabaste con la cámara del lado de tu mano dominante: el brazo con el que golpeás queda más a la vista, pero ese lado todavía no está validado en KinetiQ, así que cadera y tronco de este golpe no se pueden comparar con los de sesiones grabadas desde el otro lado.
@@ -363,7 +363,7 @@ Cada caso muestra el «En una frase» y el «Qué vimos» que salen con las mism
 
 **En una frase**
 
-> Un saque típico de tu sesión: te enroscaste 34° y tu cadera y tu tronco aceleraron casi juntos.
+> Tu cadera y tu tronco giraron casi a la vez en este saque.
 
 **Qué vimos**
 
@@ -377,7 +377,7 @@ Cada caso muestra el «En una frase» y el «Qué vimos» que salen con las mism
 
 > **Qué podés hacer → para medir mejor**
 > - Con la cámara a tu derecha, el cuerpo tapa el brazo con el que golpeás cuando armás el golpe. Si querés intentar medirlo, podés grabar desde el otro lado; ese lado todavía no está validado en KinetiQ, así que cadera y tronco de esa sesión no se podrían comparar con los de esta.
-> - Este golpe es uno de los 6 de su sesión. Para ver cuánto se parece a los demás, mirá la sesión. *(enlace a la sesión)*
+> - Este golpe es uno de los 6 de tu sesión. Para ver cuánto se parece a los demás, mirá la sesión. *(enlace a la sesión)*
 > - Un encuadre que muestre el cuerpo entero, con los pies a la vista, y buena luz pueden ayudar a que el sistema vea las rodillas con seguridad.
 
 ---
@@ -388,17 +388,17 @@ Cada caso muestra el «En una frase» y el «Qué vimos» que salen con las mism
 
 **En una frase**
 
-> En tus 6 saques te enroscaste entre 29° y 42°, salvo el golpe 6 (11°). En 3 de tus 6 saques se pudo distinguir el orden: en 2 tu cadera aceleró antes que tu tronco y en 1, al revés.
+> Medimos seis saques. Giraste parecido en casi todos y, cuando se pudo ver el orden, a veces arrancó primero la cadera y a veces el tronco.
 
 **Qué vimos**
 
 > **Lo que se midió**
 > - Se midieron los 6 golpes. La torsión entre tus caderas y tus hombros tuvo un valor típico de 33°: 5 golpes quedaron entre 29° y 42° y el golpe 6 fue de 11°. ⓘ
 > - En 3 de los 6 golpes se pudo establecer cuál giró primero: en 2 fue la cadera y en 1, el tronco. En los otros 3 quedaron casi a la vez (entre 4 y 8 ms) y no se puede decir cuál fue primero. Desde otra posición de cámara, este orden podría verse distinto. ⓘ
-> - Cuando el tronco giraba más rápido, tu rodilla izquierda estaba entre 172° y 178° en los 4 golpes en que se midió (180° es la pierna totalmente estirada). ⓘ
+> - Cuando el tronco giraba más rápido, tenías la pierna izquierda casi estirada en los 4 golpes en que se midió (rodilla entre 172° y 178°; 180° es la pierna totalmente estirada). ⓘ
 >
 > **Un golpe que se aparta**
-> - **El golpe 6 se parece menos a los demás:** su torsión fue de 11° y, además, tu rodilla izquierda estaba mucho más flexionada (101°, contra 172° a 178° en los otros 4 con dato; 180° es la pierna totalmente estirada). Puede ser tu golpe o la medición: miralo en el video. ⓘ
+> - **El golpe 6 se parece menos a los demás:** su torsión fue de 11° y, además, la pierna izquierda estaba mucho más flexionada (rodilla a 101°, contra 172° a 178° en los otros 4 con dato; 180° es la pierna totalmente estirada). Puede ser tu golpe o la medición: miralo en el video. ⓘ
 >
 > **Lo que no se pudo medir**
 > - **El brazo con el que golpeás,** en ningún golpe: desde la cámara, a tu izquierda, el cuerpo lo tapa. ⓘ
@@ -413,7 +413,7 @@ Cada caso muestra el «En una frase» y el «Qué vimos» que salen con las mism
 > - En Evolución podés mirar si el valor típico de la torsión (hoy 33°) y la variación entre golpes (hoy ±4°) se mantienen o se vuelven más parejos de una sesión a otra. *(enlace a Evolución)*
 >
 > **Para tu entrenador → preguntas**
-> 1. En el golpe 6 la torsión fue de 11° (en los otros, entre 29° y 42°) y tu rodilla izquierda estaba mucho más flexionada. ¿Qué ves en el video de ese golpe? ¿Fue un saque distinto a los demás?
+> 1. En el golpe 6 la torsión fue de 11° (en los otros, entre 29° y 42°) y la pierna izquierda estaba mucho más flexionada. ¿Qué ves en el video de ese golpe? ¿Fue un saque distinto a los demás?
 > 2. En 2 golpes la cadera llegó antes que el tronco y en 1, al revés. ¿Se ve esa diferencia en el video? ¿Vale la pena seguir mirándola en las próximas sesiones?
 > 3. ¿Cuál de estos 6 saques sentiste más cómodo o más potente? Mirá sus números y su video: ¿se distingue en algo?
 
@@ -425,14 +425,14 @@ Cada caso muestra el «En una frase» y el «Qué vimos» que salen con las mism
 
 **En una frase**
 
-> En tus 3 saques te enroscaste entre 32° y 42°. En tus 3 saques se pudo distinguir el orden, y en todos tu cadera aceleró antes que tu tronco.
+> Medimos tres saques. Cuando se pudo ver el orden, la cadera arrancó primero.
 
 **Qué vimos**
 
 > **Lo que se midió**
 > - Se midieron los 3 golpes. La torsión entre tus caderas y tus hombros tuvo un valor típico de 35°: los 3 golpes quedaron entre 32° y 42°. ⓘ
 > - En los 3 golpes se pudo establecer cuál giró primero, y en todos fue la cadera: llegó a su giro más rápido entre 17 y 42 milésimas de segundo antes que el tronco. Desde otra posición de cámara, este orden podría verse distinto. ⓘ
-> - Cuando el tronco giraba más rápido, tu rodilla izquierda estaba entre 172° y 178° en los 3 golpes en que se midió (180° es la pierna totalmente estirada). ⓘ
+> - Cuando el tronco giraba más rápido, tenías la pierna izquierda casi estirada en los 3 golpes en que se midió (rodilla entre 172° y 178°; 180° es la pierna totalmente estirada). ⓘ
 >
 > **Lo que no se pudo medir**
 > - **El brazo con el que golpeás,** en ningún golpe: desde la cámara, a tu izquierda, el cuerpo lo tapa. ⓘ
@@ -456,14 +456,14 @@ Cada caso muestra el «En una frase» y el «Qué vimos» que salen con las mism
 
 **En una frase**
 
-> En tus 5 saques te enroscaste entre 29° y 42°. En 3 de tus 5 saques se pudo distinguir el orden, y en los tres tu cadera aceleró antes que tu tronco.
+> Medimos cinco saques. Giraste parecido en todos y, cuando se pudo ver el orden, la cadera arrancó primero.
 
 **Qué vimos**
 
 > **Lo que se midió**
 > - Se midieron los 5 golpes. La torsión entre tus caderas y tus hombros tuvo un valor típico de 34°: los 5 golpes quedaron entre 29° y 42°. ⓘ
 > - En 3 de los 5 golpes (1, 3 y 5) se pudo establecer cuál giró primero, y en los 3 fue la cadera: llegó a su giro más rápido entre 17 y 42 milésimas de segundo antes que el tronco. En los otros 2 quedaron casi a la vez (entre 4 y 8 ms) y no se puede decir cuál fue primero. Desde otra posición de cámara, este orden podría verse distinto. ⓘ
-> - Cuando el tronco giraba más rápido, tu rodilla izquierda estaba entre 172° y 178° en los 4 golpes en que se midió (180° es la pierna totalmente estirada). ⓘ
+> - Cuando el tronco giraba más rápido, tenías la pierna izquierda casi estirada en los 4 golpes en que se midió (rodilla entre 172° y 178°; 180° es la pierna totalmente estirada). ⓘ
 >
 > **Lo que no se pudo medir**
 > - **El brazo con el que golpeás,** en ningún golpe: desde la cámara, a tu izquierda, el cuerpo lo tapa. ⓘ
@@ -489,14 +489,14 @@ Cada caso muestra el «En una frase» y el «Qué vimos» que salen con las mism
 
 **En una frase**
 
-> En tus 4 saques te enroscaste entre 11° y 35°. En 1 de tus 4 saques se pudo distinguir el orden, y en ese tu cadera aceleró antes que tu tronco.
+> Medimos cuatro saques. Cuando se pudo ver el orden, la cadera arrancó primero.
 
 **Qué vimos**
 
 > **Lo que se midió**
 > - Se midieron los 4 golpes. La torsión entre tus caderas y tus hombros tuvo un valor típico de 31°: los 4 golpes quedaron entre 11° y 35°. ⓘ
 > - En 1 de los 4 golpes (el 1) se pudo establecer cuál giró primero, y fue la cadera: llegó a su giro más rápido 17 milésimas de segundo antes que el tronco. En los otros 3 quedaron casi a la vez (entre 4 y 8 ms) y no se puede decir cuál fue primero. Desde otra posición de cámara, este orden podría verse distinto. ⓘ
-> - Cuando el tronco giraba más rápido, tu rodilla izquierda estaba entre 101° y 178° en los 3 golpes en que se midió (180° es la pierna totalmente estirada). ⓘ
+> - Cuando el tronco giraba más rápido, tenías la pierna izquierda flexionada en los 3 golpes en que se midió (rodilla entre 101° y 178°; 180° es la pierna totalmente estirada). ⓘ
 >
 > **Lo que no se pudo medir**
 > - **El brazo con el que golpeás,** en ningún golpe: desde la cámara, a tu izquierda, el cuerpo lo tapa. ⓘ
@@ -518,14 +518,14 @@ Cada caso muestra el «En una frase» y el «Qué vimos» que salen con las mism
 
 **En una frase**
 
-> En tus 3 saques te enroscaste entre 11° y 34°. En ningún golpe se pudo distinguir cuál aceleró primero: quedaron casi a la vez.
+> Medimos tres saques. En ninguno se pudo ver qué giró primero: la cadera y el tronco giraron casi a la vez.
 
 **Qué vimos**
 
 > **Lo que se midió**
 > - Se midieron los 3 golpes. La torsión entre tus caderas y tus hombros tuvo un valor típico de 29°: los 3 golpes quedaron entre 11° y 34°. ⓘ
 > - En ningún golpe se pudo establecer cuál giró primero: la cadera y el tronco quedaron casi a la vez (entre 4 y 8 ms). ⓘ
-> - Cuando el tronco giraba más rápido, tu rodilla izquierda estaba entre 101° y 176° en los 2 golpes en que se midió (180° es la pierna totalmente estirada). ⓘ
+> - Cuando el tronco giraba más rápido, tenías la pierna izquierda flexionada en los 2 golpes en que se midió (rodilla entre 101° y 176°; 180° es la pierna totalmente estirada). ⓘ
 >
 > **Lo que no se pudo medir**
 > - **El brazo con el que golpeás,** en ningún golpe: desde la cámara, a tu izquierda, el cuerpo lo tapa. ⓘ
@@ -546,17 +546,168 @@ Cada caso muestra el «En una frase» y el «Qué vimos» que salen con las mism
 
 | # | Pedido de Valentín | Cómo quedó |
 | --- | --- | --- |
-| 1 | El resumen de la sesión dice cuántos golpes fueron ordenables | «En 3 de tus 6 saques se pudo distinguir el orden, y en los tres tu cadera aceleró antes que tu tronco.» (con todos: «En tus N saques… y en todos…»; con uno: «…y en ese tu cadera aceleró…»). |
+| 1 | El resumen de la sesión dice cuántos golpes fueron ordenables | «En 3 de tus 6 saques se pudo distinguir el orden, y en los tres tu cadera aceleró antes que tu tronco.» (con todos: «En tus N saques… y en todos…»; con uno: «…y en ese tu cadera aceleró…»). *(Reemplazado por la tercera ronda.)* |
 | 2 | Dos casos más: un solo golpe ordenable y ninguno | Casos 10 y 11 de la matriz y de las pruebas. Ninguno: «En ningún golpe se pudo distinguir cuál aceleró primero: quedaron casi a la vez.» |
-| 3 | «Parecidos entre sí» → el rango concreto, sin adjetivo | «En tus 6 saques te enroscaste entre 29° y 42°, salvo el golpe 6 (11°).» Sin golpe que se aparte: «En tus 5 saques te enroscaste entre 29° y 42°.» *(Con menos de 5 golpes el servidor no marca ninguno que se aparte, así que el rango los incluye a todos: ver caso 10, «entre 11° y 35°».)* |
-| 4 | El gráfico «Cuándo giró cada parte» queda visible | Debajo de «Qué vimos», relativo al tronco (tronco = 0; «cadera 17 ms antes»; «brazo 52 ms después» si se midió), con la franja de ± 8,3 ms rotulada «Zona donde no se puede distinguir cuál fue primero». Sin segundos desde el inicio de la ventana (quedan en el detalle técnico). También está en el PDF del golpe. |
+| 3 | «Parecidos entre sí» → el rango concreto, sin adjetivo | «En tus 6 saques te enroscaste entre 29° y 42°, salvo el golpe 6 (11°).» Sin golpe que se aparte: «En tus 5 saques te enroscaste entre 29° y 42°.» *(Con menos de 5 golpes el servidor no marca ninguno que se aparte, así que el rango los incluye a todos: ver caso 10, «entre 11° y 35°».)* *(Reemplazado por la tercera ronda.)* |
+| 4 | El gráfico «Cuándo giró cada parte» queda visible | Debajo de «Qué vimos», relativo al tronco (tronco = 0; «cadera 17 ms antes»; «brazo 52 ms después» si se midió), con la franja de ± 8,3 ms rotulada «Zona donde no se puede distinguir cuál fue primero». Sin segundos desde el inicio de la ventana (quedan en el detalle técnico). También está en el PDF del golpe. *(Reemplazado por la tercera ronda.)* |
 | 5 | Evolución, después y solo si queda tiempo | Fuera de este cambio. |
+
+# Tercera ronda (20/10, tras verlo en producción)
+
+| # | Pedido de Valentín | Cómo quedó |
+| --- | --- | --- |
+| 1 | «En una frase» (golpe y sesión): una sola idea, **sin números**, verbo «giró/giraron» | Golpe: «Tu cadera y tu tronco giraron casi a la vez en este saque.» (con orden: «Tu cadera giró antes que tu tronco en este saque.»). Sesión: «Medimos seis saques. Giraste parecido en casi todos y, cuando se pudo ver el orden, la cadera arrancó primero.» *(Los números van escritos con palabras; «giraste parecido» solo se dice desde 5 golpes, cuando el servidor puede marcar qué golpe se aparta; con menos, la frase solo dice cuántos se midieron.)* Los datos —los grados, los milisegundos, el rango, «salvo el golpe 6»— pasaron a «Qué vimos». **Prueba nueva: «En una frase» no puede contener dígitos** (ni «aceleró», ni «como se espera», «bien», «mal», «correcto»). |
+| 2 | «¿Qué giró primero?»: cajas, sin eje ni números | Cajas de izquierda a derecha en el orden del giro más rápido; dos partes a menos de 8,33 ms van en UNA caja «casi a la vez»; si se distingue, flecha con «antes»; parte no medida: caja punteada «Brazo · no se vio». Sin «referencia» ni instrucciones. El gráfico en milisegundos con la franja pasó al **Detalle técnico** y **reemplaza** al de «segundos desde el inicio de la ventana» (queda uno solo); sus etiquetas ya no las pisa la línea punteada. Igual en el PDF del golpe. |
+| 3a | «Saque · 1 golpe» | «Saque · golpe 4 de 6» (un golpe solo en su sesión: «golpe único»); también en el encabezado del PDF. |
+| 3b | Rodilla y codo en palabras | «Cuando el tronco giraba más rápido, tenías la pierna izquierda casi estirada (rodilla a 172°; 180° es la pierna totalmente estirada).» Cortes: 178° o más «totalmente estirada»; 170° o más «casi estirada»; 140° o más «algo flexionada»; 100° o más «flexionada»; menos, «muy flexionada». Sin veredicto. |
+| 3c | «de su sesión» → «de tu sesión» | Corregido; una prueba recorre todas las frases y falla si queda «su sesión». |
+| 3d | Sin la tarjeta vacía del brazo en «Fotos y video» | Si el brazo no se midió no hay tarjeta (ni en la pantalla ni en el PDF): lo explica «Lo que no se pudo medir». |
+| 4 | Pie del sitio y del PDF | Sin «Proyecto final de Ingeniería en Informática · Universidad del Salvador · 2026»; queda «KinetiQ documenta el movimiento. No diagnostica ni reemplaza la evaluación de un profesional.» (también en el pie del PDF); la descripción ahora es «Medí cómo gira tu cuerpo en cada golpe.» |
+| 5 | Evolución en el mismo lenguaje | «En una frase» (sin números) + «Qué vimos» (con ⓘ) + un texto simple si hay menos de 2 sesiones comparables; mismas pruebas de palabras prohibidas y de jerga. **Sección D.** |
+
+**Una limitación que Valentín debe conocer sobre Evolución:** la serie se arma por **jugador × golpe × encuadre**; el **lado de la cámara todavía no es parte de la clave** (es una consulta del servidor). Hoy, si las sesiones se grabaron desde lados distintos, **se comparan igual y un aviso lo dice** (caso E5). Hacerlo estricto necesita tocar `/evolucion` (servidor), no el motor.
 
 # Pendientes
 
 1. **Pasaje de la cita del recuadro** (Kovacs y Ellenbecker, 2011): el texto es general a propósito. Una secuencia específica no se escribe hasta verificar el pasaje.
 2. **«Aceleraron / aceleró»** en «En una frase» es la redacción de Valentín; en «Qué vimos» el texto dice «alcanzó su giro más rápido», que es lo que se mide (el momento de máxima velocidad, no de aceleración).
-3. **Evolución** no está en este cambio: queda con el lenguaje de antes.
+3. **Lado de la cámara en la clave de Evolución**: necesita un cambio del servidor (ver la tercera ronda).
+
+# D. Evolución
+
+Series calculadas por el servidor con las dos sesiones reales (24 y 25/9) y variantes. Cada caso es una prueba (`frontend/tests/textos-evolucion.test.ts`).
+
+<!-- GENERADO:evolucion -->
+
+### Caso E1 — Una sola sesión (menos de 2 comparables)
+
+*Solo la sesión del 25/9.*
+
+**En una frase**
+
+> Tenés una sola sesión de este golpe y encuadre: es tu punto de partida.
+
+**Qué vimos**
+
+> **Lo que se midió**
+> - Tu punto de partida: el valor típico de tu torsión fue de 33°. La comparación empieza con tu segunda sesión de este golpe y encuadre. ⓘ
+> - En tu última sesión (25 sep) se pudo ver el orden en 3 golpes; hacen falta 5 o más para decir cuán seguido se repite. ⓘ
+> - En tu última sesión se midieron 6 de 6 golpes.
+
+**Menos de dos sesiones comparables**
+
+> Para comparar hacen falta al menos dos sesiones tuyas del mismo golpe y encuadre, grabadas desde el mismo lugar. Tenés una: cuando cargues la segunda, acá vas a ver qué cambió.
+
+**Avisos**
+
+- En alguna sesión hubo golpes que se parecieron menos a los demás; entran igual en el valor típico, que no se mueve por un golpe suelto.
+
+---
+
+### Caso E2 — Dos sesiones, el cambio está dentro de lo habitual
+
+*Las dos sesiones reales: 24/9 y 25/9 (valor típico 32,05° y 32,95°).*
+
+**En una frase**
+
+> Tu torsión se mantuvo de una sesión a la otra.
+
+**Qué vimos**
+
+> **Lo que se midió**
+> - El valor típico de tu torsión fue de 33° en tu última sesión y de 32° en la anterior: se mantuvo, dentro de lo que variás entre golpes (±3°). ⓘ
+> - En tu última sesión (25 sep) se pudo ver el orden en 3 golpes; hacen falta 5 o más para decir cuán seguido se repite. ⓘ
+> - En tu última sesión se midieron 6 de 6 golpes (antes: 6 de 6).
+> - Comparamos 2 sesiones tuyas del mismo golpe y encuadre. ⓘ
+
+**Avisos**
+
+- En alguna sesión hubo golpes que se parecieron menos a los demás; entran igual en el valor típico, que no se mueve por un golpe suelto.
+
+---
+
+### Caso E3 — Tres sesiones, el cambio es mayor que lo habitual
+
+*24/9, 25/9 y una sesión del 2/10 con todas las torsiones 14° más altas (variante inventada para probar la regla).*
+
+**En una frase**
+
+> Te enroscaste más que en tu sesión anterior.
+
+**Qué vimos**
+
+> **Lo que se midió**
+> - El valor típico de tu torsión aumentó 14°: de 33° a 47°, más que lo que variás entre golpes de una sesión (±3°). Es lo que cambió, no un juicio sobre tu técnica. ⓘ
+> - En tu última sesión (2 oct) se pudo ver el orden en 3 golpes; hacen falta 5 o más para decir cuán seguido se repite. ⓘ
+> - En tu última sesión se midieron 6 de 6 golpes (antes: 6 de 6).
+> - Comparamos 3 sesiones tuyas del mismo golpe y encuadre. ⓘ
+
+**Avisos**
+
+- En alguna sesión hubo golpes que se parecieron menos a los demás; entran igual en el valor típico, que no se mueve por un golpe suelto.
+
+---
+
+### Caso E4 — Dos sesiones con menos de 4 golpes (no se puede decir la variación)
+
+*Tres golpes por sesión: el servidor no calcula la variación (mínimo 4).*
+
+**En una frase**
+
+> Tu torsión cambió de una sesión a la otra, pero hay pocos golpes para saber si es más de lo que variás normalmente.
+
+**Qué vimos**
+
+> **Lo que se midió**
+> - El valor típico de tu torsión pasó de 31° a 32° (cambió 1°). Con menos de 4 golpes medidos por sesión no se puede decir si es más que lo que variás entre golpes. ⓘ
+> - En tu última sesión (2 oct) se pudo ver el orden en 2 golpes; hacen falta 5 o más para decir cuán seguido se repite. ⓘ
+> - En tu última sesión se midieron 3 de 3 golpes (antes: 3 de 3).
+> - Comparamos 2 sesiones tuyas del mismo golpe y encuadre. ⓘ
+
+---
+
+### Caso E5 — Sesiones grabadas desde lados distintos de la cámara
+
+*La segunda sesión se cargó con la cámara a la derecha.*
+
+**En una frase**
+
+> Tu torsión se mantuvo de una sesión a la otra.
+
+**Qué vimos**
+
+> **Lo que se midió**
+> - El valor típico de tu torsión fue de 33° en tu última sesión y de 32° en la anterior: se mantuvo, dentro de lo que variás entre golpes (±3°). ⓘ
+> - En tu última sesión (2 oct) se pudo ver el orden en 3 golpes; hacen falta 5 o más para decir cuán seguido se repite. ⓘ
+> - En tu última sesión se midieron 6 de 6 golpes (antes: 6 de 6).
+> - Comparamos 2 sesiones tuyas del mismo golpe y encuadre. ⓘ
+
+**Avisos**
+
+- Estas sesiones se cargaron con la cámara de lados distintos del jugador: la comparación puede no ser válida. Para compararte, grabá siempre desde el mismo lugar.
+- En alguna sesión hubo golpes que se parecieron menos a los demás; entran igual en el valor típico, que no se mueve por un golpe suelto.
+
+---
+
+### Caso E6 — Orden que se repite (5 golpes con orden distinguible por sesión)
+
+*Dos sesiones con 5 golpes en que se distingue el orden (variante para probar la regla).*
+
+**En una frase**
+
+> Tu torsión se mantuvo de una sesión a la otra.
+
+**Qué vimos**
+
+> **Lo que se midió**
+> - El valor típico de tu torsión fue de 35° en tu última sesión y de 35° en la anterior: se mantuvo, dentro de lo que variás entre golpes (±4°). ⓘ
+> - En tu última sesión (8 oct) el orden entre cadera y tronco fue el mismo en 5 de 5 golpes en que se pudo ver. Antes: 5 de 5. Solo cuenta si se repite. ⓘ
+> - En tu última sesión se midieron 5 de 5 golpes (antes: 5 de 5).
+> - Comparamos 2 sesiones tuyas del mismo golpe y encuadre. ⓘ
+
+<!-- /GENERADO:evolucion -->
+
+---
 
 # Cómo se hace (esfuerzo)
 

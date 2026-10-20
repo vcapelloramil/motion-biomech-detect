@@ -40,14 +40,14 @@ describe("matriz de casos", () => {
 
   test("1. cadera claramente antes", () => {
     const t = textos(caso("cadera_antes"));
-    expect(t.enUnaFrase).toBe("En este saque, te enroscaste 32° y tu cadera aceleró antes que tu tronco.");
+    expect(t.enUnaFrase).toBe("Tu cadera giró antes que tu tronco en este saque.");
     expect(juntar(t.vimos.medido)).toContain("Tu cadera alcanzó su giro más rápido 42 milésimas de segundo antes que tu tronco.");
     expect(juntar(t.vimos.medido)).toContain("Desde otra posición de cámara, este orden podría verse distinto.");
   });
 
   test("2. tronco antes que la cadera", () => {
     const t = textos(caso("tronco_antes"));
-    expect(t.enUnaFrase).toContain("tu tronco aceleró antes que tu cadera");
+    expect(t.enUnaFrase).toBe("Tu tronco giró antes que tu cadera en este saque.");
     expect(juntar(t.vimos.medido)).toContain("Tu tronco alcanzó su giro más rápido 42 milésimas de segundo antes que tu cadera.");
   });
 
@@ -64,8 +64,8 @@ describe("matriz de casos", () => {
     expect(textos(caso("drive")).hacer.literatura.texto).toBe(LITERATURA_SIN_REFERENCIA);
     expect(textos(caso("reves")).hacer.literatura.texto).toBe(LITERATURA_SIN_REFERENCIA);
     expect(textos(caso("cadera_antes")).hacer.literatura.texto).toBe(LITERATURA_SAQUE);
-    expect(textos(caso("drive")).enUnaFrase.startsWith("En este drive")).toBe(true);
-    expect(textos(caso("reves")).enUnaFrase.startsWith("En este revés")).toBe(true);
+    expect(textos(caso("drive")).enUnaFrase.endsWith("en este drive.")).toBe(true);
+    expect(textos(caso("reves")).enUnaFrase.endsWith("en este revés.")).toBe(true);
   });
 
   test("5. cámara del lado de la mano dominante: el brazo visible no figura como no medido y se avisa que ese lado no está validado", () => {
@@ -88,14 +88,15 @@ describe("matriz de casos", () => {
   test("7. orden mezclado: se cuenta cuántos de cada uno, sin hablar de un patrón", () => {
     const t = textos(caso("orden_mezclado"));
     expect(juntar(t.vimos.medido)).toContain("en 2 fue la cadera y en 1, el tronco");
-    expect(t.enUnaFrase).toContain("En 3 de tus 6 saques se pudo distinguir el orden: en 2 tu cadera aceleró antes que tu tronco y en 1, al revés.");
+    expect(t.enUnaFrase).toBe("Medimos seis saques. Giraste parecido en casi todos y, cuando se pudo ver el orden, a veces arrancó primero la cadera y a veces el tronco.");
     expect(juntar(t.vimos.medido)).not.toMatch(/se repite|se repitió/);
   });
 
   test("8. tres golpes: ni variación ni repetición, y se dice por qué", () => {
     const t = textos(caso("tres_golpes"));
-    expect(t.enUnaFrase).toBe("En tus 3 saques te enroscaste entre 32° y 42°. En tus 3 saques se pudo distinguir el orden, y en todos tu cadera aceleró antes que tu tronco.");
-    expect(t.enUnaFrase).not.toContain("parecidos");
+    expect(t.enUnaFrase).toBe("Medimos tres saques. Cuando se pudo ver el orden, la cadera arrancó primero.");
+    expect(t.enUnaFrase).not.toContain("parecido");
+    expect(juntar(t.vimos.medido)).toContain("los 3 golpes quedaron entre 32° y 42°");
     expect(juntar(t.vimos.medido)).not.toContain("±");
     expect(juntar(t.hacer.usar)).not.toContain("variación entre golpes");
     expect(juntar(t.hacer.medir)).toContain("Con 5 o más golpes en que se distinga");
@@ -104,25 +105,25 @@ describe("matriz de casos", () => {
 
   test("9. sin ningún golpe que se aparte: el rango concreto, sin adjetivo y sin excepciones", () => {
     const t = textos(caso("sin_apartan"));
-    expect(t.enUnaFrase.startsWith("En tus 5 saques te enroscaste entre 29° y 42°. ")).toBe(true);
-    expect(t.enUnaFrase).not.toContain("parecidos");
+    expect(t.enUnaFrase).toBe("Medimos cinco saques. Giraste parecido en todos y, cuando se pudo ver el orden, la cadera arrancó primero.");
+    expect(juntar(t.vimos.medido)).toContain("los 5 golpes quedaron entre 29° y 42°");
     expect(t.enUnaFrase).not.toContain("salvo");
     expect(t.vimos.seAparta).toHaveLength(0);
   });
 
   test("10. un solo golpe ordenable: el singular, sin generalizar", () => {
     const t = textos(caso("un_ordenable"));
-    expect(t.enUnaFrase).toBe("En tus 4 saques te enroscaste entre 11° y 35°. En 1 de tus 4 saques se pudo distinguir el orden, y en ese tu cadera aceleró antes que tu tronco.");
+    expect(t.enUnaFrase).toBe("Medimos cuatro saques. Cuando se pudo ver el orden, la cadera arrancó primero.");
     expect(juntar(t.vimos.medido)).toContain("En 1 de los 4 golpes (el 1) se pudo establecer cuál giró primero, y fue la cadera");
   });
 
   test("11. ningún golpe ordenable", () => {
     const t = textos(caso("ningun_ordenable"));
-    expect(t.enUnaFrase.endsWith("En ningún golpe se pudo distinguir cuál aceleró primero: quedaron casi a la vez.")).toBe(true);
+    expect(t.enUnaFrase).toBe("Medimos tres saques. En ninguno se pudo ver qué giró primero: la cadera y el tronco giraron casi a la vez.");
     expect(juntar(t.vimos.medido)).toContain("En ningún golpe se pudo establecer cuál giró primero");
   });
 
-  test("7 y 8: el golpe que se aparta se nombra con su valor y sin rango que lo incluya", () => {
-    expect(textos(caso("orden_mezclado")).enUnaFrase.startsWith("En tus 6 saques te enroscaste entre 29° y 42°, salvo el golpe 6 (11°).")).toBe(true);
+  test("7: el golpe que se aparta se nombra con su valor en «Qué vimos», no en la frase", () => {
+    expect(juntar(textos(caso("orden_mezclado")).vimos.medido)).toContain("5 golpes quedaron entre 29° y 42° y el golpe 6 fue de 11°");
   });
 });

@@ -2,8 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Loader2 } from "lucide-react";
 import { RutaProtegida } from "@/components/ruta-protegida";
-import { SecuenciaReal } from "@/components/reporte/secuencia-real";
 import { SecuenciaRelativa } from "@/components/reporte/secuencia-relativa";
+import { SecuenciaSimple } from "@/components/reporte/secuencia-simple";
 import { TresMomentos } from "@/components/reporte/tres-momentos";
 import {
   DetalleTecnico,
@@ -19,9 +19,9 @@ import { useSesion } from "@/lib/sesion";
 import { ENCUADRE_ETIQUETA, GESTO_ETIQUETA, enCurso, versionAnteriorA, tiemposDe, numero, reporteDe } from "@/lib/estado-video";
 import type { Consistencia } from "@/lib/consistencia";
 import { leerConsistencia } from "@/lib/consistencia-api";
-import { artefactosDe, picosNoMedidosDe, picosOrdenados, repeticionesDe, trazabilidadDe } from "@/lib/reporte-simple";
-import { contextoDeGolpe, textosDeGolpe } from "@/lib/textos-reporte";
-import { leerVideo, type VideoConReporte } from "@/lib/videos-data";
+import { artefactosDe, picosNoMedidosDe, repeticionesDe, trazabilidadDe } from "@/lib/reporte-simple";
+import { contextoDeGolpe, textosDeGolpe, tituloDeGolpe } from "@/lib/textos-reporte";
+import { golpesDeSesion, leerVideo, type VideoConReporte } from "@/lib/videos-data";
 
 export const Route = createFileRoute("/reporte/$videoId")({
   head: () => ({ meta: [{ title: "Reporte — KinetiQ" }, { name: "robots", content: "noindex" }] }),
@@ -118,7 +118,22 @@ function Reporte({ video, reporte }: { video: VideoConReporte; reporte: Record<s
   const { sesion: auth } = useSesion();
   const sesion = video.sesiones;
   const [consistencia, setConsistencia] = useState<Consistencia | null>(null);
+  const [posicion, setPosicion] = useState<{ n: number; m: number } | null>(null);
   const token = auth?.access_token;
+
+  // Qué golpe de la sesión es («golpe 4 de 6»), en el orden en que se cargaron. Si no se puede leer, el título dice solo el golpe.
+  useEffect(() => {
+    let activo = true;
+    golpesDeSesion(video.sesion_id)
+      .then((lista) => {
+        const i = lista.findIndex((x) => x.id === video.id);
+        if (activo && i >= 0) setPosicion({ n: i + 1, m: lista.length });
+      })
+      .catch(() => undefined);
+    return () => {
+      activo = false;
+    };
+  }, [video.id, video.sesion_id]);
 
   // La comparación con los demás golpes de su sesión (si el golpe es el típico, cuántos son, entre qué valores va la torsión).
   // Si no llega, el reporte se arma igual, sin esa parte.
@@ -135,7 +150,6 @@ function Reporte({ video, reporte }: { video: VideoConReporte; reporte: Record<s
   const fps = t.fps_real ?? numero(video.fps_real);
   const r0 = repeticionesDe(reporte)[0] ?? null;
   const artefactos = artefactosDe(reporte);
-  const picos = picosOrdenados(r0);
   const tiempos = tiemposDe(video);
   const fecha = sesion ? new Date(sesion.fecha + "T12:00:00").toLocaleDateString("es-AR", { day: "numeric", month: "long", year: "numeric" }) : null;
   const textos = useMemo(
@@ -169,7 +183,10 @@ function Reporte({ video, reporte }: { video: VideoConReporte; reporte: Record<s
         </nav>
 
         <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight md:text-6xl">
-          {sesion ? (GESTO_ETIQUETA[sesion.gesto] ?? sesion.gesto) : "Golpe"} <span className="text-gradient-neon">· 1 golpe</span>
+          {tituloDeGolpe(sesion?.gesto ?? "", posicion).gesto}{" "}
+          {tituloDeGolpe(sesion?.gesto ?? "", posicion).resto && (
+            <span className="text-gradient-neon">· {tituloDeGolpe(sesion?.gesto ?? "", posicion).resto}</span>
+          )}
         </h1>
         <p className="mt-3 text-muted-foreground">
           {fecha ? `${fecha} · ` : ""}
@@ -188,14 +205,11 @@ function Reporte({ video, reporte }: { video: VideoConReporte; reporte: Record<s
         <EnUnaFrase texto={textos.enUnaFrase} />
         <QueVimos medido={textos.vimos.medido} noMedido={textos.vimos.noMedido} sesionId={video.sesion_id} />
 
-        {/* Elemento central (CLAUDE.md §3): cuándo giró cada parte, todo respecto del tronco. */}
+        {/* Elemento central (CLAUDE.md §3): qué giró primero, sin ejes ni números. */}
         <section aria-labelledby="secuencia" className="mt-12">
-          <h2 id="secuencia" className="font-mono text-xs uppercase tracking-widest text-state-ok">Cuándo giró cada parte</h2>
-          <p className="mt-2 text-sm text-muted-foreground">
-            El giro más rápido de cada parte, medido respecto del tronco. Lo que cae dentro de la franja gris no se puede ordenar.
-          </p>
-          <div className="mt-4 rounded-2xl border border-border bg-card p-3 md:p-6">
-            <SecuenciaRelativa reporte={reporte} />
+          <h2 id="secuencia" className="font-mono text-xs uppercase tracking-widest text-state-ok">¿Qué giró primero?</h2>
+          <div className="mt-4">
+            <SecuenciaSimple reporte={reporte} />
           </div>
         </section>
 
@@ -207,24 +221,22 @@ function Reporte({ video, reporte }: { video: VideoConReporte; reporte: Record<s
         <ParaTuProfesional profesional={textos.profesional} />
 
         <DetalleTecnico>
-          {picos.length > 0 && (
-            <div>
-              <h3 className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Momentos desde el inicio del tramo analizado</h3>
-              <p className="mt-2 text-sm text-muted-foreground">
-                Los mismos momentos del gráfico de arriba, contados desde el inicio del tramo que el análisis miró. Lo que importa es la distancia
-                entre ellos, no el número.
-              </p>
-              <div className="mt-3 overflow-x-auto rounded-2xl border border-border p-4">
-                <SecuenciaReal picos={picos} mostrarTiempos={t.escala_conocida} fps={fps} />
-              </div>
+          <div>
+            <h3 className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Momentos respecto del tronco</h3>
+            <p className="mt-2 text-sm text-muted-foreground">
+              El giro más rápido de cada parte, medido respecto del tronco, en milésimas de segundo. Lo que cae dentro de la franja gris no se puede
+              ordenar. Los momentos desde el inicio del tramo analizado están en la tabla de abajo.
+            </p>
+            <div className="mt-3 rounded-2xl border border-border p-3 md:p-6">
+              <SecuenciaRelativa reporte={reporte} />
             </div>
-          )}
+          </div>
           <GruposDeDetalle grupos={textos.detalle} />
           <PieDeTextos />
         </DetalleTecnico>
       </main>
       {/* El PDF es un documento aparte (A4 vertical), no esta pantalla impresa: ver documento-golpe.tsx. */}
-      <DocumentoDeGolpe video={video} reporte={reporte} consistencia={consistencia} />
+      <DocumentoDeGolpe video={video} reporte={reporte} consistencia={consistencia} posicion={posicion} />
     </>
   );
 }

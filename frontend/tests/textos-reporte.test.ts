@@ -14,6 +14,9 @@ import {
   contextoDeGolpe,
   datosDeSecuencia,
   ordenDelGolpe,
+  posturaDe,
+  secuenciaSimple,
+  tituloDeGolpe,
   textosDeGolpe,
   textosDeSesion,
   type EntradaGolpe,
@@ -50,7 +53,7 @@ describe("golpe 4 (el golpe típico de la sesión del 25/9)", () => {
   const t = textosDeGolpe(entradaGolpe(3));
 
   test("En una frase: lo que pidió Valentín", () => {
-    expect(t.enUnaFrase).toBe("Un saque típico de tu sesión: te enroscaste 34° y tu cadera y tu tronco aceleraron casi juntos.");
+    expect(t.enUnaFrase).toBe("Tu cadera y tu tronco giraron casi a la vez en este saque.");
   });
 
   test("Qué vimos empieza por lo medido, y lo no medido va después con su porqué", () => {
@@ -115,7 +118,7 @@ describe("golpe con orden distinguible (golpe 1) y con rodilla medida", () => {
     expect(linea?.texto).toContain("180° es la pierna totalmente estirada");
   });
   test("el orden se dice como observación y con la salvedad de la cámara", () => {
-    expect(t.enUnaFrase).toContain("tu cadera aceleró antes que tu tronco");
+    expect(t.enUnaFrase).toBe("Tu cadera giró antes que tu tronco en este saque.");
     const l = t.vimos.medido.find((m) => /antes que tu tronco/.test(m.texto));
     expect(l?.texto).toContain("17 milésimas de segundo");
     expect(l?.texto).toContain("Desde otra posición de cámara, este orden podría verse distinto.");
@@ -126,7 +129,7 @@ describe("la sesión del 25/9", () => {
   const s = textosDeSesion(entradaSesion());
 
   test("En una frase: lo que pidió Valentín", () => {
-    expect(s.enUnaFrase).toBe("En tus 6 saques te enroscaste entre 29° y 42°, salvo el golpe 6 (11°). En 3 de tus 6 saques se pudo distinguir el orden, y en los tres tu cadera aceleró antes que tu tronco.");
+    expect(s.enUnaFrase).toBe("Medimos seis saques. Giraste parecido en casi todos y, cuando se pudo ver el orden, la cadera arrancó primero.");
   });
 
   test("la torsión usa «valor típico» y el golpe 6 se explica sin contradicción", () => {
@@ -202,7 +205,7 @@ describe("casos que no son los de la sesión del 25/9", () => {
     expect(ordenDelGolpe(gs[2].reporte).tipo).toBe("tronco_primero");
     const s = textosDeSesion(entradaSesion({ golpes: gs, consistencia: c }));
     expect(s.vimos.medido[1].texto).toContain("en 2 fue la cadera y en 1, el tronco");
-    expect(s.enUnaFrase).toContain("en 2 tu cadera aceleró antes que tu tronco y en 1, al revés");
+    expect(s.enUnaFrase).toContain("a veces arrancó primero la cadera y a veces el tronco");
   });
 
   test("sin saber la mano dominante no se afirma que el cuerpo tapa el brazo", () => {
@@ -213,14 +216,14 @@ describe("casos que no son los de la sesión del 25/9", () => {
 
   test("drive: «un drive típico», sin literatura y sin afirmar nada del brazo tapado", () => {
     const t = textosDeGolpe(entradaGolpe(3, { gesto: "drive" }));
-    expect(t.enUnaFrase.startsWith("Un drive típico de tu sesión")).toBe(true);
+    expect(t.enUnaFrase).toBe("Tu cadera y tu tronco giraron casi a la vez en este drive.");
     expect(t.hacer.literatura.texto).toBe(LITERATURA_SIN_REFERENCIA);
     expect(textoDe(t.vimos.noMedido)).not.toContain("el cuerpo lo tapó");
   });
 
   test("un golpe sin contexto de sesión no se llama típico", () => {
     const t = textosDeGolpe(entradaGolpe(3, { contexto: null }));
-    expect(t.enUnaFrase.startsWith("En este saque, ")).toBe(true);
+    expect(t.enUnaFrase).toBe("Tu cadera y tu tronco giraron casi a la vez en este saque.");
     expect(t.profesional.preguntas).toHaveLength(1);
   });
 
@@ -322,6 +325,91 @@ describe("«Cuándo giró cada parte»: todo respecto del tronco", () => {
   test("no usa segundos desde el inicio de la ventana", () => {
     const d = datosDeSecuencia(golpes[3].reporte);
     expect(JSON.stringify(d)).not.toMatch(/\d,\d{3} s|ventana/);
+  });
+});
+
+describe("«En una frase»: una sola idea, sin números y con un solo verbo", () => {
+  const frases = todasLasFrases().filter((f) => f.donde.endsWith(".enUnaFrase"));
+  test("se recorren las frases de los tres golpes y de la sesión", () => {
+    expect(frases.length).toBeGreaterThan(20);
+  });
+  test("ninguna contiene dígitos", () => {
+    expect(frases.filter((f) => /\d/.test(f.texto)).map((f) => `${f.donde}: ${f.texto}`)).toEqual([]);
+  });
+  test("ninguna mezcla «giró» con «aceleró»", () => {
+    expect(frases.filter((f) => /acelera/i.test(f.texto)).map((f) => f.donde)).toEqual([]);
+  });
+  test("ninguna dice «como se espera», «bien», «mal» ni «correcto» (decisión 036)", () => {
+    expect(frases.filter((f) => /como se espera|\bbien\b|\bmal\b|correct/i.test(f.texto))).toEqual([]);
+  });
+});
+
+describe("¿Qué giró primero?", () => {
+  test("golpe 3: cadera antes que tronco, en dos cajas con «antes», y el brazo «no se vio»", () => {
+    const s = secuenciaSimple(golpes[2].reporte);
+    expect(s.cajas.map((c) => c.etiqueta)).toEqual(["Cadera", "Tronco"]);
+    expect(s.cajas.every((c) => !c.casiALaVez)).toBe(true);
+    expect(s.noVistas.map((n) => n.etiqueta)).toEqual(["Brazo · no se vio"]);
+  });
+  test("golpe 4 (empate): cadera y tronco en UNA caja «casi a la vez»", () => {
+    const s = secuenciaSimple(golpes[3].reporte);
+    expect(s.cajas).toHaveLength(1);
+    expect(s.cajas[0].etiqueta).toBe("Cadera y tronco");
+    expect(s.cajas[0].casiALaVez).toBe(true);
+  });
+  test("con el tronco antes, el orden de las cajas se invierte", () => {
+    const r = JSON.parse(JSON.stringify(golpes[2].reporte));
+    const picos = r.secuenciacion.repeticiones[0].picos as { segmento: string; instante_s: number }[];
+    picos.find((p) => p.segmento === "pelvis")!.instante_s = 0.342;
+    picos.find((p) => p.segmento === "torso")!.instante_s = 0.3;
+    expect(secuenciaSimple(r).cajas.map((c) => c.etiqueta)).toEqual(["Tronco", "Cadera"]);
+  });
+  test("con el brazo medido: tres cajas, o dos si el brazo cae junto al tronco", () => {
+    const r = JSON.parse(JSON.stringify(golpes[2].reporte));
+    const picos = r.secuenciacion.repeticiones[0].picos as { segmento: string; instante_s: number; confianza: number; velocidad: number; unidad: string }[];
+    picos.push({ segmento: "brazo", instante_s: 0.352, confianza: 0.93, velocidad: 1180, unidad: "grados/s" });
+    expect(secuenciaSimple(r).cajas.map((c) => c.etiqueta)).toEqual(["Cadera", "Tronco", "Brazo"]);
+    picos[2].instante_s = 0.305;
+    expect(secuenciaSimple(r).cajas.map((c) => c.etiqueta)).toEqual(["Cadera", "Tronco y brazo"]);
+  });
+  test("sin ningún pico, no hay datos", () => {
+    const r = JSON.parse(JSON.stringify(golpes[0].reporte));
+    r.secuenciacion.repeticiones[0].picos = [];
+    const s = secuenciaSimple(r);
+    expect(s.sinDatos).toBe(true);
+    expect(s.cajas).toHaveLength(0);
+  });
+  test("la secuencia no lleva números en lo que se ve", () => {
+    for (const g of golpes) {
+      const s = secuenciaSimple(g.reporte);
+      expect(JSON.stringify([s.cajas.map((c) => c.etiqueta), s.noVistas.map((n) => n.etiqueta)])).not.toMatch(/\d/);
+    }
+  });
+});
+
+describe("rodilla y codo dichos en palabras", () => {
+  test("los cortes", () => {
+    expect(posturaDe("rodilla", 180)).toBe("totalmente estirada");
+    expect(posturaDe("rodilla", 172)).toBe("casi estirada");
+    expect(posturaDe("rodilla", 150)).toBe("algo flexionada");
+    expect(posturaDe("rodilla", 120)).toBe("flexionada");
+    expect(posturaDe("rodilla", 90)).toBe("muy flexionada");
+    expect(posturaDe("codo", 172)).toBe("casi estirado");
+  });
+  test("golpe 1: «la pierna izquierda casi estirada», con el ángulo y la referencia", () => {
+    const l = textosDeGolpe(entradaGolpe(0)).vimos.medido.find((m) => /pierna/.test(m.texto))!;
+    expect(l.texto).toBe("Cuando el tronco giraba más rápido, tenías la pierna izquierda totalmente estirada (rodilla a 178°; 180° es la pierna totalmente estirada).");
+  });
+});
+
+describe("título del golpe y tercera persona", () => {
+  test("«Saque · golpe 4 de 6»", () => {
+    expect(tituloDeGolpe("saque", { n: 4, m: 6 })).toEqual({ gesto: "Saque", resto: "golpe 4 de 6" });
+    expect(tituloDeGolpe("reves", { n: 1, m: 1 })).toEqual({ gesto: "Revés", resto: "golpe único" });
+    expect(tituloDeGolpe("drive", null)).toEqual({ gesto: "Drive", resto: null });
+  });
+  test("ninguna frase habla de «su sesión» al usuario", () => {
+    expect(todasLasFrases().filter((f) => /\bsu sesión\b/i.test(f.texto)).map((f) => f.donde)).toEqual([]);
   });
 });
 

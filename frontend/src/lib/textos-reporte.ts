@@ -27,7 +27,7 @@ import {
   type RepeticionLeida,
 } from "@/lib/reporte-simple";
 
-export const VERSION_TEXTOS = "1";
+export const VERSION_TEXTOS = "2";
 
 type Json = Record<string, unknown>;
 
@@ -44,7 +44,9 @@ export type ClaveAyuda =
   | "golpe_tipico"
   | "se_aparta"
   | "confianza"
-  | "brazo_tapado";
+  | "brazo_tapado"
+  | "orden_repeticion"
+  | "sesiones_comparadas";
 
 export const GLOSARIO: Record<ClaveAyuda, { termino: string; corto: string }> = {
   torsion: {
@@ -93,6 +95,16 @@ export const GLOSARIO: Record<ClaveAyuda, { termino: string; corto: string }> = 
   confianza: {
     termino: "Confianza",
     corto: "Va de 0 a 1 y es la seguridad con que el sistema ubicó las articulaciones que definen esa medición. Cerca de 1 es mucha seguridad.",
+  },
+  orden_repeticion: {
+    termino: "Mismo orden entre golpes",
+    corto:
+      "De los golpes en que se pudo distinguir qué giró primero, cuántos tuvieron el mismo orden. Solo cuenta si se repite; no dice cuál orden conviene. Se informa desde 5 golpes en que se pudo distinguir.",
+  },
+  sesiones_comparadas: {
+    termino: "Sesiones comparadas",
+    corto:
+      "Solo se comparan sesiones tuyas del mismo golpe y encuadre, y conviene que estén grabadas desde el mismo lugar: el mismo movimiento puede dar números distintos desde otro punto de vista.",
   },
   brazo_tapado: {
     termino: "Brazo no medido",
@@ -176,6 +188,25 @@ const NOTA_LADO_DE_LA_MANO = (que: string) =>
   `Grabaste con la cámara del lado de tu mano dominante: el brazo con el que golpeás queda más a la vista, pero ese lado todavía no está validado en KinetiQ, así que cadera y tronco de ${que} no se pueden comparar con los de sesiones grabadas desde el otro lado.`;
 
 const MODOS_LLANOS: Record<string, string> = { camara_lenta_240: "cámara lenta de 240 fps", camara_lenta_120: "cámara lenta de 120 fps" };
+
+/**
+ * El ángulo de la rodilla o del codo dicho en palabras, sin veredicto (decisión 039, segunda ronda): 180° es totalmente estirada.
+ * Los cortes son redondos y aproximados, con el error medido contra goniometría a la vista (8,5° y 12,5° de media).
+ */
+export function posturaDe(parte: "rodilla" | "codo", valor: number): string {
+  const estirada = parte === "rodilla" ? "estirada" : "estirado";
+  const flexionada = parte === "rodilla" ? "flexionada" : "flexionado";
+  if (valor >= 178) return `totalmente ${estirada}`;
+  if (valor >= 170) return `casi ${estirada}`;
+  if (valor >= 140) return `algo ${flexionada}`;
+  if (valor >= 100) return flexionada;
+  return `muy ${flexionada}`;
+}
+
+const SUJETO_ARTICULACION = (parte: "rodilla" | "codo", lado: "izq" | "der" | null) => {
+  const l = lado ? ` ${(parte === "rodilla" ? LADO_FEM : LADO_MASC)[lado]}` : "";
+  return parte === "rodilla" ? `la pierna${l}` : `el brazo${l}`;
+};
 
 const REFERENCIA_RODILLA = "180° es la pierna totalmente estirada";
 const REFERENCIA_CODO = "180° es el brazo totalmente estirado";
@@ -359,21 +390,13 @@ export type EntradaGolpe = {
   encuadre: string;
   ladoCamara: string;
   manoDominante: string | null;
-  /** Datos de su sesión (de la consistencia); `null` si todavía no están. */
+  /** Datos de tu sesión (de la consistencia); `null` si todavía no están. */
   contexto: ContextoSesionDeGolpe | null;
   /** Segundos de espera en la cola y de procesamiento: solo van al detalle técnico. */
   tiempos?: { espera_cola_s: number | null; procesamiento_s: number | null };
 };
 
 const dur = (s: number) => (s < 60 ? `${Math.round(s)} s` : `${Math.floor(s / 60)} min ${Math.round(s % 60)} s`);
-
-/** Los dos rótulos del giro: "casi juntos", "la cadera antes", "el tronco antes". */
-function fraseOrdenCorta(o: OrdenDelGolpe): string | null {
-  if (o.tipo === "a_la_vez") return "tu cadera y tu tronco aceleraron casi juntos";
-  if (o.tipo === "cadera_primero") return "tu cadera aceleró antes que tu tronco";
-  if (o.tipo === "tronco_primero") return "tu tronco aceleró antes que tu cadera";
-  return null;
-}
 
 export function textosDeGolpe(e: EntradaGolpe): TextosGolpe {
   const rep = e.reporte;
@@ -389,15 +412,13 @@ export function textosDeGolpe(e: EntradaGolpe): TextosGolpe {
   const tolRedondeada = fmt(t.tolerancia_orden_ms ?? 1000 / 120, 0);
   const ctx = e.contexto;
 
-  // --- En una frase ---
-  const clausulas: string[] = [];
-  if (torsion !== null) clausulas.push(`te enroscaste ${fmt(torsion, 0)}°`);
-  const co = fraseOrdenCorta(orden);
-  if (co) clausulas.push(co);
-  const cuerpo = clausulas.join(" y ");
-  const enUnaFrase = cuerpo
-    ? `${ctx?.esTipico ? `Un ${g.uno} típico de tu sesión: ` : `En este ${g.uno}, `}${cuerpo}.`
-    : "De este golpe no se pudo medir lo suficiente como para resumirlo en una frase.";
+  // --- En una frase: una sola idea, sin números (decisión 039, segunda ronda); los datos van en «Qué vimos» ---
+  let enUnaFrase: string;
+  if (orden.tipo === "a_la_vez") enUnaFrase = `Tu cadera y tu tronco giraron casi a la vez en este ${g.uno}.`;
+  else if (orden.tipo === "cadera_primero") enUnaFrase = `Tu cadera giró antes que tu tronco en este ${g.uno}.`;
+  else if (orden.tipo === "tronco_primero") enUnaFrase = `Tu tronco giró antes que tu cadera en este ${g.uno}.`;
+  else if (torsion !== null) enUnaFrase = `En este ${g.uno} se midió cuánto te enroscaste, pero no se pudo ver qué giró primero.`;
+  else enUnaFrase = "De este golpe no se pudo medir lo suficiente como para resumirlo en una frase.";
 
   // --- Qué vimos: primero lo medido (máximo 3 líneas) ---
   const medido: Item[] = [];
@@ -426,7 +447,7 @@ export function textosDeGolpe(e: EntradaGolpe): TextosGolpe {
   const rodillaMedida = rodillas.find((a) => a.auditable);
   if (rodillaMedida && rodillaMedida.valor !== null) {
     medido.push({
-      texto: `Cuando el tronco giraba más rápido, tu ${articulacionTexto(rodillaMedida)} estaba a ${fmt(rodillaMedida.valor, 0)}° (${REFERENCIA_RODILLA}).`,
+      texto: `Cuando el tronco giraba más rápido, tenías ${SUJETO_ARTICULACION("rodilla", rodillaMedida.lado)} ${posturaDe("rodilla", rodillaMedida.valor)} (rodilla a ${fmt(rodillaMedida.valor, 0)}°; ${REFERENCIA_RODILLA}).`,
       ayuda: "angulo_rodilla",
     });
   } else {
@@ -435,7 +456,7 @@ export function textosDeGolpe(e: EntradaGolpe): TextosGolpe {
     const codoDom = dom ? codos.find((a) => a.lado === dom && a.auditable) : undefined;
     if (codoDom && codoDom.valor !== null) {
       medido.push({
-        texto: `Cuando el tronco giraba más rápido, tu ${articulacionTexto(codoDom)} estaba a ${fmt(codoDom.valor, 0)}° (${REFERENCIA_CODO}).`,
+        texto: `Cuando el tronco giraba más rápido, tenías ${SUJETO_ARTICULACION("codo", codoDom.lado)} ${posturaDe("codo", codoDom.valor)} (codo a ${fmt(codoDom.valor, 0)}°; ${REFERENCIA_CODO}).`,
         ayuda: "angulo_codo",
       });
     }
@@ -497,7 +518,7 @@ export function textosDeGolpe(e: EntradaGolpe): TextosGolpe {
   }
   if (ctx && ctx.total > 1) {
     medir.push({
-      texto: `Este golpe es uno de los ${ctx.total} de su sesión. Para ver cuánto se parece a los demás, mirá la sesión.`,
+      texto: `Este golpe es uno de los ${ctx.total} de tu sesión. Para ver cuánto se parece a los demás, mirá la sesión.`,
       enlace: "sesion",
     });
   } else if (ctx && ctx.total === 1) {
@@ -527,7 +548,7 @@ export function textosDeGolpe(e: EntradaGolpe): TextosGolpe {
   }
   if (ctx?.esTipico && ctx.torsion && torsion !== null) {
     preguntas.push(
-      `Este es el golpe más cercano al valor típico de su sesión (torsión de ${fmt(torsion, 0)}°; la sesión va de ${fmt(ctx.torsion.minimo, 0)}° a ${fmt(ctx.torsion.maximo, 0)}°). ¿Te parece representativo de tus ${g.varios}?`,
+      `Este es el golpe más cercano al valor típico de tu sesión (torsión de ${fmt(torsion, 0)}°; la sesión va de ${fmt(ctx.torsion.minimo, 0)}° a ${fmt(ctx.torsion.maximo, 0)}°). ¿Te parece representativo de tus ${g.varios}?`,
     );
   }
   if (preguntas.length === 0) preguntas.push("¿Qué ves en el video de este golpe que los números no muestran?");
@@ -803,49 +824,31 @@ export function textosDeSesion(e: EntradaSesion): TextosSesion {
 
   // --- En una frase ---
   const plural = g.varios;
-  const PALABRA = ["cero", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve", "diez", "once", "doce"];
-  const palabra = (n: number) => PALABRA[n] ?? String(n);
+  const PALABRA = ["cero", "un", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve", "diez", "once", "doce"];
+  const palabra = (n: number) => PALABRA[n] ?? "varios";
 
-  // Primera oración: el rango concreto de la torsión, sin adjetivos; el golpe que se aparta, nombrado con su valor.
-  let fraseTorsion: string;
-  if (m === 0) {
-    fraseTorsion = "No se pudo medir ningún golpe de esta sesión.";
-  } else if (sep && sep.n > 0) {
-    const sujeto = m === total ? `En tus ${total} ${plural}` : `En los ${m} ${plural} que se midieron`;
-    const vals = sep.valores;
-    if (vals.length === 1) {
-      fraseTorsion = `En tu único ${g.uno} medido te enroscaste ${fmt(vals[0].valor, 0)}°.`;
-    } else {
-      const otros = vals.filter((v) => !idsApartan.has(v.video_id)).map((v) => v.valor);
-      const conSu = apartan.map((r) => ({ n: r.numero, v: sep.valores.find((x) => x.video_id === r.id)?.valor ?? null }));
-      const salvo = conSu.length
-        ? `, salvo ${conSu.length === 1 ? "el golpe" : "los golpes"} ${juntar(conSu.map((x) => `${x.n}${x.v !== null ? ` (${fmt(x.v, 0)}°)` : ""}`))}`
-        : "";
-      fraseTorsion = `${sujeto} te enroscaste ${entreG(otros.length ? otros : vals.map((v) => v.valor))}${salvo}.`;
-    }
+  // En una frase: una sola idea, sin números (decisión 039, segunda ronda); el rango, el golpe que se aparta y los conteos van en «Qué vimos».
+  let enUnaFrase: string;
+  if (!c) {
+    enUnaFrase = "No se pudo armar el resumen de la sesión ahora: la comparación entre golpes no estaba disponible.";
+  } else if (m === 0) {
+    enUnaFrase = "No se pudo medir ningún golpe de esta sesión.";
   } else {
-    fraseTorsion = `En tus ${total} ${plural} no se pudo medir cuánto te enroscaste.`;
+    const medimos = m === total ? `Medimos ${palabra(m)} ${m === 1 ? g.uno : plural}.` : `Medimos ${palabra(m)} de tus ${palabra(total)} ${plural}.`;
+    // «Giraste parecido» solo cuando el servidor pudo marcar qué golpe se aparta (desde 5 golpes): con menos no se afirma.
+    const sepSuficiente = !!(sep && sep.n >= c.minimos.se_apartan);
+    const parecido = m >= 2 && sepSuficiente ? (apartan.length > 0 ? "Giraste parecido en casi todos" : "Giraste parecido en todos") : null;
+    let orden: string | null = null;
+    let ordenSolo: string | null = null;
+    if (ordenables === 0) ordenSolo = "En ninguno se pudo ver qué giró primero: la cadera y el tronco giraron casi a la vez.";
+    else if (caderaPrimero.length > 0 && troncoPrimero.length > 0) orden = "cuando se pudo ver el orden, a veces arrancó primero la cadera y a veces el tronco";
+    else orden = `cuando se pudo ver el orden, ${caderaPrimero.length > 0 ? "la cadera" : "el tronco"} arrancó primero`;
+    const mayus = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+    let resto = "";
+    if (ordenSolo) resto = parecido ? `${parecido}. ${ordenSolo}` : ordenSolo;
+    else if (orden) resto = parecido ? `${parecido} y, ${orden}.` : `${mayus(orden)}.`;
+    enUnaFrase = `${medimos} ${resto}`.trim();
   }
-
-  // Segunda oración: cuántos golpes fueron ordenables, para no generalizar.
-  let fraseOrden = "";
-  if (m > 0) {
-    const deTus = m === total ? `de tus ${total} ${plural}` : `de los ${m} ${plural} que se midieron`;
-    if (ordenables === 0) {
-      fraseOrden = "En ningún golpe se pudo distinguir cuál aceleró primero: quedaron casi a la vez.";
-    } else if (caderaPrimero.length > 0 && troncoPrimero.length > 0) {
-      fraseOrden = `En ${ordenables} ${deTus} se pudo distinguir el orden: en ${caderaPrimero.length} tu cadera aceleró antes que tu tronco y en ${troncoPrimero.length}, al revés.`;
-    } else {
-      const quien = caderaPrimero.length > 0 ? "cadera" : "tronco";
-      const otra = quien === "cadera" ? "tronco" : "cadera";
-      const final = `tu ${quien} aceleró antes que tu ${otra}.`;
-      if (m === 1) fraseOrden = `En tu único ${g.uno} medido se pudo distinguir el orden, y ${final}`;
-      else if (ordenables === m) fraseOrden = `En tus ${m} ${plural} se pudo distinguir el orden, y en todos ${final}`;
-      else if (ordenables === 1) fraseOrden = `En 1 ${deTus} se pudo distinguir el orden, y en ese ${final}`;
-      else fraseOrden = `En ${ordenables} ${deTus} se pudo distinguir el orden, y en los ${palabra(ordenables)} ${final}`;
-    }
-  }
-  const enUnaFrase = c ? `${fraseTorsion}${fraseOrden ? ` ${fraseOrden}` : ""}` : "No se pudo armar el resumen de la sesión ahora: la comparación entre golpes no estaba disponible.";
 
   // --- Qué vimos ---
   const medido: Item[] = [];
@@ -919,13 +922,17 @@ export function textosDeSesion(e: EntradaSesion): TextosSesion {
           .filter((r) => !idsApartan.has(r.id))
           .map((r) => r.articulares.find((a) => a.nombre === nombre && a.auditable)?.valor)
           .filter((v): v is number => typeof v === "number");
+        const sujetoRodilla = SUJETO_ARTICULACION("rodilla", lado ?? null);
         if (vals.length >= 2) {
           medido.push({
-            texto: `Cuando el tronco giraba más rápido, tu ${nom} estaba ${entreG(vals)} en los ${vals.length} golpes en que se midió (${REFERENCIA_RODILLA}).`,
+            texto: `Cuando el tronco giraba más rápido, tenías ${sujetoRodilla} ${posturaDe("rodilla", Math.min(...vals))} en los ${vals.length} golpes en que se midió (rodilla ${entreG(vals)}; ${REFERENCIA_RODILLA}).`,
             ayuda: "angulo_rodilla",
           });
         } else if (vals.length === 1) {
-          medido.push({ texto: `Cuando el tronco giraba más rápido, tu ${nom} estaba a ${fmt(vals[0], 0)}° en el único golpe en que se midió (${REFERENCIA_RODILLA}).`, ayuda: "angulo_rodilla" });
+          medido.push({
+            texto: `Cuando el tronco giraba más rápido, tenías ${sujetoRodilla} ${posturaDe("rodilla", vals[0])} en el único golpe en que se midió (rodilla a ${fmt(vals[0], 0)}°; ${REFERENCIA_RODILLA}).`,
+            ayuda: "angulo_rodilla",
+          });
         }
         const sinRodilla = medidos.filter((r) => !r.articulares.some((a) => a.nombre === nombre && a.auditable));
         if (sinRodilla.length > 0) {
@@ -1090,9 +1097,8 @@ function rodillaQueSeAparta(r: ResumenGolpe, demas: ResumenGolpe[]): string | nu
     const mx = Math.max(...otros);
     const v = a.valor as number;
     const margen = ERROR_VALIDADO.rodilla.p95;
-    const lado = articulacionTexto(a);
-    if (v < mn - margen) return `tu ${lado} estaba mucho más flexionada (${fmt(v, 0)}°, contra ${fmt(mn, 0)}° a ${fmt(mx, 0)}° en los otros ${otros.length} con dato; ${REFERENCIA_RODILLA})`;
-    if (v > mx + margen) return `tu ${lado} estaba mucho menos flexionada (${fmt(v, 0)}°, contra ${fmt(mn, 0)}° a ${fmt(mx, 0)}° en los otros ${otros.length} con dato; ${REFERENCIA_RODILLA})`;
+    if (v < mn - margen) return `${SUJETO_ARTICULACION(a.parte, a.lado)} estaba mucho más flexionada (rodilla a ${fmt(v, 0)}°, contra ${fmt(mn, 0)}° a ${fmt(mx, 0)}° en los otros ${otros.length} con dato; ${REFERENCIA_RODILLA})`;
+    if (v > mx + margen) return `${SUJETO_ARTICULACION(a.parte, a.lado)} estaba mucho menos flexionada (rodilla a ${fmt(v, 0)}°, contra ${fmt(mn, 0)}° a ${fmt(mx, 0)}° en los otros ${otros.length} con dato; ${REFERENCIA_RODILLA})`;
   }
   return null;
 }
@@ -1145,4 +1151,74 @@ export function datosDeSecuencia(reporte: Json | null): DatosDeSecuencia {
     .map((x) => (x.deltaMs === null ? `${nombres[x.segmento]}: no medido` : `${nombres[x.segmento]}: ${x.etiqueta} que el tronco${Math.abs(x.deltaMs) <= tolMs ? " (dentro de la zona donde no se puede distinguir cuál fue primero)" : ""}`))
     .join("; ");
   return { toleranciaMs: tolMs, sinReferencia: false, puntos, resumen };
+}
+
+// --- «¿Qué giró primero?»: la secuencia simple del cuerpo del reporte -------------------------------------------------------------
+
+export type SegmentoDeSecuencia = "pelvis" | "torso" | "brazo";
+
+export type CajaDeSecuencia = {
+  partes: SegmentoDeSecuencia[];
+  /** «Cadera», «Cadera y tronco». */
+  etiqueta: string;
+  /** Más de una parte dentro de la tolerancia: van juntas, con «casi a la vez». */
+  casiALaVez: boolean;
+};
+
+export type SecuenciaSimple = {
+  /** De izquierda a derecha, en el orden en que llegó el giro más rápido; entre una caja y la siguiente va una flecha con «antes». */
+  cajas: CajaDeSecuencia[];
+  /** Las partes que no se midieron: cajas grises punteadas, «Brazo · no se vio». */
+  noVistas: { segmento: SegmentoDeSecuencia; etiqueta: string }[];
+  sinDatos: boolean;
+  /** Para el lector de pantalla. */
+  resumen: string;
+};
+
+const NOMBRE_CAJA: Record<SegmentoDeSecuencia, string> = { pelvis: "Cadera", torso: "Tronco", brazo: "Brazo" };
+
+/**
+ * Qué parte llegó primero a su giro más rápido, sin ejes ni números. Las partes cuya diferencia no supera la tolerancia del reporte
+ * (8,33 ms, decisión 032) van juntas en UNA caja: a esa resolución no se puede decir cuál fue primero.
+ */
+export function secuenciaSimple(reporte: Json | null): SecuenciaSimple {
+  const tolS = (trazabilidadDe(reporte).tolerancia_orden_ms ?? 1000 / 120) / 1000;
+  const r = repeticionesDe(reporte).find((x) => x.picos?.some((p) => p.confianza >= UMBRAL_CONFIANZA_PICO && Number.isFinite(p.instante_s)));
+  const orden: SegmentoDeSecuencia[] = ["pelvis", "torso", "brazo"];
+  const medidas = orden
+    .map((s) => ({ s, p: r?.picos?.find((p) => p.segmento === s && p.confianza >= UMBRAL_CONFIANZA_PICO && Number.isFinite(p.instante_s)) }))
+    .filter((x): x is { s: SegmentoDeSecuencia; p: NonNullable<typeof x.p> } => !!x.p)
+    .sort((a, b) => a.p.instante_s - b.p.instante_s);
+  const noVistas = orden
+    .filter((s) => !medidas.some((x) => x.s === s))
+    .map((s) => ({ segmento: s, etiqueta: `${NOMBRE_CAJA[s]} · no se vio` }));
+  if (medidas.length === 0) {
+    return { cajas: [], noVistas, sinDatos: true, resumen: "No se pudo ver qué giró primero." };
+  }
+  const grupos: { s: SegmentoDeSecuencia; t: number }[][] = [];
+  for (const x of medidas) {
+    const ultimo = grupos[grupos.length - 1];
+    if (ultimo && x.p.instante_s - ultimo[0].t <= tolS + 1e-9) ultimo.push({ s: x.s, t: x.p.instante_s });
+    else grupos.push([{ s: x.s, t: x.p.instante_s }]);
+  }
+  const cajas: CajaDeSecuencia[] = grupos.map((gr) => {
+    const partes = gr.map((x) => x.s);
+    const nombres = partes.map((s) => NOMBRE_CAJA[s].toLowerCase());
+    const etiqueta = partes.length === 1 ? NOMBRE_CAJA[partes[0]] : `${NOMBRE_CAJA[partes[0]]} y ${nombres.slice(1).join(" y ")}`;
+    return { partes, etiqueta, casiALaVez: partes.length > 1 };
+  });
+  const resumen =
+    cajas.map((c) => (c.casiALaVez ? `${c.etiqueta.toLowerCase()} casi a la vez` : c.etiqueta.toLowerCase())).join(", antes ") +
+    (noVistas.length ? `. No se vio: ${noVistas.map((n) => NOMBRE_CAJA[n.segmento].toLowerCase()).join(" ni ")}.` : ".");
+  return { cajas, noVistas, sinDatos: false, resumen: `Qué giró primero: ${resumen}` };
+}
+
+// --- título de la pantalla del golpe --------------------------------------------------------------------------------------------
+
+/** «Saque · golpe 4 de 6». Un golpe solo en su sesión: «Saque · golpe único». Sin saber el lugar (todavía se lee): solo el golpe. */
+export function tituloDeGolpe(gesto: string, posicion: { n: number; m: number } | null): { gesto: string; resto: string | null } {
+  const nombre = { saque: "Saque", drive: "Drive", reves: "Revés" }[gesto] ?? "Golpe";
+  if (!posicion || posicion.n < 1 || posicion.m < 1) return { gesto: nombre, resto: null };
+  if (posicion.m === 1) return { gesto: nombre, resto: "golpe único" };
+  return { gesto: nombre, resto: `golpe ${posicion.n} de ${posicion.m}` };
 }

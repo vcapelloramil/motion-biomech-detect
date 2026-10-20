@@ -94,3 +94,20 @@ export const CASOS: Caso[] = [
     sesion: { gesto: "saque", encuadre: "tres_cuartos", ladoCamara: "izquierda", manoDominante: "derecha", golpes: sesiones.ningun_ordenable.golpes, consistencia: sesiones.ningun_ordenable.consistencia },
   },
 ];
+
+// --- Evolución (decisión 039, segunda ronda): series calculadas por el servidor con las sesiones reales del 24 y 25/9 y variantes ---
+import evo from "./fixtures/evolucion-matriz.json";
+import type { SerieDeEvolucion } from "../src/lib/evolucion";
+
+const series = evo as unknown as Record<string, SerieDeEvolucion>;
+
+export type CasoEvolucion = { id: string; n: string; titulo: string; escenario: string; serie: SerieDeEvolucion };
+
+export const CASOS_EVOLUCION: CasoEvolucion[] = [
+  { id: "una_sesion", n: "E1", titulo: "Una sola sesión (menos de 2 comparables)", escenario: "Solo la sesión del 25/9.", serie: series.una_sesion },
+  { id: "dos_sesiones", n: "E2", titulo: "Dos sesiones, el cambio está dentro de lo habitual", escenario: "Las dos sesiones reales: 24/9 y 25/9 (valor típico 32,05° y 32,95°).", serie: series.dos_sesiones },
+  { id: "cambio_mayor", n: "E3", titulo: "Tres sesiones, el cambio es mayor que lo habitual", escenario: "24/9, 25/9 y una sesión del 2/10 con todas las torsiones 14° más altas (variante inventada para probar la regla).", serie: series.cambio_mayor },
+  { id: "pocos_golpes", n: "E4", titulo: "Dos sesiones con menos de 4 golpes (no se puede decir la variación)", escenario: "Tres golpes por sesión: el servidor no calcula la variación (mínimo 4).", serie: series.pocos_golpes },
+  { id: "lados_distintos", n: "E5", titulo: "Sesiones grabadas desde lados distintos de la cámara", escenario: "La segunda sesión se cargó con la cámara a la derecha.", serie: series.lados_distintos },
+  { id: "orden_repetido", n: "E6", titulo: "Orden que se repite (5 golpes con orden distinguible por sesión)", escenario: "Dos sesiones con 5 golpes en que se distingue el orden (variante para probar la regla).", serie: series.orden_repetido },
+];
