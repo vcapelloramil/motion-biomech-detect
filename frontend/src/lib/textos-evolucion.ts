@@ -144,7 +144,7 @@ export function textosDeEvolucion(serie: SerieDeEvolucion): TextosEvolucion {
       tituloLinea: "Cuánto te enroscaste (torsión cadera-hombro)",
       unidadLinea: "grados · valor típico por sesión",
       notaLinea:
-        "Cada punto es el valor típico de los golpes medidos de la sesión; la línea vertical, cuánto variaron entre sí. Una sesión sin dato queda como hueco: no se completa con una estimación.",
+        "Cada punto es el valor típico de los golpes medidos de la sesión; la línea vertical, cuánto variaron entre sí. Con pocos golpes esa variación es una estimación gruesa: no la compares de una sesión a otra. Una sesión sin dato queda como hueco: no se completa con una estimación.",
       textoBanda: hab !== null && serie.centro_habitual !== null ? `tu variación habitual ±${grados(hab)}` : null,
       tituloBarras: "Golpes con el mismo orden de cadera y tronco",
       notaBarras:
@@ -162,7 +162,7 @@ export function textosDeEvolucion(serie: SerieDeEvolucion): TextosEvolucion {
         s.orden.ordenables > 0 ? `${s.orden.ordenables} de ${s.orden.medidos}` : "ninguno",
         s.lado_camara ?? "—",
       ]),
-      nota: "«Orden visto» son los golpes en que se pudo ver qué giró primero. La variación se da desde 4 golpes por sesión.",
+      nota: "«Orden visto» son los golpes en que se pudo ver qué giró primero. La variación se da desde 4 golpes por sesión y, con pocos golpes, es una estimación gruesa: no conviene compararla entre sesiones.",
     },
   };
 }

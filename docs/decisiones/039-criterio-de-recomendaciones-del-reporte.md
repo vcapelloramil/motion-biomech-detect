@@ -28,7 +28,7 @@ línea de explicación, sin nombres internos; el procesamiento —tiempos, inter
 | Tipo | Qué es | Ejemplo |
 | --- | --- | --- |
 | **A. Cómo medir mejor** | Sobre la captura: lado de la cámara, encuadre, cantidad de golpes | «Con 5 o más golpes en que se distinga, KinetiQ puede decir cuántas veces se repitió el orden» |
-| **B. Cómo usar los datos para entrenar** | Comparar sesiones desde el mismo lugar, mirar si un número se vuelve más parejo, la variación propia | «Mirá en Evolución si la torsión se vuelve más pareja de una sesión a otra» |
+| **B. Cómo usar los datos para entrenar** | Comparar sesiones desde el mismo lugar y mirar cómo cambia el **valor típico**; la variación propia solo como idea general (con pocos golpes es una estimación gruesa) | «Mirá en Evolución si el valor típico de la torsión se mantiene de una sesión a otra» |
 | **C. Contexto de la literatura** | En un **recuadro separado**, sin ningún dato del jugador adentro, con cita, y **sin «coincide» ni «está bien»**. **Solo frases generales**: una secuencia específica (el orden de los picos, valores, rangos) **requiere verificar antes el pasaje** de la fuente | «La literatura describe el saque como una cadena que transmite energía desde las piernas, a través de la cadera y el tronco, hacia el brazo y la raqueta (Kovacs y Ellenbecker, 2011). La forma exacta varía de un jugador a otro.» |
 | **D. Preguntas para el entrenador** | Armadas con los datos del jugador (van en la sección «Para tu entrenador»), siempre abiertas | «En el golpe 6 la torsión fue de 11°: ¿qué ves en el video?» |
 
@@ -98,6 +98,13 @@ El motor y su sello (0.5.5), el contrato (1.4), los cuatro estados de R3 (no se 
 - **Un solo título** de «Fotos y video» en la sesión (el selector de golpe va debajo) y **«textos vN» una sola vez** al final del detalle técnico.
 - **Evolución: dos sesiones del mismo día se distinguen por su orden de carga** («24 sep · 1.ª», «24 sep · 2.ª»): la fecha de una sesión es la de la grabación y no trae hora, y la hora de carga confundiría (se cargaron el 13/10).
 - **El lado de la cámara en la clave de Evolución queda para después de la demo** (servidor); registrado en `correcciones-pendientes-capitulo-4.md` (fila 42).
+
+## Ajustes del 21/10, quinta ronda — `VERSION_TEXTOS` = «4»
+
+- **Con pocos golpes la variación entre golpes es una estimación gruesa** (decisión 040: con 6 golpes el intervalo del 95 % abarca unos 7 puntos de una escala de 10). **Ningún texto presenta un cambio de la variación como un cambio del jugador ni invita a mirar si «se vuelve más pareja».** Se corrigieron los dos textos de «Para usar estos datos al entrenar» (el del golpe y el de la sesión) y el tipo B de esta decisión ya no ofrece ese ejemplo: ahora dice «mirá cómo se parecen tus golpes dentro de una sesión como una idea general; con pocos golpes es una estimación gruesa y no conviene compararla entre sesiones», y manda a Evolución para ver el **valor típico** (la mediana) de una sesión a otra.
+- **El ⓘ de la variación típica agrega una línea:** «Con pocos golpes es una estimación gruesa: con 6 golpes puede moverse varios grados si repetís la sesión, así que no conviene compararla entre sesiones.» La nota del gráfico y de la tabla de Evolución dicen lo mismo.
+- **Prueba nueva** (`CAMBIO_DE_VARIACION`): falla si algún texto dice «se vuelve más…», «más/menos parejo, regular, constante, estable», «variaron más/menos», «mejoró/empeoró» o «más variable».
+- **Lo que sí se mantiene:** comparar el **valor típico** (la mediana) entre sesiones usando la variación como vara («se mantuvo, dentro de lo que variás entre golpes») es la regla del Criterio 3 (Δ ≤ σ_w), no una comparación de variaciones; su ⓘ lleva la advertencia nueva.
 
 ## Puntos abiertos
 

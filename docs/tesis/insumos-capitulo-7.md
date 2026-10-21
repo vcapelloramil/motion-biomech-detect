@@ -394,6 +394,45 @@ Un análisis posterior **post hoc** (optimista, no cuenta) da ~10 % de error par
 
 ---
 
+### 2.11 Indicador de «regularidad» de la torsión (decisión 040, 20–21/10/2026) — **FIRME (el cálculo) · el resultado es negativo: DESCARTADO PARA EL MVP**
+
+**Qué se hizo:** se evaluó traducir la variación típica de la torsión cadera-hombro entre los golpes de una sesión (hoy «±4°» en el 25/9) a una escala de 1 a 10 y una palabra («regularidad»), sin referencia externa y sin llamarla técnica, calidad ni puntaje. **Los cortes se fijaron ANTES de calcular nada con las sesiones reales** (commit `9e270f8`, `docs/decisiones/040-…`), con la repetibilidad del Criterio 3 (§2.6) como referencia: σ_w del corpus 2,84 a 3,14° (≈ 3°) y diferencia entre sesiones consecutivas de 0,93 a 6,03° (mediana ≈ 2,3°). **10 = variación típica de 1,5° o menos** (la mitad de la del corpus); **1 = 9° o más** (el triple); lineal entre ambos (0,83° por punto); control de cordura: el σ típico del corpus da 8.
+
+**Las dos sesiones con al menos 4 golpes** (mínimo de la variación típica):
+
+| Sesión | Golpes con torsión | Variación típica | Valor (1–10) | Palabra |
+| --- | --- | --- | --- | --- |
+| 24/9 · saque · tres cuartos | 6 | 1,11° | 10 | muy regular |
+| 25/9 · saque · tres cuartos | 6 | 4,37° | 7 | bastante regular (sin el golpe 6 de 11,2°: σ 3,11° → 8) |
+
+Las otras sesiones de la cuenta tienen menos de 4 golpes (texto simple, sin número).
+
+**Cuántos golpes hacen falta** (simulación: datos normales, σ verdadero 3,7° —el que da un σ *estimado* típico de ≈ 3° con 6 golpes—, 20 000 repeticiones; un nivel = tramo de igual ancho entre 1,5° y 9°):
+
+| Golpes de la sesión (n) | σ estimado típico | Intervalo del 95 % | Amplitud | 3 niveles (un nivel = 3,75°) | 5 niveles (1,88°) | 10 niveles (0,83°) |
+| --- | --- | --- | --- | --- | --- | --- |
+| **6** | 2,92° | 0,79 a 6,40° | 5,6° | 1,5 niveles | 3,0 niveles | 6,7 niveles |
+| **12** | 3,34° | 1,46 a 5,94° | 4,5° | 1,2 | 2,4 | 5,4 |
+| **20** | 3,48° | 1,89 a 5,52° | 3,6° | **1,0** | 1,9 | 4,4 |
+| **30** | 3,58° | 2,22 a 5,20° | 3,0° | **0,8** | 1,6 | 3,6 |
+| **50** | 3,61° | 2,52 a 4,86° | 2,3° | **0,6** | 1,2 | 2,8 |
+| *800 (verificación)* | 3,70° | 3,42 a 4,01° | 0,6° | 0,2 | 0,3 | 0,7 |
+
+| Qué se junta (3 niveles = 3,75°; 5 = 1,88°; 10 = 0,83°) | Golpes | Amplitud del intervalo del 95 % | 3 niveles | 5 niveles | 10 niveles |
+| --- | --- | --- | --- | --- | --- |
+| 1 sesión de 6 | 6 | 6,4° | 1,7 | 3,4 | 7,7 |
+| 3 sesiones de 6 (promedio de σ por sesión) | 18 | 3,8° | 1,0 | 2,0 | 4,6 |
+| 4 sesiones de 6 (promedio de σ por sesión) | 24 | 3,3° | 0,9 | 1,8 | 4,0 |
+| 4 sesiones de 12 (promedio de σ por sesión) | 48 | 2,6° | 0,7 | 1,4 | 3,1 |
+
+**Para que el intervalo del 95 % quepa en UN nivel hacen falta ≈ 20 a 30 golpes por sesión con 3 niveles, ≈ 80 con 5 y ≈ 400 con 10** (con el desvío estándar clásico, no robusto, unas tres veces menos, pero sensible a un golpe lejano). Juntar sesiones ayuda casi igual que alargarlas (4 sesiones de 6 ≈ una de 20).
+
+**Conclusión:** con 6 golpes (lo habitual) el intervalo del 95 % de la variación abarca **unos 7 puntos de una escala de 10**: un jugador con la variación típica del corpus recibiría desde un «4 algo variable» hasta un «10 muy regular», y casi la mitad de las veces un 9 o un 10. **La diferencia entre el 24/9 (10) y el 25/9 (7) es en gran parte ruido de muestreo** (un solo golpe, el 6, mueve el 25/9 de 7 a 8). **Ninguna escala debe ser más fina que la incertidumbre del dato**: es el mismo principio por el que los cortes de rodilla y codo en palabras se fijaron en tres categorías separadas por 30°, más del doble del error medido (8,5° de media en la rodilla y 12,5° en el codo, §2.6; decisión 039). Por eso **la variación se queda en grados** y su ayuda dice que con pocos golpes es una estimación gruesa. **Trabajo futuro** (§7.3): regularidad en palabras (tres bandas) con ≥ 20 a 30 saques del mismo encuadre y lado en una sesión, o «regularidad habitual» juntando ≥ 4 sesiones de 6; la celda de ≈ 20 saques está en el protocolo post-demo (`docs/protocolo-sesion-lado-derecho.md`).
+
+**Límites:** la simulación supone datos normales y σ constante (los datos reales tienen golpes lejanos y cansancio: la incertidumbre real es mayor); un jugador, una cámara; sesiones de 6 golpes.
+
+---
+
 ## 3. Estado de cada resultado
 
 | # | Resultado | Cifra principal | Estado | Por qué · qué lo cambiaría |
@@ -541,6 +580,7 @@ La lista viva de correcciones al capítulo, con la decisión que origina cada un
 
 - **Multivista:** grabar el mismo golpe a la vez desde perfil y desde tres cuartos (la prueba más limpia de la dependencia del encuadre). **Descartada por ahora: no hay un segundo teléfono.**
 - **Cintas de color:** una medición independiente de la pelvis con un solo teléfono (cuatro colores en cresta ilíaca y acromion), que permitiría levantar la suspensión del veredicto grupo por grupo. **Registrada, sin diseñar** (cuántas repeticiones, criterio de acuerdo y qué levanta la suspensión se define si se decide hacerla).
+- **Regularidad de la torsión** (decisión 040, §2.11): en palabras (tres bandas) con sesiones de ≥ 20 a 30 saques del mismo encuadre y lado, o «regularidad habitual» juntando ≥ 4 sesiones de 6 golpes. **No** una escala de 10 niveles (≈ 400 golpes). Es viable porque mide cuánto se parecen los golpes **entre sí** y no necesita una referencia externa; **no es una medida de calidad** (ver §7.4).
 - **Validación contra una referencia independiente** (marcadores, sensores inerciales o captura óptica) y **más de un jugador**, en más de un día y con niveles distintos.
 - **Grabar del lado de la raqueta** (cámara a la derecha de un jugador diestro) en saque y drive, para medir el brazo dominante y contrastar la explicación del lado de grabación (decisión 013). **Salvedad:** cambia
   la comparabilidad con el corpus; esas sesiones serían un corpus aparte. Las sesiones nuevas opcionales para Evolución usan el mismo lado del corpus (izquierda).
@@ -548,6 +588,27 @@ La lista viva de correcciones al capítulo, con la decisión que origina cada un
 - **Ventana específica por gesto**, pre-registrada, para no censurar la métrica (ii).
 - **Marca por pico del instante medido o reconstruido** y suma de la incertidumbre del hueco a la decisión de "ordenable".
 - **Alertas con umbral con referencia bibliográfica** (E5.1), solo donde haya fuente; **YOLOv8-Pose/ONNX** y elevación 3D como vías alternativas; PDF generado en el servidor, retención de 7 días y reproductor sincronizado; validación de utilidad con entrenadores y kinesiólogos (I4, Criterio 5).
+
+---
+
+### 7.4 Puntaje de calidad — **no es posible en el MVP** (y qué haría falta)
+
+**Qué se descarta:** un número o una nota que diga «qué tan bueno» es un golpe. **No es lo mismo que la «regularidad»** (§2.11, decisión 040): la regularidad mide **cuánto se parecen los golpes entre sí** y **no necesita ninguna referencia** (por eso es viable con más golpes); la calidad **necesita una referencia externa que diga qué es mejor**, y esa referencia no existe en este proyecto. Un jugador puede ser muy regular y no ser el movimiento que busca su entrenador, o variar a propósito.
+
+**Por qué no es posible hoy:**
+
+1. **No hay una definición de calidad.** Ni el proyecto ni la tesis dicen qué es un «buen» saque, drive o revés en términos medibles; la tesis solo tiene una referencia citable del orden en el saque, sin rangos numéricos (`docs/reporte-mas-valor.md`), y los umbrales poblacionales **no se implementaron ni se simularon** (§10.6).
+2. **No hay una referencia comparable en 2D.** Los valores de la literatura (por ejemplo, las velocidades de Fleisig et al., 2003) provienen de captura 3D con marcadores y miden otras magnitudes: el brazo **no es comparable** con la velocidad que calcula el motor (decisión 011). Además el orden cadera → tronco **depende del encuadre** (8 de 8 con el tronco primero en perfil y 7 de 7 con la cadera primero en tres cuartos): por eso **ningún grupo emite veredicto del orden** (decisiones 035 y 036).
+3. **Las limitaciones de la medición** con un teléfono y una cámara: el encuadre y el lado de grabación; la **oclusión del brazo que golpea** (68 % de las repeticiones sin su pico, 18 de 18 en el saque de tres cuartos, §2.7); el **error angular medido** contra goniometría manual (rodilla 8,5° de media y hasta 19,2°; codo 12,5° y hasta 36,4°, §2.6); la resolución en el tiempo (8,33 ms); un solo jugador y dos sesiones.
+4. **Un puntaje de técnica dirigiría la atención del jugador** (R2: el sistema muestra el dato, la conclusión es del profesional; sube de Clase I a Clase II ante ANMAT si el software dirige la atención médica).
+
+**Caminos futuros** (en orden de recomendación):
+
+- **A) Por el resultado de la pelota** (velocidad, porcentaje de saques adentro, ubicación). Es objetivo y no exige definir la «calidad» biomecánica. Requiere **rastrear la pelota y la cancha**, hoy **fuera del alcance** (R5), y ese resultado depende también del rival y de la táctica.
+- **B) Contra una población de jugadores avanzados con el mismo protocolo** (misma cámara, encuadre, lado y fps). Da una referencia 2D comparable, pero exige reclutar jugadores, un protocolo común y n suficiente, depende del encuadre y **choca con R5** (no se comparan con jugadores ATP/WTA): habría que revisarla de forma explícita.
+- **C) Contra la puntuación de entrenadores, con acuerdo entre evaluadores** (varios entrenadores puntúan los mismos videos con una escala acordada; se exige un acuerdo mínimo, por ejemplo un coeficiente de concordancia, antes de usar la puntuación). Valida el puntaje contra juicio experto, sin inventar un umbral.
+- **Recomendación: A + C**, idealmente con **captura multicámara o 3D** (resuelve la oclusión del brazo, el encuadre y buena parte del error articular).
+- **D) La lista de criterios de la literatura** (el «checklist» de una técnica correcta) **se descarta:** son criterios cualitativos y no operacionalizables con 17 puntos en 2D (la rotación interna del hombro no se mide con ellos, Capítulo 3, 3.3.3.4); no traen umbrales numéricos; mezclan estilos; y quien los define también los aplica (circular). Terminaría siendo un veredicto sin evidencia.
 
 ---
 

@@ -3,7 +3,7 @@
 import { describe, expect, test } from "bun:test";
 import fx from "./fixtures/sesion-25-9-saque-tres-cuartos.json";
 import type { Consistencia } from "../src/lib/consistencia";
-import { JERGA, PROHIBIDAS } from "./palabras-prohibidas";
+import { CAMBIO_DE_VARIACION, JERGA, PROHIBIDAS } from "./palabras-prohibidas";
 import {
   AVISO,
   GLOSARIO,
@@ -173,7 +173,7 @@ describe("la sesión del 25/9", () => {
   });
 
   test("Evolución usa «valor típico» y la variación", () => {
-    expect(textoDe(s.hacer.usar)).toContain("valor típico de la torsión (hoy 33°) y la variación entre golpes (hoy ±4°)");
+    expect(textoDe(s.hacer.usar)).toContain("valor típico de la torsión (hoy 33°) se mantiene de una sesión a otra. La variación entre golpes (hoy ±4°) sirve como idea general");
   });
 
   test("el golpe típico es el 4", () => {
@@ -420,6 +420,32 @@ describe("título del golpe y tercera persona", () => {
   });
   test("ninguna frase habla de «su sesión» al usuario", () => {
     expect(todasLasFrases().filter((f) => /\bsu sesión\b/i.test(f.texto)).map((f) => f.donde)).toEqual([]);
+  });
+});
+
+describe("la variación entre golpes con pocos golpes (decisión 040)", () => {
+  test("ningún texto presenta un cambio de la variación como un cambio del jugador ni invita a ver si «se vuelve más pareja»", () => {
+    const malas = todasLasFrases().flatMap((f) => CAMBIO_DE_VARIACION.filter((r) => r.test(f.texto)).map((r) => `${f.donde}: ${r}`));
+    expect(malas).toEqual([]);
+  });
+  test("todo texto de «Qué podés hacer» que menciona la variación entre golpes dice que con pocos golpes es una estimación gruesa", () => {
+    for (const c of [entradaSesion()]) {
+      const s = textosDeSesion(c);
+      const usar = textoDe(s.hacer.usar);
+      expect(usar).toContain("±4°");
+      expect(usar).toContain("estimación gruesa");
+      expect(usar).toContain("no conviene compararla entre sesiones");
+    }
+    const g = textoDe(textosDeGolpe(entradaGolpe(3)).hacer.usar);
+    expect(g).toContain("estimación gruesa");
+    expect(g).not.toMatch(/más parejo|se vuelve/i);
+  });
+  test("el ⓘ de la variación típica lo avisa", () => {
+    expect(GLOSARIO.variacion_tipica.corto).toContain("Con pocos golpes es una estimación gruesa");
+    expect(GLOSARIO.variacion_tipica.corto).toContain("con 6 golpes puede moverse varios grados");
+  });
+  test("la versión de los textos es 4", () => {
+    expect(VERSION_TEXTOS).toBe("4");
   });
 });
 

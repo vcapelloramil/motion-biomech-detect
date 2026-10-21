@@ -26,6 +26,10 @@ tres cuartos 7 de 7 con la cadera primero).
 **Recomendado (+12 golpes, ≈ +30 min):** 6 **drives** y 6 **reveses** con la cámara a la **derecha**, en perfil. Con la cámara a la izquierda el drive perdió el pico del brazo en 12 de 12; es donde más se gana, y sirve para
 la detección de lado y de tipo de golpe con los tres gestos. El revés además pone a prueba el caso donde la regla ingenua del hombro más cercano falla del lado izquierdo (decisión 038). **Total: 40 golpes.**
 
+### Celda extra para la regularidad (decisión 040, agregada el 21/10/2026)
+
+**Opcional, +20 saques (≈ 40 min):** una celda **R-3/4 de ≈ 20 saques seguidos, con la cámara a la izquierda y en tres cuartos por delante (la condición validada y la de la demo), en UNA sola sesión**, para probar si con 20 golpes la variación típica de la torsión permite tres bandas de «regularidad» (la simulación da ≈ 20 a 30 golpes para que el intervalo del 95 % quepa en un nivel de tres). **Del mismo encuadre y lado que el corpus**, con el mismo ritmo (1 minuto entre saques) y **sin mezclar con los bloques de arriba**: se graba **antes** del bloque D-P o **otro día**, para que el cansancio de la sesión larga no se confunda. Se sube como **una sesión de 12 y otra de 8** (el máximo de la aplicación es 12 golpes por sesión) o se analiza sin subir. Qué se mira (fijado antes de analizar): el intervalo del 95 % de la variación típica con los 20 golpes (remuestreo), cuántos de los 20 caen a más de 3 variaciones típicas, y si la primera mitad y la segunda mitad dan lo mismo (cansancio).
+
 ### Por qué estas cantidades
 
 - 8 por bloque del lado derecho: es lo que dio el Paso B por grupo (8 y 7 ordenables). Alcanza para ver un cambio **grande** de sentido (como 0/8 contra 7/7), **no** para efectos chicos: el resultado es **descriptivo**.

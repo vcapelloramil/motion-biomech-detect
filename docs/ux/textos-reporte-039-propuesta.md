@@ -4,7 +4,7 @@
 **Cómo se escribió este documento:** las secciones A, B y C **no están escritas a mano**: las genera el programa que arma los textos de verdad (`frontend/src/lib/textos-reporte.ts`) sobre la sesión **real** del 25/9/2026 (saque, tres cuartos, 6 golpes, motor 0.5.3, leída de la base en solo lectura) y sobre variantes de ese mismo dato. Se regeneran con `bun tests/generar-textos-doc.ts` (desde `frontend/`). Así este documento **no puede decir otra cosa que el sistema**.
 **Versión de los textos:** <!-- GENERADO:version -->
 
-Textos **v3** · generado con `bun tests/generar-textos-doc.ts` desde `frontend/src/lib/textos-reporte.ts` y la sesión real del 25/9/2026.
+Textos **v4** · generado con `bun tests/generar-textos-doc.ts` desde `frontend/src/lib/textos-reporte.ts` y la sesión real del 25/9/2026.
 
 <!-- /GENERADO:version -->
 
@@ -77,7 +77,7 @@ Reglas generales (decisión 039): primero lo medido; después lo no medido, con 
 >
 > **Para usar estos datos al entrenar**
 > - Para comparar con otro día, grabá desde el mismo lugar (lado y ángulo de la cámara): el mismo movimiento puede dar números distintos desde otro punto de vista.
-> - Más que un número suelto, sirve mirar si un número se vuelve más parejo de golpe a golpe y de sesión a sesión. En Evolución se ve la variación de tu propia sesión. *(enlace a Evolución)*
+> - Mirá cómo se parecen tus golpes dentro de una sesión como una idea general: con pocos golpes es una estimación gruesa y no conviene compararla entre sesiones. En Evolución se ve cómo cambia el valor típico de la torsión de una sesión a otra. *(enlace a Evolución)*
 >
 > **Contexto de la literatura** *(recuadro aparte)*
 > Contexto general: no es una comparación con tus datos. La literatura describe el saque como una cadena que transmite energía desde las piernas, a través de la cadera y el tronco, hacia el brazo y la raqueta (Kovacs y Ellenbecker, 2011). La forma exacta varía de un jugador a otro.
@@ -135,7 +135,7 @@ Reglas generales (decisión 039): primero lo medido; después lo no medido, con 
 | Dato | Valor | Qué significa |
 | --- | --- | --- |
 | Motor | 0.5.3 · mediapipe | Versión del programa que calculó el reporte y detector de pose. |
-| Textos | v3 | Versión de las frases de este reporte; si cambian, sube el número. |
+| Textos | v4 | Versión de las frases de este reporte; si cambian, sube el número. |
 
 <!-- /GENERADO:golpe4 -->
 
@@ -177,7 +177,7 @@ Reglas generales (decisión 039): primero lo medido; después lo no medido, con 
 >
 > **Para usar estos datos al entrenar**
 > - Para comparar esta sesión con otra, grabá desde el mismo lugar: saque, tres cuartos, cámara a la izquierda.
-> - En Evolución podés mirar si el valor típico de la torsión (hoy 33°) y la variación entre golpes (hoy ±4°) se mantienen o se vuelven más parejos de una sesión a otra. *(enlace a Evolución)*
+> - En Evolución podés mirar si el valor típico de la torsión (hoy 33°) se mantiene de una sesión a otra. La variación entre golpes (hoy ±4°) sirve como idea general de esta sesión: con pocos golpes es una estimación gruesa y no conviene compararla entre sesiones. *(enlace a Evolución)*
 >
 > **Contexto de la literatura** *(recuadro aparte)*
 > Contexto general: no es una comparación con tus datos. La literatura describe el saque como una cadena que transmite energía desde las piernas, a través de la cadera y el tronco, hacia el brazo y la raqueta (Kovacs y Ellenbecker, 2011). La forma exacta varía de un jugador a otro.
@@ -213,12 +213,12 @@ Reglas generales (decisión 039): primero lo medido; después lo no medido, con 
 *Rodilla y codo: 180° es la pierna (o el brazo) recta, sin doblar. El codo que se muestra es el del brazo que no golpea (el del lanzamiento de pelota).*
 
 - **Valor típico:** Es la mediana: el valor del medio al ordenar los golpes de menor a mayor. No se deja arrastrar por un golpe muy distinto de los demás.
-- **Variación típica:** Cuánto se aleja, en general, un golpe del valor típico. Está calculada de modo que un golpe muy distinto no la agrande. Se da desde 4 golpes. En esta sesión: ±4,4°.
+- **Variación típica:** Cuánto se aleja, en general, un golpe del valor típico. Está calculada de modo que un golpe muy distinto no la agrande. Se da desde 4 golpes. Con pocos golpes es una estimación gruesa: con 6 golpes puede moverse varios grados si repetís la sesión, así que no conviene compararla entre sesiones. En esta sesión: ±4,4°.
 - **Golpe típico:** El golpe de la sesión más cercano al valor típico de la torsión. Es el más representativo; no es un golpe ejemplar ni un juicio sobre tu técnica.
 - **Un golpe que se aparta:** Su torsión quedó a más de 3 variaciones típicas del valor típico de la sesión. Puede ser tu golpe o la medición: conviene mirarlo en el video.
 - **Casi a la vez:** Con la resolución de estos videos, menos de 8,3 ms de diferencia no se puede ordenar. La repetición del orden se informa desde 5 golpes en que se pudo establecer.
 
-*Motor 0.5.3 · textos v3*
+*Motor 0.5.3 · textos v4*
 
 <!-- /GENERADO:sesion -->
 
@@ -410,7 +410,7 @@ Cada caso muestra el «En una frase» y el «Qué vimos» que salen con las mism
 >
 > **Qué podés hacer → para usar estos datos al entrenar**
 > - Para comparar esta sesión con otra, grabá desde el mismo lugar: saque, tres cuartos, cámara a la izquierda.
-> - En Evolución podés mirar si el valor típico de la torsión (hoy 33°) y la variación entre golpes (hoy ±4°) se mantienen o se vuelven más parejos de una sesión a otra. *(enlace a Evolución)*
+> - En Evolución podés mirar si el valor típico de la torsión (hoy 33°) se mantiene de una sesión a otra. La variación entre golpes (hoy ±4°) sirve como idea general de esta sesión: con pocos golpes es una estimación gruesa y no conviene compararla entre sesiones. *(enlace a Evolución)*
 >
 > **Para tu entrenador → preguntas**
 > 1. En el golpe 6 la torsión fue de 11° (en los otros, entre 29° y 42°) y la pierna izquierda estaba mucho más flexionada. ¿Qué ves en el video de ese golpe? ¿Fue un saque distinto a los demás?
@@ -475,7 +475,7 @@ Cada caso muestra el «En una frase» y el «Qué vimos» que salen con las mism
 >
 > **Qué podés hacer → para usar estos datos al entrenar**
 > - Para comparar esta sesión con otra, grabá desde el mismo lugar: saque, tres cuartos, cámara a la izquierda.
-> - En Evolución podés mirar si el valor típico de la torsión (hoy 34°) y la variación entre golpes (hoy ±3°) se mantienen o se vuelven más parejos de una sesión a otra. *(enlace a Evolución)*
+> - En Evolución podés mirar si el valor típico de la torsión (hoy 34°) se mantiene de una sesión a otra. La variación entre golpes (hoy ±3°) sirve como idea general de esta sesión: con pocos golpes es una estimación gruesa y no conviene compararla entre sesiones. *(enlace a Evolución)*
 >
 > **Para tu entrenador → preguntas**
 > 1. En 3 golpes la cadera llegó antes que el tronco y en otros 2 llegaron casi juntos. ¿Se ve esa diferencia en el video? ¿Vale la pena seguir mirándola en las próximas sesiones?
@@ -576,6 +576,12 @@ Cada caso muestra el «En una frase» y el «Qué vimos» que salen con las mism
 | B2 | La lista solo con «Golpe N» | Sin el nombre del archivo; el archivo y «esperó X en la cola · procesamiento Y» están en el detalle técnico. Acciones juntas a la derecha, sin saltos (390 px y escritorio). |
 | B3 | Títulos duplicados | Un solo «Fotos y video» en la sesión; «textos vN» una sola vez. |
 | B4 | Sesiones del mismo día en Evolución | «24 sep · 1.ª» y «24 sep · 2.ª» (orden de carga; la fecha de una sesión no trae hora). |
+
+# Quinta ronda (21/10) — textos v4
+
+| # | Pedido de Valentín | Cómo quedó |
+| --- | --- | --- |
+| 4 | Ningún texto compara la **variación** entre sesiones ni invita a mirar si «se vuelve más pareja» (con 6 golpes puede ser azar) | Se corrigieron los textos de «Para usar estos datos al entrenar» (golpe y sesión): ahora piden mirar cómo se parecen los golpes de la sesión **como una idea general** y dicen que, con pocos golpes, es una estimación gruesa que no conviene comparar entre sesiones; Evolución se usa para ver el **valor típico**. El ⓘ de la variación típica, la nota del gráfico y la tabla de Evolución agregan la misma advertencia. **Prueba nueva** de vocabulario (`CAMBIO_DE_VARIACION`). |
 
 # Pendientes
 

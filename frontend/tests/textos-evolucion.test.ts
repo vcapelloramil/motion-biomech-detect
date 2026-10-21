@@ -1,7 +1,7 @@
 // Evolución en el lenguaje de la decisión 039 (segunda ronda). Series reales/variantes de tests/fixtures/evolucion-matriz.json.
 import { describe, expect, test } from "bun:test";
 import { CASOS_EVOLUCION, type CasoEvolucion } from "./casos-matriz";
-import { JERGA, PROHIBIDAS } from "./palabras-prohibidas";
+import { CAMBIO_DE_VARIACION, JERGA, PROHIBIDAS } from "./palabras-prohibidas";
 import { textosDeEvolucion } from "../src/lib/textos-evolucion";
 
 const t = (id: string) => textosDeEvolucion(CASOS_EVOLUCION.find((c) => c.id === id)!.serie);
@@ -62,7 +62,18 @@ describe("Evolución: palabras prohibidas y jerga", () => {
       const todo = juntar(c.id);
       expect(PROHIBIDAS.filter((r) => r.test(todo)).map(String)).toEqual([]);
       expect(JERGA.filter((r) => r.test(todo)).map(String)).toEqual([]);
+      expect(CAMBIO_DE_VARIACION.filter((r) => r.test(todo)).map(String)).toEqual([]);
       expect(todo).not.toMatch(/\bsu sesión\b/i);
     });
   }
 });
+
+describe("Evolución: la variación entre golpes es una estimación gruesa (decisión 040)", () => {
+  test("el gráfico y la tabla lo dicen", () => {
+    const x = t("dos_sesiones");
+    expect(x.graficos.notaLinea).toContain("estimación gruesa");
+    expect(x.graficos.notaLinea).toContain("no la compares de una sesión a otra");
+    expect(x.detalle.nota).toContain("estimación gruesa");
+  });
+});
+

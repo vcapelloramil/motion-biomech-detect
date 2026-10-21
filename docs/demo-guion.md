@@ -122,7 +122,28 @@ rol "entrenador") no tiene sesiones ni archivos. Versiones del motor mezcladas e
 | **7** | **Dejar el archivo de la carga en vivo:** un recorte **no subido**, por ejemplo `20260925_saque_trescuartos_toma02c_golpe1.mov`. En la demo se dice que **es del corpus** y se sube con la fecha real de la grabación; **se borra la sesión después**, para no dejar un tercer punto en Evolución | — |
 | **8** | **Respaldo final** y **congelar** (`git tag demo-…`; no se publica más) | Manifiesto "ÍNTEGRO" |
 
-**Tiempo total de proceso:** ≈ 12–15 + 12–15 + 5 min de cola ≈ **35 min** (más lo que tardes en cargar los formularios).
+**Tiempo estimado (21/10/2026, con las mediciones reales de `tools/respaldo/tiempos_y_origen_de_las_subidas.py`):** el análisis es **de a un golpe por vez** (1 CPU en Render Standard). Se suben **14 golpes** (pasos 3 a 5: 6 + 6 + 1 drive + 1 revés).
+
+| Qué | Medido | Golpes | Tiempo |
+| --- | --- | --- | --- |
+| Saque de tres cuartos (≈ 1 000–1 500 fotogramas, 0,18–0,19 s por fotograma) | procesamiento **mediana 193 s** (24/9) y **246 s** (25/9; máximo 280 s) | 12 | **39 a 56 min** |
+| Drive y revés recortados (≈ 600 fotogramas) | 14 a 125 s (una vez, 677 s) | 2 | **1 a 4 min** (hasta 23 min si pasa como el 677 s) |
+| **Total de análisis** | | **14** | **≈ 40 a 60 min; peor caso ≈ 80 min** |
+
+*Contraste:* el 13/10 los 12 golpes de las dos sesiones tardaron **43,7 min de punta a punta** (3,6 min por golpe); 14 golpes serían ≈ 51 min. La nota anterior de «≈ 35 min» estaba **corta**: solo contaba 12–15 min por sesión.
+
+**Cuánto dura toda la limpieza + nueva subida** (el análisis corre mientras se cargan los formularios y se verifica):
+
+| Paso | Tiempo |
+| --- | --- |
+| 1 · Respaldo nuevo y verificado (≈ 840 MB) y copia al disco externo | 15 a 25 min |
+| 2 · Eliminar las 8 sesiones | 5 a 10 min |
+| 3 a 5 · Cargar los formularios y subir los 14 archivos (el análisis arranca con el primero) | 10 a 15 min de carga; **el análisis termina a los 40 a 80 min del primer envío** |
+| 6 · Mirar todo en la aplicación y los dos PDF; `estado_de_la_base.py` | 15 a 20 min |
+| 7 y 8 · Dejar el archivo de la carga en vivo; respaldo final | 15 a 20 min |
+| **Total** | **≈ 1 h 35 min a 2 h 40 min (con margen: 3 h)** |
+
+**A qué hora arrancar el 25/10:** **a las 9:00** (domingo, sin otras tareas): el análisis termina antes de las 11:00 y todo cierra antes del mediodía, con margen hasta las 12:30. **No empujar nada a `main` mientras haya análisis en curso** (Render reinicia y corta el que esté corriendo): verificar con `estado_de_la_base.py` («EN CURSO: ninguno») antes de cada push. Si el 26/10 hace falta repetir algo, las dos sesiones de saque se pueden volver a subir en ≈ 1 h.
 **Si el motor cambia después de congelarlo:** repetir los pasos 1 a 8 (los pasos 3 a 5 dependen de la versión). No se sube nada antes del congelamiento.
 
 **Qué NO va a la cuenta de la demo:** las sesiones del lado derecho (`docs/protocolo-sesion-lado-derecho.md`) —son un corpus aparte, y la aplicación avisaría que cambia el lado—, ni sesiones de prueba de ninguna clase.

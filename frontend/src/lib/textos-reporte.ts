@@ -27,7 +27,7 @@ import {
   type RepeticionLeida,
 } from "@/lib/reporte-simple";
 
-export const VERSION_TEXTOS = "3";
+export const VERSION_TEXTOS = "4";
 
 type Json = Record<string, unknown>;
 
@@ -82,7 +82,7 @@ export const GLOSARIO: Record<ClaveAyuda, { termino: string; corto: string }> = 
   variacion_tipica: {
     termino: "Variación típica",
     corto:
-      "Cuánto se aleja, en general, un golpe del valor típico. Está calculada de modo que un golpe muy distinto no la agrande. Se da desde 4 golpes.",
+      "Cuánto se aleja, en general, un golpe del valor típico. Está calculada de modo que un golpe muy distinto no la agrande. Se da desde 4 golpes. Con pocos golpes es una estimación gruesa: con 6 golpes puede moverse varios grados si repetís la sesión, así que no conviene compararla entre sesiones.",
   },
   golpe_tipico: {
     termino: "Golpe típico",
@@ -539,7 +539,7 @@ export function textosDeGolpe(e: EntradaGolpe): TextosGolpe {
       texto: "Para comparar con otro día, grabá desde el mismo lugar (lado y ángulo de la cámara): el mismo movimiento puede dar números distintos desde otro punto de vista.",
     },
     {
-      texto: "Más que un número suelto, sirve mirar si un número se vuelve más parejo de golpe a golpe y de sesión a sesión. En Evolución se ve la variación de tu propia sesión.",
+      texto: "Mirá cómo se parecen tus golpes dentro de una sesión como una idea general: con pocos golpes es una estimación gruesa y no conviene compararla entre sesiones. En Evolución se ve cómo cambia el valor típico de la torsión de una sesión a otra.",
       enlace: "evolucion",
     },
   ];
@@ -1010,9 +1010,11 @@ export function textosDeSesion(e: EntradaSesion): TextosSesion {
     {
       texto:
         sep && sep.mediana !== null
-          ? sep.dispersion !== null
-            ? `En Evolución podés mirar si el valor típico de la torsión (hoy ${fmt(sep.mediana, 0)}°) y la variación entre golpes (hoy ±${fmt(sep.dispersion, 0)}°) se mantienen o se vuelven más parejos de una sesión a otra.`
-            : `En Evolución podés mirar si el valor típico de la torsión (hoy ${fmt(sep.mediana, 0)}°) se mantiene de una sesión a otra.`
+          ? `En Evolución podés mirar si el valor típico de la torsión (hoy ${fmt(sep.mediana, 0)}°) se mantiene de una sesión a otra.${
+              sep.dispersion !== null
+                ? ` La variación entre golpes (hoy ±${fmt(sep.dispersion, 0)}°) sirve como idea general de esta sesión: con pocos golpes es una estimación gruesa y no conviene compararla entre sesiones.`
+                : ""
+            }`
           : "En Evolución podés mirar cómo cambian tus mediciones de una sesión a otra.",
       enlace: "evolucion",
     },

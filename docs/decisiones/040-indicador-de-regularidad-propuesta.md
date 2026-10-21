@@ -1,7 +1,7 @@
-# Decisión 040 — Indicador de «Regularidad» de la torsión (BORRADOR: solo propuesta, nada implementado)
+# Decisión 040 — Indicador de «Regularidad» de la torsión: EVALUADA; DESCARTADA PARA EL MVP
 
-**Fecha:** 20 de octubre de 2026
-**Estado:** **BORRADOR con su análisis hecho; recomienda NO implementar el 1–10.** Pedido de Valentín (20/10): análisis y propuesta, **sin implementar**. Si no está implementado, probado y aprobado el **23/10**, queda como **trabajo futuro**.
+**Fecha:** 20 de octubre de 2026 · **cierre: 21 de octubre de 2026**
+**Estado:** **EVALUADA; DESCARTADA PARA EL MVP (decisión de Valentín, 21/10/2026).** La variación típica **se queda en grados** y su ⓘ dice que con pocos golpes es una estimación gruesa. Queda como **trabajo futuro** con el número de golpes que sale del cuadro de abajo. Lo que sigue es el análisis que llevó a esa decisión, sin cambios.
 **Afecta a (si se aprueba):** solo frontend (`frontend/src/lib/textos-reporte.ts`, `textos-evolucion.ts`, pantallas de la sesión y de Evolución, PDF). **No toca** el motor (0.5.5), el contrato (1.4) ni el servidor: usa la «variación típica» que `/sesiones/{id}/consistencia` y `/evolucion` ya calculan.
 **Relacionada con:** 014 (variación robusta), 035 a 037 (sin veredicto), 039 (lenguaje de los reportes; ningún corte más angosto que el error medido).
 
@@ -73,6 +73,60 @@ La decisión 039 dice que **ningún corte puede ser más angosto que el error me
 2. **Falsa precisión con pocos golpes** (ver el cálculo de abajo).
 3. **Un jugador puede perseguir el 10** repitiendo siempre el mismo movimiento aunque no sea el que le conviene. El aviso del ⓘ lo dice, pero el riesgo existe.
 4. **La variación mezcla al jugador con la medición** (el error de la propia torsión): no se puede separar.
+
+## Cierre (21/10/2026): ¿cuándo SÍ sería viable?
+
+**La pregunta:** cuántos golpes hacen falta para que la incertidumbre de la variación típica entre en UN nivel de la escala, con 3, 5 y 10 niveles, una sesión sola o juntando sesiones. Misma simulación que arriba (σ verdadero 3,7°: la variación típica del corpus), desvío robusto del servidor.
+
+### Una sesión de n golpes
+
+| Golpes de la sesión (n) | σ estimado típico | Intervalo del 95 % | Amplitud | 3 niveles (un nivel = 3,75°) | 5 niveles (1,88°) | 10 niveles (0,83°) |
+| --- | --- | --- | --- | --- | --- | --- |
+| **6** | 2,92° | 0,79 a 6,40° | 5,6° | 1,5 niveles | 3,0 niveles | 6,7 niveles |
+| **12** | 3,34° | 1,46 a 5,94° | 4,5° | 1,2 | 2,4 | 5,4 |
+| **20** | 3,48° | 1,89 a 5,52° | 3,6° | **1,0** | 1,9 | 4,4 |
+| **30** | 3,58° | 2,22 a 5,20° | 3,0° | **0,8** | 1,6 | 3,6 |
+| **50** | 3,61° | 2,52 a 4,86° | 2,3° | **0,6** | 1,2 | 2,8 |
+| *800 (verificación)* | 3,70° | 3,42 a 4,01° | 0,6° | 0,2 | 0,3 | 0,7 |
+
+*(Cada celda de niveles es amplitud del intervalo ÷ ancho de un nivel; «quepa en un nivel» = 1,0 o menos.)*
+
+### Cuántos golpes hacen falta
+
+| Escala | Un nivel mide | Golpes por sesión para que el intervalo del 95 % quepa en UN nivel | Con el desvío estándar clásico (no robusto) |
+| --- | --- | --- | --- |
+| **3 niveles** (3 bandas) | 3,75° | **≈ 20 a 30** (n = 20: 1,0 niveles; n = 30: 0,8) | ≈ 12 |
+| **5 niveles** | 1,88° | **≈ 80** | ≈ 30 |
+| **10 niveles** | 0,83° | **≈ 400** (n = 400: 1,0; n = 800: 0,7) | ≈ 140 |
+
+### «Regularidad habitual»: juntando sesiones
+
+| Qué se junta | Golpes | Intervalo del 95 % | Amplitud | 3 niveles | 5 niveles | 10 niveles |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1 sesión de 6 (promedio de σ por sesión, como `variacion_habitual`) | 6 | 0,88 a 7,30° | 6,4° | 1,7 | 3,4 | 7,7 |
+| **3 sesiones de 6**, promedio de σ por sesión | 18 | 1,81 a 5,60° | 3,8° | 1,0 | 2,0 | 4,6 |
+| 3 sesiones de 6, golpes juntos (cada sesión centrada en su mediana) | 18 | 1,48 a 5,67° | 4,2° | 1,1 | 2,2 | 5,0 |
+| **4 sesiones de 6**, promedio de σ por sesión | 24 | 2,04 a 5,35° | 3,3° | **0,9** | 1,8 | 4,0 |
+| 4 sesiones de 6, golpes juntos (centrados) | 24 | 1,66 a 5,34° | 3,7° | 1,0 | 2,0 | 4,4 |
+| 3 sesiones de 12, promedio de σ | 36 | 2,51 a 5,49° | 3,0° | 0,8 | 1,6 | 3,6 |
+| 4 sesiones de 12, promedio de σ | 48 | 2,69 a 5,29° | 2,6° | 0,7 | 1,4 | 3,1 |
+
+**Lectura:**
+
+- **Tres niveles (tres bandas) son viables con ≈ 20 a 30 golpes de una sesión, o con ≈ 24 golpes juntando 4 sesiones de 6** (0,9 a 1,0 niveles). Con las 3 sesiones de 6 (18 golpes) queda justo (1,0 a 1,1).
+- **Cinco niveles necesitan ≈ 80 golpes por sesión**, más de lo que cabe en una sesión (el máximo de la aplicación es 12) y de lo que se junta razonablemente (4 sesiones de 12 dan 1,4 niveles). **Diez niveles necesitan ≈ 400 golpes: inviable** con cualquier protocolo realista.
+- **Juntar sesiones ayuda casi igual que alargarlas** (24 golpes en 4 sesiones ≈ 20 en una), pero supone que la variación del jugador es estable entre sesiones, algo que hay que comprobar; si cambia de verdad, la «habitual» lo esconde.
+- **El desvío estándar clásico necesita unas 3 veces menos golpes,** pero es sensible a un golpe lejano (el 6 del 25/9): con datos reales no es una salida gratis.
+
+**Supuestos de la simulación (y por qué las cifras son optimistas):** datos normales e independientes entre golpes; σ verdadero igual en todos los golpes y en todas las sesiones; σ verdadero = 3,7° (el que da un σ *estimado* típico de ≈ 3° con 6 golpes, como el corpus: el estimador robusto subestima con pocos golpes); 20 000 repeticiones por fila (3 000 en la verificación); los niveles son tramos de igual ancho entre 1,5° y 9° (el rango de la escala de la 040); en las sesiones juntas, la media de cada sesión varía con un desvío de 2° (diferencia habitual entre sesiones ≈ 2,3°, Capítulo 7). Los datos reales tienen golpes lejanos (el golpe 6 del 25/9) y cambian con el cansancio, así que **la incertidumbre real es mayor**.
+
+### Qué queda decidido
+
+1. **Descartada para el MVP.** No se implementa ninguna escala. La **variación típica queda en grados** («±4°») y **su ⓘ agrega una línea**: con pocos golpes es una estimación gruesa (con 6 golpes puede moverse varios grados si repetís la sesión), así que no conviene compararla entre sesiones.
+2. **Los textos que comparan la variación entre sesiones o invitan a mirar si «se vuelve más pareja» se corrigieron** (decisión 039, quinta ronda, textos v4): con 6 golpes ese cambio puede ser azar y ningún texto lo presenta como un cambio del jugador. Una prueba lo vigila.
+3. **Trabajo futuro, con su número de golpes:** (a) **regularidad en palabras, tres bandas, con sesiones de ≥ 20 a 30 saques del mismo encuadre y lado**; o (b) **«regularidad habitual»** juntando **≥ 4 sesiones de 6 golpes** del mismo golpe, encuadre y lado. Nunca 10 niveles. **Para probarlo se agregó al protocolo post-demo** (`docs/protocolo-sesion-lado-derecho.md`) **una celda de ≈ 20 saques del mismo encuadre y lado.**
+4. **Principio que queda:** *ninguna escala ni corte más fino que la incertidumbre del dato* (el mismo de los cortes de rodilla y codo de la 039, hecho regla).
+5. **Hallazgo para la tesis:** `docs/tesis/insumos-capitulo-7.md` §2.11.
 
 ## Alternativas
 
