@@ -4,7 +4,7 @@ import { ArrowRight, CircleDashed, Loader2, Trash2 } from "lucide-react";
 import { RutaProtegida } from "@/components/ruta-protegida";
 import { EstadoBadge, SinDiferenciaBadge } from "@/components/estado";
 import { TresMomentos } from "@/components/reporte/tres-momentos";
-import { DetalleTecnico, EnUnaFrase, ParaTuProfesional, PieDeTextos, QuePodesHacer, QueVimos } from "@/components/reporte/bloques";
+import { DetalleTecnico, EnUnaFrase, ParaTuProfesional, QuePodesHacer, QueVimos } from "@/components/reporte/bloques";
 import { DocumentoDeSesion } from "@/components/reporte/documento-sesion";
 import { useSesion } from "@/lib/sesion";
 import {
@@ -227,62 +227,75 @@ function SesionPage() {
 
       {/* Fotos y video de un golpe de la sesión: el típico por defecto (el más cercano al valor típico, no un golpe ejemplar). */}
       {conReporte.length > 0 && (
-        <section aria-labelledby="golpe-elegido" className="mt-12">
-          <div className="flex flex-wrap items-end justify-between gap-3">
-            <div>
-              <h2 id="golpe-elegido" className="font-mono text-xs uppercase tracking-widest text-state-ok">
-                {mostrado && mostrado.id === consistencia?.golpe_tipico ? "Fotos y video · tu golpe típico" : "Fotos y video · un golpe de la sesión"}
-              </h2>
-              <p className="mt-2 font-display text-2xl font-bold md:text-3xl">
-                Golpe {mostrado ? numeroDe.get(mostrado.id) : "—"}
-              </p>
-            </div>
-            <div role="group" aria-label="Elegir el golpe" className="flex flex-wrap gap-2 print:hidden">
-              {videos.map((v) => {
-                const tiene = !!reporteDe(v)?.reporte;
-                const activo = v.id === idMostrado;
-                return (
-                  <button
-                    key={v.id}
-                    type="button"
-                    disabled={!tiene}
-                    aria-pressed={activo}
-                    onClick={() => setElegido(v.id)}
-                    className={
-                      "min-h-10 min-w-10 rounded-lg border px-3 font-mono text-sm " +
-                      (activo ? "border-neon bg-neon/10 text-neon" : "border-border text-muted-foreground hover:text-foreground") +
-                      (tiene ? "" : " cursor-not-allowed opacity-40")
-                    }
+        <>
+          {(() => {
+            const esTipico = !!mostrado && mostrado.id === consistencia?.golpe_tipico;
+            const selector = (
+              <div className="mt-4">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <p className="font-display text-lg font-bold">
+                    Golpe {mostrado ? numeroDe.get(mostrado.id) : "—"}
+                    {esTipico && <span className="font-normal text-muted-foreground"> · tu golpe típico</span>}
+                  </p>
+                  <div role="group" aria-label="Elegir el golpe" className="flex flex-wrap gap-2 print:hidden">
+                    {videos.map((v) => {
+                      const tiene = !!reporteDe(v)?.reporte;
+                      const activo = v.id === idMostrado;
+                      return (
+                        <button
+                          key={v.id}
+                          type="button"
+                          disabled={!tiene}
+                          aria-pressed={activo}
+                          aria-label={`Ver el golpe ${numeroDe.get(v.id)}`}
+                          onClick={() => setElegido(v.id)}
+                          className={
+                            "min-h-10 min-w-10 rounded-lg border px-3 font-mono text-sm " +
+                            (activo ? "border-neon bg-neon/10 text-neon" : "border-border text-muted-foreground hover:text-foreground") +
+                            (tiene ? "" : " cursor-not-allowed opacity-40")
+                          }
+                        >
+                          {numeroDe.get(v.id)}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+                {textos?.tipico && esTipico && <p className="mt-2 text-sm text-muted-foreground">{textos.tipico.texto}</p>}
+              </div>
+            );
+            return (
+              <>
+                {artefactos.fotogramas.length > 0 || artefactos.overlay ? (
+                  <TresMomentos
+                    key={idMostrado ?? "ninguno"}
+                    artefactos={artefactos}
+                    noMedidos={picosNoMedidosDe(repMostrado)}
+                    textos={fotos}
+                    desdeS={repeticionesDe(repMostrado)[0]?.desde_s ?? null}
+                    debajoDelTitulo={selector}
+                  />
+                ) : (
+                  <section aria-labelledby="fotos-y-video" className="mt-12">
+                    <h2 id="fotos-y-video" className="font-mono text-xs uppercase tracking-widest text-state-ok">Fotos y video</h2>
+                    {selector}
+                    <p className="mt-4 rounded-2xl border border-dashed border-border p-4 text-sm text-muted-foreground">Este golpe no tiene fotos ni video.</p>
+                  </section>
+                )}
+                {textos?.tipico && esTipico && <p className="mt-3 text-sm text-muted-foreground">{textos.tipico.queMirar}</p>}
+                {mostrado && (
+                  <Link
+                    to="/reporte/$videoId"
+                    params={{ videoId: mostrado.id }}
+                    className="mt-5 inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-state-ok hover:underline print:hidden"
                   >
-                    {numeroDe.get(v.id)}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-          {textos?.tipico && mostrado?.id === consistencia?.golpe_tipico && (
-            <p className="mt-4 text-sm text-muted-foreground">{textos.tipico.texto}</p>
-          )}
-          {(artefactos.fotogramas.length > 0 || artefactos.overlay) && (
-            <TresMomentos
-              key={idMostrado ?? "ninguno"}
-              artefactos={artefactos}
-              noMedidos={picosNoMedidosDe(repMostrado)}
-              textos={fotos}
-              desdeS={repeticionesDe(repMostrado)[0]?.desde_s ?? null}
-            />
-          )}
-          {textos?.tipico && mostrado?.id === consistencia?.golpe_tipico && <p className="mt-3 text-sm text-muted-foreground">{textos.tipico.queMirar}</p>}
-          {mostrado && (
-            <Link
-              to="/reporte/$videoId"
-              params={{ videoId: mostrado.id }}
-              className="mt-5 inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-state-ok hover:underline print:hidden"
-            >
-              Ver el reporte completo de este golpe <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </Link>
-          )}
-        </section>
+                    Ver el reporte completo de este golpe <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                  </Link>
+                )}
+              </>
+            );
+          })()}
+        </>
       )}
 
       {/* Todos los golpes */}
@@ -293,49 +306,51 @@ function SesionPage() {
             const n = numeroDe.get(v.id);
             const rep = reporteDe(v)?.reporte ?? null;
             const sep = valorDe.get(v.id);
-            const t = tiemposDe(v);
-            const nombre = v.ruta_almacenamiento?.split("/").pop() ?? "video";
             return (
               <li key={v.id} className="rounded-xl border border-border bg-card px-4 py-3">
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-                  <span className="font-mono text-xs text-muted-foreground">Golpe {n}</span>
-                  <span className="min-w-0 flex-1 truncate text-sm font-medium">{nombre}</span>
-                  {v.estado === "fallido" ? (
-                    <EstadoBadge estado="no-auditable">No se pudo medir</EstadoBadge>
-                  ) : (
-                    <span className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
-                      {enCurso(v.estado) ? <Loader2 className="h-3 w-3 animate-spin" aria-hidden="true" /> : <CircleDashed className="h-3 w-3" aria-hidden="true" />}
-                      {ETIQUETA_ESTADO[v.estado]}
-                    </span>
-                  )}
-                  {sep !== undefined && <span className="font-mono text-sm">{fmt(sep, 0)}°</span>}
-                  {golpeMedido(rep) && !ordenDistinguible(rep) && <SinDiferenciaBadge />}
-                  {seApartan.has(v.id) && (
-                    <span className="rounded-full border border-dashed border-border px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                      Se pareció menos
-                    </span>
-                  )}
-                  <Link
-                    to={rep ? "/reporte/$videoId" : "/procesando/$videoId"}
-                    params={{ videoId: v.id }}
-                    className="text-sm font-semibold text-state-ok hover:underline"
-                  >
-                    {rep ? "Ver reporte" : enCurso(v.estado) ? "Ver progreso" : "Ver qué pasó"}
-                  </Link>
-                  <button
-                    type="button"
-                    onClick={() => setConfirmar(confirmar === v.id ? null : v.id)}
-                    className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground print:hidden"
-                    aria-label={`Eliminar el golpe ${n}`}
-                  >
-                    <Trash2 className="h-3.5 w-3.5" aria-hidden="true" /> Eliminar
-                  </button>
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                      <span className="whitespace-nowrap font-display text-base font-bold">Golpe {n}</span>
+                      {sep !== undefined && <span className="whitespace-nowrap font-mono text-sm">{fmt(sep, 0)}°</span>}
+                      {v.estado === "fallido" ? (
+                        <EstadoBadge estado="no-auditable">No se pudo medir</EstadoBadge>
+                      ) : (
+                        <span className="flex items-center gap-1.5 whitespace-nowrap font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
+                          {enCurso(v.estado) ? <Loader2 className="h-3 w-3 animate-spin" aria-hidden="true" /> : <CircleDashed className="h-3 w-3" aria-hidden="true" />}
+                          {ETIQUETA_ESTADO[v.estado]}
+                        </span>
+                      )}
+                    </p>
+                    {((golpeMedido(rep) && !ordenDistinguible(rep)) || seApartan.has(v.id)) && (
+                      <p className="mt-1.5 flex flex-wrap items-center gap-2">
+                        {golpeMedido(rep) && !ordenDistinguible(rep) && <SinDiferenciaBadge />}
+                        {seApartan.has(v.id) && (
+                          <span className="whitespace-nowrap rounded-full border border-dashed border-border px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                            Se pareció menos
+                          </span>
+                        )}
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex shrink-0 flex-col items-end gap-2">
+                    <Link
+                      to={rep ? "/reporte/$videoId" : "/procesando/$videoId"}
+                      params={{ videoId: v.id }}
+                      className="whitespace-nowrap text-sm font-semibold text-state-ok hover:underline"
+                    >
+                      {rep ? "Ver reporte" : enCurso(v.estado) ? "Ver progreso" : "Ver qué pasó"}
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => setConfirmar(confirmar === v.id ? null : v.id)}
+                      className="flex items-center gap-1 whitespace-nowrap text-xs text-muted-foreground hover:text-foreground print:hidden"
+                      aria-label={`Eliminar el golpe ${n}`}
+                    >
+                      <Trash2 className="h-3.5 w-3.5" aria-hidden="true" /> Eliminar
+                    </button>
+                  </div>
                 </div>
-                {t.espera_cola_s !== null && t.procesamiento_s !== null && (
-                  <p className="mt-1 font-mono text-[11px] text-muted-foreground">
-                    Esperó {formatearDuracion(t.espera_cola_s)} en la cola · procesamiento {formatearDuracion(t.procesamiento_s)}
-                  </p>
-                )}
                 {confirmar === v.id && (
                   <div role="alert" className="mt-3 rounded-lg border border-destructive/50 px-3 py-2 text-sm">
                     ¿Eliminar el golpe {n}? Se borran el video y su reporte. No se puede deshacer.
@@ -396,8 +411,35 @@ function SesionPage() {
                 ))}
               </dl>
             </div>
+            <div>
+              <h3 className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Archivos y tiempos de cada golpe</h3>
+              <div className="mt-3 overflow-x-auto">
+                <table className="w-full min-w-[34rem] text-left text-sm">
+                  <thead className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                    <tr>
+                      <th className="py-2 pr-4">Golpe</th>
+                      <th className="py-2 pr-4">Archivo</th>
+                      <th className="py-2 pr-4">Esperó en la cola</th>
+                      <th className="py-2">Procesamiento</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {videos.map((v) => {
+                      const t = tiemposDe(v);
+                      return (
+                        <tr key={v.id} className="border-t border-border align-top">
+                          <td className="py-2 pr-4 font-semibold">{numeroDe.get(v.id)}</td>
+                          <td className="break-all py-2 pr-4 font-mono text-xs">{v.ruta_almacenamiento?.split("/").pop() ?? "video"}</td>
+                          <td className="py-2 pr-4 font-mono">{t.espera_cola_s !== null ? formatearDuracion(t.espera_cola_s) : "—"}</td>
+                          <td className="py-2 font-mono">{t.procesamiento_s !== null ? formatearDuracion(t.procesamiento_s) : "—"}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
             <p className="font-mono text-xs text-muted-foreground">{textos.detalle.versiones}</p>
-            <PieDeTextos />
           </DetalleTecnico>
         </>
       )}

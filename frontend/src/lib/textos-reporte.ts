@@ -27,7 +27,7 @@ import {
   type RepeticionLeida,
 } from "@/lib/reporte-simple";
 
-export const VERSION_TEXTOS = "2";
+export const VERSION_TEXTOS = "3";
 
 type Json = Record<string, unknown>;
 
@@ -67,12 +67,12 @@ export const GLOSARIO: Record<ClaveAyuda, { termino: string; corto: string }> = 
   angulo_rodilla: {
     termino: "Ángulo de la rodilla",
     corto:
-      "Es el ángulo entre el muslo y la pantorrilla, visto en la imagen. 180° es la pierna totalmente estirada; cuanto más bajo es el número, más flexionada está la rodilla.",
+      "Es el ángulo entre el muslo y la pantorrilla, visto en la imagen. 180° es la pierna recta, sin doblar; cuanto más bajo es el número, más flexionada está la rodilla.",
   },
   angulo_codo: {
     termino: "Ángulo del codo",
     corto:
-      "Es el ángulo entre el brazo y el antebrazo, visto en la imagen. 180° es el brazo totalmente estirado; cuanto más bajo es el número, más doblado está el codo.",
+      "Es el ángulo entre el brazo y el antebrazo, visto en la imagen. 180° es el brazo recto, sin doblar; cuanto más bajo es el número, más doblado está el codo.",
   },
   valor_tipico: {
     termino: "Valor típico",
@@ -190,17 +190,24 @@ const NOTA_LADO_DE_LA_MANO = (que: string) =>
 const MODOS_LLANOS: Record<string, string> = { camara_lenta_240: "cámara lenta de 240 fps", camara_lenta_120: "cámara lenta de 120 fps" };
 
 /**
- * El ángulo de la rodilla o del codo dicho en palabras, sin veredicto (decisión 039, segunda ronda): 180° es totalmente estirada.
- * Los cortes son redondos y aproximados, con el error medido contra goniometría a la vista (8,5° y 12,5° de media).
+ * El ángulo de la rodilla o del codo dicho en palabras, sin veredicto (decisión 039, cuarta ronda): TRES categorías, y ningún corte más
+ * angosto que el error medido contra goniometría manual (rodilla 8,5° de media y hasta 19,2° en el 95 %; codo 12,5° y hasta 36,4°).
+ * Nunca «totalmente estirada»: con ese error, un ángulo medido no permite afirmar que la articulación estaba del todo recta.
  */
+export const CORTES_POSTURA = { estirada: 165, algoFlexionada: 135 } as const;
+
 export function posturaDe(parte: "rodilla" | "codo", valor: number): string {
   const estirada = parte === "rodilla" ? "estirada" : "estirado";
   const flexionada = parte === "rodilla" ? "flexionada" : "flexionado";
-  if (valor >= 178) return `totalmente ${estirada}`;
-  if (valor >= 170) return `casi ${estirada}`;
-  if (valor >= 140) return `algo ${flexionada}`;
-  if (valor >= 100) return flexionada;
-  return `muy ${flexionada}`;
+  if (valor >= CORTES_POSTURA.estirada) return `${estirada} o casi ${estirada}`;
+  if (valor >= CORTES_POSTURA.algoFlexionada) return `algo ${flexionada}`;
+  return flexionada;
+}
+
+/** La postura de varios golpes: si todos caen en la misma categoría, esa; si no, se dice que cambió de un golpe a otro. */
+function posturaDeVarios(parte: "rodilla" | "codo", valores: number[]): string {
+  const cats = new Set(valores.map((v) => posturaDe(parte, v)));
+  return cats.size === 1 ? [...cats][0] : "con una flexión distinta según el golpe";
 }
 
 const SUJETO_ARTICULACION = (parte: "rodilla" | "codo", lado: "izq" | "der" | null) => {
@@ -208,8 +215,8 @@ const SUJETO_ARTICULACION = (parte: "rodilla" | "codo", lado: "izq" | "der" | nu
   return parte === "rodilla" ? `la pierna${l}` : `el brazo${l}`;
 };
 
-const REFERENCIA_RODILLA = "180° es la pierna totalmente estirada";
-const REFERENCIA_CODO = "180° es el brazo totalmente estirado";
+const REFERENCIA_RODILLA = "180° es la pierna recta, sin doblar";
+const REFERENCIA_CODO = "180° es el brazo recto, sin doblar";
 
 const GESTOS: Record<string, { uno: string; varios: string; verbo: string }> = {
   saque: { uno: "saque", varios: "saques", verbo: "sacar" },
@@ -925,7 +932,7 @@ export function textosDeSesion(e: EntradaSesion): TextosSesion {
         const sujetoRodilla = SUJETO_ARTICULACION("rodilla", lado ?? null);
         if (vals.length >= 2) {
           medido.push({
-            texto: `Cuando el tronco giraba más rápido, tenías ${sujetoRodilla} ${posturaDe("rodilla", Math.min(...vals))} en los ${vals.length} golpes en que se midió (rodilla ${entreG(vals)}; ${REFERENCIA_RODILLA}).`,
+            texto: `Cuando el tronco giraba más rápido, tenías ${sujetoRodilla} ${posturaDeVarios("rodilla", vals)} en los ${vals.length} golpes en que se midió (rodilla ${entreG(vals)}; ${REFERENCIA_RODILLA}).`,
             ayuda: "angulo_rodilla",
           });
         } else if (vals.length === 1) {
@@ -1079,7 +1086,7 @@ export function textosDeSesion(e: EntradaSesion): TextosSesion {
     detalle: {
       columnas: ["Golpe", "Torsión", "Cadera y tronco", "Rodilla (180° = estirada)", "Codo (180° = estirado)", "Parte medida", "Qué se midió"],
       filas,
-      nota: "Rodilla y codo: 180° es la pierna (o el brazo) totalmente estirada. El codo que se muestra es el del brazo que no golpea (el del lanzamiento de pelota).",
+      nota: "Rodilla y codo: 180° es la pierna (o el brazo) recta, sin doblar. El codo que se muestra es el del brazo que no golpea (el del lanzamiento de pelota).",
       terminos,
       versiones: `Motor ${versiones.length ? versiones.join(", ") : "—"} · textos v${VERSION_TEXTOS}${c?.mezcla_de_versiones ? " · algunos golpes se calcularon con una versión anterior del motor" : ""}`,
     },

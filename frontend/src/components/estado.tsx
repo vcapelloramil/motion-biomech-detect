@@ -87,7 +87,7 @@ export function SinEvaluarBadge({ className }: { className?: string }) {
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full border border-dashed border-muted-foreground/50 px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground",
+        "inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-dashed border-muted-foreground/50 px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground",
         className,
       )}
     >
@@ -101,7 +101,7 @@ export function SinEvaluarBadge({ className }: { className?: string }) {
  * "Sin diferencia medible a esta resolución" (decisión 037): cadera y tronco SE MIDIERON y llegaron dentro de la tolerancia del orden.
  * No es "no auditable" (R3 lo reserva para datos que no son confiables) ni un estado del semáforo: es gris neutro, con ícono y texto.
  */
-export const ETIQUETA_SIN_DIFERENCIA = "Sin diferencia medible a esta resolución";
+export const ETIQUETA_SIN_DIFERENCIA = "Casi a la vez";
 
 export function SinDiferenciaBadge({ className }: { className?: string }) {
   return (

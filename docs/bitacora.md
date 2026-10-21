@@ -6,6 +6,15 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-20 (más tarde) — Cuarta ronda de la 039: cortes de rodilla/codo, lista de la sesión y Evolución; y borrador de la decisión 040 (Regularidad), solo propuesta
+
+**Pedido de Valentín** tras revisar producción (sesión 25/9, golpes 3 y 4, y Evolución). `VERSION_TEXTOS` = 3; solo frontend, motor 0.5.5.
+
+- **A · Cortes en palabras:** tres categorías, ninguna más angosta que el error medido (rodilla 8,5° de media y hasta 19,2°; codo 12,5° y hasta 36,4°): **165° o más «estirada o casi estirada»; 135°–165° «algo flexionada»; menos de 135° «flexionada»**. Nunca «totalmente estirada» (la referencia es «180° es la pierna recta, sin doblar»). Registrado en la 039 como regla general. **El lado en la clave de Evolución queda para después de la demo**: fila 42 de `correcciones-pendientes-capitulo-4.md`. *(Interpreté «nunca “totalmente estirada”» también para la referencia de 180°: pasó a «recta, sin doblar».)*
+- **B · Sesión y Evolución:** la lista muestra solo «Golpe N» + torsión + estado + «casi a la vez» (etiqueta cambiada en toda la aplicación) + «se pareció menos»; «Ver reporte» y «Eliminar» juntos a la derecha (verificado a 390 px y en escritorio, sin saltos); nombre del archivo y tiempos de cola/procesamiento en el detalle técnico; un solo título de «Fotos y video» y «textos vN» una vez; en Evolución las sesiones del mismo día se llaman «24 sep · 1.ª» y «24 sep · 2.ª».
+- **La sesión del 24/9 con 1 golpe** es `3a101dd3`: saque de tres cuartos, **un solo golpe** (`20260925_saque_trescuartos_toma02c_golpe1.mov`, un recorte de la toma del **25/9** cargado el 13/10 con la fecha **24/9** por error), medido con motor **0.5.4**. **La limpieza del guion §C la elimina** (paso 2: «24/9 saque tres cuartos de 0.5.4» entre las 6 sesiones de un golpe de prueba). Por eso Evolución dice «antes: 1 de 1» y tiene dos puntos del 24 sep; después de la limpieza quedan una sesión por fecha.
+- **C · Regularidad:** solo análisis y borrador de la decisión 040 (`docs/decisiones/040-indicador-de-regularidad-propuesta.md`); **nada implementado**. Ver su sección más abajo.
+
 ## 2026-10-20 (noche) — Tercera ronda de la decisión 039: «En una frase» sin números, «¿Qué giró primero?», Evolución en lenguaje simple (`VERSION_TEXTOS` = 2; solo frontend)
 
 **Pedido de Valentín** tras ver el reporte del golpe 4 en producción (republicó el frontend del commit `b444c9a`).

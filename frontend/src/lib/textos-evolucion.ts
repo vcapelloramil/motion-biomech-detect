@@ -7,7 +7,7 @@
  * serie: si las sesiones se grabaron desde lados distintos, un aviso lo dice (decisión 013).
  */
 
-import { etiquetaDeFecha, type SerieDeEvolucion } from "@/lib/evolucion";
+import { etiquetasDeSesiones, type SerieDeEvolucion } from "@/lib/evolucion";
 import { fmt } from "@/lib/formato";
 import { VERSION_TEXTOS, type Item } from "@/lib/textos-reporte";
 
@@ -60,7 +60,8 @@ export function textosDeEvolucion(serie: SerieDeEvolucion): TextosEvolucion {
   // --- Qué vimos ---
   const medido: Item[] = [];
   const noMedido: Item[] = [];
-  const cuando = ultima ? ` (${etiquetaDeFecha(ultima.fecha)})` : "";
+  const etiquetas = etiquetasDeSesiones(ses);
+  const cuando = ultima ? ` (${etiquetas[n - 1]})` : "";
 
   if (conSeparacion.length === 0) {
     noMedido.push({ titulo: "La torsión cadera-hombro:", texto: "todavía no hay una sesión con esta medición con confianza suficiente." });
@@ -153,8 +154,8 @@ export function textosDeEvolucion(serie: SerieDeEvolucion): TextosEvolucion {
     },
     detalle: {
       columnas: ["Sesión", "Golpes medidos", "Torsión (valor típico)", "Variación típica", "Orden visto", "Cámara a la"],
-      filas: ses.map((s) => [
-        etiquetaDeFecha(s.fecha),
+      filas: ses.map((s, i) => [
+        etiquetas[i],
         `${s.golpes.medidos} de ${s.golpes.total}`,
         s.separacion_cadera_hombro.mediana !== null ? grados(s.separacion_cadera_hombro.mediana) : "—",
         s.separacion_cadera_hombro.dispersion !== null ? `±${grados(s.separacion_cadera_hombro.dispersion)}` : "—",

@@ -89,6 +89,16 @@ El motor y su sello (0.5.5), el contrato (1.4), los cuatro estados de R3 (no se 
 - **Pie del sitio y del PDF:** sin «Proyecto final de Ingeniería en Informática · Universidad del Salvador · 2026»; «KinetiQ documenta el movimiento. No diagnostica ni reemplaza la evaluación de un profesional.»; descripción: «Medí cómo gira tu cuerpo en cada golpe.»
 - **Evolución** en el mismo lenguaje («En una frase» sin números + «Qué vimos» con ⓘ + texto simple con menos de 2 sesiones comparables), con las mismas pruebas de palabras prohibidas y de jerga. **Limitación conocida:** la serie se arma por jugador × golpe × encuadre; **el lado de la cámara todavía no forma parte de la clave** (es una consulta del servidor): si las sesiones se grabaron desde lados distintos se comparan igual y un aviso lo dice. Hacerlo estricto toca `/evolucion`, no el motor.
 
+## Ajustes del 20/10, cuarta ronda — `VERSION_TEXTOS` = «3»
+
+- **Regla general: ningún corte de una palabra puede ser más angosto que el error medido** (Criterio 2, decisión 015). Rodilla: 8,5° de media y hasta 19,2° en el 95 %; codo: 12,5° y hasta 36,4°. Los cortes de la segunda versión (178°, 170°, 140°, 100°) eran más finos que ese error.
+- **Rodilla y codo en palabras: tres categorías** (`CORTES_POSTURA`): **165° o más «estirada o casi estirada»**; **de 135° a 165° «algo flexionada»**; **menos de 135° «flexionada»** (codo: «estirado o casi estirado», «algo flexionado», «flexionado»). Entre cortes hay 30°, más que el doble del error medio. Con varios golpes en categorías distintas se dice «con una flexión distinta según el golpe».
+- **Nunca «totalmente estirada»** en un texto para el usuario: con ese error un ángulo medido no permite afirmar que la articulación estaba del todo recta. La referencia pasó a «180° es la pierna (o el brazo) recta, sin doblar». Una prueba recorre todas las frases y falla si aparece.
+- **Lista «Los golpes de la sesión»:** solo «Golpe N» (sin el nombre del archivo), la torsión, el estado y, si corresponde, «casi a la vez» (mismo vocabulario que el reporte; reemplaza a «sin diferencia medible a esta resolución» en toda la aplicación) y «se pareció menos»; las acciones («Ver reporte», «Eliminar») quedan juntas a la derecha. El nombre del archivo y «esperó X en la cola · procesamiento Y» pasaron al detalle técnico.
+- **Un solo título** de «Fotos y video» en la sesión (el selector de golpe va debajo) y **«textos vN» una sola vez** al final del detalle técnico.
+- **Evolución: dos sesiones del mismo día se distinguen por su orden de carga** («24 sep · 1.ª», «24 sep · 2.ª»): la fecha de una sesión es la de la grabación y no trae hora, y la hora de carga confundiría (se cargaron el 13/10).
+- **El lado de la cámara en la clave de Evolución queda para después de la demo** (servidor); registrado en `correcciones-pendientes-capitulo-4.md` (fila 42).
+
 ## Puntos abiertos
 
 1. **Pasaje exacto de la cita** del recuadro C (Kovacs y Ellenbecker, 2011): no verificado; por eso la frase es general.

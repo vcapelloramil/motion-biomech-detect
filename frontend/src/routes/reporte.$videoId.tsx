@@ -10,7 +10,6 @@ import {
   EnUnaFrase,
   GruposDeDetalle,
   ParaTuProfesional,
-  PieDeTextos,
   QuePodesHacer,
   QueVimos,
 } from "@/components/reporte/bloques";
@@ -232,7 +231,6 @@ function Reporte({ video, reporte }: { video: VideoConReporte; reporte: Record<s
             </div>
           </div>
           <GruposDeDetalle grupos={textos.detalle} />
-          <PieDeTextos />
         </DetalleTecnico>
       </main>
       {/* El PDF es un documento aparte (A4 vertical), no esta pantalla impresa: ver documento-golpe.tsx. */}

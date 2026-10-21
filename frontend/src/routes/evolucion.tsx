@@ -6,7 +6,7 @@ import { Hueco, PanelBarras, PanelLinea } from "@/components/evolucion/graficos"
 import { BotonDescargarPdf, SelloDelPdf, LimitacionesDelPdf } from "@/components/reporte/pdf";
 import { useSesion } from "@/lib/sesion";
 import { ENCUADRE_ETIQUETA, GESTO_ETIQUETA } from "@/lib/estado-video";
-import { etiquetaDeFecha, type SerieDeEvolucion } from "@/lib/evolucion";
+import { etiquetasDeSesiones, type SerieDeEvolucion } from "@/lib/evolucion";
 import { CABECERA_EVOLUCION, textosDeEvolucion } from "@/lib/textos-evolucion";
 import { DetalleTecnico, EnUnaFrase, PieDeTextos, QueVimos } from "@/components/reporte/bloques";
 import { leerEvolucion } from "@/lib/evolucion-api";
@@ -150,7 +150,7 @@ function EvolucionPage() {
 
 function Serie({ serie }: { serie: SerieDeEvolucion }) {
   const textos = textosDeEvolucion(serie);
-  const etiquetas = serie.sesiones.map((s) => etiquetaDeFecha(s.fecha));
+  const etiquetas = etiquetasDeSesiones(serie.sesiones);
   const banda =
     serie.centro_habitual !== null && serie.variacion_habitual !== null
       ? { centro: serie.centro_habitual, semiancho: serie.variacion_habitual }

@@ -49,6 +49,23 @@ export function etiquetaDeFecha(fecha: string): string {
   return `${Number(m[3])} ${MESES[Number(m[2]) - 1] ?? m[2]}`;
 }
 
+/**
+ * Una etiqueta por sesión. Si dos sesiones son del mismo día se distinguen por su orden de carga («24 sep · 1.ª» y «24 sep · 2.ª»): la fecha
+ * de una sesión es la de la grabación y no trae hora. Las sesiones llegan ordenadas por fecha y orden de carga (servidor).
+ */
+export function etiquetasDeSesiones(sesiones: readonly { fecha: string }[]): string[] {
+  const total = new Map<string, number>();
+  for (const s of sesiones) total.set(s.fecha, (total.get(s.fecha) ?? 0) + 1);
+  const visto = new Map<string, number>();
+  return sesiones.map((s) => {
+    const base = etiquetaDeFecha(s.fecha);
+    if ((total.get(s.fecha) ?? 0) < 2) return base;
+    const k = (visto.get(s.fecha) ?? 0) + 1;
+    visto.set(s.fecha, k);
+    return `${base} · ${k}.ª`;
+  });
+}
+
 export type TarjetaDeEvolucion = {
   clave: "separacion" | "orden" | "golpes" | "sesiones";
   titulo: string;

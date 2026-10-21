@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { CircleDashed, Loader2 } from "lucide-react";
 import { NOMBRE_SEGMENTO, type PicoNoMedidoLeido, type artefactosDe } from "@/lib/reporte-simple";
 import { urlsDeArtefactos } from "@/lib/videos-data";
@@ -14,6 +14,7 @@ export function TresMomentos({
   noMedidos = [],
   textos,
   desdeS = null,
+  debajoDelTitulo = null,
 }: {
   artefactos: ReturnType<typeof artefactosDe>;
   /** Los picos que no se pudieron medir: se muestran como tarjeta, con su motivo, en vez de desaparecer. */
@@ -21,6 +22,8 @@ export function TresMomentos({
   textos: FotosTexto;
   /** Dónde empieza el tramo analizado, en segundos del video: para decir "a los X s del video". */
   desdeS?: number | null;
+  /** Algo que va entre el título y las fotos (en la sesión, el selector de golpe). */
+  debajoDelTitulo?: ReactNode;
 }) {
   const [urls, setUrls] = useState<Record<string, string> | null>(null);
   const rutas = [...artefactos.fotogramas.map((f) => f.ruta), ...(artefactos.overlay ? [artefactos.overlay.ruta] : [])];
@@ -64,6 +67,7 @@ export function TresMomentos({
     <section aria-labelledby="momentos" className="mt-12">
       <h2 id="momentos" className="font-mono text-xs uppercase tracking-widest text-state-ok">Fotos y video</h2>
       <p className="mt-2 font-display text-2xl font-bold md:text-3xl">Así se veía tu cuerpo en su giro más rápido</p>
+      {debajoDelTitulo}
 
       {urls === null ? (
         <p role="status" className="mt-5 flex items-center gap-2 text-sm text-muted-foreground">

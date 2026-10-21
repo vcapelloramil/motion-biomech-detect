@@ -15,6 +15,7 @@ import {
   datosDeSecuencia,
   ordenDelGolpe,
   posturaDe,
+  CORTES_POSTURA,
   secuenciaSimple,
   tituloDeGolpe,
   textosDeGolpe,
@@ -68,7 +69,7 @@ describe("golpe 4 (el golpe típico de la sesión del 25/9)", () => {
     expect(textoDe(t.vimos.medido)).not.toMatch(/codo/i);
     const detalle = t.detalle.flatMap((g) => g.filas).find((f) => f.dato === "Codo izquierdo");
     expect(detalle?.valor).toContain("157,1°");
-    expect(detalle?.significa).toContain("180° es el brazo totalmente estirado");
+    expect(detalle?.significa).toContain("180° es el brazo recto, sin doblar");
     expect(detalle?.significa).toContain("no golpea");
   });
 
@@ -115,7 +116,7 @@ describe("golpe con orden distinguible (golpe 1) y con rodilla medida", () => {
   test("la rodilla ocupa el lugar del codo, con su referencia", () => {
     const linea = t.vimos.medido.find((m) => /rodilla/.test(m.texto));
     expect(linea?.texto).toContain("178°");
-    expect(linea?.texto).toContain("180° es la pierna totalmente estirada");
+    expect(linea?.texto).toContain("180° es la pierna recta, sin doblar");
   });
   test("el orden se dice como observación y con la salvedad de la cámara", () => {
     expect(t.enUnaFrase).toBe("Tu cadera giró antes que tu tronco en este saque.");
@@ -156,7 +157,7 @@ describe("la sesión del 25/9", () => {
     expect(s.vimos.seAparta).toHaveLength(1);
     expect(s.vimos.seAparta[0].titulo).toBe("El golpe 6 se parece menos a los demás:");
     expect(s.vimos.seAparta[0].texto).toContain("101°, contra 172° a 178°");
-    expect(s.vimos.seAparta[0].texto).toContain("180° es la pierna totalmente estirada");
+    expect(s.vimos.seAparta[0].texto).toContain("180° es la pierna recta, sin doblar");
   });
 
   test("lo no medido: el brazo en ningún golpe, y la rodilla del golpe 4", () => {
@@ -182,7 +183,7 @@ describe("la sesión del 25/9", () => {
   test("detalle: una fila por golpe, con la referencia de 180° en los encabezados y en la nota", () => {
     expect(s.detalle.filas).toHaveLength(6);
     expect(s.detalle.columnas.join("|")).toContain("180° = estirada");
-    expect(s.detalle.nota).toContain("180° es la pierna (o el brazo) totalmente estirada");
+    expect(s.detalle.nota).toContain("180° es la pierna (o el brazo) recta, sin doblar");
     expect(s.detalle.filas[5][3]).toBe("101°");
     expect(s.detalle.filas[3][3]).toBe("no medida");
   });
@@ -388,17 +389,26 @@ describe("¿Qué giró primero?", () => {
 });
 
 describe("rodilla y codo dichos en palabras", () => {
-  test("los cortes", () => {
-    expect(posturaDe("rodilla", 180)).toBe("totalmente estirada");
-    expect(posturaDe("rodilla", 172)).toBe("casi estirada");
-    expect(posturaDe("rodilla", 150)).toBe("algo flexionada");
-    expect(posturaDe("rodilla", 120)).toBe("flexionada");
-    expect(posturaDe("rodilla", 90)).toBe("muy flexionada");
-    expect(posturaDe("codo", 172)).toBe("casi estirado");
+  test("tres categorías, ningún corte más angosto que el error medido (decisión 039)", () => {
+    expect(posturaDe("rodilla", 180)).toBe("estirada o casi estirada");
+    expect(posturaDe("rodilla", 165)).toBe("estirada o casi estirada");
+    expect(posturaDe("rodilla", 164.9)).toBe("algo flexionada");
+    expect(posturaDe("rodilla", 135)).toBe("algo flexionada");
+    expect(posturaDe("rodilla", 134.9)).toBe("flexionada");
+    expect(posturaDe("rodilla", 90)).toBe("flexionada");
+    expect(posturaDe("codo", 172)).toBe("estirado o casi estirado");
+    expect(posturaDe("codo", 150)).toBe("algo flexionado");
+    expect(posturaDe("codo", 100)).toBe("flexionado");
+  });
+  test("las tres categorías están separadas por más que el error medio de la rodilla y del codo", () => {
+    expect(CORTES_POSTURA.estirada - CORTES_POSTURA.algoFlexionada).toBeGreaterThanOrEqual(2 * 8.5);
+  });
+  test("nunca «totalmente estirada» en un texto para el usuario", () => {
+    expect(todasLasFrases().filter((f) => /totalmente estirad/i.test(f.texto)).map((f) => f.donde)).toEqual([]);
   });
   test("golpe 1: «la pierna izquierda casi estirada», con el ángulo y la referencia", () => {
     const l = textosDeGolpe(entradaGolpe(0)).vimos.medido.find((m) => /pierna/.test(m.texto))!;
-    expect(l.texto).toBe("Cuando el tronco giraba más rápido, tenías la pierna izquierda totalmente estirada (rodilla a 178°; 180° es la pierna totalmente estirada).");
+    expect(l.texto).toBe("Cuando el tronco giraba más rápido, tenías la pierna izquierda estirada o casi estirada (rodilla a 178°; 180° es la pierna recta, sin doblar).");
   });
 });
 
