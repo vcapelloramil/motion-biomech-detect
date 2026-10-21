@@ -1,7 +1,7 @@
 # Decisión 040 — Indicador de «Regularidad» de la torsión (BORRADOR: solo propuesta, nada implementado)
 
 **Fecha:** 20 de octubre de 2026
-**Estado:** **BORRADOR para decidir.** Pedido de Valentín (20/10): análisis y propuesta, **sin implementar**. Si no está implementado, probado y aprobado el **23/10**, queda como **trabajo futuro**.
+**Estado:** **BORRADOR con su análisis hecho; recomienda NO implementar el 1–10.** Pedido de Valentín (20/10): análisis y propuesta, **sin implementar**. Si no está implementado, probado y aprobado el **23/10**, queda como **trabajo futuro**.
 **Afecta a (si se aprueba):** solo frontend (`frontend/src/lib/textos-reporte.ts`, `textos-evolucion.ts`, pantallas de la sesión y de Evolución, PDF). **No toca** el motor (0.5.5), el contrato (1.4) ni el servidor: usa la «variación típica» que `/sesiones/{id}/consistencia` y `/evolucion` ya calculan.
 **Relacionada con:** 014 (variación robusta), 035 a 037 (sin veredicto), 039 (lenguaje de los reportes; ningún corte más angosto que el error medido).
 
@@ -80,4 +80,46 @@ La decisión 039 dice que **ningún corte puede ser más angosto que el error me
 - **B:** solo la palabra (cuatro bandas) con la variación en grados en el detalle. **Más honesta con pocos golpes y menos parecida a una nota.**
 - **C:** no mostrar nada nuevo: la variación típica ya está en «Qué vimos» y en Evolución.
 
-*(Las secciones «Cálculo» y «Recomendación» se agregan después de fijar estos cortes.)*
+---
+
+## Cálculo (hecho DESPUÉS de commitear los cortes: commit `9e270f8`)
+
+Script de solo lectura sobre la base de producción (`resumen_de_sesion` del servidor y el desvío robusto de la decisión 014); semilla fija. Cortes y palabras: los de arriba, sin cambios.
+
+**Control de cordura:** el σ típico del corpus (2,84; 2,98; 3,14°) da **8** en los tres casos.
+
+### Las sesiones reales
+
+| Sesión | Golpes con torsión | Variación típica σ | Valor (1–10) | Palabra | Si se saca el golpe más lejano |
+| --- | --- | --- | --- | --- | --- |
+| **24/9** · saque · tres cuartos (`e46264bf`) | 6 | **1,11°** | **10** | muy regular | — |
+| **25/9** · saque · tres cuartos (`e807c36e`) | 6 | **4,37°** | **7** | bastante regular | sin el golpe 6 (11,2°): σ 3,11° → **8** |
+| 24/9 · saque · tres cuartos (`3a101dd3`, 1 golpe) | 1 | — | — | *«Con menos de 4 golpes medidos…»* | — |
+| 24/9 · revés · tres cuartos (`97ca033b`) | 1 | — | — | *«Con menos de 4 golpes medidos…»* | — |
+| 24/9 y 25/9 · saque de perfil, 25/9 · revés (3 sesiones) | 0 | — | — | *«Con menos de 4 golpes medidos…»* | — |
+
+Evolución diría, entre el 24/9 y el 25/9: «La regularidad de tu torsión pasó de **10** a **7**: en tu última sesión los golpes variaron más entre sí.»
+
+### Qué tan firme es ese número (el criterio de la 039 aplicado a la escala)
+
+**Simulación** (datos normales; 20 000 repeticiones por fila; el σ verdadero 3,7° es el que hace que el σ *estimado* típico con 6 golpes sea ≈ 3°, como en el corpus, porque el estimador robusto con pocos golpes subestima):
+
+| Golpes por sesión | σ verdadero | Mediana del σ estimado | Intervalo del 95 % del σ estimado | Valores que abarca | Reparto de las palabras |
+| --- | --- | --- | --- | --- | --- |
+| 4 | 3,7° | 2,48° | 0,44 a 6,36° | **4 a 10** | muy regular 57 % · bastante regular 29 % · algo variable 13 % |
+| **6** | 3,7° | 2,90° | 0,79 a 6,39° | **4 a 10** | muy regular **46 %** · bastante regular 36 % · algo variable 16 % |
+| 12 | 3,7° | 3,34° | 1,45 a 5,97° | **5 a 10** | muy regular 30 % · bastante regular 51 % · algo variable 19 % |
+| 6 | 5,0° | 3,97° | 1,06 a 8,73° | **1 a 10** | las cuatro palabras (10 % a 33 % cada una) |
+
+El bootstrap de las dos sesiones reales (10 000 remuestreos) da intervalos que no sirven con 6 golpes: 24/9 de 0,00 a 3,11° (valores 8 a 10) y 25/9 de 0,00 a 15,34° (valores 1 a 10), porque con 6 datos el desvío robusto puede dar 0.
+
+**Lectura:** **no se cumple el criterio.** Con 6 golpes (lo habitual), un jugador cuya variación verdadera es la típica del corpus recibiría, según la muestra, desde un «4 algo variable» hasta un «10 muy regular», y casi la mitad de las veces un 9 o 10. **Cada punto de la escala vale 0,83° de σ, pero el intervalo del 95 % del σ con 6 golpes mide unos 5,6°, o sea unos 7 puntos de la escala: el 1–10 es unas 7 veces más fino que el dato.** La diferencia entre el 24/9 (10) y el 25/9 (7) es, en gran parte, ruido de muestreo (un solo golpe, el 6, la mueve de 7 a 8) y **Evolución la contaría como «los golpes variaron más entre sí»** con una confianza que el dato no tiene. La misma incertidumbre afecta a la «variación típica ±4°» que ya se muestra; el indicador no agrega información, **le agrega aspecto de medida exacta**.
+
+## Recomendación
+
+1. **No implementar el 1–10 para el 23/10.** Queda como **trabajo futuro**, y no por falta de tiempo: por el resultado de arriba.
+2. **Si se quiere algo para la demo, la alternativa B (solo la palabra), con dos cambios:** (a) **tres** bandas y no cuatro, con cortes que el dato pueda sostener (por ejemplo «bastante parecidos» por debajo de 3,6°, «algo variables» de 3,6° a 6,9° y «muy variables» desde 6,9°), y (b) **solo con 8 golpes o más**, no con 4. Aun así, con 12 golpes el intervalo del 95 % abarca dos o tres bandas: la palabra debería decir «aproximadamente» y **Evolución no debería comparar la palabra entre sesiones** (dos sesiones solo se comparan si la diferencia de σ supera la incertidumbre).
+3. **Alternativa C (la que prefiero hoy):** dejar la variación típica en grados, con su ⓘ, y agregar en el ⓘ de la variación típica una línea: «Con 6 golpes esta cifra puede moverse varios grados si repetís la sesión.» Honesta y sin nota.
+4. **Camino futuro con mérito:** una **«regularidad habitual»** que junte los golpes de varias sesiones (≥ 18 golpes, por ejemplo con las medianas de `variacion_habitual`), donde la incertidumbre baja a la mitad. Necesita decidir cuántas sesiones juntar; no es para esta entrega.
+
+**Decisión pendiente de Valentín:** elegir A (implementar igual, sabiendo que el 1–10 es unas 7 veces más fino que el dato), B, C o dejar la 040 como trabajo futuro.
