@@ -68,6 +68,7 @@ Decirlo en este orden y con estas cifras (todas medidas con los originales del i
 
 | ☐ | Qué | Cómo se comprueba |
 | --- | --- | --- |
+| ☐ | **Supabase activo** | Entrar al panel de Supabase y confirmar que el proyecto está **activo** (no «pausado» ni con aviso de inactividad); mirar también que el workflow *Supabase keep-alive* haya corrido hoy (GitHub → Actions) |
 | ☐ | **Servidor al día y sano** | `GET /health` → `estado: ok` y `version_motor: 0.5.5`, tres veces seguidas |
 | ☐ | **Render en Standard** (no Free) | Panel de Render: plan *Standard*; `render.yaml` dice `plan: standard` |
 | ☐ | **Frontend publicado = commit de `main`** | Abrir `https://kinetiqtennis.me` en ventana privada: Perfil muestra **"Tu actividad"**; Cargar muestra **"Recomendado"** |

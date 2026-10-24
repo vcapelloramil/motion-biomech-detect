@@ -6,6 +6,18 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-10-24 — Keep-alive de Supabase: tres veces por día y una escritura real (ajuste de la decisión 021; no se toca el motor ni el servidor)
+
+**Pedido de Valentín:** el keep-alive corre bien (7 de 7 en verde, cada 3 días, con 5 a 8 h de atraso de GitHub) pero **Supabase mandó igual el aviso de inactividad el 24/10**. Su documentación pide «unos pocos pedidos de usuario por día» en la base. Se queda en el plan gratis.
+
+- **Workflow** (`.github/workflows/supabase-keepalive.yml`): el cron pasa de `17 6 */3 * *` a **`17 6,14,22 * * *`** (06:17, 14:17 y 22:17 UTC). El resto, igual (clave anon, rechazo de `service_role`, falla si no hay 2xx).
+- **Migración nueva** `supabase/migrations/20261024120000_keepalive_latido.sql` (**la aplica Valentín en el SQL Editor de Supabase**; no está aplicada todavía): tabla `public.keepalive_latido` de una sola fila (`id` fijo = 1, `ultimo_latido`), **RLS activado y sin políticas**, privilegios revocados a `public`, `anon` y `authenticated`; `public.keepalive()` hace un upsert de la hora y la devuelve; **sin parámetros, `security definer`, `search_path` fijo y vacío, `EXECUTE` solo para `anon`**; sin `service_role`. **No se ejecutó contra un Postgres:** el entorno no tiene uno; se verifica con las consultas de abajo.
+- **Decisión 021:** ajuste del 24/10 (el porqué: frecuencia y actividad real en la base; la función pasa de `invoker` a `definer` y por qué es aceptable). Índice de decisiones actualizado.
+- **Verificación (después de aplicar la migración):** `select public.keepalive();` y `select id, ultimo_latido, now() - ultimo_latido as hace from public.keepalive_latido;` (una fila con id 1 y «hace» de segundos); además `select relrowsecurity from pg_class where oid = 'public.keepalive_latido'::regclass;` (true), `select count(*) from pg_policies where tablename = 'keepalive_latido';` (0), `select has_table_privilege('anon', 'public.keepalive_latido', 'select');` (false). Luego correr el workflow a mano (Actions → Supabase keep-alive → Run workflow) y repetir la consulta: la hora cambió.
+- **Pendientes post-demo:** (1) **GitHub desactiva los workflows programados tras 60 días sin actividad en el repo**: después de la defensa hay que hacer un commit o **reactivarlo a mano** (Actions → el workflow → *Enable workflow*); también anotado en `plan-mvp-punta-a-punta.md` §9. (2) Confirmar en el panel que el proyecto sigue activo pasados unos días del cambio.
+- **Guion de la demo:** checklist D−1 con «**Supabase activo**: entrar al panel y confirmar que el proyecto está activo».
+- **Hoy es el congelamiento del motor:** no se tocó `engine/`, `ensamblar_reporte.py`, el contrato ni el servidor.
+
 ## 2026-10-21 — Decisión 040 cerrada («evaluada; descartada para el MVP»), quinta ronda de la 039 (textos v4), puntaje de calidad y tiempo de la limpieza del 25/10
 
 **Pedido de Valentín** tras leer la 040: no se implementa el 1–10; dejar planteado cuándo sí sería viable. Frontend y documentos; motor 0.5.5, contrato 1.4 y servidor sin cambios.

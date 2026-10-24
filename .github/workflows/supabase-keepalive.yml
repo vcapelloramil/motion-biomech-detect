@@ -1,16 +1,19 @@
 name: Supabase keep-alive
 
 # El plan gratuito de Supabase pausa el proyecto tras 7 días sin actividad. Este workflow llama a
-# la función public.keepalive() (supabase/migrations/20261006120000_keepalive_rpc.sql) por la API
+# la función public.keepalive() (supabase/migrations/20261006120000_keepalive_rpc.sql, ajustada por
+# 20261024120000_keepalive_latido.sql: además ESCRIBE la hora en una tabla de una sola fila) por la API
 # REST con la clave anon/publishable, que viene de los secretos del repo. Nunca la service_role.
 #
 # Secretos del repo (Settings -> Secrets and variables -> Actions): SUPABASE_URL y SUPABASE_ANON_KEY.
 
 on:
   schedule:
-    # Día 1, 4, 7, ... de cada mes, 06:17 UTC (minuto no redondo: a las :00 GitHub se satura).
-    # La brecha máxima es de 3 días, también al cambiar de mes.
-    - cron: "17 6 */3 * *"
+    # TRES veces por día, a las 06:17, 14:17 y 22:17 UTC (minutos no redondos: a las :00 GitHub se satura).
+    # Supabase pide "unos pocos pedidos de usuario por día" (decisión 021, ajuste del 24/10/2026): el cron anterior,
+    # cada 3 días, corría bien pero igual llegó el aviso de inactividad. GitHub suele atrasar estas corridas 5 a 8 h:
+    # con tres por día siempre queda alguna dentro de cada día.
+    - cron: "17 6,14,22 * * *"
   workflow_dispatch:
 
 permissions: {}

@@ -58,7 +58,7 @@ Qué habilita, qué cierra, qué hay que recordar más adelante.
 | [018](018-esquema-datos-etapa-4.5.md) | Esquema de datos de la Etapa 4.5: sesión como grupo de golpes | vigente |
 | [019](019-semilla-api-despliegue-render.md) | Semilla de la API (FastAPI) para desplegar y medir el plan gratuito de Render | vigente |
 | [020](020-bug-fps-efectivos-procesar-video.md) | Bug real de fps, corregido con una declaración de modo de captura del usuario | vigente (implementada y aplicada; control contra historial diferido) |
-| [021](021-keepalive-supabase-funcion-anon.md) | Keep-alive de Supabase: función `keepalive()` ejecutable por `anon` (excepción acotada a "nada a anon") | vigente |
+| [021](021-keepalive-supabase-funcion-anon.md) | Keep-alive de Supabase: función `keepalive()` ejecutable por `anon` (excepción acotada a "nada a anon"); **ajuste del 24/10/2026: tres veces por día y una escritura real en `keepalive_latido`** | vigente (ajustada el 24/10) |
 | [022](022-reintento-fallido-y-columnas-protegidas.md) | Reintento `fallido → encolado` y permisos por columna sobre `videos` y `sesiones` | vigente (en implementación; ver "Avance") |
 | [023](023-instancia-render-pruebas-con-usuarios.md) | Instancia de Render: Free primero, Standard (1 CPU, 2 GB) cuando la espera o los cortes molesten y siempre para la defensa; Starter descartado | vigente (actualizada el 7/10; el cambio lo hace Valentín) |
 | [024](024-contrato-del-reporte-v1.md) | Contrato del reporte v1.0: el único cambio antes de generar JSON reales | vigente (implementado) |
