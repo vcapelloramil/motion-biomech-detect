@@ -6,6 +6,20 @@ más reciente arriba. Cada entrada anota: **qué se hizo**, **qué quedó pendie
 
 ---
 
+## 2026-11-20 — Render vuelve a Free hasta el final (decisión 023)
+
+**Qué se hizo:** entregado el trabajo (17/11), Valentín pasó el servicio `kinetiq-motor` de la instancia de 1 CPU y 2 GB
+(USD 25/mes) a Free desde el panel; `render.yaml` pasa a `plan: free` en el mismo paso. El plan de la cuenta (Hobby, USD 0) no cambia.
+Supabase sigue mandando avisos de inactividad aunque el keep-alive corre en verde (dos veces por día).
+
+**Qué quedó pendiente:** en Free el análisis probablemente se corte por memoria (margen de 32 MB antes de los fotogramas clave
+de la decisión 033, que suman ~56 MB) y el servicio se duerme a los 15 min sin pedidos. No se usa hasta el final.
+
+**Siguiente paso concreto:** unos días antes del final, volver a la instancia de 1 CPU y 2 GB (panel y `render.yaml`), confirmar
+que Supabase esté activo (y reanudarlo si se pausó) y procesar un golpe de prueba de punta a punta.
+
+---
+
 ## 2026-10-24 — Keep-alive de Supabase: tres veces por día y una escritura real (ajuste de la decisión 021; no se toca el motor ni el servidor)
 
 **Pedido de Valentín:** el keep-alive corre bien (7 de 7 en verde, cada 3 días, con 5 a 8 h de atraso de GitHub) pero **Supabase mandó igual el aviso de inactividad el 24/10**. Su documentación pide «unos pocos pedidos de usuario por día» en la base. Se queda en el plan gratis.

@@ -9,13 +9,15 @@
 # de 3 s tardaba 11 min 18 s y el margen de memoria era de 32 MB, y los fotogramas clave con esqueleto (decisión 033)
 # suman un proceso de ffmpeg de ~56 MB. Cambió Valentín en el panel; este archivo lo sigue. Después de la defensa se
 # puede volver a free (en el mismo paso: panel, este archivo y la bitácora).
+# plan: free desde el 20/11/2026: entregado el trabajo, se baja hasta el final para no pagar. Antes del final se vuelve
+# a standard y se procesa un golpe de prueba (en Free el análisis probablemente se corte por memoria).
 services:
   - type: web
     name: kinetiq-motor
     runtime: docker
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
-    plan: standard
+    plan: free
     healthCheckPath: /health
     envVars:
       - key: SUPABASE_URL
